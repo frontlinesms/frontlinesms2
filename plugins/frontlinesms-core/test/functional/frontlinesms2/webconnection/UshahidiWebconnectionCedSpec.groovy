@@ -5,27 +5,27 @@ import frontlinesms2.message.*
 import frontlinesms2.popup.*
 import spock.lang.*
 
-class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
+class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 	def setup(){
-		createWebConnections()
+		createWebconnections()
 	}
 	def 'ushahidi option is available on "Select type" screen'() {
 		when:
 			launchWizard()
 		then:
-			waitFor{ at WebConnectionWizard }
-			selectWebConnectionType.option('ushahidi').displayed
+			waitFor{ at WebconnectionWizard }
+			selectWebconnectionType.option('ushahidi').displayed
 		and:
-			selectWebConnectionType.getTitle('ushahidi') == 'Crowdmap / Ushahidi'
+			selectWebconnectionType.getTitle('ushahidi') == 'Crowdmap / Ushahidi'
 		and:
-			selectWebConnectionType.getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server'
+			selectWebconnectionType.getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server'
 	}
 
 	def 'configure page should have title and description'() {
 		when:
 			launchWizard('ushahidi')
 		then:
-			waitFor{ at WebConnectionWizard }
+			waitFor{ at WebconnectionWizard }
 			$('h2').text() == 'Ushahidi / Crowdmap'
 		and:
 			$('.info').text() == 'The API key for either Crowdmap or Ushahidi can be found in the Settings on the Crowdmap or Ushahidi web site.'
@@ -35,7 +35,7 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		when:
-			waitFor{ at WebConnectionWizard }
+			waitFor{ at WebconnectionWizard }
 			configureUshahidi.subType('crowdmap').click()
 		then:
 			configureUshahidi.crowdmapDeployAddress.displayed
@@ -47,7 +47,7 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		when:
-			waitFor{ at WebConnectionWizard }
+			waitFor{ at WebconnectionWizard }
 			configureUshahidi.subType('ushahidi').click()
 		then:
 			configureUshahidi.ushahidiDeployAddress.displayed
@@ -60,7 +60,7 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		when:
-			waitFor{ at WebConnectionWizard }
+			waitFor{ at WebconnectionWizard }
 			configureUshahidi.subType('ushahidi')
 		and:
 			configureUshahidi.ushahidiDeployAddress = deployAddress
@@ -82,7 +82,7 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		and:
-			waitFor{ at WebConnectionWizard }
+			waitFor{ at WebconnectionWizard }
 			fillValidConfig()
 		when: 'skip past sorting page'
 			next.click()
@@ -95,7 +95,7 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		and:
-			waitFor{ at WebConnectionWizard }
+			waitFor{ at WebconnectionWizard }
 			configureUshahidi.subType('crowdmap')
 			configureUshahidi.crowdmapDeployAddress = 'my'
 			configureUshahidi.crowdmapApiKey = 'a1b2c3d4e5'
@@ -111,10 +111,10 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 
 	def "editing a web connection should change values"(){
 		given:
-			to PageMessageWebConnection, UshahidiWebConnection.findByName('Trial')
+			to PageMessageWebconnection, UshahidiWebconnection.findByName('Trial')
 		when:
 			header.moreActions.value("edit").jquery.click()
-			waitFor { at WebConnectionWizard }
+			waitFor { at WebconnectionWizard }
 			configureUshahidi.subType('crowdmap').click()
 			configureUshahidi.crowdmapDeployAddress = "frontlineCrowd"
 			configureUshahidi.apiKeyInputLabel = "2343asdasd"
@@ -131,7 +131,7 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		when:
 			submit.click()
 		then:
-			def connection = UshahidiWebConnection.findByName('Trial')
+			def connection = UshahidiWebconnection.findByName('Trial')
 			connection.name == "stanlee"
 			connection.url == "http://frontlineCrowd.crowdmap.com"
 			connection.requestParameters*.value.containsAll(["2343asdasd"])

@@ -5,14 +5,14 @@ import spock.lang.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 
-@TestFor(WebConnectionService)
-class WebConnectionServiceSpec extends Specification {
+@TestFor(WebconnectionService)
+class WebconnectionServiceSpec extends Specification {
 	def requestedId
 	def mockConnection
 
 	def setup() {
-		mockConnection = Mock(WebConnection)
-		WebConnection.metaClass.static.get = { Serializable id ->
+		mockConnection = Mock(Webconnection)
+		Webconnection.metaClass.static.get = { Serializable id ->
 			requestedId = id
 			return mockConnection
 		}

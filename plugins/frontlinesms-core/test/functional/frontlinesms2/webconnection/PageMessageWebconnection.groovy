@@ -4,20 +4,20 @@ import frontlinesms2.*
 import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
-class PageMessageWebConnection extends frontlinesms2.page.PageMessageActivity {
+class PageMessageWebconnection extends frontlinesms2.page.PageMessageActivity {
 	static content = {
-		header { module WebConnectionHeaderModule }
+		header { module WebconnectionHeaderModule }
 	}
 	static at = {
 		title.contains("web connection")
 	}
 }
 
-class WebConnectionHeaderModule extends ContentHeader {
+class WebconnectionHeaderModule extends ContentHeader {
 	static content = {
 		infoListItems { $('ul.info li')*.text() }
 		name { $('ul.info h1').text().toLowerCase() }
-		subtitle { $('#webConnectionSubtitle').text().toLowerCase() }
+		subtitle { $('#webconnectionSubtitle').text().toLowerCase() }
 		url { $("span#web_connection_url").text().toLowerCase() }
 		sendMethod { $("span#web_connection_method").text().toLowerCase() - ')' -'('}
 		archive { buttons.filter(text: iContains('Archive')) }

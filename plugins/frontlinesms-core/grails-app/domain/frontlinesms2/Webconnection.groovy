@@ -6,14 +6,14 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
-abstract class WebConnection extends Activity {
+abstract class Webconnection extends Activity {
 	def camelContext
-	def webConnectionService
+	def webconnectionService
 	enum HttpMethod { POST, GET }
-	static String getShortName() { 'webConnection' }
+	static String getShortName() { 'webconnection' }
 	static String getType() { '' }
-	static def implementations = [GenericWebConnection,
-			UshahidiWebConnection]
+	static def implementations = [GenericWebconnection,
+			UshahidiWebconnection]
 
 	// Camel route redelivery config
 	static final def retryAttempts = 3 // how many times to retry before giving up
@@ -43,7 +43,7 @@ abstract class WebConnection extends Activity {
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->
 			if(obj?.deleted || obj?.archived) return true
-			def identical = WebConnection.findAllByNameIlike(val)
+			def identical = Webconnection.findAllByNameIlike(val)
 			if(!identical) return true
 			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
 			else return true
@@ -57,15 +57,15 @@ abstract class WebConnection extends Activity {
 	def processKeyword(Fmessage message, Boolean exactMatch) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
-		webConnectionService.send(message)
+		webconnectionService.send(message)
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				return [from("seda:activity-webconnection-${WebConnection.this.id}")
-						.beanRef('webConnectionService', 'preProcess')
+				return [from("seda:activity-webconnection-${Webconnection.this.id}")
+						.beanRef('webconnectionService', 'preProcess')
 						.setHeader(Exchange.HTTP_PATH,
 								simple('${header.url}'))
 						.onException(Exception)
@@ -74,11 +74,11 @@ abstract class WebConnection extends Activity {
 									.maximumRedeliveries(retryAttempts)
 									.retryAttemptedLogLevel(LoggingLevel.WARN)
 									.handled(true)
-									.beanRef('webConnectionService', 'handleException')
+									.beanRef('webconnectionService', 'handleException')
 									.end()
-						.to(WebConnection.this.url)
-						.beanRef('webConnectionService', 'postProcess')
-						.routeId("activity-webconnection-${WebConnection.this.id}")]
+						.to(Webconnection.this.url)
+						.beanRef('webconnectionService', 'postProcess')
+						.routeId("activity-webconnection-${Webconnection.this.id}")]
 			}
 		}.routeDefinitions
 	}
@@ -88,8 +88,8 @@ abstract class WebConnection extends Activity {
 		try {
 			def routes = this.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
-			println "################# Activating WebConnection :: ${this}"
-			LogEntry.log("Created WebConnection routes: ${routes*.id}")
+			println "################# Activating Webconnection :: ${this}"
+			LogEntry.log("Created Webconnection routes: ${routes*.id}")
 		} catch(FailedToCreateProducerException ex) {
 			println ex
 		} catch(Exception ex) {
@@ -100,7 +100,7 @@ abstract class WebConnection extends Activity {
 	}
 
 	def deactivate() {
-		println "################ Deactivating WebConnection :: ${this}"
+		println "################ Deactivating Webconnection :: ${this}"
 		camelContext.stopRoute("activity-webconnection-${this.id}")
 		camelContext.removeRoute("activity-webconnection-${this.id}")
 	}

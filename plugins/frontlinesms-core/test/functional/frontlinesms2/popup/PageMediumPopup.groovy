@@ -73,7 +73,7 @@ class CreateActivityDialog extends MediumPopup {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
 		autoreply { $('input[value="autoreply"]') }
-		webconnection(wait:true) { $('input[value="webConnection"]') }
+		webconnection(wait:true) { $('input[value="webconnection"]') }
 		subscription { $('input[value="subscription"]') }
 	}
 }
@@ -292,27 +292,27 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	}
 }
 
-class WebConnectionWizard extends MediumPopup {
+class WebconnectionWizard extends MediumPopup {
 	static at = {
 		waitFor('very slow') { popupTitle.toLowerCase().contains("connection") || popupTitle.toLowerCase().contains("activity") }
 	}
 	static content = {
 		error { $("label.error").text()}
-		keywordTab { module WebConnectionKeywordTab }
-		requestTab { module WebConnectionRequestFormatTab }
-		confirmTab { module WebConnectionConfirmTab }
-		summary { module WebConnectionSummary }
+		keywordTab { module WebconnectionKeywordTab }
+		requestTab { module WebconnectionRequestFormatTab }
+		confirmTab { module WebconnectionConfirmTab }
+		summary { module WebconnectionSummary }
 
-		selectWebConnectionType { module WebConnectionTypeSelectTab }
-		configureUshahidi { module ConfigureUshahidiWebConnectionTab }
+		selectWebconnectionType { module WebconnectionTypeSelectTab }
+		configureUshahidi { module ConfigureUshahidiWebconnectionTab }
 
-		option { shortName -> $('input', name:'webConnectionType', value:shortName) }
+		option { shortName -> $('input', name:'webconnectionType', value:shortName) }
 		getTitle { shortName -> option(shortName).previous('label').text() }
 		getDescription { shortName -> option(shortName).previous('p').text() }
 	}
 }
 
-class WebConnectionKeywordTab extends geb.Module {
+class WebconnectionKeywordTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
 		useKeyword { $("input#blankKeyword") }
@@ -320,18 +320,18 @@ class WebConnectionKeywordTab extends geb.Module {
 	}
 }
 
-class WebConnectionRequestFormatTab extends geb.Module {
+class WebconnectionRequestFormatTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
 		post { $("input[value='POST']") }
 		get { $("input[value='GET']") }
 		url { $("input#url") }
 		addParam { $('a.btn.addNew') }
-		parameters { moduleList WebConnectionParam, $('#web-connection-param-table tbody tr') }
+		parameters { moduleList WebconnectionParam, $('#web-connection-param-table tbody tr') }
 	}
 }
 
-class WebConnectionParam extends geb.Module {
+class WebconnectionParam extends geb.Module {
 	static content = {
 		value { $('input.param-value') }
 		name { $("input.param-name") }
@@ -339,7 +339,7 @@ class WebConnectionParam extends geb.Module {
 	}
 }
 
-class WebConnectionConfirmTab extends geb.Module {
+class WebconnectionConfirmTab extends geb.Module {
 	static base = { $('div#tabs-4') }
 	static content = {
 		name { $('input#name') }
@@ -353,7 +353,7 @@ class WebConnectionConfirmTab extends geb.Module {
 	}
 }
 
-class WebConnectionSummary extends geb.Module {
+class WebconnectionSummary extends geb.Module {
 	static base = { $('div#tabs-4') }
 	static content = {
 		message { $("div.summary") }
@@ -429,7 +429,7 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	}
 }
 
-class WebConnectionTypeSelectTab extends geb.Module{
+class WebconnectionTypeSelectTab extends geb.Module{
 	static base = { $('div#tabs-1') }
 	static content = {
 		getDescription { shortName ->
@@ -439,12 +439,12 @@ class WebConnectionTypeSelectTab extends geb.Module{
 			$("#"+shortName+" .info").text()
 		}
 		option { shortName ->
-			$('#webConnectionType').value(shortName)
+			$('#webconnectionType').value(shortName)
 		}
 	}
 }
 
-class ConfigureUshahidiWebConnectionTab extends geb.Module{
+class ConfigureUshahidiWebconnectionTab extends geb.Module{
 	static base = { $('div#tab-2') }
 	static content = {
 		subType{ type->

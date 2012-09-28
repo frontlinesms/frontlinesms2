@@ -1,10 +1,10 @@
 package frontlinesms2
 
-class GenericWebConnection extends WebConnection {
+class GenericWebconnection extends Webconnection {
 	static String getType() { 'generic' }
 
 	def initialize(params) {
-		this.httpMethod = WebConnection.HttpMethod."${params.httpMethod.toUpperCase()}"
+		this.httpMethod = Webconnection.HttpMethod."${params.httpMethod.toUpperCase()}"
 		this.url = params.url
 		this.name = params.name
 		processRequestParameters(params)

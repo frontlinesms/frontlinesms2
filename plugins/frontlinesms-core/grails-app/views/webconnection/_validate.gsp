@@ -1,6 +1,6 @@
-<%@ page import="frontlinesms2.WebConnection" %>
+<%@ page import="frontlinesms2.Webconnection" %>
 <r:script>
-	var webConnectionDialog = (function() {
+	var webconnectionDialog = (function() {
 		var _updateConfirmationScreen = function() {};
 		var validationMessageGenerator = function(fieldName, ruleName) {
 			var i18nKey = "webconnection." + fieldName + ".validation.error";
@@ -32,8 +32,8 @@
 				});
 			},
 			setScripts: function(scripts) {
-				webConnectionDialog.resetValidator(scripts.validation);
-				webConnectionDialog.updateConfirmationScreen = scripts.updateConfirmationScreen;
+				webconnectionDialog.resetValidator(scripts.validation);
+				webconnectionDialog.updateConfirmationScreen = scripts.updateConfirmationScreen;
 			},
 			updateConfirmationScreen:_updateConfirmationScreen,
 			___end___:null
@@ -42,7 +42,7 @@
 
 	function initializePopup() {
 		var initialScripts = <fsms:render template="generic/scripts"/>;
-		webConnectionDialog.setScripts(initialScripts);
+		webconnectionDialog.setScripts(initialScripts);
 
 		var keyWordTabValidation = function() {
 			return isGroupChecked("blankKeyword") || validator.element("#keyword");
@@ -66,12 +66,12 @@
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();
-			webConnectionDialog.updateConfirmationScreen();
+			webconnectionDialog.updateConfirmationScreen();
 		});
 	}
 
 	function setType(type) {
-		$.getJSON(url_root + "webConnection/" + type + "/config", function(data) {
+		$.getJSON(url_root + "webconnection/" + type + "/config", function(data) {
 			var configTab = $("#webconnection-config");
 			var confirmTab = $("#webconnection-confirm");
 			configTab.html(data.config);
@@ -80,8 +80,8 @@
 
 			$("#webconnection-confirm").html(data.confirm);
 
-			webConnectionDialog.setScripts(eval("(" + data.scripts + ")"));
-			webConnectionDialog.updateConfirmationScreen();
+			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
+			webconnectionDialog.updateConfirmationScreen();
 		});
 	}
 

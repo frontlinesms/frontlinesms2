@@ -4,7 +4,7 @@ import frontlinesms2.*
 import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
-class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
+class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 	def 'generic option is available on "Select type" screen'() {
 		when:
 			launchWizard()

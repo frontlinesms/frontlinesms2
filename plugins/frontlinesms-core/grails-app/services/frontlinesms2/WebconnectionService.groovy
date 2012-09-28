@@ -3,13 +3,13 @@ package frontlinesms2
 import frontlinesms2.*
 import org.apache.camel.*
 
-class WebConnectionService{
+class WebconnectionService{
 
 	def preProcess(Exchange x) {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def webConn = WebConnection.get(x.in.headers.'webconnection-id')
+		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
 		webConn.preProcess(x)
 	}
 
@@ -17,7 +17,7 @@ class WebConnectionService{
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def webConn = WebConnection.get(x.in.headers.'webconnection-id')
+		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
 		webConn.postProcess(x)
 	}
 

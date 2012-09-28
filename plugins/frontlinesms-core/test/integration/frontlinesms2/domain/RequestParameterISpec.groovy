@@ -9,7 +9,7 @@ class RequestParameterISpec extends grails.plugin.spock.IntegrationSpec {
 			def message = Fmessage.build(text:"Sample text to send out", src:'12345')
 			def syncKeyword = new Keyword(value:"SYNC")
 			def parameter = new RequestParameter(name:'message', value:"\${}")
-			def webconnection = new GenericWebConnection(name:"Sync", keyword:syncKeyword, url:"http://www.frontlinesms.com/sync", httpMethod:WebConnection.HttpMethod.GET)
+			def webconnection = new GenericWebconnection(name:"Sync", keyword:syncKeyword, url:"http://www.frontlinesms.com/sync", httpMethod:Webconnection.HttpMethod.GET)
 			webconnection.addToRequestParameters(parameter)
 			webconnection.save(failOnError:true)
 			

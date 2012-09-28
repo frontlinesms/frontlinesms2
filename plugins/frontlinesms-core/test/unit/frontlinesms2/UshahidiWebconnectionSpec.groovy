@@ -8,41 +8,41 @@ import org.apache.camel.Exchange
 import org.apache.camel.Message
 import grails.buildtestdata.mixin.Build
 
-@TestFor(UshahidiWebConnection)
+@TestFor(UshahidiWebconnection)
 @Mock([Keyword])
 @Build(Fmessage)
-class UshahidiWebConnectionSpec extends CamelUnitSpecification {
+class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 	private static final String TEST_NUMBER = "+2345678"
 	def setup() {
-		WebConnection.metaClass.static.findAllByNameIlike = { name -> UshahidiWebConnection.findAll().findAll { it.name == name } }
+		Webconnection.metaClass.static.findAllByNameIlike = { name -> UshahidiWebconnection.findAll().findAll { it.name == name } }
 	}
 
 	@Unroll
 	def "Test constraints"() {
 		when:
 			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def connection = new UshahidiWebConnection(name:name, keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
+			def connection = new UshahidiWebconnection(name:name, keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
 		then:
 			println connection.errors
 			connection.validate() == valid
 		where:
 			name	|addKeyword	|valid | method
-			'test'	|true		|true  | WebConnection.HttpMethod.POST
-			'test'	|false		|false | WebConnection.HttpMethod.POST
-			''		|true		|false | WebConnection.HttpMethod.POST
-			null	|true		|false | WebConnection.HttpMethod.POST
+			'test'	|true		|true  | Webconnection.HttpMethod.POST
+			'test'	|false		|false | Webconnection.HttpMethod.POST
+			''		|true		|false | Webconnection.HttpMethod.POST
+			null	|true		|false | Webconnection.HttpMethod.POST
 	}
 
 	def "Test Ushahidi pre-processor"() {
 		given:
 			def message = Fmessage.build(text:"testing", src:"bob")
-			def connection = new UshahidiWebConnection(name:'name',
+			def connection = new UshahidiWebconnection(name:'name',
 					keyword:new Keyword(value:'keyword'),
 					url:"www.ushahidi.com/frontlinesms2",
-					httpMethod:WebConnection.HttpMethod.GET)
+					httpMethod:Webconnection.HttpMethod.GET)
 			mockRequestParams(connection, [s:'${message_src_name}', m:'${message_body}', key:'1234567'])
 
-			def headers = ['fmessage-id':message.id,'webConnection-id':connection.id]
+			def headers = ['fmessage-id':message.id,'webconnection-id':connection.id]
 			def exchange = mockExchange(null, headers)
 		when:
 			connection.preProcess(exchange)

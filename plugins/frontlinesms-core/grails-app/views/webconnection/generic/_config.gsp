@@ -1,4 +1,4 @@
-<%@ page import="frontlinesms2.WebConnection" %>
+<%@ page import="frontlinesms2.Webconnection" %>
 <div class="input">
 	<label for="url"><g:message code="webconnection.url.label"/></label>
 	<g:textField name="url" value="${activityInstanceToEdit?.url}" required="true"/>
@@ -9,11 +9,11 @@
 		<g:set var="httpMethod" value="${activityInstanceToEdit?.httpMethod}"/>
 		<li>
 			<label for="httpMethod"><g:message code="webconnection.httpMethod.get"/></label>
-			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod == WebConnection.HttpMethod.GET}" />
+			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod == Webconnection.HttpMethod.GET}" />
 		</li>
 		<li>
 			<label for="httpMethod"><g:message code="webconnection.httpMethod.post"/></label>
-			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && httpMethod != WebConnection.HttpMethod.GET}" />
+			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && httpMethod != Webconnection.HttpMethod.GET}" />
 		</li>
 	</ul>
 </div>
@@ -33,15 +33,15 @@
 		<g:if test="${activityInstanceToEdit?.id}">
 			<g:if test="${activityInstanceToEdit?.requestParameters}">
 				<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
-					<fsms:render template="/webConnection/parameter" model="[name:parameter.name, value:parameter.value]" />
+					<fsms:render template="/webconnection/parameter" model="[name:parameter.name, value:parameter.value]" />
 				</g:each>
 			</g:if>
 			<g:else>
-				<fsms:render template="/webConnection/parameter" model="[name:'',  value:'']"/>
+				<fsms:render template="/webconnection/parameter" model="[name:'',  value:'']"/>
 			</g:else>
 		</g:if>
 		<g:else>
-			<fsms:render template="/webConnection/parameter" model="[name:'message',  value:'${messageText}']"/>
+			<fsms:render template="/webconnection/parameter" model="[name:'message',  value:'${messageText}']"/>
 		</g:else>
 	</tbody>
 </table>

@@ -2,7 +2,7 @@
 	<h1>
 		<g:message code="webconnection.title" args="${[ownerInstance.name]}"/>
 	</h1>
-	<g:message code="webconnection.${ownerInstance?.type}.subtitle" id="webConnectionSubtitle"/>
+	<g:message code="webconnection.${ownerInstance?.type}.subtitle" id="webconnectionSubtitle"/>
 	<li>
 		<g:formatDate date="${ownerInstance?.dateCreated}"/>
 	</li>

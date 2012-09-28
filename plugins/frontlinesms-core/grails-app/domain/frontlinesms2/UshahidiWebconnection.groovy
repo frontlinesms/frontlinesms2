@@ -2,7 +2,7 @@ package frontlinesms2
 
 import org.apache.camel.Exchange
 
-class UshahidiWebConnection extends WebConnection {
+class UshahidiWebconnection extends Webconnection {
 	static String getType() { 'ushahidi' }
 	static constraints = {
 	}
@@ -14,7 +14,7 @@ class UshahidiWebConnection extends WebConnection {
 		//TODO Test for urls which end with /
 		def modifyUrl = params.url.endsWith(/\/frontlinesms/) ? params.url : params.url + "/frontlinesms"
 		this.url = modifyUrl
-		this.httpMethod = WebConnection.HttpMethod.GET
+		this.httpMethod = Webconnection.HttpMethod.GET
 		this.name = params.name
 		this
 	}
