@@ -294,7 +294,7 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 
 class WebConnectionWizard extends MediumPopup {
 	static at = {
-		popupTitle.toLowerCase().contains("connection") || popupTitle.toLowerCase().contains("activity")
+		waitFor('very slow') { popupTitle.toLowerCase().contains("connection") || popupTitle.toLowerCase().contains("activity") }
 	}
 	static content = {
 		error { $("label.error").text()}
@@ -305,6 +305,10 @@ class WebConnectionWizard extends MediumPopup {
 
 		selectWebConnectionType { module WebConnectionTypeSelectTab }
 		configureUshahidi { module ConfigureUshahidiWebConnectionTab }
+
+		option { shortName -> $('input', name:'webConnectionType', value:shortName) }
+		getTitle { shortName -> option(shortName).previous('label').text() }
+		getDescription { shortName -> option(shortName).previous('p').text() }
 	}
 }
 
