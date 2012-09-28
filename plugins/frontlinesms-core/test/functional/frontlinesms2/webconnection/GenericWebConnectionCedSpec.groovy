@@ -131,13 +131,19 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 	}
 
 	def "Keyword must be provided if its checkbox is selected"() {
-		given:
+		when:
 			launchWizard('generic')
+		then:
+			waitFor { requestTab.displayed }
+		when:
+			next.click()
+		then:
+			waitFor { keywordTab.displayed }
 		when:
 			keywordTab.useKeyword.jquery.click()//disable keyword
 			next.click()
 		then:
-			waitFor { requestTab.displayed }
+			waitFor { confirm.displayed }
 		when:
 			previous.click()
 		then:

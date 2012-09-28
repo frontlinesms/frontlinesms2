@@ -32,7 +32,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webConnectionService.preProcess(x)
 		then:
-			1* x.out.setBody({ bodyContent ->
+			1 * x.out.setBody({ bodyContent ->
 				bodyContent.contains("message=test+message")
 			})
 	}
@@ -86,7 +86,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		webconnection.save(failOnError:true, flush:true)
 		def message = Fmessage.build(text:messageText)
 		Exchange exchange = Mock(Exchange)
-		exchange.in >> mockExchangeMessage(['frontlinesms.fmessageId':message.id,'frontlinesms.webConnectionId':webconnection.id], null)
+		exchange.in >> mockExchangeMessage(['fmessage-id':message.id,'webconnection-id':webconnection.id], null)
 		exchange.out >> mockExchangeMessage([:], null)
 		exchange.unitOfWork >> Mock(UnitOfWork)
 		return exchange
