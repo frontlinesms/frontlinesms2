@@ -1,9 +1,9 @@
 <div class="input">
-	<label for="keyword"><g:message code="webConnection.keyword.title"/></label>
+	<label for="keyword"><g:message code="webconnection.keyword.title"/></label>
 	<g:textField name="keyword" value="${activityInstanceToEdit?.keyword?.value}" required="true" disabled="${activityInstanceToEdit?.keyword?.value == ''}"/>
 </div>
 <div class="input optional">
-	<label for="blankKeyword"><g:message code="webConnection.all.messages"/></label>
+	<label for="blankKeyword"><g:message code="webconnection.all.messages"/></label>
 	<g:checkBox name="blankKeyword" checked="${activityInstanceToEdit?.keyword?.value == ''}"/>
 </div>
 <r:script>

@@ -344,7 +344,7 @@ class FsmsTagLib {
 	}
 
 	private def getActivityFieldLabel(att) {
-		g.message(code:"${att.instanceClass?.shortName.toLowerCase()}.${att.type}.${att.fieldName}.label")
+		g.message(code:"${att.instanceClass?.shortName.toLowerCase()}.${att.type}.${att.field}.label")
 	}
 	
 	private def isPassword(instanceClass, groovyKey) {

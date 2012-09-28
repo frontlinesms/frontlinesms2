@@ -4,9 +4,9 @@
 		var url = $("input[name=url]").val();
 		var httpMethod = $("input[name=httpMethod]:checked").val().toUpperCase();
 		var requestParameters = "";
-		var keyword = $("input[name=keyword]").val() || i18n("webConnection.none.label");
+		var keyword = $("input[name=keyword]").val() || i18n("webconnection.none.label");
 		if($(".web-connection-parameter.disabled").is(":hidden")) { 
-			requestParameters = i18n("webConnection.none.label")
+			requestParameters = i18n("webconnection.none.label")
 		} else {
 			$('input[name=param-name]').each(function(index) {
 				var values = $('input[name=param-value]').get();
