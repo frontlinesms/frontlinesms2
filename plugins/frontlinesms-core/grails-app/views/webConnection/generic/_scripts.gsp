@@ -4,6 +4,7 @@
 		var url = $("input[name=url]").val();
 		var httpMethod = $("input[name=httpMethod]:checked").val().toUpperCase();
 		var requestParameters = "";
+		var keyword = $("input[name=keyword]").val() || i18n("webConnection.none.label");
 		if($(".web-connection-parameter.disabled").is(":hidden")) { 
 			requestParameters = i18n("webConnection.none.label")
 		} else {
@@ -14,9 +15,10 @@
 				}
 			});
 		}
-		$("#url-confirm").html('<p>' + url  + '</p>');
-		$("#httpMethod-confirm").html('<p>' + httpMethod  + '</p>');
-		$("#requestParameters-confirm").html('<p>' + requestParameters  + '</p>');
+		$("#confirm-url").html('<p>' + url  + '</p>');
+		$("#confirm-httpMethod").html('<p>' + httpMethod  + '</p>');
+		$("#confirm-keyword").html('<p>' + keyword  + '</p>');
+		$("#confirm-parameters").html('<p>' + requestParameters  + '</p>');
 
 	}
 }

@@ -73,7 +73,9 @@
 	function setType(type) {
 		$.getJSON(url_root + "webConnection/" + type + "/config", function(data) {
 			var configTab = $("#webconnection-config");
+			var confirmTab = $("#webconnection-confirm");
 			configTab.html(data.config);
+			confirmTab.html(data.confirm);
 			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
 			webConnectionDialog.setScripts(eval("(" + data.scripts + ")"));
 		});
