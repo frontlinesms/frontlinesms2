@@ -29,7 +29,7 @@ class WebConnectionService{
 	def send(Fmessage message){
 		println "*** sending message ${message}"
 		def headers = [:]
-		headers.'frontlinesms.fmessageId' = message.id
+		headers.'fmessage-id' = message.id
 		headers.'webconnection-id' = message.messageOwner.id
 		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
 	}
