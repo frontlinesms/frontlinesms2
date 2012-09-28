@@ -1,31 +1,31 @@
 <%@ page import="frontlinesms2.WebConnection" %>
 <div class="input">
-	<label for="url"><g:message code="webConnection.url.label"/></label>
+	<label for="url"><g:message code="webconnection.url.label"/></label>
 	<g:textField name="url" value="${activityInstanceToEdit?.url}" required="true"/>
 </div>
 <div class="input">
-	<label for="httpMethod"><g:message code="webConnection.httpMethod.label"/></label>
+	<label for="httpMethod"><g:message code="webconnection.httpMethod.label"/></label>
 	<ul class="select">
 		<g:set var="httpMethod" value="${activityInstanceToEdit?.httpMethod}"/>
 		<li>
-			<label for="httpMethod"><g:message code="webConnection.httpMethod.get"/></label>
+			<label for="httpMethod"><g:message code="webconnection.httpMethod.get"/></label>
 			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod == WebConnection.HttpMethod.GET}" />
 		</li>
 		<li>
-			<label for="httpMethod"><g:message code="webConnection.httpMethod.post"/></label>
+			<label for="httpMethod"><g:message code="webconnection.httpMethod.post"/></label>
 			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && httpMethod != WebConnection.HttpMethod.GET}" />
 		</li>
 	</ul>
 </div>
-<h2><g:message code="webConnection.parameters"/></h2>
+<h2><g:message code="webconnection.parameters"/></h2>
 <table id="web-connection-param-table">
 	<thead>
 		<tr class="prop">
 			<td>
-				<label for="param-name"><g:message code="webConnection.param.name"/></label>
+				<label for="param-name"><g:message code="webconnection.param.name"/></label>
 			</td>
 			<td>
-				<label for="param-value"><g:message code="webConnection.param.value"/></label>
+				<label for="param-value"><g:message code="webconnection.param.value"/></label>
 			</td>
 		</tr>
 	</thead>
@@ -46,7 +46,7 @@
 	</tbody>
 </table>
 <a class="btn addNew" onclick="addNewParam()">
-	<g:message code="webConnection.add.anotherparam"/>
+	<g:message code="webconnection.add.anotherparam"/>
 </a></br>
 
 <r:script>
