@@ -17,24 +17,18 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 	}
 
 	def "can create and save a HTTP GET external command"() {
-		when:
-			launchWizard('generic')
-		then:
-			waitFor { requestTab.displayed }
+		given:
+			startAtTab('request')
 		when:
 			requestTab.post.click()
 			requestTab.url = "http://www.myurl.com"
 			requestTab.parameters[0].name = "text"
 			requestTab.parameters[0].value = "message_body"
-			next.click()
 		then:
-			waitFor { keywordTab.displayed }
+			nextTab(keywordTab)
 		when:
 			keywordTab.keyword = "SENDME"
-			next.click()
-		then:
-			waitFor { confirmTab.displayed }
-		when:
+			nextTab(confirmTab)
 			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
@@ -43,20 +37,18 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 
 	def "can create and save an HTTP POST external command"() {
 		given:
-			launchWizard('generic')
-		when:
-			keywordTab.keyword = "SENDME"
-			next.click()
-		then:
-			waitFor { requestTab.displayed }
+			startAtTab('request')
 		when:
 			requestTab.url = "http://www.myurl.com"
 			requestTab.get.click()
 			requestTab.parameters[0].value = "message_body"
 			requestTab.parameters[0].name = "text"
-			next.click()
 		then:
-			waitFor { confirmTab.displayed }
+			nextTab(keywordTab)
+		when:
+			keywordTab.keyword = "SENDME"
+		then:
+			nextTab(confirmTab)
 		when:
 			confirmTab.name = "my ext cmd"
 			submit.click()
@@ -66,18 +58,10 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 
 	def "can create an external command with no keyword"() {
 		given:
-			launchWizard('generic')
+			startAtTab('keyword')
 		when:
 			keywordTab.keyword = ""
 			keywordTab.useKeyword.click() // to disable
-			next.click()
-		then:
-			waitFor { requestTab.displayed }
-		when:
-			requestTab.url = "http://www.myurl.com"
-			requestTab.post.click()
-			requestTab.parameters[0].value = "message_body"
-			requestTab.parameters[0].name = "text"
 			next.click()
 		then:
 			waitFor { confirmTab.displayed }
@@ -89,11 +73,8 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 	}
 
 	def "can add and remove any number of parameters to the request"() {
-		given:
-			launchWizard('generic')
 		when:
-			keywordTab.keyword = "SENDME"
-			next.click()
+			launchWizard('generic')
 		then:
 			waitFor { requestTab.displayed }
 		when:
@@ -109,21 +90,19 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 			requestTab.parameters[1].name = "contact"
 			next.click()
 		then:
-			waitFor { confirmTab.displayed }
+			waitFor { keywordTab.displayed }
 		when:
-			previous.click()
-		then:
-			waitFor { requestTab.displayed }
-		when:
+			keywordTab.keyword = "SENDME"
+			nextTab(confirmTab)
+			previousTab(keywordTab)
+			previousTab(requestTab)
 			requestTab.parameters[0].remove.click()
 		then:
 			waitFor { requestTab.parameters.size() == 1 }
 			requestTab.parameters[0].value.jquery.val() == "contact_name"
 		when:
-			next.click()
-		then:
-			waitFor { confirmTab.displayed }
-		when:
+			nextTab(keywordTab)
+			nextTab(confirmTab)
 			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
@@ -131,24 +110,10 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 	}
 
 	def "Keyword must be provided if its checkbox is selected"() {
+		given:
+			startAtTab('confirm')
 		when:
-			launchWizard('generic')
-		then:
-			waitFor { requestTab.displayed }
-		when:
-			next.click()
-		then:
-			waitFor { keywordTab.displayed }
-		when:
-			keywordTab.useKeyword.jquery.click()//disable keyword
-			next.click()
-		then:
-			waitFor { confirm.displayed }
-		when:
-			previous.click()
-		then:
-			waitFor { keywordTab.displayed }
-		when:
+			previousTab(keywordTab)
 			keywordTab.useKeyword.jquery.click()//enable keyword
 			next.click()
 		then:
@@ -157,12 +122,7 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 
 	def "Url must be provided"() {
 		given:
-			launchWizard('generic')
-		when:
-			keywordTab.keyword = "Sync"
-			next.click()
-		then:
-			waitFor { requestTab.displayed }
+			startAtTab('request')
 		when:
 			requestTab.post.click()
 			next.click()
@@ -172,18 +132,39 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 
 	def "If parameter added a name must be given"() {
 		given:
-			launchWizard('generic')
-		when:
-			keywordTab.keyword = "Sync"
-			next.click()
-		then:
-			waitFor { requestTab.displayed }
+			startAtTab('request')
 		when:
 			requestTab.url = "http://www.frontlinsms.com.sync"
 			requestTab.addParam.click()
-			next.click()
 		then:
-			requestTab.displayed
+			nextTab(requestTab)
+			// N.B. there is no text displayed for this error
+	}
+
+	private def startAtTab(tabName) {
+		launchWizard('generic')
+		waitFor { requestTab.displayed }
+		if(tabName == 'request') return;
+
+		requestTab.url = "http://www.myurl.com"
+
+		nextTab(keywordTab)
+		if(tabName == 'keyword') return;
+
+		keywordTab.useKeyword.jquery.click() // disable keyword
+
+		nextTab(confirmTab)
+		if(tabName == 'confirm') return;
+	}
+
+	private def nextTab(tab) {
+		next.click()
+		waitFor { tab.displayed }
+	}
+
+	private def previousTab(tab) {
+		previous.click()
+		waitFor { tab.displayed }
 	}
 }
 

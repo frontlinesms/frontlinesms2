@@ -14,8 +14,11 @@ class WebConnectionController extends ActivityController {
 	}
 
 	def config() {
+		def activityInstanceToEdit
+		if(params.ownerId) activityInstanceToEdit = WEB_CONNECTION_TYPE_MAP[params.imp].get(params.ownerId) 
+		else activityInstanceToEdit = WEB_CONNECTION_TYPE_MAP[params.imp].newInstance()
 		def responseMap = ['config', 'scripts', 'confirm'].collectEntries {
-			[it, g.render(template:"/webConnection/$params.imp/$it")]
+			[it, g.render(template:"/webConnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
 		}
 		render responseMap as JSON
 	}

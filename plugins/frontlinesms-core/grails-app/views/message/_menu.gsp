@@ -9,7 +9,7 @@
 
 	<fsms:submenu code="activities.header" class="activities">
 		<g:each in="${activityInstanceList}" status="i" var="a">
-			<fsms:menuitem class="" selected="${a == ownerInstance}" controller="message" action="activity" code="${a.shortName}.title" msgargs="${[a.name]}" params="[ownerId: a.id]"/>
+			<fsms:menuitem class="" selected="${a == ownerInstance}" controller="message" action="activity" code="${a.shortName.toLowerCase()}.title" msgargs="${[a.name]}" params="[ownerId: a.id]"/>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
 			<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumPopup(i18n('popup.activity.create'), data, (i18n('action.next')), chooseActivity);">

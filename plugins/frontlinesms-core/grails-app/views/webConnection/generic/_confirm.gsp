@@ -1,26 +1,10 @@
+<%@ page import="frontlinesms2.GenericWebConnection" %>
 <div class="input">
-	<label for="name"><g:message code="webConnection.name.prompt"/></label>
-	<g:textField name="name" value="${activityInstanceToEdit?.name}"/>
+	<label for="name"><g:message code="webconnection.name.prompt"/></label>
+	<g:textField name="name" value="${activityInstanceToEdit?.name}" class="required"/>
 </div>
 <div class="confirm">
-	<h2><g:message code="webConnection.details.label"/></h2>
-	<table>
-		<tr>
-			<td><g:message code="webConnection.keyword.label"/></td>
-			<td id="keyword-confirm"/>
-		</tr>
-		<tr>
-			<td><g:message code="webConnection.url.label"/></td>
-			<td id="url-confirm"/>
-		</tr>
-		<tr>
-			<td><g:message code="webConnection.httpMethod.label"/></td>
-			<td id="httpMethod-confirm"/>
-		</tr>
-		<tr>
-			<td><g:message code="webConnection.parameters.confirm"/></td>
-			<td id="requestParameters-confirm"/>
-		</tr>
-	</table>
+	<h2><g:message code="webconnection.details.label"/></h2>
+	<fsms:activityConfirmTable fields="httpMethod, url, keyword, parameters" type="${GenericWebConnection.type}" instanceClass="${GenericWebConnection}"/>
 </div>
 
