@@ -5,8 +5,8 @@
 		<ul class="select">
 			<g:each in="${WebConnection.implementations}" status="i" var="it">
 				<li>
-					<label for="webConnectionType"><g:message code="webConnection.${it.type}.label"/></label>
-					<p><g:message code="webConnection.${it.type}.description"/></p>
+					<label for="webConnectionType"><g:message code="webconnection.${it.type}.label"/></label>
+					<p><g:message code="webconnection.${it.type}.description"/></p>
 					<g:radio name="webConnectionType" checked="${i == 0}"
 							value="${it.type}" onclick="setType('${it.type}')"/>
 				</li>
