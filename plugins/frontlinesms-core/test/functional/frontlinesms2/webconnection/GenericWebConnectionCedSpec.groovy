@@ -17,11 +17,8 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 	}
 
 	def "can create and save a HTTP GET external command"() {
-		given:
-			launchWizard('generic')
 		when:
-			keywordTab.keyword = "SENDME"
-			next.click()
+			launchWizard('generic')
 		then:
 			waitFor { requestTab.displayed }
 		when:
@@ -29,6 +26,11 @@ class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
 			requestTab.url = "http://www.myurl.com"
 			requestTab.parameters[0].name = "text"
 			requestTab.parameters[0].value = "message_body"
+			next.click()
+		then:
+			waitFor { keywordTab.displayed }
+		when:
+			keywordTab.keyword = "SENDME"
 			next.click()
 		then:
 			waitFor { confirmTab.displayed }
