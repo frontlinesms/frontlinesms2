@@ -25,7 +25,7 @@ class WebconnectionController extends ActivityController {
 
 	private def doSave(Class<Webconnection> clazz) {
 		def webconnectionInstance
-		if(params.ownerId) { 
+		if(params.ownerId) {
 			webconnectionInstance = clazz.get(params.ownerId)
 			def keywordValue = params.blankKeyword ? '' : params.keyword.toUpperCase()
 			webconnectionInstance.keyword.value = keywordValue
@@ -34,7 +34,7 @@ class WebconnectionController extends ActivityController {
 			webconnectionInstance.keyword =  new Keyword(value: params.blankKeyword ? '' : params.keyword.toUpperCase())
 		}
 		webconnectionInstance.initialize(params)
-		
+
 		if(webconnectionInstance.save(flush:true)) {
 			if(params.ownerId)
 				webconnectionInstance.deactivate()
