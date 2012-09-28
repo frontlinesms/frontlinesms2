@@ -1,4 +1,4 @@
-package frontlinesms2.controller
+package frontlinesms2.domain
 
 import spock.lang.*
 import frontlinesms2.*
