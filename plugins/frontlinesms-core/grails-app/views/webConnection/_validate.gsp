@@ -77,7 +77,11 @@
 			configTab.html(data.config);
 			confirmTab.html(data.confirm);
 			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
+
+			$("#webconnection-confirm").html(data.confirm);
+
 			webConnectionDialog.setScripts(eval("(" + data.scripts + ")"));
+			webConnectionDialog.updateConfirmationScreen();
 		});
 	}
 

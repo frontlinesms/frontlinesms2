@@ -11,6 +11,7 @@ abstract class WebConnection extends Activity {
 	def webConnectionService
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webConnection' }
+	static String getType() { '' }
 	static def implementations = [GenericWebConnection,
 			UshahidiWebConnection]
 
@@ -110,7 +111,6 @@ abstract class WebConnection extends Activity {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		x.out.headers = x.in.headers
 		def inMessage = Fmessage.get(x.in.headers.'frontlinesms.fmessageId')
 		def encodedParameters = this.requestParameters.collect {
 			urlEncode(it.name) + '=' + urlEncode(it.getProcessedValue(inMessage))

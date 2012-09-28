@@ -164,7 +164,7 @@ class FsmsTagLib {
 	def activityConfirmTableRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
-		out << getActivityFieldLabel(att.type, att.field)
+		out << getActivityFieldLabel(att)
 		out << '</td>'
 		out << '<td id="confirm-' + att.field + '"></td>'
 		out << '</tr>'
@@ -343,8 +343,8 @@ class FsmsTagLib {
 		g.message(code:"${clazz.simpleName.toLowerCase()}.${fieldName}.label")
 	}
 
-	private def getActivityFieldLabel(type, fieldName) {
-		g.message(code:"${type}.${fieldName}.label")
+	private def getActivityFieldLabel(att) {
+		g.message(code:"${att.instanceClass.shortName.toLowerCase()}.${att.type}.${att.fieldName}.label")
 	}
 	
 	private def isPassword(instanceClass, groovyKey) {

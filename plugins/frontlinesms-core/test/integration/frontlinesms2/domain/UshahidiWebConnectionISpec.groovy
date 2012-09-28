@@ -1,10 +1,10 @@
-package frontlinesms2.controller
+package frontlinesms2.domain
 
 import spock.lang.*
 import frontlinesms2.*
 import grails.converters.JSON
 
-class CrowdMapWebConnectionISpec extends grails.plugin.spock.IntegrationSpec {
+class UshahidiWebConnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def webCService = Mock(WebConnectionService)
 
 	def 'incoming message matching keyword should trigger http message sending'() {
