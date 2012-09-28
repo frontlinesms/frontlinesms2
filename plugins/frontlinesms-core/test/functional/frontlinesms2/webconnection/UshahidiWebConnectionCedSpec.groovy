@@ -9,16 +9,16 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 	def setup(){
 		createWebConnections()
 	}
+
 	def 'ushahidi option is available on "Select type" screen'() {
 		when:
 			launchWizard()
 		then:
-			waitFor{ at WebConnectionWizard }
-			selectWebConnectionType.option('ushahidi').displayed
+			option('ushahidi').displayed
 		and:
-			selectWebConnectionType.getTitle('ushahidi') == 'Crowdmap / Ushahidi'
+			getTitle('ushahidi') == 'Crowdmap / Ushahidi'
 		and:
-			selectWebConnectionType.getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server'
+			getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server'
 	}
 
 	def 'configure page should have title and description'() {
