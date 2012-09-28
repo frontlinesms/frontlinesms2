@@ -41,7 +41,37 @@ _**Note:** Keywords are **unique.** Once a keyword has been set, it cannot be us
 
 To set a keyword, select "Sort messages automatically that have the following Keyword:" and then enter your keyword.
 
-Click 'next' to set an Automatic Reply.
+When you set a keyword, and have selected a Multiple Choice Poll type, it will be possible for you to set "Aliases" in the next step.
+
+Click 'next' to set Aliases if you have chosen a keyword, or the set up and Automatic Reply if you haven't.
+
+**_Aliases_**
+
+Aliases are alternate ways of spelling and/or writing the choices you entered in the "Response List". 
+
+_This step is only available if you have selected a keyword in the previous step. If you have not, then please go to the next step._
+
+For example, if one of the choices was "Yes", you can enter alternative ways of spelling the word like "Yeah" or "Yeh". This could help in increasing the accuracy of your Poll results and reducing the amount of work you may have to do in correcting and manually categorising incorrectly spelt choices.
+
+The alias screen looks like this:
+
+![Aliases][17]
+
+Each choice is followed by an area where you can enter text. You will see two aliases already entered into the text area. These are the default settings. 
+
+You can add more aliases simple by adding to the string of text already in the text area. Separate each alias with a comma. An example would be:
+
+"Yes, A, yeah, yeh"
+
+Furthermore, the first entry in the text area corresponds to the text that will be used when generating a message in the "Edit Message" step. To change how each choice appears in the message that will be send out, change the first entry in the text area.
+
+If the text area looks like this for example:
+
+"Yeah, A, yes, yeh"
+
+Then "Yeah" will be used as part of the outgoing message text for the Poll.
+
+Once you have completed this section click "Next" to set up an "Automatic Reply".
 
 **_Automatic Reply_**
 At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a keyword with your poll. Without a keyword the system cannot recognise which messages to automatically reply to.  
@@ -107,12 +137,12 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [Creating a group][5]  
 [Creating a smart group][6]  
 
-[1]: activities/3.creating_a_poll
-[3]: activities/5.creating_an_auto-reply
-[4]: activities/4.creating_an_announcement
-[5]: contacts/4.creating_a_group
-[6]: contacts/5.creating_a_smart_group
-[7]: messages/1.getting_around_the_messages_tab
+[1]: core/activities/3.creating_a_poll
+[3]: core/activities/5.creating_an_auto-reply
+[4]: core/activities/4.creating_an_announcement
+[5]: core/contacts/4.creating_a_group
+[6]: core/contacts/5.creating_a_smart_group
+[7]: core/messages/1.getting_around_the_messages_tab
 [8]: ../images/help/poll1.png
 [9]: ../images/help/poll2.png
 [10]: ../images/help/poll3.png
@@ -122,3 +152,4 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [14]: ../images/help/poll7.png
 [15]: ../images/help/poll8.png
 [16]: ../images/help/poll9.png
+[17]: ../images/help/aliases.png

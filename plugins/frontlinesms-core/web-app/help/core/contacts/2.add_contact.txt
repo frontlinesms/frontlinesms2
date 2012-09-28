@@ -67,14 +67,14 @@ If you change your mind about altering a contact's details and you want to leave
 [Viewing All Messages Sent/Received by Contact][10]   
 
 
-[1]: messages/3.quick_message
-[2]: activities/1.getting_around_activities
-[3]: contacts/5.creating_a_smart_group
-[4]: contacts/1.getting_around_the_contacts_tab
-[5]: messages/1.getting_around_the_messages_tab
-[6]: contacts/4.creating_a_group
-[7]: activities/3.creating_a_poll
-[8]: activities/4.creating_an_announcement
-[9]: contacts/6.add_remove_contact_to_from_a_group
-[10]: contacts/7.messages_sent_or_received_by_contact
+[1]: core/messages/3.quick_message
+[2]: core/activities/1.getting_around_activities
+[3]: core/contacts/5.creating_a_smart_group
+[4]: core/contacts/1.getting_around_the_contacts_tab
+[5]: core/messages/1.getting_around_the_messages_tab
+[6]: core/contacts/4.creating_a_group
+[7]: core/activities/3.creating_a_poll
+[8]: core/activities/4.creating_an_announcement
+[9]: core/contacts/6.add_remove_contact_to_from_a_group
+[10]: core/contacts/7.messages_sent_or_received_by_contact
 [13]: ../images/help/add_contact.png

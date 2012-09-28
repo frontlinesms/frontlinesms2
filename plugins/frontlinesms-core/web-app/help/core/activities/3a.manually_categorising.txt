@@ -21,9 +21,9 @@ Your message/s will be updated with new categories and the poll statistics will 
 [Creating an Announcement][4]  
 [Exporting an Activity][5]
 
-[1]: activities/3a.manually_categorising
-[2]: activities/3.creating_a_poll
-[3]: activities/6.renaming_an_activity
-[4]: activities/4.creating_an_announcement
-[5]: activities/7.exporting_an_activity
+[1]: core/activities/3a.manually_categorising
+[2]: core/activities/3.creating_a_poll
+[3]: core/activities/6.renaming_an_activity
+[4]: core/activities/4.creating_an_announcement
+[5]: core/activities/7.exporting_an_activity
 [6]: ../images/help/manual_response.png

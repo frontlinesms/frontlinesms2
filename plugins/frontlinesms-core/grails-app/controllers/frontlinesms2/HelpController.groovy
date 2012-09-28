@@ -1,7 +1,8 @@
 package frontlinesms2
 
 class HelpController {
-	def index() { redirect(action: main) }
+
+def index = { redirect(action: 'main') }
 	
 	def main() {}
 	
