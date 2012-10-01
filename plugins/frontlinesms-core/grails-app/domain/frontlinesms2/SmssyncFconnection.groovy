@@ -8,9 +8,9 @@ import frontlinesms2.api.*
 class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	static final String apiUrl = 'smssync'
 	static String getShortName() { 'smssync' }
-	static final configFields = ['receiveEnabled', 'sendEnabled', 'secret']
+	static final configFields = ['name', 'receiveEnabled', 'sendEnabled', 'secret']
 	static final passwords = ['secret']
-	static final defaultValues = []
+	static final defaultValues = [sendEnabled:true, receiveEnabled:true]
 
 	def smssyncService
 

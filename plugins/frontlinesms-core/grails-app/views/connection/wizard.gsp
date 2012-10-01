@@ -19,10 +19,15 @@
 var fconnection = {
 	getType: function() {
 		<g:if test="${fconnectionInstance}">return "${fconnectionInstance?.shortName}";</g:if>
-		<g:else>return $("input[name=connectionType]").val();</g:else>
+		<g:else>return $("input[name=connectionType]:checked").val();</g:else>
 	},
 	setType: function(connectionType) {
-		$("input[name=connectionType]").val(connectionType);
+		if(!$("input[name=connectionType]:checked")) {
+			$("input[name=connectionType]").each(function() {
+				var e = $(this);
+				e.attr("checked", e.val() == connectionType);
+			});
+		}
 		<g:each in="${Fconnection.implementations*.shortName}">
 			$("#${it}-form").hide();
 		</g:each>
@@ -30,7 +35,7 @@ var fconnection = {
 		fconnection.init();
 	},
 	init: function() {
-		var keys = fconnection[fconnection.getType()].configFieldsKeys;
+		var keys = fconnection[fconnection.getType()].validationSubsectionFieldKeys;
 		$.each(keys, function(index, value) {
 			fconnection.toggleSubFields(value);
 		});
@@ -41,19 +46,19 @@ var fconnection = {
 		fconnection[fconnection.getType()].show();
 	},
 	isValid: function() {
-		var valid = false;
-		var keys = fconnection[fconnection.getType()].configFieldsKeys;
+		var valid = true;
+		var keys = fconnection[fconnection.getType()].validationSubsectionFieldKeys;
 		if(keys.length > 1) {
 			valid = validateSections(keys);
 			if(!valid) return valid;
 			$.each(keys, function(index, value) {
-				valid = isFieldValid(value);
+				valid = valid && isFieldValid(value);
 				return valid;
 			});
 		} else {
 			var fields = fconnection[fconnection.getType()].requiredFields;
 			$.each(fields, function(index, value) {
-				valid = isFieldValid(value);
+				valid = valid && isFieldValid(value);
 				return valid;
 			});
 		}
@@ -77,18 +82,18 @@ var fconnection = {
 		<%
 			def asJs = { it? '"' + it.join('", "') + '"': '' }
 			def nonNullableConfigFields = asJs(Fconnection.getNonnullableConfigFields(imp))
-			def configFieldKeys = asJs(imp.configFields instanceof Map? imp.configFields.getAllKeys(): imp.configFields)
+			def validationSubsectionFieldKeys = asJs(imp.configFields instanceof Map? imp.configFields.getAllKeys(): null)
 		%>
 		requiredFields: [${nonNullableConfigFields}],
-		configFieldsKeys: [${configFieldKeys}],
+		validationSubsectionFieldKeys: [${validationSubsectionFieldKeys}],
 		humanReadableName: "<g:message code="${imp.simpleName.toLowerCase()}.label"/>",
 		show: function() {
 			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
 				$("#${it}-confirm").hide();
 			</g:each>
-			var configFieldsKeys = fconnection[fconnection.getType()].configFieldsKeys;
-			if(configFieldsKeys.length > 1) {
-				$.each(configFieldsKeys, function(index, value) {
+			var validationSubsectionFieldKeys = fconnection[fconnection.getType()].validationSubsectionFieldKeys;
+			if(validationSubsectionFieldKeys.length > 1) {
+				$.each(validationSubsectionFieldKeys, function(index, value) {
 					setConfirmation(value);
 				});
 			}
@@ -103,20 +108,21 @@ var fconnection = {
 	</g:each>
 	_terminator: null // this is here to prevent the trailing comma which kills IE7
 };
-			
-function isFieldSet(fieldName) {
-	var val = getFieldVal(fieldName);
+
+function isFieldValid(fieldName) {
 	if(isInstanceOf(val, 'Boolean')) {
+		var val = getFieldVal(fieldName);
 		if(val && isSubsection(fieldName)) {
 			return validateSubsectionFields(fieldName);
 		}
 	} else {
-		return val!==null && val.length>0;
+		return !getField(fieldName).hasClass("error") && isFieldSet(fieldName);
 	}
 }
 
-function isFieldValid(field) {
-	return isFieldSet(field);
+function isFieldSet(fieldName) {
+	var val = getFieldVal(fieldName);
+	return val!==null && val.length>0;
 }
 
 function isInstanceOf(obj, clazz) {
@@ -130,7 +136,7 @@ function validateSubsectionFields(field) {
 	$.each(subSectionFields, function(index, value) {
 		var field = $(value).attr("field");
 		if(requiredFields.indexOf(field) > -1) {
-			valid = isFieldSet(field);
+			valid = isFieldValid(field);
 			return valid;
 		}
 	});
@@ -167,13 +173,16 @@ function enableSubsectionFields(field) {
 }
 
 function getFieldVal(fieldName) {
-	var val;
-	if($('#' + fconnection.getType() + fieldName).attr("type") === "checkbox") {
-		val = $('#' + fconnection.getType() + fieldName).prop("checked");
+	var field = getField(fieldName);
+	if(field.attr("type") === "checkbox") {
+		return field.prop("checked");
 	} else {
-		val = $('#' + fconnection.getType() + fieldName).val();
+		return field.val();
 	}
-	return val;
+}
+
+function getField(fieldName) {
+	return $('#' + fconnection.getType() + fieldName);
 }
 
 function setConfirmVal(fieldName, val) {
