@@ -21,6 +21,7 @@ public class DatabaseBackupRestorer {
 	}
 
 	public boolean restore(String resourcePath) {
+		resourcePath = resourcePath.replace("~", System.getProperty("user.home"));
 		File resourceDir = new File(resourcePath);
 		if (!resourceDir.exists()) {
 			System.out.println("Can't find existing resource directory at " + resourceDir.getAbsolutePath());
