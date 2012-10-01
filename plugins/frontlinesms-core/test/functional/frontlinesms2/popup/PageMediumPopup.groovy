@@ -294,7 +294,8 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 
 class WebconnectionWizard extends MediumPopup {
 	static at = {
-		waitFor('very slow') { popupTitle.toLowerCase().contains("connection") || popupTitle.toLowerCase().contains("activity") }
+		waitFor('very slow') { popupTitle.contains("connection") || popupTitle == 'edit activity' }
+		return true
 	}
 	static content = {
 		error { $("label.error").text()}
