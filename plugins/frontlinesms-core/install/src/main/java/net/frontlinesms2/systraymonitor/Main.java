@@ -94,8 +94,10 @@ public class Main {
 			System.setProperty("serial.detect.disable", "true");
 		}
 
+		o("Checking if DB Restore was requested..");
 		if(properties.getBoolean(PROP_RESTORE_DB_BACKUP)) {
-			(new DatabaseBackupRestorer()).restore(PROP_RESOURCE_PATH);
+			o("Running Database restore");
+			(new DatabaseBackupRestorer()).restore(properties.getString(PROP_RESOURCE_PATH));
 		}
 
 		int port = properties.getInt(PROP_SERVER_PORT);
