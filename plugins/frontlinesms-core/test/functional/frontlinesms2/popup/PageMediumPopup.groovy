@@ -18,6 +18,7 @@ abstract class MediumPopup extends geb.Page {
 			$('#tabs a[href="#tabs-'+tabId+'"]')
 		}
 		errorPanel { $('div.error-panel') }
+		validationError { $('label.error') }
 		error { errorPanel.text()?.toLowerCase() }
 	}
 }
@@ -300,11 +301,11 @@ class WebConnectionWizard extends MediumPopup {
 		error { $("label.error").text()}
 		keywordTab { module WebConnectionKeywordTab }
 		requestTab { module WebConnectionRequestFormatTab }
-		confirmTab { module WebConnectionConfirmTab }
+		confirmTab(required:false) { module WebConnectionConfirmTab }
 		summary { module WebConnectionSummary }
 
 		selectWebConnectionType { module WebConnectionTypeSelectTab }
-		configureUshahidi { module ConfigureUshahidiWebConnectionTab }
+		configureUshahidi(required:false) { module ConfigureUshahidiWebConnectionTab }
 
 		option { shortName -> $('input', name:'webConnectionType', value:shortName) }
 		getTitle { shortName -> option(shortName).previous('label').text() }
@@ -348,7 +349,7 @@ class WebConnectionConfirmTab extends geb.Module {
 		url { $("#confirm-url").text() }
 		
 		confirm{ label->
-			$("#"+label+"-confirm").text()
+			$("#confirm-"+label).text()
 		}
 	}
 }
@@ -445,13 +446,17 @@ class WebConnectionTypeSelectTab extends geb.Module{
 }
 
 class ConfigureUshahidiWebConnectionTab extends geb.Module{
-	static base = { $('div#tab-2') }
+	static base = { $('div#tabs-2') }
 	static content = {
-		subType{ type->
-			$("input#serviceType").value(type)
+		subType(required:false){ type->
+			$('input', name:'serviceType', value:type)
 		} 
-		crowdmapDeployAddress{ $('#crowdmapDeployAddress') }
-		ushahidiDeployAddress{ $('#ushahidiDeployAddress')  }
-		apiKeyInputLabel{ $('#apikey') }	
+		crowdmapDeployAddress{ $('#url') }
+		ushahidiDeployAddress{ $('#url') }
+		ushahidiKeyLabel { $("label", for:'key').first() }
+		crowdmapKeyLabel { $("label", for:'key').last() }
+		urlSuffix { $("label", for:'url').last() }
+		crowdmapApiKey{ $('#key') }
+		ushahidiApiKey{ $('#key') }
 	}
 }

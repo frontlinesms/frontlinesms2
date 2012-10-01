@@ -21,38 +21,39 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 			getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server'
 	}
 
-	def 'configure page should have title and description'() {
+	def 'Configure page for Crowdmap should have info text at the top of page'() {
 		when:
-			launchWizard('ushahidi')
+			launchWizard()
+			option('ushahidi').click()
+			next.click()
 		then:
-			waitFor{ at WebConnectionWizard }
-			$('h2').text() == 'Ushahidi / Crowdmap'
-		and:
+			waitFor('veryslow') { configureUshahidi.subType('crowdmap').displayed }
+			configureUshahidi.subType('crowdmap').click()
 			$('.info').text() == 'The API key for either Crowdmap or Ushahidi can be found in the Settings on the Crowdmap or Ushahidi web site.'
+		and:
+			$('h2').text() == 'Ushahidi / Crowdmap'
 	}
 
 	def 'when configuring for crowdmap, deploy address has suffix specified'() {
 		given:
 			launchWizard('ushahidi')
 		when:
-			waitFor{ at WebConnectionWizard }
+			waitFor('veryslow') { configureUshahidi.subType('crowdmap').displayed }
 			configureUshahidi.subType('crowdmap').click()
 		then:
-			configureUshahidi.crowdmapDeployAddress.displayed
-		and:
-			configureUshahidi.apiKeyInputLabel.text() == 'Crowdmap API key'
+			configureUshahidi.urlSuffix.text() == '.crowdmap.com'
+			configureUshahidi.crowdmapKeyLabel.text() == 'Crowdmap API Key:'
 	}
 
 	def 'when configuring for ushahidi, deploy address is free-form'() {
 		given:
 			launchWizard('ushahidi')
 		when:
-			waitFor{ at WebConnectionWizard }
+			waitFor('veryslow') { configureUshahidi.subType('ushahidi').displayed }
 			configureUshahidi.subType('ushahidi').click()
 		then:
 			configureUshahidi.ushahidiDeployAddress.displayed
-		and:
-			configureUshahidi.apiKeyInputLabel.text() == 'Ushahidi API key'
+			configureUshahidi.ushahidiKeyLabel.text() == 'API Key:'
 	}
 
 	@Unroll
@@ -60,8 +61,8 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		when:
-			waitFor{ at WebConnectionWizard }
-			configureUshahidi.subType('ushahidi')
+			waitFor('veryslow') { configureUshahidi.subType('ushahidi').displayed }
+			configureUshahidi.subType('ushahidi').click()
 		and:
 			configureUshahidi.ushahidiDeployAddress = deployAddress
 		and:
@@ -69,7 +70,7 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		and:
 			next.click()
 		then:
-			(valid && at (AutomaticSortingTab)) || (!valid && validationError.displayed)
+			(valid && keywordTab.keyword.displayed ) || (!valid && validationError.displayed)
 		where:
 			deployAddress     | apiKey       | valid
 			'www.example.com' | 'ABCDE12345' | true
@@ -82,10 +83,8 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		and:
-			waitFor{ at WebConnectionWizard }
 			fillValidConfig()
 		when: 'skip past sorting page'
-			next.click()
 			next.click()
 		then:
 			confirmTab.name.displayed // not sure, but expect this definition will already exist - please update accordingly
@@ -95,18 +94,19 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		and:
-			waitFor{ at WebConnectionWizard }
-			configureUshahidi.subType('crowdmap')
+			waitFor('veryslow') { configureUshahidi.subType('crowdmap').displayed }
+			configureUshahidi.subType('crowdmap').click()
 			configureUshahidi.crowdmapDeployAddress = 'my'
 			configureUshahidi.crowdmapApiKey = 'a1b2c3d4e5'
-		when: 'we skip past the sorting page'
+		when:
 			next.click()
+			keywordTab.useKeyword.click()
 			next.click()
 		then:
-			confirmTab.confirm('Service') == 'Crowdmap'
-			confirmTab.confirm('Address') == 'http://my.crowdmap.com'
-			confirmTab.confirm('API key') == 'a1b2c3d4e5'
-			confirmTab.confirm('Auto-sort') == 'No messages will be autosorted but you should check what the correct text is here when implementing thanks ;-)'
+			confirmTab.confirm('service') == 'Crowdmap'
+			confirmTab.confirm('url') == 'http://my.crowdmap.com'
+			confirmTab.confirm('key') == 'a1b2c3d4e5'
+			confirmTab.confirm('keyword') == 'None'
 	}
 
 	def "editing a web connection should change values"(){
@@ -117,17 +117,17 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 			waitFor { at WebConnectionWizard }
 			configureUshahidi.subType('crowdmap').click()
 			configureUshahidi.crowdmapDeployAddress = "frontlineCrowd"
-			configureUshahidi.apiKeyInputLabel = "2343asdasd"
+			configureUshahidi.crowdmapApiKey = "2343asdasd"
 			next.click()
 		and:
-			keywordTab.keywordTab = "Repo"
+			keywordTab.keyword = "Repo"
 			next.click()
 		then:
 			confirmTab.name == "stanlee"
-			confirmTab.confirm('Service') == 'Crowdmap'
-			confirmTab.confirm('Address') == 'http://frontlineCrowd.crowdmap.com'
-			confirmTab.confirm('API key') == '2343asdasd'
-			confirmTab.confirm('Auto-sort') == 'No messages will be autosorted but you should check what the correct text is here when implementing thanks ;-)'
+			confirmTab.confirm('service') == 'Crowdmap'
+			confirmTab.confirm('url') == 'http://frontlineCrowd.crowdmap.com'
+			confirmTab.confirm('key') == '2343asdasd'
+			confirmTab.confirm('keyword') == 'Repo'
 		when:
 			submit.click()
 		then:
@@ -138,9 +138,12 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 	}
 
 	private def fillValidConfig() {
-		configureUshahidi.subType('crowdmap')
+		waitFor('veryslow') { configureUshahidi.subType('crowdmap').displayed }
+		configureUshahidi.subType('crowdmap').click()
 		configureUshahidi.crowdmapDeployAddress = 'default'
 		configureUshahidi.crowdmapApiKey = 'aaa111bbb222'
+		next.click()
+		keywordTab.useKeyword.click()
 	}
 }
 
