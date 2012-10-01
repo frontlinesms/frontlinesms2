@@ -23,11 +23,8 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 
 	def 'Configure page for Crowdmap should have info text at the top of page'() {
 		when:
-			launchWizard()
-			option('ushahidi').click()
-			next.click()
+			launchWizard('ushahidi')
 		then:
-			waitFor('veryslow') { configureUshahidi.subType('crowdmap').displayed }
 			configureUshahidi.subType('crowdmap').click()
 			$('.info').text() == 'The API key for either Crowdmap or Ushahidi can be found in the Settings on the Crowdmap or Ushahidi web site.'
 		and:
@@ -38,7 +35,6 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		when:
-			waitFor('veryslow') { configureUshahidi.subType('crowdmap').displayed }
 			configureUshahidi.subType('crowdmap').click()
 		then:
 			configureUshahidi.urlSuffix.text() == '.crowdmap.com'
@@ -47,9 +43,8 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 
 	def 'when configuring for ushahidi, deploy address is free-form'() {
 		given:
-			launchWizard('ushahidi')
+			launchWizard('ushahidi') 
 		when:
-			waitFor('veryslow') { configureUshahidi.subType('ushahidi').displayed }
 			configureUshahidi.subType('ushahidi').click()
 		then:
 			configureUshahidi.ushahidiDeployAddress.displayed
@@ -61,7 +56,6 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		when:
-			waitFor('veryslow') { configureUshahidi.subType('ushahidi').displayed }
 			configureUshahidi.subType('ushahidi').click()
 		and:
 			configureUshahidi.ushahidiDeployAddress = deployAddress
@@ -94,7 +88,6 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		given:
 			launchWizard('ushahidi')
 		and:
-			waitFor('veryslow') { configureUshahidi.subType('crowdmap').displayed }
 			configureUshahidi.subType('crowdmap').click()
 			configureUshahidi.crowdmapDeployAddress = 'my'
 			configureUshahidi.crowdmapApiKey = 'a1b2c3d4e5'
@@ -138,7 +131,6 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 	}
 
 	private def fillValidConfig() {
-		waitFor('veryslow') { configureUshahidi.subType('crowdmap').displayed }
 		configureUshahidi.subType('crowdmap').click()
 		configureUshahidi.crowdmapDeployAddress = 'default'
 		configureUshahidi.crowdmapApiKey = 'aaa111bbb222'
