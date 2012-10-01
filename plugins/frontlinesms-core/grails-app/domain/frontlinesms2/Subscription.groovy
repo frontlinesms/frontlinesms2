@@ -119,35 +119,34 @@ class Subscription extends Activity{
 	Action getAction(String messageText, boolean exactMatch) {
 		def words =  messageText.trim().toUpperCase().split(/\s+/)
 		if(words.size() == 1){
-			if(words[0].contains(keyword.value)){
-				if(hasAtLeastOneAlias(joinAliases,words[0])){
-					return Action.JOIN
-				}else if(hasAtLeastOneAlias(leaveAliases,words[0])){
-					return Action.LEAVE
-				}else if (exactMatch){
-					return Action.TOGGLE
-				}else if(!exactMatch){
-					return null;
-				}
+			if(hasAtLeastOneAlias(joinAliases,words[0])){
+				return Action.JOIN
+			}else if(hasAtLeastOneAlias(leaveAliases,words[0])){
+				return Action.LEAVE
+			}else if (exactMatch){
+				return defaultAction
+			}else if(!exactMatch){
+				println "################## Why are you called? You are not a match."
+				return defaultAction;
 			}
 		}
 		else if (words.size() > 1 && exactMatch) {
-			if(joinAliases.toUpperCase().split(",").contains(words[1].trim())) {
+			if(joinAliases.toUpperCase().split(",").contains(words[1].toUpperCase().trim())) {
 				return Action.JOIN
-		 	} else if(leaveAliases.toUpperCase().split(",").contains(words[1].trim())) {
+		 	} else if(leaveAliases.toUpperCase().split(",").contains(words[1].toUpperCase().trim())) {
 		 		return Action.LEAVE
 		 	} else {
-		 		return Action.TOGGLE
+		 		return defaultAction
 		 	}
 		}
 	}
 
 	def hasAtLeastOneAlias(aliases,message) {
-		aliases.toUpperCase().split(",").contains(message.substring(keyword.value.length()))	
+		aliases && aliases.toUpperCase().split(",").contains(message.substring(keyword.value.length()))	
 	}
 
 	def getDisplayText(Fmessage msg) {
-		if (msg.messageOwner.id == this.id) {
+		if ((msg.messageOwner.id == this.id) && msg.ownerDetail) {
 			return (msg.ownerDetail?.toLowerCase() + ' ("' + msg.text + '")').truncate(50) // FIXME probably shouldn't truncate here
 		} else
 			return msg.text

@@ -22,10 +22,11 @@ class WebConnectionSpec extends CamelUnitSpecification {
 		then:
 			extComm.validate() == valid
 		where:
-			name	|addKeyword	|valid
-			'test'	|true		|true
-			'test'	|false		|false
-			''		|true		|false
-			null	|true		|false
+			name  | addKeyword |valid
+			'test'| true       |true
+			'test'| false      |false
+			''    | true       |false
+			null  | true       |false
 	}
 }
+

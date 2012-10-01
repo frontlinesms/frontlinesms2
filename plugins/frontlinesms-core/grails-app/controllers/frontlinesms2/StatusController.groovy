@@ -4,8 +4,7 @@ class StatusController {
 	def deviceDetectionService
 	
 	def index() {
-	    
-		redirect action: "show", params:params
+		redirect action:'show', params:params
 	}
 
 	def trafficLightIndicator() {
