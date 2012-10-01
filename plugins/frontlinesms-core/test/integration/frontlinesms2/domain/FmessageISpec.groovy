@@ -5,7 +5,7 @@ import frontlinesms2.*
 import spock.lang.*
 
 class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
-	final Date TEST_DATE = new Date()
+	final Date TEST_DATE = Date.parseToStringDate('Wed Sep 12 12:00:00 GMT 2012')
 
 	def 'display name should be taken from Contact with matching mobile for incoming message'() {
 		given:
