@@ -22,9 +22,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor { title?.toLowerCase().contains("web connection") }
 			header[item] == value
 		where:
-			item		| value
-			'name'		| "sync web connection"
-			'url'		| 'http://www.frontlinesms.com/sync'
+			item        | value
+			'name'      | "sync web connection"
+			'url'       | 'http://www.frontlinesms.com/sync'
 			'sendMethod'| 'get'
 			'subtitle'  | 'http web connection'
 	}
@@ -39,9 +39,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor { title?.toLowerCase().contains("web connection") }
 			header[item] == value
 		where:
-			item		| value
-			'name'		| "sync web connection"
-			'url'		| 'http://www.ushahidi.com/' // For Ushahidi web connection, /frontlinesms should not be displayed
+			item        | value
+			'name'      | 'ush web connection'
+			'url'       | 'http://www.ushahidi.com/frontlinesms'
 			'sendMethod'| 'get'
 			'subtitle'  | 'web connection to ushahidi'
 	}

@@ -16,10 +16,10 @@ class PageMessageWebconnection extends frontlinesms2.page.PageMessageActivity {
 class WebconnectionHeaderModule extends ContentHeader {
 	static content = {
 		infoListItems { $('ul.info li')*.text() }
-		name { $('ul.info h1').text().toLowerCase() }
-		subtitle { $('#webconnectionSubtitle').text().toLowerCase() }
-		url { $("span#web_connection_url").text().toLowerCase() }
-		sendMethod { $("span#web_connection_method").text().toLowerCase() - ')' -'('}
+		name { $('ul.info h1').text()?.toLowerCase() }
+		subtitle { $('#webconnectionSubtitle').text()?.toLowerCase() }
+		url { $("span#web_connection_url").text()?.toLowerCase() }
+		sendMethod { $("span#web_connection_method").text()?.toLowerCase() - ')' -'('}
 		archive { buttons.filter(text: iContains('Archive')) }
 		moreActions { $('div.header-buttons select#more-actions') }
 	}
