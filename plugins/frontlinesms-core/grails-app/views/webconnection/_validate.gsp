@@ -41,7 +41,7 @@
 	})();
 
 	function initializePopup() {
-		var initialScripts = <fsms:render template="generic/scripts"/>;
+		var initialScripts = <fsms:render template="/webconnection/generic/scripts"/>;
 		webconnectionDialog.setScripts(initialScripts);
 
 		var keyWordTabValidation = function() {
