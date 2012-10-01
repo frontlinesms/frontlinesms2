@@ -116,6 +116,20 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 			messageText << ['KEY SOMETHING', 'KEY OTHERWISE', 'KEY RAMBLING NONSENSE']
 	}
 
+	@Unroll
+	def 'Correct Action is triggered depending on the defaultAction set for the subscription'(){
+		setup:
+			s.defaultAction = defaultAction
+			s.save(failOnError:true)
+		expect:
+			s.getAction(messageText, true) == action
+		where:
+			messageText|defaultAction|action
+			'KEY'|Subscription.Action.JOIN|Subscription.Action.JOIN
+			'KEY'|Subscription.Action.LEAVE|Subscription.Action.LEAVE
+			'KEY'|Subscription.Action.TOGGLE|Subscription.Action.TOGGLE
+	}
+
 //> HELPERS
 	private def processKeyword(String messageText, String sourcePhoneNumber, boolean exactMatch=true) {
 		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), exactMatch)
