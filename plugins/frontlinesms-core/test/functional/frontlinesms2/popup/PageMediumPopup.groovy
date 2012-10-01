@@ -300,12 +300,12 @@ class WebconnectionWizard extends MediumPopup {
 	}
 	static content = {
 		error { $("label.error").text()}
-		keywordTab { module WebConnectionKeywordTab }
-		requestTab { module WebConnectionRequestFormatTab }
-		confirmTab(required:false) { module WebConnectionConfirmTab }
-		summary { module WebConnectionSummary }
+		keywordTab { module WebconnectionKeywordTab }
+		requestTab { module WebconnectionRequestFormatTab }
+		confirmTab(required:false) { module WebconnectionConfirmTab }
+		summary { module WebconnectionSummary }
 
-		configureUshahidi(required:false) { module ConfigureUshahidiWebConnectionTab }
+		configureUshahidi(required:false) { module ConfigureUshahidiWebconnectionTab }
 
 		option { shortName -> $('input', name:'webconnectionType', value:shortName) }
 		getTitle { shortName -> option(shortName).previous('label').text() }
