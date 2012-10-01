@@ -45,7 +45,7 @@ class CoreUrlMappings {
 		"/archive/folder/$ownerId"(controller:'archive', action:'folder') {}
 		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
 
-		"/webConnection/$imp/$action"(controller:'webConnection') {}
+		"/webconnection/$imp/$action"(controller:'webconnection') {}
 		
 		"/$controller/$action?/$id?"{
 			constraints {
