@@ -41,5 +41,6 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		if(webconnectionType == "ushahidi"){
 			waitFor { configureUshahidi.subType('crowdmap').displayed }
 		}
+		return true
 	}
 }
