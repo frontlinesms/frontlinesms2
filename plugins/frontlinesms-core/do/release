@@ -1,11 +1,36 @@
 #!/bin/bash
 echo "Building new release"
-echo "1: Checking for clean repository..."
+echo "Checking for clean repository..."
 if test -n "$(git status --porcelain)"
 then
-	echo "Your repository is not clean. This script can only build from a clean repo"
+	echo "FAILURE: Your repository is not clean. This script can only build from a clean repo"
 	exit 1
 fi
-echo "2: "
+# TODO: i18n
+
+# TODO: roll version numbers to non-snapshot
+echo "Rolling version numbers to non-snapshot"
+do/remove_snapshot_from_install_resource_directories
+
+# TODO: do builds
+echo "Building installers.."
+grails prod BuildInstallers
+
+# TODO: test build in appropriate format for machine
+
+# TODO: commit
+
+# TODO: tag commit
+
+# TODO: prompt user for new snapshot version number
+
+# TODO: roll version to new snapshot
+
+# TODO: commit with new snapshot version
+
+# TODO: git push --tags
+
+# TODO: upload builds
+
 
 
