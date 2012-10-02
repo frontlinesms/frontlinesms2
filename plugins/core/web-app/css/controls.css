@@ -76,7 +76,7 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 	display:block; width:16px; height:18px; }
 
 #server-connection-lost-notification, #thinking { position:absolute; top:0; bottom:0; left:0; right:0; opacity:0.8; }
-#server-connection-lost-notification { background-color:black; padding-top:40px; text-align:center; z-index:100; }
+#server-connection-lost-notification { background-color:black; padding-top:40px; text-align:center; z-index:9999; }
 #server-connection-lost-notification .content { background-color:white; border-radius:8px; padding:17px; display:inline-block; }
 #server-connection-lost-notification .content p { text-align:center; font-size:180%; font-weight:bold; margin-bottom:17px; }
 #server-connection-lost-notification .content p:last-child { margin-bottom:0; }
