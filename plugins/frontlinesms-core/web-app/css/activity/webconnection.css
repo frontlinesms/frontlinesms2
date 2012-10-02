@@ -1,4 +1,5 @@
-#tabs p.info { padding-left:20px; margin:15px 0;}
+.tab-content-webconnection-type label { font-weight: bold; }
+#tabs p.info { padding-left:20px; margin:5px 0 15px 0;}
 #tabs div.info { padding:4px 0 5px 25px; margin:15px 0;
 	background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }#web-connection-param-table { margin-bottom:10px; margin-left:20px; }
 #web-connection-param-table td { padding:2px; }
@@ -8,5 +9,6 @@
 
 #webconnection-config input#url { display:inline-block; }
 #webconnection-config label.crowdmap:nth-child(4) { display:inline-block; text-indent:25px; margin-bottom:0; }
-
-
+#tabs input#displayed_url { display: inline-block;}
+label.hidden { visibility: hidden; }
+label.crowdmap {display:inline;}
