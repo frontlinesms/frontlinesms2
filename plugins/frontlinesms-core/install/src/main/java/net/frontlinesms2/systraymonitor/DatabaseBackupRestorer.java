@@ -13,8 +13,9 @@ import java.util.Arrays;
 
 public class DatabaseBackupRestorer {
 	public static final String DB_FILE_NAME = "prodDb.h2.db";
-	public static final String BACKUP_FOLDER_IDENTIFIER = ".frontlinesms2-backup.";
+	public static final String BACKUP_FOLDER_IDENTIFIER = "-backup.";
 	public static final String BROKEN_DB_BACKUP_FOLDER_NAME = ".damaged_db";
+	private File resourceDir;
 	
 	public DatabaseBackupRestorer() {
 
@@ -22,7 +23,7 @@ public class DatabaseBackupRestorer {
 
 	public boolean restore(String resourcePath) {
 		resourcePath = resourcePath.replace("~", System.getProperty("user.home"));
-		File resourceDir = new File(resourcePath);
+		resourceDir = new File(resourcePath);
 		if (!resourceDir.exists()) {
 			System.out.println("Can't find existing resource directory at " + resourceDir.getAbsolutePath());
 			return false;
@@ -37,7 +38,7 @@ public class DatabaseBackupRestorer {
 		String [] backupFiles = resourceDir.getParentFile().list(new FilenameFilter() {
 			@Override
 			public boolean accept(File arg0, String arg1) {
-				return arg1.contains(BACKUP_FOLDER_IDENTIFIER);
+				return arg1.contains(resourceDir.getName() + BACKUP_FOLDER_IDENTIFIER);
 			}
 		});
 		if (backupFiles.length == 0) {
