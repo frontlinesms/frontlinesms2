@@ -126,6 +126,7 @@ class SingleContactDetails extends geb.Module {
 		save { $('#action-buttons #update-single') }
 		cancel { $('#action-buttons a.cancel', text:'Cancel') }
 		delete { $('#btn_delete') }
+		searchForMessages { $('#message-stats a.search') }
 	}
 }
 
