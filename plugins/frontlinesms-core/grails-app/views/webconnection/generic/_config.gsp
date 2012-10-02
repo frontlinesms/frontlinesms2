@@ -41,7 +41,7 @@
 			</g:else>
 		</g:if>
 		<g:else>
-			<fsms:render template="/webconnection/parameter" model="[name:'message',  value:'${messageText}']"/>
+			<fsms:render template="/webconnection/parameter" model="[name:'message',  value:'${message_body}']"/>
 		</g:else>
 	</tbody>
 </table>
