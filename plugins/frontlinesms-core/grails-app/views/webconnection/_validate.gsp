@@ -41,8 +41,16 @@
 	})();
 
 	function initializePopup() {
-		var initialScripts = <fsms:render template="/webconnection/generic/scripts"/>;
-		webconnectionDialog.setScripts(initialScripts);
+		<g:if test="${activityInstanceToEdit?.id}">
+			var initialScripts = <fsms:render template="/webconnection/${activityInstanceToEdit?.class?.type}/scripts"/>;
+			webconnectionDialog.setScripts(initialScripts);
+			webconnectionDialog.updateConfirmationScreen()
+		</g:if>
+		<g:else>
+			var initialScripts = <fsms:render template="/webconnection/generic/scripts"/>;
+			webconnectionDialog.setScripts(initialScripts);
+		</g:else>
+		
 
 		var keyWordTabValidation = function() {
 			return isGroupChecked("blankKeyword") || validator.element("#keyword");

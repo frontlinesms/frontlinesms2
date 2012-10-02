@@ -24,7 +24,7 @@ class UshahidiWebconnection extends Webconnection {
 	}
 
 	def getKey() {
-		requestParameters?.find {it.name == "key"}
+		requestParameters?.find {it.name == "key"}?.value
 	}
 }
 

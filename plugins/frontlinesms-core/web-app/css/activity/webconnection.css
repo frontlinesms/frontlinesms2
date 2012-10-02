@@ -6,4 +6,5 @@
 
 #webconnection-config input#url { display:inline-block; }
 #webconnection-config label.crowdmap:nth-child(4) { display:inline-block; text-indent:25px; margin-bottom:0; }
+/*#webconnection-config label.crowdmap.hidden, #webconnection-config label.ushahidi.hidden {display:none}*/
 

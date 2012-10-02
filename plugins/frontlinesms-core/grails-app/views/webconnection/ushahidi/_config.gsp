@@ -1,4 +1,4 @@
-<% def isCrowdmap = !activityInstanceToEdit || serviceType == 'crowdmap'; %>
+<% def isCrowdmap = !activityInstanceToEdit || activityInstanceToEdit?.serviceType == 'crowdmap'; %>
 <div class="info">
 	<p><g:message code="webconnection.ushahidi.description"/></p>
 </div>
@@ -17,7 +17,7 @@
 	</ul>
 </div>
 <div class="input">
-	<label for="url" class="ushahidi${isCrowdmap?' hidden':''}"><g:message code="webconnection.ushahidi.url.label"/></label>
+	<label for="url" class="ushahidi${isCrowdmap? ' hidden':''}"><g:message code="webconnection.ushahidi.url.label"/></label>
 	<label for="url" class="crowdmap${isCrowdmap?'':' hidden'}"><g:message code="webconnection.crowdmap.url.label"/></label>
 	<g:textField name="url" value="${activityInstanceToEdit?.url}" required="true"/>
 	<label for='url' class="crowdmap${isCrowdmap?'':' hidden'}">.crowdmap.com</label>
