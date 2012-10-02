@@ -17,20 +17,27 @@ echo "Building installers.."
 grails prod BuildInstallers
 
 # TODO: test build in appropriate format for machine
+#### This can reuse elements of build_uninstall_install_test
 
 # TODO: commit
+#### git commit -m "Build for 2.a.b"
+#### git push
 
 # TODO: tag commit
+#### git tag frontlinesms2.a.b
+#### git push
 
 # TODO: prompt user for new snapshot version number
+#### prompt for new snapshot number
 
 # TODO: roll version to new snapshot
+#### similar to do/remove_snapshot_from_install_resource_directories
 
 # TODO: commit with new snapshot version
+#### git commit -m "Rolled version numbers to 2.x.y snapshot after 2.a.b release"
 
 # TODO: git push --tags
 
 # TODO: upload builds
-
-
+#### CORE-1440
 
