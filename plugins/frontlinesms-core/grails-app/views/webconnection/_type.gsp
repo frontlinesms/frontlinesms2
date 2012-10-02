@@ -14,7 +14,3 @@
 		</ul>
 	</div>
 </g:if>
-<g:else>
-	<g:hiddenField name="webconnectionType" value="${activityInstanceToEdit?.type}"/>
-</g:else>
-

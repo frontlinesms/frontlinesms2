@@ -12,8 +12,7 @@ class UshahidiWebconnection extends Webconnection {
 		this.addToRequestParameters(new RequestParameter(name:"m", value:'${message_body}'))
 		this.addToRequestParameters(new RequestParameter(name:"key", value:params.key))
 		//TODO Test for urls which end with /
-		def modifyUrl = params.url.endsWith(/\/frontlinesms/) ? params.url : params.url + "/frontlinesms"
-		this.url = modifyUrl
+		this.url = params.url
 		this.httpMethod = Webconnection.HttpMethod.GET
 		this.name = params.name
 		this
