@@ -110,8 +110,8 @@ var fconnection = {
 };
 
 function isFieldValid(fieldName) {
-	if(isInstanceOf(val, 'Boolean')) {
-		var val = getFieldVal(fieldName);
+	var val = getFieldVal(fieldName);
+	if(typeof(val) === "boolean") {
 		if(val && isSubsection(fieldName)) {
 			return validateSubsectionFields(fieldName);
 		}
@@ -123,10 +123,6 @@ function isFieldValid(fieldName) {
 function isFieldSet(fieldName) {
 	var val = getFieldVal(fieldName);
 	return val!==null && val.length>0;
-}
-
-function isInstanceOf(obj, clazz) {
-  return (obj instanceof eval("("+clazz+")")) || typeof(obj) === clazz.toLowerCase();
 }
 
 function validateSubsectionFields(field) {
