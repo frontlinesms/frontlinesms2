@@ -10,4 +10,4 @@ fi
 # check that jslint is available in temp
 
 # run jslint
-find web-app/js/ -name "*.js" -print0 -type f | xargs --null -n 1 jslint
+find web-app/js/ -name "*.js" | grep -v jqplot | xargs -n 1 jslint --white --
