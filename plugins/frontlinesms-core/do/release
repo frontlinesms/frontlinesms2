@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "Building new release"
+echo "1: Checking for clean repository"
+if test -n "$(git status --porcelain)"
+then
+	echo "not clean"
+fi
+echo "2: "
+
+
