@@ -1,4 +1,6 @@
-#web-connection-param-table { margin-bottom:10px; margin-left:20px; }
+#tabs p.info { padding-left:20px; margin:15px 0;}
+#tabs div.info { padding:4px 0 5px 25px; margin:15px 0;
+	background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }#web-connection-param-table { margin-bottom:10px; margin-left:20px; }
 #web-connection-param-table td { padding:2px; }
 #web-connection-param-table td .ui-selectmenu-wrapper > a { margin:0 !important; }
 #web-connection-param-table td .ui-selectmenu-wrapper > a > span { padding:2px; }
@@ -6,5 +8,5 @@
 
 #webconnection-config input#url { display:inline-block; }
 #webconnection-config label.crowdmap:nth-child(4) { display:inline-block; text-indent:25px; margin-bottom:0; }
-/*#webconnection-config label.crowdmap.hidden, #webconnection-config label.ushahidi.hidden {display:none}*/
+
 
