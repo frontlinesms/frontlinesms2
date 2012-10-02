@@ -1,9 +1,10 @@
 #!/bin/bash
 echo "Building new release"
-echo "1: Checking for clean repository"
+echo "1: Checking for clean repository..."
 if test -n "$(git status --porcelain)"
 then
-	echo "not clean"
+	echo "Your repository is not clean. This script can only build from a clean repo"
+	exit 1
 fi
 echo "2: "
 
