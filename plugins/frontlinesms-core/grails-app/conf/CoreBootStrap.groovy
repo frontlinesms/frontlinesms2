@@ -14,6 +14,7 @@ import serial.mock.SerialPortHandler
 import serial.mock.CommPortIdentifier
 
 import org.mockito.Mockito
+import grails.converters.JSON
 
 class CoreBootStrap {
 	def applicationContext
@@ -72,6 +73,7 @@ class CoreBootStrap {
 			createWelcomeNote()
 		}
 
+		setCustomJSONRenderers()
 		ensureResourceDirExists()
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
@@ -523,5 +525,16 @@ class CoreBootStrap {
 			dir.mkdirs()
 			log.info "creating resource directory at {$dir.absolutePath}"
 		}
+	}
+
+	private def setCustomJSONRenderers() {
+		JSON.registerObjectMarshaller(Announcement) {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['dateCreated'] = it.dateCreated
+            returnArray['name'] = it.name
+            returnArray['sentMessageText'] = it.sentMessageText
+            return returnArray
+        }
 	}
 }

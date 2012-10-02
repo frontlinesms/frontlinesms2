@@ -53,6 +53,20 @@ class ContactListSpec extends ContactBaseSpec {
 		then:
 			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones', 'SaM Tina']) }
 	}
+
+	def 'should be able to search contacts by phone number'() {
+		given:
+			def samAnderson = Contact.build(name:'Sam Anderson', mobile:"+11111")
+			def samJones = Contact.build(name:'SAm Jones', mobile:"+11112")
+			def samTina = Contact.build(name:'SaM Tina', mobile:"+23232")
+			def bob = Contact.build(name:'bob')
+		when:
+			to PageContactShow
+			footer.searchContact.jquery.trigger('focus')
+			footer.searchContact << "+1111"
+		then:
+			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones']) }
+	}
 	
 	def 'should be able to search contacts within a group'() {
 		given:

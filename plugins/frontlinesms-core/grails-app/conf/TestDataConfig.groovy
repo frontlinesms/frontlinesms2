@@ -1,6 +1,7 @@
 import frontlinesms2.*
 
 testDataConfig {
+	def counter = 0
 	sampleData {
 		'frontlinesms2.Fmessage' {
 			inbound = true
@@ -8,6 +9,7 @@ testDataConfig {
 			text = 'build-test-data made me'
 		}
 		'frontlinesms2.Announcement' {
+			name = { "${++counter}-announcement" }
 			messages = []
 		}
 		'frontlinesms2.IntelliSmsFconnection' {

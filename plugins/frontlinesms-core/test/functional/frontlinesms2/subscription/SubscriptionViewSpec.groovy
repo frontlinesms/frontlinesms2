@@ -268,7 +268,6 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	}
 
-
 	def 'Categorisation with the dialog works for sent messages as well, adding/removing the recipients to/from the group'() {
 		given:
 			def g = Group.findByName("Camping")

@@ -1,10 +1,10 @@
 <div class="controls">
 	<div id="contact-name-search">
 			<g:if test="${contactsSection instanceof frontlinesms2.SmartGroup}">
-				<input id="contact-search" class="search" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' +this.value+ \'&smartGroupId=\' +getGroupId()')}" value="${params.searchString ?: 'Search'}" defaultValue='Search'/>
+				<input id="contact-search" class="search" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' + encodeURIComponent(this.value) + \'&smartGroupId=\' +getGroupId()')}" value="${params.searchString ?: 'Search'}" defaultValue='Search'/>
 			</g:if>
 			<g:else>
-				<input id="contact-search" class="search" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' +this.value+ \'&groupId=\' +getGroupId()')}" value="${params.searchString ?: 'Search'}" defaultValue='Search'/>
+				<input id="contact-search" class="search" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' + encodeURIComponent(this.value) + \'&groupId=\' +getGroupId()')}" value="${params.searchString ?: 'Search'}" defaultValue='Search'/>
 			</g:else>
 	</div>
 	<div id="paging">
