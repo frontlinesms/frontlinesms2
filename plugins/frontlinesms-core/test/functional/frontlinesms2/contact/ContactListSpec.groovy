@@ -1,6 +1,7 @@
 package frontlinesms2.contact
 
 import frontlinesms2.*
+import frontlinesms2.search.*
 
 import geb.Browser
 import grails.plugin.geb.GebSpec
@@ -133,5 +134,43 @@ class ContactListSpec extends ContactBaseSpec {
 			to PageContactShow
 		then:	
 			header.contactCount == 2
+	}
+
+	def 'can search for all messages from a named contact'() {
+		given:
+			def pedro = Contact.build(name:'Pedro', mobile:'+111')
+			(1..20).each { Fmessage.build(src:'+111', inbound:true, text:"message ${it}") }
+			def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
+				.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
+				.save(failOnError:true)
+		when:
+			to PageContactShow
+			contactList.selectContact 0
+		then:
+			waitFor { singleContactDetails.name.value() == "Pedro" }
+		when:
+			singleContactDetails.searchForMessages.click()
+		then:
+			waitFor { at PageSearchResult }
+			messageList.messages.size() == 21
+	}
+
+	def 'can search for all messages from an unnamed contact'() {
+		given:
+			def pedro = Contact.build(name:'', mobile:'+111')
+			(1..20).each { Fmessage.build(src:'+111', inbound:true, text:"message ${it}") }
+			def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
+				.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
+				.save(failOnError:true)
+		when:
+			to PageContactShow
+			contactList.selectContact 0
+		then:
+			waitFor { singleContactDetails.name.value() == "" }
+		when:
+			singleContactDetails.searchForMessages.click()
+		then:
+			waitFor { at PageSearchResult }
+			messageList.messages.size() == 21
 	}
 }
