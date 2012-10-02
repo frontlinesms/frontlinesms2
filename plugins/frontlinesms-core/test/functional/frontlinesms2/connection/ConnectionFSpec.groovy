@@ -154,7 +154,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { connectionList.selectedConnection.text().contains('Henry') }
 	}
 
-	def 'can setup a new IntelliSMS account'() {
+	def 'can set up a new IntelliSMS account'() {
 		when:
 			launchCreateWizard('intellisms')
 			connectionForm.intellismssend = true

@@ -31,7 +31,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.name = 'Henry\'s Connection'
 			controller.params.secret = 'dibble'
 		when:
-			controller.save
+			controller.save()
 		then:
 			def c = SmssyncFconnection.findByName("Henry's Connection")
 			!c.receiveEnabled
@@ -63,6 +63,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def c = new SmssyncFconnection(name:'h', sendEnabled:true, receiveEnabled:false, secret:null).save(failOnError:true, flush:true)
 		when:
 			controller.params.id = c.id
+			controller.params.connectionType = 'smssync'
 			controller.params.name = 'i'
 			controller.params.receiveEnabled = true
 			controller.params.sendEnabled = false
