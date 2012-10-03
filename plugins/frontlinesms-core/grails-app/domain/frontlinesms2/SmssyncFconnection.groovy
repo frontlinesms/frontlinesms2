@@ -17,10 +17,10 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	String secret
-	String outgoingQueue // stored as String as either we are adding to it or destroying the whole thing
+	static hasMany = [queuedDispatches: Long]
 
 	static constraints = {
-		outgoingQueue nullable:true
+		queuedDispatches nullable:true
 		secret nullable:true
 	}
 
@@ -29,15 +29,8 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	def addToQueue(Dispatch d) {
-		if(outgoingQueue) {
-			outgoingQueue += ',' + d.id
-		} else outgoingQueue = d.id.toString()
-	}
-
-	Long[] getOutgoingQueueIds() {
-		if(outgoingQueue) {
-			return outgoingQueue?.split(',')*.toLong()
-		} else return []
+		this.addToQueuedDispatches(d.id)
+		this.save(failOnError:true, flush:true)
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {
