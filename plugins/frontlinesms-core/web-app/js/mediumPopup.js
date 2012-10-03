@@ -277,7 +277,7 @@ var mediumPopup = (function() {
 			}
 		});
 	};
-	selectSubscriptionGroup = function(groupId){
+	selectSubscriptionGroup = function(groupId) { // FIXME activity-specific code should not be inside this file
 		var labelId = $('input[value=group-'+groupId+']').attr('id');
 		$('label[for='+labelId+']').trigger('click');
 	};
@@ -287,7 +287,9 @@ var mediumPopup = (function() {
 		launchMediumPopup:launchMediumPopup,
 		launchMediumWizard:launchMediumWizard,
 		launchHelpWizard:launchHelpWizard,
-		messageResponseClick:messageResponseClick
+		messageResponseClick:messageResponseClick,
+		selectSubscriptionGroup:selectSubscriptionGroup,
+		submit:submit
 	};
 }());
 
