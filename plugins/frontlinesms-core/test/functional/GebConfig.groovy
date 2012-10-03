@@ -36,7 +36,7 @@ driver = {
 	println "Configured WebDriver: ${driver.class}"
 
 	3.times { try {
-		driver.navigate().to('http://localhost:8080/core') // TODO should read this url from grails settings
+		driver.navigate().to('http://localhost:8080/frontlinesms-core') // TODO should read this url from grails settings
 	} catch(TimeoutException ex) { sleep 10000 } }
 	def width = 1366
 	def height = 768
