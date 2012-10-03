@@ -21,7 +21,7 @@
 	<label for="url" class="crowdmap${isCrowdmap?'':' hidden'}"><g:message code="webconnection.crowdmap.url.label"/></label>
 	<g:textField name="displayed_url" value="${activityInstanceToEdit ? (isCrowdmap? (activityInstanceToEdit.url - 'https://' - '.crowdmap.com') : activityInstanceToEdit.url ) : ''}" required="true"/>
 	<g:hiddenField name="url" value="${activityInstanceToEdit?.url}" />
-	<label for='url' class="crowdmap${isCrowdmap?'':' hidden'}">.crowdmap.com</label>
+	<label for='url' class="crowdmap${isCrowdmap?'':' hidden'} suffix">.crowdmap.com</label>
 </div>
 <div class="input"> 
 	<label for="key" class="ushahidi${isCrowdmap?' hidden':''}"><g:message code="webconnection.ushahidi.key.label"/></label>

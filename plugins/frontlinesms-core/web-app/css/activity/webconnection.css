@@ -9,5 +9,5 @@
 
 #webconnection-config input#url { display:inline-block; }
 #webconnection-config label.crowdmap:nth-child(4) { display:inline-block; text-indent:25px; margin-bottom:0; }
-#tabs input#displayed_url { display: inline-block;}
-label.crowdmap {display:inline;}
+#webconnection-config input#displayed_url { display: inline-block;}
+#webconnection-config label.crowdmap.suffix { display: inline-block; padding-left:25px}
