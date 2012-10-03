@@ -286,7 +286,8 @@ var mediumPopup = (function() {
 		addValidation:addValidation,
 		launchMediumPopup:launchMediumPopup,
 		launchMediumWizard:launchMediumWizard,
-		launchHelpWizard:launchHelpWizard
+		launchHelpWizard:launchHelpWizard,
+		messageResponseClick:messageResponseClick
 	};
 }());
 
