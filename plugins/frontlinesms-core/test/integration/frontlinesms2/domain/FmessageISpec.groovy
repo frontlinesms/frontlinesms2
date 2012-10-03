@@ -330,6 +330,24 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.owned(owner, false, true).list(sort:'date', order:'desc') == [received, sent]
 			Fmessage.owned(owner, false, false).list(sort:'date', order:'desc') == [received]
 	}
+
+	def 'Search.listDistinct should return distinct messages'(){
+		setup:
+			def message
+			(1..60).each{
+				message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
+				(0..10).each { num ->
+					message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+				}
+				message.save(failOnError:true)
+			}
+			def controller = new SearchController()
+			controller.params.searchString = "sample"
+		when:
+			def dataModel = controller.result()
+		then:
+			dataModel.messageInstanceList.size() == 60
+	}
 	
 	private Folder getTestFolder(params=[]) {
 		new Folder(name:params.name?:'test',
