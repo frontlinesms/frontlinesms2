@@ -1,5 +1,5 @@
 {
-	validation:{ url:"required", key:"required", keyword:"required"},
+	validation:{ displayed_url:"required", key:"required", keyword:"required"},
 	updateConfirmationScreen:function() {
 		$("#webconnection-config label.hidden").hide();
 		var selectType = function(ctx) {
