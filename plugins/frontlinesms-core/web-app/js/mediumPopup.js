@@ -1,3 +1,23 @@
+function cancel() {
+	$(this).dialog('close');
+}
+
+function getCurrentTab() {
+	var selected = $("#tabs").tabs("option", "selected");
+	return $("#tabs").find('.ui-tabs-panel').eq(selected);
+}
+
+function getCurrentTabDom() {
+	return $('#tabs').tabs('option', 'selected');
+}
+
+function getCurrentTabIndex() {
+	var current, tabWidget;
+	tabWidget = $('#tabs').tabs();
+	current = tabWidget.tabs('option', 'selected');
+	return current;
+}
+
 function createModalBox(html) {
 	var modalBox = $("<div id='modalBox'><div>");
 	modalBox.html(html).appendTo(document.body);
@@ -24,8 +44,9 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 }
 
 function launchMediumWizard(title, html, btnFinishedText, width, height, closeOnSubmit) {
-	closeWhenDone = (typeof closeOnSubmit == 'undefined' ? true : closeOnSubmit );
-	var modalBox = createModalBox(html);
+	var closeWhenDone, modalBox;
+	closeWhenDone = (typeof closeOnSubmit === 'undefined'? true: closeOnSubmit);
+	modalBox = createModalBox(html);
 	$("#messageText").keyup();
 	magicwand.init(modalBox.find('select[id^="magicwand-select"]'));
 	modalBox.dialog({
@@ -53,11 +74,12 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 }
 
 function launchHelpWizard(html) {
-	var modalBox = createModalBox(html);
+	var dialog, height, modalBox;
+	modalBox = createModalBox(html);
 	modalBox.addClass("help");
 	$("#messageText").keyup();
-	var height = $(window).height();
-	var dialog = modalBox.dialog({
+	height = $(window).height();
+	dialog = modalBox.dialog({
 		modal: true,
 		title: i18n("popup.help.title"),
 		width: "95%",
@@ -94,9 +116,10 @@ function submit() {
 }
 
 function prevButton() {
-	for (var i = 1; i <= getCurrentTabIndex(); i++) {
-		var prevTab = getCurrentTabIndex() - i;
-		if ($.inArray(prevTab, $("#tabs").tabs("option", "disabled")) == -1) {
+	var i, prevTab;
+	for (i = 1; i <= getCurrentTabIndex(); i++) {
+		prevTab = getCurrentTabIndex() - i;
+		if ($.inArray(prevTab, $("#tabs").tabs("option", "disabled")) === -1) {
 			$("#tabs").tabs('select', prevTab);
 			break;
 		}
@@ -106,15 +129,11 @@ function prevButton() {
 function nextButton() {
 	for (var i = 1; i <= getTabLength(); i++) {
 		var nextTab = getCurrentTabIndex() + i;
-		if ($.inArray(nextTab, $("#tabs").tabs("option", "disabled")) == -1) {
+		if ($.inArray(nextTab, $("#tabs").tabs("option", "disabled")) === -1) {
 			$("#tabs").tabs('select', nextTab);
 			break;
 		}
 	}
-}
-
-function cancel() {
-	$(this).dialog('close');
 }
 
 function validateTabSelections(dialog) {
@@ -192,21 +211,6 @@ function getButtonToTabMappings() {
 			"submit": [getTabLength()],
 			"disabledBack": [0]
 	};
-}
-
-function getCurrentTab() {
-	var selected = $("#tabs").tabs("option", "selected");
-	return $("#tabs").find('.ui-tabs-panel').eq(selected)
-}
-
-function getCurrentTabDom() {
-	return $('#tabs').tabs('option', 'selected');
-}
-
-function getCurrentTabIndex() {
-	var tabWidget = $('#tabs').tabs();
-	var current = tabWidget.tabs('option', 'selected');
-	return current;
 }
 
 function initializeTabContentWidgets() {

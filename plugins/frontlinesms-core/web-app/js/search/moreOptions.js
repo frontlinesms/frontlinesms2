@@ -1,10 +1,11 @@
 $(function() {	
 	$(".extra-option").each(function() {
-		if (!$(this).children("input").val())
+		if (!$(this).children("input").val()) {
 			$(this).hide();
-		else
+		} else {
 			$(".extra-option-link#" + $(this).children("input").attr('id') + "-add").hide();
-	})
+		}
+	});
 	
 	$("#extra-options-list").hide();
 	$("#toggle-extra-options").find("#minus").hide();
