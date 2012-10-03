@@ -65,10 +65,10 @@
 			return validator.element('#name');
 		};
 
-		addValidation('subscription-select-group-keyword', groupAndKeywordTabValidation);
-		addValidation('subscription-aliases', aliasTabValidation);
-		addValidation('subscription-autoreplies', autoreplyTabValidation);
-		addValidation('subscription-confirm', confirmTabValidation);
+		mediumPopup.addValidation('subscription-select-group-keyword', groupAndKeywordTabValidation);
+		mediumPopup.addValidation('subscription-aliases', aliasTabValidation);
+		mediumPopup.addValidation('subscription-autoreplies', autoreplyTabValidation);
+		mediumPopup.addValidation('subscription-confirm', confirmTabValidation);
 		
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmTab();

@@ -23,7 +23,7 @@ function renameAction() {
 		data: {ownerId: $("#ownerId").val()},
 		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename"), 'validate'); }
+			hideThinking(); mediumPopup.launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename"), 'validate'); }
 	});
 }
 
@@ -36,7 +36,7 @@ function editAction() {
 		data: {id: $("#ownerId").val()},
 		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			hideThinking(); launchMediumWizard(title, data, i18n('wizard.ok'), 675, 500, false); }
+			hideThinking(); mediumPopup.launchMediumWizard(title, data, i18n('wizard.ok'), 675, 500, false); }
 	});
 }
 

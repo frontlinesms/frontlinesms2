@@ -127,14 +127,14 @@
 			return validator.element('input[name=name]');
 		};
 
-		addValidation('poll-question', questionTabValidation);
-		addValidation('poll-response', responseTabValidation);
-		addValidation('poll-sort', autoSortTabValidation);
-		addValidation('poll-alias', aliasTabValidation);
-		addValidation('poll-reply', autoReplyTabValidation);
-		addValidation('poll-edit-message', composeMessageTabValidation)
-		addValidation('poll-recipients', recipientTabValidation);
-		addValidation('poll-confirm', confirmTabValidation);
+		mediumPopup.addValidation('poll-question', questionTabValidation);
+		mediumPopup.addValidation('poll-response', responseTabValidation);
+		mediumPopup.addValidation('poll-sort', autoSortTabValidation);
+		mediumPopup.addValidation('poll-alias', aliasTabValidation);
+		mediumPopup.addValidation('poll-reply', autoReplyTabValidation);
+		mediumPopup.addValidation('poll-edit-message', composeMessageTabValidation)
+		mediumPopup.addValidation('poll-recipients', recipientTabValidation);
+		mediumPopup.addValidation('poll-confirm', confirmTabValidation);
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateSendMessage();

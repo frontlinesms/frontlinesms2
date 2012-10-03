@@ -7,7 +7,12 @@ jslint || echo "Please install jslint"
 # check that jslint is available in temp
 
 # run jslint
-FILES=`find web-app/js/ -name "*.js" | grep -v jqplot | grep -v jquery`
+if [ -z "$@" ]; then
+	FILES=`find web-app/js/ -name "*.js" | grep -v jqplot | grep -v jquery`
+else
+	FILES="$@"
+fi
+
 echo "# Linting: $FILES"
 jslint --white --sloppy --white --browser --nomen --plusplus --forin \
 --predef $ \

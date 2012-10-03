@@ -24,9 +24,9 @@
 			return validator.element('input[name=name]');
 		};
 
-		addValidation('autoreply-enter-keyword', keyWordTabValidation);
-		addValidation('autoreply-create-message', messageTextTabValidation);
-		addValidation('autoreply-confirm', confirmTabValidation);
+		mediumPopup.addValidation('autoreply-enter-keyword', keyWordTabValidation);
+		mediumPopup.addValidation('autoreply-create-message', messageTextTabValidation);
+		mediumPopup.addValidation('autoreply-confirm', confirmTabValidation);
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();
