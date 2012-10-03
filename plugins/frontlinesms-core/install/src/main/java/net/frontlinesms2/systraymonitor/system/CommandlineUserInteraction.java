@@ -27,5 +27,18 @@ public abstract class CommandlineUserInteraction {
 		if(response == null || response.length() == 0) return defaultResponse;
 		else return response.charAt(0);
 	}
+
+	public boolean yesNoPrompt(String prompt, boolean defaultResponse) {
+		echo(prompt + " [" + (defaultResponse?'Y':'y') + "/" + (defaultResponse?'n':'N') + "]");
+		while(true) {
+			switch(charPrompt(defaultResponse? 'y': 'n')) {
+				case 'y': case 'Y':
+					return true;
+				case 'n': case 'N':
+					return false;
+				default: echo("Please enter either 'Y' or 'N'.");
+			}
+		}
+	}
 }
 
