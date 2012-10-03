@@ -12,8 +12,8 @@
 			}
 		</g:if>
 		<g:else>
-			disableTab("poll-response");
-			disableTab("poll-alias");
+			mediumPopup.disableTab("poll-response");
+			mediumPopup.disableTab("poll-alias");
 			$("input[name='pollType']").trigger("change");
 		</g:else>
 		<g:if test="${activityInstanceToEdit?.archived}">

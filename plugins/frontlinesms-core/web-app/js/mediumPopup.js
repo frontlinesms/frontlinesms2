@@ -284,6 +284,8 @@ var mediumPopup = (function() {
 
 	return {
 		addValidation:addValidation,
+		disableTab:disableTab,
+		enableTab:enableTab,
 		launchMediumPopup:launchMediumPopup,
 		launchMediumWizard:launchMediumWizard,
 		launchHelpWizard:launchHelpWizard,
