@@ -10,4 +10,6 @@ class GenericWebconnection extends Webconnection {
 		processRequestParameters(params)
 		this
 	}
+
+	def getServiceType() {'generic'}
 }

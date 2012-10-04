@@ -106,6 +106,7 @@ abstract class Webconnection extends Activity {
 	}
 
 	abstract def initialize(params)
+	abstract def getServiceType()
 
 	def preProcess(Exchange x) {
 		println "x: ${x}"

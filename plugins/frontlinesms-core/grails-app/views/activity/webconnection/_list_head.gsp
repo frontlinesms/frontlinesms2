@@ -3,7 +3,7 @@
 		<g:message code="webconnection.title" args="${[ownerInstance.name]}"/>
 	</h1>
 	<p class="subtitle">
-		<g:message code="webconnection.${ownerInstance?.type}.subtitle" args="${[ownerInstance?.serviceType.capitalize()]}" id="webconnectionSubtitle"/>
+		<g:message code="webconnection.${ownerInstance?.type}.subtitle" args="${[ownerInstance?.serviceType?.capitalize()]}" id="webconnectionSubtitle"/>
 	</p>
 	<li>
 		<g:formatDate date="${ownerInstance?.dateCreated}"/>
