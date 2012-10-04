@@ -257,13 +257,20 @@ class ConnectionDialog extends MediumPopup {
 	}
 	static content = {
 		connectionType { $("#connectionType") }
-		connectionForm { $('#connectionForm')}
-		confirmName { $("#confirm-name")}
-		confirmType { $("#confirm-type")}
-		confirmPort { $("#confirm-port")}
-		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
-		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
-		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
+		connectionForm { $('#connectionForm') }
+		confirmName { $("#confirm-name") }
+		confirmType { $("#confirm-type") }
+		confirmPort { $("#confirm-port") }
+
+		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name") }
+		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username") }
+		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type") }
+
+		confirmSmssyncName { $('#smssync-confirm #confirm-name') }
+		confirmSmssyncSecret { $('#smssync-confirm #confirm-secret') }
+		confirmSmssyncReceiveEnabled { $('#smssync-confirm #confirm-receiveEnabled') }
+		confirmSmssyncSendEnabled { $('#smssync-confirm #confirm-sendEnabled') }
+
 		error {$('label', class:'error')}
 	}
 }

@@ -1,13 +1,23 @@
 #!/bin/sh
+set -e
 
 # check spidermonkey is installed
-jslint
-if [ $? -eq 127 ]; then
-	echo "Please install jslint."
-	exit
-fi
+jslint || echo "Please install jslint"
 
 # check that jslint is available in temp
 
 # run jslint
-find web-app/js/ -name "*.js" -print0 -type f | xargs --null -n 1 jslint
+if [ -z "$@" ]; then
+	FILES=`find web-app/js/ -name "*.js" | grep -v jqplot | grep -v jquery`
+else
+	FILES="$@"
+fi
+
+echo "# Linting: $FILES"
+jslint --white --sloppy --white --browser --nomen --plusplus --forin \
+--predef $ \
+--predef jQuery \
+--predef url_root \
+--predef i18n \
+--predef initializePopup \
+-- $FILES

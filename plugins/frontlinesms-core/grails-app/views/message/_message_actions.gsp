@@ -14,10 +14,10 @@
 			<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}"><g:message code="fmessage.resend" /></g:link>
 		</g:elseif>
 		<g:else>
-			<a id="btn_reply" class="msg-btn btn" onclick="messageResponseClick('Reply')"><g:message code="fmessage.reply" /></a>
+			<a id="btn_reply" class="msg-btn btn" onclick="mediumPopup.messageResponseClick('Reply')"><g:message code="fmessage.reply" /></a>
 		</g:else>
 
-		<a id="btn_forward" class="msg-btn btn" onclick="messageResponseClick('Forward')"><g:message code="fmessage.forward" /></a>
+		<a id="btn_forward" class="msg-btn btn" onclick="mediumPopup.messageResponseClick('Forward')"><g:message code="fmessage.forward" /></a>
 
 		<g:if test="${!messageInstance.messageOwner}">
 			<g:if test="${!messageInstance.archived}">

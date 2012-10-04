@@ -41,7 +41,7 @@ class SearchController extends MessageController {
 		}
 
 		def rawSearchResults = Fmessage.search(search)
-		def searchResults = rawSearchResults.list(sort:"date", order:"desc", max: params.max, offset: params.offset)
+		def searchResults = rawSearchResults.listDistinct(sort:"date", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		flash.message = params.flashMessage

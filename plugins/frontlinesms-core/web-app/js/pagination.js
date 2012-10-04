@@ -1,15 +1,15 @@
 /** TODO this should be moved into a taglib */
 function disablePaginationControls() {
-	if($(".prevLink").size() == 0) {
+	if($(".prevLink").size() === 0) {
 		$("#paging").prepend('<a href="#" class="prevLink disabled"></a>');
 	} else {
 		$("#paging .prevLink").empty();
 	}
-	if($(".nextLink").size() == 0) {
+	if($(".nextLink").size() === 0) {
 		$("#paging").append('<a href="#" class="nextLink disabled"></a>');
 	} else {
 		$("#paging .nextLink").empty();
 	}
-	$(".disabled").click(function(e) {e.preventDefault()});
+	$(".disabled").click(function(e) { e.preventDefault(); });
 }
 
