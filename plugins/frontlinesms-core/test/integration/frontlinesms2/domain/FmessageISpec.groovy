@@ -330,11 +330,11 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.owned(owner, false, true).list(sort:'date', order:'desc') == [received, sent]
 			Fmessage.owned(owner, false, false).list(sort:'date', order:'desc') == [received]
 	}
-@spock.lang.IgnoreRest
-	def 'Search.listDistinct should return distinct messages'(){
+
+	def 'search page should display distinct messages'(){
 		setup:
 			def message
-			(1..10).each{
+			(1..60).each{
 				message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
 				(0..10).each { num ->
 					message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
@@ -344,12 +344,37 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def controller = new SearchController()
 			controller.params.searchString = "sample"
 			controller.params.max = 50
+			controller.params.offset = 0
 		when:
 			def dataModel = controller.result()
 		then:
 			dataModel.messageInstanceList.size() == dataModel.messageInstanceList*.id.unique().size() &&
-					dataModel.messageInstanceList.size() == 10
-					
+					dataModel.messageInstanceList.size() == 50
+	}
+@Unroll
+	def 'pagination navigation should still work in search page'(){
+		setup:
+			def message
+			(1..80).each{
+				message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
+				(0..10).each { num ->
+					message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+				}
+				message.save(failOnError:true)
+			}
+			def controller = new SearchController()
+			controller.params.searchString = "sample"
+			controller.params.max = max
+			controller.params.offset = offset
+		when:
+			def dataModel = controller.result()
+		then:
+			dataModel.messageInstanceList.size() == dataModel.messageInstanceList*.id.unique().size()
+			dataModel.messageInstanceList*.id.containsAll(Fmessage.list(offset : offset,max : max,sort:"date", order:"desc")*.id)
+		where:
+			offset|max
+			0|50
+			50|50
 	}
 	
 	private Folder getTestFolder(params=[]) {
