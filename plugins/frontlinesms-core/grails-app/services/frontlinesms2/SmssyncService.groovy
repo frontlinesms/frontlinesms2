@@ -13,7 +13,7 @@ class SmssyncService {
 		println "SmssyncService.processSend() :: x.in.body=$x.in.body"
 		println "SmssyncService.processSend() :: x.in.headers=${x.in?.headers}"
 		def connection = SmssyncFconnection.get(x.in.headers['fconnection-id'])
-		connection.addToQueue(x.in.body)
+		connection.addToQueuedDispatchIds(x.in.body)
 		connection.save(failOnError:true)
 		println "SmssyncService.processSend() :: EXIT"
 	}
@@ -61,14 +61,14 @@ class SmssyncService {
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {
 		def responseMap = [:]
 
-		def q = connection.queuedDispatches
+		def q = connection.queuedDispatchIds
 		if(q || includeWhenEmpty) {
 			responseMap.task = 'send'
 
-			connection.queuedDispatches = null
+			connection.queuedDispatchIds = null
 			connection.save(failOnError:true)
 
-			responseMap.messages = Dispatch.getAll(q.collect{ it }).collect { d ->
+			responseMap.messages = Dispatch.getAll(q).collect { d ->
 				d.status = DispatchStatus.SENT
 				[to:d.dst, message:d.text]
 			}

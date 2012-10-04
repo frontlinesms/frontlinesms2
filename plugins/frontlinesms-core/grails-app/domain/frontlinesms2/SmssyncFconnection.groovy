@@ -17,20 +17,16 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	String secret
-	static hasMany = [queuedDispatches: Long]
+	static hasMany = [queuedDispatchIds: Long]
+	List queuedDispatchIds
 
 	static constraints = {
-		queuedDispatches nullable:true
+		queuedDispatchIds nullable:true
 		secret nullable:true
 	}
 
 	def apiProcess(controller) {
 		smssyncService.apiProcess(this, controller)
-	}
-
-	def addToQueue(Dispatch d) {
-		this.addToQueuedDispatches(d.id)
-		this.save(failOnError:true, flush:true)
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {

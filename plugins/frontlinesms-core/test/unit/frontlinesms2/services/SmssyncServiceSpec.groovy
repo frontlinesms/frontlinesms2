@@ -32,7 +32,7 @@ class SmssyncServiceSpec extends Specification {
 	def setupDefaultConnection() {
 		connection.receiveEnabled >> true
 		connection.sendEnabled >> true
-		connection.outgoingQueueIds >> ([1, 2, 3] as Long[])
+		connection.queuedDispatchIds >> ([1, 2, 3] as Long[])
 	}
 
 	def 'processSend should get fconnection from exchange headers'() {
@@ -71,7 +71,7 @@ class SmssyncServiceSpec extends Specification {
 			connection.secret >> secret
 			controller.params.secret = secret
 			if(sendMode) controller.params.task = 'send'
-			if(dispatches) connection.outgoingQueueIds >> ((1..dispatches).collect { it } as Long[])
+			if(dispatches) connection.queuedDispatchIds >> ((1..dispatches).collect { it } as Long[])
 		when:
 			def actualResponse = service.generateApiResponse(connection, controller)
 		then:
