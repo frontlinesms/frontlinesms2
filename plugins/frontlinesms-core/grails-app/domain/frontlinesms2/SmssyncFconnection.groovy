@@ -29,6 +29,10 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		smssyncService.apiProcess(this, controller)
 	}
 
+	def addToQueuedDispatches(d) {
+		addToQueuedDispatchIds(d.id)
+	}
+
 	List<RouteDefinition> getRouteDefinitions() {
 		def routeDefinitions = new RouteBuilder() {
 			@Override void configure() {}

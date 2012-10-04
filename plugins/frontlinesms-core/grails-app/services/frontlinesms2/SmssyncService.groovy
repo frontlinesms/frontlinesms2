@@ -13,7 +13,7 @@ class SmssyncService {
 		println "SmssyncService.processSend() :: x.in.body=$x.in.body"
 		println "SmssyncService.processSend() :: x.in.headers=${x.in?.headers}"
 		def connection = SmssyncFconnection.get(x.in.headers['fconnection-id'])
-		connection.addToQueuedDispatchIds(x.in.body)
+		connection.addToQueuedDispatches(x.in.body)
 		connection.save(failOnError:true)
 		println "SmssyncService.processSend() :: EXIT"
 	}

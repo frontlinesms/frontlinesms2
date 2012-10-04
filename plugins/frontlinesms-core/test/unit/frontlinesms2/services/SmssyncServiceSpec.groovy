@@ -47,11 +47,11 @@ class SmssyncServiceSpec extends Specification {
 	def 'processSend should add exchange body to connection\'s queue'() {
 		given:
 			setupDefaultConnection()
-			def mockDispatch = new Dispatch()
+			def mockDispatch = Mock(Dispatch)
 		when:
 			service.processSend(mockExchange(mockDispatch))
 		then:
-			1 * connection.addToQueue(mockDispatch)
+			1 * connection.addToQueuedDispatches(_)
 	}
 
 	def 'processSend should save connection'() {
