@@ -4,16 +4,12 @@ import grails.converters.JSON
 
 class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete:'GET']
-	private static final def CONNECTION_TYPE_MAP = [smslib:SmslibFconnection,
-			email:EmailFconnection,
-			clickatell:ClickatellFconnection,
-			intellisms:IntelliSmsFconnection]
 
 	def fconnectionService
 	def messageSendService
 
 	def index() {
-		redirect(action:'create_new')
+		redirect action:'list'
 	}
 	
 	def list() {
@@ -49,7 +45,7 @@ class ConnectionController {
 	
 	def save() {
 		remapFormParams()
-		doSave(CONNECTION_TYPE_MAP[params.connectionType])
+		doSave(Fconnection.implementations.find { it.shortName == params.connectionType })
 	}
 
 	def delete() {
@@ -93,7 +89,7 @@ class ConnectionController {
 	
 	private def remapFormParams() {
 		def cType = params.connectionType
-		if(!(cType in CONNECTION_TYPE_MAP)) {
+		if(!(cType in Fconnection.implementations*.shortName)) {
 			throw new RuntimeException("Unknown connection type: " + cType)
 		}
 		def newParams = [:] // TODO remove this - without currently throw ConcurrentModificationException

@@ -75,11 +75,11 @@ class GroupViewSpec extends GroupBaseSpec {
 			footer.prevPage.disabled
 			footer.nextPage.click()
 		then:
-			!footer.prevPage.disabled
+			waitFor { !footer.prevPage.disabled }
 		when:
 			contactList.selectContact 1
 		then:
-			!footer.prevPage.disabled
+			waitFor { !footer.prevPage.disabled }
 	}
 	
 }

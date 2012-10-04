@@ -11,7 +11,7 @@ if(!Array.prototype.indexOf) {
 if(!String.prototype.trim) {
 	String.prototype.trim = function(s) {
 		return jQuery.trim(s);
-	}
+	};
 }
 
 // Standardise the onclick/onchange firing in IE before IE9
@@ -36,7 +36,7 @@ if(jQuery.browser.msie) { $(function() {
 	        this.disabled = false;
 	    });
 	};
-})(jQuery);
+}(jQuery));
 
 function refreshMessageCount() {
 	$.ajax({
@@ -46,20 +46,20 @@ function refreshMessageCount() {
 	});
 }
 
-function isElementEmpty(selector) {
-	return isEmpty($(selector).val());
-}
-
 function isEmpty(val) {
 	return val.trim().length === 0;
 }
 
-function isGroupChecked(groupName) {
-	return getSelectedGroupElements(groupName).length > 0;
+function isElementEmpty(selector) {
+	return isEmpty($(selector).val());
 }
 
 function getSelectedGroupElements(groupName) {
 	return $('input[name=' + groupName + ']:checked');
+}
+
+function isGroupChecked(groupName) {
+	return getSelectedGroupElements(groupName).length > 0;
 }
 
 function isDropDownSelected(id) {
@@ -100,7 +100,7 @@ function hideThinking() {
 }
 
 function insertAtCaret(areaId, text) {
-	var range,
+	var front, back, range,
 	txtarea = document.getElementById(areaId),
 	scrollPos = txtarea.scrollTop,
 	strPos = 0,
@@ -115,8 +115,8 @@ function insertAtCaret(areaId, text) {
 		strPos = txtarea.selectionStart;
 	}
 
-	var front = (txtarea.value).substring(0, strPos);
-	var back = (txtarea.value).substring(strPos, txtarea.value.length);
+	front = (txtarea.value).substring(0, strPos);
+	back = (txtarea.value).substring(strPos, txtarea.value.length);
 	txtarea.value=front + text + back;
 	strPos = strPos + text.length;
 	if (browser === "ie") {

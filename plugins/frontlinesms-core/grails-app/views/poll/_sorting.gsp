@@ -20,13 +20,13 @@
 	var enableKeyword = function() {
 			var enabled = $(this).val();
 			if(enabled == "true") {
-				enableTab("poll-alias");
+				mediumPopup.enableTab("poll-alias");
 				$('#poll-keyword').removeAttr("disabled");
 				$('#poll-keyword').addClass("required");
 			}
 			else {
 				$('#poll-keyword').attr("disabled", "disabled");
-				disableTab("poll-alias");
+				mediumPopup.disableTab("poll-alias");
 				$('#poll-keyword').removeClass("required");
 				$('#poll-keyword').removeClass("error");
 				$("label.error").remove();

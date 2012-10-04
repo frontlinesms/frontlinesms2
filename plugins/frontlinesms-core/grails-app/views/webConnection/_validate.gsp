@@ -38,9 +38,9 @@
 			return validator.element('input[name=name]');
 		};
 
-		addValidation('webconnection-sorting', keyWordTabValidation);
-		addValidation('webconnection-configure', configureTabValidation);
-		addValidation('webconnection-confirm', confirmTabValidation);
+		mediumPopup.addValidation('webconnection-sorting', keyWordTabValidation);
+		mediumPopup.addValidation('webconnection-configure', configureTabValidation);
+		mediumPopup.addValidation('webconnection-confirm', confirmTabValidation);
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();
