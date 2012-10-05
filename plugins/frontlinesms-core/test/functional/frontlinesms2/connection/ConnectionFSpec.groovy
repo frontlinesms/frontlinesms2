@@ -49,7 +49,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			connectionList.btnDelete.click()
 		then:
-			notifications.flashMessageText.contains("Connection test email connection was deleted.")
+			waitFor { notifications.flashMessageText.contains("Connection test email connection was deleted.") }
 			connectionList.text().contains('You have no connections configured.')
 	}
 
@@ -88,15 +88,12 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.selectedConnection.size() == 1
 	}
 
-	def 'creating a new fconnection adds the connection to the connections list'(){
+	def 'creating a new fconnection adds the connection to the connections list'() {
 		given:
-			createTestEmailConnection()
-		when:
 			to PageConnection
-			btnNewConnection.click()
-		then:
-			waitFor('very slow') { at ConnectionDialog }
+			assert connectionList.connection.size() == 0
 		when:
+			launchCreateWizard()
 			next.click()
 			connectionForm.smslibname = "name"
 			connectionForm.smslibport = "COM2"
@@ -111,32 +108,55 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at PageConnection
 			waitFor { connectionList.selectedConnection.text().contains('name') }
-			connectionList.connection.size() == 2
+			connectionList.connection.size() == 1
 	}
 
-	def 'dialog should dispay error when wrong baud data type is entered'(){
+	def 'dialog should dispay error when wrong baud data type is entered'() {
 		when:
-			to PageConnection
-			btnNewConnection.click()
-			waitFor { at ConnectionDialog }
-			next.click()
+			launchCreateWizard('smslib')
 			connectionForm.smslibbaud = "wrongBaud"
 			connectionForm.smslibname = "name"
 			connectionForm.smslibport = "port"
+			next.click()
 		then:
-			waitFor {error.text().contains('Please enter only digits')}
+			waitFor { error.text().contains('Please enter only digits') }
 	}
 
-	def 'can setup a new IntelliSMS account'() {
+	def 'can set up a new Smssync connection'() {
 		when:
-			to PageConnection
-			btnNewConnection.click()
-		then:
-			waitFor { at ConnectionDialog }
-		when:
-			connectionType.value("intellisms").jquery.trigger("click")
-
+			launchCreateWizard('smssync')
+			smssyncname = 'Henry\'s SMSSync Connection'
+			connectionForm.smssyncsecret = 'topcat'
 			next.click()
+		then:
+			confirmSmssyncSecret.text() == '****'
+			confirmSmssyncReceiveEnabled.text() == 'Yes'
+			confirmSmssyncSendEnabled.text() == 'Yes'
+	}
+
+	def 'can set up a new Smssync connection with no secret'() {
+		when:
+			launchCreateWizard('smssync')
+			smssyncname = 'Henry\'s SMSSync Connection'
+			connectionForm.smssyncreceiveEnabled = false
+			connectionForm.smssyncsendEnabled = false
+			next.click()
+		then:
+			confirmSmssyncName.text() == 'Henry\'s SMSSync Connection'
+			confirmSmssyncSecret.text() == 'None'
+			confirmSmssyncReceiveEnabled.text() == 'No'
+			confirmSmssyncSendEnabled.text() == 'No'
+		when:
+			submit.click()
+		then:
+			at PageConnection
+		and:
+			waitFor { connectionList.selectedConnection.text().contains('Henry') }
+	}
+
+	def 'can set up a new IntelliSMS account'() {
+		when:
+			launchCreateWizard('intellisms')
 			connectionForm.intellismssend = true
 			connectionForm.intellismsname = "New IntelliSMS Connection"
 			connectionForm.intellismsusername = "test"
@@ -167,6 +187,18 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { at TestMessagePopup }
 			addresses == ''
 			message == "Congratulations from FrontlineSMS \\o/ you have successfully configured test email connection to send SMS \\o/"
+	}
+
+	private def launchCreateWizard(def type=null) {
+		to PageConnection
+		btnNewConnection.click()
+		waitFor('very slow') { at ConnectionDialog }
+
+		if(!type) return
+
+		connectionType.value(type)
+		next.click()
+		waitFor { $('#' + type + 'name').displayed }
 	}
 
 	def createTestConnections() {

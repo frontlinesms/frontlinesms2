@@ -24,7 +24,7 @@ var groupActions = {
 			url: url_root + getContactSection() + '/edit',
 			data: {id: $("#groupId").val()},
 			success: function(data) {
-				launchMediumPopup(i18n("smallpopup.group.edit.title"), data, i18n("action.edit"), submit); }
+				mediumPopup.launchMediumPopup(i18n("smallpopup.group.edit.title"), data, i18n("action.edit"), mediumPopup.submit); }
 		});
 	},
 	

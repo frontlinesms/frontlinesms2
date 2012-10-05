@@ -9,8 +9,8 @@ import frontlinesms2.camel.exception.*
 
 class ClickatellFconnection extends Fconnection {
 	private static final String CLICKATELL_URL = 'http://api.clickatell.com/http'
-	static configFields = ['name', 'apiId', 'username', 'password']
-	static defaultValues = []
+	static final configFields = ['name', 'apiId', 'username', 'password']
+	static final defaultValues = []
 	static String getShortName() { 'clickatell' }
 	
 	String apiId

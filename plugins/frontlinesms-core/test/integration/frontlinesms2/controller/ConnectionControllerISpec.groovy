@@ -10,29 +10,8 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		controller = new ConnectionController()
 	}
 
-	def "can save new email connection"() {
-		setup:
-			controller.params.connectionType = 'email'
-			controller.params.name = 'test email connection'
-			controller.params.receiveProtocol = 'IMAP'
-			controller.params.serverName = 'mail.example.com'
-			controller.params.serverPort = '1234'
-			controller.params.username = 'greg'
-			controller.params.password = 'pastie'
-		when:
-			controller.save()
-			def conn = EmailFconnection.findByPassword('pastie')
-		then:
-			conn
-			conn.receiveProtocol == EmailReceiveProtocol.IMAP
-			conn.serverName == 'mail.example.com'
-			conn.serverPort == 1234
-			conn.username == 'greg'
-			conn.password =='pastie'
-	}
-
 	def "can save new smslib connection"() {
-		setup:
+		given:
 			controller.params.connectionType = 'smslib'
 			controller.params.name = 'test smslib connection'
 			controller.params.port = 'COM1'
@@ -46,33 +25,22 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			conn2.baud == 9600
 	}
 
-	def "can edit email connection"() {
-		setup:
-			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.IMAP, name:"test connection", serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)
-
-			controller.params.id = emailConnection.id
-			controller.params.receiveProtocol = 'POP3'
-			controller.params.connectionType = 'email'
-			controller.params.name = 'new name'
-			controller.params.serverName = 'mail.example.com'
-			controller.params.serverPort = '5678'
-			controller.params.username = 'greg'
-			controller.params.password = 'pastie'
+	def "can save new smssync connection"() {
+		given:
+			controller.params.connectionType = 'smssync'
+			controller.params.name = 'Henry\'s Connection'
+			controller.params.secret = 'dibble'
 		when:
-			controller.update()
-			emailConnection.refresh()
+			controller.save()
 		then:
-			!emailConnection.hasErrors()
-			emailConnection.name == 'new name'
-			emailConnection.receiveProtocol == EmailReceiveProtocol.POP3
-			emailConnection.serverName == 'mail.example.com'
-			emailConnection.serverPort == 5678
-			emailConnection.username == 'greg'
-			emailConnection.password =='pastie'
+			def c = SmssyncFconnection.findByName("Henry's Connection")
+			c.receiveEnabled
+			c.sendEnabled
+			c.secret == 'dibble'
 	}
 	
 	def "can edit sms connection"() {
-		setup:
+		given:
 			def smslibConnection = new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
 			controller.params.id = smslibConnection.id
 			controller.params.connectionType = 'smslib'
@@ -89,9 +57,29 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			smslibConnection.baud == 9600
 			smslibConnection.pin == "1234"
 	}
+
+	def 'can edit smssync connection'() {
+		given:
+			def c = new SmssyncFconnection(name:'h', sendEnabled:true, receiveEnabled:false, secret:null).save(failOnError:true, flush:true)
+		when:
+			controller.params.id = c.id
+			controller.params.connectionType = 'smssync'
+			controller.params.name = 'i'
+			controller.params.receiveEnabled = true
+			controller.params.sendEnabled = false
+			controller.params.secret = 'humbug'
+			controller.update()
+		then:
+			c.refresh()
+			c.name == 'i'
+			!c.hasErrors()
+			c.receiveEnabled
+			!c.sendEnabled
+			c.secret == 'humbug'
+	}
 	
 	def "can save a new IntelliSmsFconnection"() {
-		setup:
+		given:
 			controller.params.name = "Test IntelliSmsFconnection"
 			controller.params.connectionType = 'intellisms'
 			controller.params.send = 'true'
@@ -108,7 +96,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	def "sendTest redirects to the show LIST action"() {
-		setup:
+		given:
 			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.IMAP, name:"test connection", serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)
 		when:
 			controller.params.id = emailConnection.id
@@ -118,7 +106,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def "sendTest redirects to the SHOW action"() {
-		setup:
+		given:
 			def conn = new Fconnection(name:"test")
 			conn.save(flush:true)
 		when:
@@ -129,7 +117,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def "can edit an existing IntelliSmsFconnection"() {
-		setup:
+		given:
 			def intellismsConn = new IntelliSmsFconnection(send:true, name:"Test IntelliSmsFconnection", username:"test", password:"****").save(flush:true)
 			controller.params.connectionType = 'intellisms'
 			controller.params.id = intellismsConn.id

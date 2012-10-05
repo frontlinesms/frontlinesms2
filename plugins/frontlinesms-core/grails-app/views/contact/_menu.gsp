@@ -24,10 +24,22 @@
 			<fsms:menuitem selected="${contactsSection instanceof frontlinesms2.SmartGroup && contactsSection.id==g.id}" controller="smartGroup" action="show" string="${g.name}" id="${g.id}" />
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<g:remoteLink class="create btn" controller="smartGroup" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumPopup(i18n('popup.smartgroup.create'), data, (i18n('action.create')), createSmartGroup)">
+			<g:remoteLink class="create btn" controller="smartGroup" action="create" onLoading="showThinking();" onSuccess="hideThinking(); mediumPopup.launchMediumPopup(i18n('popup.smartgroup.create'), data, (i18n('action.create')), createSmartGroup)">
 				<g:message code="contact.create.smartgroup"/>
 			</g:remoteLink>
 		</fsms:menuitem>
 	</fsms:submenu>
 </fsms:menu>
 
+<g:javascript disposition="head">
+	var createSmartGroup = function() {
+		$("#submit").attr('disabled', 'disabled');
+		if(validateSmartGroup()) {
+			$(this).find("form").submit();
+			$(this).dialog('close');
+		} else {
+			$("#submit").removeAttr('disabled');
+			$('.error-panel').show();
+		}
+	};
+</g:javascript>

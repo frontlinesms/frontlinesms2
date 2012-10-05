@@ -53,9 +53,9 @@
 			return validator.element('input[name=name]');
 		};
 
-		addValidation('announcement-create-message', messageTextTabValidation);
-		addValidation('announcement-select-recipients', recepientTabValidation);
-		addValidation('announcement-confirm', confirmTabValidation);
+		mediumPopup.addValidation('announcement-create-message', messageTextTabValidation);
+		mediumPopup.addValidation('announcement-select-recipients', recepientTabValidation);
+		mediumPopup.addValidation('announcement-confirm', confirmTabValidation);
 		
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();

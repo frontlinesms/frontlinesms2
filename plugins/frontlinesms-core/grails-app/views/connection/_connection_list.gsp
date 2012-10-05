@@ -4,7 +4,7 @@
 		<h1><g:message code="connection.header"/></h1>
 		<ul class="buttons">
 			<li>
-				<g:remoteLink class="btn" name="addConnection" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
+				<g:remoteLink class="btn" name="addConnection" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); mediumPopup.launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
 					<g:message code="connection.add" />
 				</g:remoteLink>
 			</li>
@@ -31,7 +31,7 @@
 						<div class="controls">
 							<g:if test="${c.status == ConnectionStatus.NOT_CONNECTED}">
 								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.route.create"/></g:link>
-								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
+								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
 										<g:message code="connection.edit"/>
 									</g:remoteLink>
 								<g:link controller="connection" action="delete" class="btn route" id="${c.id}">
