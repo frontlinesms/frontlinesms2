@@ -27,7 +27,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 		then:
 			Webconnection.findByName("Test Webconnection").name == controller.params.name
-			Webconnection.findByName("Test Webconnection").url == "www.ushahidi.com/frontlinesms"
+			Webconnection.findByName("Test Webconnection").url == "www.ushahidi.com"
 			RequestParameter.findByName('key').value == '12345678'
 			RequestParameter.findByName('m').value == '${message_body}'
 			RequestParameter.findByName('s').value == '${message_src_number}'
@@ -136,7 +136,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			connection.name == "Ushahidi Connection"
 			connection.name != "Trial"
-			connection.url == "http://sane.com/frontlinesms"
+			connection.url == "http://sane.com"
 			connection.url != "www.ushahidi.com/frontlinesms2"
 			connection.httpMethod ==  Webconnection.HttpMethod.GET
 			connection.httpMethod !=  Webconnection.HttpMethod.POST
