@@ -70,6 +70,8 @@ class SmssyncService {
 
 			responseMap.messages = Dispatch.getAll(q).collect { d ->
 				d.status = DispatchStatus.SENT
+				d.dateSent = new Date()
+				d.save(failOnError: true)
 				[to:d.dst, message:d.text]
 			}
 		}
