@@ -64,7 +64,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		and:
 			next.click()
 		then:
-			(valid && keywordTab.keyword.displayed ) || (!valid && validationError.displayed)
+			(valid && keywordTab.keyword.displayed ) || (!valid && errorPanel.displayed)
 		where:
 			deployAddress     | apiKey       | valid
 			'www.example.com' | 'ABCDE12345' | true
@@ -97,7 +97,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			next.click()
 		then:
 			confirmTab.confirm('service') == 'Crowdmap'
-			confirmTab.confirm('url') == 'http://my.crowdmap.com'
+			confirmTab.confirm('url') == 'https://my.crowdmap.com'
 			confirmTab.confirm('key') == 'a1b2c3d4e5'
 			confirmTab.confirm('keyword') == 'None'
 	}
@@ -108,7 +108,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		when:
 			header.moreActions.value("edit").jquery.click()
 			waitFor { at WebconnectionWizard }
-			configureUshahidi.subType('crowdmap').click()
+			configureUshahidi.crowdmapDeployAddress.displayed
 			configureUshahidi.crowdmapDeployAddress = "frontlineCrowd"
 			configureUshahidi.crowdmapApiKey = "2343asdasd"
 			next.click()
@@ -116,9 +116,9 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			keywordTab.keyword = "Repo"
 			next.click()
 		then:
-			confirmTab.name == "stanlee"
+			confirmTab.name == "Trial"
 			confirmTab.confirm('service') == 'Crowdmap'
-			confirmTab.confirm('url') == 'http://frontlineCrowd.crowdmap.com'
+			confirmTab.confirm('url') == 'https://frontlineCrowd.crowdmap.com'
 			confirmTab.confirm('key') == '2343asdasd'
 			confirmTab.confirm('keyword') == 'Repo'
 		when:
@@ -126,7 +126,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			def connection = UshahidiWebconnection.findByName('Trial')
 			connection.name == "stanlee"
-			connection.url == "http://frontlineCrowd.crowdmap.com"
+			connection.url == "https://frontlineCrowd.crowdmap.com"
 			connection.requestParameters*.value.containsAll(["2343asdasd"])
 	}
 

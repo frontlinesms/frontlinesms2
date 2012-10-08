@@ -10,7 +10,7 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		def ushKeyword = new Keyword(value:"USH")
 		def keyword = new Keyword(value:"TRIAL")
 		new GenericWebconnection(name:"Sync", keyword:syncKeyword, url:"http://www.frontlinesms.com/sync", httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
-		new UshahidiWebconnection(name:"Trial", keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST).save(failOnError:true)
+		new UshahidiWebconnection(name:"Trial", keyword:keyword, url:"https://trial.crowdmap.com", httpMethod:Webconnection.HttpMethod.POST).save(failOnError:true)
 		new UshahidiWebconnection(name:"Ush", keyword:ushKeyword, url:"http://www.ushahidi.com/frontlinesms", httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
 	}
 

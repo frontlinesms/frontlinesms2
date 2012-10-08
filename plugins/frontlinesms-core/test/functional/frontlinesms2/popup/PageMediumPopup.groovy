@@ -321,7 +321,7 @@ class WebconnectionWizard extends MediumPopup {
 }
 
 class WebconnectionKeywordTab extends geb.Module {
-	static base = { $('div#tabs-3') }
+	static base = { $('#webconnection-sorting') }
 	static content = {
 		useKeyword { $("input#blankKeyword") }
 		keyword { $('input#keyword') }
@@ -348,7 +348,7 @@ class WebconnectionParam extends geb.Module {
 }
 
 class WebconnectionConfirmTab extends geb.Module {
-	static base = { $('div#tabs-4') }
+	static base = { $('div#webconnection-confirm') }
 	static content = {
 		name { $('input#name') }
 		keyword { $("#confirm-keyword").text() }
@@ -453,13 +453,13 @@ class WebconnectionTypeSelectTab extends geb.Module{
 }
 
 class ConfigureUshahidiWebconnectionTab extends geb.Module{
-	static base = { $('div#tabs-2') }
+	static base = { $('#webconnection-config') }
 	static content = {
 		subType(required:false){ type->
 			$('input', name:'serviceType', value:type)
 		} 
-		crowdmapDeployAddress{ $('#url') }
-		ushahidiDeployAddress{ $('#url') }
+		crowdmapDeployAddress{ $('#displayed_url') }
+		ushahidiDeployAddress{ $('#displayed_url') }
 		ushahidiKeyLabel { $("label", for:'key').first() }
 		crowdmapKeyLabel { $("label", for:'key').last() }
 		urlSuffix { $("label", for:'url').last() }
