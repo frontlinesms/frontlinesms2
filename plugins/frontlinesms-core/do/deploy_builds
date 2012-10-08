@@ -1,4 +1,48 @@
-#ftp into frontlinesms website and upload the buils in the right folders
-#Write and Upload xml file that has data for new uploads
-#Write and Upload the php script that changes the links
+#!/bin/bash
+upload(){
+	local=$1
+	remote=$2
+	curl -v -T $local --ftp-pasv -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote"
+}
 
+echo "username : $1 password : $2"
+USERNAME=$1
+PASSWORD=$2
+root_url="ftp://frontlinesms.com/"
+
+local_windows_path=ls install/target/install4j/frontlinesms* | grep window
+local_mac_path=ls install/target/install4j/frontlinesms* | grep mac
+local_unix_path=ls /install/target/install4j/frontlinesms* | grep unix
+
+remote_windows_path=$root_url"/downloads/"
+remote_mac_path=$root_url"/downloads/"
+remote_unix_path=$root_url"/downloads/"
+
+r_path="http://www.frontlinesms.com/"
+
+cd install/target/install4j/
+r_windows_path=$r_path"/downloads/"ls | grep windows
+r_mac_path=$r_path"/downloads/"ls | grep mac
+r_unix_path=$r_path"/downloads/"ls | grep linux
+cd ../../
+
+#uloading the builds
+echo "#### Uloading windows build.."
+curl -v -T $local_windows_path --ftp-pasv -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_windows_path"
+echo "#### Uloading mac build.."
+curl -v -T $local_mac_path --ftp-pasv -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_mac_path"
+echo "#### Uploading unix build..."
+curl -v -T $local_unix_path --ftp-pasv -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_unix_path"
+
+echo "#### Creating the xml file with file names"
+pushd #change pwd to home
+touch build_links.json
+"{'windows':'$r_windows_path', 'mac':'$r_mac_path', 'unix':'$r_unix_path'}" >> build_links.json
+
+echo "#### Uloading xml document with file names"
+local_json_path=pwd"build_links.json"
+remote_json_path=$r_path"/downloads/build_links.json"
+upload $local_json_path $remote_json_path
+
+popd # change back to /do folder
+echo "Complete...:-)"
