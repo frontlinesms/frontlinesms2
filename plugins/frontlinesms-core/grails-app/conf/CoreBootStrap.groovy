@@ -207,6 +207,7 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
 		new SmslibFconnection(name:"MobiGater Modem", port:'/dev/ttyACM0', baud:9600, pin:'1149').save(failOnError:true)
+		new SmssyncFconnection(name:"SMSSync connection", secret:'secret').save(flush: true, failOnError:true)
 	}
 	
 	
