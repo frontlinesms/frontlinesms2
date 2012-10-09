@@ -17,12 +17,13 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	String secret
-	static hasMany = [queuedDispatchIds: Long]
-	List queuedDispatchIds
 
 	static constraints = {
-		queuedDispatchIds nullable:true
 		secret nullable:true
+	}
+
+	def removeDispatchesFromQueue(dispatchIds) {
+		SmssyncFconnectionQueuedDispatch.delete(this, dispatchIds)
 	}
 
 	def apiProcess(controller) {
@@ -30,7 +31,11 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	def addToQueuedDispatches(d) {
-		addToQueuedDispatchIds(d.id)
+		SmssyncFconnectionQueuedDispatch.create(this, d)
+	}
+
+	def getQueuedDispatchIds() {
+		SmssyncFconnectionQueuedDispatch.getDispatches(this).collect { it.id }
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {

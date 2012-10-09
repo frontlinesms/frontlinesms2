@@ -67,8 +67,7 @@ class SmssyncService {
 		if(q || includeWhenEmpty) {
 			responseMap.task = 'send'
 
-			connection.queuedDispatchIds = null
-			connection.save(failOnError:true)
+			connection.removeDispatchesFromQueue(q as List)
 
 			responseMap.messages = Dispatch.getAll(q).collect { d ->
 				d.status = DispatchStatus.SENT
