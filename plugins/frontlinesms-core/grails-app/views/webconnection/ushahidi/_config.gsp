@@ -1,6 +1,7 @@
 <% def isCrowdmap = !activityInstanceToEdit || activityInstanceToEdit?.serviceType == 'crowdmap'; %>
 <div class="info">
 	<p><g:message code="webconnection.ushahidi.description"/></p>
+	<p><g:message code="webconnection.ushahidi.key.description"/></p>
 </div>
 <div class="input">
 	<label for="serviceType"><g:message code="webconnection.ushahidi.service.label"/></label>

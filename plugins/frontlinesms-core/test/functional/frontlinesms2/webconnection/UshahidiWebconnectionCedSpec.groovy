@@ -18,7 +18,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		and:
 			getTitle('ushahidi') == 'Crowdmap / Ushahidi'
 		and:
-			getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server'
+			getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server.'
 	}
 
 	def 'Configure page for Crowdmap should have info text at the top of page'() {
@@ -26,9 +26,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			launchWizard('ushahidi')
 		then:
 			configureUshahidi.subType('crowdmap').click()
-			$('.info').text() == 'The API key for either Crowdmap or Ushahidi can be found in the Settings on the Crowdmap or Ushahidi web site.'
-		and:
-			$('h2').text() == 'Ushahidi / Crowdmap'
+			$('.info p')[1].text() == 'The API key for either Crowdmap or Ushahidi can be found in the Settings on the Crowdmap or Ushahidi web site.'
 	}
 
 	def 'when configuring for crowdmap, deploy address has suffix specified'() {
@@ -125,7 +123,8 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			submit.click()
 		then:
 			def connection = UshahidiWebconnection.findByName('Trial')
-			connection.name == "stanlee"
+			connection.refresh()
+			connection.name == "Trial"
 			connection.url == "https://frontlineCrowd.crowdmap.com"
 			connection.requestParameters*.value.containsAll(["2343asdasd"])
 	}
