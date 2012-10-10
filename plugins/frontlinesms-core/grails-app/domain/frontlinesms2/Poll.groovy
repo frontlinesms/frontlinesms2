@@ -10,7 +10,7 @@ class Poll extends Activity {
 	def messageSendService
 
 //> PROPERTIES
-	static hasOne = [keyword: Keyword]
+	static hasMany = [keywords: Keyword]
 	String autoreplyText
 	String question
 	boolean yesNo

@@ -2,8 +2,6 @@ package frontlinesms2
 
 class PollResponse {
 	String value
-	String key
-	String aliases
 	static belongsTo = [poll: Poll]
 	static hasMany = [messages: Fmessage]
 	List messages = []

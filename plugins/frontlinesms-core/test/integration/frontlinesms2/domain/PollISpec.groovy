@@ -253,21 +253,25 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	@Unroll
-	def "Aliases should be sorted into the correct PollResponse"() {
+	def "Aliases should be sorted into the correct PollResponse for  Poll with top level and second level keywords"() {
 		when:
 			def p = new Poll(name: 'This is a poll')
-			p.keyword = new Keyword(value: "FOOTBALL", activity: p)
-			p.editResponses(choiceA:'Manchester', choiceB:'Barcelona', aliasA:'A,manu,yeah', aliasB:'B,barca,bfc')
+			def p1 = new PollResponse(value:"Manchester")
+			def p2 = new PollResponse(value:"Barcelona")
+			def k1 = new Keyword(value: "FOOTBALL", activity: p)
+			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"${p1.id}")
+			def k3 = new Keyword(value: "MANU", activity: p, ownerDetail:"${p1.id}")
+			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"${p2.id}")
+			p.keywords << k1 << k2 << k3
 			p.save(failOnError:true, flush:true)
 		then:
-			// TODO change this message creation to .build()
-			p.getPollResponse(new Fmessage(src:'Bob', text:messageText, inbound:true, date:new Date()).save(), true).key == groupKey
+			p.getPollResponse(Fmessage(src:'Bob', text:messageText, inbound:true, date:new Date()).build(), true).value == pollResponseValue
 		where:
-			messageText 	| groupKey
-			"football manu"	| "A"
-			"football a" 	| "A"	
-			"football yeah" | "A"
-			"football"  	| "unknown"
+			messageText 			| pollResponseValue
+			"football manu"			| "Manchester"
+			"football manchester" 	| "Manchester"	
+			"football barcelona" 	| "Barcelona"
+			"football"  			| "unknown"
 	}
 
 	def "saving a poll with a response value empty should fail"(){
