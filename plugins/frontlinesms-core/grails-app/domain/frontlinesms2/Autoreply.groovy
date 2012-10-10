@@ -5,7 +5,6 @@ class Autoreply extends Activity {
 	static String getShortName() { 'autoreply' }
 
 //> PROPERTIES
-	static hasOne = [keyword: Keyword]
 	String autoreplyText
 	
 	static constraints = {

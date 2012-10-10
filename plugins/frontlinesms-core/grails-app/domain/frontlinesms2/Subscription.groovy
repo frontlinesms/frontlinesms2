@@ -7,7 +7,6 @@ class Subscription extends Activity{
 //> PROPERTIES
 	enum Action { TOGGLE, JOIN, LEAVE }
 	String name
-	static hasOne = [keyword: Keyword]
 	Group group
 	Action defaultAction = Action.TOGGLE
 	String joinAliases

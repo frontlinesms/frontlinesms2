@@ -15,15 +15,15 @@ class Keyword {
 			if(val.find(/\s/)) return false
 			if(val != val.toUpperCase()) return false
 			if(me.activity?.deleted || me.activity?.archived) return true
-			def found
-			if(me.isTopLevel)
-				found = Keyword.findAllByValueAndIsTopLevel(val, true)
-			else
-				found = Keyword.findAllByValueAndActivityAndIsTopLevel(val, me.activity, false)
+			def found = Keyword.findAllByValueAndIsTopLevel(val, me.isTopLevel)
 			if(!found || found==[me]) return true
-			else if (found.any { it != me && !it.activity?.archived && !it.activity?.deleted }) return false
+			else if (found.any { 
+				if (me.isTopLevel)
+					return it != me && !it.activity?.archived && !it.activity?.deleted
+				else
+					return it != me && it.activity == me.activity
+			}) return false
 			else return true
-			if(!found || found==[me]) return true
 		})
 		activity(nullable: false)
 		ownerDetail(nullable: true, validator: {val, me ->

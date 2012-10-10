@@ -38,7 +38,6 @@ abstract class Webconnection extends Activity {
 	String url
 	HttpMethod httpMethod
 	static hasMany = [requestParameters:RequestParameter]
-	static hasOne = [keyword: Keyword]
 	
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->

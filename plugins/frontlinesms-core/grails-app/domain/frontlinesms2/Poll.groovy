@@ -14,7 +14,7 @@ class Poll extends Activity {
 	String question
 	boolean yesNo
 	List responses
-	static hasMany = [responses: PollResponse, keywords: Keyword]
+	static hasMany = [responses: PollResponse]
 
 //> SETTINGS
 	static transients = ['unknown']
