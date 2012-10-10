@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class PollResponse {
+	String key
 	String value
 	boolean isUnknownResponse = false
 	static belongsTo = [poll: Poll]
@@ -16,6 +17,7 @@ class PollResponse {
 		value(blank:false, nullable:false, maxSize:255)
 		poll(nullable:false)
 		messages(nullable:true)
+		key(nullable:true)
 	}
 	
 	void addToMessages(Fmessage message) {

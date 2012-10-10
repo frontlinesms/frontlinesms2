@@ -7,14 +7,20 @@ class PollController extends ActivityController {
 		// FIXME this should use withPoll to shorten and DRY the code, but it causes cascade errors as referenced here:
 		// http://grails.1312388.n4.nabble.com/Cascade-problem-with-hasOne-relationship-td4495102.html
 		def poll
+		println "######### ${params}"
 		if(Poll.get(params.ownerId)) {
 			poll = Poll.get(params.ownerId)
-			if(params.enableKeyword && params.keyword)
-				poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword.toUpperCase()))
-		} else if(params.enableKeyword && params.keyword) {
+			if(params.enableKeyword && params.topLevelKeyword)
+				println "##### enableKeyword and topLevelKeyword and owner"
+				poll.editKeywords(params)// adding the keywords but not adding ownerdetail
+				//poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword.toUpperCase()))
+		} else if(params.enableKeyword) {
+			println "##### enableKeyword and topLevelKeyword >>> no ownerid"
 			poll = new Poll()
-			poll.keyword = new Keyword(value: params.keyword.toUpperCase())
+			poll.editKeywords(params)
+			//poll.keyword = new Keyword(value: params.keyword.toUpperCase())
 		} else {
+			println "##### else ...."
 			poll = new Poll()
 		}
 		poll.name = params.name ?: poll.name

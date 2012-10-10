@@ -27,7 +27,6 @@ class Subscription extends Activity{
 			})
 		joinAutoreplyText nullable:true, blank:false
 		leaveAutoreplyText nullable:true, blank:false
-		keyword nullable:true
 	}
 
 	def processJoin(Fmessage message){

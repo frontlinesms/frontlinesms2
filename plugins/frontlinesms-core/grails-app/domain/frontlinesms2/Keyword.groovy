@@ -4,7 +4,7 @@ class Keyword {
 	String value
 	static belongsTo = [activity: Activity]
 	String ownerDetail
-	boolean isTopLevel
+	boolean isTopLevel = true
 
 	static mapping = {
 		version false

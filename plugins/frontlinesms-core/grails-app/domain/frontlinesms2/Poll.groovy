@@ -94,8 +94,8 @@ class Poll extends Activity {
 	
 	def editResponses(attrs) {
 		if(attrs.pollType == 'yesNo' && !this.responses) {
-			this.addToResponses(value:'Yes', key:'A', aliases:extractAliases(attrs, 'A'))
-			this.addToResponses(value:'No', key:'B', aliases:extractAliases(attrs, 'B'))
+			this.addToResponses(value:'Yes')
+			this.addToResponses(value:'No')
 			this.yesNo = true
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
@@ -104,15 +104,32 @@ class Poll extends Activity {
 				def found = responses.find { it.key == k }
 				if(found) {
 					found.value = v
-					found.aliases = extractAliases(attrs, k)
-				} else if(v?.trim()) this.addToResponses(value:v, key:k , aliases:extractAliases(attrs, k))
+				} else if(v?.trim()) this.addToResponses(value:v)
 			}
 		}
 		if(!this.unknown) {
 			this.addToResponses(PollResponse.createUnknown())
 		}
 	}
-	
+
+	def editKeywords(attrs){
+		def keywords = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
+		println "###### Keywords :: ${keywords}"
+		keywords.each { k, v ->
+			k = k.substring('keywords'.size())
+			println "###### K :: ${k}"
+			def found = responses.find { it.key == k }
+			if(found) {
+				//TODO implement the editing of the responses
+			} else if(v?.trim()){
+				params.topLevelKeyword.trim()?this.addToKeywords(new Keyword(value:"${params.topLevelKeyword.trim().toUpperCase()}")):
+				attrs["keywords"+k].replaceAll(/\s/, "").split(",").each{
+					this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${v}", isTopLevel:!params.topLevelKeyword.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
+				}
+			}
+		}
+	}
+
 	def extractAliases(attrs, String k) {
 		def raw = attrs["alias$k"]
 		if(raw) raw.toUpperCase().replaceAll(/\s/, "").split(",").findAll { it }.join(", ")

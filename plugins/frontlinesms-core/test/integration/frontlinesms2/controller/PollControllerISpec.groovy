@@ -28,7 +28,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.autoreplyText == "automatic reply text"
 			(poll.responses*.value).containsAll(['yes', 'no', 'maybe'])
 	}
-
+@spock.lang.IgnoreRest
 	def "saving new poll with keyword enabled should save the keyword"() {
 		given:
 			controller.params.name = 'test-poll-1'
@@ -37,11 +37,14 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceC = "maybe"
 			controller.params.autoreplyText = "automatic reply text"
 			controller.params.enableKeyword = true
-			controller.params.keyword = "HELLO"
+			controller.params.topLevelKeyword = "Hello"
+			controller.params.keywordsA = "A"
+			controller.params.keywordsB = "B"
+			controller.params.keywordsC = "maybe"
 		when:
 			controller.save()
 		then:
-			Poll.findByName("test-poll-1")?.keyword.value == 'HELLO'
+			Poll.findByName("test-poll-1")?.keywords*.value.containsAll(['HELLOA','HELLOB'])
 	}
 
 	def "saving new poll with keyword disabled does should not save the keyword"() {
