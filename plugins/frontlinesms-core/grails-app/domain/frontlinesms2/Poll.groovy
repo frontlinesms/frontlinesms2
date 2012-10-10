@@ -10,12 +10,11 @@ class Poll extends Activity {
 	def messageSendService
 
 //> PROPERTIES
-	static hasMany = [keywords: Keyword]
 	String autoreplyText
 	String question
 	boolean yesNo
 	List responses
-	static hasMany = [responses: PollResponse]
+	static hasMany = [responses: PollResponse, keywords: Keyword]
 
 //> SETTINGS
 	static transients = ['unknown']
@@ -51,12 +50,12 @@ class Poll extends Activity {
 		})
 		autoreplyText(nullable:true, blank:false)
 		question(nullable:true)
-		keyword(nullable:true)
+		keywords(nullable:true)
 	}
 
 //> ACCESSORS
 	def getUnknown() {
-		responses.find { it.key == KEY_UNKNOWN } }
+		responses.find { it.isUnknownResponse == true } }
 	
 	Poll addToMessages(Fmessage message) {
 		if(!messages) messages = []
@@ -128,8 +127,8 @@ class Poll extends Activity {
 		this
 	}
 
-	def processKeyword(Fmessage message, boolean exactMatch) {
-		def response = getPollResponse(message, exactMatch)
+	def processKeyword(Fmessage message, Keyword keyword) {
+		def response = getPollResponse(message, keyword)
 		response.addToMessages(message)
 		response.save()
 		def poll = this
@@ -145,16 +144,12 @@ class Poll extends Activity {
 	}
 	
 //> PRIVATE HELPERS
-	private PollResponse getPollResponse(Fmessage message, boolean exactMatch) {
-		def option
-		def words = message.text.trim().toUpperCase().split(/\s+/)
-		if(exactMatch) {
-			if(words.size() < 2) return this.unknown
-			option = words[1]
+	private PollResponse getPollResponse(Fmessage message, Keyword keyword) {
+		if(keyword.isTopLevel && !keyword.ownerDetail){
+			return this.unknown
 		} else {
-			option = words[0][-1]
+			return PollResponse.get(keyword.ownerDetail as Long)
 		}
-		return responses.find { it!=this.unknown && it.aliases?.split(", ")?.contains(option) }?: this.unknown
 	}
 }
 
