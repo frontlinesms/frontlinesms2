@@ -211,7 +211,6 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			model.messageInstanceList.size() == 1
 			model.messageInstanceTotal == 3
-
 	}
 	
 	def "if only end date is defined, return message before or on this date"() {
@@ -311,5 +310,24 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def model = controller.result()
 		then:
 			model.messageInstanceList.size() == 1
+	}
+
+	def "ensure dispatch count in message results is correct"(){
+		setup:
+			def message = new Fmessage(text:"test")
+			message.addToDispatches(dst:'999', status:DispatchStatus.PENDING)
+			message.addToDispatches(dst:'998', status:DispatchStatus.PENDING)
+			message.addToDispatches(dst:'888', status:DispatchStatus.PENDING)
+			100.times { message.addToDispatches(dst:'888', status:DispatchStatus.PENDING) }
+			message.save(flush:true, failOnError:true)
+		when:
+			controller.params.searchString = "99"
+			controller.params.max = "1"
+			def model = controller.result()
+		then:
+			model.messageInstanceList.size() == 1
+			model.messageInstanceList.first().text == "test"
+			model.messageInstanceList.first().dispatches.size() == 103
+			model.messageInstanceList.first().displayName == "103"
 	}
 }
