@@ -8,7 +8,7 @@ import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
 class IntelliSmsFconnection extends Fconnection {
-	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway'
+	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway/sendmsg.aspx?'
 	static configFields = [name:null,
 				send: ['username', 'password'], 
 				receive: ['receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
@@ -74,9 +74,8 @@ class IntelliSmsFconnection extends Fconnection {
 									.end()
 							.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(IntelliSmsFconnection.this.id.toString()))
 							.process(new IntelliSmsPreProcessor())
-							.setHeader(Exchange.HTTP_URI,
-									simple(INTELLISMS_URL + '/sendmsg.aspx?' + 
-											'username=${header.intellisms.username}&' + 
+							.setHeader(Exchange.HTTP_QUERY,
+									simple('username=${header.intellisms.username}&' + 
 											'password=${header.intellisms.password}&' + 
 											'to=${header.intellisms.dst}&' +
 											'text=${body}'))
