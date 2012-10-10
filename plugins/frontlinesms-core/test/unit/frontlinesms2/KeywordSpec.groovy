@@ -7,7 +7,7 @@ import grails.test.mixin.*
 class KeywordSpec extends Specification {
 	def "beforeSave should convert keyword to upper case"() {
 		given:
-			Keyword k = new Keyword(value:'shoehorn')
+			Keyword k = new Keyword(value:'shoehorn', isTopLevel: true)
 		when:
 			k.beforeSave()
 		then:
@@ -19,16 +19,18 @@ class KeywordSpec extends Specification {
 		given:
 			Keyword.metaClass.static.findAllByValue = { v -> [] }
 		when:
-			def k = new Keyword(value:keyword, activity:Mock(Activity))
+			def k = new Keyword(value:keyword, ownerDetail:ownerDetail, isTopLevel:isTopLevel, activity:Mock(Activity))
 		then:
 			k.validate() == valid
 		where:
-			valid | keyword
-			false | null
-			true  | ''
-			false | 'lowercase'
-			true  | 'UPPERCASE'
-			false | 'WITH SPACE'
+			valid | keyword      | ownerDetail | isTopLevel
+			false | null         | null        | true
+			true  | ''           | null        | true
+			false | 'lowercase'  | null        | true
+			true  | 'UPPERCASE'  | null        | true
+			false | 'WITH SPACE' | null        | true
+			true  | 'UPPERCASE'  | 'something' | false
+			false | 'UPPERCASE'  | null        | false
 	}
 }
 

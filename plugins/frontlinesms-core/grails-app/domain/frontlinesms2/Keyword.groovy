@@ -3,6 +3,8 @@ package frontlinesms2
 class Keyword {
 	String value
 	static belongsTo = [activity: Activity]
+	String ownerDetail
+	boolean isTopLevel
 
 	static mapping = {
 		version false
@@ -19,6 +21,9 @@ class Keyword {
 			else return true
 		})
 		activity(nullable: false)
+		ownerDetail(nullable: true, validator: {val, me ->
+			me.isTopLevel || val
+		})
 	}
 
 	static namedQueries = {
