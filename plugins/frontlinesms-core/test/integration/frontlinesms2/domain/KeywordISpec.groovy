@@ -51,6 +51,7 @@ class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			def k1 = new Keyword(value:keyword, isTopLevel: false)
 			def k2 = new Keyword(value:keyword2, isTopLevel: false)
+		when:
 			new Autoreply(name:'whatever3', autoreplyText:'2')
 				.addToKeywords(k1)
 				.addToKeywords(k2)

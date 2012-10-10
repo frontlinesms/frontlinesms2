@@ -64,17 +64,6 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			'top bottom1'           | true     | true
 	}
 
-	private def createKeywords(keywords) {
-		keywords = keywords*.toUpperCase()
-		def count = 0
-		keywords.collect { keyword ->
-			def k = new Keyword(value:keyword)
-			k.activity = Autoreply.build(name:"autoreply-${++count}", keyword:k)
-			k.activity.metaClass.processKeyword = { Fmessage m, boolean b -> processed << [(delegate):b] }
-			k.save(failOnError:true, flush:true)
-		}
-	}
-
 	private def createTestPoll(archived=false, deleted=false) {
 		Poll p = new Poll(name:'test poll')
 		p.addToKeywords(new Keyword(value:"TOP", isTopLevel: true))
@@ -82,20 +71,9 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			p.addToResponses(new PollResponse(value: 'poll response ${it}'))
 			p.addToKeywords(new Keyword(value: "BOTTOM${it}", isTopLevel: false, ownerDetail: "${it}"))
 		}
-		p.metaClass.processKeyword = { Keyword k, Message m -> processed << [k:m]}
+		p.metaClass.processKeyword = { Keyword k, Fmessage m -> processed << [k:m]}
 		p.save(failOnError:true, flush:true)
 		p
-	}
-
-	private def createActivities(attributes) {
-		def count = 0
-		attributes.collect { a ->
-			def k = new Keyword(value:'A')
-			k.activity = Autoreply.build(name:"autoreply-${++count}",
-					keyword:k, archived:a.archived, deleted:a.deleted)
-			k.activity.metaClass.processKeyword = { Fmessage m, boolean b -> processed << [(delegate):b] }
-			k.save(failOnError:true, flush:true)
-		}
 	}
 
 	private def createFmessage(text) {
