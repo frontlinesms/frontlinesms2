@@ -9,79 +9,59 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def processed = [:]
 
 	@Unroll
-	def "activity_process should be called for matching keywords"() {
+	def "activity.processKeyword should be called with most specific keyword match"() {
 		given:
-			createKeywords(keywordValues)
-			def activity = Keyword.findByValue(matchedKeyword).activity
+			Poll p = createTestPoll()
 			def m = createFmessage(messageText)
 		when:
 			keywordProcessorService.process(m)
 		then:
-			processed == [(activity):exactMatch]
+			processed == [matchedKeyword:m]
 		where:
-			keywordValues      | messageText          | matchedKeyword | exactMatch
-			['']               | ''                   | ''             | true
-			['']               | '   '                | ''             | true
-			['']               | 'whatever'           | ''             | false
-			['']               | 'two words'          | ''             | false
-			['A', 'B']         | 'a very nice day'    | 'A'            | true
-			['A', 'B']         | 'a\nvery nice day'   | 'A'            | true
-			['A', 'B']         | 'by jove'            | 'B'            | false
-			['A']              | '\r\n    A'          | 'A'            | true
-			['', 'A']          | '\r\n    B'          | ''             | false
-			['A', 'AB']        | 'ab'                 | 'AB'           | true
-			['A', 'AB']        | 'ac'                 | 'A'            | false
-			['LONG', 'LONGER'] | 'long time no see'   | 'LONG'         | true
-			['LONG', 'LONGER'] | 'longo bongo'        | 'LONG'         | false
-			['LONG', 'LONGER'] | 'longer time no see' | 'LONGER'       | true
+			messageText      | matchedKeyword
+			'top'            | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, true, null)
+			'top only'       | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, true, null)
+			'top bottom1'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "1")
+			'top bottom2'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "2")
+			'top bottom3'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "3")
+			'top bottom4'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "4")
+			'top bottom5'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "5")
+			'top bottom6'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, true, null)
 	}
 
 	@Unroll
 	def "no activity should be processed if no keyword matches"() {
 		given:
-			createKeywords(keywordValues)
+			Poll p = createTestPoll()
 			def m = createFmessage(messageText)
 		when:
 			keywordProcessorService.process(m)
 		then:
 			processed == [:]
 		where:
-			keywordValues | messageText
-			[]            | ''
-			[]            | 'word'
-			[]            | 'many words'
-			['a', 'b']    | 'word'
-			['a', 'b']    | 'many words'
-			['a', 'b']    | 'averyniceday'
-			['a', 'b']    | 'but why'
+			messageText << ['should not match', 'topsy turvy', '']
 	}
 
-
-	def 'Keyword matching should ignore archived and deleted activities when there is an unarchived match'() {
+	@Unroll
+	def "archived and deleted activities should not be matched"() {
 		given:
-			createActivities([[archived:true, deleted:false], [archived:false, deleted:true], [archived:false, deleted:false]])
-			def activities = Keyword.findAllByValue('A')*.activity
-			def activeKeyword = activities[2]
-			assert activities*.archived == [true, false, false]
-			assert activities*.deleted == [false, true, false]
-			def m = createFmessage 'a'
-		when:
-			keywordProcessorService.process(m)
-		then:
-			processed == [(activeKeyword):true]
-	}
-
-	def 'Keyword matching should ignore archived and deleted activities even if there is no unarchived or undeleted match'() {
-		given:
-			createActivities([[archived:true, deleted:false], [archived:false, deleted:true]])
-			def activities = Keyword.findAllByValue('A')*.activity
-			assert activities*.archived == [true, false]
-			assert activities*.deleted == [false, true]
-			def m = createFmessage 'a'
+			Poll p = createTestPoll(archived, deleted)
+			def m = createFmessage(messageText)
 		when:
 			keywordProcessorService.process(m)
 		then:
 			processed == [:]
+		where:
+			messageText             | archived | deleted
+			'top'                   | true     | false
+			'top only'              | true     | false
+			'top'                   | false    | true
+			'top only'              | false    | true
+			'top'                   | true     | true
+			'top only'              | true     | true
+			'top bottom1'           | true     | false
+			'top bottom1'           | false    | true
+			'top bottom1'           | true     | true
 	}
 
 	private def createKeywords(keywords) {
@@ -93,6 +73,18 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			k.activity.metaClass.processKeyword = { Fmessage m, boolean b -> processed << [(delegate):b] }
 			k.save(failOnError:true, flush:true)
 		}
+	}
+
+	private def createTestPoll(archived=false, deleted=false) {
+		Poll p = new Poll(name:'test poll')
+		p.addToKeywords(new Keyword(value:"TOP", isTopLevel: true))
+		(1..5).each {
+			p.addToResponses(new PollResponse(value: 'poll response ${it}'))
+			p.addToKeywords(new Keyword(value: "BOTTOM${it}", isTopLevel: false, ownerDetail: "${it}"))
+		}
+		p.metaClass.processKeyword = { Keyword k, Message m -> processed << [k:m]}
+		p.save(failOnError:true, flush:true)
+		p
 	}
 
 	private def createActivities(attributes) {
