@@ -47,7 +47,7 @@ abstract class Activity extends MessageOwner {
 		this.messages*.isDeleted = false
 	}
 
-	def processKeyword(Fmessage message, boolean exactMatch) {}
+	def processKeyword(Fmessage message, Keyword match) {}
 
 	def activate() {}
 

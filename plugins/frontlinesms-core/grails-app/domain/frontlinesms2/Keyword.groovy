@@ -15,10 +15,15 @@ class Keyword {
 			if(val.find(/\s/)) return false
 			if(val != val.toUpperCase()) return false
 			if(me.activity?.deleted || me.activity?.archived) return true
-			def found = Keyword.findAllByValue(val)
+			def found
+			if(me.isTopLevel)
+				found = Keyword.findAllByValueAndIsTopLevel(val, true)
+			else
+				found = Keyword.findAllByValueAndActivityAndIsTopLevel(val, me.activity, false)
 			if(!found || found==[me]) return true
 			else if (found.any { it != me && !it.activity?.archived && !it.activity?.deleted }) return false
 			else return true
+			if(!found || found==[me]) return true
 		})
 		activity(nullable: false)
 		ownerDetail(nullable: true, validator: {val, me ->
@@ -27,7 +32,14 @@ class Keyword {
 	}
 
 	static namedQueries = {
-		match { word ->
+		matchFirstLevel { word ->
+			activity {
+				eq('archived', false)
+				eq('deleted', false)
+			}
+			eq('value', word.toUpperCase())
+		}
+		matchSecondLevel { word -> //TODO
 			activity {
 				eq('archived', false)
 				eq('deleted', false)
