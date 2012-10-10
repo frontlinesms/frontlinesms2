@@ -30,6 +30,7 @@ environments {
     }
     production {
         dataSource {
+            dbCreate = "update"
             def prodDbName = System.properties.'db.name' ?: 'prodDb' // production DB name defaults to prodDb
             url = "jdbc:h2:${frontlinesms2.ResourceUtils.resourcePath}/${prodDbName};MVCC=TRUE"
             pooled = true

@@ -65,7 +65,7 @@ grails.exceptionresolver.params.exclude = ['password']
 grails.hibernate.cache.queries = true
 
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
-grails.plugin.databasemigration.updateOnStart = true
+grails.plugin.databasemigration.updateOnStart = false
 // allow migration override in dev
 environments { development {
         def runMigrations = System.properties.'db.migrations'
