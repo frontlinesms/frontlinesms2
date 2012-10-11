@@ -55,7 +55,7 @@ class Poll extends Activity {
 
 //> ACCESSORS
 	def getUnknown() {
-		responses.find { it.isUnknownResponse == true } }
+		responses.find { it.key == KEY_UNKNOWN } }
 	
 	Poll addToMessages(Fmessage message) {
 		if(!messages) messages = []
@@ -94,8 +94,8 @@ class Poll extends Activity {
 	
 	def editResponses(attrs) {
 		if(attrs.pollType == 'yesNo' && !this.responses) {
-			this.addToResponses(value:'Yes')
-			this.addToResponses(value:'No')
+			this.addToResponses(key:'A', value:'Yes')
+			this.addToResponses(key:'B', value:'No')
 			this.yesNo = true
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
@@ -104,14 +104,14 @@ class Poll extends Activity {
 				def found = responses.find { it.key == k }
 				if(found) {
 					found.value = v
-				} else if(v?.trim()) this.addToResponses(value:v)
+				} else if(v?.trim()) this.addToResponses(key:k, value:v)
 			}
 		}
 		if(!this.unknown) {
 			this.addToResponses(PollResponse.createUnknown())
 		}
 	}
-
+//TODO edit keywords only adds keywoids to the poll...does not edit
 	def editKeywords(attrs){
 		def keys = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
 		println "###### Keywords :: ${keys}"
@@ -123,9 +123,13 @@ class Poll extends Activity {
 			println "###### V :: ${v}"
 			println attrs["keywords${k}"]
 			attrs["keywords${k}"].replaceAll(/\s/, "").split(",").each{
-				this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${v}", isTopLevel:!attrs.topLevelKeyword.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
+				this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${this.responses.find{ it.key == k}.id}", isTopLevel:!attrs.topLevelKeyword?.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
 			}
 		}
+	}
+
+	def noKeyword(){
+		println "Removing the keywords"
 	}
 
 	def extractAliases(attrs, String k) {

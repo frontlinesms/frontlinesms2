@@ -11,6 +11,7 @@ abstract class Activity extends MessageOwner {
 	static transients = ['liveMessageCount']
 
 	static hasMany = [keywords: Keyword]
+	List keywords
 
 	static mapping = {
 		tablePerHierarchy false

@@ -8,27 +8,15 @@ class PollController extends ActivityController {
 		// http://grails.1312388.n4.nabble.com/Cascade-problem-with-hasOne-relationship-td4495102.html
 		def poll
 		println "######### ${params}"
-		if(Poll.get(params.ownerId)) {
-			poll = Poll.get(params.ownerId)
-			if(params.enableKeyword && params.topLevelKeyword)
-				println "##### enableKeyword and topLevelKeyword and owner"
-				poll.editKeywords(params)// adding the keywords but not adding ownerdetail
-				//poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword.toUpperCase()))
-		} else if(params.enableKeyword) {
-			println "##### enableKeyword and topLevelKeyword >>> no ownerid"
-			poll = new Poll()
-			poll.editKeywords(params)
-			//poll.keyword = new Keyword(value: params.keyword.toUpperCase())
-		} else {
-			println "##### else ...."
-			poll = new Poll()
-		}
+		poll = Poll.get(params.ownerId)?Poll.get(params.ownerId):new Poll()
 		poll.name = params.name ?: poll.name
 		poll.autoreplyText = params.enableAutoreply? (params.autoreplyText ?: poll.autoreplyText): null
 		poll.question = params.question ?: poll.question
 		poll.sentMessageText = params.messageText ?: poll.sentMessageText
 		poll.editResponses(params)
 		if (poll.save()) {
+			params.enableKeyword?poll.editKeywords(params):poll.noKeyword()
+			println "############ Edited keywords"
 			if(!params.dontSendMessage && !poll.archived) {
 				def message = messageSendService.createOutgoingMessage(params)
 				message.save()
@@ -50,6 +38,7 @@ class PollController extends ActivityController {
 				renderJsonErrors(poll)
 			}
 		} else {
+			println "Did not save at all ooooops :("
 			renderJsonErrors(poll)
 		}
 	}

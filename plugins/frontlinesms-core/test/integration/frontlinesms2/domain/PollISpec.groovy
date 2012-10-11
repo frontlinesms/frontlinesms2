@@ -240,18 +240,6 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			!m.messageOwner
 	}
 
-	def "Saving a poll should save the corresponding aliases for the choices"(){
-		when:
-			def p = new Poll(name: 'This is a poll')
-			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona', aliasA: 'A,manu,yeah',aliasB: 'B,barca,bfc')
-			p.save(failOnError:true, flush:true)
-			def savedPoll = Poll.findByName("This is a poll")
-		then:
-			savedPoll.responses[0].aliases.contains("A").equals(true)
-			savedPoll.responses[0].aliases.contains("MANU").equals(true)
-			savedPoll.responses[0].aliases.contains("YEAH").equals(true)
-	}
-
 	@Unroll
 	def "Message should be sorted into the correct PollResponse for  Poll with top level and second level keywords"() {
 		when:
@@ -259,7 +247,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p.addToResponses(new PollResponse(value:"Manchester"))
 			p.addToResponses(new PollResponse(value:"Barcelona"))
 			p.addToResponses(new PollResponse(value:"Harambee Stars"))
-			p.addToResponses(new PollResponse(value:"unknown", isUnknownResponse:true))
+			p.addToResponses(PollResponse.createUnknown())
 			p.save(failOnError:true)
 			def k1 = new Keyword(value: "FOOTBALL", activity: p)
 			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"${p.responses[0].id}", isTopLevel:false)
@@ -274,7 +262,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), Keyword.findByValue(keywordValue)).value == pollResponseValue
 		where:
 			keywordValue|pollResponseValue
-			"FOOTBALL"|"unknown"
+			"FOOTBALL"|"Unknown"
 			"MANCHESTER"|"Manchester"	
 			"BARCELONA"|"Barcelona"
 			"HARAMBEE"|"Harambee Stars"
@@ -287,7 +275,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p.addToResponses(new PollResponse(value:"Manchester"))
 			p.addToResponses(new PollResponse(value:"Barcelona"))
 			p.addToResponses(new PollResponse(value:"Harambee Stars"))
-			p.addToResponses(new PollResponse(value:"unknown", isUnknownResponse:true))
+			p.addToResponses(PollResponse.createUnknown())
 			p.save(failOnError:true)
 			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"${p.responses[0].id}")
 			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"${p.responses[2].id}")
