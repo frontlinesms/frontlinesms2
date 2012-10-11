@@ -10,14 +10,25 @@ class AutoreplyController extends ActivityController {
 		if(Autoreply.get(params.ownerId)) {
 			autoreply = Autoreply.get(params.ownerId)
 			
-			def keywordValue = params.blankKeyword ? '' : params.keyword.toUpperCase()
-			autoreply.keyword.value = keywordValue
+			def keywordRawValues = (params.blankKeyword ? '' : params.keyword.toUpperCase()).trim().split(",")
+			if(!autoreply.keywords*.value.containsAll(keywordRawValues)){
+				autoreply.keywords.clear()
+				for(keywordValue in keywordRawValues){
+					def keyword = new Keyword(value: keywordValue.toUpperCase())
+					autoreply.addToKeywords(keyword)
+				}
+			}
 			
 			autoreply.name = params.name ?: autoreply.name
 			autoreply.autoreplyText = params.messageText ?: autoreply.autoreplyText
 		} else {
-			def keyword = new Keyword(value: params.blankKeyword ? '' : params.keyword.toUpperCase())
-			autoreply = new Autoreply(name: params.name, autoreplyText:params.messageText, keyword: keyword)
+			autoreply = new Autoreply(name: params.name, autoreplyText:params.messageText)
+
+			def keywordRawValues = (params.blankKeyword ? '' : params.keyword.toUpperCase()).trim().split(",")
+			for(keywordValue in keywordRawValues){
+				def keyword = new Keyword(value: keywordValue.toUpperCase())
+				autoreply.addToKeywords(keyword)
+			}
 		}
 		if(autoreply.save()) {
 			flash.message = message(code:'autoreply.saved')

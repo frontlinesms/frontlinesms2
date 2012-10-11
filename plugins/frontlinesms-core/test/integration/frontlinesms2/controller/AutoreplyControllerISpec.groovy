@@ -22,7 +22,8 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			def autoreply = Autoreply.findByName(name)
 			autoreply.autoreplyText == autoreplyText
-			autoreply.keyword.value == keyword
+			autoreply.keywords?.size() == 1
+			autoreply.keywords[0].value == keyword
 		where:
 			name     | keyword | autoreplyText
 			"Color"  | 'COLOR' | "ahhhhhhhhh"
@@ -33,9 +34,9 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "can edit an Autoreply"() {
 		given: 'an autoreply exists'
 			def k = new Keyword(value:initialKeyword)
-			def a = new Autoreply(name:"Color", keyword:k, autoreplyText:"ahhhhhhhhh")
+			def a = new Autoreply(name:"Color", autoreplyText:"ahhhhhhhhh")
 					.save(flush:true, failOnError:true)
-			
+			a.addToKeywords(k)
 		and: 'controller params are setup'
 			controller.params.ownerId = a.id
 			controller.params.name = name
@@ -49,7 +50,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then: 'the auto reply has been updated'
 			def autoreply = Autoreply.get(model.ownerId)
 			autoreply.name == name
-			autoreply.keyword.value == finalKeyword
+			autoreply.keywords[0].value == finalKeyword
 			autoreply.autoreplyText == autoreplyText
 		
 		and: 'the old auto reply and keyword have been deleted'
