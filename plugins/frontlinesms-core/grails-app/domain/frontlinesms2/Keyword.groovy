@@ -33,13 +33,16 @@ class Keyword {
 
 	static namedQueries = {
 		matchFirstLevel { word ->
+			eq('isTopLevel', true)
 			activity {
 				eq('archived', false)
 				eq('deleted', false)
 			}
 			eq('value', word.toUpperCase())
 		}
-		matchSecondLevel { word -> //TODO
+		matchSecondLevel { word, act ->
+			eq('isTopLevel', false)
+			eq('activity', act)
 			activity {
 				eq('archived', false)
 				eq('deleted', false)
@@ -50,6 +53,16 @@ class Keyword {
 
 	static Keyword getMatch(String word) {
 		def list = Keyword.match(word).list()
+		return list? list[0]: null
+	}
+
+	static Keyword getFirstLevelMatch(String word) {
+		def list = Keyword.matchFirstLevel(word).list()
+		return list? list[0]: null
+	}
+
+	static Keyword getSecondLevelMatchInActivity(String word, Activity act) {
+		def list = Keyword.matchSecondLevel(word, act).list()
 		return list? list[0]: null
 	}
     
