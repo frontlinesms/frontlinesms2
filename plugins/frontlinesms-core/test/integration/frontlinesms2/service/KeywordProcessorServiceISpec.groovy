@@ -6,27 +6,31 @@ import spock.lang.*
 class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def keywordProcessorService
 
-	def processed = [:]
+	def keywordsThatHaveBeenProcessed = [:]
 
 	@Unroll
 	def "activity.processKeyword should be called with most specific keyword match"() {
 		given:
 			Poll p = createTestPoll()
-			def m = createFmessage(messageText)
+			def m = createFmessage(messageText).save(failOnError:true)
 		when:
 			keywordProcessorService.process(m)
 		then:
-			processed == [matchedKeyword:m]
+			println "*** all Keywords::::"
+			Keyword.findAll().each { println "::: ${it.value}"}
+			def key = Keyword.findByValue(matchedKeyword)
+			keywordsThatHaveBeenProcessed == [(key):m]
 		where:
 			messageText      | matchedKeyword
-			'top'            | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, true, null)
-			'top only'       | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, true, null)
-			'top bottom1'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "1")
-			'top bottom2'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "2")
-			'top bottom3'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "3")
-			'top bottom4'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "4")
-			'top bottom5'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, false, "5")
-			'top bottom6'    | Keyword.findByActivityAndIsTopLevelAndOwnerDetail(p, true, null)
+			'top'            | "TOP"
+			'top'            | "TOP"
+			'top only'       | "TOP"
+			'top bottom1'    | "BOTTOM1"
+			'top bottom2'    | "BOTTOM2"
+			'top bottom3'    | "BOTTMOM3"
+			'top bottom4'    | "BOTTOM4"
+			'top bottom5'    | "BOTTOM5"
+			'top bottom6'    | "TOP"
 	}
 
 	@Unroll
@@ -37,7 +41,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			keywordProcessorService.process(m)
 		then:
-			processed == [:]
+			keywordsThatHaveBeenProcessed == [:]
 		where:
 			messageText << ['should not match', 'topsy turvy', '']
 	}
@@ -50,7 +54,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			keywordProcessorService.process(m)
 		then:
-			processed == [:]
+			keywordsThatHaveBeenProcessed == [:]
 		where:
 			messageText             | archived | deleted
 			'top'                   | true     | false
@@ -68,12 +72,19 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		Poll p = new Poll(name:'test poll')
 		p.addToKeywords(new Keyword(value:"TOP", isTopLevel: true))
 		(1..5).each {
-			p.addToResponses(new PollResponse(value: 'poll response ${it}'))
+			p.addToResponses(new PollResponse(value: "poll response ${it}"))
 			p.addToKeywords(new Keyword(value: "BOTTOM${it}", isTopLevel: false, ownerDetail: "${it}"))
 		}
-		p.metaClass.processKeyword = { Keyword k, Fmessage m -> processed << [k:m]}
+		p.addToResponses(PollResponse.createUnknown())
+		Poll.metaClass.processKeyword = { Fmessage m, Keyword k -> 
+			println "processing keyword $k, value: ${k.value}"
+			keywordsThatHaveBeenProcessed = [:]
+			println "processed was $keywordsThatHaveBeenProcessed"
+			keywordsThatHaveBeenProcessed << [(k):m]
+			println "processed is now $keywordsThatHaveBeenProcessed"
+		}
 		p.save(failOnError:true, flush:true)
-		p
+		return p
 	}
 
 	private def createFmessage(text) {

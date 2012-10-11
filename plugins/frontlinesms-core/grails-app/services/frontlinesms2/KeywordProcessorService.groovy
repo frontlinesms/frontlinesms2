@@ -5,7 +5,9 @@ class KeywordProcessorService {
 		def words = message.text?.trim().toUpperCase().split(/\s/)
 		def topLevelMatch = Keyword.getFirstLevelMatch(words[0])
 		if(topLevelMatch) {
-			def secondLevelMatch = Keyword.getSecondLevelMatchInActivity(words[1], topLevelMatch.activity)
+			def secondLevelMatch = null
+			if(words.length > 1)
+				secondLevelMatch = Keyword.getSecondLevelMatchInActivity(words[1], topLevelMatch.activity)
 			if (secondLevelMatch) {
 				secondLevelMatch.activity.processKeyword(message, secondLevelMatch)
 			}
