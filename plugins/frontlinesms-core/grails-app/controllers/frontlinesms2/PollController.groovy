@@ -28,7 +28,7 @@ class PollController extends ActivityController {
 		poll.question = params.question ?: poll.question
 		poll.sentMessageText = params.messageText ?: poll.sentMessageText
 		poll.editResponses(params)
-		if (poll.save(flush:true)) {
+		if (poll.save()) {
 			if(!params.dontSendMessage && !poll.archived) {
 				def message = messageSendService.createOutgoingMessage(params)
 				message.save()

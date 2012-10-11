@@ -113,19 +113,17 @@ class Poll extends Activity {
 	}
 
 	def editKeywords(attrs){
-		def keywords = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
-		println "###### Keywords :: ${keywords}"
-		keywords.each { k, v ->
+		def keys = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
+		println "###### Keywords :: ${keys}"
+		attrs.topLevelKeyword?this.addToKeywords(new Keyword(value:"${attrs.topLevelKeyword.trim().toUpperCase()}")):null
+		keys.each { k, v ->
+			println "${k}"
 			k = k.substring('keywords'.size())
 			println "###### K :: ${k}"
-			def found = responses.find { it.key == k }
-			if(found) {
-				//TODO implement the editing of the responses
-			} else if(v?.trim()){
-				params.topLevelKeyword.trim()?this.addToKeywords(new Keyword(value:"${params.topLevelKeyword.trim().toUpperCase()}")):
-				attrs["keywords"+k].replaceAll(/\s/, "").split(",").each{
-					this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${v}", isTopLevel:!params.topLevelKeyword.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
-				}
+			println "###### V :: ${v}"
+			println attrs["keywords${k}"]
+			attrs["keywords${k}"].replaceAll(/\s/, "").split(",").each{
+				this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${v}", isTopLevel:!attrs.topLevelKeyword.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
 			}
 		}
 	}
