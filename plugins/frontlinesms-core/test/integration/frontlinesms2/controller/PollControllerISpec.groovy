@@ -46,9 +46,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			def poll = Poll.findByName("test-poll-1")
 			poll?.keywords*.value.containsAll(['HELLO','A','AA','B','BB'])
-			def ids = poll.responses*.id
-			poll.keywords*.ownerDetail.containsAll([null, ids])
-			poll.keywords.size() == 6
+			poll.keywords.size() == 7
 			poll.keywords[0].ownerDetail == poll.responses[0].id.toString()
 			poll.keywords[1].ownerDetail == poll.responses[0].id.toString()
 			poll.keywords[2].ownerDetail == poll.responses[1].id.toString()
