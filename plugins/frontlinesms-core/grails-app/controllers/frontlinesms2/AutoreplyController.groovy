@@ -10,7 +10,7 @@ class AutoreplyController extends ActivityController {
 		if(Autoreply.get(params.ownerId)) {
 			autoreply = Autoreply.get(params.ownerId)
 			
-			def keywordRawValues = (params.blankKeyword ? '' : params.keyword.toUpperCase()).trim().split(",")
+			def keywordRawValues = (params.blankKeyword ? '' : params.keywords.toUpperCase()).trim().split(",")
 			if(!autoreply.keywords*.value.containsAll(keywordRawValues)){
 				autoreply.keywords.clear()
 				for(keywordValue in keywordRawValues){
@@ -24,7 +24,7 @@ class AutoreplyController extends ActivityController {
 		} else {
 			autoreply = new Autoreply(name: params.name, autoreplyText:params.messageText)
 
-			def keywordRawValues = (params.blankKeyword ? '' : params.keyword.toUpperCase()).trim().split(",")
+			def keywordRawValues = (params.blankKeyword ? '' : params.keywords.toUpperCase()).trim().split(",")
 			for(keywordValue in keywordRawValues){
 				def keyword = new Keyword(value: keywordValue.toUpperCase())
 				autoreply.addToKeywords(keyword)
