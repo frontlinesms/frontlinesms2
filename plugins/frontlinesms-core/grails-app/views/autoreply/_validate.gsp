@@ -13,7 +13,7 @@
 		});
 
 		var keyWordTabValidation = function() {
-			 if(!isGroupChecked("blankKeyword")) return validator.element('#keyword');
+			 if(!isGroupChecked("blankKeyword")) return validator.element('#keywords');
 			 else return true;
 		};
 		var messageTextTabValidation = function() {
@@ -35,10 +35,10 @@
 	
 	function updateConfirmationMessage() {
 		if(!(isGroupChecked("blankKeyword"))){
-			var keyword = $('#keyword').val().toUpperCase();
+			var keywords = $('#keywords').val().toUpperCase();
 			var autoreplyText = $('#messageText').val();
 
-			$("#keyword-confirm").html('<p>' + keyword  + '</p>');
+			$("#keyword-confirm").html('<p>' + keywords  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		} else {
 			var autoreplyText = $('#messageText').val();
