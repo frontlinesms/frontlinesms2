@@ -28,7 +28,7 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 		where:
 			name	|addKeyword	|valid | method
 			'test'	|true		|true  | Webconnection.HttpMethod.POST
-			'test'	|false		|false | Webconnection.HttpMethod.POST
+			'test'	|false		|true | Webconnection.HttpMethod.POST
 			''		|true		|false | Webconnection.HttpMethod.POST
 			null	|true		|false | Webconnection.HttpMethod.POST
 	}

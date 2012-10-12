@@ -24,15 +24,19 @@ class WebconnectionController extends ActivityController {
 	}
 
 	private def doSave(Class<Webconnection> clazz) {
+		def keywords = params.blankKeyword ? '' : params.keywords.toUpperCase().replaceAll(/\s/, "").split(',')
 		def webconnectionInstance
 		if(params.ownerId) {
 			webconnectionInstance = clazz.get(params.ownerId)
-			def keywordValue = params.blankKeyword ? '' : params.keyword.toUpperCase()
-			webconnectionInstance.keyword.value = keywordValue
+			webconnectionInstance.keywords.clear()
+			// TODO: tests with partial changes to the keywords will fail
 		} else {
 			webconnectionInstance = clazz.newInstance()
-			webconnectionInstance.keyword =  new Keyword(value: params.blankKeyword ? '' : params.keyword.toUpperCase())
 		}
+		if(params.blankKeyword)
+			webconnectionInstance.addToKeywords(new Keyword(value:'', isTopLevel:true))
+		else
+			keywords.collect { new Keyword(value:it.trim(), isTopLevel:true) }.each { webconnectionInstance.addToKeywords(it) }
 		webconnectionInstance.initialize(params)
 
 		if(webconnectionInstance.save(flush:true)) {

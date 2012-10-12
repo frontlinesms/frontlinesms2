@@ -19,7 +19,7 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 	def "Test constraints"() {
 		when:
 			def keyword = new Keyword(value:'TEST')
-			def extComm = new WebConnection(name:name, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET)
+			def extComm = new GenericWebconnection(name:name, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET)
 			if (addKeyword)
 				extComm.addToKeywords(keyword)
 		then:
