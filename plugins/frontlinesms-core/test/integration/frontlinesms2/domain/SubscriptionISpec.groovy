@@ -15,105 +15,62 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 		createTestContact()
 	}
 
-	def 'triggering join keyword for an existing contact should add him to a group'() {
-		when:
-			processKeyword('KEY JOIN', TEST_CONTACT)
-		then:
-			c.isMemberOf(g)
-	}
-
-	def 'triggering leave keyword for an existing contact should remove him from a group if he is already a member'() {
-		given:
-			g.addToMembers(c)
-		when:
-			processKeyword('KEY LEAVE', TEST_CONTACT)
-		then:
-			!c.isMemberOf(g)
-	}
-
-	def 'triggering leave keyword for an existing contact should do nothing if he is not already a member'() {
-		when:
-			processKeyword('KEY LEAVE', TEST_CONTACT)
-		then:
-			!c.isMemberOf(g)
-	}
-
-	def 'triggering join keyword for a non-existing contact should create him and add him to the group'() {
-		when:
-			processKeyword('KEY JOIN', TEST_NON_CONTACT)
-		then:
-			getNewContact()
-		and:
-			getNewContact().isMemberOf(g)
-	}
-
-	def 'triggering leave keyword for a non-existing contact should have no effect'() {
-		when:
-			processKeyword('KEY LEAVE', TEST_NON_CONTACT)
-		then:
-			!getNewContact()	
-	}
-
-	def 'triggering toggle for an existing contact should add him to a group if he is not already a member'() {
-		when:
-			processKeyword('KEY', TEST_CONTACT)
-		then:
-			c.isMemberOf(g)
-	}
-
-	def 'triggering toggle for an existing contact should remove him from a group if he is already a member'() {
-		given:
-			g.addToMembers(c)
-		when:
-			processKeyword('KEY', TEST_CONTACT)
-		then:
-			!c.isMemberOf(g)
-	}
-
-	def 'triggering toggle for a non-existing contact should create him and add him to the group'() {
-		when:
-			processKeyword('KEY', TEST_NON_CONTACT)
-		then:
-			getNewContact()
-		and:
-			getNewContact().isMemberOf(g)
+	def 'keyword should issue proper Action'(){
+		setup:
+			s.defaultAction = Subscription.Action.TOGGLE
+			s.save(failOnError:true)
+		expect:
+			action == s.getAction(s.keywords.find{ it.value == keyword})
+		where:
+			keyword|action
+			"KEY"|Subscription.Action.TOGGLE
+			"JOIN"|Subscription.Action.JOIN
+			"IN"|Subscription.Action.JOIN
+			"LEAVE"|Subscription.Action.LEAVE
+			"OUT"|Subscription.Action.LEAVE
 	}
 
 	@Unroll
-	def 'exact matches should map to alias'() {
-		expect:
-			s.getAction(messageText, true) == action
+	def 'triggering keyword should change membership properly of contact'() {
+		setup:
+			s.defaultAction = Subscription.Action.TOGGLE
+			s.save(failOnError:true)
+			makeMember?g.addToMembers(c):null
+		when:
+			 s.processKeyword(mockMessage('KEY JOIN', TEST_CONTACT), s.keywords.find{ it.value == keyword})
+		then:
+			state == c.isMemberOf(g)
 		where:
-			messageText | action
-			'KEY JOIN'  | Action.JOIN
-			'KEY LEAVE' | Action.LEAVE
-			'KEY'       | Action.TOGGLE
+			keyword|makeMember|action
+			"KEY"|true|false
+			"JOIN"|true|true
+			"IN"|true|true
+			"LEAVE"|true|false
+			"OUT"|true|false
+			// if contact is not a member of group
+			"KEY"|false|true
+			"JOIN"|false|true
+			"IN"|false|true
+			"LEAVE"|false|false
+			"OUT"|false|false
 	}
 
 	@Unroll
-	def 'non-exact matches should map to alias'() {
-		expect:
-			s.getAction(messageText, false) == action
+	def 'triggering keyword should change membership properly of non-contact'() {
+		setup:
+			s.defaultAction = Subscription.Action.TOGGLE
+			s.save(failOnError:true)
+		when:
+			 s.processKeyword(mockMessage('KEY JOIN', TEST_NON_CONTACT), s.keywords.find{ it.value == keyword})
+		then:
+			state == getNewContact().isMemberOf(g)
 		where:
-			messageText | action
-			'KEYJOIN'   | Action.JOIN
-			'KEYLEAVE'  | Action.LEAVE
-	}
-
-	@Unroll
-	def 'exact match without alias match should map to blank setting'() {
-		expect:
-			s.getAction(messageText, true) == Action.TOGGLE
-		where:
-			messageText << ['KEY SOMETHING', 'KEY OTHERWISE', 'KEY RAMBLING NONSENSE']
-	}
-
-	@Unroll
-	def 'non-exact match without alias should not map'() {
-		expect:
-			s.getAction(messageText, false) == null
-		where:
-			messageText << ['KEY SOMETHING', 'KEY OTHERWISE', 'KEY RAMBLING NONSENSE']
+			keyword|action
+			"KEY"|true
+			"JOIN"|true
+			"IN"|true
+			"LEAVE"|false
+			"OUT"|false
 	}
 
 	@Unroll
@@ -122,27 +79,33 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 			s.defaultAction = defaultAction
 			s.save(failOnError:true)
 		expect:
-			s.getAction(messageText, true) == action
+			action == s.getAction(s.keywords.find{ it.value == keyword})
 		where:
-			messageText|defaultAction|action
+			keyword|defaultAction|action
 			'KEY'|Subscription.Action.JOIN|Subscription.Action.JOIN
 			'KEY'|Subscription.Action.LEAVE|Subscription.Action.LEAVE
 			'KEY'|Subscription.Action.TOGGLE|Subscription.Action.TOGGLE
-	}
-
-//> HELPERS
-	private def processKeyword(String messageText, String sourcePhoneNumber, boolean exactMatch=true) {
-		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), exactMatch)
 	}
 
 	private def createTestContact() {
 		c = Contact.build(mobile:TEST_CONTACT)
 	}
 
+	private def processKeyword(String messageText, String sourcePhoneNumber, boolean exactMatch=true) {
+		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), exactMatch)
+	}
+
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
-		def keyword = new Keyword(value:"KEY")
-		s = new Subscription(name:"test subscription", keyword: keyword,group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
+		def k0  = new Keyword(value:"KII", ownerDetail:null)
+		def k1  = new Keyword(value:"KEY", ownerDetail:null)
+		def k2  = new Keyword(value:"JOIN", ownerDetail:Subscription.Action.JOIN.toString())
+		def k3  = new Keyword(value:"IN", ownerDetail:Subscription.Action.JOIN.toString())
+		def k4  = new Keyword(value:"LEAVE", ownerDetail:Subscription.Action.LEAVE.toString())
+		def k5  = new Keyword(value:"OUT", ownerDetail:Subscription.Action.LEAVE.toString())
+
+		s = new Subscription(name:"test subscription", group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
+		s.keywords = [k0 ,k1, k2, k3, k4, k5]
 	}
 
 	private def mockMessage(String messageText, String sourcePhoneNumber) {
