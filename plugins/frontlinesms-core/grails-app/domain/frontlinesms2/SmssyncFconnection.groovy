@@ -22,8 +22,8 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		secret nullable:true
 	}
 
-	def removeDispatchesFromQueue(dispatchIds) {
-		SmssyncFconnectionQueuedDispatch.delete(this, dispatchIds)
+	def removeDispatchesFromQueue(dispatches) {
+		SmssyncFconnectionQueuedDispatch.delete(this, dispatches)
 	}
 
 	def apiProcess(controller) {
@@ -34,8 +34,8 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		SmssyncFconnectionQueuedDispatch.create(this, d)
 	}
 
-	def getQueuedDispatchIds() {
-		SmssyncFconnectionQueuedDispatch.getDispatches(this).collect { it.id }
+	def getQueuedDispatches() {
+		SmssyncFconnectionQueuedDispatch.getDispatches(this)
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {

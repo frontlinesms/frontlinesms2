@@ -63,13 +63,13 @@ class SmssyncService {
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {
 		def responseMap = [:]
 
-		def q = connection.queuedDispatchIds
+		def q = connection.queuedDispatches
 		if(q || includeWhenEmpty) {
 			responseMap.task = 'send'
 
-			connection.removeDispatchesFromQueue(q as List)
+			connection.removeDispatchesFromQueue(q)
 
-			responseMap.messages = Dispatch.getAll(q).collect { d ->
+			responseMap.messages = q.collect { d ->
 				d.status = DispatchStatus.SENT
 				d.dateSent = new Date()
 				d.save(failOnError: true)
