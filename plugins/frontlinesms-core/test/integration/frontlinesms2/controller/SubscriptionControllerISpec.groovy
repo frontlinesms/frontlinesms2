@@ -11,7 +11,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def trashService
 	def setup() {
-		controller = new WebconnectionController()
+		controller = new subscriptionController()
 	}
 
 	//> CED tests
