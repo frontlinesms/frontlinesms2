@@ -324,7 +324,7 @@ class WebconnectionKeywordTab extends geb.Module {
 	static base = { $('#webconnection-sorting') }
 	static content = {
 		useKeyword { $("input#blankKeyword") }
-		keyword { $('input#keyword') }
+		keyword { $('input#keywords') }
 	}
 }
 
