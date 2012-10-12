@@ -101,8 +101,8 @@ class Subscription extends Activity{
 		})
 	}
 
-	def processKeyword(Fmessage message, boolean exactMatch) {
-		def action = getAction(message.text,exactMatch)
+	def processKeyword(Fmessage message, Keyword k) {
+		def action = getAction(k)
 		message.ownerDetail = action.toString()
 		if(action == Action.JOIN){
 			processJoin(message)
@@ -111,31 +111,17 @@ class Subscription extends Activity{
 		}else if(action == Action.TOGGLE) {
 			processToggle(message)
 		}
-		this.save(failOnError:true)
 	}
 
-	Action getAction(String messageText, boolean exactMatch) {
-		def words =  messageText.trim().toUpperCase().split(/\s+/)
-		if(words.size() == 1){
-			if(hasAtLeastOneAlias(joinAliases,words[0])){
-				return Action.JOIN
-			}else if(hasAtLeastOneAlias(leaveAliases,words[0])){
-				return Action.LEAVE
-			}else if (exactMatch){
-				return defaultAction
-			}else if(!exactMatch){
-				println "################## Why are you called? You are not a match."
-				return defaultAction;
-			}
-		}
-		else if (words.size() > 1 && exactMatch) {
-			if(joinAliases.toUpperCase().split(",").contains(words[1].toUpperCase().trim())) {
-				return Action.JOIN
-		 	} else if(leaveAliases.toUpperCase().split(",").contains(words[1].toUpperCase().trim())) {
-		 		return Action.LEAVE
-		 	} else {
-		 		return defaultAction
-		 	}
+	Action getAction(Keyword k) {
+		def actionText = k.ownerDetail
+		println "### OwnerDetail ## ${k.ownerDetail}"
+		if(actionText == Action.JOIN.toString()){
+			return Action.JOIN
+		} else if(actionText == Action.LEAVE.toString()){
+			return Action.LEAVE
+		}else if(actionText == null){
+			return defaultAction
 		}
 	}
 
