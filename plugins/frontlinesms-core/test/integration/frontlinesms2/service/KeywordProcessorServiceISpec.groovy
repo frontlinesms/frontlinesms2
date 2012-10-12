@@ -18,8 +18,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			println "*** all Keywords::::"
 			Keyword.findAll().each { println "::: ${it.value}"}
-			def key = Keyword.findByValue(matchedKeyword)
-			keywordsThatHaveBeenProcessed == [(key):m]
+			Keyword.findAllByValue(matchedKeyword) == Keyword.findAllByOwnerDetail("PROCESSED")
 		where:
 			messageText      | matchedKeyword
 			'top'            | "TOP"
@@ -27,7 +26,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			'top only'       | "TOP"
 			'top bottom1'    | "BOTTOM1"
 			'top bottom2'    | "BOTTOM2"
-			'top bottom3'    | "BOTTMOM3"
+			'top bottom3'    | "BOTTOM3"
 			'top bottom4'    | "BOTTOM4"
 			'top bottom5'    | "BOTTOM5"
 			'top bottom6'    | "TOP"
@@ -41,7 +40,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			keywordProcessorService.process(m)
 		then:
-			keywordsThatHaveBeenProcessed == [:]
+			Keyword.findAllByOwnerDetail("PROCESSED") == []
 		where:
 			messageText << ['should not match', 'topsy turvy', '']
 	}
@@ -54,7 +53,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			keywordProcessorService.process(m)
 		then:
-			keywordsThatHaveBeenProcessed == [:]
+			Keyword.findAllByOwnerDetail("PROCESSED") == []
 		where:
 			messageText             | archived | deleted
 			'top'                   | true     | false
@@ -69,7 +68,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createTestPoll(archived=false, deleted=false) {
-		Poll p = new Poll(name:'test poll')
+		Poll p = new Poll(name:'test poll', archived: archived, deleted: deleted)
 		p.addToKeywords(new Keyword(value:"TOP", isTopLevel: true))
 		(1..5).each {
 			p.addToResponses(new PollResponse(value: "poll response ${it}"))
@@ -78,10 +77,8 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		p.addToResponses(PollResponse.createUnknown())
 		Poll.metaClass.processKeyword = { Fmessage m, Keyword k -> 
 			println "processing keyword $k, value: ${k.value}"
-			keywordsThatHaveBeenProcessed = [:]
-			println "processed was $keywordsThatHaveBeenProcessed"
-			keywordsThatHaveBeenProcessed << [(k):m]
-			println "processed is now $keywordsThatHaveBeenProcessed"
+			k.ownerDetail = "PROCESSED"
+			k.save(failOnError:true)
 		}
 		p.save(failOnError:true, flush:true)
 		return p
