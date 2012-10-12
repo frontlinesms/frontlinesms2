@@ -4,7 +4,7 @@
 	<li>(<g:message code="poll.messages.sent" args="${[sentDispatchCount]}"/>)</li>
 	<li>${ownerInstance?.sentMessageText}</li>
 	<li>${ownerInstance.autoreplyText? g.message(code:'poll.response.enabled') : ""}</li>
-	<li>Top Level Keyword : ${ownerInstance?.keywords.find{it.isTopLevel && it.ownerDetail == null}?.value}</li>
+	<li>Top Level Keyword : ${ownerInstance?.keywords.findAll{it.isTopLevel && it.ownerDetail == null}?.value?.join(',')}</li>
 </ul>
 <div class="stats">
 	<table>

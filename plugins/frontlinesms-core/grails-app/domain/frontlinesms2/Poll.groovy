@@ -121,7 +121,9 @@ class Poll extends Activity {
 		this.keywords?.clear()
 		def keys = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
 		println "###### Keywords :: ${keys}"
-		attrs.topLevelKeyword?this.addToKeywords(new Keyword(value:"${attrs.topLevelKeyword.trim().toUpperCase()}")):null
+		attrs.topLevelKeyword.replaceAll(/\s/, "").split(",").each{
+			this.addToKeywords(new Keyword(value:"${it.trim().toUpperCase()}"))
+		}
 		println "Keywords after setting Most TopLevel ## ${this.keywords*.value}"
 		keys.each { k, v ->
 			println "${k}"
