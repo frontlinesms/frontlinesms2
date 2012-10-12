@@ -32,9 +32,9 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			s.keywords.findAll { it.ownerDetail == "JOIN" && !it.isTopLevel }*.value.sort().join(',') == "IN,JOINING,TUKO"
 			s.keywords.findAll { !it.ownerDetail && it.isTopLevel }*.value.sort().join(',') == "SUBSCRIPTION"
 			s.keywords.findAll { it.ownerDetail == "LEAVE" && !it.isTopLevel }*.value.sort().join(',') == "OUT,SPAM,STOP"
-			s.defaultAction = Subscription.Action.TOGGLE
-			s.joinAutoreplyText = "welcome"
-			s.leaveAutoreplyText = 'bye bye'
+			s.defaultAction == Subscription.Action.TOGGLE
+			s.joinAutoreplyText == "welcome"
+			s.leaveAutoreplyText == 'bye bye'
 	}
 
 	def 'top level keywords are optional'() {
@@ -52,9 +52,9 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def s = Subscription.findByName("Test")
 			s.keywords.findAll { it.ownerDetail == "JOIN" && it.isTopLevel }*.value.sort().join(',') == "IN,JOINING,TUKO"
 			s.keywords.findAll { it.ownerDetail == "LEAVE"  && it.isTop }*.value.sort().join(',') == "OUT,SPAM,STOP"
-			s.defaultAction = Subscription.Action.LEAVE
-			s.joinAutoreplyText = "welcome"
-			s.leaveAutoreplyText = 'bye bye'
+			s.defaultAction == Subscription.Action.LEAVE
+			s.joinAutoreplyText == "welcome"
+			s.leaveAutoreplyText == 'bye bye'
 	}
 
 	def 'save also works for multiple top level keywords'() {
@@ -74,9 +74,9 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			s.keywords.findAll { !it.ownerDetail }*.value.sort().join(',') == "APPLE,BANANA,CARROTJUICE"
 			s.keywords.findAll { it.ownerDetail == "JOIN" }*.value.sort().join(',') == "IN,JOINING,TUKO"
 			s.keywords.findAll { it.ownerDetail == "LEAVE" }*.value.sort().join(',') == "OUT,SPAM,STOP"
-			s.defaultAction = Subscription.Action.TOGGLE
-			s.joinAutoreplyText = "welcome"
-			s.leaveAutoreplyText = 'bye bye'
+			s.defaultAction == Subscription.Action.TOGGLE
+			s.joinAutoreplyText == "welcome"
+			s.leaveAutoreplyText == 'bye bye'
 	}
 
 	def 'can edit an existing subscription'() {
@@ -99,12 +99,12 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.save()
 		then:
-			def s = Subscription.findByName("Test")
-			s.keywords.findAll { it.ownerDetail == "JOIN" }*.value.sort().join(',') == "IN,JOINING,TUKO"
-			s.keywords.findAll { it.ownerDetail == "LEAVE" }*.value.sort().join(',') == "OUT,SPAM,STOP"
-			s.defaultAction = Subscription.Action.TOGGLE
-			s.joinAutoreplyText = "welcome"
-			s.leaveAutoreplyText = 'bye bye'
+			def sub = Subscription.findByName("Test")
+			sub.keywords.findAll { it.ownerDetail == "JOIN" }*.value.sort().join(',') == "IN,JOINING,TUKO"
+			sub.keywords.findAll { it.ownerDetail == "LEAVE" }*.value.sort().join(',') == "OUT,SPAM,STOP"
+			sub.defaultAction == Subscription.Action.TOGGLE
+			sub.joinAutoreplyText == "welcome"
+			sub.leaveAutoreplyText == 'bye bye'
 	}
 
 	//> Message Action tests (for messages moved into subscription)
@@ -113,7 +113,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def c = createTestContact()
 			def g = createTestGroup(initiallyInGroup?c:null)
 			def s = createTestSubscription(g)
-			def m = createTestMessageFromContact(c)
+			def m = createTestMessageFromContact("hello guys", c)
 			controller.params.ownerId = s.id
 			controllers.messageId = m.id
 		when:
@@ -132,7 +132,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createTestSubscription(Group g) {
-		new Subscription(name:"West", joinAutoreplyText:":)", leaveAutoreplyText:":(", defaultAction: Subscription.Action.TOGGLE, group:g)
+		def s = new Subscription(name:"West", joinAutoreplyText:":)", leaveAutoreplyText:":(", defaultAction: Subscription.Action.TOGGLE, group:g)
 		s.addToKeywords(new Keyword(value:"IN", isTopLevel:false, ownerDetail: "JOIN"))
 		s.addToKeywords(new Keyword(value:"OUT", isTopLevel:false, ownerDetail: "LEAVE"))
 		s.save(failOnError: true)
@@ -142,7 +142,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	private def createTestGroup(Contact contact=null) {
 		def g = new Group(name:"The Cool Gang")
 		if(contact)
-			g.addToContacts(contact)
+			contact.addToGroup(g)
 		g.save(failOnError:true)
 		g
 	}
