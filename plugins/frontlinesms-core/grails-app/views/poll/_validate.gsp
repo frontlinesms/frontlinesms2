@@ -14,6 +14,9 @@
 		<g:else>
 			mediumPopup.disableTab("poll-response");
 			$("input[name='pollType']").trigger("change");
+			$("input[name='enableKeyword']").trigger("change");
+			$('#poll-keyword').hide();
+			$('#poll-keywords').hide();
 		</g:else>
 		<g:if test="${activityInstanceToEdit?.archived}">
 			$("input#dontSendMessage").attr('checked', true);
@@ -339,6 +342,10 @@
 	function setConfirmAliasValues(){
 		var myArray = ['A', 'B', 'C', 'D', 'E'];
 		var aliasText = "";
+		var topLevelKeyword = $('#poll-keyword').val();
+		if(topLevelKeyword){
+			aliasText += "<p>Top Level Keyword : "+ topLevelKeyword + "</p>";
+		}
 		if($("input[name='pollType']:checked").val() != "yesNo") {
 			$.each(myArray, function(index, value){
 				var choice = $("ul#poll-choices li input#choice"+value).val();

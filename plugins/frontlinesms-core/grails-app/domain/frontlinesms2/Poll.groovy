@@ -118,9 +118,7 @@ class Poll extends Activity {
 	}
 //TODO edit keywords only adds keywoids to the poll...does not edit
 	def editKeywords(attrs){
-		println "## Count Keywords # before ## ${Keyword.findAll().size()}"
-		this.keywords.clear()
-		println "## Count Keywords # after ## ${Keyword.findAll().size()}"
+		this.keywords?.clear()
 		def keys = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
 		println "###### Keywords :: ${keys}"
 		attrs.topLevelKeyword?this.addToKeywords(new Keyword(value:"${attrs.topLevelKeyword.trim().toUpperCase()}")):null
@@ -132,7 +130,7 @@ class Poll extends Activity {
 			println "###### V :: ${v}"
 			println attrs["keywords${k}"]
 			attrs["keywords${k}"].replaceAll(/\s/, "").split(",").each{
-				this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${this.responses.find{ it.key == k}.id}", isTopLevel:!attrs.topLevelKeyword?.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
+				this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${k}", isTopLevel:!attrs.topLevelKeyword?.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
 			}
 		}
 	}
@@ -176,7 +174,7 @@ class Poll extends Activity {
 		if(keyword.isTopLevel && !keyword.ownerDetail){
 			return this.unknown
 		} else {
-			return PollResponse.get(keyword.ownerDetail as Long)
+			return this.responses.find{ keyword.ownerDetail == it.key }
 		}
 	}
 }
