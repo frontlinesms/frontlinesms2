@@ -4,6 +4,7 @@
 	<li>(<g:message code="poll.messages.sent" args="${[sentDispatchCount]}"/>)</li>
 	<li>${ownerInstance?.sentMessageText}</li>
 	<li>${ownerInstance.autoreplyText? g.message(code:'poll.response.enabled') : ""}</li>
+	<li>${ownerInstance?.keywords.find{it.isTopLevel && it.ownerDetail == null}?.value}</li>
 </ul>
 <div class="stats">
 	<table>
@@ -14,10 +15,9 @@
 				<td class="percent">
 					<g:formatNumber number="${ownerInstance.liveMessageCount - sentMessageCount != 0 ? r.liveMessageCount/(ownerInstance.liveMessageCount - sentMessageCount) : 0}" type="percent" maxFractionDigits="2"/>
 				</td>
-				<td class="" >${r.aliases}</td>
+				<td class="" >${ownerInstance.keywords.findAll{ it.ownerDetail == r.id.toString() }*.value.join(",")}</td>
 			</tr>
 		</g:each>
 	</table>
 	<a id='poll-graph-btn' class='btn show-arrow'><g:message code="fmessage.showpolldetails"/></a>
 </div>
-

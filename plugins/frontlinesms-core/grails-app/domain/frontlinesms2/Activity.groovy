@@ -16,6 +16,7 @@ abstract class Activity extends MessageOwner {
 	static mapping = {
 		tablePerHierarchy false
 		version false
+		keywords cascade: "all-delete-orphan"
 	}
 
 	static constraints = {

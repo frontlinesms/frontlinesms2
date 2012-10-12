@@ -7,17 +7,23 @@ class PollController extends ActivityController {
 		// FIXME this should use withPoll to shorten and DRY the code, but it causes cascade errors as referenced here:
 		// http://grails.1312388.n4.nabble.com/Cascade-problem-with-hasOne-relationship-td4495102.html
 		def poll
-		println "######### ${params}"
+		println "####### Params # ${params}"
 		poll = Poll.get(params.ownerId)?Poll.get(params.ownerId):new Poll()
+		println "### Poll Name : ${poll.name}"
 		poll.name = params.name ?: poll.name
 		poll.autoreplyText = params.enableAutoreply? (params.autoreplyText ?: poll.autoreplyText): null
 		poll.question = params.question ?: poll.question
 		poll.sentMessageText = params.messageText ?: poll.sentMessageText
 		poll.editResponses(params)
-		if (poll.save()) {
+		if (poll.validate()) {
+			poll.save()
+			println "### Round One Saved "
 			params.enableKeyword?poll.editKeywords(params):poll.noKeyword()
 			println "############ Edited keywords"
+			println "#####Poll Keyword errors ${poll.validate()} ## ${poll.errors.allErrors}"
+			poll.save()
 			if(!params.dontSendMessage && !poll.archived) {
+				println "#### Sending message to receipients"
 				def message = messageSendService.createOutgoingMessage(params)
 				message.save()
 				poll.addToMessages(message)
@@ -38,7 +44,8 @@ class PollController extends ActivityController {
 				renderJsonErrors(poll)
 			}
 		} else {
-			println "Did not save at all ooooops :("
+			println "## Did not save at all ooooops :("
+			println "Errors ## ${poll.errors.allErrors}"
 			renderJsonErrors(poll)
 		}
 	}

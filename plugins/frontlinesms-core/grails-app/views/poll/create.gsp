@@ -3,7 +3,6 @@
 <fsms:wizard url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null, format: 'json']]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )"
 		verticalTabs="poll.question,
 				poll.response,
-				poll.sort,
 				poll.alias,
 				poll.reply,
 				poll.edit.message,
@@ -11,7 +10,6 @@
 				poll.confirm"
 		templates="/poll/question,
 				/poll/responses,
-				/poll/sorting,
 				/poll/aliases,
 				/poll/replies,
 				/message/compose,

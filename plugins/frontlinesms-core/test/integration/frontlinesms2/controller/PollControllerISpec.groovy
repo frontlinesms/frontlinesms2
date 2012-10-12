@@ -45,14 +45,15 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 		then:
 			def poll = Poll.findByName("test-poll-1")
-			poll?.keywords*.value.containsAll(['HELLO','A','AA','B','BB'])
+			poll?.keywords*.value.containsAll(['HELLO','A','AA','B','BB','MAYBE','IDONTKNOW'])
 			poll.keywords.size() == 7
-			poll.keywords[0].ownerDetail == poll.responses[0].id.toString()
+			poll.keywords[0].ownerDetail == null
 			poll.keywords[1].ownerDetail == poll.responses[0].id.toString()
-			poll.keywords[2].ownerDetail == poll.responses[1].id.toString()
+			poll.keywords[2].ownerDetail == poll.responses[0].id.toString()
 			poll.keywords[3].ownerDetail == poll.responses[1].id.toString()
-			poll.keywords[4].ownerDetail == poll.responses[2].id.toString()
+			poll.keywords[4].ownerDetail == poll.responses[1].id.toString()
 			poll.keywords[5].ownerDetail == poll.responses[2].id.toString()
+			poll.keywords[6].ownerDetail == poll.responses[2].id.toString()
 	}
 
 	def "saving new poll with keyword disabled does should not save the keyword"() {
@@ -147,7 +148,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			model.groupList["smartgroup-$s.id"] == [name:'English numbers', addresses:[]]
 	}
-	
+
 	def "edit action modifies the properties of an existing poll"() {
 		setup:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
@@ -181,10 +182,56 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.ownerId = poll.id
 			controller.params.topLevelKeyword = 'bad'
 			controller.params.enableKeyword = true
+			controller.params.dontSendMessage=true
 			controller.save()
 			poll = Poll.get(poll.id)
 		then:
-			poll.keywords*.value.containsAll(['BAD'])
+			poll.keywords[0].value == 'BAD'
 	}
-	
+
+	def "editing a poll persists keyword changes"() {
+		setup:
+			def p = new Poll(name: 'This is a poll', yesNo:false)
+			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
+			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
+			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
+			p.addToResponses(PollResponse.createUnknown())
+			p.save(failOnError:true)
+			def k1 = new Keyword(value: "FOOTBALL", activity: p)
+			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"${p.responses[0].id}", isTopLevel:false)
+			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"${p.responses[2].id}", isTopLevel:false)
+			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"${p.responses[1].id}", isTopLevel:false)
+			p.addToKeywords(k1)
+			p.addToKeywords(k2)
+			p.addToKeywords(k3)
+			p.addToKeywords(k4)
+			p.save(failOnError:true, flush:true)
+		and:
+			controller.params.ownerId=Poll.findByName('This is a poll').id
+			controller.params.name = 'test-poll-1'
+			controller.params.choiceA = "yes"
+			controller.params.choiceB = "no"
+			controller.params.choiceC = "maybe"
+			controller.params.autoreplyText = "automatic reply text"
+			controller.params.enableKeyword = true
+			controller.params.topLevelKeyword = "Hello"
+			controller.params.keywordsA = "A,aa"
+			controller.params.keywordsB = "B,bb"
+			controller.params.keywordsC = "C,cc"
+			controller.params.dontSendMessage=true
+		when:
+			controller.save()
+		then:
+			def poll = Poll.findByName("test-poll-1")
+			poll?.keywords*.value.containsAll(['HELLO','A','AA','B','BB','C','CC'])
+			poll.keywords.size() == 7
+			Keyword.findAll().size() == 7
+			poll.keywords[0].ownerDetail == null
+			poll.keywords[1].ownerDetail == poll.responses[0].id.toString()
+			poll.keywords[2].ownerDetail == poll.responses[0].id.toString()
+			poll.keywords[3].ownerDetail == poll.responses[1].id.toString()
+			poll.keywords[4].ownerDetail == poll.responses[1].id.toString()
+			poll.keywords[5].ownerDetail == poll.responses[2].id.toString()
+			poll.keywords[6].ownerDetail == poll.responses[2].id.toString()
+	}
 }

@@ -104,7 +104,12 @@ class Poll extends Activity {
 				def found = responses.find { it.key == k }
 				if(found) {
 					found.value = v
-				} else if(v?.trim()) this.addToResponses(key:k, value:v)
+					println "###### Key :: ${k}"
+					println "###### value :: ${v}"
+				} else if(v?.trim()) {
+					println "###### Adding a new PollResponse ${k} :: ${v}"
+					this.addToResponses(key:k, value:v)
+				}
 			}
 		}
 		if(!this.unknown) {
@@ -113,9 +118,13 @@ class Poll extends Activity {
 	}
 //TODO edit keywords only adds keywoids to the poll...does not edit
 	def editKeywords(attrs){
+		println "## Count Keywords # before ## ${Keyword.findAll().size()}"
+		this.keywords.clear()
+		println "## Count Keywords # after ## ${Keyword.findAll().size()}"
 		def keys = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
 		println "###### Keywords :: ${keys}"
 		attrs.topLevelKeyword?this.addToKeywords(new Keyword(value:"${attrs.topLevelKeyword.trim().toUpperCase()}")):null
+		println "Keywords after setting Most TopLevel ## ${this.keywords*.value}"
 		keys.each { k, v ->
 			println "${k}"
 			k = k.substring('keywords'.size())
