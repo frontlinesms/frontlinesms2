@@ -115,6 +115,7 @@ class Subscription extends Activity{
 
 	Action getAction(Keyword k) {
 		def actionText = k.ownerDetail
+		println "### OwnerDetail ## ${k.ownerDetail}"
 		if(actionText == Action.JOIN.toString()){
 			return Action.JOIN
 		} else if(actionText == Action.LEAVE.toString()){
