@@ -53,7 +53,7 @@ abstract class Webconnection extends Activity {
 		tablePerHierarchy false
 	}
 
-	def processKeyword(Fmessage message, Boolean exactMatch) {
+	def processKeyword(Fmessage message, Keyword k) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		webconnectionService.send(message)
