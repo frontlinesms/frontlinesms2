@@ -3,6 +3,7 @@ package frontlinesms2
 import grails.converters.JSON
 
 class AnnouncementController extends ActivityController {
+	def announcementService
 	def index() { redirect(action: 'save') }
 
 	def list() {
@@ -12,12 +13,7 @@ class AnnouncementController extends ActivityController {
 	def save() {
 		def announcementInstance
 		announcementInstance = Announcement.get(params.ownerId) ?: new Announcement()
-		announcementInstance.name = params.name
-		announcementInstance.sentMessageText = params.messageText
-		def m = messageSendService.createOutgoingMessage(params)
-		messageSendService.send(m)
-		announcementInstance.addToMessages(m)
-		if (announcementInstance.save()) {
+		if(announcementService.saveInstance(announcementInstance, params)){
 			flash.message = message(code: 'announcement.saved')
 			params.activityId = announcementInstance.id
 			withFormat {
