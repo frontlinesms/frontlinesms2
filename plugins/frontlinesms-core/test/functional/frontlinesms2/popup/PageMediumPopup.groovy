@@ -18,6 +18,7 @@ abstract class MediumPopup extends geb.Page {
 			$('#tabs a[href="#tabs-'+tabId+'"]')
 		}
 		errorPanel { $('div.error-panel') }
+		validationError { $('label.error') }
 		error { errorPanel.text()?.toLowerCase() }
 	}
 }
@@ -73,7 +74,7 @@ class CreateActivityDialog extends MediumPopup {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
 		autoreply { $('input[value="autoreply"]') }
-		webconnection(wait:true) { $('input[value="webConnection"]') }
+		webconnection(wait:true) { $('input[value="webconnection"]') }
 		subscription { $('input[value="subscription"]') }
 	}
 }
@@ -299,39 +300,46 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	}
 }
 
-class WebConnectionWizard extends MediumPopup {
+class WebconnectionWizard extends MediumPopup {
 	static at = {
-		popupTitle.toLowerCase().contains("connection") || popupTitle.toLowerCase().contains("activity")
+		waitFor('very slow') { popupTitle.contains("connection") || popupTitle == 'edit activity' }
+		return true
 	}
 	static content = {
 		error { $("label.error").text()}
-		keywordTab { module WebConnectionKeywordTab }
-		requestTab { module WebConnectionRequestFormatTab }
-		confirmTab { module WebConnectionConfirmTab }
-		summary { module WebConnectionSummary }
+		keywordTab { module WebconnectionKeywordTab }
+		requestTab { module WebconnectionRequestFormatTab }
+		confirmTab(required:false) { module WebconnectionConfirmTab }
+		summary { module WebconnectionSummary }
+
+		configureUshahidi(required:false) { module ConfigureUshahidiWebconnectionTab }
+
+		option { shortName -> $('input', name:'webconnectionType', value:shortName) }
+		getTitle { shortName -> option(shortName).previous('label').text() }
+		getDescription { shortName -> option(shortName).previous('p').text() }
 	}
 }
 
-class WebConnectionKeywordTab extends geb.Module {
-	static base = { $('div#tabs-1') }
+class WebconnectionKeywordTab extends geb.Module {
+	static base = { $('#webconnection-sorting') }
 	static content = {
 		useKeyword { $("input#blankKeyword") }
 		keyword { $('input#keyword') }
 	}
 }
 
-class WebConnectionRequestFormatTab extends geb.Module {
+class WebconnectionRequestFormatTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
 		post { $("input[value='POST']") }
 		get { $("input[value='GET']") }
 		url { $("input#url") }
 		addParam { $('a.btn.addNew') }
-		parameters { moduleList WebConnectionParam, $('#web-connection-param-table tbody tr') }
+		parameters { moduleList WebconnectionParam, $('#web-connection-param-table tbody tr') }
 	}
 }
 
-class WebConnectionParam extends geb.Module {
+class WebconnectionParam extends geb.Module {
 	static content = {
 		value { $('input.param-value') }
 		name { $("input.param-name") }
@@ -339,17 +347,21 @@ class WebConnectionParam extends geb.Module {
 	}
 }
 
-class WebConnectionConfirmTab extends geb.Module {
-	static base = { $('div#tabs-3') }
+class WebconnectionConfirmTab extends geb.Module {
+	static base = { $('div#webconnection-confirm') }
 	static content = {
 		name { $('input#name') }
 		keyword { $("#confirm-keyword").text() }
 		type { $("#confirm-type").text() }
 		url { $("#confirm-url").text() }
+		
+		confirm{ label->
+			$("#confirm-"+label).text()
+		}
 	}
 }
 
-class WebConnectionSummary extends geb.Module {
+class WebconnectionSummary extends geb.Module {
 	static base = { $('div#tabs-4') }
 	static content = {
 		message { $("div.summary") }
@@ -425,3 +437,33 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	}
 }
 
+class WebconnectionTypeSelectTab extends geb.Module{
+	static base = { $('div#tabs-1') }
+	static content = {
+		getDescription { shortName ->
+			$("#"+shortName).text()
+		}
+		getTitle { shortName ->
+			$("#"+shortName+" .info").text()
+		}
+		option { shortName ->
+			$('#webconnectionType').value(shortName)
+		}
+	}
+}
+
+class ConfigureUshahidiWebconnectionTab extends geb.Module{
+	static base = { $('#webconnection-config') }
+	static content = {
+		subType(required:false){ type->
+			$('input', name:'serviceType', value:type)
+		} 
+		crowdmapDeployAddress{ $('#displayed_url') }
+		ushahidiDeployAddress{ $('#displayed_url') }
+		ushahidiKeyLabel { $("label", for:'key').first() }
+		crowdmapKeyLabel { $("label", for:'key').last() }
+		urlSuffix { $("label", for:'url').last() }
+		crowdmapApiKey{ $('#key') }
+		ushahidiApiKey{ $('#key') }
+	}
+}

@@ -19,7 +19,7 @@ class FmessageService {
 						outgoingMessage.save()
 						messagesToSend << outgoingMessage
 						activity.addToMessages(outgoingMessage)
-					}else if(activity instanceof WebConnection) {
+					}else if(activity instanceof Webconnection) {
 						activity.processKeyword(messageInstance, false)
 					}
 					activity.save()

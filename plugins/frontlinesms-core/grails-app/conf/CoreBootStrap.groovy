@@ -65,7 +65,7 @@ class CoreBootStrap {
 			dev_initFolders()
 			dev_initAnnouncements()
 			dev_initSubscriptions()
-			dev_initWebConnections()
+			dev_initWebconnections()
 			dev_initLogEntries()
 		}
 
@@ -308,16 +308,19 @@ class CoreBootStrap {
 	}
 
 
-	private def dev_initWebConnections() {
+	private def dev_initWebconnections() {
 		if(!bootstrapData) return
-		[new Fmessage(src:'Wanyama', text:'forward me to the server'),
+		[	new Fmessage(src:'Wanyama', text:'forward me to the server'),
 			new Fmessage(src:'Tshabalala', text:'a text from me'),
-			new Fmessage(src:'June', text:'I just arrived')].each() {
+			new Fmessage(src:'June', text:'I just arrived'),
+			new Fmessage(src:'Otieno', text:'I am on a map!'),
+			new Fmessage(src:'Ekisa', text:'I too am on a map'),
+			new Fmessage(src:'James', text:'I just arrived')].each() {
 				it.inbound = true
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def extCmd = new WebConnection(name:'GET to Server', keyword:new Keyword(value:'FORWARD'), url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:WebConnection.HttpMethod.GET)
+		def extCmd = new GenericWebconnection(name:'GET to Server', keyword:new Keyword(value:'FORWARD'), url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET)
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
@@ -331,11 +334,24 @@ class CoreBootStrap {
 		extCmd.addToMessages(Fmessage.findBySrc('Tshabalala'))
 		extCmd.addToMessages(Fmessage.findBySrc('June'))
 		extCmd.save(failOnError:true, flush:true)
-		def extCmdPost = new WebConnection(name:'POST to Server', keyword:new Keyword(value:'POST'), url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:WebConnection.HttpMethod.POST)
+		def extCmdPost = new GenericWebconnection(name:'POST to Server', keyword:new Keyword(value:'POST'), url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:Webconnection.HttpMethod.POST)
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))
 		extCmdPost.save(failOnError:true, flush:true)
+
+		def ushahidiWebconnection = new UshahidiWebconnection(name:'Ushahidi', keyword:new Keyword(value:'USHAHIDI'), url:"http://192.168.0.200:80/ushahidi/frontlinesms/", httpMethod:Webconnection.HttpMethod.GET)
+		ushahidiWebconnection.addToRequestParameters(new RequestParameter(name:'m' , value: '${message_body}'))
+		ushahidiWebconnection.addToRequestParameters(new RequestParameter(name:'key' , value: '1NIJP34G'))
+		ushahidiWebconnection.addToRequestParameters(new RequestParameter(name:'s' , value: '${message_src_number}'))
+		ushahidiWebconnection.save(failOnError:true, flush:true)
+		def ushSent = new Fmessage(src:'me', inbound:false, text:"Your messages are on Ushahidi!")
+		ushSent.addToDispatches(dst:'+25411663123', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+		ushahidiWebconnection.addToMessages(ushSent).save(failOnError:true, flush:true)
+		ushahidiWebconnection.addToMessages(Fmessage.findBySrc('Otieno'))
+		ushahidiWebconnection.addToMessages(Fmessage.findBySrc('Ekisa'))
+		ushahidiWebconnection.addToMessages(Fmessage.findBySrc('James'))
+		ushahidiWebconnection.save(failOnError:true, flush:true)
 	}
 
 

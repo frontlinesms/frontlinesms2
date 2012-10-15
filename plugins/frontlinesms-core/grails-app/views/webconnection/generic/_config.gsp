@@ -1,31 +1,31 @@
-<%@ page import="frontlinesms2.WebConnection" %>
+<%@ page import="frontlinesms2.Webconnection" %>
 <div class="input">
-	<label for="url"><g:message code="webConnection.url.label"/></label>
+	<label for="url"><g:message code="webconnection.url.label"/></label>
 	<g:textField name="url" value="${activityInstanceToEdit?.url}" required="true"/>
 </div>
 <div class="input">
-	<label for="httpMethod"><g:message code="webConnection.httpMethod.label"/></label>
+	<label for="httpMethod"><g:message code="webconnection.httpMethod.label"/></label>
 	<ul class="select">
 		<g:set var="httpMethod" value="${activityInstanceToEdit?.httpMethod}"/>
 		<li>
-			<label for="httpMethod"><g:message code="webConnection.httpMethod.get"/></label>
-			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod == WebConnection.HttpMethod.GET}" />
+			<label for="httpMethod"><g:message code="webconnection.httpMethod.get"/></label>
+			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod == Webconnection.HttpMethod.GET}" />
 		</li>
 		<li>
-			<label for="httpMethod"><g:message code="webConnection.httpMethod.post"/></label>
-			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && httpMethod != WebConnection.HttpMethod.GET}" />
+			<label for="httpMethod"><g:message code="webconnection.httpMethod.post"/></label>
+			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && httpMethod != Webconnection.HttpMethod.GET}" />
 		</li>
 	</ul>
 </div>
-<h2><g:message code="webConnection.parameters"/></h2>
+<h2><g:message code="webconnection.parameters"/></h2>
 <table id="web-connection-param-table">
 	<thead>
 		<tr class="prop">
 			<td>
-				<label for="param-name"><g:message code="webConnection.param.name"/></label>
+				<label for="param-name"><g:message code="webconnection.param.name"/></label>
 			</td>
 			<td>
-				<label for="param-value"><g:message code="webConnection.param.value"/></label>
+				<label for="param-value"><g:message code="webconnection.param.value"/></label>
 			</td>
 		</tr>
 	</thead>
@@ -33,22 +33,21 @@
 		<g:if test="${activityInstanceToEdit?.id}">
 			<g:if test="${activityInstanceToEdit?.requestParameters}">
 				<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
-					<fsms:render template="/webConnection/parameter" model="[name:parameter.name, value:parameter.value]" />
+					<fsms:render template="/webconnection/parameter" model="[name:parameter.name, value:parameter.value]" />
 				</g:each>
 			</g:if>
 			<g:else>
-				<fsms:render template="/webConnection/parameter" model="[name:'',  value:'']"/>
+				<fsms:render template="/webconnection/parameter" model="[name:'',  value:'']"/>
 			</g:else>
 		</g:if>
 		<g:else>
-			<fsms:render template="/webConnection/parameter" model="[name:'message',  value:'${messageText}']"/>
+			<fsms:render template="/webconnection/parameter" model="[name:'message',  value:'${message_body}']"/>
 		</g:else>
 	</tbody>
 </table>
 <a class="btn addNew" onclick="addNewParam()">
-	<g:message code="webConnection.add.anotherparam"/>
+	<g:message code="webconnection.add.anotherparam"/>
 </a></br>
-
 
 <r:script>
 
@@ -92,25 +91,5 @@
 		$('#web-connection-param-table tbody').append(newRow);
 		magicwand.init(newRow.find('select[id^="magicwand-select"]'));
 		magicwand.reset(template.find("select"));
-	}
-
-	function updateServerConfiguration() {
-		var url = $("input[name=url]").val();
-		var httpMethod = $("input[name=httpMethod]:checked").val().toUpperCase();
-		var requestParameters = "";
-		if($(".web-connection-parameter.disabled").is(":hidden")) { 
-			requestParameters = i18n("webConnection.none.label")
-		} else {
-			$('input[name=param-name]').each(function(index) {
-				var values = $('input[name=param-value]').get();
-				if($(this).val().length > 0) {
-					requestParameters += '<p>' + $(this).val() + ':' + $(values[index]).val() + '</p>';
-				}
-			});
-		}
-		$("#url-confirm").html('<p>' + url  + '</p>');
-		$("#httpMethod-confirm").html('<p>' + httpMethod  + '</p>');
-		$("#requestParameters-confirm").html('<p>' + requestParameters  + '</p>');
-
 	}
 </r:script>

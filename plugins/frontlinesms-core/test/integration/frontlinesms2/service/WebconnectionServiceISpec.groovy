@@ -8,18 +8,18 @@ import org.apache.camel.spi.UnitOfWork
 import org.apache.camel.spi.RouteContext
 import org.apache.camel.model.RouteDefinition
 
-class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
-	def webConnectionService
+class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
+	def webconnectionService
 	def setup() {
 		def k = new Keyword(value:'FOREWARD')
-		def webconnection = new WebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
+		def webconnection = new GenericWebconnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
 	}
 	//Pre-Processor Tests
 	def 'out_header url should contain the RequestParameters for GET request'() {
  		given:
 			def x = mockExchange("simple","get", false)
 		when:
-			webConnectionService.preProcess(x)
+			webconnectionService.preProcess(x)
 			println "**** " + x.out.headers.url
 		then:
 			x.out.headers[Exchange.HTTP_QUERY].contains("username=bob")
@@ -30,9 +30,9 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		given:
 			def x = mockExchange("test message","post", true)
 		when:
-			webConnectionService.preProcess(x)
+			webconnectionService.preProcess(x)
 		then:
-			1* x.out.setBody({ bodyContent ->
+			1 * x.out.setBody({ bodyContent ->
 				bodyContent.contains("message=test+message")
 			})
 	}
@@ -41,7 +41,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		given:
 			def x = mockExchange("test message","post", true)
 		when:
-			webConnectionService.preProcess(x)
+			webconnectionService.preProcess(x)
 		then:
 		!x.out.headers[Exchange.HTTP_QUERY]
 	}
@@ -50,7 +50,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		given:
 			def x = mockExchange("simple","post", false)
 		when:
-			webConnectionService.preProcess(x)
+			webconnectionService.preProcess(x)
 		then:
 			1* x.out.setBody({ bodyContent ->
 				bodyContent.contains("message=simple") && 
@@ -63,17 +63,17 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		given:
 			def x = mockExchange("simple","post", false)
 		when:
-			webConnectionService.postProcess(x)
+			webconnectionService.postProcess(x)
 		then:
 			notThrown(RuntimeException)
 	}
 
 	Exchange mockExchange(messageText,method,messageOnly){
-		def webconnection =  WebConnection.findByName("Sync")
+		def webconnection =  Webconnection.findByName("Sync")
 		if(method ==  'get'){
-			webconnection.httpMethod = WebConnection.HttpMethod.GET
+			webconnection.httpMethod = Webconnection.HttpMethod.GET
 		} else {
-			webconnection.httpMethod = WebConnection.HttpMethod.POST
+			webconnection.httpMethod = Webconnection.HttpMethod.POST
 		}
 		def p1 = new RequestParameter(name:"message",value:"\${message_body}")
 		webconnection.addToRequestParameters(p1)
@@ -86,13 +86,13 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		webconnection.save(failOnError:true, flush:true)
 		def message = Fmessage.build(text:messageText)
 		Exchange exchange = Mock(Exchange)
-		exchange.in >> mockExchangeMessage(['frontlinesms.fmessageId':message.id,'frontlinesms.webConnectionId':webconnection.id], null)
+		exchange.in >> mockExchangeMessage(['fmessage-id':message.id,'webconnection-id':webconnection.id], null)
 		exchange.out >> mockExchangeMessage([:], null)
 		exchange.unitOfWork >> Mock(UnitOfWork)
 		return exchange
 		/*
-		def inMessage = mockIncomingMessage(['frontlinesms.fmessageId':message.id,'frontlinesms.webConnectionId':webconnection.id], null)
-		def xIn = [headers:['frontlinesms.fmessageId':message.id,'frontlinesms.webConnectionId':webconnection.id], body:null] as Message
+		def inMessage = mockIncomingMessage(['frontlinesms.fmessageId':message.id,'frontlinesms.webconnectionId':webconnection.id], null)
+		def xIn = [headers:['frontlinesms.fmessageId':message.id,'frontlinesms.webconnectionId':webconnection.id], body:null] as Message
 		def xOut = [headers:[:], body:null] as Message
 		def x = [getIn:{xIn}, getOut:{xOut}, unitOfWork:Mock(UnitOfWork)]
 		x = x as Exchange

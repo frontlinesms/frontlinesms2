@@ -7,18 +7,19 @@ import frontlinesms2.camel.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 
-@TestFor(WebConnection)
+@TestFor(GenericWebconnection)
 @Mock([Keyword])
-class WebConnectionSpec extends CamelUnitSpecification {
+class GenericWebconnectionSpec extends CamelUnitSpecification {
 	private static final String TEST_NUMBER = "+2345678"
 	def setup() {
+		Webconnection.metaClass.static.findAllByNameIlike = { name -> GenericWebconnection.findAll().findAll { it.name == name } }
 	}
 
 	@Unroll
 	def "Test constraints"() {
 		when:
 			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def extComm = new WebConnection(name:name, keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET)
+			def extComm = new GenericWebconnection(name:name, keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET)
 		then:
 			extComm.validate() == valid
 		where:
