@@ -53,12 +53,17 @@ class SubscriptionController extends ActivityController {
 	def save() {
 		withSubscription { subscriptionInstance ->
 			subscriptionInstance.group = Group.get(params.subscriptionGroup)
-			if(subscriptionInstance.keyword)
-				subscriptionInstance.keyword.value = params.keyword.toUpperCase()
-			else
-				subscriptionInstance.keyword = new Keyword(value: params.keyword.toUpperCase())
-			subscriptionInstance.joinAliases = params.joinAliases.toUpperCase()
-			subscriptionInstance.leaveAliases = params.leaveAliases.toUpperCase()
+			subscriptionInstance.keywords.clear()
+			subscriptionInstance.save(failOnError:true)
+			params.keywords.toUpperCase()).replaceAll(/\s/, "").split(",").each {
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:true))
+			}
+			params.joinKeywords.toUpperCase()).replaceAll(/\s/, "").split(",").each {
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:false, ownerDetail: Subscription.Action.JOIN.toString()))
+			}
+			params.leaveKeywords.toUpperCase()).replaceAll(/\s/, "").split(",").each {
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:false, ownerDetail: Subscription.Action.LEAVE.toString()))
+			}
 			subscriptionInstance.defaultAction = Subscription.Action."${params.defaultAction.toUpperCase()}"
 			subscriptionInstance.joinAutoreplyText = params.joinAutoreplyText
 			subscriptionInstance.leaveAutoreplyText = params.leaveAutoreplyText

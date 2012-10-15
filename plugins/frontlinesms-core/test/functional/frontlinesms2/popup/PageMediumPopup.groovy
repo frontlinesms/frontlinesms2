@@ -467,3 +467,48 @@ class ConfigureUshahidiWebconnectionTab extends geb.Module{
 		ushahidiApiKey{ $('#key') }
 	}
 }
+
+class AutoreplyCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("autoreply") || popupTitle.contains("New autoreply")
+	}
+	static content = {
+		message { module AutoreplyMessageTab}
+		keyword { module AutoreplyKeywordTab}
+		confirm { module AutoreplyConfirmTab}
+		summary { module AutoreplySummaryTab}
+		create { $('button#submit') }
+		error {$('label', class:'error')}
+	}
+}
+
+class AutoreplyMessageTab extends geb.Module {
+	static base = { $('div#tabs-1')}
+	static content = {
+		messageText { $('area#messageText') }
+	}
+}
+
+class AutoreplyKeywordTab extends geb.Module {
+	static base = { $('div#tabs-2')}
+	static content = {
+		keywordText { $('#keywords') }
+		blankKeyword {$('#blankKeyword')}
+	}
+}
+
+class AutoreplyConfirmTab extends geb.Module {
+	static base = { $('div#tabs-3') }
+	static content = {
+		keywordConfirm {$("#keyword-confirm").text()}
+		autoreplyConfirm {$("#autoreply-confirm").text()}
+		nameText {$("#name")}
+	}
+}
+
+class AutoreplySummaryTab extends geb.Module {
+	static base = { $('div#tabs-4 > div.summary') } //ensures div.summary has been loaded too
+	static content = {
+		message { $("p", 0).text() }
+	}
+}

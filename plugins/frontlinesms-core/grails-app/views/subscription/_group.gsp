@@ -1,5 +1,5 @@
 <%@ page import="frontlinesms2.Group" %>
-<h2><g:message code="subscription.group.header"/></h2>
+<h2><g:message code="subscription.select.group"/></h2>
 <div class="info">
 	<p><g:message code="subscription.group.description"/></p>
 </div>
@@ -11,11 +11,6 @@
 		<!--
 			TODO: the group list needs to exclude currently selected group
 		-->
-</div>
-
-<h2><g:message code="subscription.keyword.header"/></h2>
-<div class="input">
-	<g:textField name="keyword" value="${activityInstanceToEdit?.keyword?.value}" class="required"/>
 </div>
 
 
