@@ -141,3 +141,6 @@ jqueryValidation.additionalMethods = false
 
 frontlinesms.plugins=['frontlinesms-core']
 
+frontlinesms.enableAuthentication = false
+frontlinesms.username=''
+frontlinesms.password=''

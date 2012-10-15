@@ -32,6 +32,10 @@ class SettingsController {
 		redirect view:'general'
 	}
 
+	def basicAuth() {
+		
+	}
+
 	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)
 		if(connection) {

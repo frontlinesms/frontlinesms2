@@ -39,6 +39,18 @@ class SettingsControllerSpec extends Specification {
 			'forever'  | 6
 	}
 
+	def "can enable application authentication from settings"() {
+		when:
+			params.enableAuthentication = "true"
+			params.username = "test"
+			params.password = "pass"
+			controller.basicAuth()
+		then:
+			grailsApplication.config.frontlinesms.enabledAuthentication == true
+			grailsApplication.config.frontlinesms.username == "test".bytes.encodeBase64().toString()
+			grailsApplication.config.frontlinesms.password == "pass".bytes.encodeBase64().toString()
+	}
+
 	private def createLogEntries(entries) {
 		entries.collect { content, dateOffset ->
 			new LogEntry(content:content, date:TEST_DATE-dateOffset).save(failOnError:true)
