@@ -63,14 +63,16 @@ class SubscriptionController extends ActivityController {
 
 			subscriptionInstance.save(failOnError:true, flush:true)
 			
-			params.keywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
-				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:true))
+			if(params.topLevelKeywords) {
+				params.topLevelKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
+					subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:true))
+				}
 			}
 			params.joinKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
-				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:false, ownerDetail: Subscription.Action.JOIN.toString()))
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:!params.topLevelKeywords, ownerDetail: Subscription.Action.JOIN.toString()))
 			}
 			params.leaveKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
-				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:false, ownerDetail: Subscription.Action.LEAVE.toString()))
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:!params.topLevelKeywords, ownerDetail: Subscription.Action.LEAVE.toString()))
 			}
 
 			if (subscriptionInstance.save(flush:true)) {

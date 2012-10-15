@@ -51,7 +51,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			def s = Subscription.findByName("Test")
 			s.keywords.findAll { it.ownerDetail == "JOIN" && it.isTopLevel }*.value.sort().join(',') == "IN,JOINING,TUKO"
-			s.keywords.findAll { it.ownerDetail == "LEAVE"  && it.isTop }*.value.sort().join(',') == "OUT,SPAM,STOP"
+			s.keywords.findAll { it.ownerDetail == "LEAVE"  && it.isTopLevel }*.value.sort().join(',') == "OUT,SPAM,STOP"
 			s.defaultAction == Subscription.Action.LEAVE
 			s.joinAutoreplyText == "welcome"
 			s.leaveAutoreplyText == 'bye bye'
@@ -81,7 +81,8 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'can edit an existing subscription'() {
 		setup:
-			def s = new Subscription(name:"West", joinAutoreplyText:":)", leaveAutoreplyText:":(", defaultAction:Subscription.Action.TOGGLE, group:createTestGroup())
+			def group = createTestGroup()
+			def s = new Subscription(name:"West", joinAutoreplyText:":)", leaveAutoreplyText:":(", defaultAction:Subscription.Action.TOGGLE, group:group)
 			s.addToKeywords(new Keyword(value:"JEST", isTopLevel:true))
 			s.addToKeywords(new Keyword(value:"YOURGROUP", isTopLevel:true))
 			s.addToKeywords(new Keyword(value:"IN", isTopLevel:false, ownerDetail: "JOIN"))
@@ -96,6 +97,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.defaultAction = "toggle"
 			controller.params.joinAutoreplyText = "welcome"
 			controller.params.leaveAutoreplyText = 'bye bye'
+			controller.params.subscriptionGroup = group.id
 		when:
 			controller.save()
 		then:
@@ -108,6 +110,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	//> Message Action tests (for messages moved into subscription)
+	@Unroll
 	def 'join, leave and toggle actions work, moving messsage to "join" and updating contact group membership'() {
 		setup:
 			def c = createTestContact()
@@ -115,11 +118,12 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def s = createTestSubscription(g)
 			def m = createTestMessageFromContact("hello guys", c)
 			controller.params.ownerId = s.id
-			controllers.messageId = m.id
+			controller.params.messageId = m.id
 		when:
 			controller."${triggeredAction}"()
 		then:
 			(GroupMembership.getMembers(g, 5, 0) == [c]) == inGroupAtEnd
+			m.refresh()
 			m.ownerDetail == triggeredAction.toUpperCase()
 		where:
 			initiallyInGroup  |  triggeredAction  |  inGroupAtEnd
@@ -140,7 +144,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createTestGroup(Contact contact=null) {
-		def g = new Group(name:"The Cool Gang")
+		def g = new Group(name:"The Cool Gang").save(failOnError:true)
 		if(contact)
 			contact.addToGroup(g)
 		g.save(failOnError:true)
@@ -153,7 +157,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createTestMessageFromContact(text, Contact c) {
-		def m = new Fmessage(text:text, src:c.mobile, inbound:true)
+		def m = new Fmessage(text:text, src:c.mobile, inbound:true).save(failOnError:true)
 	}
 
 }

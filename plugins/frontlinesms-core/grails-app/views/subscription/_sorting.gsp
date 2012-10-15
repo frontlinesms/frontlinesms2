@@ -4,7 +4,7 @@
 	<p><g:message code="subscription.top.keyword.header"/></p>
 </div>
 <div class="input">
-	<g:textField name="keywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="required"/>
+	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="required"/>
 </div>
 
 <h2><g:message code="subscription.keywords.header"/></h2>
