@@ -81,7 +81,33 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			autoreply.keywords[2].value == 'BANANA'
 	}
 
-	def "can edit Autoreply with multiple keywords"(){
+	def "can change Autoreply keywords"(){
+		given: 'an autoreply exists'
+			def a = new Autoreply(name:"Fruits", autoreplyText:"Hello")
+			a.addToKeywords(new Keyword(value:"MANGO"))
+			a.addToKeywords(new Keyword(value:"ORANGE"))
+			a.save(flush:true, failOnError:true)
+		and: 'controller params are setup'
+			controller.params.ownerId = a.id
+			controller.params.name = "Matunda"
+			controller.params.keywords = "Apple,Strawberry"
+			controller.params.messageText = "Hello"
+			controller.response.format = 'html'
+		when:
+			def model = controller.save()
+			println "MODEL::: $model"
+			def autoreply = Autoreply.get(model?.ownerId)
+		then: 'the auto reply has been updated'
+			autoreply != null
+			autoreply.name == "Matunda"
+			autoreply.keywords[0].value == "APPLE"
+			autoreply.keywords[1].value == "STRAWBERRY"
+			autoreply.autoreplyText == "Hello"
+		and: 'the old keyword have been deleted'
+			Keyword.findByValue("ORANGE") == null
+	}
+
+	def "can edit Autoreply with multiple keywords, keeping some of the old ones"(){
 		given: 'an autoreply exists'
 			def a = new Autoreply(name:"Fruits", autoreplyText:"Hello")
 			a.addToKeywords(new Keyword(value:"MANGO"))
@@ -95,6 +121,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.format = 'html'
 		when:
 			def model = controller.save()
+			println "MODEL::: $model"
 			def autoreply = Autoreply.get(model?.ownerId)
 		then: 'the auto reply has been updated'
 			autoreply != null
