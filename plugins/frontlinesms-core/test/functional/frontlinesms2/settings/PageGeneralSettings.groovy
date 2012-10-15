@@ -7,8 +7,21 @@ class PageGeneralSettings extends PageSettings {
 	
 	static content = {
 		languageList { $('select#language') }
+		basicAuthentication {module BasicAuthentication}
 	}
 	static at = {
 		title.contains('Settings') || title.contains('Mazingira')
+	}
+}
+
+class BasicAuthentication extends geb.Module {
+	static base = { $('#basic-authentication') }
+	
+	static content = {
+		authenticationForm { $('form')}
+		enableAuthentication { authenticationForm.enableAuthentication}
+		username { authenticationForm.username }
+		password { authenticationForm.password }
+		save { $("#basicAuth")}
 	}
 }
