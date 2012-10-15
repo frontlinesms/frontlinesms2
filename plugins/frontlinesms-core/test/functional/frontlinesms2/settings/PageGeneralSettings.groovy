@@ -19,7 +19,7 @@ class BasicAuthentication extends geb.Module {
 	static base = { $('#basic-authentication') }
 	
 	static content = {
-		authenticationForm { $('form')}
+		authenticationForm { $('form#basic-auth')}
 		enableAuthentication { authenticationForm.enableAuthentication}
 		username { authenticationForm.username }
 		password { authenticationForm.password }

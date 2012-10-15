@@ -64,7 +64,7 @@ class BasicAuthenticationSpec extends grails.plugin.geb.GebSpec {
 			basicAuthentication.save.click()
 		then:
 			at PageGeneralSettings
-			basicAuthentication.enableAuthentication
+			basicAuthentication.enableAuthentication == "true"
 			basicAuthentication.username == "john"
 			basicAuthentication.password == "doe"
 			
@@ -72,7 +72,7 @@ class BasicAuthenticationSpec extends grails.plugin.geb.GebSpec {
 
 	def setupAuthentication() {
 		to PageGeneralSettings
-		basicAuthentication.enableAuthentication = true
+		basicAuthentication.enableAuthentication = "enableAuthentication"
 		basicAuthentication.username = "test"
 		basicAuthentication.password = "pass"
 		basicAuthentication.confirmPassword = "pass"

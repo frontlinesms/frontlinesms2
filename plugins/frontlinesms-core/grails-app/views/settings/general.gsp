@@ -42,6 +42,38 @@
 					<label for="importCsvFile"><g:message code="import.prompt"/></label>
 				</g:uploadForm>
 			</div>
+			<div id="basic-authentication">
+				<h2><g:message code="basic.authentication" /></h2>
+				<p class="info">
+					<g:message code="basic.authentication.label"/>
+				</p>
+				<g:form name="basic-auth" action="basicAuth" controller="settings">
+					<table>
+						<tbody>
+							<tr>
+								<td><label for="enabledAuthentication"><g:message code="basic.authentication.enable"/></label></td>
+								<td><g:checkBox name="enabledAuthentication" value="${enabledAuthentication}" checked="${enabledAuthentication ? 'true':''}" /></td>
+							</tr>
+							<tr>
+								<td><label for="username"><g:message code="basic.authentication.username"/></label></td>
+								<td><g:textField name="username" value="${username}"/></td>
+							</tr>
+							<tr>
+								<td><label for="password"><g:message code="basic.authentication.password"/></label></td>
+								<td><g:passwordField name="password" value="${password}" /></td>
+							</tr>
+							<tr>
+								<td><label for="confirmPassword"><g:message code="basic.authentication.confirm.password"/></label></td>
+								<td><g:passwordField name="confirmPassword" value="" /></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><g:submitButton name="save" value="${message(code:'action.save')}"/></td>
+							</tr>
+						</tbody>
+					</table>
+				</g:form>
+			</div>
 		</div>
 	</body>
 </html>

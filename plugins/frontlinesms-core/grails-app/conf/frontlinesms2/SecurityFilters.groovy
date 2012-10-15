@@ -1,12 +1,12 @@
 package frontlinesms2
 
 class SecurityFilters {
-	def grailsApplication
+	def appSettingsService
 
 	def filters = {
 		basicAuth(controller:'*', action:'*') {
 			before = {
-				def enabledAuthentication = grailsApplication.config.frontlinesms.enabledAuthentication
+				def enabledAuthentication = appSettingsService.get("enabledAuthentication")
 				println "### enabledAuthentication: $enabledAuthentication"
 				if(enabledAuthentication) {
 					def basicAuthRequired = { credentialsProvided ->
@@ -18,8 +18,8 @@ class SecurityFilters {
 								render text:'Restricted Page';
 								return false
 						}
-					def username = new String(grailsApplication.config.frontlinesms.username.decodeBase64())
-					def password = new String(grailsApplication.config.frontlinesms.password.decodeBase64())
+					def username = new String(appSettingsService.get("username").decodeBase64())
+					def password = new String(appSettingsService.get("password").decodeBase64())
 
 					def authString = request.getHeader('Authorization')
 					if(!authString) return basicAuthRequired()

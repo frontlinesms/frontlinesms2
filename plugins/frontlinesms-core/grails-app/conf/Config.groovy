@@ -140,7 +140,3 @@ jqueryValidation.cdn = false  // false or "microsoft"
 jqueryValidation.additionalMethods = false
 
 frontlinesms.plugins=['frontlinesms-core']
-
-frontlinesms.enableAuthentication = false
-frontlinesms.username=''
-frontlinesms.password=''
