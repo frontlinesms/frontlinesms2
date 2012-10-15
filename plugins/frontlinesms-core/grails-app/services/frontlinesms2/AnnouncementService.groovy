@@ -2,7 +2,7 @@ package frontlinesms.core
 
 import frontlinesms2.*
 
-class AutoreplyService {
+class AnnouncementService {
 
     def saveInstance(Announcement announcement, params) {
 		announcement.name = params.name ?: announcement.name
