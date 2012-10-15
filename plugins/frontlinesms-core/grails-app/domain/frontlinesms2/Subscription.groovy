@@ -31,8 +31,9 @@ class Subscription extends Activity{
 		this.addToMessages(message)
 		this.save()
 		message.ownerDetail = Action.JOIN.toString()
-		message.save(failOnError:true, flush:true)
+		message.save(failOnError:true)
 		withEachCorrespondent(message, { phoneNumber ->
+			println "##### >>>>> ${Contact.findByMobile(phoneNumber)}"
 			def foundContact = Contact.findByMobile(phoneNumber)
 			if(!foundContact) {
 				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
@@ -52,8 +53,9 @@ class Subscription extends Activity{
 		this.addToMessages(message)
 		this.save()
 		message.ownerDetail = Action.LEAVE.toString()
-		message.save(failOnError:true, flush:true)
+		message.save(failOnError:true)
 		withEachCorrespondent(message, { phoneNumber ->
+			println "##### >>>>> ${Contact.findByMobile(phoneNumber)}"
 			def foundContact = Contact.findByMobile(phoneNumber)
 			foundContact?.removeFromGroup(group)
 			if(leaveAutoreplyText && foundContact) {
