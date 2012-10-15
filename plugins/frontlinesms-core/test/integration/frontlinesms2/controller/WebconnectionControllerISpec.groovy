@@ -20,7 +20,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.name = "Test Webconnection"
 			controller.params.httpMethod = "get"
 			controller.params.url = "www.ushahidi.com"
-			controller.params.keyword = "keyword"
+			controller.params.keywords = "keyword"
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.key = '12345678'
 		when:
@@ -38,7 +38,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.name = "Test Webconnection"
 			controller.params.httpMethod = "get"
 			controller.params.url = "www.frontlinesms.com/sync"
-			controller.params.keyword = "keyword"
+			controller.params.keywords = "keyword"
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = 'username'
 			controller.params.'param-value' = 'bob'
@@ -52,14 +52,14 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'edit should save all the details from the walkthrough'() {
 		setup:
 			def keyword = new Keyword(value:'TEST')
-			def webconnection = new GenericWebconnection(name:"Old Webconnection name", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
-			webconnection.save(failOnError:true)
+			def webconnection = new GenericWebconnection(name:"Old Webconnection name", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
+			webconnection.addToKeywords(keyword).save(failOnError:true)
 
 			controller.params.ownerId = webconnection.id
 			controller.params.name = "New Webconnection name"
 			controller.params.url = "www.frontlinesms.com/syncing"
 			controller.params.httpMethod = "get"
-			controller.params.keyword = "keyword"
+			controller.params.keywords = "keyword"
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = ['username', 'password'] as String[]
 			controller.params.'param-value' = ['bob','secret'] as String[]
@@ -68,7 +68,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webconnection.refresh()
 		then:
 			webconnection.name == "New Webconnection name"
-			webconnection.keyword.value == "KEYWORD"
+			webconnection.keywords*.value == ["KEYWORD"]
 			webconnection.httpMethod == Webconnection.HttpMethod.GET
 			webconnection.url == "www.frontlinesms.com/syncing"
 			webconnection.requestParameters.size() == 2
