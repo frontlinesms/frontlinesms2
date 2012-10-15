@@ -9,8 +9,6 @@ class Subscription extends Activity{
 	String name
 	Group group
 	Action defaultAction = Action.TOGGLE
-	String joinAliases
-	String leaveAliases
 	String joinAutoreplyText
 	String leaveAutoreplyText
 

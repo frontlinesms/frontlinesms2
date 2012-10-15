@@ -53,21 +53,25 @@ class SubscriptionController extends ActivityController {
 	def save() {
 		withSubscription { subscriptionInstance ->
 			subscriptionInstance.group = Group.get(params.subscriptionGroup)
-			subscriptionInstance.keywords.clear()
-			subscriptionInstance.save(failOnError:true)
-			params.keywords.toUpperCase()).replaceAll(/\s/, "").split(",").each {
-				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:true))
-			}
-			params.joinKeywords.toUpperCase()).replaceAll(/\s/, "").split(",").each {
-				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:false, ownerDetail: Subscription.Action.JOIN.toString()))
-			}
-			params.leaveKeywords.toUpperCase()).replaceAll(/\s/, "").split(",").each {
-				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:false, ownerDetail: Subscription.Action.LEAVE.toString()))
-			}
+			if(subscriptionInstance.keywords)
+				subscriptionInstance.keywords.clear()
+
 			subscriptionInstance.defaultAction = Subscription.Action."${params.defaultAction.toUpperCase()}"
 			subscriptionInstance.joinAutoreplyText = params.joinAutoreplyText
 			subscriptionInstance.leaveAutoreplyText = params.leaveAutoreplyText
 			subscriptionInstance.name = params.name
+
+			subscriptionInstance.save(failOnError:true, flush:true)
+			
+			params.keywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:true))
+			}
+			params.joinKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:false, ownerDetail: Subscription.Action.JOIN.toString()))
+			}
+			params.leaveKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:false, ownerDetail: Subscription.Action.LEAVE.toString()))
+			}
 
 			if (subscriptionInstance.save(flush:true)) {
 				params.activityId = subscriptionInstance.id
