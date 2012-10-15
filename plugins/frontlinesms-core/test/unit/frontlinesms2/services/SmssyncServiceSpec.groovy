@@ -34,7 +34,7 @@ class SmssyncServiceSpec extends Specification {
 		connection.receiveEnabled >> true
 		if(sendEnabled) {
 			connection.sendEnabled >> true
-			connection.queuedDispatchIds >> ([1, 2, 3] as Long[])
+			mockDispatchQueue(connection, [1, 2, 3])
 		}
 	}
 
@@ -78,7 +78,7 @@ class SmssyncServiceSpec extends Specification {
 				controller.params.from = '1234567890'
 				controller.params.message = 'word'
 			}
-			if(dispatchCount) connection.queuedDispatchIds >> ((1..dispatchCount).collect { it } as Long[])
+			if(dispatchCount) mockDispatchQueue(connection, (1..dispatchCount))
 		when:
 			def actualResponse = service.generateApiResponse(connection, controller)
 		then:
@@ -181,6 +181,10 @@ class SmssyncServiceSpec extends Specification {
 		inMessage.headers >> headers
 		x.in >> inMessage
 		return x
+	}
+
+	private def mockDispatchQueue(connection, ids) {
+		connection.queuedDispatches >> Dispatch.getAll(ids)
 	}
 }
 
