@@ -2,6 +2,8 @@ package frontlinesms2
 
 class SettingsController {
 	def i18nUtilService
+	def grailsApplication
+	
 	def index() {
 		redirect(action:'general')
 	}

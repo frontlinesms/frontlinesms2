@@ -7,6 +7,7 @@ class PageGeneralSettings extends PageSettings {
 	
 	static content = {
 		languageList { $('select#language') }
+		errors(required:false) { $('label.error')}
 		basicAuthentication {module BasicAuthentication}
 	}
 	static at = {
@@ -22,6 +23,7 @@ class BasicAuthentication extends geb.Module {
 		enableAuthentication { authenticationForm.enableAuthentication}
 		username { authenticationForm.username }
 		password { authenticationForm.password }
+		confirmPassword { authenticationForm.confirmPassword }
 		save { $("#basicAuth")}
 	}
 }
