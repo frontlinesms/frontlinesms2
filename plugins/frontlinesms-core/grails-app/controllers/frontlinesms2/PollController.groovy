@@ -3,50 +3,24 @@ package frontlinesms2
 import grails.converters.JSON
 
 class PollController extends ActivityController {
+	def pollService
 	def save() {
-		// FIXME this should use withPoll to shorten and DRY the code, but it causes cascade errors as referenced here:
-		// http://grails.1312388.n4.nabble.com/Cascade-problem-with-hasOne-relationship-td4495102.html
-		def poll
-		println "####### Params # ${params}"
-		poll = Poll.get(params.ownerId)?Poll.get(params.ownerId):new Poll()
-		println "### Poll Name : ${poll.name}"
-		poll.name = params.name ?: poll.name
-		poll.autoreplyText = params.enableAutoreply? (params.autoreplyText ?: poll.autoreplyText): null
-		poll.question = params.question ?: poll.question
-		poll.sentMessageText = params.messageText ?: poll.sentMessageText
-		poll.editResponses(params)
-		if (poll.validate()) {
-			poll.keywords?.clear()
-			poll.save(flush:true)
-			println "### Round One Saved "
-			(params.enableKeyword == 'true')?poll.editKeywords(params):poll.noKeyword()
-			println "############ Edited keywords"
-			println "#####Poll Keyword errors ${poll.validate()} ## ${poll.errors.allErrors}"
-			poll.save()
-			if(!params.dontSendMessage && !poll.archived) {
-				println "#### Sending message to receipients"
-				def message = messageSendService.createOutgoingMessage(params)
-				message.save()
-				poll.addToMessages(message)
-				MessageSendJob.defer(message)
-			}
-			if (poll.save()) {
-				params.activityId = poll.id
-				if (!params.dontSendMessage)
-					flash.message = message(code: 'flash.message.poll.queued')
-				else
-					flash.message = message(code: 'flash.message.poll.saved')
+		def poll = Poll.get(params.ownerId)?Poll.get(params.ownerId):new Poll()
+		try{
+			poll = pollService.saveInstance(poll, params)
+			params.activityId = poll.id
+			if (!params.dontSendMessage)
+			       flash.message = message(code: 'flash.message.poll.queued')
+			else
+			       flash.message = message(code: 'flash.message.poll.saved')
 
-				withFormat {
-					json { render([ok:true, ownerId: poll.id] as JSON)}
-					html { [ownerId:poll.id]}
-				}
-			} else {
-				renderJsonErrors(poll)
+			withFormat {
+			       json { render([ok:true, ownerId: poll.id] as JSON)}
+			       html { [ownerId:poll.id]}
 			}
-		} else {
-			println "### Did not save at all ooooops :("
-			println "### Errors ## ${poll.errors.allErrors}"
+		} catch(Exception e){
+			println e
+			println "## Exception Thrown"
 			renderJsonErrors(poll)
 		}
 	}
