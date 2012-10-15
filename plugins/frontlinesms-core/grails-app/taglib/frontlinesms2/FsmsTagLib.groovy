@@ -120,7 +120,7 @@ class FsmsTagLib {
 			['', "_${locale.language}",
 					"_${locale.language}_${locale.country}",
 					"_${locale.language}_${locale.country}_${locale.variant}"].each {
-				out << "<script type=\"text/javascript\" src=\"${request.contextPath}/i18n/${bundle}_messages${it}.js\"></script>" }
+				out << "<script type=\"text/javascript\" src=\"${request.contextPath}/i18n/${bundle}_messages${it}.js\" charset=\"UTF-8\"></script>" }
 		}
 	}
 	
