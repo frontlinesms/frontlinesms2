@@ -13,14 +13,16 @@ class AutoreplyController extends ActivityController {
 			autoreply = Autoreply.get(params.ownerId)
 		else
 			autoreply = new Autoreply()
-		if(autoreplyService.saveInstance(autoreply, params)) {
+		try { 
+			autoreplyService.saveInstance(autoreply, params)
 			flash.message = message(code:'autoreply.saved')
 			params.activityId = autoreply.id
 			withFormat {
 				json { render([ok:true, ownerId:autoreply.id] as JSON) }
 				html { [ownerId:autoreply.id] }
 			}
-		} else {
+		}
+		catch (Exception e) {
 			def errors = autoreply.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
 			withFormat {
 				json { render([ok:false, text:errors] as JSON) }
