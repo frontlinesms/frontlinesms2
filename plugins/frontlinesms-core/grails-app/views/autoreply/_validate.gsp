@@ -4,6 +4,9 @@
 			$("#messageText").val("${activityInstanceToEdit.autoreplyText}");
 			$("#messageText").trigger("keyup");
 		</g:if>
+		
+		genericSortingValidation();
+
 		var validator = $("#create_autoreply").validate({
 			errorContainer: ".error-panel",
 			rules: {
@@ -13,7 +16,9 @@
 		});
 
 		var keyWordTabValidation = function() {
-			 if(!isGroupChecked("blankKeyword")) return validator.element('#keywords');
+			if(!isGroupChecked("blankKeyword")){
+				return validator.element('#keywords');
+			}
 			 else return true;
 		};
 		var messageTextTabValidation = function() {
@@ -23,10 +28,6 @@
 		var confirmTabValidation = function() {
 			return validator.element('input[name=name]');
 		};
-
-		jQuery.validator.addMethod("sorting-generic", function(value, element) {
-			return genericSortingValidation();
-		}, i18n("activity.generic.sort.validation.error"));
 
 		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
 		mediumPopup.addValidation('autoreply-create-message', messageTextTabValidation);

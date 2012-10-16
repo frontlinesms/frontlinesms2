@@ -12,7 +12,7 @@
 			<li>
 				<label for="enableKeyword"><g:message code="poll.autosort.description"/></label>
 				<g:radio name="enableKeyword" id="yesAutosort" value="true" checked="${activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: false}"/>
-				<g:textField name="topLevelKeyword" id="poll-keyword" class="no-space" disabled="${activityInstanceToEdit?.keywords?false:true}" value="${activityInstanceToEdit?.keywords.findAll{it.isTopLevel && it.ownerDetail == null}?.value?.join(',')}"/>
+				<g:textField name="topLevelKeyword" id="poll-keyword" class="no-space sorting-generic" disabled="${activityInstanceToEdit?.keywords?false:true}" value="${activityInstanceToEdit?.keywords.findAll{it.isTopLevel && it.ownerDetail == null}?.value?.join(',')}"/>
 			</li>
 		</ul>
 	</div>
