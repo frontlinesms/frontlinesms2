@@ -368,11 +368,11 @@ class SubscriptionCreateDialog extends MediumPopup {
 	}
 	static content = {
 		group { module SubscriptionGroupTab }
-		aliases { module SubscriptionAliasesTab}
+		keywords { module SubscriptionKeywordsTab}
 		autoreply { module SubscriptionAutoReplyTab }
 		confirm { module SubscriptionConfirmTab }
 		summary { module SubscriptionSummary }
-		error {$('label', class:'error')}
+		error { errorPanel }
 	}
 }
 
@@ -383,15 +383,15 @@ class SubscriptionGroupTab extends geb.Module {
 			$('select#subscriptionGroup').jquery.val(groupId)
 			$('select#subscriptionGroup').jquery.trigger("change")
 		}
-		keywordText { $('input#keyword') }
 	}
 }
 
-class SubscriptionAliasesTab extends geb.Module {
+class SubscriptionKeywordsTab extends geb.Module {
 	static base = { $('div#tabs-2')}
 	static content = {
-		joinAliases {$('input#joinAliases')}
-		leaveAliases {$('input#leaveAliases')}
+		keywordText { $('input#topLevelKeywords') }
+		joinKeywords {$('input#joinKeywords')}
+		leaveKeywords {$('input#leaveKeywords')}
 		defaultAction { $("input#defaultAction") }
 	}
 }
@@ -471,8 +471,10 @@ class AutoreplyCreateDialog extends MediumPopup {
 		keyword { module AutoreplyKeywordTab}
 		confirm { module AutoreplyConfirmTab}
 		summary { module AutoreplySummaryTab}
+		validationErrorText { $('label.error').text() }
+		errorText { errorPanel.text()?.toLowerCase() }
+		error { errorPanel }
 		create { $('button#submit') }
-		error {$('label', class:'error')}
 	}
 }
 

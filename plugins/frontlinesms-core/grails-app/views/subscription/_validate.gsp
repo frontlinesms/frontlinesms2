@@ -42,12 +42,12 @@
 	}
 
 	function initializeTabValidation(validator) {
-		var groupAndKeywordTabValidation = function() {
-			return (validator.element($('#subscriptionGroup')) && validator.element($("#keyword")));
+		var groupTabValidation = function() {
+			return (validator.element($('#subscriptionGroup')));
 		};
 
-		var aliasTabValidation = function() {
-			return (validator.element($('#joinAliases')) && validator.element($("#leaveAliases")));
+		var sortingTabValidation = function() {
+			return true;	
 		};
 
 		var autoreplyTabValidation = function() {
@@ -65,8 +65,8 @@
 			return validator.element('#name');
 		};
 
-		mediumPopup.addValidation('subscription-select-group-keyword', groupAndKeywordTabValidation);
-		mediumPopup.addValidation('subscription-aliases', aliasTabValidation);
+		mediumPopup.addValidation('subscription-group', groupTabValidation);
+		mediumPopup.addValidation('subscription-sorting', sortingTabValidation);
 		mediumPopup.addValidation('subscription-autoreplies', autoreplyTabValidation);
 		mediumPopup.addValidation('subscription-confirm', confirmTabValidation);
 		

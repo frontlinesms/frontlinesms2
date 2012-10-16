@@ -22,11 +22,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 
 	def "Can create a new autoreply" () {
 		given: 'Create Autoreply wizard is open'
-			to PageMessageInbox
-			bodyMenu.newActivity.click()
-			waitFor { at CreateActivityDialog }
-			autoreply.click()
-			waitFor { at AutoreplyCreateDialog }
+			 launchAutoreplyPopup()
 		when: 'Text message is entered'
 			messageText = "Welcome Sir/Madam. This is an autoreply response!"
 			next.click()
@@ -76,5 +72,68 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 		then: 'Summary tab should open'
 			waitFor { summary.displayed }
 			summary.message.contains('The autoreply has been created')
+	}
+
+	def "keyword must be provided in autoreply"() {
+		given: 'Open keyword tab'
+			 launchAutoreplyPopup('keyword')
+		when: 'Keyword is entered'
+			next.click()
+		then: 'Error message is displayed'
+			errorText == "please fill in all required fields"
+			validationErrorText == "This field is required."
+	}
+
+	def "keyword must have valid commas seperated values if provided"() {
+		given: 'Open keyword tab'
+			 launchAutoreplyPopup('keyword')
+		when: 'Keyword is entered'
+			keyword.keywordText = 'Hello Goodbye'
+			next.click()
+		then: 'Error message is displayed'
+			errorText == "please fill in all required fields"
+			validationErrorText == "Use commas instead of spaces"
+	}
+
+	def "keywords must be unique if provided"() {
+		given: 'Open keyword tab'
+			 launchAutoreplyPopup('keyword')
+		when: 'Keyword is entered'
+			keyword.keywordText = 'Hello,Hello'
+			next.click()
+		then: 'Error message is displayed'
+			errorText == "please fill in all required fields"
+			validationErrorText == "Keywords must be unique"
+	}
+
+	def "keywords must not be used in another Activity"() {
+		given: 'an autoreply already exists'
+			createTestAutoreply()
+		and: 'Open keyword tab'
+			 launchAutoreplyPopup('keyword')
+		when: 'Duplicate Keyword is entered'
+			keyword.keywordText = 'Mango'
+			next.click()
+		then: 'Confirm tab should open'
+			confirm.displayed
+			confirm.keywordConfirm == 'MANGO'
+			confirm.autoreplyConfirm == "Welcome Sir/Madam. This is an autoreply response!"
+		when: 'When create is clicked'
+			confirm.name = 'Hello'
+			create.click()
+		then: 'Summary tab should NOT be displayed'
+			confirm.displayed
+			error.displayed
+	}
+
+	def launchAutoreplyPopup(String tab = ''){
+		to PageMessageInbox
+			bodyMenu.newActivity.click()
+			waitFor { at CreateActivityDialog }
+			autoreply.click()
+			waitFor { at AutoreplyCreateDialog }
+		if(tab == 'keyword')
+			messageText = "Welcome Sir/Madam. This is an autoreply response!"
+			next.click()
 	}
 }
