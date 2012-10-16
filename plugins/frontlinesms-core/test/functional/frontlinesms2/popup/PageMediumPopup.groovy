@@ -464,7 +464,7 @@ class ConfigureUshahidiWebconnectionTab extends geb.Module{
 
 class AutoreplyCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("autoreply") || popupTitle.contains("New autoreply")
+		popupTitle.contains("autoreply") || popupTitle.contains("edit activity")
 	}
 	static content = {
 		message { module AutoreplyMessageTab}

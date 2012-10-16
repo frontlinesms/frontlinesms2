@@ -3,14 +3,40 @@ package frontlinesms2
 import grails.converters.JSON
 
 class WebconnectionController extends ActivityController {
-	private static final def WEB_CONNECTION_TYPE_MAP = [generic:GenericWebconnection,
+	def webconnectionService
+
+	public static final def WEB_CONNECTION_TYPE_MAP = [generic:GenericWebconnection,
 			ushahidi:UshahidiWebconnection]
 
 	def create() {}
 
 	def save() {
 		def webconnectionInstance
-		doSave(WEB_CONNECTION_TYPE_MAP[params.webconnectionType])
+		Class<Webconnection> clazz = WebconnectionController.WEB_CONNECTION_TYPE_MAP[params.webconnectionType]
+		if(params.ownerId) {
+			webconnectionInstance = clazz.get(params.ownerId)
+		} else {
+			webconnectionInstance = clazz.newInstance()
+		}
+		try {
+			webconnectionService.saveInstance(webconnectionInstance, params)
+			if(params.ownerId)
+				webconnectionInstance.deactivate()
+			webconnectionInstance.activate()
+			flash.message = message(code:'webconnection.saved')
+			params.activityId = webconnectionInstance.id
+			withFormat {
+				json { render([ok:true, ownerId:webconnectionInstance.id] as JSON) }
+				html { [ownerId:webconnectionInstance.id] }
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace()
+			def errors = webconnectionInstance.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
+			withFormat {
+				json { render([ok:false, text:errors] as JSON) }
+			}
+		}
 	}
 
 	def config() {
@@ -21,40 +47,6 @@ class WebconnectionController extends ActivityController {
 			[it, g.render(template:"/webconnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
 		}
 		render responseMap as JSON
-	}
-
-	private def doSave(Class<Webconnection> clazz) {
-		def keywords = params.blankKeyword ? '' : params.keywords.toUpperCase().replaceAll(/\s/, "").split(',')
-		def webconnectionInstance
-		if(params.ownerId) {
-			webconnectionInstance = clazz.get(params.ownerId)
-			webconnectionInstance.keywords.clear()
-			// TODO: tests with partial changes to the keywords will fail
-		} else {
-			webconnectionInstance = clazz.newInstance()
-		}
-		if(params.blankKeyword)
-			webconnectionInstance.addToKeywords(new Keyword(value:'', isTopLevel:true))
-		else
-			keywords.collect { new Keyword(value:it.trim(), isTopLevel:true) }.each { webconnectionInstance.addToKeywords(it) }
-		webconnectionInstance.initialize(params)
-
-		if(webconnectionInstance.save(flush:true)) {
-			if(params.ownerId)
-				webconnectionInstance.deactivate()
-			webconnectionInstance.activate()
-			flash.message = message(code:'webconnection.saved')
-			params.activityId = webconnectionInstance.id
-			withFormat {
-				json { render([ok:true, ownerId:webconnectionInstance.id] as JSON) }
-				html { [ownerId:webconnectionInstance.id] }
-			}
-		} else {
-			def errors = webconnectionInstance.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
-			withFormat {
-				json { render([ok:false, text:errors] as JSON) }
-			}
-		}
 	}
 
 	private def renderJsonErrors(webconnectionInstance) {

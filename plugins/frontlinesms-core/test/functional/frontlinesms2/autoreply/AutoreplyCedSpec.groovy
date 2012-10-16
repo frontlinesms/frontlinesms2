@@ -5,7 +5,7 @@ import frontlinesms2.page.*
 import frontlinesms2.popup.*
 import frontlinesms2.message.PageMessageInbox
 
-class AutoreplyCedSpec extends grails.plugin.geb.GebSpec {
+class AutoreplyCedSpec extends AutoreplyBaseSpec{
 
 	def "can launch autoreply wizard from create new activity link" () {
 		given: ' the inbox is opened'
@@ -47,4 +47,34 @@ class AutoreplyCedSpec extends grails.plugin.geb.GebSpec {
 			summary.message.contains('The autoreply has been created')
 	}
 
+	def "Can edit an existing autoreply"() {
+		given:'create an autoreply'
+			createTestAutoreply()
+		when: 'go to autoreply message page'
+			to PageMessageAutoreply, 'Fruits'
+		then: 'autoreply message page should be open'
+			header.title == 'fruits autoreply'
+		when: 'edit button is clicked'
+			moreActions.value("edit").click()
+		then: 'autoreply wizard should open'
+			waitFor { at AutoreplyCreateDialog }
+		when: 'Text messages is edited'
+			messageText = 'Some other text'
+			next.click()
+		then: 'Keyword tab should open'
+			keyword.displayed
+		when: 'Keyword is changed'
+			keyword.keywordText = 'Goodbye'
+			next.click()
+		then: 'Confirm tab should open'
+			confirm.displayed
+			confirm.keywordConfirm == 'GOODBYE'
+			confirm.autoreplyConfirm == "Some other text"
+		when: 'submit is clicked'
+			confirm.name = 'Hello'
+			create.click()
+		then: 'Summary tab should open'
+			waitFor { summary.displayed }
+			summary.message.contains('The autoreply has been created')
+	}
 }
