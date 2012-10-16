@@ -51,6 +51,7 @@
 			webconnectionDialog.setScripts(initialScripts);
 		</g:else>
 		
+		genericSortingValidation();
 
 		var keyWordTabValidation = function() {
 			 if(!isGroupChecked("blankKeyword")) return validator.element('#keywords');
@@ -64,10 +65,6 @@
 			});
 			return isValid;
 		};
-
-		jQuery.validator.addMethod("sorting-generic", function(value, element) {
-			return genericSortingValidation();
-		}, i18n("activity.generic.sort.validation.error"));
 
 		var confirmTabValidation = function() {
 			return validator.element('input[name=name]');

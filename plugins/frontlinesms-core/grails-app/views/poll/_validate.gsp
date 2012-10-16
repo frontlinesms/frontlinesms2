@@ -54,6 +54,7 @@
 
 	function addCustomValidationClasses() {
 		aliasCustomValidation();
+		genericSortingValidation();
 		
 		jQuery.validator.addMethod("edit", function(value, element) {
 			return (value.trim().length != 0);
@@ -91,7 +92,7 @@
 				    valid = false;
 				}
 			});
-			return valid;
+			return validator.element('#poll-keyword') && valid;
 		};
 		var autoReplyTabValidation = function() {
 			return validator.element('#autoreplyText');

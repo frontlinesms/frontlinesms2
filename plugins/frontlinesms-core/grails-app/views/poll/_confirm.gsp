@@ -29,7 +29,7 @@
 			<td id="confirm-messages-count"><span id="messages-count">0</span> <g:message code="quickmessage.messages.count"/></td>
 		</tr>
 		<tr>
-			<td><g:message code="poll.alias"/></td>
+			<td><g:message code="poll.keywords"/></td>
 			<td id="poll-confirm-aliases"/>
 		</tr>
 	</table>
