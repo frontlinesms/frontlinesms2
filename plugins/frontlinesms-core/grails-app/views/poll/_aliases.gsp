@@ -7,11 +7,11 @@
 		<ul class="select">
 			<li>
 				<label for="enableKeyword"><g:message code="poll.autosort.no.description"/></label>
-				<g:radio name="enableKeyword" value="false" checked="${activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: true}"/>
+				<g:radio name="enableKeyword" id="noAutosort" value="false" checked="${activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: true}"/>
 			</li>
 			<li>
 				<label for="enableKeyword"><g:message code="poll.autosort.description"/></label>
-				<g:radio name="enableKeyword" value="true" checked="${activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: false}"/>
+				<g:radio name="enableKeyword" id="yesAutosort" value="true" checked="${activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: false}"/>
 				<g:textField name="topLevelKeyword" id="poll-keyword" class="no-space" disabled="${activityInstanceToEdit?.keywords?false:true}" value="${activityInstanceToEdit?.keywords.findAll{it.isTopLevel && it.ownerDetail == null}?.value?.join(',')}"/>
 			</li>
 		</ul>
@@ -24,11 +24,13 @@
 					$('#poll-keyword').removeAttr("disabled");
 					$('#poll-keyword').show();
 					$('#poll-keywords').show();
+					$('input:not(:disabled).keywords').addClass('required');
 				}
 				else {
 					$('#poll-keyword').attr("disabled", "disabled");
 					$('#poll-keyword').hide();
 					$('#poll-keywords').hide();
+					$('input:not(:disabled).keywords').removeClass('required');
 				}
 			};
 		$("input[name='enableKeyword']").live("change", enableKeyword);
@@ -47,10 +49,10 @@
 						<label for='keywords${key}' class="${key == 'A' || key == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)) ? 'field-enabled': ''}">keywords${key}</label>
 						<% def pollResponse = activityInstanceToEdit?.responses.find {it.key == key} %>
 						<g:if test="${(key == 'A' || key == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 2)))}">
-							<g:textField class='keywords validcommas' name='keywords${key}' value="${activityInstanceToEdit.keywords.findAll{ it.ownerDetail == pollResponse?.key }.value.join(',')}"/>
+							<g:textField class='keywords required validcommas' name='keywords${key}' value="${activityInstanceToEdit.keywords.findAll{ it.ownerDetail == pollResponse?.key }.value.join(',')}"/>
 						</g:if>
 						<g:else>
-							<g:textField class='keywords validcommas' name="keywords${key}" value="" disabled="true"/>
+							<g:textField class='keywords required validcommas' name="keywords${key}" value="" disabled="true"/>
 						</g:else>
 					</g:if>
 					<g:else>

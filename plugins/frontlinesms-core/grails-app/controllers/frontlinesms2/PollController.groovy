@@ -19,8 +19,7 @@ class PollController extends ActivityController {
 			       html { [ownerId:poll.id]}
 			}
 		} catch(Exception e){
-			println e
-			println "## Exception Thrown"
+			println "#### Exception Thrown ### ${e}"
 			renderJsonErrors(poll)
 		}
 	}

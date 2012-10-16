@@ -244,9 +244,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	def "Message should be sorted into the correct PollResponse for  Poll with top level and second level keywords"() {
 		when:
 			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(value:"Manchester"))
-			p.addToResponses(new PollResponse(value:"Barcelona"))
-			p.addToResponses(new PollResponse(value:"Harambee Stars"))
+			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
+			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
+			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
 			p.addToResponses(PollResponse.createUnknown())
 			p.save(failOnError:true)
 			def k1 = new Keyword(value: "FOOTBALL", activity: p)
@@ -272,20 +272,21 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	def "Message should be sorted into the correct PollResponse for  Poll with only top level keywords"() {
 		when:
 			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(value:"Manchester"))
-			p.addToResponses(new PollResponse(value:"Barcelona"))
-			p.addToResponses(new PollResponse(value:"Harambee Stars"))
+			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
+			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
+			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
 			p.addToResponses(PollResponse.createUnknown())
 			p.save(failOnError:true)
-			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A")
-			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"C")
-			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"B")
+			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:true)
+			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"C", isTopLevel:true)
+			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"B", isTopLevel:true)
 			p.addToKeywords(k2)
 			p.addToKeywords(k3)
 			p.addToKeywords(k4)
 			p.save(failOnError:true, flush:true)
+			println "##### ${p.keywords*.value}"
 		then:
-			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), Keyword.findByValue(keywordValue)).value == pollResponseValue
+			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), p.keywords.find{ it.value == keywordValue }).value == pollResponseValue
 		where:
 			keywordValue|pollResponseValue
 			"MANCHESTER"|"Manchester"

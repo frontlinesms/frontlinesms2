@@ -47,11 +47,14 @@ class PollCedSpec extends PollBaseSpec {
 	def "should require keywords if sorting is enabled"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
-			sort.sort.click()
+			sort.sort.jquery.click()
+			sort.inputs[0].value("")
+			sort.inputs[1].value("")
 			next.click()
 		then:
 			waitFor { errorPanel.displayed }
-			sort.keyword.hasClass('error')
+			sort.inputs[0].hasClass('error')
+			sort.inputs[1].hasClass('error')
 	}
 
 	def "Keyword input fields should be hidden when popup first loads"() {
@@ -419,7 +422,8 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.pollName = 'Who is badder?'
 			submit.click()
 		then:
-			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }		
+			waitFor { summary.displayed }
+			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }
 	}
 	
 	def "should display errors when poll validation fails"() {

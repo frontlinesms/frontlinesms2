@@ -36,7 +36,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
 			controller.params.autoreplyText = "automatic reply text"
-			controller.params.enableKeyword = true
+			controller.params.enableKeyword = "true"
 			controller.params.topLevelKeyword = "Hello"
 			controller.params.keywordsA = "A,aa"
 			controller.params.keywordsB = "B,bb"
@@ -63,7 +63,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
 			controller.params.autoReplyText = "automatic reply text"
-			controller.params.enableKeyword = false
+			controller.params.enableKeyword = "false"
 		when:
 			controller.save()
 			def p = Poll.findByName("test-poll-2")
@@ -181,7 +181,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.ownerId = poll.id
 			controller.params.topLevelKeyword = 'bad'
-			controller.params.enableKeyword = true
+			controller.params.enableKeyword = "true"
 			controller.params.dontSendMessage=true
 			controller.save()
 			poll = Poll.get(poll.id)
@@ -213,7 +213,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
 			controller.params.autoreplyText = "automatic reply text"
-			controller.params.enableKeyword = true
+			controller.params.enableKeyword = "true"
 			controller.params.topLevelKeyword = "Hello"
 			controller.params.keywordsA = "Manchester"
 			controller.params.keywordsB = "Barcelona"
