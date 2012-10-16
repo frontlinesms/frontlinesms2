@@ -15,7 +15,7 @@ class UshahidiWebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 			webconnection.save(failOnError:true)
 			def incomingMessage = Fmessage.build(text:"FORWARD ME", src:'123123')
 		when:
-			webconnection.processKeyword(incomingMessage, true)
+			webconnection.processKeyword(incomingMessage, k)
 		then:
 			1 * webCService.send(incomingMessage)
 	}
@@ -29,7 +29,7 @@ class UshahidiWebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 			def incomingMessage = Fmessage.build(text:"FORWARD ME", src:'123123')
 			webconnection.addToMessages(incomingMessage).save(failOnError:true)
 		when:
-			webconnection.processKeyword(incomingMessage, false)
+			webconnection.processKeyword(incomingMessage, k)
 		then:
 			1 * webCService.send(incomingMessage)
 	}

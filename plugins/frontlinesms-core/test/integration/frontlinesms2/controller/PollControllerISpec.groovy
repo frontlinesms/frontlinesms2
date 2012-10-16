@@ -186,7 +186,8 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 			poll = Poll.get(poll.id)
 		then:
-			poll.keywords[0].value == 'BAD'
+			println "################ ${poll.keywords*.value}"
+			poll.keywords*.value.contains('BAD')
 	}
 
 	def "editing a poll persists keyword changes"() {
