@@ -79,7 +79,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'edit should remove requestParameters from a web connection'() {
 		setup:
 			def keyword = new Keyword(value:'COOL')
-			def webconnection = new GenericWebconnection(name:"Test", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
+			def webconnection = new GenericWebconnection(name:"Test", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
 			webconnection.addToRequestParameters(new RequestParameter(name:"name", value:'${name}'))
 			webconnection.addToRequestParameters(new RequestParameter(name:"age", value:'${age}'))
 			webconnection.save(failOnError:true)
@@ -102,7 +102,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "should not save requestParameters without a name value"() {
 		setup:
 			def keyword = new Keyword(value:'AWESOME')
-			def webconnection = new GenericWebconnection(name:"Ushahidi", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
+			def webconnection = new GenericWebconnection(name:"Ushahidi", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
 			webconnection.addToRequestParameters(new RequestParameter(name:"name", value:'${name}'))
 			webconnection.addToRequestParameters(new RequestParameter(name:"age", value:'${age}'))
 			webconnection.save(failOnError:true)
@@ -123,7 +123,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "editing a webconnection should persist changes"(){
 		setup:
 			def keyword = new Keyword(value:"TRIAL")
-			def connection = new UshahidiWebconnection(name:"Trial", keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST)
+			def connection = new UshahidiWebconnection(name:"Trial", url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
 			connection.save(failOnError:true)
 			controller.params.ownerId = connection.id
 			controller.params.name = "Ushahidi Connection"
