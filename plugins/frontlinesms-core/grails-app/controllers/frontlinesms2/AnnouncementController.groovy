@@ -13,15 +13,15 @@ class AnnouncementController extends ActivityController {
 	def save() {
 		def announcementInstance
 		announcementInstance = Announcement.get(params.ownerId) ?: new Announcement()
-		if(announcementService.saveInstance(announcementInstance, params)){
+		try{
+			announcementInstance = announcementService.saveInstance(announcementInstance, params)
 			flash.message = message(code: 'announcement.saved')
 			params.activityId = announcementInstance.id
 			withFormat {
 				json { render([ok:true, ownerId: announcementInstance.id] as JSON)}
 				html { [ownerId: announcementInstance.id]}
 			}
-
-		} else {
+		}catch(Exception e){
 			def errors = announcementInstance.errors.allErrors.collect { message(error:it)}.join("\n")
 			withFormat {
 				json { render([ok:false, text:errors] as JSON)}
