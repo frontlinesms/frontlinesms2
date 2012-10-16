@@ -121,7 +121,7 @@ class Poll extends Activity {
 		this.keywords?.clear()
 		def keys = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
 		println "###### Keywords :: ${keys}"
-		attrs.topLevelKeyword.replaceAll(/\s/, "").split(",").each{
+		attrs.topLevelKeyword?.replaceAll(/\s/, "").split(",").each{
 			this.addToKeywords(new Keyword(value:"${it.trim().toUpperCase()}"))
 		}
 		println "Keywords after setting Most TopLevel ## ${this.keywords*.value}"
@@ -131,7 +131,7 @@ class Poll extends Activity {
 			println "###### K :: ${k}"
 			println "###### V :: ${v}"
 			println attrs["keywords${k}"]
-			attrs["keywords${k}"].replaceAll(/\s/, "").split(",").each{
+			attrs["keywords${k}"]?.replaceAll(/\s/, "").split(",").each{
 				this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${k}", isTopLevel:!attrs.topLevelKeyword?.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
 			}
 		}
@@ -171,8 +171,7 @@ class Poll extends Activity {
 		}
 	}
 	
-//> PRIVATE HELPERS
-	private PollResponse getPollResponse(Fmessage message, Keyword keyword) {
+	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
 		if(keyword.isTopLevel && !keyword.ownerDetail){
 			return this.unknown
 		} else {
