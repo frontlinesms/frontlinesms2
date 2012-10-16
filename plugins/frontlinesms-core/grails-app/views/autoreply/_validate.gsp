@@ -24,7 +24,11 @@
 			return validator.element('input[name=name]');
 		};
 
-		mediumPopup.addValidation('autoreply-enter-keyword', keyWordTabValidation);
+		jQuery.validator.addMethod("sorting-generic", function(value, element) {
+			return genericSortingValidation();
+		}, i18n("activity.generic.sort.validation.error"));
+
+		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
 		mediumPopup.addValidation('autoreply-create-message', messageTextTabValidation);
 		mediumPopup.addValidation('autoreply-confirm', confirmTabValidation);
 
@@ -45,6 +49,6 @@
 			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		}
-		
 	}
+
 </r:script>
