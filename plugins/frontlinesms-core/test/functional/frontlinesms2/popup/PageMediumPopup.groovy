@@ -471,8 +471,10 @@ class AutoreplyCreateDialog extends MediumPopup {
 		keyword { module AutoreplyKeywordTab}
 		confirm { module AutoreplyConfirmTab}
 		summary { module AutoreplySummaryTab}
+		validationErrorText { $('label.error').text() }
+		errorText { errorPanel.text()?.toLowerCase() }
+		error { errorPanel }
 		create { $('button#submit') }
-		error {$('label', class:'error')}
 	}
 }
 
