@@ -23,7 +23,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def message = Fmessage.build(src:'123456', date:new Date(), inbound:true, isDeleted:false)
 			message.save(failOnError:true, flush:true)
 			def keyword = new Keyword(value: "FOOTBALL")
-			def p = new Poll(name:'Who is the best football team in the world?', keyword: keyword, deleted:true)
+			def p = new Poll(name:'Who is the best football team in the world?', deleted:true).addToKeywords(keyword)
 			p.editResponses(choiceA: "FC Manchester United", choiceB: "FC United of Manchester")
 			p.save(failOnError:true, flush:true)
 			PollResponse.findByValue("FC United of Manchester").addToMessages(message)

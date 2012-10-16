@@ -21,7 +21,7 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 	def "Test constraints"() {
 		when:
 			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def connection = new UshahidiWebconnection(name:name, keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
+			def connection = new UshahidiWebconnection(name:name, url:"www.ushahidi.com/frontlinesms2", httpMethod:method).addToKeywords(keyword)
 		then:
 			println connection.errors
 			connection.validate() == valid
@@ -37,9 +37,9 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 		given:
 			def message = Fmessage.build(text:"testing", src:"bob")
 			def connection = new UshahidiWebconnection(name:'name',
-					keyword:new Keyword(value:'keyword'),
 					url:"www.ushahidi.com/frontlinesms2",
 					httpMethod:Webconnection.HttpMethod.GET)
+					.addToKeywords(new Keyword(value:'keyword'))
 			mockRequestParams(connection, [s:'${message_src_name}', m:'${message_body}', key:'1234567'])
 
 			def headers = ['fmessage-id':message.id,'webconnection-id':connection.id]
