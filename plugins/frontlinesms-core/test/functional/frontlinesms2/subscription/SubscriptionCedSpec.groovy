@@ -32,14 +32,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor {at SubscriptionCreateDialog}
 		when:
 			group.addToGroup Group.findByName('Friends').id
-			group.keywordText = 'FRIENDS'
 			next.click()
 		then:
-			waitFor { aliases.displayed }
+			waitFor { keywords.displayed }
 		when:
-			aliases.joinAliases = 'join, start'
-			aliases.leaveAliases = 'leave, stop'
-			aliases.defaultAction = "join"
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
+			keywords.defaultAction = "join"
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -77,11 +77,11 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			println "***"+group.text()
 			group.addToGroup Group.findByName("Camping").id.toString()
-			group.keywordText = 'NOTABOUTFOOTBALL'
 			next.click()
 		then:
-			waitFor {aliases.displayed}
+			waitFor {keywords.displayed}
 		when:
+			keywords.keywordText = 'NOTABOUTFOOTBALL'
 			next.click()
 			autoreply.enableJoinAutoreply.click()
 			autoreply.joinAutoreplyText = "You have been successfully subscribed to some other group"
@@ -104,10 +104,10 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id.toString()
-			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = 'join, start'
-			aliases.leaveAliases = 'leave, stop'
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
 			next.click()
 			autoreply.enableJoinAutoreply.click()
 			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
@@ -128,7 +128,6 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup('Select group')
-			group.keywordText = 'FRIENDS'
 			next.click()
 		then:
 			waitFor {error.text().contains('Subscriptions must have a group')}
@@ -156,14 +155,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id
-			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = 'team'
-			aliases.leaveAliases = 'team'
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'team'
+			keywords.leaveKeywords = 'team'
 			next.click()
 		then:
 			waitFor {error.text().contains('Aliases should be unique')}
-			aliases.joinAliases.displayed
+			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
 
@@ -174,14 +173,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id
-			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = 'team'
-			aliases.leaveAliases = 'team%^&%^%&'
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'team'
+			keywords.leaveKeywords = 'team%^&%^%&'
 			next.click()
 		then:
 			waitFor {error.text().contains('Invalid alias. Try a, name, word')}
-			aliases.joinAliases.displayed
+			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
 
@@ -192,10 +191,10 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id
-			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = 'join, start'
-			aliases.leaveAliases = 'leave, stop'
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
