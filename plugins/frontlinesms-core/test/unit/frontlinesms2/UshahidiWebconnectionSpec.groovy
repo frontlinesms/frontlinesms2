@@ -20,8 +20,10 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def connection = new UshahidiWebconnection(name:name, url:"www.ushahidi.com/frontlinesms2", httpMethod:method).addToKeywords(keyword)
+			def keyword = Mock(Keyword)
+			def connection = new UshahidiWebconnection(name:name, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
+			if(addKeyword)
+				connection.addToKeywords(keyword)
 		then:
 			println connection.errors
 			connection.validate() == valid
