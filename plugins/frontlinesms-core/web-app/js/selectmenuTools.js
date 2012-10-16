@@ -8,9 +8,9 @@ var selectmenuTools = {
 		else return true;
 	},
 
-	initAll: function(selecter) {
+	initAll: function(selecter, parent) {
 		if(!selectmenuTools.isSupported()) return;
-		var elements = $(selecter);
+		var elements = parent? parent.find(selecter): $(selecter);
 		elements.selectmenu();
 		elements.each(function(i, e) {
 			e = $(e).next().find(".ui-selectmenu-status");

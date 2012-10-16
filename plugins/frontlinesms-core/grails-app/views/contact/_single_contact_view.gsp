@@ -19,7 +19,7 @@
 					<a class="remove-command not-custom-field" id="remove-mobile">
 						<g:message code="contact.remove.mobile"/>
 					</a>
-					<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+					<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 						&nbsp;
 					</g:remoteLink>
 				</g:if>
@@ -113,7 +113,8 @@
 				<li class="sent"><g:message code="contact.sent.messages" args="${[contactInstance?.outboundMessagesCount]}"/></li>
 				<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
 			</ul>
-			<g:link class="btn search" controller='search' action='result' params="[contactString: contactInstance?.name]">
+			<g:link class="btn search" controller='search' action='result'
+				params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
 				<g:message code="contact.search.messages"/>
 			</g:link>
 		</div>

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 echo "Invoking Maven so it thinks we're running build-installers script..."
-mvn -Dfrontlinesms.flavour=core $@
+mvn -Dfrontlinesms.flavour=frontlinesms-core -Dbuild.version=simulated $@
 

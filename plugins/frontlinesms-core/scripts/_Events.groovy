@@ -35,7 +35,13 @@ eventTestPhaseStart = { phaseName ->
 
 eventTestStart = { testName ->
 	if (currentTestPhase == 'functional' || currentTestPhase == 'integration') {
-		def sql = Sql.newInstance("jdbc:h2:mem:testDb${frontlinesms2.StaticApplicationInstance.uniqueId}", 'sa', '', 'org.h2.Driver')
+		// Need to generate appInstanceId here as StaticApplicationInstance may not be
+		// on the classpath at this point (i.e. after `grails clean`)
+		def appInstanceId = System.properties['frontlinesms.appInstanceId']
+		if(!appInstanceId) appInstanceId = "${new Random().nextLong()}"
+		System.properties['frontlinesms.appInstanceId'] = appInstanceId
+
+		def sql = Sql.newInstance("jdbc:h2:mem:testDb$appInstanceId", 'sa', '', 'org.h2.Driver')
 		sql.execute "SET REFERENTIAL_INTEGRITY FALSE"
 		sql.eachRow("SHOW TABLES") { table -> sql.execute('DELETE FROM ' + table.TABLE_NAME) } 
 		sql.execute "SET REFERENTIAL_INTEGRITY TRUE"
@@ -119,15 +125,16 @@ println "appName: $appName"
 	new File('grails-app/i18n/').listFiles().each { f ->
 		def builder = new groovy.json.JsonBuilder()
 		def props = new Properties()
-		f.withInputStream { stream -> props.load(stream); }
+		f.withReader 'UTF-8', { reader -> props.load(reader) }
 
 		def m = [:]
 		props.each { k, v -> m[k] = v }
 		builder(m)
 
 		jsFilename = appName + '_' + f.name - '.properties' + '.js'
-		new File("web-app/i18n/$jsFilename").text =
-				"var i18nStrings = i18nStrings || {}; i18nStrings[\"$appName\"] = $builder;"
+		new File("web-app/i18n/$jsFilename").setText(
+				"var i18nStrings = i18nStrings || {}; i18nStrings[\"$appName\"] = $builder;",
+				'UTF-8')
 	}
 }
 

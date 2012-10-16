@@ -1,0 +1,16 @@
+<%@ page import="frontlinesms2.Webconnection" %>
+<tr class="prop web-connection-parameter">
+	<td>
+		<g:textField name="param-name" class="param-name" value='${name}' required="true"/>
+	</td>
+	<td>
+		<g:textField name="param-value" class="param-value" value='${value}'/>
+	</td>
+	<td>
+		<fsms:magicWand target="param-value" fields="${Webconnection.subFields*.key}" onchange='autofillValue(this);'/>
+	</td>
+	<td>
+		<a onclick="removeRule(this)" class="remove-command" />
+	</td>
+</tr>
+

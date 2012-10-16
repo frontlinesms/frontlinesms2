@@ -8,7 +8,7 @@ import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
 class ClickatellFconnection extends Fconnection {
-	private static final String CLICKATELL_URL = 'http://api.clickatell.com/http'
+	private static final String CLICKATELL_URL = 'http://api.clickatell.com/http/sendmsg?'
 	static final configFields = ['name', 'apiId', 'username', 'password']
 	static final defaultValues = []
 	static String getShortName() { 'clickatell' }
@@ -34,9 +34,8 @@ class ClickatellFconnection extends Fconnection {
 									.end()
 						.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(ClickatellFconnection.this.id.toString()))
 						.process(new ClickatellPreProcessor())
-						.setHeader(Exchange.HTTP_URI,
-								simple(CLICKATELL_URL + '/sendmsg?' + 
-										'api_id=${header.clickatell.apiId}&' +
+						.setHeader(Exchange.HTTP_QUERY,
+								simple('api_id=${header.clickatell.apiId}&' +
 										'user=${header.clickatell.username}&' + 
 										'password=${header.clickatell.password}&' + 
 										'to=${header.clickatell.dst}&' +
