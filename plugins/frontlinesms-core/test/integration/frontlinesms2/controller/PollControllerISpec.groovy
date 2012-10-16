@@ -12,12 +12,6 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		controller.params.addresses = '123'
 	}
 
-	def cleanup(){
-		Poll.findAll()*.delete()
-		Autoreply.findAll()*.delete()
-		Keyword.findAll()*.delete()
-	}
-
 	def "can save new poll"() {
 		setup:
 			controller.params.name = "poll"
@@ -239,55 +233,5 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			(poll.keywords[2].value == 'BARCELONA')&&(poll.keywords[2].ownerDetail == poll.responses[1].key)
 			(poll.keywords[3].value == 'HARAMBEE')&&(poll.keywords[3].ownerDetail == poll.responses[2].key)
 			(poll.keywords[4].value == 'TEAM')&&(poll.keywords[4].ownerDetail == poll.responses[2].key)
-	}
-
-	def "If new poll data does not validate then the service action should rollback"() {
-		setup:
-			def a1 = new Autoreply(name:"Toothpaste", autoreplyText: "Thanks for the input")
-			a1.addToKeywords(new Keyword(value:'HELLO'))
-			a1.save(failOnError:true)
-			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
-			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
-			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
-			p.addToResponses(PollResponse.createUnknown())
-			p.save(failOnError:true)
-			def k1 = new Keyword(value: "FOOTBALL", activity: p)
-			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:false)
-			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"B", isTopLevel:false)
-			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"C", isTopLevel:false)
-			p.addToKeywords(k1)
-			p.addToKeywords(k2)
-			p.addToKeywords(k3)
-			p.addToKeywords(k4)
-			p.save(failOnError:true, flush:true)
-		and:
-			controller.params.ownerId=Poll.findByName('This is a poll').id
-			controller.params.name = 'name in use'
-			controller.params.choiceA = "yes"
-			controller.params.choiceB = "no"
-			controller.params.choiceC = "maybe"
-			controller.params.autoreplyText = "automatic reply text"
-			controller.params.enableKeyword = true
-			controller.params.topLevelKeyword = "Hello"
-			controller.params.keywordsA = "Manu"
-			controller.params.keywordsB = "Barcelona"
-			controller.params.keywordsC = "Harambee,Team"
-			controller.params.dontSendMessage=true
-		when:
-			controller.save()
-		then:
-			println "## Poll keywords ########### ${Poll.findAll()*.keywords}"
-			println "## Autoreply keywords ########### ${Autoreply.findAll()*.keywords}"
-			Poll.findAll().size() == 1
-			def poll = Poll.get(p.id)
-			poll.name == "This is a poll"
-			println "#### keywords in test ### ${poll?.keywords*.value}"
-			println "#### All Keywords ### ${Keyword.findAll()*.value}"
-			poll.keywords.size() == 4
-			poll.keywords[0].value == 'FOOTBALL'
-			poll.keywords[1].value == 'MANCHESTER'
-			poll.keywords[2].value == 'HARAMBEE'
-			poll.keywords[3].value == 'BARCELONA'
 	}
 }
