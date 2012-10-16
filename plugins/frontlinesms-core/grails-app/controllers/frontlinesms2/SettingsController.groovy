@@ -54,7 +54,7 @@ class SettingsController {
 		} else if(params.password != params.confirmPassword){
 			flash.message = message(code:"password.match.error")
 		}
-		redirect view:'general'
+		render view:'general', model:general()
 	}
 
 	private def withFconnection(Closure c) {

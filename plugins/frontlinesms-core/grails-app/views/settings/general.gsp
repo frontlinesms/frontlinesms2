@@ -52,7 +52,7 @@
 						<tbody>
 							<tr>
 								<td><label for="enabledAuthentication"><g:message code="basic.authentication.enable"/></label></td>
-								<td><g:checkBox name="enabledAuthentication" value="${enabledAuthentication}" checked="${enabledAuthentication ? 'true':''}" /></td>
+								<td><g:checkBox name="enabledAuthentication" value="true" checked="${enabledAuthentication ? 'true':''}" /></td>
 							</tr>
 							<tr>
 								<td><label for="username"><g:message code="basic.authentication.username"/></label></td>
