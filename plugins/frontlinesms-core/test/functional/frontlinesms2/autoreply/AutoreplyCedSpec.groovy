@@ -123,7 +123,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			create.click()
 		then: 'Summary tab should NOT be displayed'
 			confirm.displayed
-			error.displayed
+			waitFor { errorText.contains('frontlinesms2.keyword.value.validator.error')}
 	}
 
 	def launchAutoreplyPopup(String tab = ''){
