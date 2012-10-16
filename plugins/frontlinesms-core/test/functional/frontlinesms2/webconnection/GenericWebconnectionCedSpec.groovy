@@ -117,7 +117,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			keywordTab.useKeyword.jquery.click()//enable keyword
 			next.click()
 		then:
-			waitFor { error.contains('Keyword is required') }
+			waitFor { error.toLowerCase().contains('this field is required') }
 	}
 
 	def "Url must be provided"() {

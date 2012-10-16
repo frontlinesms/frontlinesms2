@@ -27,3 +27,30 @@ function aliasCustomValidation(){
 		return value.match(/^(\s*,*\s*[\w-]+\s*,*\s*)(,*\s*[\w-]+\s*,*\s*)*$/) !== null;
 	}, i18n("poll.alias.validation.error.invalid.alias"));
 }
+
+function genericSortingValidation() {
+	var isValid = true;
+	var keywords = {};
+	var input = $("input#keywords");
+	var rawKeywords = input.val();
+	if (rawKeywords.charAt( rawKeywords.length-1 ) == ",")
+		rawKeywords = rawKeywords.slice(0, -1);
+	input.removeClass("error");
+	$.each(rawKeywords.split(","), function(index, value){
+		var keyword = value.trim();
+		if(keyword.indexOf(" ") != -1){
+			// not valid
+			input.addClass("error");
+			isValid = false;
+		}
+		else if(keyword in keywords) {
+			//not unique
+			input.addClass("error");
+			isValid = false;
+		}
+		else {
+			keywords[keyword] = true;
+		}
+	});
+	return isValid;
+};
