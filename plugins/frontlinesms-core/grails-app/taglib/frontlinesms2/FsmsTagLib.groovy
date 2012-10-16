@@ -120,7 +120,7 @@ class FsmsTagLib {
 			['', "_${locale.language}",
 					"_${locale.language}_${locale.country}",
 					"_${locale.language}_${locale.country}_${locale.variant}"].each {
-				out << "<script type=\"text/javascript\" src=\"${request.contextPath}/i18n/${bundle}_messages${it}.js\"></script>" }
+				out << "<script type=\"text/javascript\" src=\"${request.contextPath}/i18n/${bundle}_messages${it}.js\" charset=\"UTF-8\"></script>" }
 		}
 	}
 	
@@ -149,6 +149,22 @@ class FsmsTagLib {
 		out << '<tr>'
 		out << '<td class="field-label">'
 		out << getFieldLabel(att.instanceClass, att.field)
+		out << '</td>'
+		out << '<td id="confirm-' + att.field + '"></td>'
+		out << '</tr>'
+	}
+
+	def activityConfirmTable = { att ->
+		out << '<table id="' + att.type + '-confirm" class="activity-confirm-table">'
+		def fields = getFields(att)
+		fields.each { out << activityConfirmTableRow(att + [field:it.trim()]) }
+		out << '</table>'
+	}
+
+	def activityConfirmTableRow = { att ->
+		out << '<tr>'
+		out << '<td class="field-label">'
+		out << getActivityFieldLabel(att)
 		out << '</td>'
 		out << '<td id="confirm-' + att.field + '"></td>'
 		out << '</tr>'
@@ -326,6 +342,10 @@ class FsmsTagLib {
 	
 	private def getFieldLabel(clazz, fieldName) {
 		g.message(code:"${clazz.simpleName.toLowerCase()}.${fieldName}.label")
+	}
+
+	private def getActivityFieldLabel(att) {
+		g.message(code:"${att.instanceClass?.shortName.toLowerCase()}.${att.type}.${att.field}.label")
 	}
 	
 	private def isPassword(instanceClass, groovyKey) {

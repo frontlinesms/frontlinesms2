@@ -11,7 +11,7 @@ class RequestParameter {
 
 	static def regex = /[$][{]*[a-z_]*[}]/
 
-	static belongsTo = [connection:WebConnection]
+	static belongsTo = [connection:Webconnection]
 
 	String getProcessedValue(Fmessage msg) {
 		def val = this.value
@@ -24,7 +24,7 @@ class RequestParameter {
 
 	String getReplacement(String arg, Fmessage msg) {
 		arg = (arg - '${') - '}'
-		def c = WebConnection.subFields[arg]
+		def c = Webconnection.subFields[arg]
 		return c(msg)
 	}
 

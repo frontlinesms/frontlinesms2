@@ -1,0 +1,4 @@
+#!/bin/bash
+TEMP_JS=target/temp.js
+find grails-app/views/ -name "*.gsp" -print | xargs sgrep '("<r:script".."</r:script>") or ("<g:javascript".."</g:javascript>") or ("<script".."</script>")' | grep -E -v "r:script|g:javascript|<script|</script>" > $TEMP_JS
+do/jslint $TEMP_JS

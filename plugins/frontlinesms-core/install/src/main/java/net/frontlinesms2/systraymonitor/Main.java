@@ -16,6 +16,7 @@ public class Main {
 	private static final String PROP_PERMISSIONS_CHECK = "os.permissions.check";
 	private static final String PROP_SERIAL_PORTS = "serial.ports.rxtx.enable";
 	private static final String PROP_SERIAL_DETECTION_DISABLED = "serial.detect.disable";
+	private static final String PROP_RESTORE_DB_BACKUP = "restore.db.backup";
 
 	private Monitor m;
 	private TrayThingy t;
@@ -39,11 +40,13 @@ public class Main {
 		properties.setDefault(PROP_RESOURCE_PATH, "~/.frontlinesms2-default");
 		properties.setDefault(PROP_PERMISSIONS_CHECK, true);
 		properties.setDefault(PROP_SERIAL_DETECTION_DISABLED, false);
+		properties.setDefault(PROP_RESTORE_DB_BACKUP, false);
 
 		// Override properties with commandline settings
 		if(isFlagSet(args, "no-tray")) properties.set(PROP_TRAY_DISABLED, true);
 		if(isFlagSet(args, "no-permission-check")) properties.set(PROP_PERMISSIONS_CHECK, false);
 		if(isFlagSet(args, "no-serial-detection")) properties.set(PROP_SERIAL_DETECTION_DISABLED, true);
+		if(isFlagSet(args, "restore-database-backup")) properties.set(PROP_RESTORE_DB_BACKUP, true);
 		mapArgsToProperties(args, properties,
 				"server-port", PROP_SERVER_PORT,
 				"resource-path", PROP_RESOURCE_PATH);
@@ -89,6 +92,12 @@ public class Main {
 
 		if(properties.getBoolean(PROP_SERIAL_DETECTION_DISABLED)) {
 			System.setProperty("serial.detect.disable", "true");
+		}
+
+		o("Checking if DB Restore was requested..");
+		if(properties.getBoolean(PROP_RESTORE_DB_BACKUP)) {
+			o("Running Database restore");
+			(new DatabaseBackupRestorer()).restore(properties.getString(PROP_RESOURCE_PATH));
 		}
 
 		int port = properties.getInt(PROP_SERVER_PORT);
