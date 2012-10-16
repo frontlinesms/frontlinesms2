@@ -21,7 +21,7 @@ class AutoreplySpec extends Specification {
 	def "Test constraints"() {
 		when:
 			def keyword = addKeyword? new Keyword(): null
-			def autoreply = new Autoreply(name:name, autoreplyText:replyText, keyword:keyword)
+			def autoreply = new Autoreply(name:name, autoreplyText:replyText).addToKeywords(keyword)
 		then:
 			autoreply.validate() == valid
 		where:
@@ -38,7 +38,7 @@ class AutoreplySpec extends Specification {
 	def 'processKeyword should not generate an autoreply for non-exact keyword match if keyword is not blank'() {
 		given:
 			def k = mockKeyword('asdf')
-			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text', keyword:k)
+			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text').addToKeywords(k)
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -53,7 +53,7 @@ class AutoreplySpec extends Specification {
 	def 'processKeyword should generate an autoreply for blank keyword if non-exact match'() {
 		given:
 			def k = mockKeyword('')
-			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text', keyword:k)
+			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text').addToKeywords(k)
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService

@@ -51,12 +51,11 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	def createPoll(attrs) {
-		def k
+		Poll p = new Poll(name:attrs.name)
 		if(attrs.keyword) {
-			k = new Keyword(value:attrs.keyword.toUpperCase())
+			def k = new Keyword(value:attrs.keyword.toUpperCase())
+			p.addToKeywords(k)
 		}
-		Poll p = new Poll(name:attrs.name, keyword:k)
-		
 		p.editResponses(attrs)
 		p.save(failOnError:true, flush:true)
 		return p

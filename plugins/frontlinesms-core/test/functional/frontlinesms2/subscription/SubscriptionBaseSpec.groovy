@@ -12,7 +12,7 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 		def campingGroup = Group.build(name:"Camping")
 		def campingKeyword = new Keyword(value: 'CAMPING')
 		def campingSub = new Subscription(name:"Camping Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
-				defaultAction:Action.JOIN, keyword:campingKeyword).save(failOnError:true)
+				defaultAction:Action.JOIN).addToKeywords(campingKeyword).save(failOnError:true)
 		campingGroup.addToMembers(allrounderBobby)
 		campingGroup.addToMembers(camperSam)
 
@@ -21,7 +21,7 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 		def footballGroup = Group.build(name:"Football Updates")
 		def footballKeyword = new Keyword(value: 'FOOTBALL')
 		def footballSub = new Subscription(name:"Football Updates Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
-				defaultAction:Action.JOIN, keyword:footballKeyword).save(failOnError:true)
+				defaultAction:Action.JOIN).addToKeywords(footballKeyword).save(failOnError:true)
 		
 		footballGroup.addToMembers(allrounderBobby)
 		footballGroup.addToMembers(footyRon)

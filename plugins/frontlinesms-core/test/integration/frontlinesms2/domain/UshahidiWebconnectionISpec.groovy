@@ -10,7 +10,7 @@ class UshahidiWebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'incoming message matching keyword should trigger http message sending'() {
 		given:
 			def k = new Keyword(value:'FORWARD')
-			def webconnection = new UshahidiWebconnection(name:"CrowdahidiSMS", keyword:k, url:"www.ushahidi.com/frontlinesms/",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
+			def webconnection = new UshahidiWebconnection(name:"CrowdahidiSMS", url:"www.ushahidi.com/frontlinesms/",httpMethod:Webconnection.HttpMethod.GET).addToKeywords(k).save(failOnError:true)
 			webconnection.webconnectionService = webCService
 			webconnection.save(failOnError:true)
 			def incomingMessage = Fmessage.build(text:"FORWARD ME", src:'123123')
@@ -23,7 +23,7 @@ class UshahidiWebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'incoming message should match if keyword is blank and exactmatch == false'() {
 		given:
 			def k = new Keyword(value:'')
-			def webconnection = new UshahidiWebconnection(name:"CrowdahidiSMS", keyword:k, url:"www.ushahidi.com/frontlinesms/",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
+			def webconnection = new UshahidiWebconnection(name:"CrowdahidiSMS", url:"www.ushahidi.com/frontlinesms/",httpMethod:Webconnection.HttpMethod.GET).addToKeywords(k).save(failOnError:true)
 			webconnection.webconnectionService = webCService
 			webconnection.save(failOnError:true)
 			def incomingMessage = Fmessage.build(text:"FORWARD ME", src:'123123')

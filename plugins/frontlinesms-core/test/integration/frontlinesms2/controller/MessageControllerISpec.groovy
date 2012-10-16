@@ -189,7 +189,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			assert responseA.messages.contains(m)
 
 			def Keyword k = new Keyword(value:'ASDF')
-			def newOwner = new Autoreply(name:"Toothpaste", keyword: k, autoreplyText: "Thanks for the input").save(failOnError:true)
+			def newOwner = new Autoreply(name:"Toothpaste", autoreplyText: "Thanks for the input").addToKeywords(k).save(failOnError:true)
 			
 			// TODO move this test to MessageController
 			controller.params.messageId = m.id
