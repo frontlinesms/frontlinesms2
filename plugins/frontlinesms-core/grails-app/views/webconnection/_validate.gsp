@@ -53,7 +53,8 @@
 		
 
 		var keyWordTabValidation = function() {
-			return isGroupChecked("blankKeyword") || validator.element("#keyword");
+			 if(!isGroupChecked("blankKeyword")) return validator.element('#keywords');
+			 else return true;
 		};
 
 		var configureTabValidation = function() {
@@ -64,11 +65,15 @@
 			return isValid;
 		};
 
+		jQuery.validator.addMethod("sorting-generic", function(value, element) {
+			return genericSortingValidation();
+		}, i18n("activity.generic.sort.validation.error"));
+
 		var confirmTabValidation = function() {
 			return validator.element('input[name=name]');
 		};
 
-		mediumPopup.addValidation('webconnection-sorting', keyWordTabValidation);
+		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
 		mediumPopup.addValidation('webconnection-configure', configureTabValidation);
 		mediumPopup.addValidation('webconnection-confirm', confirmTabValidation);
 
