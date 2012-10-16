@@ -21,11 +21,15 @@ class SubscriptionService {
 				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:true))
 			}
 		}
-		params.joinKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
-			subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:!params.topLevelKeywords, ownerDetail: Subscription.Action.JOIN.toString()))
+		if(params.joinKeywords.trim()){
+			params.joinKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:!params.topLevelKeywords, ownerDetail: Subscription.Action.JOIN.toString()))
+			}
 		}
-		params.leaveKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
-			subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:!params.topLevelKeywords, ownerDetail: Subscription.Action.LEAVE.toString()))
+		if(params.leaveKeywords.trim()){
+			params.leaveKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
+				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:!params.topLevelKeywords, ownerDetail: Subscription.Action.LEAVE.toString()))
+			}
 		}
 		subscriptionInstance.save(flush:true, failOnError: true)
 		return subscriptionInstance

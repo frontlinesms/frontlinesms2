@@ -43,11 +43,17 @@
 
 	function initializeTabValidation(validator) {
 		var groupTabValidation = function() {
-			return (validator.element($('#subscriptionGroup')));
+			return validator.element($('#subscriptionGroup'));
 		};
 
 		var sortingTabValidation = function() {
-			return true;	
+			var valid = true;
+			$('input:not(:disabled).keywords').each(function() {
+				if (!validator.element(this) && valid) {
+				    valid = false;
+				}
+			});
+			return validator.element('#topLevelKeywords') && valid;
 		};
 
 		var autoreplyTabValidation = function() {
@@ -85,5 +91,6 @@
 		}, i18n("subscription.group.required.error"));
 
 		aliasCustomValidation();
+		genericSortingValidation();
 	}
 </r:script>

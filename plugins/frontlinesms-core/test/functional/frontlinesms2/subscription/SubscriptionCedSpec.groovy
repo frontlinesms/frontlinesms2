@@ -119,7 +119,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			submit.click()
 		then:
-			waitFor {error.text().contains('This field is required.')}
+			waitFor {validationError.text().contains('This field is required.')}
 			at SubscriptionCreateDialog
 	}
 
@@ -130,21 +130,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			group.addToGroup('Select group')
 			next.click()
 		then:
-			waitFor {error.text().contains('Subscriptions must have a group')}
-			at SubscriptionCreateDialog
-	}
-
-	def "keyword must be provided in a subscription"() {
-		setup:
-			new Group(name:"Friends").save(failOnError:true)
-		when:
-			launchSubscriptionPopup()
-			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
-			next.click()
-		then:
-			waitFor {error.text().contains('Keyword is required')}
-			group.keywordText.displayed
+			waitFor {validationError.text().contains('Subscriptions must have a group')}
 			at SubscriptionCreateDialog
 	}
 
@@ -161,7 +147,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.leaveKeywords = 'team'
 			next.click()
 		then:
-			waitFor {error.text().contains('Aliases should be unique')}
+			waitFor {validationError.text().contains('Keywords should be unique')}
 			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
@@ -179,7 +165,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.leaveKeywords = 'team%^&%^%&'
 			next.click()
 		then:
-			waitFor {error.text().contains('Invalid alias. Try a, name, word')}
+			waitFor {validationError.text().contains('Invalid Keyword. Try a, name, word')}
 			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
@@ -204,7 +190,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			autoreply.enableLeaveAutoreply.click()
 			next.click()
 		then:
-			waitFor {error.text().contains('Please enter leave autoreply text')}
+			waitFor {validationError.text().contains('Please enter leave autoreply text')}
 			autoreply.enableLeaveAutoreply.displayed
 	}
 
