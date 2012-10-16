@@ -86,7 +86,6 @@ class PollDialog extends MediumPopup {
 	static content = {
 		compose { module ComposeTab }
 		response { module ResponseTab }
-		aliases { module AliasTab }
 		sort { module SortTab }
 		autoreply { module AutoReplyTab }
 		edit { module EditMessageTab }
@@ -127,14 +126,6 @@ class ResponseTab extends geb.Module {
 	}
 }
 
-class AliasTab extends geb.Module {
-	static base = { $('div#tabs-4') }
-	static content = {
-		labels { $('#poll-aliases label') }
-		inputs { $('#poll-aliases input.aliases') }
-	}
-}
-
 class SortTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
@@ -142,11 +133,14 @@ class SortTab extends geb.Module {
 		sort { $('ul.select input[value="true"]') }
 		toggle { $('input#enableKeyword') }
 		keyword { $('input#poll-keyword') }
+		labels { $('#poll-aliases label') }
+		inputs { $('#poll-aliases input.keywords') }
+		pollKeywordsContainer { $('#poll-keywords') }
 	}
 }
 
 class AutoReplyTab extends geb.Module {
-	static base = { $('div#tabs-5') }
+	static base = { $('div#tabs-4') }
 	static content = {
 		autoreplyCheck { $('input#enableAutoreply') }
 		text { $('textarea#autoreplyText') }
@@ -155,14 +149,14 @@ class AutoReplyTab extends geb.Module {
 }
 
 class EditMessageTab extends geb.Module {
-	static base = { $('div#tabs-6') }
+	static base = { $('div#tabs-5') }
 	static content = {
 		text { $('textarea#messageText') }
 	}
 }
 
 class RecipientsTab extends geb.Module {
-	static base = { $('div#tabs-7') }
+	static base = { $('div#tabs-6') }
 	static content = {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
@@ -172,7 +166,7 @@ class RecipientsTab extends geb.Module {
 }
 
 class ConfirmTab extends geb.Module {
-	static base = { $('div#tabs-8') }
+	static base = { $('div#tabs-7') }
 	static content = {
 		pollName { $('input#name') }
 		message { $("#poll-message").text() }
