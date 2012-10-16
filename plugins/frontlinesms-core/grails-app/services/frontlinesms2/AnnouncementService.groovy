@@ -1,4 +1,4 @@
-package frontlinesms.core
+package frontlinesms2
 
 import frontlinesms2.*
 
