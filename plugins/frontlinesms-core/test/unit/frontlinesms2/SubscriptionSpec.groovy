@@ -85,7 +85,7 @@ class SubscriptionSpec extends Specification {
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
 		def keyword = new Keyword(value:"KEY")
-		s = new Subscription(name:"test subscription", keyword: keyword,group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
+		s = new Subscription(name:"test subscription", group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave").addToKeywords(keyword)
 	}
 
 	//> HELPERS
