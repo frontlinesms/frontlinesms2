@@ -83,7 +83,8 @@
 			setAliasValues();
 			return valid;
 		};
-		var aliasTabValidation = function() {
+
+		var autoSortTabValidation = function() {
 			var valid = true;
 			$('input:not(:disabled).keywords').each(function() {
 				if (!validator.element(this) && valid) {
@@ -91,9 +92,6 @@
 				}
 			});
 			return valid;
-		};
-		var autoSortTabValidation = function() {
-			return validator.element('#poll-keyword');
 		};
 		var autoReplyTabValidation = function() {
 			return validator.element('#autoreplyText');
@@ -131,7 +129,7 @@
 
 		mediumPopup.addValidation('poll-question', questionTabValidation);
 		mediumPopup.addValidation('poll-response', responseTabValidation);
-		mediumPopup.addValidation('poll-alias', aliasTabValidation);
+		mediumPopup.addValidation('poll-sort', autoSortTabValidation);
 		mediumPopup.addValidation('poll-reply', autoReplyTabValidation);
 		mediumPopup.addValidation('poll-edit-message', composeMessageTabValidation)
 		mediumPopup.addValidation('poll-recipients', recipientTabValidation);
