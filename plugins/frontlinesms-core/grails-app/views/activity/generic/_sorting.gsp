@@ -5,7 +5,7 @@
 	</div>
 	<div class="input">
 		<label for="keywords"><g:message code="activity.generic.keywords.title"/></label>
-		<g:textField name="keywords" class="required sorting-generic" value="${activityInstanceToEdit?.keywords? activityInstanceToEdit?.keywords*.value.join(',') : ''}" disabled="${activityInstanceToEdit && !activityInstanceToEdit?.keywords}"/>
+		<g:textField name="keywords" class="required validcommas sorting-generic-unique sorting-generic-no-spaces" value="${activityInstanceToEdit?.keywords? activityInstanceToEdit?.keywords*.value.join(',') : ''}" disabled="${activityInstanceToEdit && !activityInstanceToEdit?.keywords}"/>
 	</div>
 	<div class="input optional">
 		<label for="blankKeyword"><g:message code="activity.generic.no.keywords"/></label>
