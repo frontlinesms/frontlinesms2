@@ -1,15 +1,24 @@
 package frontlinesms2.page
 
 import frontlinesms2.*
+import geb.Module
 
 abstract class PageBase extends geb.Page {
 	static content = {
+		systemMenu { module SystemMenu }
 		tabs { module TabsModule }
 		notifications { module NotificationsModule }
 	}
 }
 
-class TabsModule extends geb.Module {
+class SystemMenu extends Module {
+	static base = { $("#system-menu") }
+	static content = {
+		help { $('a', controller:'help') }
+	}
+}
+
+class TabsModule extends Module {
 	static content = {
 		current {
 			($('#main-nav li.current a').text() 
@@ -24,7 +33,7 @@ class TabsModule extends geb.Module {
 	}
 }
 
-class NotificationsModule extends geb.Module {
+class NotificationsModule extends Module {
 	static content = { 
 		errorMessages { $('.flash.errors')*.text() }
 		flashMessageText { def t = flashMessage.text(); t.substring(0, t.length()-2).trim() }
