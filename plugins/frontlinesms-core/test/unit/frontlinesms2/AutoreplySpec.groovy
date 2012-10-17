@@ -20,8 +20,8 @@ class AutoreplySpec extends Specification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def keyword = addKeyword? new Keyword(): null
-			def autoreply = new Autoreply(name:name, autoreplyText:replyText).addToKeywords(keyword)
+			def autoreply = new Autoreply(name:name, autoreplyText:replyText)
+			if(addKeyword) autoreply.addToKeywords(Mock(Keyword))
 		then:
 			autoreply.validate() == valid
 		where:
@@ -30,24 +30,9 @@ class AutoreplySpec extends Specification {
 			null   | 'something' | false      | false
 			null   | null        | true       | false
 			'test' | null        | false      | false
-			'test' | 'something' | false      | false
+			'test' | 'something' | false      | true
 			'test' | null        | true       | false
 			'test' | 'something' | true       | true
-	}
-
-	def 'processKeyword should not generate an autoreply for non-exact keyword match if keyword is not blank'() {
-		given:
-			def k = mockKeyword('asdf')
-			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text').addToKeywords(k)
-
-			def sendService = Mock(MessageSendService)
-			autoreply.messageSendService = sendService
-
-			def inMessage = mockFmessage("message text", TEST_NUMBER)
-		when:
-			autoreply.processKeyword(inMessage, false)
-		then:
-			0 * sendService._
 	}
 
 	def 'processKeyword should generate an autoreply for blank keyword if non-exact match'() {
@@ -65,7 +50,7 @@ class AutoreplySpec extends Specification {
 
 			def inMessage = mockFmessage("message text", TEST_NUMBER)
 		when:
-			autoreply.processKeyword(inMessage, false)
+			autoreply.processKeyword(inMessage, k)
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -73,6 +58,8 @@ class AutoreplySpec extends Specification {
 	def 'processKeyword should generate an autoreply'() {
 		given:
 			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
+			def k = new Keyword(value:'test')
+			autoreply.addToKeywords(k)
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -84,7 +71,7 @@ class AutoreplySpec extends Specification {
 
 			def inMessage = mockFmessage("message text", TEST_NUMBER)
 		when:
-			autoreply.processKeyword(inMessage, true)
+			autoreply.processKeyword(inMessage, k)
 		then:
 			1 * sendService.send(replyMessage)
 	}
