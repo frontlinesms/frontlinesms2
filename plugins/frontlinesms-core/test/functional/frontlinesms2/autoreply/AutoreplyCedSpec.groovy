@@ -92,7 +92,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			next.click()
 		then: 'Error message is displayed'
 			errorText == "please fill in all required fields"
-			validationErrorText == "Use commas instead of spaces"
+			validationErrorText == "Keyword should not have spaces"
 	}
 
 	def "keywords must be unique if provided"() {
