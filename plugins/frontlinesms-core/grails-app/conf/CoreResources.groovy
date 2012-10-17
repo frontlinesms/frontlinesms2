@@ -93,6 +93,7 @@ modules = {
 	
 	settings {
 		dependsOn "common"
+		resource url:[dir:'js', file:'/settings/basicAuthValidation.js']
 	}
 	
 	overrides {

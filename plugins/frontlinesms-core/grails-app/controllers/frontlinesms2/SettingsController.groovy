@@ -47,12 +47,12 @@ class SettingsController {
 		if(appSettingsService.get("enabledAuthentication") && appSettingsService.get("username") && appSettingsService.get("password")) {
 			appSettingsService.set("enabledAuthentication", params.enabledAuthentication) 
 		}
-		if(params.password == params.confirmPassword) {
+		if(params.password && params.password == params.confirmPassword) {
 			appSettingsService.set("enabledAuthentication", params.enabledAuthentication) 
 			appSettingsService.set("username", params."username".bytes.encodeBase64().toString()) 
 			appSettingsService.set("password", params."password".bytes.encodeBase64().toString()) 
 		} else if(params.password != params.confirmPassword){
-			flash.message = message(code:"password.match.error")
+			flash.message = message(code:"basic.authentication.password.mismatch")
 		}
 		render view:'general', model:general()
 	}
