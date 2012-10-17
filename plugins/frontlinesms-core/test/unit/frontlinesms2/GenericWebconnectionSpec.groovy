@@ -18,18 +18,15 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def keyword = Mock(Keyword)
 			def extComm = new GenericWebconnection(name:name, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET)
-			if(addKeyword)
-				extComm.addToKeywords(keyword)
 		then:
 			extComm.validate() == valid
 		where:
-			name  | addKeyword |valid
-			'test'| true       |true
-			'test'| false      |true
-			''    | true       |false
-			null  | true       |false
+			name   | valid
+			'test' | true
+			'test' | true
+			''     | false
+			null   | false
 	}
 }
 
