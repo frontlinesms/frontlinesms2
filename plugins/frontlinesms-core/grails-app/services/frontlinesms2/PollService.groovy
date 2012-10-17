@@ -25,6 +25,7 @@ class PollService{
 		println "#### Round 2 Save!!"
 		println "Keywords ${poll.keywords*.value}"
 		if(!params.dontSendMessage && !poll.archived) {
+			println "Sending a message as part of saving poll"
 			def message = messageSendService.createOutgoingMessage(params)
 			message.save()
 			poll.addToMessages(message)
