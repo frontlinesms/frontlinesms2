@@ -15,6 +15,7 @@ abstract class PageMessage extends frontlinesms2.page.PageBase {
 		messageList { module MessageList }
 		singleMessageDetails { module SingleMessageDetails }
 		multipleMessageDetails { module MultipleMessageDetails }
+		flashMessage(required:false) { $('div.flash') }
 	}
 }
 

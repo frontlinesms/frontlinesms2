@@ -51,7 +51,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 		then: 'autoreply message page should be open'
 			header.title == 'fruits autoreply'
 		when: 'edit button is clicked'
-			moreActions.value("edit").click()
+			header.moreActions.value("edit").click()
 		then: 'autoreply wizard should open'
 			waitFor { at AutoreplyCreateDialog }
 		when: 'Text messages is edited'
