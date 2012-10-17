@@ -48,7 +48,7 @@ class AutoreplySpec extends Specification {
 
 			def inMessage = mockFmessage("message text", TEST_NUMBER)
 		when:
-			autoreply.processKeyword(inMessage, k)
+			autoreply.processKeyword(inMessage, Mock(Keyword))
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -67,7 +67,7 @@ class AutoreplySpec extends Specification {
 
 			def inMessage = mockFmessage("message text", TEST_NUMBER)
 		when:
-			autoreply.processKeyword(inMessage, k)
+			autoreply.processKeyword(inMessage, Mock(Keyword))
 		then:
 			1 * sendService.send(replyMessage)
 	}
