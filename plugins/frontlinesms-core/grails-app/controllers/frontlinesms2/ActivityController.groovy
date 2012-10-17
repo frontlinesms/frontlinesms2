@@ -110,6 +110,18 @@ class ActivityController {
 	}
 	
 	def create_new_activity() {}
+
+	def getCollidingKeywords(topLevelKeywords) {
+		def collidingKeywords = [:]
+		def currentKeyword
+		topLevelKeywords.toUpperCase().split(",").collect { it.trim() }.each { 
+			currentKeyword = Keyword.getFirstLevelMatch(it)
+			if(currentKeyword)
+				collidingKeywords << [(currentKeyword.value):"'${currentKeyword.activity.name}'"]
+		}
+		println "colliding keywords:: $collidingKeywords"
+		return collidingKeywords
+	}
 	
 	private def withActivity(Closure c) {
 		def activityInstance = Activity.get(params.id)

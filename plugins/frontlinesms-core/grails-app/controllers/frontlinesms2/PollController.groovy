@@ -20,12 +20,17 @@ class PollController extends ActivityController {
 			}
 		} catch(Exception e){
 			println "#### Exception Thrown ### ${e}"
-			renderJsonErrors(poll)
+			renderJsonErrors(poll, params)
 		}
 	}
 
-	private def renderJsonErrors(poll) {
-		def errorMessages = poll.errors.allErrors.collect { message(error:it) }.join("\n")
+	private def renderJsonErrors(poll, params) {
+		def errorMessages
+		def collidingKeywords = getCollidingKeywords(params.topLevelKeyword)
+		if (collidingKeywords)
+			errorMessages = collidingKeywords.collect { message(code:'activity.generic.keyword.in.use', args: [it.key, it.value]) }.join("\n")
+		else
+			errorMessages = poll.errors.allErrors.collect { message(error:it) }.join("\n")
 		withFormat {
 			json {
 				render([ok:false, text:errorMessages] as JSON)

@@ -18,5 +18,7 @@
 			<span id="web_connection_method">(${ownerInstance.httpMethod?.toString()})</span>
 		</g:if>
 	</li>
+	<g:if test="${ownerInstance?.keywords}">
+		<li id="web_connection_keywords"><g:message code="poll.keywords"/> : ${ownerInstance?.keywords*.value.join(',')}</li>
+	</g:if>
 </ul>
-

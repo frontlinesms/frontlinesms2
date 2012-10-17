@@ -92,7 +92,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			next.click()
 		then: 'Error message is displayed'
 			errorText == "please fill in all required fields"
-			validationErrorText == "Use commas instead of spaces"
+			validationErrorText == "Keyword should not have spaces"
 	}
 
 	def "keywords must be unique if provided"() {
@@ -123,7 +123,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			create.click()
 		then: 'Summary tab should NOT be displayed'
 			confirm.displayed
-			waitFor { errorText.contains('frontlinesms2.keyword.value.validator.error')}
+			waitFor { errorText.contains("the keyword mango is already in use by activity 'fruits'")}
 	}
 
 	def launchAutoreplyPopup(String tab = ''){

@@ -14,7 +14,7 @@
 </div>
 
 <div class="input">
-	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="required subscription-keyword-field"/>
+	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field"/>
 </div>
 
 <h2><g:message code="subscription.keywords.header"/></h2>
@@ -25,11 +25,11 @@
 	<table class="subscription-aliases">
 		<tr>
 			<td><label for="joinKeywords"><g:message code="subscription.keywords.join"/></label></td>
-			<td><g:textField class="aliases validcommas subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }"/></td>
+			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }"/></td>
 		</tr>
 		<tr>
 			<td><label for="leaveKeywords"><g:message code="subscription.keywords.leave"/></label></td>
-			<td><g:textField class="aliases validcommas subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }"/></td>
+			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }"/></td>
 		</tr>
 	</table>
 </div>

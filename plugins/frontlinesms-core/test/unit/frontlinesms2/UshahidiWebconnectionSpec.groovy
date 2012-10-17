@@ -20,19 +20,16 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def keyword = Mock(Keyword)
 			def connection = new UshahidiWebconnection(name:name, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
-			if(addKeyword)
-				connection.addToKeywords(keyword)
 		then:
 			println connection.errors
 			connection.validate() == valid
 		where:
-			name	|addKeyword	|valid | method
-			'test'	|true		|true  | Webconnection.HttpMethod.POST
-			'test'	|false		|true | Webconnection.HttpMethod.POST
-			''		|true		|false | Webconnection.HttpMethod.POST
-			null	|true		|false | Webconnection.HttpMethod.POST
+			name	|valid | method
+			'test'	|true  | Webconnection.HttpMethod.POST
+			'test'	|true  | Webconnection.HttpMethod.POST
+			''		|false | Webconnection.HttpMethod.POST
+			null	|false | Webconnection.HttpMethod.POST
 	}
 
 	def "Test Ushahidi pre-processor"() {
@@ -41,7 +38,6 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 			def connection = new UshahidiWebconnection(name:'name',
 					url:"www.ushahidi.com/frontlinesms2",
 					httpMethod:Webconnection.HttpMethod.GET)
-					.addToKeywords(new Keyword(value:'keyword'))
 			mockRequestParams(connection, [s:'${message_src_name}', m:'${message_body}', key:'1234567'])
 
 			def headers = ['fmessage-id':message.id,'webconnection-id':connection.id]

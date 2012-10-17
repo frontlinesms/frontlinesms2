@@ -167,7 +167,7 @@ class Poll extends Activity {
 			def outgoingMessage = messageSendService.createOutgoingMessage(params)
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
-			poll.save()
+			poll.save(failOnError:true)
 		}
 	}
 	

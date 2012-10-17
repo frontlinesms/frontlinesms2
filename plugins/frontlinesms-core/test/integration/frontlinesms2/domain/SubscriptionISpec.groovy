@@ -92,10 +92,6 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 		c = Contact.build(mobile:TEST_CONTACT)
 	}
 
-	private def processKeyword(String messageText, String sourcePhoneNumber, boolean exactMatch=true) {
-		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), exactMatch)
-	}
-
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save(failOnError:true)
 		def k0  = new Keyword(value:"KII", ownerDetail:null)
