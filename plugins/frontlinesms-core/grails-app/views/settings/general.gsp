@@ -68,7 +68,7 @@
 							</tr>
 							<tr>
 								<td></td>
-								<td><g:submitButton name="save" onclick="basicAuthValidation.showErrors()" value="${message(code:'action.save')}"/></td>
+								<td><g:submitButton name="save" class="btn" onclick="basicAuthValidation.showErrors()" value="${message(code:'action.save')}"/></td>
 							</tr>
 						</tbody>
 					</table>

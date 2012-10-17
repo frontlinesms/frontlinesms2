@@ -10,26 +10,24 @@ class SecurityFilters {
 				println "### enabledAuthentication: $enabledAuthentication"
 				if(enabledAuthentication) {
 					def basicAuthRequired = { credentialsProvided ->
-							if(credentialsProvided) response.status = 403
-								else {
-										response.status = 401
-										response.addHeader('WWW-Authenticate', 'Basic realm="FrontlineSMS"')
-								}
-								render text:'Restricted Page';
-								return false
+						if(credentialsProvided) response.status = 403
+						else {
+								response.status = 401
+								response.addHeader('WWW-Authenticate', 'Basic realm="FrontlineSMS"')
 						}
+						return false
+					}
 					def username = new String(appSettingsService.get("username").decodeBase64())
 					def password = new String(appSettingsService.get("password").decodeBase64())
 
 					def authString = request.getHeader('Authorization')
 					if(!authString) return basicAuthRequired()
-							authString -= 'Basic '
-							def decoded = new String(authString.decodeBase64())
-							if(decoded != "$username:$password") return basicAuthRequired()
-									return true
+					authString -= 'Basic '
+					def decoded = new String(authString.decodeBase64())
+					if(decoded != "$username:$password") return basicAuthRequired()
+					return true
 				}
 			}
-	
 		}
 	}
 }
