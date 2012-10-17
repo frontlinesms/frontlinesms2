@@ -1,0 +1,653 @@
+
+| Loading Grails 2.0.3
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver http://192.168.0.200:8081/artifactory/simple/super-repo/ already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+Dependency resolver mavenCentral already defined. Ignoring...
+Dependency resolver grailsPlugins already defined. Ignoring...
+Dependency resolver grailsHome already defined. Ignoring...
+Dependency resolver grailsCentral already defined. Ignoring...
+| Configuring classpath
+Resolving [test] dependencies...
+Resolving [runtime] dependencies...
+| Configuring classpath.
+| Environment set to test
+| Environment set to test.
+| Environment set to test..
+| Environment set to test...
+| Environment set to test....
+| Environment set to test.....
+| Compiling 8 source files
+| Compiling 8 source files.
+| Compiling 8 source files..
+appName: frontlinesms-core
+| Error log4j:ERROR Method missing when configuring log4j: pattern
+| Compiling 8 source files...
+| Compiling 8 source files....
+| Compiling 8 source files.....
+| Packaging Grails application
+| Packaging Grails application.
+| Compiling 8 source files
+| Compiling 8 source files.
+| Compiling 8 source files..
+appName: frontlinesms-core
+2012-10-17 12:15:04,282 [main] WARN  cfg.ConfigurationHelper  - Unable to load specified config location file:/home/vaneyck//.frontlinesms2-default/log4j.groovy : /home/vaneyck/.frontlinesms2-default/log4j.groovy (No such file or directory)
+| Compiling 8 source files...
+| Compiling 8 source files....
+| Compiling 8 source files.....
+| Packaging Grails application
+| Packaging Grails application.
+| Compiling 8 source files
+| Compiling 8 source files.
+| Compiling 8 source files..
+appName: frontlinesms-core
+2012-10-17 12:15:07,906 [main] WARN  cfg.ConfigurationHelper  - Unable to load specified config location file:/home/vaneyck//.frontlinesms2-default/log4j.groovy : /home/vaneyck/.frontlinesms2-default/log4j.groovy (No such file or directory)
+| Compiling 8 source files...
+| Compiling 8 source files....
+| Compiling 8 source files.....
+2012-10-17 12:15:19,981 [main] WARN  servlet.DefaultGrailsApplicationAttributes  - ApplicationContext not found in org.codehaus.groovy.grails.APPLICATION_CONTEXT attribute of servlet context.
+Starting Quartz Scheduler in QuartzFactoryBean
+BootStrap.init() : Env=TEST
+PORTS:
+> Port identifier: serial.CommPortIdentifier@1c0c66a
+> Port identifier: serial.CommPortIdentifier@1228521
+> Port identifier: serial.CommPortIdentifier@1526c5f
+> Port identifier: serial.CommPortIdentifier@490a12
+> Port identifier: serial.CommPortIdentifier@1342a0b
+> Port identifier: serial.CommPortIdentifier@1b43ff9
+END OF PORTS LIST
+DeviceDetectionService.init() :: detection disabled as grails environment is test.
+Hibernate: select this_.id as id11_0_, this_.date_sent as date2_11_0_, this_.dst as dst11_0_, this_.is_deleted as is4_11_0_, this_.message_id as message5_11_0_, this_.status as status11_0_ from dispatch this_ where this_.status=?
+Hibernate: select this_.id as id22_0_, this_1_.archived as archived22_0_, this_1_.deleted as deleted22_0_, this_1_.name as name22_0_, this_.date_created as date2_23_0_, this_.sent_message_text as sent3_23_0_, this_2_.http_method as http2_24_0_, this_2_.url as url24_0_, this_5_.autoreply_text as autoreply2_27_0_, this_5_.question as question27_0_, this_5_.yes_no as yes4_27_0_, this_6_.autoreply_text as autoreply2_28_0_, this_7_.default_action as default2_29_0_, this_7_.group_id as group3_29_0_, this_7_.join_autoreply_text as join4_29_0_, this_7_.leave_autoreply_text as leave5_29_0_, case when this_3_.id is not null then 3 when this_4_.id is not null then 4 when this_2_.id is not null then 2 when this_5_.id is not null then 5 when this_6_.id is not null then 6 when this_7_.id is not null then 7 when this_8_.id is not null then 8 when this_.id is not null then 1 end as clazz_0_ from activity this_ inner join message_owner this_1_ on this_.id=this_1_.id left outer join webconnection this_2_ on this_.id=this_2_.id left outer join ushahidi_webconnection this_3_ on this_.id=this_3_.id left outer join generic_webconnection this_4_ on this_.id=this_4_.id left outer join poll this_5_ on this_.id=this_5_.id left outer join autoreply this_6_ on this_.id=this_6_.id left outer join subscription this_7_ on this_.id=this_7_.id left outer join announcement this_8_ on this_.id=this_8_.id where this_1_.archived=? and this_1_.deleted=?
+\o/ FrontlineSMS started.
+| Running 274 spock tests...
+| Running 274 spock tests... 1 of 274
+| Running 274 spock tests... 2 of 274
+| Running 274 spock tests... 3 of 274
+| Running 274 spock tests... 4 of 274
+| Running 274 spock tests... 5 of 274
+| Running 274 spock tests... 6 of 274
+| Running 274 spock tests... 7 of 274
+| Running 274 spock tests... 8 of 274
+| Running 274 spock tests... 9 of 274
+| Running 274 spock tests... 10 of 274
+| Running 274 spock tests... 11 of 274
+| Running 274 spock tests... 12 of 274
+| Running 274 spock tests... 13 of 274
+| Running 274 spock tests... 14 of 274
+| Running 274 spock tests... 15 of 274
+| Running 274 spock tests... 16 of 274
+| Running 274 spock tests... 17 of 274
+| Running 274 spock tests... 18 of 274
+| Running 274 spock tests... 19 of 274
+| Running 274 spock tests... 20 of 274
+| Running 274 spock tests... 21 of 274
+| Running 274 spock tests... 22 of 274
+| Running 274 spock tests... 23 of 274
+| Running 274 spock tests... 24 of 274
+| Running 274 spock tests... 25 of 274
+| Running 274 spock tests... 26 of 274
+| Running 274 spock tests... 27 of 274
+| Running 274 spock tests... 28 of 274
+| Running 274 spock tests... 29 of 274
+| Running 274 spock tests... 30 of 274
+| Running 274 spock tests... 31 of 274
+| Running 274 spock tests... 32 of 274
+| Running 274 spock tests... 33 of 274
+| Running 274 spock tests... 34 of 274
+| Running 274 spock tests... 35 of 274
+| Running 274 spock tests... 36 of 274
+| Running 274 spock tests... 37 of 274
+| Running 274 spock tests... 38 of 274
+| Running 274 spock tests... 39 of 274
+| Running 274 spock tests... 40 of 274
+| Running 274 spock tests... 41 of 274
+| Running 274 spock tests... 42 of 274
+| Running 274 spock tests... 43 of 274
+| Running 274 spock tests... 44 of 274
+| Running 274 spock tests... 45 of 274
+| Running 274 spock tests... 46 of 274
+| Running 274 spock tests... 47 of 274
+| Running 274 spock tests... 48 of 274
+| Running 274 spock tests... 49 of 274
+| Running 274 spock tests... 50 of 274
+| Running 274 spock tests... 51 of 274
+| Running 274 spock tests... 52 of 274
+| Running 274 spock tests... 53 of 274
+| Running 274 spock tests... 54 of 274
+| Running 274 spock tests... 55 of 274
+| Running 274 spock tests... 56 of 274
+| Running 274 spock tests... 57 of 274
+| Running 274 spock tests... 58 of 274
+| Running 274 spock tests... 59 of 274
+| Running 274 spock tests... 60 of 274
+| Running 274 spock tests... 61 of 274
+| Running 274 spock tests... 62 of 274
+| Running 274 spock tests... 63 of 274
+| Running 274 spock tests... 64 of 274
+| Running 274 spock tests... 65 of 274
+| Running 274 spock tests... 66 of 274
+| Running 274 spock tests... 67 of 274
+| Running 274 spock tests... 68 of 274
+| Running 274 spock tests... 69 of 274
+| Running 274 spock tests... 70 of 274
+| Running 274 spock tests... 71 of 274
+| Running 274 spock tests... 72 of 274
+| Running 274 spock tests... 73 of 274
+| Running 274 spock tests... 74 of 274
+| Running 274 spock tests... 75 of 274
+| Running 274 spock tests... 76 of 274
+| Running 274 spock tests... 77 of 274
+| Running 274 spock tests... 78 of 274
+| Running 274 spock tests... 79 of 274
+| Running 274 spock tests... 80 of 274
+| Running 274 spock tests... 81 of 274
+| Running 274 spock tests... 82 of 274
+| Running 274 spock tests... 83 of 274
+| Running 274 spock tests... 84 of 274
+| Running 274 spock tests... 85 of 274
+| Running 274 spock tests... 86 of 274
+| Running 274 spock tests... 87 of 274
+| Running 274 spock tests... 88 of 274
+| Running 274 spock tests... 89 of 274
+| Running 274 spock tests... 90 of 274
+| Running 274 spock tests... 91 of 274
+| Running 274 spock tests... 92 of 274
+| Running 274 spock tests... 93 of 274
+| Running 274 spock tests... 94 of 274
+| Running 274 spock tests... 95 of 274
+| Running 274 spock tests... 96 of 274
+| Running 274 spock tests... 97 of 274
+| Running 274 spock tests... 98 of 274
+| Running 274 spock tests... 99 of 274
+| Running 274 spock tests... 100 of 274
+| Running 274 spock tests... 101 of 274
+| Running 274 spock tests... 102 of 274
+| Running 274 spock tests... 103 of 274
+| Running 274 spock tests... 104 of 274
+| Running 274 spock tests... 105 of 274
+| Running 274 spock tests... 106 of 274
+| Running 274 spock tests... 107 of 274
+| Running 274 spock tests... 108 of 274
+| Running 274 spock tests... 109 of 274
+| Running 274 spock tests... 110 of 274
+| Running 274 spock tests... 111 of 274
+| Running 274 spock tests... 112 of 274
+| Running 274 spock tests... 113 of 274
+| Running 274 spock tests... 114 of 274
+| Running 274 spock tests... 115 of 274
+| Running 274 spock tests... 116 of 274
+| Running 274 spock tests... 117 of 274
+| Running 274 spock tests... 118 of 274
+| Running 274 spock tests... 119 of 274
+| Running 274 spock tests... 120 of 274
+| Running 274 spock tests... 121 of 274
+| Running 274 spock tests... 122 of 274
+| Running 274 spock tests... 123 of 274
+| Running 274 spock tests... 124 of 274
+| Running 274 spock tests... 125 of 274
+| Running 274 spock tests... 126 of 274
+| Running 274 spock tests... 127 of 274
+| Running 274 spock tests... 128 of 274
+| Running 274 spock tests... 129 of 274
+| Running 274 spock tests... 130 of 274
+| Running 274 spock tests... 131 of 274
+| Running 274 spock tests... 132 of 274
+| Running 274 spock tests... 133 of 274
+| Running 274 spock tests... 134 of 274
+| Running 274 spock tests... 135 of 274
+| Running 274 spock tests... 136 of 274
+| Running 274 spock tests... 137 of 274
+| Running 274 spock tests... 138 of 274
+| Running 274 spock tests... 139 of 274
+| Running 274 spock tests... 140 of 274
+| Running 274 spock tests... 141 of 274
+| Running 274 spock tests... 142 of 274
+| Running 274 spock tests... 143 of 274
+| Running 274 spock tests... 144 of 274
+| Running 274 spock tests... 145 of 274
+| Running 274 spock tests... 146 of 274
+| Running 274 spock tests... 147 of 274
+| Running 274 spock tests... 148 of 274
+| Running 274 spock tests... 149 of 274
+| Running 274 spock tests... 150 of 274
+| Running 274 spock tests... 151 of 274
+| Running 274 spock tests... 152 of 274
+| Running 274 spock tests... 153 of 274
+| Running 274 spock tests... 154 of 274
+| Running 274 spock tests... 155 of 274
+| Running 274 spock tests... 156 of 274
+| Running 274 spock tests... 157 of 274
+| Running 274 spock tests... 158 of 274
+| Running 274 spock tests... 159 of 274
+| Running 274 spock tests... 160 of 274
+| Running 274 spock tests... 161 of 274
+| Running 274 spock tests... 162 of 274
+| Running 274 spock tests... 163 of 274
+| Running 274 spock tests... 164 of 274
+| Running 274 spock tests... 165 of 274
+| Running 274 spock tests... 166 of 274
+| Running 274 spock tests... 167 of 274
+| Running 274 spock tests... 168 of 274
+| Running 274 spock tests... 169 of 274
+| Running 274 spock tests... 170 of 274
+| Running 274 spock tests... 171 of 274
+| Running 274 spock tests... 172 of 274
+| Running 274 spock tests... 173 of 274
+| Running 274 spock tests... 174 of 274
+| Running 274 spock tests... 175 of 274
+| Running 274 spock tests... 176 of 274
+| Running 274 spock tests... 177 of 274
+| Running 274 spock tests... 178 of 274
+| Running 274 spock tests... 179 of 274
+| Running 274 spock tests... 180 of 274
+| Running 274 spock tests... 181 of 274
+| Running 274 spock tests... 182 of 274
+| Running 274 spock tests... 183 of 274
+| Running 274 spock tests... 184 of 274
+| Running 274 spock tests... 185 of 274
+| Running 274 spock tests... 186 of 274
+| Running 274 spock tests... 187 of 274
+| Running 274 spock tests... 188 of 274
+| Running 274 spock tests... 189 of 274
+| Running 274 spock tests... 190 of 274
+| Running 274 spock tests... 191 of 274
+| Running 274 spock tests... 192 of 274
+| Running 274 spock tests... 193 of 274
+| Running 274 spock tests... 194 of 274
+| Running 274 spock tests... 195 of 274
+| Running 274 spock tests... 196 of 274
+| Running 274 spock tests... 197 of 274
+| Running 274 spock tests... 198 of 274
+| Running 274 spock tests... 199 of 274
+| Running 274 spock tests... 200 of 274
+| Running 274 spock tests... 201 of 274
+| Running 274 spock tests... 202 of 274
+| Running 274 spock tests... 203 of 274
+| Running 274 spock tests... 204 of 274
+| Running 274 spock tests... 205 of 274
+| Running 274 spock tests... 206 of 274
+| Running 274 spock tests... 207 of 274
+| Running 274 spock tests... 208 of 274
+| Running 274 spock tests... 209 of 274
+| Running 274 spock tests... 210 of 274
+| Running 274 spock tests... 211 of 274
+| Running 274 spock tests... 212 of 274
+| Running 274 spock tests... 213 of 274
+| Running 274 spock tests... 214 of 274
+| Running 274 spock tests... 215 of 274
+| Running 274 spock tests... 216 of 274
+| Running 274 spock tests... 217 of 274
+| Running 274 spock tests... 218 of 274
+| Running 274 spock tests... 219 of 274
+| Running 274 spock tests... 220 of 274
+| Running 274 spock tests... 221 of 274
+| Running 274 spock tests... 222 of 274
+| Running 274 spock tests... 223 of 274
+| Running 274 spock tests... 224 of 274
+| Running 274 spock tests... 225 of 274
+| Running 274 spock tests... 226 of 274
+| Running 274 spock tests... 227 of 274
+| Running 274 spock tests... 228 of 274
+| Running 274 spock tests... 229 of 274
+| Running 274 spock tests... 230 of 274
+| Running 274 spock tests... 231 of 274
+| Running 274 spock tests... 232 of 274
+| Running 274 spock tests... 233 of 274
+| Running 274 spock tests... 234 of 274
+| Running 274 spock tests... 235 of 274
+| Running 274 spock tests... 236 of 274
+| Running 274 spock tests... 237 of 274
+| Running 274 spock tests... 238 of 274
+| Running 274 spock tests... 239 of 274
+| Running 274 spock tests... 240 of 274
+| Running 274 spock tests... 241 of 274
+| Running 274 spock tests... 242 of 274
+| Running 274 spock tests... 243 of 274
+| Running 274 spock tests... 244 of 274
+| Running 274 spock tests... 245 of 274
+| Running 274 spock tests... 246 of 274
+| Running 274 spock tests... 247 of 274
+| Running 274 spock tests... 248 of 274
+| Running 274 spock tests... 249 of 274
+| Running 274 spock tests... 250 of 274
+| Running 274 spock tests... 251 of 274
+| Running 274 spock tests... 252 of 274
+| Running 274 spock tests... 253 of 274
+| Running 274 spock tests... 254 of 274
+| Running 274 spock tests... 255 of 274
+| Running 274 spock tests... 256 of 274
+| Running 274 spock tests... 257 of 274
+| Running 274 spock tests... 258 of 274
+| Running 274 spock tests... 259 of 274
+| Running 274 spock tests... 260 of 274
+| Running 274 spock tests... 261 of 274
+| Running 274 spock tests... 262 of 274
+| Running 274 spock tests... 263 of 274
+| Running 274 spock tests... 264 of 274
+| Running 274 spock tests... 265 of 274
+| Running 274 spock tests... 266 of 274
+| Running 274 spock tests... 267 of 274
+| Running 274 spock tests... 268 of 274
+| Running 274 spock tests... 269 of 274
+| Running 274 spock tests... 270 of 274
+| Running 274 spock tests... 271 of 274
+| Running 274 spock tests... 272 of 274
+| Running 274 spock tests... 273 of 274
+| Running 274 spock tests... 274 of 274
+| Running 274 spock tests... 275 of 274
+| Running 274 spock tests... 276 of 274
+| Running 274 spock tests... 277 of 274
+| Running 274 spock tests... 278 of 274
+| Running 274 spock tests... 279 of 274
+| Running 274 spock tests... 280 of 274
+| Running 274 spock tests... 281 of 274
+| Running 274 spock tests... 282 of 274
+| Running 274 spock tests... 283 of 274
+| Running 274 spock tests... 284 of 274
+| Running 274 spock tests... 285 of 274
+| Running 274 spock tests... 286 of 274
+| Running 274 spock tests... 287 of 274
+| Running 274 spock tests... 288 of 274
+| Running 274 spock tests... 289 of 274
+| Running 274 spock tests... 290 of 274
+| Running 274 spock tests... 291 of 274
+| Running 274 spock tests... 292 of 274
+| Running 274 spock tests... 293 of 274
+| Running 274 spock tests... 294 of 274
+| Running 274 spock tests... 295 of 274
+| Running 274 spock tests... 296 of 274
+| Running 274 spock tests... 297 of 274
+| Running 274 spock tests... 298 of 274
+| Running 274 spock tests... 299 of 274
+| Running 274 spock tests... 300 of 274
+| Running 274 spock tests... 301 of 274
+| Running 274 spock tests... 302 of 274
+| Running 274 spock tests... 303 of 274
+| Running 274 spock tests... 304 of 274
+| Running 274 spock tests... 305 of 274
+| Running 274 spock tests... 306 of 274
+| Running 274 spock tests... 307 of 274
+| Running 274 spock tests... 308 of 274
+| Running 274 spock tests... 309 of 274
+| Running 274 spock tests... 310 of 274
+| Running 274 spock tests... 311 of 274
+| Running 274 spock tests... 312 of 274
+| Running 274 spock tests... 313 of 274
+| Running 274 spock tests... 314 of 274
+| Running 274 spock tests... 315 of 274
+| Running 274 spock tests... 316 of 274
+| Running 274 spock tests... 317 of 274
+| Running 274 spock tests... 318 of 274
+| Running 274 spock tests... 319 of 274
+| Running 274 spock tests... 320 of 274
+| Running 274 spock tests... 321 of 274
+| Running 274 spock tests... 322 of 274
+| Running 274 spock tests... 323 of 274
+| Running 274 spock tests... 324 of 274
+| Running 274 spock tests... 325 of 274
+| Running 274 spock tests... 326 of 274
+| Running 274 spock tests... 327 of 274
+| Running 274 spock tests... 328 of 274
+| Running 274 spock tests... 329 of 274
+| Running 274 spock tests... 330 of 274
+| Running 274 spock tests... 331 of 274
+| Running 274 spock tests... 332 of 274
+| Running 274 spock tests... 333 of 274
+| Running 274 spock tests... 334 of 274
+| Running 274 spock tests... 335 of 274
+| Running 274 spock tests... 336 of 274
+| Running 274 spock tests... 337 of 274
+| Running 274 spock tests... 338 of 274
+| Running 274 spock tests... 339 of 274
+| Running 274 spock tests... 340 of 274
+| Running 274 spock tests... 341 of 274
+| Running 274 spock tests... 342 of 274
+| Running 274 spock tests... 343 of 274
+| Running 274 spock tests... 344 of 274
+| Running 274 spock tests... 345 of 274
+| Running 274 spock tests... 346 of 274
+| Running 274 spock tests... 347 of 274
+| Running 274 spock tests... 348 of 274
+| Running 274 spock tests... 349 of 274
+| Running 274 spock tests... 350 of 274
+| Running 274 spock tests... 351 of 274
+| Running 274 spock tests... 352 of 274
+| Running 274 spock tests... 353 of 274
+| Running 274 spock tests... 354 of 274
+| Running 274 spock tests... 355 of 274
+| Running 274 spock tests... 356 of 274
+| Running 274 spock tests... 357 of 274
+| Running 274 spock tests... 358 of 274
+| Running 274 spock tests... 359 of 274
+| Running 274 spock tests... 360 of 274
+| Running 274 spock tests... 361 of 274
+| Running 274 spock tests... 362 of 274
+| Running 274 spock tests... 363 of 274
+| Running 274 spock tests... 364 of 274
+| Running 274 spock tests... 365 of 274
+| Running 274 spock tests... 366 of 274
+| Running 274 spock tests... 367 of 274
+| Running 274 spock tests... 368 of 274
+| Running 274 spock tests... 369 of 274
+| Running 274 spock tests... 370 of 274
+| Running 274 spock tests... 371 of 274
+| Running 274 spock tests... 372 of 274
+| Running 274 spock tests... 373 of 274
+| Running 274 spock tests... 374 of 274
+| Running 274 spock tests... 375 of 274
+| Running 274 spock tests... 376 of 274
+| Running 274 spock tests... 377 of 274
+| Running 274 spock tests... 378 of 274
+| Running 274 spock tests... 379 of 274
+| Running 274 spock tests... 380 of 274
+| Running 274 spock tests... 381 of 274
+| Running 274 spock tests... 382 of 274
+| Running 274 spock tests... 383 of 274
+| Running 274 spock tests... 384 of 274
+| Running 274 spock tests... 385 of 274
+| Running 274 spock tests... 386 of 274
+| Running 274 spock tests... 387 of 274
+| Running 274 spock tests... 388 of 274
+| Running 274 spock tests... 389 of 274
+| Running 274 spock tests... 390 of 274
+| Running 274 spock tests... 391 of 274
+| Failure:  should translate a CIncomingMessage into a Fmessage then save it then deliver it to KeywordProcessor(routing.IncomingSmslibRouteSpec)
+|  Condition not satisfied:
+
+messages[0].messageOwner == poll
+|       |   |            |  |
+|       |   null         |  frontlinesms2.Poll : 238
+|       |                false
+|       frontlinesms2.Fmessage : 906
+[frontlinesms2.Fmessage : 906]
+
+	at routing.IncomingSmslibRouteSpec.should translate a CIncomingMessage into a Fmessage then save it then deliver it to KeywordProcessor(IncomingSmslibRouteSpec.groovy:42)
+| Running 274 spock tests... 392 of 274
+| Completed 274 spock tests, 1 failed in 63494ms
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 2594] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 2594]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 2594]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-44]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 1
+DispatchRouterService.slip() : Sending with route: out-modem-44
+DispatchRouterService.slip() : Routing to seda:out-44
+GroovyHayesPortHandler.getResponseText() : Getting response for AT+CMGS=25
+GroovyHayesState.getResponse() : request=AT+CMGS=25
+GroovyHayesState.getResponse() : For request AT+CMGS=25, returning: frontlinesms2.dev.GroovyHayesResponse@176bad7
+GroovyHayesPortHandler.getResponseText() : Got response as HayesState (OK -> frontlinesms2.dev.GroovyHayesState@1e48964)
+GroovyHayesPortHandler.getResponseText() : Next state responses: [.+, frontlinesms2.dev.MockModemUtils$_createMockPortHandler_closure5@f81abf]
+APPENDED RESPONSE: OK
+RECEIVED COMPLETE REQUEST: AT+CMGS=25
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 2594] with previous endpoint seda://out-44 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 2594]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 2594]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+GroovyHayesPortHandler.getResponseText() : Getting response for 0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C
+GroovyHayesState.getResponse() : request=0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C
+GroovyHayesState.getResponse() : For request 0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C, returning: frontlinesms2.dev.MockModemUtils$_createMockPortHandler_closure5@f81abf
+Added sent message [handler=frontlinesms2.dev.GroovyHayesPortHandler@6fd4e6,request=0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C]; sentMessages now [0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C, 0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C, 0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C]
+GroovyHayesPortHandler.getResponseText() : Got response as HayesState (+CMGS: 0OK -> frontlinesms2.dev.GroovyHayesState@ae08d1)
+GroovyHayesPortHandler.getResponseText() : Next state responses: [AT, OK, AT+CSMS?, SMS: 1,1,1,1OK, AT+CMEE=1, OK, AT+STSF=1, OK, AT+CPIN?, +CPIN: READY, AT+CGMI, WAVECOM MODEMOK, AT+CGMM, 900POK, AT+CNUM, +CNUM :"Phone", "0712345678",129OK, AT+CGSN, 123456789099998OK, AT+CIMI, 254123456789012OK, AT+COPS=0, OK, AT+CLIP=1, OK, ATE0, OK, AT+CREG?, +CREG: 1,1OK, AT+CMGF=0, OK, +++, , AT+CPMS?, +CPMS:"SM",0,100OK, AT+CPMS="ME", ERROR, AT+CPMS="SM", OK, AT\+CMGL=\d, frontlinesms2.dev.MockModemUtils$_createMockPortHandler_closure3@1510704, AT\+CMGD=\d+, frontlinesms2.dev.MockModemUtils$_createMockPortHandler_closure4@1c4ddff, AT\+CMGS=\d+, frontlinesms2.dev.GroovyHayesResponse@176bad7]
+APPENDED RESPONSE: +CMGS: 0OK
+RECEIVED COMPLETE REQUEST: 0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C
+GroovyHayesPortHandler.getResponseText() : Getting response for +++
+GroovyHayesState.getResponse() : request=+++
+GroovyHayesState.getResponse() : For request +++, returning: 
+GroovyHayesPortHandler.getResponseText() : Got response as String ()
+APPENDED RESPONSE: 
+RECEIVED COMPLETE REQUEST: +++
+| Error 2012-10-17 12:16:30,321 [Camel (camelContext) thread #21 - OnCompletion] ERROR processor.DefaultErrorHandler  - Failed delivery for (MessageId: ID-vaneyck-Inspiron-N5110-34296-1350465317962-0-142 on ExchangeId: ID-vaneyck-Inspiron-N5110-34296-1350465317962-0-143). Exhausted after delivery attempt: 1 caught: org.apache.camel.RuntimeCamelException: org.springframework.beans.factory.BeanCreationNotAllowedException: Error creating bean with name 'dispatchRouterService': Singleton bean creation not allowed while the singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
+Message: org.springframework.beans.factory.BeanCreationNotAllowedException: Error creating bean with name 'dispatchRouterService': Singleton bean creation not allowed while the singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
+    Line | Method
+->> 1221 | wrapRuntimeCamelException in org.apache.camel.util.ObjectHelper
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+|     51 | lookup                    in org.apache.camel.impl.PropertyPlaceholderDelegateRegistry
+|    136 | lookupBean . . . . . . .  in org.apache.camel.component.bean.RegistryBean
+|     62 | getBean                   in     ''
+|     83 | process . . . . . . . . . in org.apache.camel.component.bean.BeanProcessor
+|     73 | process                   in org.apache.camel.util.AsyncProcessorHelper
+|     99 | processNext . . . . . . . in org.apache.camel.processor.DelegateAsyncProcessor
+|     90 | process                   in     ''
+|     71 | process . . . . . . . . . in org.apache.camel.management.InstrumentationProcessor
+|     73 | process                   in org.apache.camel.util.AsyncProcessorHelper
+|     99 | processNext . . . . . . . in org.apache.camel.processor.DelegateAsyncProcessor
+|     90 | process                   in     ''
+|     91 | process . . . . . . . . . in org.apache.camel.processor.interceptor.TraceInterceptor
+|     73 | process                   in org.apache.camel.util.AsyncProcessorHelper
+|    333 | processErrorHandler . . . in org.apache.camel.processor.RedeliveryErrorHandler
+|    223 | process                   in     ''
+|     45 | processNext . . . . . . . in org.apache.camel.processor.RouteContextProcessor
+|     90 | process                   in org.apache.camel.processor.DelegateAsyncProcessor
+|    304 | process . . . . . . . . . in org.apache.camel.processor.interceptor.DefaultChannel
+|     45 | processNext               in org.apache.camel.processor.RouteContextProcessor
+|     90 | process . . . . . . . . . in org.apache.camel.processor.DelegateAsyncProcessor
+|    122 | process                   in org.apache.camel.processor.UnitOfWorkProcessor
+|    150 | processAsync . . . . . .  in     ''
+|    117 | process                   in     ''
+|     99 | process . . . . . . . . . in org.apache.camel.util.AsyncProcessorHelper
+|     86 | process                   in org.apache.camel.processor.DelegateAsyncProcessor
+|     97 | doProcess . . . . . . . . in org.apache.camel.processor.OnCompletionProcessor
+|    161 | call                      in org.apache.camel.processor.OnCompletionProcessor$OnCompletionSynchronization$1
+|    158 | call . . . . . . . . . .  in     ''
+|    334 | innerRun                  in java.util.concurrent.FutureTask$Sync
+|    166 | run . . . . . . . . . . . in java.util.concurrent.FutureTask
+|   1110 | runWorker                 in java.util.concurrent.ThreadPoolExecutor
+|    603 | run . . . . . . . . . . . in java.util.concurrent.ThreadPoolExecutor$Worker
+^    679 | run                       in java.lang.Thread
+
+Caused by BeanCreationNotAllowedException: Error creating bean with name 'dispatchRouterService': Singleton bean creation not allowed while the singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
+->>   66 | lookup                    in org.apache.camel.spring.spi.ApplicationContextRegistry
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+|     49 | lookup                    in org.apache.camel.impl.PropertyPlaceholderDelegateRegistry
+|    136 | lookupBean . . . . . . .  in org.apache.camel.component.bean.RegistryBean
+|     62 | getBean                   in     ''
+|     83 | process . . . . . . . . . in org.apache.camel.component.bean.BeanProcessor
+|     73 | process                   in org.apache.camel.util.AsyncProcessorHelper
+|     99 | processNext . . . . . . . in org.apache.camel.processor.DelegateAsyncProcessor
+|     90 | process                   in     ''
+|     71 | process . . . . . . . . . in org.apache.camel.management.InstrumentationProcessor
+|     73 | process                   in org.apache.camel.util.AsyncProcessorHelper
+|     99 | processNext . . . . . . . in org.apache.camel.processor.DelegateAsyncProcessor
+|     90 | process                   in     ''
+|     91 | process . . . . . . . . . in org.apache.camel.processor.interceptor.TraceInterceptor
+|     73 | process                   in org.apache.camel.util.AsyncProcessorHelper
+|    333 | processErrorHandler . . . in org.apache.camel.processor.RedeliveryErrorHandler
+|    223 | process                   in     ''
+|     45 | processNext . . . . . . . in org.apache.camel.processor.RouteContextProcessor
+|     90 | process                   in org.apache.camel.processor.DelegateAsyncProcessor
+|    304 | process . . . . . . . . . in org.apache.camel.processor.interceptor.DefaultChannel
+|     45 | processNext               in org.apache.camel.processor.RouteContextProcessor
+|     90 | process . . . . . . . . . in org.apache.camel.processor.DelegateAsyncProcessor
+|    122 | process                   in org.apache.camel.processor.UnitOfWorkProcessor
+|    150 | processAsync . . . . . .  in     ''
+|    117 | process                   in     ''
+|     99 | process . . . . . . . . . in org.apache.camel.util.AsyncProcessorHelper
+|     86 | process                   in org.apache.camel.processor.DelegateAsyncProcessor
+|     97 | doProcess . . . . . . . . in org.apache.camel.processor.OnCompletionProcessor
+|    161 | call                      in org.apache.camel.processor.OnCompletionProcessor$OnCompletionSynchronization$1
+|    158 | call . . . . . . . . . .  in     ''
+|    334 | innerRun                  in java.util.concurrent.FutureTask$Sync
+|    166 | run . . . . . . . . . . . in java.util.concurrent.FutureTask
+|   1110 | runWorker                 in java.util.concurrent.ThreadPoolExecutor
+|    603 | run . . . . . . . . . . . in java.util.concurrent.ThreadPoolExecutor$Worker
+^    679 | run                       in java.lang.Thread
+GroovyHayesPortHandler.getResponseText() : Getting response for AT+CPMS="SM"
+GroovyHayesState.getResponse() : request=AT+CPMS="SM"
+GroovyHayesState.getResponse() : For request AT+CPMS="SM", returning: OK
+GroovyHayesPortHandler.getResponseText() : Got response as String (OK)
+APPENDED RESPONSE: OK
+RECEIVED COMPLETE REQUEST: AT+CPMS="SM"
+GroovyHayesPortHandler.getResponseText() : Getting response for AT+CMGL=4
+GroovyHayesState.getResponse() : request=AT+CMGL=4
+GroovyHayesState.getResponse() : For request AT+CMGL=4, returning: frontlinesms2.dev.MockModemUtils$_createMockPortHandler_closure3@1510704
+Hello I have been called.  What am I going to do?
+I ahve been given this object: frontlinesms2.dev.GroovyHayesPortHandler@6fd4e6
+Created CMGL response: 
+GroovyHayesPortHandler.getResponseText() : Got response as String (OK)
+APPENDED RESPONSE: OK
+RECEIVED COMPLETE REQUEST: AT+CMGL=4
+GroovyHayesPortHandler.getResponseText() : Getting response for +++
+GroovyHayesState.getResponse() : request=+++
+GroovyHayesState.getResponse() : For request +++, returning: 
+GroovyHayesPortHandler.getResponseText() : Got response as String ()
+APPENDED RESPONSE: 
+RECEIVED COMPLETE REQUEST: +++
+GroovyHayesPortHandler.getResponseText() : Getting response for AT+CPMS="SM"
+GroovyHayesState.getResponse() : request=AT+CPMS="SM"
+GroovyHayesState.getResponse() : For request AT+CPMS="SM", returning: OK
+GroovyHayesPortHandler.getResponseText() : Got response as String (OK)
+APPENDED RESPONSE: OK
+RECEIVED COMPLETE REQUEST: AT+CPMS="SM"
+GroovyHayesPortHandler.getResponseText() : Getting response for AT+CMGL=4
+GroovyHayesState.getResponse() : request=AT+CMGL=4
+GroovyHayesState.getResponse() : For request AT+CMGL=4, returning: frontlinesms2.dev.MockModemUtils$_createMockPortHandler_closure3@1510704
+Hello I have been called.  What am I going to do?
+I ahve been given this object: frontlinesms2.dev.GroovyHayesPortHandler@6fd4e6
+Created CMGL response: 
+GroovyHayesPortHandler.getResponseText() : Got response as String (OK)
+APPENDED RESPONSE: OK
+RECEIVED COMPLETE REQUEST: AT+CMGL=4
+| Tests FAILED  - view reports in target/test-reports
