@@ -115,8 +115,8 @@ class ActivityController {
 		def collidingKeywords = [:]
 		def currentKeyword
 		topLevelKeywords.toUpperCase().split(",").collect { it.trim() }.each { 
-			currentKeyword = Keyword.findByValueAndIsTopLevel(it, true)
-			if(currentKeyword && !currentKeyword.activity.archived && !currentKeyword.activity.deleted)
+			currentKeyword = Keyword.getFirstLevelMatch(it)
+			if(currentKeyword)
 				collidingKeywords << [(currentKeyword.value):"'${currentKeyword.activity.name}'"]
 		}
 		println "colliding keywords:: $collidingKeywords"
