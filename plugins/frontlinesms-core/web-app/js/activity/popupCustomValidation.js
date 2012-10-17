@@ -33,7 +33,7 @@ function genericSortingValidation() {
 		var isValid = true;
 		var keywords = {};
 		var input = $(element);
-		var rawKeywords = value;
+		var rawKeywords = value.toUpperCase();
 		if (rawKeywords.charAt( rawKeywords.length-1 ) == ",")
 			rawKeywords = rawKeywords.slice(0, -1);
 		input.removeClass("error");
