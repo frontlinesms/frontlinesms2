@@ -5,11 +5,11 @@
 	</div>
 	<div class="input">
 		<label for="keywords"><g:message code="activity.generic.keywords.title"/></label>
-		<g:textField name="keywords" class="required validcommas sorting-generic-unique sorting-generic-no-spaces" value="${activityInstanceToEdit?.keywords? activityInstanceToEdit?.keywords*.value.join(',') : ''}" disabled="${(activityInstanceToEdit?.keywords.size() == 1) && (activityInstanceToEdit?.keywords[0].value == '')}"/>
+		<g:textField name="keywords" class="required validcommas sorting-generic-unique sorting-generic-no-spaces" value="${activityInstanceToEdit?.keywords? activityInstanceToEdit?.keywords*.value.join(',') : ''}" disabled="${(activityInstanceToEdit?.keywords?.size() == 1) && (activityInstanceToEdit?.keywords[0].value == '')}"/>
 	</div>
 	<div class="input optional">
 		<label for="blankKeyword"><g:message code="activity.generic.no.keywords"/></label>
-		<g:checkBox name="blankKeyword" checked="${(activityInstanceToEdit?.keywords.size() == 1) && (activityInstanceToEdit?.keywords[0].value == '')}"/>
+		<g:checkBox name="blankKeyword" checked="${(activityInstanceToEdit?.keywords?.size() == 1) && (activityInstanceToEdit?.keywords[0].value == '')}"/>
 	</div>
 	<r:script>
 	$(function() {
