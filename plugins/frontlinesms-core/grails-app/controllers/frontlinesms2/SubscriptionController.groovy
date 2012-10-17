@@ -72,7 +72,12 @@ class SubscriptionController extends ActivityController {
 
 	private def renderJsonErrors(subscription) {
 		println "Error:: ${subscription.errors.allErrors}"
-		def errorMessages = subscription.errors.allErrors.collect { message(error:it) }.join("\n")
+		def collidingKeywords = getCollidingKeywords(params.topLevelKeywords)
+		def errorMessages
+		if (collidingKeywords)
+			errorMessages = collidingKeywords.collect { message(code:'activity.generic.keyword.in.use', args: [it.key, it.value]) }.join("\n")
+		else
+			errorMessages = subscription.errors.allErrors.collect { message(error:it) }.join("\n")
 		withFormat {
 			json {
 				render([ok:false, text:errorMessages] as JSON)
