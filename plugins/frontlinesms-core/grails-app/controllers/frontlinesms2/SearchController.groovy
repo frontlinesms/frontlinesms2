@@ -30,7 +30,7 @@ class SearchController extends MessageController {
 			searchInstance.group = params.groupId ? Group.get(params.groupId) : null
 			searchInstance.status = params.messageStatus ?: null
 			searchInstance.activityId = params.activityId ?: null
-			searchInstance.inArchive = params.activityId ? true : params.inArchive ? true : false
+			searchInstance.inArchive = params.activityId || params.inArchive
 			searchInstance.startDate = params.startDate ?: null
 			searchInstance.endDate = params.endDate ?: null
 			searchInstance.customFields = [:]
@@ -38,22 +38,18 @@ class SearchController extends MessageController {
 				if(params[customFieldName])
 					searchInstance.customFields[customFieldName] = params[customFieldName]
 			}
-			searchInstance.save(failOnError: true, flush: true)
+			searchInstance.save(failOnError:true, flush:true)
 		}
 
 		def rawSearchResults = Fmessage.search(search)
-		def searchResults = rawSearchResults.listDistinct(sort:"date", order:"desc")
 		int offset = params.offset?.toInteger()?:0
 		int max = params.max?.toInteger()?:50
-		def paginatedSearchResults = searchResults.subList(offset,Math.min(offset + max, searchResults.size()))
-		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		flash.message = params.flashMessage
-		[searchDescription: searchDescription,
-				search: search,
-				checkedMessageCount: checkedMessageCount,
-				messageInstanceList: paginatedSearchResults,
-				messageInstanceTotal: searchResults.size()] << show() << no_search()
+		[searchDescription:getSearchDescription(search), search:search,
+				checkedMessageCount:params.checkedMessageList?.tokenize(',')?.size(),
+				messageInstanceList:rawSearchResults.listDistinct(sort:'date', order:'desc', offset:offset, max:max),
+				messageInstanceTotal:rawSearchResults.count()] << show() << no_search()
 	}
 
 	def show() {

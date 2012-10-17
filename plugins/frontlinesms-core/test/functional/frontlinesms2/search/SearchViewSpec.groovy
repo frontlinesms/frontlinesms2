@@ -292,8 +292,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			multipleMessageDetails.multiple_moveActions.displayed
 	}
 
-	def "ensure dispatch count in message results is correct"(){
+	def "ensure dispatch count in message results is correct"() {
 		given:
+			Fmessage.build(src:'3333333')
+			Fmessage.build()
+
 			def message = new Fmessage(text:"experiment")
 			message.addToDispatches(dst:'333', status:DispatchStatus.PENDING)
 			message.addToDispatches(dst:'332', status:DispatchStatus.PENDING)
@@ -306,7 +309,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.searchBtn.click()
 		then:
 			waitFor{ searchsidebar.searchBtn.displayed }
-			messageList.messages.size() == 1
+			messageList.messages.size() == 2
 			messageList.messages[0].text == 'experiment'
 			messageList.messages[0].source == 'To: 3 recipients'
 	}
