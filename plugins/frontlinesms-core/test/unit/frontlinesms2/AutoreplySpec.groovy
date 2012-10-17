@@ -21,7 +21,8 @@ class AutoreplySpec extends Specification {
 	def "Test constraints"() {
 		when:
 			def autoreply = new Autoreply(name:name, autoreplyText:replyText)
-			if(addKeyword) autoreply.addToKeywords(Mock(Keyword))
+			if(addKeyword)
+				autoreply.addToKeywords(Mock(Keyword))
 		then:
 			autoreply.validate() == valid
 		where:
@@ -77,7 +78,7 @@ class AutoreplySpec extends Specification {
 	}
 
 	private def mockKeyword(String value) {
-		new Keyword(value:value)
+		return Mock(Keyword)
 	}
 
 	private def mockFmessage(String messageText, String src=null) {
