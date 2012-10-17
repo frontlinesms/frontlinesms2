@@ -102,7 +102,7 @@
 	function updateConfirmationMessage() {
 		var keywordConfirmationText;
 		if(!(isGroupChecked("blankKeyword"))) {
-			keywordConfirmationText = $('#keyword').val().toUpperCase();
+			keywordConfirmationText = $('#keywords').val().toUpperCase();
 		} else {
 			keywordConfirmationText = i18n("autoreply.blank.keyword");
 		}
