@@ -158,6 +158,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.save(failOnError:true, flush:true)
 			controller.params.ownerId = poll.id
 			controller.params.choiceC = "Arnold Vandam"
+			controller.params.messageText = "question"
 		when:
 			controller.save()
 			poll = Poll.get(poll.id)
