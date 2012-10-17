@@ -123,7 +123,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			create.click()
 		then: 'Summary tab should NOT be displayed'
 			confirm.displayed
-			waitFor { errorText.contains('frontlinesms2.keyword.value.validator.error')}
+			waitFor { errorText.contains("the keyword mango is already in use by activity 'fruits'")}
 	}
 
 	def launchAutoreplyPopup(String tab = ''){
