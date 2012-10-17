@@ -159,6 +159,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.ownerId = poll.id
 			controller.params.choiceC = "Arnold Vandam"
 			controller.params.messageText = "question"
+			controller.params.dontSendMessage=true
 		when:
 			controller.save()
 			poll = Poll.get(poll.id)
@@ -167,6 +168,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.ownerId = poll.id
 			controller.params.question = "Who is worse?"
+			controller.params.dontSendMessage=true
 			controller.save()
 			poll = Poll.get(poll.id)
 		then:
@@ -175,6 +177,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.ownerId = poll.id
 			controller.params.enableAutoreply = "true"
 			controller.params.autoreplyText = "Thank you for replying to this awesome poll"
+			controller.params.dontSendMessage=true
 			controller.save()
 			poll = Poll.get(poll.id)
 		then:
