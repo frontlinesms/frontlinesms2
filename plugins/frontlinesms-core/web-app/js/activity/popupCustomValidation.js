@@ -29,7 +29,29 @@ function aliasCustomValidation(){
 }
 
 function genericSortingValidation() {
-	jQuery.validator.addMethod("sorting-generic", function(value, element) {
+	jQuery.validator.addMethod("sorting-generic-unique", function(value, element) {
+		var isValid = true;
+		var keywords = {};
+		var input = $(element);
+		var rawKeywords = value.toUpperCase();
+		if (rawKeywords.charAt( rawKeywords.length-1 ) == ",")
+			rawKeywords = rawKeywords.slice(0, -1);
+		input.removeClass("error");
+		$.each(rawKeywords.split(","), function(index, value){
+			var keyword = value.trim();
+			if(keyword in keywords) {
+				//not unique
+				input.addClass("error");
+				isValid = false;
+			}
+			else {
+				keywords[keyword] = true;
+			}
+		});
+		return isValid;
+	}, i18n("activity.generic.sort.validation.unique.error"));
+
+	jQuery.validator.addMethod("sorting-generic-no-spaces", function(value, element) {
 		var isValid = true;
 		var keywords = {};
 		var input = $(element);
@@ -44,15 +66,10 @@ function genericSortingValidation() {
 				input.addClass("error");
 				isValid = false;
 			}
-			else if(keyword in keywords) {
-				//not unique
-				input.addClass("error");
-				isValid = false;
-			}
 			else {
 				keywords[keyword] = true;
 			}
 		});
 		return isValid;
-	}, i18n("activity.generic.sort.validation.error"));
+	}, i18n("validation.nospaces.error"));
 };
