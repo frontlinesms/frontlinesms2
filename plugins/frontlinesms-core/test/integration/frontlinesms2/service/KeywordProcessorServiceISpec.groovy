@@ -67,6 +67,22 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			'top bottom1'           | true     | true
 	}
 
+	def "blank top-level keyword should be matched"() {
+		given:
+			Autoreply a = new Autoreply(name:"test", autoreplyText:"testing")
+			a.addToKeywords(new Keyword(value:"", isTopLevel:true))
+			Autoreply.metaClass.processKeyword = { Fmessage m, Keyword k -> 
+				println "processing keyword $k, value: ${k.value}"
+				k.ownerDetail = "PROCESSED"
+				k.save(failOnError:true)
+			}
+			a.save(failOnError:true)
+		when:
+			keywordProcessorService.process(createFmessage("I'm just an innocent FMessage"))
+		then:
+			Keyword.findAllByOwnerDetail("PROCESSED") == Keyword.findAllByValue('')
+	}
+
 	private def createTestPoll(archived=false, deleted=false) {
 		Poll p = new Poll(name:'test poll', archived: archived, deleted: deleted)
 		p.addToKeywords(new Keyword(value:"TOP", isTopLevel: true))
