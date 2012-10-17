@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import frontlinesms2.api.*
+
 class ApiController {
 	def grailsApplication
 	def index() {
