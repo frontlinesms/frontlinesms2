@@ -32,10 +32,15 @@ class WebconnectionController extends ActivityController {
 		}
 		catch(Exception e) {
 			e.printStackTrace()
-			def collidingKeywords = getCollidingKeywords(params.keywords)
+			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords)
 			def errors
 			if (collidingKeywords)
-				errors = collidingKeywords.collect { message(code:'activity.generic.keyword.in.use', args: [it.key, it.value]) }.join("\n")
+				errors = collidingKeywords.collect { 
+					if(it.key == '')
+						message(code:'activity.generic.global.keyword.in.use', args: [it.value])
+					else
+						message(code:'activity.generic.keyword.in.use', args: [it.key, it.value])
+				}.join("\n")
 			else
 				errors = webconnectionInstance.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
 			withFormat {
