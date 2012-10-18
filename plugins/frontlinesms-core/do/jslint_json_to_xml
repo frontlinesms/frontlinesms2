@@ -1,4 +1,6 @@
 #!/bin/groovy
+@Grab('commons-lang:commons-lang:2.5')
+import org.apache.commons.lang.StringEscapeUtils
 import groovy.json.JsonSlurper
 import groovy.json.JsonException
 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))
@@ -7,7 +9,7 @@ def indent = { count -> print('\t'*count) }
 def tag = { ind, tagName, Map attrs=[:], close=true ->
 	indent ind
 	print "<$tagName"
-	attrs.each { k, v -> v = v as String; print " $k=\"${v.replace('"', '&quot;')}\"" }
+	attrs.each { k, v -> v = v as String; print " $k=\"${StringEscapeUtils.escapeXml(v.replace('"', '&quot;'))}\"" }
 	if(close) print '/'
 	println '>'
 }
