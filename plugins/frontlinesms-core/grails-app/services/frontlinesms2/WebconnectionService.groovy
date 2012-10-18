@@ -39,11 +39,13 @@ class WebconnectionService{
 		webconnectionInstance.name = params.name
 		webconnectionInstance.initialize(params)
 		webconnectionInstance.save(flush:true, failOnError:true)
-		(params.sorting == 'disabled')? {println "##### WebconnectionService.saveInstance() # removing keywords"} : null
-		if(params.sorting == 'global')
+		if (params.sorting == 'disabled') {
+			println "##### WebconnectionService.saveInstance() # removing keywords"
+		}
+		else if(params.sorting == 'global')
 			webconnectionInstance.addToKeywords(new Keyword(value:'', isTopLevel:true))
 		else{
-			def keywords = (params.sorting == 'enabled') ? '' : params.keywords?.toUpperCase().replaceAll(/\s/, "").split(',')
+			def keywords = params.keywords?.toUpperCase().replaceAll(/\s/, "").split(',')
 			keywords.collect { new Keyword(value:it.trim(), isTopLevel:true) }.each { webconnectionInstance.addToKeywords(it) }
 		}
 		webconnectionInstance.save(flush:true, failOnError:true)
