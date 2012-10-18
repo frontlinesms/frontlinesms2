@@ -51,7 +51,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 		then: 'autoreply message page should be open'
 			header.title == 'fruits autoreply'
 		when: 'edit button is clicked'
-			moreActions.value("edit").click()
+			header.moreActions.value("edit").click()
 		then: 'autoreply wizard should open'
 			waitFor { at AutoreplyCreateDialog }
 		when: 'Text messages is edited'
@@ -123,7 +123,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			create.click()
 		then: 'Summary tab should NOT be displayed'
 			confirm.displayed
-			waitFor { errorText.contains('frontlinesms2.keyword.value.validator.error')}
+			waitFor { errorText.contains("the keyword mango is already in use by activity 'fruits'")}
 	}
 
 	def launchAutoreplyPopup(String tab = ''){
