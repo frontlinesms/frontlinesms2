@@ -86,7 +86,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.ownerId = webconnection.id
 			controller.params.name = "Test Connection"
 			controller.params.httpMethod = "post"
-			controller.params.keyword = "Test"
+			controller.params.keywords = "Test"
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = "username"
 			controller.params.'param-value' = "geoffrey"
@@ -108,7 +108,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webconnection.save(failOnError:true)
 			controller.params.ownerId = webconnection.id
 			controller.params.name = "Ushahidi Connection"
-			controller.params.keyword = "Test"
+			controller.params.keywords = "Test"
 			controller.params.httpMethod = "post"
 			controller.params.'param-name' = ""
 			controller.params.webconnectionType = "generic"
@@ -128,7 +128,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.ownerId = connection.id
 			controller.params.name = "Ushahidi Connection"
 			controller.params.url = "http://sane.com"
-			controller.params.keyword = "Test"
+			controller.params.keywords = "Test"
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.httpMethod = "get"
 		when:
@@ -140,5 +140,28 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			connection.url != "www.ushahidi.com/frontlinesms2"
 			connection.httpMethod ==  Webconnection.HttpMethod.GET
 			connection.httpMethod !=  Webconnection.HttpMethod.POST
+	}
+@spock.lang.IgnoreRest
+	def 'while editing a webconnection changing the sorting criteria should translate into proper keyword changes'(){
+		setup:
+			def keyword = new Keyword(value:"TRIAL")
+			def connection = new UshahidiWebconnection(name:"Trial", url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
+			connection.save(failOnError:true)
+			controller.params.ownerId = connection.id
+			controller.params.name = "Ushahidi Connection"
+			controller.params.url = "http://sane.com"
+			controller.params.keywords = "Test,testing"
+			controller.params.webconnectionType = "ushahidi"
+			controller.params.httpMethod = "get"
+		when:
+			controller.params.sorting = sorting
+			controller.save()
+		then:
+			results == UshahidiWebconnection.findByName("Ushahidi Connection").keywords?.value.join(',')
+		where:
+			sorting|results
+			"global"|""
+			"enabled"|"TEST,TESTING"
+			"disabled"|null
 	}
 }

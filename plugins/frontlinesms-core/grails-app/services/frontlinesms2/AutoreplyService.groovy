@@ -7,9 +7,17 @@ class AutoreplyService {
     def saveInstance(Autoreply autoreply, params) {
 		autoreply.name = params.name ?: autoreply.name
 		autoreply.autoreplyText = params.messageText ?: autoreply.autoreplyText
-		def keywordRawValues = (params.blankKeyword ? '' : params.keywords.toUpperCase()).replaceAll(/\s/, "").split(",")
 		autoreply.keywords?.clear()
 		autoreply.save(flush:true, failOnError:true)
+
+		if(params.sorting == 'global'){
+			autoreply.addToKeywords(new Keyword(value:''))
+		}else if(params.sorting == 'enabled'){
+			def keywordRawValues = params.keywords?.toUpperCase().replaceAll(/\s/, "").split(",")
+		} else {
+			println "##### AutoreplyService.saveInstance() # removing keywords"
+		}
+
 		for(keywordValue in keywordRawValues) {
 			def keyword = new Keyword(value: keywordValue.trim().toUpperCase())
 			autoreply.addToKeywords(keyword)
