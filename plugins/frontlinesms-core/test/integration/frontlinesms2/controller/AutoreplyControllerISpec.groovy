@@ -157,5 +157,36 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			"enabled"|"MANGO,BANANA,OVACADO"
 			"disabled"|null
 	}
+
+	def "can create Autoreply with global keyword"(){
+		given:
+			controller.params.name = 'Fruit'
+			controller.params.keywords = ''
+			controller.params.messageText = 'Some Text'
+			controller.response.format = 'html'
+			controller.params.sorting = "global"
+		when:
+			def model = controller.save()
+		then:
+			def autoreply = Autoreply.get(model.ownerId)
+			autoreply.autoreplyText == 'Some Text'
+			autoreply.keywords?.size() == 1
+			autoreply.keywords[0].value == ''
+	}
+
+	def "can create Autoreply without keywords"(){
+		given:
+			controller.params.name = 'Fruit'
+			controller.params.keywords = ''
+			controller.params.messageText = 'Some Text'
+			controller.response.format = 'html'
+			controller.params.sorting = "disabled"
+		when:
+			def model = controller.save()
+		then:
+			def autoreply = Autoreply.get(model.ownerId)
+			autoreply.autoreplyText == 'Some Text'
+			autoreply.keywords == null
+	}
 }
 
