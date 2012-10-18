@@ -7,7 +7,7 @@ def indent = { count -> print('\t'*count) }
 def tag = { ind, tagName, Map attrs=[:], close=true ->
 	indent ind
 	print "<$tagName"
-	attrs.each { k, v -> print " $k=\"$v\"" }
+	attrs.each { k, v -> v = v as String; print " $k=\"${v.replace('"', '&quot;')}\"" }
 	if(close) print '/'
 	println '>'
 }
