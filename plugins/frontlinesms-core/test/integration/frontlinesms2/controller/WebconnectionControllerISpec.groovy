@@ -60,6 +60,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.url = "www.frontlinesms.com/syncing"
 			controller.params.httpMethod = "get"
 			controller.params.keywords = "keyword"
+			controller.params.sorting = "enabled"
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = ['username', 'password'] as String[]
 			controller.params.'param-value' = ['bob','secret'] as String[]
@@ -131,6 +132,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.keywords = "Test"
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.httpMethod = "get"
+			controller.params.key = "get"
 		when:
 			controller.save()
 		then:
@@ -141,26 +143,25 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			connection.httpMethod ==  Webconnection.HttpMethod.GET
 			connection.httpMethod !=  Webconnection.HttpMethod.POST
 	}
-@spock.lang.IgnoreRest
+
+	@Unroll
 	def 'while editing a webconnection changing the sorting criteria should translate into proper keyword changes'(){
 		setup:
-			def keyword = new Keyword(value:"TRIAL")
-			def connection = new UshahidiWebconnection(name:"Trial", url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
-			connection.save(failOnError:true)
-			controller.params.ownerId = connection.id
 			controller.params.name = "Ushahidi Connection"
 			controller.params.url = "http://sane.com"
 			controller.params.keywords = "Test,testing"
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.httpMethod = "get"
+			controller.params.key = "get"
 		when:
 			controller.params.sorting = sorting
 			controller.save()
 		then:
-			results == UshahidiWebconnection.findByName("Ushahidi Connection").keywords?.value.join(',')
+			println ">>>>>>>>>>>>> ${UshahidiWebconnection.findByName("Ushahidi Connection").keywords?.value}"
+			results == UshahidiWebconnection.findByName("Ushahidi Connection").keywords*.value?.join(',')
 		where:
 			sorting|results
-			"global"|""
+			"global"|''
 			"enabled"|"TEST,TESTING"
 			"disabled"|null
 	}

@@ -44,7 +44,7 @@ class WebconnectionService{
 		}
 		else if(params.sorting == 'global')
 			webconnectionInstance.addToKeywords(new Keyword(value:'', isTopLevel:true))
-		else{
+		else if(params.sorting == 'enabled'){
 			def keywords = params.keywords?.toUpperCase().replaceAll(/\s/, "").split(',')
 			keywords.collect { new Keyword(value:it.trim(), isTopLevel:true) }.each { webconnectionInstance.addToKeywords(it) }
 		}

@@ -17,6 +17,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.name = name
 			controller.params.keywords = keyword
 			controller.params.messageText = autoreplyText
+			controller.params.sorting = "enabled"
 		when:
 			controller.save()
 		then:
@@ -41,6 +42,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.ownerId = a.id
 			controller.params.name = name
 			controller.params.keywords = finalKeyword
+			controller.params.sorting = "enabled"
 			controller.params.messageText = autoreplyText
 			controller.response.format = 'html'
 			
@@ -70,6 +72,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.keywords = 'Mango,Orange,Banana'
 			controller.params.messageText = 'Some Text'
 			controller.response.format = 'html'
+			controller.params.sorting = "enabled"
 		when:
 			def model = controller.save()
 		then:
@@ -93,6 +96,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.keywords = "Apple,Strawberry"
 			controller.params.messageText = "Hello"
 			controller.response.format = 'html'
+			controller.params.sorting = "enabled"
 		when:
 			def model = controller.save()
 			println "MODEL::: $model"
@@ -119,6 +123,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.keywords = "Mango,Banana,Ovacado"
 			controller.params.messageText = "Hello"
 			controller.response.format = 'html'
+			controller.params.sorting = "enabled"
 		when:
 			def model = controller.save()
 			println "MODEL::: $model"
@@ -132,6 +137,25 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			autoreply.autoreplyText == "Hello"
 		and: 'the old keyword have been deleted'
 			Keyword.findByValue("ORANGE") == null
+	}
+
+	@Unroll
+	def 'while editing an autoreply changing the sorting criteria should translate into proper keyword changes'(){
+		setup:
+			controller.params.name = "Matunda"
+			controller.params.keywords = "Mango,Banana,Ovacado"
+			controller.params.messageText = "Hello"
+			controller.response.format = 'html'
+		when:
+			controller.params.sorting = sorting
+			controller.save()
+		then:
+			results == Autoreply.findByName("Matunda").keywords*.value?.join(',')
+		where:
+			sorting|results
+			"global"|''
+			"enabled"|"MANGO,BANANA,OVACADO"
+			"disabled"|null
 	}
 }
 
