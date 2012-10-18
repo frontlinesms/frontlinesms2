@@ -26,7 +26,7 @@
 			<label class="sorting-option-label"><g:message code="activity.generic.enable.sorting"/></label>
 			<div class="sorting-option">
 				<label for="keywords"><g:message code="activity.generic.keywords.title"/></label>
-				<g:textField name="keywords" class="required validcommas sorting-generic-unique sorting-generic-no-spaces" value="${activityInstanceToEdit?.keywords? activityInstanceToEdit?.keywords*.value.join(',') : ''}" disabled="${activityInstanceToEdit && ((activityInstanceToEdit?.keywords?.size() == 0) || (activityInstanceToEdit?.keywords[0].value == ''))}"/>
+				<g:textField name="keywords" class="${!activityInstanceToEdit || ((activityInstanceToEdit?.keywords?.size() > 0) && (activityInstanceToEdit?.keywords[0].value != '')) ? 'required' : ''} validcommas sorting-generic-unique sorting-generic-no-spaces" value="${activityInstanceToEdit?.keywords? activityInstanceToEdit?.keywords*.value.join(',') : ''}" disabled="${activityInstanceToEdit && ((activityInstanceToEdit?.keywords?.size() == 0) || (activityInstanceToEdit?.keywords[0].value == ''))}"/>
 			</div>
 		</li>
 	</ul>
