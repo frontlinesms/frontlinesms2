@@ -22,7 +22,7 @@ abstract class Webconnection extends Activity {
 
 	// Substitution variables
 	static subFields = ['message_body' : { msg ->
-			def keyword = msg.messageOwner?.keyword?.value
+			def keyword = msg.messageOwner?.keywords?.find { it.value }
 			def text = msg.text
 			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
 				text = text.substring(keyword.size()).trim()
