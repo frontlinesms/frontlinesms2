@@ -1,5 +1,19 @@
-#!/bin/sh
+#!/bin/bash
 set -e
+
+# Extract flags to pass to jslint
+EXTRA_FLAGS=""
+while [[ $1 == "--"* ]]; do
+	if [ -z "$EXTRA_FLAGS" ]; then
+		EXTRA_FLAGS=$1
+	else
+		EXTRA_FLAGS="$EXTRA_FLAGS $1"
+	fi
+	shift
+done
+
+echo "Flags to pass directly to jslint: $EXTRA_FLAGS"
+echo "Other args: $@"
 
 # check spidermonkey is installed
 jslint || echo "Please install jslint"
@@ -14,7 +28,7 @@ else
 fi
 
 echo "# Linting: $FILES"
-jslint --white --sloppy --white --browser --nomen --plusplus --forin --undef \
+jslint --white --sloppy --white --browser --nomen --plusplus --forin --undef $EXTRA_FLAGS \
 --predef $ \
 --predef jQuery \
 --predef url_root \

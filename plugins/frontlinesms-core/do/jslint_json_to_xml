@@ -1,0 +1,41 @@
+#!/bin/groovy
+import groovy.json.JsonSlurper
+import groovy.json.JsonException
+BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))
+
+def indent = { count -> print('\t'*count) }
+def tag = { ind, tagName, Map attrs=[:], close=true ->
+	indent ind
+	print "<$tagName"
+	attrs.each { k, v -> print " $k=\"$v\"" }
+	if(close) print '/'
+	println '>'
+}
+def open = { ind, tagName, Map attrs=[:] ->
+	tag ind, tagName, attrs, false
+}
+def close = { ind, tagName -> indent ind; println "</$tagName>" }
+def issue = { i ->
+	if(!i || i.reason.startsWith('Stopping. ')) return
+	def character = i.character
+	i.remove 'character'
+	i.char = character
+	tag 2, 'issue', i
+}
+def file = { name, issues ->
+	tag 1, 'file', [name:name], !issues
+	if(issues) {
+		issues.each { i -> issue i }
+		close 1, 'file'
+	}
+}
+
+open 0, 'jslint'
+reader.eachLine { line ->
+	try {
+		def result = new JsonSlurper().parseText(line)
+		file result[0], result[1]
+	} catch(JsonException _) { /* Ignoring line */ }
+}
+close 0, 'jslint'
+
