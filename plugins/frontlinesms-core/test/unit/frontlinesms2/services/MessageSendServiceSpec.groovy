@@ -1,11 +1,11 @@
 package frontlinesms2.services
 
 import spock.lang.*
-import grails.test.mixin.*
 
 import frontlinesms2.*
 
 @TestFor(MessageSendService)
+@Mock([Fmessage, Dispatch])
 class MessageSendServiceSpec extends Specification {
 	MessageSendService s
 
@@ -23,6 +23,18 @@ class MessageSendServiceSpec extends Specification {
 			['+1234']         | ['+1234']
 			['1234', '56789'] | ['1234', '56789']
 			['1234', '1234']  | ['1234']
+	}
+
+	@Unroll
+	def 'createOutgoingMessage should strip unexpected characters from supplied phone number'() {
+		expect:
+			service.createOutgoingMessage([addresses:unsanitised]).dispatches*.dst == [sanitised]
+		where:
+			sanitised       | unsanitised
+			'123456789'     | '123456789'
+			'123 456 789'   | '123456789'
+			'+123456789'    | '+123456789'
+			'(123)-456-789' | '123456789'
 	}
 }
 

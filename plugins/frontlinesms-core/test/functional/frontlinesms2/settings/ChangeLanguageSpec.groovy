@@ -9,7 +9,7 @@ class ChangeLanguageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageGeneralSettings
 		then:
-			languageList.children()*.text()== ['English', 'English', 'Kiswahili']
+			languageList.children()*.text()== ["English", "Arabic", "Deutsch", "English", "Español", "French", "Indonesian", "Kiswahili", "Português", "Русский"]
 	}
 
 	def 'Can change language of the application'() {

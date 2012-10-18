@@ -39,6 +39,7 @@ class CoreBootStrap {
 		if(Environment.current == Environment.TEST) {
 			quartzScheduler.start()
 			test_initGeb(servletContext)
+			dev_disableSecurityFilter()
 		}
 
 		if(Environment.current == Environment.DEVELOPMENT) {
@@ -52,6 +53,7 @@ class CoreBootStrap {
 			// by camel 2.9.0 so this can be permanently enabled once we
 			// upgrade our Camel dependencies.
 			//camelContext.tracing = true
+			dev_disableSecurityFilter()
 		}
 
 		if(bootstrapData) {
@@ -207,6 +209,7 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
 		new SmslibFconnection(name:"MobiGater Modem", port:'/dev/ttyACM0', baud:9600, pin:'1149').save(failOnError:true)
+		new SmssyncFconnection(name:"SMSSync connection", secret:'secret').save(flush: true, failOnError:true)
 	}
 	
 	
@@ -523,6 +526,12 @@ class CoreBootStrap {
 		geb.navigator.EmptyNavigator.metaClass = emptyMc
 		nonEmptyMc.initialize()
 		geb.navigator.NonEmptyNavigator.metaClass = nonEmptyMc
+	}
+
+	private def dev_disableSecurityFilter() {
+		appSettingsService.set("enabledAuthentication", '')
+		appSettingsService.set("username", '') 
+		appSettingsService.set("password", '')
 	}
 
 	private Date createDate(String dateAsString) {
