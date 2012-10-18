@@ -144,6 +144,29 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			connection.httpMethod !=  Webconnection.HttpMethod.POST
 	}
 
+	def "can update keywords"(){
+		setup:
+			def connection = new UshahidiWebconnection(name:"Trial", url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST)
+			(1..4).each { connection.addToKeywords(new Keyword(value:"KEYWORD${it}")) }
+			connection.save(failOnError:true)
+			controller.params.ownerId = connection.id
+			controller.params.name = "Ushahidi Connection"
+			controller.params.url = "http://sane.com"
+			controller.params.keywords = "KEYWORD3,KEYWORD4,KEYWORD5"
+			controller.params.webconnectionType = "ushahidi"
+			controller.params.httpMethod = "get"
+			controller.params.key = "get"
+		when:
+			controller.save()
+		then:
+			connection.name == "Ushahidi Connection"
+			connection.name != "Trial"
+			connection.url == "http://sane.com"
+			connection.url != "www.ushahidi.com/frontlinesms2"
+			connection.httpMethod ==  Webconnection.HttpMethod.GET
+			connection.httpMethod !=  Webconnection.HttpMethod.POST
+	}
+
 	@Unroll
 	def 'while editing a webconnection changing the sorting criteria should translate into proper keyword changes'(){
 		setup:
