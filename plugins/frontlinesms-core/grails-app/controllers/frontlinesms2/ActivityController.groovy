@@ -112,7 +112,7 @@ class ActivityController {
 	def create_new_activity() {}
 
 	def getCollidingKeywords(topLevelKeywords) {
-		if (!topLevelKeywords)
+		if (topLevelKeywords == null)
 			return [:]
 		def collidingKeywords = [:]
 		def currentKeyword
