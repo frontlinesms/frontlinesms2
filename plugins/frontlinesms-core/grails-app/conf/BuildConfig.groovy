@@ -110,7 +110,7 @@ coverage {
 }
 
 codenarc {
-	reportName = 'target/test-reports/codenarc.xml'
+	reportName = 'target/analysis-reports/codenarc.xml'
 	reportType = 'xml'
 	systemExitOnBuildException = false
 	// NB these numbers should be LOWERED over time as code quality should be INCREASING
