@@ -38,3 +38,6 @@
 #body-content.logs .date { white-space:nowrap; }
 #body-content.logs tr:nth-child(2n) td { background-color:#eff2f9; }
 #body-content.logs tr:hover td { background-color:#e5eff3; }
+#body-content #basic-authentication input[type='text'].error, input[type='password'].error  {
+	border:1px solid red;
+}

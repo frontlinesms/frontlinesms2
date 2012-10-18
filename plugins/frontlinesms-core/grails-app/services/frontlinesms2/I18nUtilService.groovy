@@ -47,7 +47,7 @@ class I18nUtilService {
 			def lang
 			try { f.eachLine { line ->
 				if(line.startsWith("language.name=")) {
-					lang = line - "language.name="
+					lang = (line - "language.name=").trim()
 					throw new EOFException()
 				}
 			} } catch(EOFException _) {}
