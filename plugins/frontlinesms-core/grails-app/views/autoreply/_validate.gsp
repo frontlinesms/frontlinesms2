@@ -5,6 +5,7 @@
 			$("#messageText").trigger("keyup");
 		</g:if>
 		
+		aliasCustomValidation();
 		genericSortingValidation();
 
 		var validator = $("#create_autoreply").validate({

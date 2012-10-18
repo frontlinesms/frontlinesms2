@@ -51,6 +51,7 @@
 			webconnectionDialog.setScripts(initialScripts);
 		</g:else>
 		
+		aliasCustomValidation();
 		genericSortingValidation();
 
 		var keyWordTabValidation = function() {
