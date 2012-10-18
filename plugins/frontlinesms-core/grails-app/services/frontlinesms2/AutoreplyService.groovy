@@ -14,13 +14,12 @@ class AutoreplyService {
 			autoreply.addToKeywords(new Keyword(value:''))
 		}else if(params.sorting == 'enabled'){
 			def keywordRawValues = params.keywords?.toUpperCase().replaceAll(/\s/, "").split(",")
+			for(keywordValue in keywordRawValues) {
+				def keyword = new Keyword(value: keywordValue.trim().toUpperCase())
+				autoreply.addToKeywords(keyword)
+			}
 		} else {
 			println "##### AutoreplyService.saveInstance() # removing keywords"
-		}
-
-		for(keywordValue in keywordRawValues) {
-			def keyword = new Keyword(value: keywordValue.trim().toUpperCase())
-			autoreply.addToKeywords(keyword)
 		}
 		autoreply.save(failOnError:true,flush:true)
 		return autoreply

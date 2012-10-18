@@ -112,6 +112,8 @@ class ActivityController {
 	def create_new_activity() {}
 
 	def getCollidingKeywords(topLevelKeywords) {
+		if (!topLevelKeywords)
+			return [:]
 		def collidingKeywords = [:]
 		def currentKeyword
 		topLevelKeywords.toUpperCase().split(",").collect { it.trim() }.each { 
