@@ -2,6 +2,7 @@
 	function initializePopup() {
 		initializeTabValidation(createFormValidator());
 		addCustomValidationClasses();
+		console.log("called AddCustomVal");
 	}
 
 	function createFormValidator() {
@@ -71,7 +72,7 @@
 			return validator.element('#name');
 		};
 
-		mediumPopup.addValidation('subscription-group', groupTabValidation);
+		mediumPopup.addValidation('subscription-group-header', groupTabValidation);
 		mediumPopup.addValidation('subscription-sorting', sortingTabValidation);
 		mediumPopup.addValidation('subscription-autoreplies', autoreplyTabValidation);
 		mediumPopup.addValidation('subscription-confirm', confirmTabValidation);
@@ -86,8 +87,10 @@
 	}
 
 	function addCustomValidationClasses() {
-		jQuery.validator.addMethod("notEmpty", function(value, element) {
-			return ($('select#subscriptionGroup').val() != '');
+		console.log("adding custom val");
+		jQuery.validator.addMethod("not-empty", function(value, element) {
+			console.log("validating not emptiness");
+			return ($('#subscriptionGroup').val() != '');
 		}, i18n("subscription.group.required.error"));
 
 		aliasCustomValidation();
