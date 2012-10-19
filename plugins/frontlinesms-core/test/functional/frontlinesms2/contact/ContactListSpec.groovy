@@ -27,7 +27,7 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			bodyMenu.selectedMenuItem == 'all contacts'
+			bodyMenu.selectedMenuItem.startsWith('all contacts')
 	}
 	
 	def 'contacts list is paginated'() {
@@ -127,6 +127,15 @@ class ContactListSpec extends ContactBaseSpec {
 			!contactList.selectAll.checked
 	}
 
+	def '"All contacts" heading should displayed contact count'() {
+		given:
+			createTestContacts()
+		when:
+			to PageContactShow
+		then:	
+			header.contactCount == 2
+	}
+
 	def 'can search for all messages from a named contact'() {
 		given:
 			def pedro = Contact.build(name:'Pedro', mobile:'+111')
@@ -164,5 +173,4 @@ class ContactListSpec extends ContactBaseSpec {
 			waitFor { at PageSearchResult }
 			messageList.messages.size() == 21
 	}
-		
 }

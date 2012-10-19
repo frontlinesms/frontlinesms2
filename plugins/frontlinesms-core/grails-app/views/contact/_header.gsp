@@ -16,7 +16,7 @@
 		</div>
 	</g:if>
 	<g:else>
-		<h1><g:message code="contact.all.contacts"/></h1>
+		<h1><g:message code="contact.all.contacts" args="${[contactInstanceTotal]}"/></h1>
 		<div class="header-buttons">
 			<g:remoteLink class="btn" controller="export" action="contactWizard" onSuccess="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="action.export"/></g:remoteLink>
 		</div>
