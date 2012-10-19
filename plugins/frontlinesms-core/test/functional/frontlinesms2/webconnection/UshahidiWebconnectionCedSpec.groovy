@@ -99,7 +99,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.confirm('key') == 'a1b2c3d4e5'
 			confirmTab.confirm('keyword') == 'None'
 	}
-	@spock.lang.IgnoreRest
+
 	def "editing a web connection should change values"(){
 		given:
 			to PageMessageWebconnection, UshahidiWebconnection.findByName('Trial')
