@@ -10,15 +10,16 @@ function initContactPaneGroups() {
 }
 
 function addGroupClickAction() {
-	var me = $(this).find('option:selected');
-	if(me.hasClass('not-group')) return;
-	var groupName = me.text();
-	var groupId = me.attr('value');
-	var groupList = $('.single-contact').is(':visible') ? $('#group-list') : $('#multi-group-list');
-	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups');
+	var me, groupName, groupId, groupList, noGroup, groupListItem, deleteButton;
+	me = $(this).find('option:selected');
+	if(me.hasClass('not-group')) { return; }
+	groupName = me.text();
+	groupId = me.attr('value');
+	groupList = $('.single-contact').is(':visible') ? $('#group-list') : $('#multi-group-list');
+	noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups');
 
-	var groupListItem = $('<li class="" groupName="' + groupName + '"><span>' + groupName + '</span>');
-	var deleteButton = $('<a class="remove-command" id="remove-group-' + groupId + '"></a></li>');
+	groupListItem = $('<li class="" groupName="' + groupName + '"><span>' + groupName + '</span>');
+	deleteButton = $('<a class="remove-command" id="remove-group-' + groupId + '"></a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
 	
@@ -26,23 +27,23 @@ function addGroupClickAction() {
 	me.remove();
 	noGroup.hide();
 	addGroupId(groupId);
-	// addIdToGroupHiddenField(groupId);
 	enableSaveAndCancel();
 }
 
 function removeGroupClickAction() {
-	var me = $(this);
-	var groupId = me.attr('id').substring('remove-group-'.length);
-	var groupName = me.parent().children('span').text();
+	var me, groupId, groupName, groupDropdown, groupListElements, noGroup, option, groupList;
+	me = $(this);
+	groupId = me.attr('id').substring('remove-group-'.length);
+	groupName = me.parent().children('span').text();
 
-	var groupDropdown = $('.single-contact').is(':visible') ? $('#group-dropdown') : $('#multi-group-dropdown');
-	var groupListElements = $('.single-contact').is(':visible') ? $('#group-list li span') : $('#multi-group-list ');
-	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups');
-	var option = $("<option value='" + groupId + "'>" + groupName + '</option>');
+	groupDropdown = $('.single-contact').is(':visible') ? $('#group-dropdown') : $('#multi-group-dropdown');
+	groupListElements = $('.single-contact').is(':visible') ? $('#group-list li span') : $('#multi-group-list ');
+	noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups');
+	option = $("<option value='" + groupId + "'>" + groupName + '</option>');
 	
 	option.click(addGroupClickAction);
 	groupDropdown.append(option);
-	var groupList = me.parent();
+	groupList = me.parent();
 	groupList.remove();
 	if(groupListElements.size() <= 1) {
 		noGroup.show();
@@ -66,14 +67,16 @@ function addGroupId(id) {
 	addIdToList(id, 'groupsToAdd');
 }
 function removeIdFromList(id, fieldName) {
-	var f = $('input:hidden[name=' + fieldName + ']');
-	var oldList = f.val();
-	var newList = oldList.replace(','+ id +',', ',');
+	var f, oldList, newList;
+	f = $('input:hidden[name=' + fieldName + ']');
+	oldList = f.val();
+	newList = oldList.replace(','+ id +',', ',');
 	f.val(newList);
 }
 function addIdToList(id, fieldName) {
-	var f = $('input:hidden[name=' + fieldName + ']');
-	var oldList = f.val();
-	var newList = oldList + id + ',';
+	var f, oldList, newList;
+	f = $('input:hidden[name=' + fieldName + ']');
+	oldList = f.val();
+	newList = oldList + id + ',';
 	f.val(newList);
 }

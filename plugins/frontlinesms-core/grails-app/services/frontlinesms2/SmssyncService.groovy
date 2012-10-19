@@ -13,7 +13,7 @@ class SmssyncService {
 		println "SmssyncService.processSend() :: x.in.body=$x.in.body"
 		println "SmssyncService.processSend() :: x.in.headers=${x.in?.headers}"
 		def connection = SmssyncFconnection.get(x.in.headers['fconnection-id'])
-		connection.addToQueue(x.in.body)
+		connection.addToQueuedDispatches(x.in.body)
 		connection.save(failOnError:true)
 		println "SmssyncService.processSend() :: EXIT"
 	}
@@ -29,13 +29,15 @@ class SmssyncService {
 			def payload = controller.params.task=='send'? handlePollForOutgoing(connection): handleIncoming(connection, controller.params)
 			if(connection.secret) payload = [secret:connection.secret] + payload
 			return [payload:payload]
-		} catch(FrontlineApiException _) {
-			return failure()
+		} catch(FrontlineApiException ex) {
+			return failure(ex)
 		}
 	}
 
 	private def handleIncoming(connection, params) {
 		if(!connection.receiveEnabled) throw new FrontlineApiException("Receive not enabled for this connection")
+
+		if(!params.from || params.message==null) throw new FrontlineApiException('Missing one or both of `from` and `message` parameters');
 
 		/* parse received JSON with the following params:
 		    from -- the number that sent the SMS
@@ -61,23 +63,28 @@ class SmssyncService {
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {
 		def responseMap = [:]
 
-		def q = connection.outgoingQueueIds
+		def q = connection.queuedDispatches
 		if(q || includeWhenEmpty) {
 			responseMap.task = 'send'
 
-			connection.outgoingQueue = null
-			connection.save(failOnError:true)
+			connection.removeDispatchesFromQueue(q)
 
-			responseMap.messages = Dispatch.getAll(q).collect { d ->
+			responseMap.messages = q.collect { d ->
 				d.status = DispatchStatus.SENT
+				d.dateSent = new Date()
+				d.save(failOnError: true)
 				[to:d.dst, message:d.text]
 			}
 		}
 		return responseMap
 	}
 
-	private def failure() {
-		return [payload:[success:'false']]
+	private def failure(FrontlineApiException ex=null) {
+		if(ex) {
+			return [payload:[success:'false', error:ex.message]]
+		} else {
+			return [payload:[success:'false']]
+		}
 	}
 
 	private def success(additionalContent=null) {

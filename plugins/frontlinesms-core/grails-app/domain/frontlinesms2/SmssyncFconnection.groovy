@@ -17,27 +17,25 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	String secret
-	String outgoingQueue // stored as String as either we are adding to it or destroying the whole thing
 
 	static constraints = {
-		outgoingQueue nullable:true
 		secret nullable:true
+	}
+
+	def removeDispatchesFromQueue(dispatches) {
+		SmssyncFconnectionQueuedDispatch.delete(this, dispatches)
 	}
 
 	def apiProcess(controller) {
 		smssyncService.apiProcess(this, controller)
 	}
 
-	def addToQueue(Dispatch d) {
-		if(outgoingQueue) {
-			outgoingQueue += ',' + d.id
-		} else outgoingQueue = d.id.toString()
+	def addToQueuedDispatches(d) {
+		SmssyncFconnectionQueuedDispatch.create(this, d)
 	}
 
-	Long[] getOutgoingQueueIds() {
-		if(outgoingQueue) {
-			return outgoingQueue?.split(',')*.toLong()
-		} else return []
+	def getQueuedDispatches() {
+		SmssyncFconnectionQueuedDispatch.getDispatches(this)
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {

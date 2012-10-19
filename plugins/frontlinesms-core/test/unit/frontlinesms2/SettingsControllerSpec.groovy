@@ -5,7 +5,7 @@ import grails.test.mixin.*
 import org.codehaus.groovy.grails.orm.hibernate.cfg.*
 
 @TestFor(SettingsController)
-@Mock(LogEntry)
+@Mock([LogEntry, AppSettingsService])
 class SettingsControllerSpec extends Specification {
 	def TEST_DATE = new Date()
 	
@@ -37,6 +37,43 @@ class SettingsControllerSpec extends Specification {
 			'14'       | 4
 			'28'       | 5
 			'forever'  | 6
+	}
+
+	def "can enable application authentication from settings if details validate"() {
+		setup:
+			def appSettingsService = new AppSettingsService()
+			appSettingsService.load()
+			SettingsController.metaClass.appSettingsService = appSettingsService
+		when:
+			params.enabledAuthentication = "on"
+			params.username = "test"
+			params.password = "pass"
+			params.confirmPassword = "pass"
+			controller.basicAuth()
+		then:
+			appSettingsService.get("enabledAuthentication") == "on"
+			appSettingsService.get("username") == "test".bytes.encodeBase64().toString()
+			appSettingsService.get("password") == "pass".bytes.encodeBase64().toString()
+	}
+
+	def "does not enable application authentication from settings if details validate"() {
+		setup:
+			def appSettingsService = new AppSettingsService()
+			appSettingsService.load()
+			appSettingsService.set("enabledAuthentication", false)
+			appSettingsService.set("username", "")
+			appSettingsService.set("password", "".bytes.encodeBase64().toString())
+			SettingsController.metaClass.appSettingsService = appSettingsService
+		when:
+			params.enabledAuthentication = "on"
+			params.username = "test"
+			params.password = "pass"
+			params.confirmPassword = "me"
+			controller.basicAuth()
+		then:
+			!appSettingsService.get("enabledAuthentication")
+			appSettingsService.get("username") == ""
+			appSettingsService.get("password") == ""
 	}
 
 	private def createLogEntries(entries) {
