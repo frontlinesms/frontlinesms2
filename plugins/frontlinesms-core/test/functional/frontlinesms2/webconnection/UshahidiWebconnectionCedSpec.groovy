@@ -87,7 +87,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			launchWizard('ushahidi')
 		and:
 			configureUshahidi.subType('crowdmap').click()
-			configureUshahidi.crowdmapDeployAddress = 'my'
+			configureUshahidi.crowdmapDeployAddress.value('my')
 			configureUshahidi.crowdmapApiKey = 'a1b2c3d4e5'
 		when:
 			next.click()
@@ -107,7 +107,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			header.moreActions.value("edit").jquery.click()
 			waitFor { at WebconnectionWizard }
 			configureUshahidi.crowdmapDeployAddress.displayed
-			configureUshahidi.crowdmapDeployAddress = "frontlineCrowd"
+			configureUshahidi.crowdmapDeployAddress.value("frontlineCrowd")
 			configureUshahidi.crowdmapApiKey = "2343asdasd"
 			next.click()
 		and:
@@ -122,6 +122,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		when:
 			submit.click()
 		then:
+			waitFor('veryslow'){ summary.displayed }
 			def connection = UshahidiWebconnection.findByName('Trial')
 			connection.refresh()
 			connection.name == "Trial"
