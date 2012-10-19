@@ -8,7 +8,6 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 	// * all resizables should be within a single parent
 	// * resizables should have `position:absolute` set
 	var
-		_direction, _key,
 		_main_header_height = $("#head").outerHeight(), // this height is fixed
 		_getBorders = function(element) {
 			return {
@@ -16,8 +15,9 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 				left:{ width:element.css("border-left-width"), style:element.css("border-left-style"), color:element.css("border-left-color") }};
 		},
 		_setBorders = function(element, borders) {
+			var _direction, _key, values;
 			for(_direction in borders) {
-				var values = borders[_direction];
+				values = borders[_direction];
 				for(_key in values) {
 					element.css("border-" + _direction + "-" + _key, values[_key]);
 				}
@@ -27,10 +27,11 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 		_fixed_footers = $(fixed_footer_selecter),
 		_container = $(container_selecter),
 		_resize = function() {
-			var _header_offset = _main_header_height;
-			var _container_left = _container.css("left");   // FF gives these values in px instead of % so
-			var _container_right = _container.css("right"); // we have to recalculate every resize
-			var _container_borders = _getBorders(_container);
+			var _header_offset, _container_left, _container_right, _container_borders, _footer_offset;
+			_header_offset = _main_header_height;
+			_container_left = _container.css("left");   // FF gives these values in px instead of % so
+			_container_right = _container.css("right"); // we have to recalculate every resize
+			_container_borders = _getBorders(_container);
 			_fixed_headers.each(function(i, element) {
 				element = $(element);
 				element.css("position", "fixed");
@@ -42,7 +43,7 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 				_header_offset += element.outerHeight();
 			});
 
-			var _footer_offset = 0;
+			_footer_offset = 0;
 			_fixed_footers.each(function(i, element) {
 				element = $(element);
 				element.css("position", "fixed");
