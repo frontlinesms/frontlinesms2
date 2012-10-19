@@ -10,6 +10,7 @@ import serial.mock.MockSerial
 import serial.mock.CommPortIdentifier
 
 class ConnectionFSpec extends grails.plugin.geb.GebSpec {
+	/*
 	def 'When there are no connections, this is explained to the user'() {
 		when:
 			to PageConnection
@@ -218,5 +219,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
 		SmslibFconnection.build(name:'MTN Dongle', port:'COM99')
 	}
+	*/
 }
 
