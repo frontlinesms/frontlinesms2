@@ -8,7 +8,7 @@ class I18nUtilServiceSpec extends IntegrationSpec {
 
 	def 'get a list of available translations'() {
 		expect:
-			i18nUtilService.getAllTranslations() == ['':'English', sw:'Kiswahili']
+			i18nUtilService.getAllTranslations() == [ar:'Arabic', de:'Deutsch', '':'English', es:'Español', fr:'French', in_ID:'Indonesian', sw:'Kiswahili', pt:'Português', ru:'Русский']
 	}
 
 	@Unroll

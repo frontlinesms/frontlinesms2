@@ -1,0 +1,7 @@
+#!/bin/bash
+TARGET_DIR="target/analysis-reports"
+TARGET="$TARGET_DIR/jslint.xml"
+echo "# Generating jslint report in $TARGET"
+mkdir -p $TARGET_DIR
+do/jslint --json | do/jslint_json_to_xml > $TARGET
+

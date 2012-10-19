@@ -6,7 +6,7 @@
 		</g:link>
 	</li>
 	<li class="nav ${params.controller=='help' ? 'selected' : ''}">
-		<g:remoteLink controller="help" onSuccess="launchHelpWizard(data);">
+		<g:remoteLink controller="help" onSuccess="mediumPopup.launchHelpWizard(data);">
 			<g:message code="common.help"/>
 		</g:remoteLink>
 	</li>

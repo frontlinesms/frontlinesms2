@@ -1,5 +1,8 @@
 <%@ page import="frontlinesms2.Subscription" %>
 <h2><g:message code="subscription.sorting"/></h2>
+<div class="info">
+	<p><g:message code="activity.generic.sort.description"/></p>
+</div>
 <div class="input">
 	<ul class="select">
 		<li>
@@ -10,7 +13,7 @@
 </div>
 <h2><g:message code="subscription.top.keyword.header"/></h2>
 <div class="info">
-	<p><g:message code="subscription.top.keyword.header"/></p>
+	<p><g:message code="subscription.top.keyword.description"/></p>
 </div>
 
 <div class="input">

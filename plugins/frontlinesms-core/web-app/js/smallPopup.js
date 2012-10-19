@@ -1,9 +1,9 @@
 function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	if (doneAction == null) {
+	if (doneAction === undefined) {
 		doneAction = defaultDoneAction;
 	} else {
-		if (doneAction == 'validate') {
+		if (doneAction === 'validate') {
 			doneAction = smallPopup.validate;
 		}
 	}
@@ -13,7 +13,7 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 			maxHeight: 300,
 			title: title,
 			buttons: [{ text:i18n("action.cancel"), click: cancel, id:"cancel" },
-			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],
+					{ text:btnFinishedText,  click: doneAction, id:"done" }],
 			close: function() { $(this).remove(); }
 	});
 	$("#modalBox").bind("keydown", function(e) {
@@ -25,20 +25,21 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 }
 
 function launchConfirmationPopup(title) {
-	var contactList = getCheckedList('contact');
-	if (contactList == ',') {
-		var contactIdList = $("#contactId").val();
-		var message = i18n("smallpopup.delete.prompt", $('#name').val());
+	var contactList, contactIdList, message, count;
+	contactList = getCheckedList('contact');
+	if (contactList === ',') {
+		contactIdList = $("#contactId").val();
+		message = i18n("smallpopup.delete.prompt", $('#name').val());
 	} else {
-		var contactIdList = contactList;
-		var count = contactList.split(",").length - 2;
-		var message = i18n("smallpopup.delete.many.prompt", count)
+		contactIdList = contactList;
+		count = contactList.split(",").length - 2;
+		message = i18n("smallpopup.delete.many.prompt", count);
 	}
 	$.ajax({
 		type:'POST',
-		data: {checkedContactList: contactIdList, message: message},
+		data: { checkedContactList:contactIdList, message:message },
 		url: url_root + 'contact/confirmDelete',
-		success: function(data, textStatus){ launchSmallPopup(title, data, i18n('action.ok')); }
+		success: function(data, textStatus) { launchSmallPopup(title, data, i18n('action.ok')); }
 	});
 }
 
@@ -62,7 +63,7 @@ function defaultDoneAction() {
 	}
 }
 
-var SmallPopup = function() {
+var smallPopup = (function() {
 	var
 		_checkResults = function(json) {
 			if (json.ok) {
@@ -78,10 +79,9 @@ var SmallPopup = function() {
 			if ($("#modalBox").contentWidget("onDone")) {
 				$(this).find("form").submit();
 			}
-		}
+		};
 	return {
 		checkResults: _checkResults,
 		validate: _validate
 	};
-};
-var smallPopup = new SmallPopup();
+}());

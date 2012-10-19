@@ -4,7 +4,7 @@
 	<p><g:message code="subscription.group.description"/></p>
 </div>
 <div class="input">
-	<g:select name="subscriptionGroup" class="dropdown notEmpty"
+	<g:select name="subscriptionGroup" class="dropdown not-empty"
 		noSelection="${activityInstanceToEdit? null : ['': g.message(code:'subscription.group.none.selected')] }"
 		from="${Group.getAll()}" optionKey="id" optionValue="name"
 		value="${activityInstanceToEdit?.group?.id}" />

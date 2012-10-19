@@ -43,6 +43,7 @@ class ContentHeader extends geb.Module {
 	static base = { $('#main-list-head') }
 	static content = {
 		title { $('h1').text().toLowerCase() }
+		contactCount { $('h1').text().find(/\d+/) as Integer}
 		button { $('a.btn, input[type="button"], button') }
 		groupHeaderSection { $('div.group') }
 		groupHeaderTitle { $('div.group h1') }

@@ -9,7 +9,7 @@ class ChangeLanguageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageGeneralSettings
 		then:
-			languageList.children()*.text()== ['English', 'English', 'Kiswahili']
+			languageList.children()*.text()== ["English", "Arabic", "Deutsch", "English", "Español", "French", "Indonesian", "Kiswahili", "Português", "Русский"]
 	}
 
 	def 'Can change language of the application'() {
@@ -17,12 +17,11 @@ class ChangeLanguageSpec extends grails.plugin.geb.GebSpec {
 			to PageGeneralSettings
 			waitFor { title.contains('Settings') }
 		when:
-			languageList.value('Kiswahili')
+			setLanguage('Kiswahili')
 		then:
 			waitFor { title.contains('Mazingira') }
 		cleanup:
-			languageList.jquery.val('English')
-			languageList.jquery.trigger('change')
+			setLanguage('English')
 			waitFor { title.contains('Settings') }
 	}
 }
