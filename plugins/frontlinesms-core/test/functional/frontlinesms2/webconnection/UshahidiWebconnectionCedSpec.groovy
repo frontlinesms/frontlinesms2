@@ -91,7 +91,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.crowdmapApiKey = 'a1b2c3d4e5'
 		when:
 			next.click()
-			keywordTab.useKeyword.click()
+			keywordTab.useKeyword('global').click()
 			next.click()
 		then:
 			confirmTab.confirm('service') == 'Crowdmap'
@@ -134,7 +134,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		configureUshahidi.crowdmapDeployAddress = 'default'
 		configureUshahidi.crowdmapApiKey = 'aaa111bbb222'
 		next.click()
-		keywordTab.useKeyword.click()
+		keywordTab.useKeyword('global').click()
 	}
 }
 
