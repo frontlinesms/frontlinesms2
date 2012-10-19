@@ -317,7 +317,9 @@ class WebconnectionWizard extends MediumPopup {
 class WebconnectionKeywordTab extends geb.Module {
 	static base = { $('div.generic_sorting_tab') }
 	static content = {
-		useKeyword { $("input#blankKeyword") }
+		useKeyword { value ->
+				$('input#sorting',value:value)
+		}
 		keyword { $('input#keywords') }
 	}
 }
