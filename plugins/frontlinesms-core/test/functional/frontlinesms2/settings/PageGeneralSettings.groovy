@@ -7,6 +7,11 @@ class PageGeneralSettings extends PageSettings {
 	
 	static content = {
 		languageList { $('select#language') }
+		setLanguage { newLang ->
+			def newVal = $('option', text:newLang).@value
+			languageList.jquery.val(newVal)
+			languageList.jquery.trigger('change')
+		}
 		errors(required:false) { $('label.error')}
 		basicAuthentication {module BasicAuthentication}
 	}

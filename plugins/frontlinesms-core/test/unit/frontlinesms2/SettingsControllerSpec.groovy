@@ -8,6 +8,10 @@ import org.codehaus.groovy.grails.orm.hibernate.cfg.*
 @Mock([LogEntry, AppSettingsService])
 class SettingsControllerSpec extends Specification {
 	def TEST_DATE = new Date()
+
+	def setup() {
+		controller.i18nUtilService = Mock(I18nUtilService)
+	}
 	
 	def "can view the list of all log entries"() {
 		given:
@@ -41,6 +45,7 @@ class SettingsControllerSpec extends Specification {
 
 	def "can enable application authentication from settings if details validate"() {
 		setup:
+			// FIXME appSettingsService should be mocked
 			def appSettingsService = new AppSettingsService()
 			appSettingsService.load()
 			SettingsController.metaClass.appSettingsService = appSettingsService
@@ -58,6 +63,7 @@ class SettingsControllerSpec extends Specification {
 
 	def "does not enable application authentication from settings if details validate"() {
 		setup:
+			// FIXME appSettingsService should be mocked
 			def appSettingsService = new AppSettingsService()
 			appSettingsService.load()
 			appSettingsService.set("enabledAuthentication", false)
