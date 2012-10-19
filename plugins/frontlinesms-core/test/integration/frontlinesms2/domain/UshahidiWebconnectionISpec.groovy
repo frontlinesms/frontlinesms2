@@ -33,4 +33,26 @@ class UshahidiWebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			1 * webCService.send(incomingMessage)
 	}
+
+	def 'can edit an existing ushahidi web connection'(){
+		given: 'an UshahidiWebconnection exists'
+			def keyword = new Keyword(value:'USHAHIDI')
+			def webConnectionInstance = new UshahidiWebconnection(name:"Trial", url:"https://trial.crowdmap.com", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword).save(failOnError:true)			
+		and:
+			def controller = new WebconnectionController()
+		when: 'new parameters are passed'
+			controller.params.ownerId = webConnectionInstance.id
+			controller.params.webconnectionType = 'ushahidi'
+			controller.params.name = 'Trial'
+			controller.params.url = 'https://frontlineCrowd.crowdmap.com'
+			controller.params.key = '2343asdasd'
+			controller.params.keyword = 'Repo'
+		and: 'save action is called'
+			controller.save()
+		then: 'existing UshahidiWebconnection properties should have changed'
+			def connection = UshahidiWebconnection.findByName('Trial')
+			connection.name == "Trial"
+			connection.url == "https://frontlineCrowd.crowdmap.com"
+			connection.requestParameters*.value.containsAll(["2343asdasd"])
+	}
 }
