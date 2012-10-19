@@ -1,6 +1,6 @@
 function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	if (doneAction === null) {
+	if (doneAction === undefined) {
 		doneAction = defaultDoneAction;
 	} else {
 		if (doneAction === 'validate') {
@@ -37,9 +37,9 @@ function launchConfirmationPopup(title) {
 	}
 	$.ajax({
 		type:'POST',
-		data: {checkedContactList: contactIdList, message: message},
+		data: { checkedContactList:contactIdList, message:message },
 		url: url_root + 'contact/confirmDelete',
-		success: function(data, textStatus){ launchSmallPopup(title, data, i18n('action.ok')); }
+		success: function(data, textStatus) { launchSmallPopup(title, data, i18n('action.ok')); }
 	});
 }
 
