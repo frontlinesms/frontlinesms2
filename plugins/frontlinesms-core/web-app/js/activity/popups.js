@@ -1,7 +1,8 @@
 function chooseActivity() {
-	var activity = $("input[name='activity']:checked").val();
-	var activityUrl = activity.replace(/\s/g, "") + '/create';
-	var title = i18n("wizard.title.new") + activity;
+	var activity, activityUrl, title;
+	activity = $("input[name='activity']:checked").val();
+	activityUrl = activity.replace(/\s/g, "") + '/create';
+	title = i18n("wizard.title.new") + activity;
 	$(this).dialog('close');
 	$.ajax({
 		type:'GET',
@@ -10,17 +11,17 @@ function chooseActivity() {
 		beforeSend: function(){ showThinking(); },
 		success: function(data, textStatus) { hideThinking(); mediumPopup.launchMediumWizard(title, data, i18n('wizard.create'), 675, 500, false); }
 	});
-	return;
 }
 	
 function checkForSuccessfulSave(response, type) {
+	var errors, messageDialog;
 	$("#submit").removeAttr('disabled');
 	if (response.ok) {
 		$("div.confirm").parent().hide();
 		$(".ui-tabs-nav").hide();
 		$("div.summary").show();
 		$(".summary #activityId").val(response.ownerId);
-		var messageDialog = $("#modalBox");
+		messageDialog = $("#modalBox");
 		messageDialog.dialog(
 			{
 				modal: true,
@@ -35,7 +36,7 @@ function checkForSuccessfulSave(response, type) {
 		messageDialog.css("height", "389px");
 		
 	} else {
-		var errors = $(".error-panel");
+		errors = $(".error-panel");
 		errors.text(response.text);
 		errors.show();
 		$("#submit").removeAttr('disabled');
@@ -45,5 +46,5 @@ function checkForSuccessfulSave(response, type) {
 function summaryRedirect() {
 	var activityId = $(".summary #activityId").val();
 	$(this).dialog('close');
-	window.location.replace(url_root + "message/activity/" + activityId	);
+	window.location.replace(url_root + "message/activity/" + activityId);
 }
