@@ -9,6 +9,14 @@ import frontlinesms2.*
 class MessageSendServiceSpec extends Specification {
 	MessageSendService s
 
+	def setup() {
+		// for some reason mocking Fmessage and Dispatch does not add Fmessage.addToDispatches method
+		Fmessage.metaClass.addToDispatches = { d ->
+			if(!delegate.dispatches) delegate.dispatches = []
+			delegate.dispatches << d
+		}
+	}
+
 	@Unroll
 	def 'generateDispatches should generate a single dispatch for each of a list of addresses'() {
 		expect:
@@ -30,7 +38,7 @@ class MessageSendServiceSpec extends Specification {
 		expect:
 			service.createOutgoingMessage([addresses:unsanitised]).dispatches*.dst == [sanitised]
 		where:
-			sanitised       | unsanitised
+			unsanitised     | sanitised
 			'123456789'     | '123456789'
 			'123 456 789'   | '123456789'
 			'+123456789'    | '+123456789'
