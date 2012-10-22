@@ -1,7 +1,8 @@
 var magicwand = {
 	wave: function(select, target) {
-		var list = $('#' + select);
-		var varName = list.val();
+		var list, varName;
+		list = $('#' + select);
+		varName = list.val();
 		if(varName !== "na") {
 			insertAtCaret(target, "${" + varName + "}");
 		}
@@ -21,16 +22,17 @@ var magicwand = {
 	},
 
 	init: function(list) {
-		if(!selectmenuTools.isSupported()) return;
+		var status, statusParent;
+		if(!selectmenuTools.isSupported()) { return; }
 		list.selectmenu();
-		var status = list.parent().find(".ui-selectmenu-status");
+		status = list.parent().find(".ui-selectmenu-status");
 		status.text('');
 		status.prepend('<span class="magicwand-icon"/>');
 		status.attr('title', i18n("magicwand.title"));
 		status.siblings(".ui-selectmenu-icon").remove();
 		status.removeClass("ui-selectmenu-status");
 		status.addClass("btn");
-		var statusParent = status.parent();
+		statusParent = status.parent();
 		statusParent.removeClass("ui-selectmenu");
 		statusParent.css("display", "block");
 	}

@@ -1,12 +1,12 @@
 $(document).ready(function() {
 	$('.more-actions').bind('change', function() {
-		if ($(this).find('option:selected').val() == 'delete') {
+		if ($(this).find('option:selected').val() === 'delete') {
 			deleteAction();
-		} else if($(this).find('option:selected').val() == 'rename') {
+		} else if($(this).find('option:selected').val() === 'rename') {
 			renameAction();
-		} else if($(this).find('option:selected').val() == 'edit') {
+		} else if($(this).find('option:selected').val() === 'edit') {
 			editAction();
-		} else if($(this).find('option:selected').val() == 'export') {
+		} else if($(this).find('option:selected').val() === 'export') {
 			exportAction();
 		}
 		selectmenuTools.snapback($('#more-actions'));
@@ -28,8 +28,9 @@ function renameAction() {
 }
 
 function editAction() {
-	var messageSection = $("#messageSection").val();
-	var title = i18n("wizard.fmessage.edit.title", messageSection);
+	var title, messageSection;
+	messageSection = $("#messageSection").val();
+	title = i18n("wizard.fmessage.edit.title", messageSection);
 	$.ajax({
 		type:'GET',
 		url: url_root + messageSection + '/edit',

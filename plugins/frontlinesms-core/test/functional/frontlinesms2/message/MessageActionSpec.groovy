@@ -14,9 +14,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		when:
 			to PageMessagePoll, Poll.findByName('Football Teams'), Fmessage.findBySrc('Bob')
 		then:
-			def actions = singleMessageDetails.moveActions
-			actions[1] == "Inbox"
-			actions[2] == "Shampoo Brands"
+			def actions = singleMessageDetails.moveActions.sort()
+			actions[0] == "Inbox"
+			actions[4] == "Shampoo Brands"
 			!actions.contains("Football Teams")
 		when:
 			to PageMessageInbox, Fmessage.findBySrc("Bob")

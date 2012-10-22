@@ -9,8 +9,9 @@ function initContactPaneFields() {
 }
 
 function addFieldClickAction() {
-	var me = $(this).find('option:selected');
-	if(me.hasClass('not-field')) return;
+	var me, fieldName, fieldValue;
+	me = $(this).find('option:selected');
+	if(me.hasClass('not-field')) { return; }
 	if(me.hasClass('create-custom-field')) {
 		$.ajax({
 			type:'POST',
@@ -18,8 +19,8 @@ function addFieldClickAction() {
 			success: function(data, textStatus) { launchSmallPopup(i18n("smallpopup.customfield.create.title"), data, i18n("action.ok"), clickDone); }
 		});
 	} else {
-		var fieldName = me.text();
-		var fieldValue = "";
+		fieldName = me.text();
+		fieldValue = "";
 		addCustomField(fieldName);
 		me.remove();
 	}
@@ -33,17 +34,18 @@ function clickDone() {
 	}
 }
 
-var CustomFields = function() {
+var customFields = (function() {
 	var
 		_checkResults = function(json) {
-			if ($("#custom-field-name").val() != "") {
-				var name = $("#custom-field-name").val();
-				var fieldsToAdd = getFieldIdList('fieldsToAdd').val().split(",");
+			var name, fieldsToAdd, x, y;
+			if ($("#custom-field-name").val() !== "") {
+				name = $("#custom-field-name").val();
+				fieldsToAdd = getFieldIdList('fieldsToAdd').val().split(",");
 				for (y in fieldsToAdd) {
-					if(fieldsToAdd[y] !="" ) {json.uniqueCustomFields.push(fieldsToAdd[y])};
+					if(fieldsToAdd[y] !== "") { json.uniqueCustomFields.push(fieldsToAdd[y]); }
 				}
 				for (x in json.uniqueCustomFields) {
-					if (json.uniqueCustomFields[x].toLowerCase() == name.toLowerCase()) {
+					if (json.uniqueCustomFields[x].toLowerCase() === name.toLowerCase()) {
 						$("#smallpopup-error-panel").html(i18n("customfield.validation.error"));
 						$("#smallpopup-error-panel").show();
 						return false;
@@ -59,16 +61,16 @@ var CustomFields = function() {
 	return {
 		checkResults: _checkResults
 	};
-};
-var customFields = new CustomFields();
+}());
 
 function addCustomField(name) {
-	var fieldId = Math.floor(Math.random() * 100001);
-	var fieldRow = $('<tr><td><label for="' + fieldId + '">' + name + '</label></td></tr>');
-	var textFieldItem = $('<input type="text" name="' + name + '"/>');
-	var deleteButton = $('<a class="remove-command unsaved-field custom-field" id="remove-field-' + fieldId + '">&nbsp;</a>');
+	var fieldId, fieldRow, textFieldItem, deleteButton, fieldTd;
+	fieldId = Math.floor(Math.random() * 100001);
+	fieldRow = $('<tr><td><label for="' + fieldId + '">' + name + '</label></td></tr>');
+	textFieldItem = $('<input type="text" name="' + name + '"/>');
+	deleteButton = $('<a class="remove-command unsaved-field custom-field" id="remove-field-' + fieldId + '">&nbsp;</a>');
 
-	var fieldTd = $("<td/>");
+	fieldTd = $("<td/>");
 	fieldTd.append(textFieldItem);
 	fieldTd.append(deleteButton);
 	fieldRow.append(fieldTd);
@@ -81,10 +83,11 @@ function addCustomField(name) {
 }
 
 function removeFieldClickAction() {
-	var fieldId = $(this).attr('id').substring('remove-field-'.length);
-	var fieldElement = $(this).parent().parent();
-	var isUnsaved = $(this).hasClass('unsaved-field');
-	var fieldName = fieldElement.find('input').attr('name');
+	var fieldId, fieldElement, isUnsaved, fieldName;
+	fieldId = $(this).attr('id').substring('remove-field-'.length);
+	fieldElement = $(this).parent().parent();
+	isUnsaved = $(this).hasClass('unsaved-field');
+	fieldName = fieldElement.find('input').attr('name');
 	fieldElement.remove();
 	$("#new-field-dropdown option[value='na']").after('<option value="'+fieldName+'">'+fieldName+'</option>');
 	selectmenuTools.refresh($('#new-field-dropdown'));
@@ -109,23 +112,26 @@ function addField(id) {
 }
 
 function removeFieldIdFromList(id, fieldName) {
-	var f = $('input:hidden[name=' + fieldName + ']');
-	var oldList = f.val();
-	var newList = oldList.replace(','+ id +',', ',');
+	var f, oldList, newList;
+	f = $('input:hidden[name=' + fieldName + ']');
+	oldList = f.val();
+	newList = oldList.replace(','+ id +',', ',');
 	f.val(newList);
 }
 function addFieldIdToList(id, fieldName) {
-	var f = getFieldIdList(fieldName);
-	var oldList = f.val();
-	var newList = oldList + id + ',';
+	var f, oldList, newList;
+	f = getFieldIdList(fieldName);
+	oldList = f.val();
+	newList = oldList + id + ',';
 	f.val(newList);
 }
 function getFieldIdList(fieldName) {
 	return $('input:hidden[name=' + fieldName + ']');
 }
 function clearField() {
+	var field;
 	if($(this).attr('id')) {
-		var field = $(this).attr('id').substring('remove-'.length);
+		field = $(this).attr('id').substring('remove-'.length);
 		$('#' + field).val('');
 		$(this).hide();
 		$(this).next().hide();
