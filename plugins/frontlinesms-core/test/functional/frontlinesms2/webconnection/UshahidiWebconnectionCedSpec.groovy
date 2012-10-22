@@ -88,7 +88,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		and:
 			configureUshahidi.subType('crowdmap').click()
 			configureUshahidi.crowdmapDeployAddress.value('my')
-			configureUshahidi.crowdmapApiKey = 'a1b2c3d4e5'
+			configureUshahidi.crowdmapApiKey.value('a1b2c3d4e5')
 		when:
 			next.click()
 			keywordTab.useKeyword('global').click()
@@ -108,7 +108,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			waitFor { at WebconnectionWizard }
 			configureUshahidi.crowdmapDeployAddress.displayed
 			configureUshahidi.crowdmapDeployAddress.value("frontlineCrowd")
-			configureUshahidi.crowdmapApiKey = "2343asdasd"
+			configureUshahidi.crowdmapApiKey.value("2343asdasd")
 			next.click()
 		and:
 			keywordTab.keyword = "Repo"
@@ -122,12 +122,11 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		when:
 			submit.click()
 		then:
-			waitFor('veryslow'){ summary.displayed }
-			def connection = UshahidiWebconnection.findByName('Trial')
-			connection.refresh()
-			connection.name == "Trial"
-			connection.url == "https://frontlineCrowd.crowdmap.com"
-			connection.requestParameters*.value.containsAll(["2343asdasd"])
+			waitFor('very slow'){ summary.message.text() == "The Web Connection has been saved!" }
+			submit.click()
+			waitFor('very slow') { at PageMessageWebconnection }
+			header['name'] == 'trial web connection'
+			header['url'] == 'https://frontlinecrowd.crowdmap.com'
 	}
 
 	private def fillValidConfig() {
