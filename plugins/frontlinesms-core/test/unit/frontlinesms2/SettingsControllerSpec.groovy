@@ -8,6 +8,14 @@ import org.codehaus.groovy.grails.orm.hibernate.cfg.*
 @Mock([LogEntry, AppSettingsService])
 class SettingsControllerSpec extends Specification {
 	def TEST_DATE = new Date()
+
+	def appSettingsService
+
+	def setup() {
+		controller.i18nUtilService = Mock(I18nUtilService)
+		appSettingsService = Mock(AppSettingsService)
+		controller.appSettingsService = appSettingsService
+	}
 	
 	def "can view the list of all log entries"() {
 		given:
@@ -40,40 +48,38 @@ class SettingsControllerSpec extends Specification {
 	}
 
 	def "can enable application authentication from settings if details validate"() {
-		setup:
-			def appSettingsService = new AppSettingsService()
-			appSettingsService.load()
-			SettingsController.metaClass.appSettingsService = appSettingsService
-		when:
-			params.enabledAuthentication = "on"
+		given:
+			params.enabledAuthentication = 'true'
 			params.username = "test"
 			params.password = "pass"
 			params.confirmPassword = "pass"
+		when:
 			controller.basicAuth()
 		then:
-			appSettingsService.get("enabledAuthentication") == "on"
-			appSettingsService.get("username") == "test".bytes.encodeBase64().toString()
-			appSettingsService.get("password") == "pass".bytes.encodeBase64().toString()
+			1 * appSettingsService.set('enabledAuthentication', 'true')
+			1 * appSettingsService.set('username', 'test'.bytes.encodeBase64().toString())
+			1 * appSettingsService.set('password', 'pass'.bytes.encodeBase64().toString())
+			0 * appSettingsService.set(_, _)
 	}
 
-	def "does not enable application authentication from settings if details validate"() {
-		setup:
-			def appSettingsService = new AppSettingsService()
-			appSettingsService.load()
-			appSettingsService.set("enabledAuthentication", false)
-			appSettingsService.set("username", "")
-			appSettingsService.set("password", "".bytes.encodeBase64().toString())
-			SettingsController.metaClass.appSettingsService = appSettingsService
+	def "should not enable application authentication from settings if details don't validate"() {
+		given:
+			mockAppSettings(enabledAuthentication: false,
+					username:'', password:'')
 		when:
-			params.enabledAuthentication = "on"
+			params.enabledAuthentication = "true"
 			params.username = "test"
 			params.password = "pass"
 			params.confirmPassword = "me"
 			controller.basicAuth()
 		then:
-			!appSettingsService.get("enabledAuthentication")
-			appSettingsService.get("username") == ""
-			appSettingsService.get("password") == ""
+			0 * appSettingsService.set(_, _)
+	}
+
+	private def mockAppSettings(Map s) {
+		s.each { k, v ->
+			appSettingsService.get(k, _) >> { v instanceof String? v.bytes.encodeBase64().toString(): v }
+		}
 	}
 
 	private def createLogEntries(entries) {

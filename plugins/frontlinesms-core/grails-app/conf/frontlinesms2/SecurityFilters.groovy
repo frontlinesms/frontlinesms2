@@ -7,7 +7,6 @@ class SecurityFilters {
 		basicAuth(controller:'*', action:'*') {
 			before = {
 				def enabledAuthentication = appSettingsService.get("enabledAuthentication")
-				println "### enabledAuthentication: $enabledAuthentication"
 				if(enabledAuthentication) {
 					def basicAuthRequired = { credentialsProvided ->
 						if(credentialsProvided) response.status = 403
