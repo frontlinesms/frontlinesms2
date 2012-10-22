@@ -50,6 +50,7 @@ class MessageSendService {
 
 	def generateDispatches(List addresses) {
 		(addresses.unique() - null).collect {
+			it = it.replaceAll(/\s|\(|\)|\-/, "")
 			new Dispatch(dst:it, status:DispatchStatus.PENDING)
 		}
 	}
