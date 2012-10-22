@@ -6,7 +6,7 @@
 <div class="input">
 	<ul class="select">
 		<li>
-			<g:checkBox name="disableSorting" checked="activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false"/>
+			<g:checkBox name="disableSorting" checked="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
 			<label for="leaveKeywords"><g:message code="subscription.sorting.disable"/></label>
 		</li>
 	</ul>
@@ -17,7 +17,7 @@
 </div>
 
 <div class="input">
-	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field"/>
+	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
 </div>
 
 <h2><g:message code="subscription.keywords.header"/></h2>
@@ -28,11 +28,11 @@
 	<table class="subscription-aliases">
 		<tr>
 			<td><label for="joinKeywords"><g:message code="subscription.keywords.join"/></label></td>
-			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }"/></td>
+			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/></td>
 		</tr>
 		<tr>
 			<td><label for="leaveKeywords"><g:message code="subscription.keywords.leave"/></label></td>
-			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }"/></td>
+			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/></td>
 		</tr>
 	</table>
 </div>
@@ -45,15 +45,15 @@
 	<ul class="select">
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.join"/></label>
-			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.JOIN : true}" class="subscription-default-action"/>
+			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.JOIN : true}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
 		</li>
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.leave"/></label>
-			<g:radio name="defaultAction" value="leave" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.LEAVE : false}" class="subscription-default-action"/>
+			<g:radio name="defaultAction" value="leave" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.LEAVE : false}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
 		</li>
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.toggle"/></label>
-			<g:radio name="defaultAction" value="toggle" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.TOGGLE : false}" class="subscription-default-action"/>
+			<g:radio name="defaultAction" value="toggle" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.TOGGLE : false}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
 		</li>
 	</ul>
 </div>

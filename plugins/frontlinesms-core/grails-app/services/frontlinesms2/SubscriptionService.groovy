@@ -9,24 +9,25 @@ class SubscriptionService {
 		if(subscriptionInstance.keywords)
 			subscriptionInstance.keywords.clear()
 
-		subscriptionInstance.defaultAction = Subscription.Action."${params.defaultAction.toUpperCase()}"
+		def defaultAction = params.defaultAction ? params.defaultAction.toUpperCase() : Subscription.Action.JOIN.toString()
+		subscriptionInstance.defaultAction = Subscription.Action."${defaultAction}"
 		subscriptionInstance.joinAutoreplyText = params.joinAutoreplyText
 		subscriptionInstance.leaveAutoreplyText = params.leaveAutoreplyText
 		subscriptionInstance.name = params.name
 
 		subscriptionInstance.save(failOnError:true, flush:true)
 		
-		if(params.topLevelKeywords) {
+		if(params.topLevelKeywords?.trim()) {
 			params.topLevelKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
 				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:true))
 			}
 		}
-		if(params.joinKeywords.trim()){
+		if(params.joinKeywords?.trim()){
 			params.joinKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
 				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:!params.topLevelKeywords, ownerDetail: Subscription.Action.JOIN.toString()))
 			}
 		}
-		if(params.leaveKeywords.trim()){
+		if(params.leaveKeywords?.trim()){
 			params.leaveKeywords.toUpperCase().replaceAll(/\s/, "").split(",").each {
 				subscriptionInstance.addToKeywords(new Keyword(value: it, isTopLevel:!params.topLevelKeywords, ownerDetail: Subscription.Action.LEAVE.toString()))
 			}
