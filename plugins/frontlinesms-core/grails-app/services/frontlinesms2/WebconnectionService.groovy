@@ -33,4 +33,22 @@ class WebconnectionService{
 		headers.'webconnection-id' = message.messageOwner.id
 		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
 	}
+
+	def saveInstance(Webconnection webconnectionInstance, params) {
+		webconnectionInstance.keywords?.clear()
+		webconnectionInstance.name = params.name
+		webconnectionInstance.initialize(params)
+		webconnectionInstance.save(flush:true, failOnError:true)
+		if (params.sorting == 'disabled') {
+			println "##### WebconnectionService.saveInstance() # removing keywords"
+		}
+		else if(params.sorting == 'global')
+			webconnectionInstance.addToKeywords(new Keyword(value:'', isTopLevel:true))
+		else if(params.sorting == 'enabled'){
+			def keywords = params.keywords?.toUpperCase().replaceAll(/\s/, "").split(',')
+			keywords.collect { new Keyword(value:it.trim(), isTopLevel:true) }.each { webconnectionInstance.addToKeywords(it) }
+		}
+		webconnectionInstance.save(flush:true, failOnError:true)
+		return webconnectionInstance
+	}
 }

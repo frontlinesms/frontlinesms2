@@ -1,0 +1,18 @@
+#!/bin/bash
+VIOLATIONS=0
+
+echo "# All domain saves should be flushed in functional tests"
+BAD_SAVE_COUNT=`grep -r save test/functional/ | grep -v flush:true | grep -c .`
+if [ "0" -ne "$BAD_SAVE_COUNT" ]; then
+	echo "# Found saves without flush: $BAD_SAVE_COUNT"
+	let ++VIOLATIONS
+else
+	echo "# No bad saves found"
+fi
+
+if [ $VIOLATIONS -gt "0" ]; then
+	echo "# Violations: $VIOLATIONS"
+	exit 1
+fi
+
+echo "# There were no violations"

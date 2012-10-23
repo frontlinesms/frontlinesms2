@@ -141,11 +141,12 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'move action should work for activities'() {
 		given:
-			def poll = new Poll(name:'whatever')
-					.addToResponses(PollResponse.createUnknown())
-					.addToResponses(key:'A', value:'a')
-					.addToResponses(key:'B', value:'b')
-					.save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'This is a poll', yesNo:false)
+			poll.addToResponses(new PollResponse(value:"Manchester"))
+			poll.addToResponses(new PollResponse(value:"Barcelona"))
+			poll.addToResponses(new PollResponse(value:"Harambee Stars"))
+			poll.addToResponses(PollResponse.createUnknown())
+			poll.save(failOnError:true)
 			def message = Fmessage.build()
 		when:
 			controller.params.messageId = message.id
@@ -154,8 +155,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.move()
 		then:
 			message.messageOwner == poll
-			// FIXME this next should work but doesn't. 
-			//poll.messages == [message]
+			poll.messages*.id.contains(message.id)
 	}
 
 	def 'listRecipients should return a JSON list of contact displayNames and message statuses'() {
@@ -180,7 +180,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def responseA = new PollResponse(key:'A', value:'TessstA')
 			def previousOwner = new Poll(name:'This is a poll', question:'What is your name?')
 					.addToResponses(responseA)
-					.addToResponses(key:'B' , value:'TessstB')
+					.addToResponses(new PollResponse(key:'B' , value:'TessstB'))
 					.addToResponses(PollResponse.createUnknown())
 					.addToMessages(m)
 			responseA.addToMessages(m)
@@ -189,7 +189,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			assert responseA.messages.contains(m)
 
 			def Keyword k = new Keyword(value:'ASDF')
-			def newOwner = Autoreply.build(keyword:k)
+			def newOwner = new Autoreply(name:"Toothpaste", autoreplyText: "Thanks for the input").addToKeywords(k).save(failOnError:true)
 			
 			// TODO move this test to MessageController
 			controller.params.messageId = m.id

@@ -56,22 +56,6 @@ class PollControllerSpec extends Specification {
 			!poll.archived
 			controller.response.redirectUrl == '/archive/activityList'
 	}
-
-	def "save action should persist outgoing message when required"() {
-		given:
-			MessageSendJob.metaClass.static.defer = { Fmessage message -> }
-			MessageSendService sendService = Mock()
-			sendService.createOutgoingMessage(_) >> { Map params -> Fmessage.buildWithoutSave() }
-			controller.messageSendService = sendService
-			params.name = "Test"
-			params.question = "Are we having fun?"
-			params.pollType = "yesNo"
-			params.messageText = "thanks for participating in this poll"
-			params.addresses = "07257723729"
-		when:
-			controller.save()
-		then:
-			Fmessage.count() == 1
-	}
 	
 }
+

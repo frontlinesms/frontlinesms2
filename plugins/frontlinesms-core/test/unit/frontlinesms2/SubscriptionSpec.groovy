@@ -31,7 +31,7 @@ class SubscriptionSpec extends Specification {
 				params.addresses==TEST_CONTACT && params.messageText=='you have joined'
 			}) >> replyMessage
 		when:
-			processKeyword("KEY JOIN", TEST_CONTACT)
+			processKeyword("KEY JOIN", TEST_CONTACT, "JOIN")
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -46,7 +46,7 @@ class SubscriptionSpec extends Specification {
 				params.addresses==TEST_CONTACT && params.messageText=='you have left'
 			}) >> replyMessage
 		when:
-			processKeyword("KEY LEAVE", TEST_CONTACT)
+			processKeyword("KEY LEAVE", TEST_CONTACT, "LEAVE")
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -61,7 +61,7 @@ class SubscriptionSpec extends Specification {
 				params.addresses==TEST_CONTACT && params.messageText=='you have joined'
 			}) >> replyMessage
 		when:
-			processKeyword("KEY", TEST_CONTACT)
+			processKeyword("KEY", TEST_CONTACT, null)
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -77,20 +77,21 @@ class SubscriptionSpec extends Specification {
 				params.addresses==TEST_CONTACT && params.messageText=='you have left'
 			}) >> replyMessage
 		when:
-			processKeyword("KEY", TEST_CONTACT)
+			processKeyword("KEY", TEST_CONTACT, null)
 		then:
 			1 * sendService.send(replyMessage)
 	}
 
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
-		def keyword = new Keyword(value:"KEY")
-		s = new Subscription(name:"test subscription", keyword: keyword,group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
+		s = new Subscription(name:"test subscription", group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
 	}
 
 	//> HELPERS
-	private def processKeyword(String messageText, String sourcePhoneNumber, boolean exactMatch=true) {
-		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), exactMatch)
+	private def processKeyword(String messageText, String sourcePhoneNumber, String ownerDetail) {
+		def k = Mock(Keyword)
+		k.ownerDetail >> ownerDetail
+		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), k)
 	}
 
 	private def createTestContact() {

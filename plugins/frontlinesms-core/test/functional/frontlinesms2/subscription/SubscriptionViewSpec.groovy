@@ -29,7 +29,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			'title'            | "camping subscription subscription"
 			'groupMemberCount' | '2 members'
 			'group'            | 'Group: Camping'
-			'keyword'          | 'Keyword: CAMPING'
+			'keyword'          | 'Top-level Keywords: CAMPING'
 			'joinAliases'      | 'Join: JOIN,IN,START'
 			'leaveAliases'     | 'Leave: LEAVE,OUT,STOP'
 	}

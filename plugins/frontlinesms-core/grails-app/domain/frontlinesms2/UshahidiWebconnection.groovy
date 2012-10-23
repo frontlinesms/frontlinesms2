@@ -19,7 +19,7 @@ class UshahidiWebconnection extends Webconnection {
 	}
 
 	def getServiceType() {
-		url ==~ 'https://.*\\.crowdmap.com' ? "crowdmap" : "ushahidi"
+		url ==~ 'https://.*\\.crowdmap.com/frontlinesms/' ? "crowdmap" : "ushahidi"
 	}
 
 	def getKey() {

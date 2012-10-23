@@ -61,7 +61,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			startAtTab('keyword')
 		when:
 			keywordTab.keyword = ""
-			keywordTab.useKeyword.click() // to disable
+			keywordTab.useKeyword('disabled').click() // to disable
 			next.click()
 		then:
 			waitFor { confirmTab.displayed }
@@ -114,10 +114,10 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			startAtTab('confirm')
 		when:
 			previousTab(keywordTab)
-			keywordTab.useKeyword.jquery.click()//enable keyword
+			keywordTab.useKeyword('enabled').jquery.click()//enable keyword
 			next.click()
 		then:
-			waitFor { error.contains('Keyword is required') }
+			waitFor { error.toLowerCase().contains('this field is required') }
 	}
 
 	def "Url must be provided"() {
@@ -151,7 +151,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		nextTab(keywordTab)
 		if(tabName == 'keyword') return;
 
-		keywordTab.useKeyword.jquery.click() // disable keyword
+		keywordTab.useKeyword('disabled').jquery.click() // disable keyword
 
 		nextTab(confirmTab)
 		if(tabName == 'confirm') return;

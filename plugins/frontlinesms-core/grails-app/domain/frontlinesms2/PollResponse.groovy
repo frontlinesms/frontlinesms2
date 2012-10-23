@@ -1,9 +1,9 @@
 package frontlinesms2
 
 class PollResponse {
-	String value
 	String key
-	String aliases
+	String value
+	boolean isUnknownResponse = false
 	static belongsTo = [poll: Poll]
 	static hasMany = [messages: Fmessage]
 	List messages = []
@@ -15,10 +15,9 @@ class PollResponse {
 	
 	static constraints = {
 		value(blank:false, nullable:false, maxSize:255)
-		key(nullable:true)
-		aliases(blank:true,nullable:true)
 		poll(nullable:false)
 		messages(nullable:true)
+		key(nullable:true)
 	}
 	
 	void addToMessages(Fmessage message) {

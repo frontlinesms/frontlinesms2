@@ -15,14 +15,16 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'can create an Autoreply'() {
 		given:
 			controller.params.name = name
-			controller.params.keyword = keyword
+			controller.params.keywords = keyword
 			controller.params.messageText = autoreplyText
+			controller.params.sorting = "enabled"
 		when:
 			controller.save()
 		then:
 			def autoreply = Autoreply.findByName(name)
 			autoreply.autoreplyText == autoreplyText
-			autoreply.keyword.value == keyword
+			autoreply.keywords?.size() == 1
+			autoreply.keywords[0].value == keyword
 		where:
 			name     | keyword | autoreplyText
 			"Color"  | 'COLOR' | "ahhhhhhhhh"
@@ -33,13 +35,14 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "can edit an Autoreply"() {
 		given: 'an autoreply exists'
 			def k = new Keyword(value:initialKeyword)
-			def a = new Autoreply(name:"Color", keyword:k, autoreplyText:"ahhhhhhhhh")
+			def a = new Autoreply(name:"Color", autoreplyText:"ahhhhhhhhh")
 					.save(flush:true, failOnError:true)
-			
+			a.addToKeywords(k)
 		and: 'controller params are setup'
 			controller.params.ownerId = a.id
 			controller.params.name = name
-			controller.params.keyword = finalKeyword
+			controller.params.keywords = finalKeyword
+			controller.params.sorting = "enabled"
 			controller.params.messageText = autoreplyText
 			controller.response.format = 'html'
 			
@@ -49,7 +52,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then: 'the auto reply has been updated'
 			def autoreply = Autoreply.get(model.ownerId)
 			autoreply.name == name
-			autoreply.keyword.value == finalKeyword
+			autoreply.keywords[0].value == finalKeyword
 			autoreply.autoreplyText == autoreplyText
 		
 		and: 'the old auto reply and keyword have been deleted'
@@ -62,5 +65,128 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			"Blank"   | "COLOR"        | ""           | "blue, i mean green"
 			"ColorZ"  | ""             | "COLORZ"     | "blue, i mean green"
 	}  
+
+	def "can create Autoreply with multiple keywords"(){
+		given:
+			controller.params.name = 'Fruit'
+			controller.params.keywords = 'Mango,Orange,Banana'
+			controller.params.messageText = 'Some Text'
+			controller.response.format = 'html'
+			controller.params.sorting = "enabled"
+		when:
+			def model = controller.save()
+		then:
+			def autoreply = Autoreply.get(model.ownerId)
+			autoreply.autoreplyText == 'Some Text'
+			autoreply.keywords?.size() == 3
+			autoreply.keywords[0].value == 'MANGO'
+			autoreply.keywords[1].value == 'ORANGE'
+			autoreply.keywords[2].value == 'BANANA'
+	}
+
+	def "can change Autoreply keywords"(){
+		given: 'an autoreply exists'
+			def a = new Autoreply(name:"Fruits", autoreplyText:"Hello")
+			a.addToKeywords(new Keyword(value:"MANGO"))
+			a.addToKeywords(new Keyword(value:"ORANGE"))
+			a.save(flush:true, failOnError:true)
+		and: 'controller params are setup'
+			controller.params.ownerId = a.id
+			controller.params.name = "Matunda"
+			controller.params.keywords = "Apple,Strawberry"
+			controller.params.messageText = "Hello"
+			controller.response.format = 'html'
+			controller.params.sorting = "enabled"
+		when:
+			def model = controller.save()
+			println "MODEL::: $model"
+			def autoreply = Autoreply.get(model?.ownerId)
+		then: 'the auto reply has been updated'
+			autoreply != null
+			autoreply.name == "Matunda"
+			autoreply.keywords[0].value == "APPLE"
+			autoreply.keywords[1].value == "STRAWBERRY"
+			autoreply.autoreplyText == "Hello"
+		and: 'the old keyword have been deleted'
+			Keyword.findByValue("ORANGE") == null
+	}
+
+	def "can edit Autoreply with multiple keywords, keeping some of the old ones"(){
+		given: 'an autoreply exists'
+			def a = new Autoreply(name:"Fruits", autoreplyText:"Hello")
+			a.addToKeywords(new Keyword(value:"MANGO"))
+			a.addToKeywords(new Keyword(value:"ORANGE"))
+			a.save(flush:true, failOnError:true)
+		and: 'controller params are setup'
+			controller.params.ownerId = a.id
+			controller.params.name = "Matunda"
+			controller.params.keywords = "Mango,Banana,Ovacado"
+			controller.params.messageText = "Hello"
+			controller.response.format = 'html'
+			controller.params.sorting = "enabled"
+		when:
+			def model = controller.save()
+			println "MODEL::: $model"
+			def autoreply = Autoreply.get(model?.ownerId)
+		then: 'the auto reply has been updated'
+			autoreply != null
+			autoreply.name == "Matunda"
+			autoreply.keywords[0].value == "MANGO"
+			autoreply.keywords[1].value == "BANANA"
+			autoreply.keywords[2].value == "OVACADO"
+			autoreply.autoreplyText == "Hello"
+		and: 'the old keyword have been deleted'
+			Keyword.findByValue("ORANGE") == null
+	}
+
+	@Unroll
+	def 'while editing an autoreply changing the sorting criteria should translate into proper keyword changes'(){
+		setup:
+			controller.params.name = "Matunda"
+			controller.params.keywords = "Mango,Banana,Ovacado"
+			controller.params.messageText = "Hello"
+			controller.response.format = 'html'
+		when:
+			controller.params.sorting = sorting
+			controller.save()
+		then:
+			results == Autoreply.findByName("Matunda").keywords*.value?.join(',')
+		where:
+			sorting|results
+			"global"|''
+			"enabled"|"MANGO,BANANA,OVACADO"
+			"disabled"|null
+	}
+
+	def "can create Autoreply with global keyword"(){
+		given:
+			controller.params.name = 'Fruit'
+			controller.params.keywords = ''
+			controller.params.messageText = 'Some Text'
+			controller.response.format = 'html'
+			controller.params.sorting = "global"
+		when:
+			def model = controller.save()
+		then:
+			def autoreply = Autoreply.get(model.ownerId)
+			autoreply.autoreplyText == 'Some Text'
+			autoreply.keywords?.size() == 1
+			autoreply.keywords[0].value == ''
+	}
+
+	def "can create Autoreply without keywords"(){
+		given:
+			controller.params.name = 'Fruit'
+			controller.params.keywords = ''
+			controller.params.messageText = 'Some Text'
+			controller.response.format = 'html'
+			controller.params.sorting = "disabled"
+		when:
+			def model = controller.save()
+		then:
+			def autoreply = Autoreply.get(model.ownerId)
+			autoreply.autoreplyText == 'Some Text'
+			autoreply.keywords == null
+	}
 }
 

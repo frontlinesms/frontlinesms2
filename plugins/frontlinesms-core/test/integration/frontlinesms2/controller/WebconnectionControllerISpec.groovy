@@ -20,7 +20,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.name = "Test Webconnection"
 			controller.params.httpMethod = "get"
 			controller.params.url = "www.ushahidi.com"
-			controller.params.keyword = "keyword"
+			controller.params.keywords = "keyword"
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.key = '12345678'
 		when:
@@ -38,7 +38,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.name = "Test Webconnection"
 			controller.params.httpMethod = "get"
 			controller.params.url = "www.frontlinesms.com/sync"
-			controller.params.keyword = "keyword"
+			controller.params.keywords = "keyword"
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = 'username'
 			controller.params.'param-value' = 'bob'
@@ -52,14 +52,15 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'edit should save all the details from the walkthrough'() {
 		setup:
 			def keyword = new Keyword(value:'TEST')
-			def webconnection = new GenericWebconnection(name:"Old Webconnection name", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
-			webconnection.save(failOnError:true)
+			def webconnection = new GenericWebconnection(name:"Old Webconnection name", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
+			webconnection.addToKeywords(keyword).save(failOnError:true)
 
 			controller.params.ownerId = webconnection.id
 			controller.params.name = "New Webconnection name"
 			controller.params.url = "www.frontlinesms.com/syncing"
 			controller.params.httpMethod = "get"
-			controller.params.keyword = "keyword"
+			controller.params.keywords = "keyword"
+			controller.params.sorting = "enabled"
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = ['username', 'password'] as String[]
 			controller.params.'param-value' = ['bob','secret'] as String[]
@@ -68,7 +69,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webconnection.refresh()
 		then:
 			webconnection.name == "New Webconnection name"
-			webconnection.keyword.value == "KEYWORD"
+			webconnection.keywords*.value == ["KEYWORD"]
 			webconnection.httpMethod == Webconnection.HttpMethod.GET
 			webconnection.url == "www.frontlinesms.com/syncing"
 			webconnection.requestParameters.size() == 2
@@ -79,14 +80,14 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'edit should remove requestParameters from a web connection'() {
 		setup:
 			def keyword = new Keyword(value:'COOL')
-			def webconnection = new GenericWebconnection(name:"Test", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
+			def webconnection = new GenericWebconnection(name:"Test", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
 			webconnection.addToRequestParameters(new RequestParameter(name:"name", value:'${name}'))
 			webconnection.addToRequestParameters(new RequestParameter(name:"age", value:'${age}'))
 			webconnection.save(failOnError:true)
 			controller.params.ownerId = webconnection.id
 			controller.params.name = "Test Connection"
 			controller.params.httpMethod = "post"
-			controller.params.keyword = "Test"
+			controller.params.keywords = "Test"
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = "username"
 			controller.params.'param-value' = "geoffrey"
@@ -102,13 +103,13 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "should not save requestParameters without a name value"() {
 		setup:
 			def keyword = new Keyword(value:'AWESOME')
-			def webconnection = new GenericWebconnection(name:"Ushahidi", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
+			def webconnection = new GenericWebconnection(name:"Ushahidi", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
 			webconnection.addToRequestParameters(new RequestParameter(name:"name", value:'${name}'))
 			webconnection.addToRequestParameters(new RequestParameter(name:"age", value:'${age}'))
 			webconnection.save(failOnError:true)
 			controller.params.ownerId = webconnection.id
 			controller.params.name = "Ushahidi Connection"
-			controller.params.keyword = "Test"
+			controller.params.keywords = "Test"
 			controller.params.httpMethod = "post"
 			controller.params.'param-name' = ""
 			controller.params.webconnectionType = "generic"
@@ -123,14 +124,15 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "editing a webconnection should persist changes"(){
 		setup:
 			def keyword = new Keyword(value:"TRIAL")
-			def connection = new UshahidiWebconnection(name:"Trial", keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST)
+			def connection = new UshahidiWebconnection(name:"Trial", url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
 			connection.save(failOnError:true)
 			controller.params.ownerId = connection.id
 			controller.params.name = "Ushahidi Connection"
 			controller.params.url = "http://sane.com"
-			controller.params.keyword = "Test"
+			controller.params.keywords = "Test"
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.httpMethod = "get"
+			controller.params.key = "get"
 		when:
 			controller.save()
 		then:
@@ -140,5 +142,50 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			connection.url != "www.ushahidi.com/frontlinesms2"
 			connection.httpMethod ==  Webconnection.HttpMethod.GET
 			connection.httpMethod !=  Webconnection.HttpMethod.POST
+	}
+
+	def "can update keywords"(){
+		setup:
+			def connection = new UshahidiWebconnection(name:"Trial", url:"www.ushahidi.com/frontlinesms2", httpMethod:Webconnection.HttpMethod.POST)
+			(1..4).each { connection.addToKeywords(new Keyword(value:"KEYWORD${it}")) }
+			connection.save(failOnError:true)
+			controller.params.ownerId = connection.id
+			controller.params.name = "Ushahidi Connection"
+			controller.params.url = "http://sane.com"
+			controller.params.keywords = "KEYWORD3,KEYWORD4,KEYWORD5"
+			controller.params.webconnectionType = "ushahidi"
+			controller.params.httpMethod = "get"
+			controller.params.key = "get"
+		when:
+			controller.save()
+		then:
+			connection.name == "Ushahidi Connection"
+			connection.name != "Trial"
+			connection.url == "http://sane.com"
+			connection.url != "www.ushahidi.com/frontlinesms2"
+			connection.httpMethod ==  Webconnection.HttpMethod.GET
+			connection.httpMethod !=  Webconnection.HttpMethod.POST
+	}
+
+	@Unroll
+	def 'while editing a webconnection changing the sorting criteria should translate into proper keyword changes'(){
+		setup:
+			controller.params.name = "Ushahidi Connection"
+			controller.params.url = "http://sane.com"
+			controller.params.keywords = "Test,testing"
+			controller.params.webconnectionType = "ushahidi"
+			controller.params.httpMethod = "get"
+			controller.params.key = "get"
+		when:
+			controller.params.sorting = sorting
+			controller.save()
+		then:
+			println ">>>>>>>>>>>>> ${UshahidiWebconnection.findByName("Ushahidi Connection").keywords?.value}"
+			results == UshahidiWebconnection.findByName("Ushahidi Connection").keywords*.value?.join(',')
+		where:
+			sorting|results
+			"global"|''
+			"enabled"|"TEST,TESTING"
+			"disabled"|null
 	}
 }

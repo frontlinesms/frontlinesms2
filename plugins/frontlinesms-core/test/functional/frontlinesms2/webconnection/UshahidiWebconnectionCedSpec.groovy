@@ -87,15 +87,15 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			launchWizard('ushahidi')
 		and:
 			configureUshahidi.subType('crowdmap').click()
-			configureUshahidi.crowdmapDeployAddress = 'my'
-			configureUshahidi.crowdmapApiKey = 'a1b2c3d4e5'
+			configureUshahidi.crowdmapDeployAddress.value('my')
+			configureUshahidi.crowdmapApiKey.value('a1b2c3d4e5')
 		when:
 			next.click()
-			keywordTab.useKeyword.click()
+			keywordTab.useKeyword('global').click()
 			next.click()
 		then:
 			confirmTab.confirm('service') == 'Crowdmap'
-			confirmTab.confirm('url') == 'https://my.crowdmap.com'
+			confirmTab.confirm('url') == 'https://my.crowdmap.com/frontlinesms/'
 			confirmTab.confirm('key') == 'a1b2c3d4e5'
 			confirmTab.confirm('keyword') == 'None'
 	}
@@ -107,8 +107,8 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			header.moreActions.value("edit").jquery.click()
 			waitFor { at WebconnectionWizard }
 			configureUshahidi.crowdmapDeployAddress.displayed
-			configureUshahidi.crowdmapDeployAddress = "frontlineCrowd"
-			configureUshahidi.crowdmapApiKey = "2343asdasd"
+			configureUshahidi.crowdmapDeployAddress.value("frontlineCrowd")
+			configureUshahidi.crowdmapApiKey.value("2343asdasd")
 			next.click()
 		and:
 			keywordTab.keyword = "Repo"
@@ -122,11 +122,11 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		when:
 			submit.click()
 		then:
-			def connection = UshahidiWebconnection.findByName('Trial')
-			connection.refresh()
-			connection.name == "Trial"
-			connection.url == "https://frontlineCrowd.crowdmap.com"
-			connection.requestParameters*.value.containsAll(["2343asdasd"])
+			waitFor('very slow'){ summary.message.text() == "The Web Connection has been saved!" }
+			submit.click()
+			waitFor('very slow') { at PageMessageWebconnection }
+			header['name'] == 'trial web connection'
+			header['url'] == 'https://frontlinecrowd.crowdmap.com'
 	}
 
 	private def fillValidConfig() {
@@ -134,7 +134,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		configureUshahidi.crowdmapDeployAddress = 'default'
 		configureUshahidi.crowdmapApiKey = 'aaa111bbb222'
 		next.click()
-		keywordTab.useKeyword.click()
+		keywordTab.useKeyword('global').click()
 	}
 }
 

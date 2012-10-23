@@ -86,7 +86,6 @@ class PollDialog extends MediumPopup {
 	static content = {
 		compose { module ComposeTab }
 		response { module ResponseTab }
-		aliases { module AliasTab }
 		sort { module SortTab }
 		autoreply { module AutoReplyTab }
 		edit { module EditMessageTab }
@@ -127,14 +126,6 @@ class ResponseTab extends geb.Module {
 	}
 }
 
-class AliasTab extends geb.Module {
-	static base = { $('div#tabs-4') }
-	static content = {
-		labels { $('#poll-aliases label') }
-		inputs { $('#poll-aliases input.aliases') }
-	}
-}
-
 class SortTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
@@ -142,11 +133,14 @@ class SortTab extends geb.Module {
 		sort { $('ul.select input[value="true"]') }
 		toggle { $('input#enableKeyword') }
 		keyword { $('input#poll-keyword') }
+		labels { $('#poll-aliases label') }
+		inputs { $('#poll-aliases input.keywords') }
+		pollKeywordsContainer { $('#poll-keywords') }
 	}
 }
 
 class AutoReplyTab extends geb.Module {
-	static base = { $('div#tabs-5') }
+	static base = { $('div#tabs-4') }
 	static content = {
 		autoreplyCheck { $('input#enableAutoreply') }
 		text { $('textarea#autoreplyText') }
@@ -155,14 +149,14 @@ class AutoReplyTab extends geb.Module {
 }
 
 class EditMessageTab extends geb.Module {
-	static base = { $('div#tabs-6') }
+	static base = { $('div#tabs-5') }
 	static content = {
 		text { $('textarea#messageText') }
 	}
 }
 
 class RecipientsTab extends geb.Module {
-	static base = { $('div#tabs-7') }
+	static base = { $('div#tabs-6') }
 	static content = {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
@@ -172,7 +166,7 @@ class RecipientsTab extends geb.Module {
 }
 
 class ConfirmTab extends geb.Module {
-	static base = { $('div#tabs-8') }
+	static base = { $('div#tabs-7') }
 	static content = {
 		pollName { $('input#name') }
 		message { $("#poll-message").text() }
@@ -251,30 +245,6 @@ class DeleteDialog extends MediumPopup {
 	}
 }
 
-class ConnectionDialog extends MediumPopup {
-	static at = {
-		popupTitle.contains('connection')
-	}
-	static content = {
-		connectionType { $("#connectionType") }
-		connectionForm { $('#connectionForm') }
-		confirmName { $("#confirm-name") }
-		confirmType { $("#confirm-type") }
-		confirmPort { $("#confirm-port") }
-
-		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name") }
-		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username") }
-		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type") }
-
-		confirmSmssyncName { $('#smssync-confirm #confirm-name') }
-		confirmSmssyncSecret { $('#smssync-confirm #confirm-secret') }
-		confirmSmssyncReceiveEnabled { $('#smssync-confirm #confirm-receiveEnabled') }
-		confirmSmssyncSendEnabled { $('#smssync-confirm #confirm-sendEnabled') }
-
-		error {$('label', class:'error')}
-	}
-}
-
 class SmartGroupCreateDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains('create smart group')
@@ -321,10 +291,12 @@ class WebconnectionWizard extends MediumPopup {
 }
 
 class WebconnectionKeywordTab extends geb.Module {
-	static base = { $('#webconnection-sorting') }
+	static base = { $('div.generic_sorting_tab') }
 	static content = {
-		useKeyword { $("input#blankKeyword") }
-		keyword { $('input#keyword') }
+		useKeyword { value ->
+				$('input#sorting',value:value)
+		}
+		keyword { $('input#keywords') }
 	}
 }
 
@@ -374,11 +346,11 @@ class SubscriptionCreateDialog extends MediumPopup {
 	}
 	static content = {
 		group { module SubscriptionGroupTab }
-		aliases { module SubscriptionAliasesTab}
+		keywords { module SubscriptionKeywordsTab}
 		autoreply { module SubscriptionAutoReplyTab }
 		confirm { module SubscriptionConfirmTab }
 		summary { module SubscriptionSummary }
-		error {$('label', class:'error')}
+		error { errorPanel }
 	}
 }
 
@@ -389,15 +361,15 @@ class SubscriptionGroupTab extends geb.Module {
 			$('select#subscriptionGroup').jquery.val(groupId)
 			$('select#subscriptionGroup').jquery.trigger("change")
 		}
-		keywordText { $('input#keyword') }
 	}
 }
 
-class SubscriptionAliasesTab extends geb.Module {
+class SubscriptionKeywordsTab extends geb.Module {
 	static base = { $('div#tabs-2')}
 	static content = {
-		joinAliases {$('input#joinAliases')}
-		leaveAliases {$('input#leaveAliases')}
+		keywordText { $('input#topLevelKeywords') }
+		joinKeywords {$('input#joinKeywords')}
+		leaveKeywords {$('input#leaveKeywords')}
 		defaultAction { $("input#defaultAction") }
 	}
 }
@@ -417,6 +389,9 @@ class SubscriptionConfirmTab extends geb.Module {
 	static content = {
 		subscriptionName { $('input#name') }
 		keyword {$("#confirm-keyword").text()}
+		confirm {id->
+			$("#confirm-"+id).text()
+		}
 		joinAliases {$("#confirm-joinAliases").text()}
 		leaveAliases {$("#confirm-leaveAliases").text()}
 		autoreplyText {$("#confirm-autoreplyText").text()}
@@ -465,5 +440,52 @@ class ConfigureUshahidiWebconnectionTab extends geb.Module{
 		urlSuffix { $("label", for:'url').last() }
 		crowdmapApiKey{ $('#key') }
 		ushahidiApiKey{ $('#key') }
+	}
+}
+
+class AutoreplyCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("autoreply") || popupTitle.contains("edit activity")
+	}
+	static content = {
+		message { module AutoreplyMessageTab}
+		keyword { module AutoreplyKeywordTab}
+		confirm { module AutoreplyConfirmTab}
+		summary { module AutoreplySummaryTab}
+		validationErrorText { $('label.error').text() }
+		errorText { errorPanel.text()?.toLowerCase() }
+		error { errorPanel }
+		create { $('button#submit') }
+	}
+}
+
+class AutoreplyMessageTab extends geb.Module {
+	static base = { $('div#tabs-1')}
+	static content = {
+		messageText { $('area#messageText') }
+	}
+}
+
+class AutoreplyKeywordTab extends geb.Module {
+	static base = { $('div#tabs-2')}
+	static content = {
+		keywordText { $('#keywords') }
+		blankKeyword {$('#blankKeyword')}
+	}
+}
+
+class AutoreplyConfirmTab extends geb.Module {
+	static base = { $('div#tabs-3') }
+	static content = {
+		keywordConfirm {$("#keyword-confirm").text()}
+		autoreplyConfirm {$("#autoreply-confirm").text()}
+		nameText {$("#name")}
+	}
+}
+
+class AutoreplySummaryTab extends geb.Module {
+	static base = { $('div#tabs-4 > div.summary') } //ensures div.summary has been loaded too
+	static content = {
+		message { $("p", 0).text() }
 	}
 }

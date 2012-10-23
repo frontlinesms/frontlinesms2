@@ -28,7 +28,7 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			fconnectionService.createRoutes(connection)
 			
 			// create a poll called GOO with an answer D
-			createPoll(name:'What do you think of goo?', keyword:'goo', choiceA:'i like goo', choiceB:'goo is ok',
+			createPoll(name:'What do you think of goo?', keyword:'good', choiceA:'i like goo', choiceB:'goo is ok',
 					choiceC:'i have no strong opinion on goo', choiceD:'goo is horrible')
 		when:
 			// wait for message to be read from mock serial device
@@ -51,12 +51,11 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	def createPoll(attrs) {
-		def k
+		Poll p = new Poll(name:attrs.name)
 		if(attrs.keyword) {
-			k = new Keyword(value:attrs.keyword.toUpperCase())
+			def k = new Keyword(value:attrs.keyword.toUpperCase())
+			p.addToKeywords(k)
 		}
-		Poll p = new Poll(name:attrs.name, keyword:k)
-		
 		p.editResponses(attrs)
 		p.save(failOnError:true, flush:true)
 		return p

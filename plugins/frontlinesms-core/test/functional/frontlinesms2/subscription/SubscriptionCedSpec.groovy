@@ -32,14 +32,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor {at SubscriptionCreateDialog}
 		when:
 			group.addToGroup Group.findByName('Friends').id
-			group.keywordText = 'FRIENDS'
 			next.click()
 		then:
-			waitFor { aliases.displayed }
+			waitFor { keywords.displayed }
 		when:
-			aliases.joinAliases = 'join, start'
-			aliases.leaveAliases = 'leave, stop'
-			aliases.defaultAction = "join"
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
+			keywords.defaultAction = "join"
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -77,11 +77,11 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			println "***"+group.text()
 			group.addToGroup Group.findByName("Camping").id.toString()
-			group.keywordText = 'NOTABOUTFOOTBALL'
 			next.click()
 		then:
-			waitFor {aliases.displayed}
+			waitFor {keywords.displayed}
 		when:
+			keywords.keywordText = 'NOTABOUTFOOTBALL'
 			next.click()
 			autoreply.enableJoinAutoreply.click()
 			autoreply.joinAutoreplyText = "You have been successfully subscribed to some other group"
@@ -104,10 +104,10 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id.toString()
-			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = 'join, start'
-			aliases.leaveAliases = 'leave, stop'
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
 			next.click()
 			autoreply.enableJoinAutoreply.click()
 			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
@@ -119,7 +119,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			submit.click()
 		then:
-			waitFor {error.text().contains('This field is required.')}
+			waitFor {validationError.text().contains('This field is required.')}
 			at SubscriptionCreateDialog
 	}
 
@@ -128,24 +128,9 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup('Select group')
-			group.keywordText = 'FRIENDS'
 			next.click()
 		then:
-			waitFor {error.text().contains('Subscriptions must have a group')}
-			at SubscriptionCreateDialog
-	}
-
-	def "keyword must be provided in a subscription"() {
-		setup:
-			new Group(name:"Friends").save(failOnError:true)
-		when:
-			launchSubscriptionPopup()
-			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
-			next.click()
-		then:
-			waitFor {error.text().contains('Keyword is required')}
-			group.keywordText.displayed
+			waitFor {validationError.text().contains('Subscriptions must have a group')}
 			at SubscriptionCreateDialog
 	}
 
@@ -156,14 +141,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id
-			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = 'team'
-			aliases.leaveAliases = 'team'
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'team'
+			keywords.leaveKeywords = 'team'
 			next.click()
 		then:
-			waitFor {error.text().contains('Aliases should be unique')}
-			aliases.joinAliases.displayed
+			waitFor {validationError.text().contains('Keywords should be unique')}
+			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
 
@@ -174,14 +159,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id
-			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = 'team'
-			aliases.leaveAliases = 'team%^&%^%&'
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'team'
+			keywords.leaveKeywords = 'team%^&%^%&'
 			next.click()
 		then:
-			waitFor {error.text().contains('Invalid alias. Try a, name, word')}
-			aliases.joinAliases.displayed
+			waitFor {validationError.text().contains('Invalid keyword. Try a, name, word')}
+			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
 
@@ -192,10 +177,10 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id
-			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = 'join, start'
-			aliases.leaveAliases = 'leave, stop'
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -205,8 +190,42 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			autoreply.enableLeaveAutoreply.click()
 			next.click()
 		then:
-			waitFor {error.text().contains('Please enter leave autoreply text')}
+			waitFor {validationError.text().contains('Please enter leave autoreply text')}
 			autoreply.enableLeaveAutoreply.displayed
+	}
+
+	def "Confirm screen should display all the necessary data" () {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
+		when:
+			launchSubscriptionPopup()
+			waitFor { at SubscriptionCreateDialog }
+			group.addToGroup Group.findByName('Friends').id
+			next.click()
+		then:
+			waitFor { keywords.displayed }
+		when:
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
+			keywords.defaultAction = "join"
+			next.click()
+		then:
+			waitFor {autoreply.displayed}
+		when:
+			autoreply.enableJoinAutoreply.click()
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
+			autoreply.enableLeaveAutoreply.click()
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			next.click()
+		then:
+			waitFor { confirm.subscriptionName.displayed }
+			confirm.confirm("keyword-text") ==  "FRIENDS"
+			confirm.confirm("join-alias-text") ==  "join, start"
+			confirm.confirm("leave-alias-text") ==  "leave, stop"
+			confirm.confirm("default-action-text") ==  "join"
+			confirm.confirm("join-autoreply-text") ==  "You have been successfully subscribed to Friends group"
+			confirm.confirm("leave-autoreply-text") ==  "You have been unsubscribed from Friends group"
 	}
 
 	def launchSubscriptionPopup() {

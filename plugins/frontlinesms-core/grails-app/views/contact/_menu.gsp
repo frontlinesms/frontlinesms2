@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <fsms:menu class="contacts">
 	<fsms:submenu code="contact.header" class="contacts">
-		<fsms:menuitem selected="${!contactsSection}" controller="contact" action="show" code="contact.all.contacts"/>
+		<fsms:menuitem selected="${!contactsSection}" controller="contact" action="show" code="contact.all.contacts" msgargs="${[contactInstanceTotal]}"/>
 		<fsms:menuitem bodyOnly="true" class="create">
 			<g:link class="create btn contact" controller="contact" action="createContact">
 				<g:message code="contact.create"/>

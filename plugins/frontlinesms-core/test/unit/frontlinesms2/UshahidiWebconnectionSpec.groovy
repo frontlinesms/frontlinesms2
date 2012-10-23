@@ -20,24 +20,22 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def connection = new UshahidiWebconnection(name:name, keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
+			def connection = new UshahidiWebconnection(name:name, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
 		then:
 			println connection.errors
 			connection.validate() == valid
 		where:
-			name	|addKeyword	|valid | method
-			'test'	|true		|true  | Webconnection.HttpMethod.POST
-			'test'	|false		|false | Webconnection.HttpMethod.POST
-			''		|true		|false | Webconnection.HttpMethod.POST
-			null	|true		|false | Webconnection.HttpMethod.POST
+			name	|valid | method
+			'test'	|true  | Webconnection.HttpMethod.POST
+			'test'	|true  | Webconnection.HttpMethod.POST
+			''		|false | Webconnection.HttpMethod.POST
+			null	|false | Webconnection.HttpMethod.POST
 	}
 
 	def "Test Ushahidi pre-processor"() {
 		given:
 			def message = Fmessage.build(text:"testing", src:"bob")
 			def connection = new UshahidiWebconnection(name:'name',
-					keyword:new Keyword(value:'keyword'),
 					url:"www.ushahidi.com/frontlinesms2",
 					httpMethod:Webconnection.HttpMethod.GET)
 			mockRequestParams(connection, [s:'${message_src_name}', m:'${message_body}', key:'1234567'])

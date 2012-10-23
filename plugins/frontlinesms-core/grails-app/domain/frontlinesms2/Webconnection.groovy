@@ -12,8 +12,8 @@ abstract class Webconnection extends Activity {
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webconnection' }
 	static String getType() { '' }
-	static def implementations = [GenericWebconnection,
-			UshahidiWebconnection]
+	static def implementations = [UshahidiWebconnection, 
+			GenericWebconnection]
 
 	// Camel route redelivery config
 	static final def retryAttempts = 3 // how many times to retry before giving up
@@ -22,7 +22,7 @@ abstract class Webconnection extends Activity {
 
 	// Substitution variables
 	static subFields = ['message_body' : { msg ->
-			def keyword = msg.messageOwner?.keyword?.value
+			def keyword = msg.messageOwner?.keywords?.find{ msg.text.toUpperCase().startsWith(it.value) }?.value
 			def text = msg.text
 			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
 				text = text.substring(keyword.size()).trim()
@@ -38,7 +38,6 @@ abstract class Webconnection extends Activity {
 	String url
 	HttpMethod httpMethod
 	static hasMany = [requestParameters:RequestParameter]
-	static hasOne = [keyword: Keyword]
 	
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->
@@ -54,7 +53,7 @@ abstract class Webconnection extends Activity {
 		tablePerHierarchy false
 	}
 
-	def processKeyword(Fmessage message, Boolean exactMatch) {
+	def processKeyword(Fmessage message, Keyword k) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		webconnectionService.send(message)

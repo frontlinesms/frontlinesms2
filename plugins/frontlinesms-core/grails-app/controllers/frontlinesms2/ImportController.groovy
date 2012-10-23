@@ -183,6 +183,7 @@ println "The errors are $fm.errors"
 	private def getGroups(groupNames) {
 		println "ImportController.getGroups() : $groupNames"
 		groupNames.collect { name ->
+			name = name.trim()
 			Group.findByName(name)?: new Group(name:name).save(failOnError:true)
 		}
 	}
