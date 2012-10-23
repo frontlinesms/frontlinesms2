@@ -65,6 +65,36 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor { at PageMessageSubscription }
 	}
 
+	def "If no top level keyword is provided, default action is disabled, and is only enabled when a T.L.K is added" () {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
+		when:
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
+		then:
+			waitFor {at CreateActivityDialog}
+		when:
+			subscription.click()
+		then:
+			waitFor {at SubscriptionCreateDialog}
+		when:
+			group.addToGroup Group.findByName('Friends').id
+			next.click()
+		then:
+			waitFor { keywords.displayed }
+		when:
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
+		then:
+			keywords.joinHelperMessage.containsAll(["JOIN", "START"])
+			keywords.leaveHelperMessage.containsAll(["LEAVE", "STOP"])
+			keywords.defaultAction.attr('disabled', true);
+		when:
+			keywords.keywordText = 'a'
+		then:
+			keywords.defaultAction.attr('disabled', false)
+	}
+
 	def "Can edit an existing subscription"() {
 		setup:
 			createTestSubscriptions()
