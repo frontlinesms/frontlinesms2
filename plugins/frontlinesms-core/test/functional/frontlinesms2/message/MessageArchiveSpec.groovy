@@ -31,7 +31,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 	def 'archived messages do not show up in sent view'() {
 		setup:
 			def d = new Dispatch(dst:"34567890", dateSent: new Date(), status: DispatchStatus.SENT)
-			new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush: true, failOnError:true)
+			new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush:true, failOnError:true)
 		when:
 		    to PageArchiveSent
 		then:

@@ -59,7 +59,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 
 	def "should display errors when announcement validation fails"() {
 		setup:
-			def announcementNewbie = new Announcement(name: "newbie", messageText: "announcing this new announcement!", messages:[]).save(failOnError:true)
+			def announcementNewbie = new Announcement(name: "newbie", messageText: "announcing this new announcement!", messages:[]).save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
