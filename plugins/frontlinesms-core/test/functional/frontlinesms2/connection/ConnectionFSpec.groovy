@@ -134,6 +134,16 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			confirmSmssyncSendEnabled.text() == 'Yes'
 	}
 
+	def 'each connection type in the list has a description under its name'() {
+		when:
+			launchCreateWizard()
+		then:
+			basicInfo("smslib") == "connect to USB, serial and bluetooth modems or phones"
+			basicInfo("smssync") == "use an Android phone with the Smssync app installed to send and receive SMS with FrontlineSMS"
+			basicInfo("clickatel") == "send an receive messages through a clickatel account"
+			basicInfo("intellisms") == "send an receive messages through an intellisms account"
+	}
+
 	def 'can set up a new Smssync connection with no secret'() {
 		when:
 			launchCreateWizard('smssync')

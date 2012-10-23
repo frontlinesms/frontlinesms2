@@ -256,6 +256,10 @@ class ConnectionDialog extends MediumPopup {
 		confirmType { $("#confirm-type") }
 		confirmPort { $("#confirm-port") }
 
+		basicInfo { connectionType ->
+			$("p.info.$connectionType").text()
+		}
+
 		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name") }
 		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username") }
 		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type") }
