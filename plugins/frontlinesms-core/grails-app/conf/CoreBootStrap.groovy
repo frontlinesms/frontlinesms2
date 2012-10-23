@@ -227,16 +227,24 @@ class CoreBootStrap {
 	
 	private def dev_initPolls() {
 		if(!bootstrapData) return
-		def keyword = new Keyword(value: 'FOOTBALL')
-		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
-		poll1.addToResponses(key:'A', value:'manchester', aliases:'manchester, A')
-		poll1.addToResponses(key:'B', value:'barcelona', aliases:'barcelona, B')
+		def keyword1 = new Keyword(value: 'FOOTBALL')
+		def keyword2 = new Keyword(value: 'SOCCER')
+		def keyword3 = new Keyword(value: 'MANU', isTopLevel:false, ownerDetail:'A')
+		def keyword4 = new Keyword(value: 'BARCA', isTopLevel:false, ownerDetail:'B')
+		def keyword5 = new Keyword(value: 'UTD', isTopLevel:false, ownerDetail:'A')
+		def keyword6 = new Keyword(value: 'FCB', isTopLevel:false, ownerDetail:'B')
+		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL MANU for 'manchester' or FOOTBALL BARCA for 'barcelona'", autoreplyText:"Thank you for participating in the football poll")
+		poll1.addToKeywords(keyword1).addToKeywords(keyword2).addToKeywords(keyword3).addToKeywords(keyword4).addToKeywords(keyword5).addToKeywords(keyword6)
+		poll1.addToResponses(key:'A', value:'manchester')
+		poll1.addToResponses(key:'B', value:'barcelona')
 		poll1.addToResponses(PollResponse.createUnknown())
 		
 		def poll2 = new Poll(name: 'Shampoo Brands', question:"What shampoo brand do you prefer?", sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
 		poll2.addToResponses(key: 'A', value: 'pantene')
 		poll2.addToResponses(key: 'B', value: 'oriele')
 		poll2.addToResponses(PollResponse.createUnknown())
+		poll2.addToKeywords(value:'PANTENE', ownerDetail: 'A')
+		poll2.addToKeywords(value:'ORIELE', ownerDetail: 'B')
 		
 		poll1.save(failOnError:true, flush:true)
 		poll2.save(failOnError:true, flush: true)
@@ -259,8 +267,14 @@ class CoreBootStrap {
 		def k1 = new Keyword(value: "COLOR")
 		def k2 = new Keyword(value: "AUTOREPLY")
 
-		new Autoreply(name:"Toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
-		new Autoreply(name:"Color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
+		new Autoreply(name:"Toothpaste", autoreplyText: "Thanks for the input")
+			.addToKeywords(value:"MENO")
+			.addToKeywords(value:"TEETH")
+			.save(failOnError:true, flush:true)
+		new Autoreply(name:"Color", autoreplyText: "ahhhhhhhhh")
+			.addToKeywords(value:"COLOUR")
+			.addToKeywords(value:"COLOR")
+			.save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFolders() {
@@ -323,7 +337,9 @@ class CoreBootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def extCmd = new GenericWebconnection(name:'GET to Server', keyword:new Keyword(value:'FORWARD'), url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET)
+		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET)
+			.addToKeywords(value:'FORWARD')
+			.addToKeywords(value:'UPLOAD')
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
@@ -337,13 +353,16 @@ class CoreBootStrap {
 		extCmd.addToMessages(Fmessage.findBySrc('Tshabalala'))
 		extCmd.addToMessages(Fmessage.findBySrc('June'))
 		extCmd.save(failOnError:true, flush:true)
-		def extCmdPost = new GenericWebconnection(name:'POST to Server', keyword:new Keyword(value:'POST'), url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:Webconnection.HttpMethod.POST)
+		def extCmdPost = new GenericWebconnection(name:'POST to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:Webconnection.HttpMethod.POST)
+			.addToKeywords(value:'POST')
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))
 		extCmdPost.save(failOnError:true, flush:true)
 
-		def ushahidiWebconnection = new UshahidiWebconnection(name:'Ushahidi', keyword:new Keyword(value:'USHAHIDI'), url:"http://192.168.0.200:80/ushahidi/frontlinesms/", httpMethod:Webconnection.HttpMethod.GET)
+		def ushahidiWebconnection = new UshahidiWebconnection(name:'Ushahidi', url:"http://192.168.0.200:80/ushahidi/frontlinesms/", httpMethod:Webconnection.HttpMethod.GET)
+			.addToKeywords(value:"USHAHIDI")
+			.addToKeywords(value:"MAP")
 		ushahidiWebconnection.addToRequestParameters(new RequestParameter(name:'m' , value: '${message_body}'))
 		ushahidiWebconnection.addToRequestParameters(new RequestParameter(name:'key' , value: '1NIJP34G'))
 		ushahidiWebconnection.addToRequestParameters(new RequestParameter(name:'s' , value: '${message_src_number}'))
@@ -366,18 +385,23 @@ class CoreBootStrap {
 		def footyRon = new Contact(name:'Ron', mobile:"987654323").save(failOnError:true)
 
 		def campingGroup = new Group(name:"Camping Group").save(failOnError:true)
-		def campingKeyword = new Keyword(value: 'CAMPING')
-		def campingSub = new Subscription(name:"Camping Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
-				defaultAction:Subscription.Action.JOIN, keyword:campingKeyword).save(failOnError:true)
+		def campingSub = new Subscription(name:"Camping Subscription", group:campingGroup, defaultAction:Subscription.Action.JOIN)
+			.addToKeywords(value:"CAMPING", isTopLevel:true)
+			.addToKeywords(value:"IN", isTopLevel:false, ownerDetail:"JOIN")
+			.addToKeywords(value:"YES", isTopLevel:false, ownerDetail:"JOIN")
+			.addToKeywords(value:"OUT", isTopLevel:false, ownerDetail:"LEAVE")
+			.addToKeywords(value:"NO", isTopLevel:false, ownerDetail:"LEAVE")
+			.save(failOnError:true)
 		campingGroup.addToMembers(allrounderBobby)
 		campingGroup.addToMembers(camperSam)
 
 		campingGroup.save(failOnError:true)
 
 		def footballGroup = new Group(name:"Football Updates").save(failOnError:true)
-		def footballKeyword = new Keyword(value: 'FOOTIE')
-		def footballSub = new Subscription(name:"Football Updates Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
-				defaultAction:Subscription.Action.JOIN, keyword:footballKeyword).save(failOnError:true)
+		def footballSub = new Subscription(name:"Football Updates Subscription", group:campingGroup, defaultAction:Subscription.Action.JOIN)
+			.addToKeywords(value:"JOIN", isTopLevel:true, ownerDetail: "JOIN")
+			.addToKeywords(value:"LEAVE", isTopLevel:true, ownerDetail: "LEAVE")
+			.save(failOnError:true)
 		
 		footballGroup.addToMembers(allrounderBobby)
 		footballGroup.addToMembers(footyRon)

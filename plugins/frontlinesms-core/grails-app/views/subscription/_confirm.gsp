@@ -27,11 +27,11 @@
 		</tr>
 		<tr>
 			<td><g:message code="subscription.confirm.join.autoreply"/></td>
-			<td id="confirm-join-autoreply-text"><span id="contacts-count">0</span> <g:message code="quickmessage.recipients.count"/></td>
+			<td id="confirm-join-autoreply-text"><g:message code="announcement.message.none"/></td>
 		</tr>
 		<tr>
 			<td><g:message code="subscription.confirm.leave.autoreply"/></td>
-			<td id="confirm-leave-autoreply-text"><span id="contacts-count">0</span> <g:message code="quickmessage.recipients.count"/></td>
+			<td id="confirm-leave-autoreply-text"><g:message code="announcement.message.none"/></td>
 		</tr>
 	</table>
 </div>

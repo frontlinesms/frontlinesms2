@@ -51,29 +51,30 @@ class PollSpec extends Specification {
 			def poll = pollAndResponses.poll
 			def responses = pollAndResponses.responses
 			def m = Fmessage.build(text:messageText)
+			def k = new Keyword(value:'irrelevant', ownerDetail:keywordOwnerDetail, isTopLevel:!keywordOwnerDetail)
 		when:
-			poll.processKeyword(m, exactMatch)
+			poll.processKeyword(m, k)
 		then:
 			responses[response].messages == [m]
 			poll.messages?.contains(m)
 		where:
-			messageText            | exactMatch | validResponseCount | response
-			'k c'                  | true       | 3                  | 'C'
-			'k'                    | true       | 3                  | Poll.KEY_UNKNOWN
-			'word a'               | true       | 3                  | 'A'
-			'word b'               | true       | 3                  | 'B'
-			'word c'               | true       | 3                  | 'C'
-			'word d'               | true       | 3                  | Poll.KEY_UNKNOWN
-			'word averylongword'   | true       | 3                  | Poll.KEY_UNKNOWN
-			'    word a response ' | true       | 3                  | 'A'
-			'\r\nword a match'     | true       | 3                  | 'A'
-			'wordA'                | false      | 3                  | 'A'
-			'wordA with more words'| false      | 3                  | 'A'
-			'oneword'              | true       | 3                  | Poll.KEY_UNKNOWN
-			'oneword'              | false      | 3                  | Poll.KEY_UNKNOWN
-			'two words'            | false      | 3                  | Poll.KEY_UNKNOWN
-			'two bords'            | false      | 3                  | Poll.KEY_UNKNOWN
-			'keyword c'            | false      | 2                  | Poll.KEY_UNKNOWN
+			messageText            | keywordOwnerDetail | validResponseCount | response
+			'k c'                  | 'C'                | 3                  | 'C'
+			'k'                    | null               | 3                  | Poll.KEY_UNKNOWN
+			'word a'               | 'A'                | 3                  | 'A'
+			'word b'               | 'B'                | 3                  | 'B'
+			'word c'               | 'C'                | 3                  | 'C'
+			'word d'               | null               | 3                  | Poll.KEY_UNKNOWN
+			'word averylongword'   | null               | 3                  | Poll.KEY_UNKNOWN
+			'    word a response ' | 'A'                | 3                  | 'A'
+			'\r\nword a match'     | 'A'                | 3                  | 'A'
+			'wordA'                | 'A'                | 3                  | 'A'
+			'wordA with more words'| 'A'                | 3                  | 'A'
+			'oneword'              | null               | 3                  | Poll.KEY_UNKNOWN
+			'oneword'              | null               | 3                  | Poll.KEY_UNKNOWN
+			'two words'            | null               | 3                  | Poll.KEY_UNKNOWN
+			'two bords'            | null               | 3                  | Poll.KEY_UNKNOWN
+			'keyword c'            | null               | 2                  | Poll.KEY_UNKNOWN
 	}
 
 	def 'processKeyword should send autoreply if one is present'() {
@@ -90,7 +91,7 @@ class PollSpec extends Specification {
 
 			def inMessage = Fmessage.build(text:"message text", src:TEST_NUMBER)
 		when:
-			poll.processKeyword(inMessage, true)
+			poll.processKeyword(inMessage, new Keyword(value:'test', isTopLevel:true, ownerDetail:null))
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -133,11 +134,12 @@ class PollSpec extends Specification {
 
 	private def createPoll(int validResponseCount) {
 		def p = new Poll()
+		p.name = "test poll"
 		def responses = [unknown:PollResponse.createUnknown()]
 		p.addToResponses(responses.unknown)
 		for(i in 0..<validResponseCount) {
 			def key = ('A'..'C')[i]
-			def r = new PollResponse(key:key, value:"mock-response-$i", aliases:key)
+			def r = new PollResponse(key:key, value:"mock-response-$i")
 			responses[key] = r
 			p.addToResponses(r)
 		}

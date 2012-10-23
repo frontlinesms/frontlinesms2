@@ -3,6 +3,7 @@ package frontlinesms2
 import grails.converters.JSON
 
 class SubscriptionController extends ActivityController {
+	def subscriptionService
 
 	def create() {
 		def groupList = Group.getAll()
@@ -51,29 +52,17 @@ class SubscriptionController extends ActivityController {
 	}
 
 	def save() {
-		withSubscription { subscriptionInstance ->
-			subscriptionInstance.group = Group.get(params.subscriptionGroup)
-			if(subscriptionInstance.keyword)
-				subscriptionInstance.keyword.value = params.keyword.toUpperCase()
-			else
-				subscriptionInstance.keyword = new Keyword(value: params.keyword.toUpperCase())
-			subscriptionInstance.joinAliases = params.joinAliases.toUpperCase()
-			subscriptionInstance.leaveAliases = params.leaveAliases.toUpperCase()
-			subscriptionInstance.defaultAction = Subscription.Action."${params.defaultAction.toUpperCase()}"
-			subscriptionInstance.joinAutoreplyText = params.joinAutoreplyText
-			subscriptionInstance.leaveAutoreplyText = params.leaveAutoreplyText
-			subscriptionInstance.name = params.name
-
-			if (subscriptionInstance.save(flush:true)) {
-				params.activityId = subscriptionInstance.id
-				withFormat {
-					json { render([ok:true, ownerId: subscriptionInstance.id] as JSON)}
-					html { [ownerId:poll.id]}
-				}
+		def subscriptionInstance = (params.ownerId) ? Subscription.get(params.ownerId) : new Subscription()
+		try {
+			subscriptionService.saveInstance(subscriptionInstance, params)
+			params.activityId = subscriptionInstance.id
+			withFormat {
+				json { render([ok:true, ownerId: subscriptionInstance.id] as JSON)}
+				html { [ownerId:poll.id]}
 			}
-			else {
-				renderJsonErrors(subscriptionInstance)
-			}
+		}
+		catch (Exception e) {
+			renderJsonErrors(subscriptionInstance)
 		}
 	}
 
@@ -83,7 +72,12 @@ class SubscriptionController extends ActivityController {
 
 	private def renderJsonErrors(subscription) {
 		println "Error:: ${subscription.errors.allErrors}"
-		def errorMessages = subscription.errors.allErrors.collect { message(error:it) }.join("\n")
+		def collidingKeywords = getCollidingKeywords(params.topLevelKeywords)
+		def errorMessages
+		if (collidingKeywords)
+			errorMessages = collidingKeywords.collect { message(code:'activity.generic.keyword.in.use', args: [it.key, it.value]) }.join("\n")
+		else
+			errorMessages = subscription.errors.allErrors.collect { message(error:it) }.join("\n")
 		withFormat {
 			json {
 				render([ok:false, text:errorMessages] as JSON)

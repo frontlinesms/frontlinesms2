@@ -31,14 +31,9 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
-			launchPollPopup('yesNo', null, false)
-		then:
-			errorPanel.displayed
-		when:
-			tab(1).click()
-			compose.question = "question"
-			setAliases();
-			tab(8).click()
+			launchPollPopup('yesNo', 'question', false)
+			setKeywords();
+			tab(7).click()
 		then:
 			confirm.pollName.displayed
 		when:
@@ -49,61 +44,47 @@ class PollCedSpec extends PollBaseSpec {
 			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
 
-	def "should require keyword if sorting is enabled"() {
+	def "should require keywords if sorting is enabled"() {
 		when:
-			launchPollPopup()
-		then:
-			waitFor { sort.displayed }
-			sort.keyword.disabled
-		when:
-			sort.sort.click()
+			launchPollPopup('yesNo', 'question', false)
+			sort.sort.jquery.click()
+			sort.inputs[0].value("")
+			sort.inputs[1].value("")
 			next.click()
 		then:
 			waitFor { errorPanel.displayed }
-			sort.keyword.hasClass('error')
-			sort.displayed
-		when:
-			sort.keyword = 'trigger'
-			next.click()
-		then:
-			waitFor { aliases.displayed }
+			sort.inputs[0].hasClass('error')
+			sort.inputs[1].hasClass('error')
 	}
 
-	def "Aliases tab should be disabled when poll popup first loads"() {
+	def "Keyword input fields should be hidden when popup first loads"() {
 		when:
-			launchPollPopup()
+			launchPollPopup('yesNo','question',false)
 		then:
-			aliases.hasClass('ui-tabs-hide')
-	}
-
-	def "Aliases tab should be enabled if sorting is enabled"() {
-		when:
-			launchPollPopup('yesNo','question',true)
-		then:
-			sort.displayed
-			sort.keyword.disabled
+			!sort.keyword.displayed
+			!sort.pollKeywordsContainer.displayed
 		when:
 			sort.sort.click()
 			sort.keyword = 'key'
 			next.click()
 		then:
-			waitFor { aliases.displayed }
+			waitFor { autoreply.displayed }
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
-			setAliases()
+			setKeywords()
 		then:
 			waitFor { sort.displayed }
 		when:
 			sort.sort.click()
 			sort.keyword.value("key")
-			tab(8).click()
+			tab(7).click()
 		then:
 			waitFor { confirm.displayed }
 			tab(2).hasClass("disabled-tab")
-			tab(7).hasClass("disabled-tab")
+			tab(6).hasClass("disabled-tab")
 		when:
 			previous.click()
 		then:
@@ -177,7 +158,7 @@ class PollCedSpec extends PollBaseSpec {
 			sort.sort.click()
 			sort.keyword = 'coffee'
 			next.click()
-			setAliases()
+			setKeywords()
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -258,7 +239,7 @@ class PollCedSpec extends PollBaseSpec {
 			sort.sort.click()
 			sort.keyword = 'coffee'
 			next.click()
-			setAliases()
+			setKeywords()
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -298,7 +279,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { sort.displayed }
 		when:
-			tab(8).click()
+			tab(7).click()
 		then:
 			waitFor { confirm.displayed }
 			confirm.recipientCount == "0 contacts selected"
@@ -430,8 +411,8 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			sort.dontSort.click()
 			next.click()
-			setAliases()
-			goToTab(7)
+			setKeywords()
+			goToTab(6)
 			recipients.addField = '1234567890'
 			recipients.addButton.click()
 		then:
@@ -441,7 +422,8 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.pollName = 'Who is badder?'
 			submit.click()
 		then:
-			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }		
+			waitFor { summary.displayed }
+			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }
 	}
 	
 	def "should display errors when poll validation fails"() {
@@ -457,7 +439,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { sort.displayed }
 		when:
-			tab(8).click()
+			tab(7).click()
 			confirm.pollName = 'Who is badder?'
 			submit.click()
 		then:
@@ -525,14 +507,14 @@ class PollCedSpec extends PollBaseSpec {
 		tab(tabNo).click()
 	}
 
-	def setAliases(aliasValues=null) {
+	def setKeywords(aliasValues=null) {
 		at PollDialog
-		tab(4).click()
+		tab(3).click()
 		if (!aliasValues)
 			aliasValues = ['A', 'B', 'C', 'D', 'E']
 		aliasValues.eachWithIndex { alias, index ->
-			if (aliases.inputs[index].displayed && !aliases.inputs[index].disabled) {
-				aliases.inputs[index].value(alias)
+			if (sort.inputs[index].displayed && !sort.inputs[index].disabled) {
+				sort.inputs[index].value(alias)
 			}
 		}
 	}

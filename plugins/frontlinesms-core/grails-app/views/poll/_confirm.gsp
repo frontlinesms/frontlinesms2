@@ -17,6 +17,10 @@
 			</td>
 		</tr>
 		<tr>
+			<td><g:message code="poll.keywords"/></td>
+			<td id="poll-confirm-aliases"/>
+		</tr>
+		<tr>
 			<td><g:message code="poll.autoreply.label"/></td>
 			<td id="auto-reply-read-only-text"><g:message code="poll.autoreply.none"/></div>
 		</tr>
@@ -27,10 +31,6 @@
 		<tr>
 			<td><g:message code="quickmessage.count.label"/></td>
 			<td id="confirm-messages-count"><span id="messages-count">0</span> <g:message code="quickmessage.messages.count"/></td>
-		</tr>
-		<tr>
-			<td><g:message code="poll.alias"/></td>
-			<td id="poll-confirm-aliases"/>
 		</tr>
 	</table>
 </div>

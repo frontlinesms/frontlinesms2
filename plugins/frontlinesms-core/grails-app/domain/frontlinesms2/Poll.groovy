@@ -10,7 +10,6 @@ class Poll extends Activity {
 	def messageSendService
 
 //> PROPERTIES
-	static hasOne = [keyword: Keyword]
 	String autoreplyText
 	String question
 	boolean yesNo
@@ -51,7 +50,7 @@ class Poll extends Activity {
 		})
 		autoreplyText(nullable:true, blank:false)
 		question(nullable:true)
-		keyword(nullable:true)
+		keywords(nullable:true)
 	}
 
 //> ACCESSORS
@@ -95,8 +94,8 @@ class Poll extends Activity {
 	
 	def editResponses(attrs) {
 		if(attrs.pollType == 'yesNo' && !this.responses) {
-			this.addToResponses(value:'Yes', key:'A', aliases:extractAliases(attrs, 'A'))
-			this.addToResponses(value:'No', key:'B', aliases:extractAliases(attrs, 'B'))
+			this.addToResponses(key:'A', value:'Yes')
+			this.addToResponses(key:'B', value:'No')
 			this.yesNo = true
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
@@ -105,15 +104,43 @@ class Poll extends Activity {
 				def found = responses.find { it.key == k }
 				if(found) {
 					found.value = v
-					found.aliases = extractAliases(attrs, k)
-				} else if(v?.trim()) this.addToResponses(value:v, key:k , aliases:extractAliases(attrs, k))
+					println "###### Key :: ${k}"
+					println "###### value :: ${v}"
+				} else if(v?.trim()) {
+					println "###### Adding a new PollResponse ${k} :: ${v}"
+					this.addToResponses(key:k, value:v)
+				}
 			}
 		}
 		if(!this.unknown) {
 			this.addToResponses(PollResponse.createUnknown())
 		}
 	}
-	
+//TODO edit keywords only adds keywoids to the poll...does not edit
+	def editKeywords(attrs){
+		this.keywords?.clear()
+		def keys = attrs.findAll { it ==~ /keywords[A-E]=.*/ }
+		println "###### Keywords :: ${keys}"
+		attrs.topLevelKeyword?.replaceAll(/\s/, "").split(",").each{
+			this.addToKeywords(new Keyword(value:"${it.trim().toUpperCase()}"))
+		}
+		println "Keywords after setting Most TopLevel ## ${this.keywords*.value}"
+		keys.each { k, v ->
+			println "${k}"
+			k = k.substring('keywords'.size())
+			println "###### K :: ${k}"
+			println "###### V :: ${v}"
+			println attrs["keywords${k}"]
+			attrs["keywords${k}"]?.replaceAll(/\s/, "").split(",").each{
+				this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${k}", isTopLevel:!attrs.topLevelKeyword?.trim()))//adds the keyword without setting the ownerDetail as pollResponse.id
+			}
+		}
+	}
+
+	def noKeyword(){
+		println "Removing the keywords"
+	}
+
 	def extractAliases(attrs, String k) {
 		def raw = attrs["alias$k"]
 		if(raw) raw.toUpperCase().replaceAll(/\s/, "").split(",").findAll { it }.join(", ")
@@ -128,8 +155,8 @@ class Poll extends Activity {
 		this
 	}
 
-	def processKeyword(Fmessage message, boolean exactMatch) {
-		def response = getPollResponse(message, exactMatch)
+	def processKeyword(Fmessage message, Keyword keyword) {
+		def response = getPollResponse(message, keyword)
 		response.addToMessages(message)
 		response.save()
 		def poll = this
@@ -140,21 +167,16 @@ class Poll extends Activity {
 			def outgoingMessage = messageSendService.createOutgoingMessage(params)
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
-			poll.save()
+			poll.save(failOnError:true)
 		}
 	}
 	
-//> PRIVATE HELPERS
-	private PollResponse getPollResponse(Fmessage message, boolean exactMatch) {
-		def option
-		def words = message.text.trim().toUpperCase().split(/\s+/)
-		if(exactMatch) {
-			if(words.size() < 2) return this.unknown
-			option = words[1]
+	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
+		if(keyword.isTopLevel && !keyword.ownerDetail){
+			return this.unknown
 		} else {
-			option = words[0][-1]
+			return this.responses.find{ keyword.ownerDetail == it.key }
 		}
-		return responses.find { it!=this.unknown && it.aliases?.split(", ")?.contains(option) }?: this.unknown
 	}
 }
 

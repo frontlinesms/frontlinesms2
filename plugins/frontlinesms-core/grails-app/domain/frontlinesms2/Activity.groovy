@@ -10,9 +10,13 @@ abstract class Activity extends MessageOwner {
 	Date dateCreated
 	static transients = ['liveMessageCount']
 
+	static hasMany = [keywords: Keyword]
+	List keywords
+
 	static mapping = {
 		tablePerHierarchy false
 		version false
+		keywords cascade: "all-delete-orphan"
 	}
 
 	static constraints = {
@@ -47,7 +51,7 @@ abstract class Activity extends MessageOwner {
 		this.messages*.isDeleted = false
 	}
 
-	def processKeyword(Fmessage message, boolean exactMatch) {}
+	def processKeyword(Fmessage message, Keyword match) {}
 
 	def activate() {}
 

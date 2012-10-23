@@ -9,13 +9,13 @@
 		<g:message code="subscription.info.groupMemberCount" args="${[ownerInstance.group.members.size()]}"/>
 	</li>
 	<li>
-		<g:message code="subscription.info.keyword" args="${[ownerInstance.keyword.value]}"/>
+		<g:message code="subscription.info.keyword" args="${[ownerInstance.keywords?.findAll { it.isTopLevel && !it.ownerDetail }?.value?.join(',')]}"/>
 	</li>
 	<li>
-		<g:message code="subscription.info.joinAliases" args="${[ownerInstance.joinAliases]}"/>
+		<g:message code="subscription.info.joinKeywords" args="${[ownerInstance.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',')]}"/>
 	</li>
 	<li>
-		<g:message code="subscription.info.leaveAliases" args="${[ownerInstance.leaveAliases]}"/>
+		<g:message code="subscription.info.leaveKeywords" args="${[ownerInstance.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',')]}"/>
 	</li>
 </ul>
 

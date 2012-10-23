@@ -5,7 +5,6 @@ class Autoreply extends Activity {
 	static String getShortName() { 'autoreply' }
 
 //> PROPERTIES
-	static hasOne = [keyword: Keyword]
 	String autoreplyText
 	
 	static constraints = {
@@ -28,8 +27,7 @@ class Autoreply extends Activity {
 	def messageSendService
 
 //> PROCESS METHODS
-	def processKeyword(Fmessage message, boolean exactMatch) {
-		if(!exactMatch && keyword.value) return
+	def processKeyword(Fmessage message, Keyword matchedKeyword) {
 		def params = [:]
 		params.addresses = message.src
 		params.messageText = autoreplyText

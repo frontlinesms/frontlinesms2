@@ -4,7 +4,7 @@
 		var url = $("input[name=url]").val();
 		var httpMethod = $("input[name=httpMethod]:checked").val().toUpperCase();
 		var requestParameters = "";
-		var keyword = $("input[name=keyword]").val() || i18n("webconnection.none.label");
+		var keyword = $("input#keywords").val() || i18n("webconnection.none.label");
 		if($(".web-connection-parameter.disabled").is(":hidden")) { 
 			requestParameters = i18n("webconnection.none.label")
 		} else {

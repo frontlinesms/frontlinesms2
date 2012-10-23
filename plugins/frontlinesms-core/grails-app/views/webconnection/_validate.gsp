@@ -51,9 +51,12 @@
 			webconnectionDialog.setScripts(initialScripts);
 		</g:else>
 		
+		aliasCustomValidation();
+		genericSortingValidation();
 
 		var keyWordTabValidation = function() {
-			return isGroupChecked("blankKeyword") || validator.element("#keyword");
+			 if(!isGroupChecked("blankKeyword")) return validator.element('#keywords');
+			 else return true;
 		};
 
 		var configureTabValidation = function() {
@@ -68,7 +71,7 @@
 			return validator.element('input[name=name]');
 		};
 
-		mediumPopup.addValidation('webconnection-sorting', keyWordTabValidation);
+		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
 		mediumPopup.addValidation('webconnection-configure', configureTabValidation);
 		mediumPopup.addValidation('webconnection-confirm', confirmTabValidation);
 
@@ -100,7 +103,7 @@
 	function updateConfirmationMessage() {
 		var keywordConfirmationText;
 		if(!(isGroupChecked("blankKeyword"))) {
-			keywordConfirmationText = $('#keyword').val().toUpperCase();
+			keywordConfirmationText = $('#keywords').val().toUpperCase();
 		} else {
 			keywordConfirmationText = i18n("autoreply.blank.keyword");
 		}

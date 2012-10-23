@@ -13,8 +13,10 @@
 		</g:if>
 		<g:else>
 			mediumPopup.disableTab("poll-response");
-			mediumPopup.disableTab("poll-alias");
 			$("input[name='pollType']").trigger("change");
+			$("input[name='enableKeyword']").trigger("change");
+			$('#poll-keyword').hide();
+			$('#poll-keywords').hide();
 		</g:else>
 		<g:if test="${activityInstanceToEdit?.archived}">
 			$("input#dontSendMessage").attr('checked', true);
@@ -52,6 +54,7 @@
 
 	function addCustomValidationClasses() {
 		aliasCustomValidation();
+		genericSortingValidation();
 		
 		jQuery.validator.addMethod("edit", function(value, element) {
 			return (value.trim().length != 0);
@@ -81,17 +84,15 @@
 			setAliasValues();
 			return valid;
 		};
-		var aliasTabValidation = function() {
+
+		var autoSortTabValidation = function() {
 			var valid = true;
-			$('input:not(:disabled).aliases').each(function() {
+			$('input:not(:disabled).keywords').each(function() {
 				if (!validator.element(this) && valid) {
 				    valid = false;
 				}
 			});
-			return valid;
-		};
-		var autoSortTabValidation = function() {
-			return validator.element('#poll-keyword');
+			return validator.element('#poll-keyword') && valid;
 		};
 		var autoReplyTabValidation = function() {
 			return validator.element('#autoreplyText');
@@ -130,7 +131,6 @@
 		mediumPopup.addValidation('poll-question', questionTabValidation);
 		mediumPopup.addValidation('poll-response', responseTabValidation);
 		mediumPopup.addValidation('poll-sort', autoSortTabValidation);
-		mediumPopup.addValidation('poll-alias', aliasTabValidation);
 		mediumPopup.addValidation('poll-reply', autoReplyTabValidation);
 		mediumPopup.addValidation('poll-edit-message', composeMessageTabValidation)
 		mediumPopup.addValidation('poll-recipients', recipientTabValidation);
@@ -158,14 +158,14 @@
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 				keywordText = $("#poll-keyword").val().toUpperCase();
 				if($("input[name='pollType']:checked").val() == "yesNo") {
-					var yesAlias = getFirstAlias($("ul#poll-aliases li input#aliasA"))
-					var noAlias = getFirstAlias($("ul#poll-aliases li input#aliasB"))
+					var yesAlias = getFirstAlias($("ul#poll-aliases li input#keywordsA"))
+					var noAlias = getFirstAlias($("ul#poll-aliases li input#keywordsB"))
 					replyText = i18n("poll.reply.text", keywordText, yesAlias, keywordText, noAlias);
 				} else {
 					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
 						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
-						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#alias"+this.name.substring(6,7))), this.value);
+						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
 					});
 					replyText = replyText + '.';
 				}
@@ -191,20 +191,20 @@
 		if (yesNo) {
 			var myMap = {'A':'Yes', 'B':'No', 'C':'', 'D':'', 'E':''};
 			$.each(myMap, function(key, value) {
-				$("ul#poll-aliases li label:first[for='alias"+key+"']").text(value);
+				$("ul#poll-aliases li label:first[for='keywords"+key+"']").text(value);
 				if(value == '') {
-					$("ul#poll-aliases li input#alias"+key).val('');
-					$("ul#poll-aliases li input#alias"+key).attr('disabled','disabled');
+					$("ul#poll-aliases li input#keywords"+key).val('');
+					$("ul#poll-aliases li input#keywords"+key).attr('disabled','disabled');
 				} else {
-					$("ul#poll-aliases li input#alias"+key).removeAttr('disabled');
+					$("ul#poll-aliases li input#keywords"+key).removeAttr('disabled');
 				}
 			});
 		} else {
 			var myArray = ['A', 'B', 'C', 'D', 'E'];
 			$.each(myArray, function(index, value) {
 				var labelValue = $("ul#poll-choices li input#choice"+value).val().trim();
-				var aliasTextFieldLabel = $("ul#poll-aliases li label:first[for='alias"+value+"']");
-				var aliasTextField = $("ul#poll-aliases li input#alias"+value);
+				var aliasTextFieldLabel = $("ul#poll-aliases li label:first[for='keywords"+value+"']");
+				var aliasTextField = $("ul#poll-aliases li input#keywords"+value);
 				if(labelValue.length == 0) {
 					aliasTextFieldLabel.text(value);
 					aliasTextField.attr('disabled', 'disabled');
@@ -212,7 +212,7 @@
 				} else {
 					aliasTextFieldLabel.text(labelValue);
 					aliasTextFieldLabel.addClass("field-enabled");
-					$("ul#poll-aliases li input#alias"+value).removeAttr('disabled');
+					$("ul#poll-aliases li input#keywords"+value).removeAttr('disabled');
 				}
 			});
 		}
@@ -221,8 +221,8 @@
 	function addRespectiveAliases(field) {
 		var yesNo = $("input[name='pollType']:checked").val() == "yesNo";
 		if(yesNo) {
-			var aliasYesTextField = $("ul#poll-aliases li input#aliasA");
-			var aliasNoTextField = $("ul#poll-aliases li input#aliasB");
+			var aliasYesTextField = $("ul#poll-aliases li input#keywordsA");
+			var aliasNoTextField = $("ul#poll-aliases li input#keywordsB");
 			var yesAlias = i18n("poll.yes") + ", A";
 			var noAlias = i18n("poll.no") + ", B";
 			var choices = { };
@@ -243,8 +243,8 @@
 			var rawVal = $(field).val().trim();
 			var value = rawVal.split(' ')[0]
 			var key = rawKey.substring(rawKey.length-1);
-			var aliasTextFieldLabel = $("ul#poll-aliases li label[for='alias" + value + "']");
-			var aliasTextField = $("ul#poll-aliases li input#alias" + key);
+			var aliasTextFieldLabel = $("ul#poll-aliases li label[for='keywords" + value + "']");
+			var aliasTextField = $("ul#poll-aliases li input#keywords" + key);
 			if($(field).hasClass("create")) {
 				if(value.length > 0){
 					aliases += value + ", " + key;
@@ -341,20 +341,26 @@
 	function setConfirmAliasValues(){
 		var myArray = ['A', 'B', 'C', 'D', 'E'];
 		var aliasText = "";
-		if($("input[name='pollType']:checked").val() != "yesNo") {
-			$.each(myArray, function(index, value){
-				var choice = $("ul#poll-choices li input#choice"+value).val();
-				var aliases = $("ul#poll-aliases li input#alias"+value).val();
-				if(choice.length != 0){
-					aliasText += "<p>"+choice+" : "+aliases + "</p>";
-				}
-			});
+		var topLevelKeyword = $('#poll-keyword').val();
+		if($('#yesAutosort').attr('checked')){
+			if(topLevelKeyword){
+				aliasText += "<p>"+i18n("poll.toplevelkeyword")+" : "+ topLevelKeyword + "</p>";
+			}
+			if($("input[name='pollType']:checked").val() != "yesNo") {
+				$.each(myArray, function(index, value){
+					var choice = $("ul#poll-choices li input#choice"+value).val();
+					var aliases = $("ul#poll-aliases li input#keywords"+value).val();
+					if(choice.length != 0){
+						aliasText += "<p>"+choice+" : "+aliases + "</p>";
+					}
+				});
+			}
+			else {
+				aliasText += "<p>"+i18n("poll.yes") + " : " + $("ul#poll-aliases li input#keywordsA").val() + "</p>";
+				aliasText += "<p>"+i18n("poll.no") + " : " + $("ul#poll-aliases li input#keywordsB").val() + "</p>";
+			}
+			$("#poll-confirm-aliases").html(aliasText);
 		}
-		else {
-			aliasText += "<p>"+i18n("poll.yes") + " : " + $("ul#poll-aliases li input#aliasA").val() + "</p>";
-			aliasText += "<p>"+i18n("poll.no") + " : " + $("ul#poll-aliases li input#aliasB").val() + "</p>";
-		}
-		$("#poll-confirm-aliases").html(aliasText);
 	}
 
 	function getFirstAlias(field){
