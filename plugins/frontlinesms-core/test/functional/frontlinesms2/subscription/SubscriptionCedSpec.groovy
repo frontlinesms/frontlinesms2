@@ -40,6 +40,9 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.joinKeywords = 'join, start'
 			keywords.leaveKeywords = 'leave, stop'
 			keywords.defaultAction = "join"
+		then:
+			keywords.joinHelperMessage.containsAll(["FRIENDS JOIN", "FRIENDS START"])
+			keywords.leaveHelperMessage.containsAll(["FRIENDS LEAVE", "FRIENDS STOP"])
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -79,9 +82,15 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			group.addToGroup Group.findByName("Camping").id.toString()
 			next.click()
 		then:
-			waitFor {keywords.displayed}
+			waitFor { keywords.displayed }
+			keywords.joinHelperMessage.containsAll(["CAMPING JOIN", "CAMPING IN", "CAMPING START"])
+			keywords.leaveHelperMessage.containsAll(["CAMPING LEAVE", "CAMPING OUT", "CAMPING STOP"])
 		when:
 			keywords.keywordText = 'NOTABOUTFOOTBALL'
+		then:
+			keywords.joinHelperMessage.containsAll(["NOTABOUTFOOTBALL JOIN", "NOTABOUTFOOTBALL IN", "NOTABOUTFOOTBALL START"])
+			keywords.leaveHelperMessage.containsAll(["NOTABOUTFOOTBALL LEAVE", "NOTABOUTFOOTBALL OUT", "NOTABOUTFOOTBALL STOP"])
+		when:
 			next.click()
 			autoreply.enableJoinAutoreply.click()
 			autoreply.joinAutoreplyText = "You have been successfully subscribed to some other group"
