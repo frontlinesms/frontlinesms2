@@ -199,6 +199,44 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			message == "Congratulations from FrontlineSMS \\o/ you have successfully configured test email connection to send SMS \\o/"
 	}
 
+	def 'failed connection should show an edit button in the flash message'() {
+		given: 'connection exists'
+			createBadConnection()
+		when: 'bad connection is started'
+			startBadConnection()
+		then: 'connection failed message is displayed'
+			waitFor('very slow') { js.exec('window.location.reload()') || true; notifications.systemNotificationText.contains('Failed to create route on Bad Port') }
+		and: 'there is an edit button available'
+			connectionFailedFlashMessageEditButton.displayed
+	}
+
+	@spock.lang.IgnoreRest
+	def 'clicking edit in failed connection flash message should launch connection edit dialog'() {
+		given: 'connection exists, is started and failed message is displayed'
+			createBadConnection()
+			startBadConnection()
+			waitFor('very slow') { js.exec('window.location.reload()') || true; notifications.systemNotificationText.contains('Failed to create route on Bad Port') }
+		when: 'edit button is clicked'
+			connectionFailedFlashMessageEditButton.click()
+		then: 'modification dialog is displayed'
+			println "popupTitle is $popupTitle"
+			waitFor { at ConnectionDialog }
+			println "popupTitle is $popupTitle"
+	}
+
+	private def createBadConnection() {
+		MockModemUtils.initialiseMockSerial([
+				MOCK97:new CommPortIdentifier('MOCK97', MockModemUtils.createMockPortHandler_badPort())])
+		SmslibFconnection.build(name:'Bad Port', port:'MOCK97')
+	}
+
+	private def startBadConnection() {
+		def connectionId = SmslibFconnection.findByName('Bad Port').id
+		to PageConnection, connectionId
+		waitFor { connectionList.btnCreateRoute.displayed }
+		connectionList.btnCreateRoute.click()
+	}
+
 	private def launchCreateWizard(def type=null) {
 		to PageConnection
 		btnNewConnection.click()

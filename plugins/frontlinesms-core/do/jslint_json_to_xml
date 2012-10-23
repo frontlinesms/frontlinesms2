@@ -5,6 +5,9 @@ import groovy.json.JsonSlurper
 import groovy.json.JsonException
 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))
 
+println "<!-- Supplied args: $args -->"
+def pathPrefix = args? args[0]: ''
+
 def indent = { count -> print('\t'*count) }
 def tag = { ind, tagName, Map attrs=[:], close=true ->
 	indent ind
@@ -25,7 +28,7 @@ def issue = { i ->
 	tag 2, 'issue', i
 }
 def file = { name, issues ->
-	tag 1, 'file', [name:name], !issues
+	tag 1, 'file', [name:pathPrefix + name], !issues
 	if(issues) {
 		issues.each { i -> issue i }
 		close 1, 'file'

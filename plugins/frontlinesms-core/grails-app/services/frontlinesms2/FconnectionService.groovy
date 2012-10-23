@@ -78,6 +78,7 @@ class FconnectionService {
 			log.warn("Caught exception for route: $ex.fromRouteId", caughtException)
 			def routeId = (ex.fromRouteId =~ /(?:(?:in)|(?:out))-(?:[a-z]+-)?(\d+)/)[0][1]
 			println "FconnectionService.handleDisconnection() : Looking to stop route: $routeId"
+			createSystemNotification('connection.route.exception', [routeId], caughtException)
 			RouteDestroyJob.triggerNow([routeId:routeId as long])
 		} catch(Exception e) {
 			e.printStackTrace()
