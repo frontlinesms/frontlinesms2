@@ -204,7 +204,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.leaveKeywords = 'team%^&%^%&'
 			next.click()
 		then:
-			waitFor {validationError.text().contains('Invalid Keyword. Try a, name, word')}
+			waitFor {validationError.text().contains('Invalid keyword. Try a, name, word')}
 			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
