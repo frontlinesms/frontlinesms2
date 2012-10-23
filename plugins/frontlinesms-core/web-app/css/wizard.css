@@ -49,3 +49,5 @@ ul.sorting-options input[type=radio] { margin:5px; display:inline-block; }
 ul.sorting-options label.sorting-option-label { font-weight: bold; }
 div.sorting-option { padding:5px 5px 10px 25px; }
 div.sorting-option input#keywords { display: block; margin-top:5px; }
+
+#connectionForm label[for=connectionType] { font-weight: bold }
