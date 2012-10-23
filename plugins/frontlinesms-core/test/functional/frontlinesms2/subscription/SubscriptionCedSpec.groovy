@@ -194,6 +194,40 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			autoreply.enableLeaveAutoreply.displayed
 	}
 
+	def "Confirm screen should display all the necessary data" () {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
+		when:
+			launchSubscriptionPopup()
+			waitFor { at SubscriptionCreateDialog }
+			group.addToGroup Group.findByName('Friends').id
+			next.click()
+		then:
+			waitFor { keywords.displayed }
+		when:
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
+			keywords.defaultAction = "join"
+			next.click()
+		then:
+			waitFor {autoreply.displayed}
+		when:
+			autoreply.enableJoinAutoreply.click()
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
+			autoreply.enableLeaveAutoreply.click()
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			next.click()
+		then:
+			waitFor { confirm.subscriptionName.displayed }
+			confirm.confirm("keyword-text") ==  "FRIENDS"
+			confirm.confirm("join-alias-text") ==  "join, start"
+			confirm.confirm("leave-alias-text") ==  "leave, stop"
+			confirm.confirm("default-action-text") ==  "join"
+			confirm.confirm("join-autoreply-text") ==  "You have been successfully subscribed to Friends group"
+			confirm.confirm("leave-autoreply-text") ==  "You have been unsubscribed from Friends group"
+	}
+
 	def launchSubscriptionPopup() {
 		to PageMessageInbox
 		bodyMenu.newActivity.click()

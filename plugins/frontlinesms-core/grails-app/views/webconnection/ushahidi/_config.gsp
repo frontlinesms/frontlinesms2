@@ -20,7 +20,7 @@
 <div class="input">
 	<label for="url" class="ushahidi${isCrowdmap? ' hidden':''}"><g:message code="webconnection.ushahidi.url.label"/></label>
 	<label for="url" class="crowdmap${isCrowdmap?'':' hidden'}"><g:message code="webconnection.crowdmap.url.label"/></label>
-	<g:textField name="displayed_url" value="${activityInstanceToEdit ? (isCrowdmap? (activityInstanceToEdit.url - 'https://' - '.crowdmap.com') : activityInstanceToEdit.url ) : ''}" required="true"/>
+	<g:textField name="displayed_url" value="${activityInstanceToEdit ? (isCrowdmap? (activityInstanceToEdit.url - 'https://' - '.crowdmap.com/frontlinesms/') : activityInstanceToEdit.url ) : ''}" required="true"/>
 	<g:hiddenField name="url" value="${activityInstanceToEdit?.url}" />
 	<label for='url' class="crowdmap${isCrowdmap?'':' hidden'} suffix">.crowdmap.com</label>
 </div>
