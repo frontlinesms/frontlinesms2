@@ -20,11 +20,11 @@ class ClickatellPostProcessor implements Processor {
 			if(m.matches()) {
 				switch (m[0][1]) {
 					case "001"://Invalid Login
-						throw new AuthenticationException("Clickatell gateway error: $m[0][2]}")
+						throw new AuthenticationException("Clickatell gateway error: ${m[0][2]}")
 					case "108"://Missing or invalid Api_Id
-						throw new InvalidApiIdException("Clickatell gateway error: $m[0][2]")
+						throw new InvalidApiIdException("Clickatell gateway error: ${m[0][2]}")
 					default:
-						throw new RuntimeException("Clickatell gateway error: $m[0][2]")
+						throw new RuntimeException("Clickatell gateway error: ${m[0][2]}")
 				}
 			} else throw new RuntimeException("Unexpected response from Clickatell gateway: $text")
 		}
