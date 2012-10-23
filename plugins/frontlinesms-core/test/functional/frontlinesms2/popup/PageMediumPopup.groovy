@@ -413,6 +413,9 @@ class SubscriptionConfirmTab extends geb.Module {
 	static content = {
 		subscriptionName { $('input#name') }
 		keyword {$("#confirm-keyword").text()}
+		confirm {id->
+			$("#confirm-"+id).text()
+		}
 		joinAliases {$("#confirm-joinAliases").text()}
 		leaveAliases {$("#confirm-leaveAliases").text()}
 		autoreplyText {$("#confirm-autoreplyText").text()}
