@@ -13,7 +13,7 @@ environments {
 }
 
 grails.project.dependency.resolution = {
-	def gebVersion = '0.7.0'
+	def gebVersion = '0.7.2'
 
 	// inherit Grails' default dependencies
 	inherits("global") {
