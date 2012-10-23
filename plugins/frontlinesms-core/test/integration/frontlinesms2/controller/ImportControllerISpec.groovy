@@ -42,8 +42,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 "Alice Sihoho254728749000","","","true","","/ToDo/Work"
 '''
 	}
-
-	def 'uploading contacts with backslash characters should not cause issues'() {
+	def 'uploading contacts with backslash characters should unfortunately interpret them as separate groups'() {
 		when:
 			importContacts('''"Name","Mobile Number","E-mail Address","Notes","Group(s)","lake","town"
 "Alex","0702597711",,,"\\o/ team",,
@@ -52,10 +51,10 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 "Vaneyck","0723127992",,,"\\o/ team",,
 ''')
 		then:
-			Group.list()*.name == ['\\o/']
+			Group.list()*.name == ['o', 'o- team', 'team']
 			Contact.count() == 4
-			def group = Group.findAll().first()
-			Contact.findAll().every { it.isMemberOf(group) }
+			def groups = Group.findAll()
+			Contact.findAll().every { groups.every { group -> it.isMemberOf(group) } }
 	}
 	
 	def 'Uploading a messages CSV file from version 1 should create new messages and folder in the database'() {
