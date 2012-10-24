@@ -1,6 +1,6 @@
 <%@ page import="frontlinesms2.*" %>
 <g:if test="${fconnectionInstance}">
-	<div id="${fconnectionInstance.shortName}-form">
+	<div id="${fconnectionInstance.shortName}-form" class="fconnection-details">
 		<h2><g:message code="${fconnectionInstance.class.simpleName.toLowerCase()}.label"/></h2>
 		<div class="info">
 			<p><g:message code="${fconnectionInstance.class.simpleName.toLowerCase()}.simple.instructions"/></p>
@@ -10,7 +10,7 @@
 </g:if>
 <g:else>
 	<g:each in="${Fconnection.implementations}">
-		<div id="${it.shortName}-form">
+		<div id="${it.shortName}-form" class="fconnection-details">
 			<h2><g:message code="${it.simpleName.toLowerCase()}.label"/></h2>
 			<div class="info">
 				<p><g:message code="${it.simpleName.toLowerCase()}.simple.instructions"/></p>

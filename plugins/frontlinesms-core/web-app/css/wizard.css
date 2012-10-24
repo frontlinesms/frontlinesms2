@@ -51,3 +51,6 @@ div.sorting-option { padding:5px 5px 10px 25px; }
 div.sorting-option input#keywords { display: block; margin-top:5px; }
 
 #connectionForm label[for=connectionType] { font-weight: bold }
+#connectionForm td label { font-weight: bold }
+#connectionForm .connection-field-info { padding-left:10px; padding-bottom:3px;}
+

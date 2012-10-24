@@ -94,6 +94,7 @@ modules = {
 	settings {
 		dependsOn "common"
 		resource url:[dir:'js', file:'/settings/basicAuthValidation.js']
+		resource url:[dir:'js', file:'/settings/connectionTooltips.js']
 	}
 	
 	overrides {
