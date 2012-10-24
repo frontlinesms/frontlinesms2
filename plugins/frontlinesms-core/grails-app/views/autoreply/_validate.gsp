@@ -40,17 +40,14 @@
 	}
 	
 	function updateConfirmationMessage() {
+		var autoreplyText = $('#messageText').val().htmlEncode();
 		if(!(isGroupChecked("blankKeyword"))){
 			var keywords = $('#keywords').val().toUpperCase();
-			var autoreplyText = $('#messageText').val();
-
 			$("#keyword-confirm").html('<p>' + keywords  + '</p>');
-			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		} else {
-			var autoreplyText = $('#messageText').val();
 			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
-			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		}
+		$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 	}
 
 </r:script>
