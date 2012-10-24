@@ -269,14 +269,7 @@ var mediumPopup = (function() {
 			success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('action.send')); }
 		});
 	};
-	editConnection = function(id) {
-		$.ajax({
-			url: url_root + "connection/wizard/" + id,
-			success: function(data){
-				launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false);
-			}
-		});
-	};
+	
 	selectSubscriptionGroup = function(groupId) { // FIXME activity-specific code should not be inside this file
 		var labelId = $('input[value=group-'+groupId+']').attr('id');
 		$('label[for='+labelId+']').trigger('click');
@@ -300,3 +293,11 @@ $.widget("ui.contentWidget", {
 	validate:function() { return this.options.validate(); },
 	options:{ validate:function() { return true; } } });
 
+function editConnection(id) {
+	$.ajax({
+		url: url_root + "connection/wizard/" + id,
+		success: function(data){
+			mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false);
+		}
+	});
+}
