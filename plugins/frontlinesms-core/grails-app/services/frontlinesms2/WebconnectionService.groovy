@@ -26,6 +26,14 @@ class WebconnectionService{
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
+	def handleFailed(Exchange x) {
+
+	}
+
+	def handleCompleted(Exchange x) {
+		
+	}
+
 	def send(Fmessage message){
 		println "*** sending message ${message}"
 		def headers = [:]

@@ -68,6 +68,24 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			notThrown(RuntimeException)
 	}
 
+	def 'handleCompleted should update the message status to SENT'() {
+		given:
+			def x = mockExchange("simple","post", false)
+		when:
+			webconnectionService.handleCompleted(x)
+		then:
+			Fmessage.findByText("simple").ownerDetail == DispatchStatus.SENT
+	}
+
+	def 'handleFailed should update the message status to FAILED'() {
+		given:
+			def x = mockExchange("simple","post", false)
+		when:
+			webconnectionService.handleFailed(x)
+		then:
+			Fmessage.findByText("simple").ownerDetail == DispatchStatus.FAILED
+	}
+
 	Exchange mockExchange(messageText,method,messageOnly){
 		def webconnection =  Webconnection.findByName("Sync")
 		if(method ==  'get'){
