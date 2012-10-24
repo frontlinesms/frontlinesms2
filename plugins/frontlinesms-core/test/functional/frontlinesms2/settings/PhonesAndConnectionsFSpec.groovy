@@ -25,6 +25,16 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			connectionNames*.text().containsAll(["'Miriam's Clickatell account'", "'MTN Dongle'"])
 	}
 
+	def 'smsssync connection should display connection url'(){
+		given:
+			createTestConnections()
+		when:
+			go 'connection/list'
+		then:
+			at PageConnectionSettings
+			(/http:\/\/you-ip-address\/frontlinesms-core\/api\/.*\/smssync\// =~ connections[2].children().text()[2])
+	}
+
 	def createTestConnections() {
 		SmslibFconnection.build(name:'MTN Dongle', port:'stormyPort')
 		EmailFconnection.build(name:'Miriam\'s Clickatell account',
@@ -33,6 +43,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 				serverPort:993,
 				username:'mr.testy@zoho.com',
 				password:'mister')
+		SmssyncFconnection.build(name:'SmsSync to Bobs Android', secret:'trial')
 	}
 }
 
