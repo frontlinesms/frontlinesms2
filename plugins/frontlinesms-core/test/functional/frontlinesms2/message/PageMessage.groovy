@@ -106,6 +106,7 @@ class MessageListRow extends geb.Module {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse($('td.message-date-cell').text())
 		}
 		linkUrl { $('td.message-text-cell a').@href }
+		hasStatus { status -> $(':first-child').parent().hasClass(status) }
 	}
 }
 
