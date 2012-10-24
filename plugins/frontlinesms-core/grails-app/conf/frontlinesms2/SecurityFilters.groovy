@@ -4,7 +4,7 @@ class SecurityFilters {
 	def appSettingsService
 
 	def filters = {
-		basicAuth(controller:'*', action:'*') {
+		basicAuth(controller:'*', action:'*', uriExclude:'/api/**') {
 			before = {
 				def enabledAuthentication = appSettingsService.get("enabledAuthentication")
 				if(enabledAuthentication) {

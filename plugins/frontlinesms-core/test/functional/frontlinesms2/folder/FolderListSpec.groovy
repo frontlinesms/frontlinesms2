@@ -117,8 +117,8 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 			createTestMessages()
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
+			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true, flush:true)
+			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
 			messageList.messages[0].checkbox.click()

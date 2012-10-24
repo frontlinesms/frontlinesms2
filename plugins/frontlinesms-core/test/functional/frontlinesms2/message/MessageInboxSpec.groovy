@@ -169,7 +169,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should show the address of the contact in the confirm screen"() {
 		given:
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
 			
 		when:
 			to PageMessageInbox, message.id
@@ -185,8 +185,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
 		given:
-			new Contact(name: "Tom", mobile: "+254999999").save(failOnError:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
+			new Contact(name: "Tom", mobile: "+254999999").save(failOnError:true, flush:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
 			
 		when:
 			to PageMessageInbox, message.id
@@ -219,7 +219,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true)
+			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true, flush:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox, Fmessage.findByText('hello').id
@@ -237,7 +237,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			tabs.unreadcount == 1
 		when:
-			Fmessage.build().save(flush: true, failOnError:true)
+			Fmessage.build().save(flush:true, failOnError:true)
 			js.refreshMessageCount()
 		then:
 			waitFor { tabs.unreadcount == 2}
