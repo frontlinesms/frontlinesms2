@@ -12,8 +12,8 @@ abstract class Webconnection extends Activity {
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webconnection' }
 	static String getType() { '' }
-	static def implementations = [GenericWebconnection,
-			UshahidiWebconnection]
+	static def implementations = [UshahidiWebconnection, 
+			GenericWebconnection]
 
 	// Camel route redelivery config
 	static final def retryAttempts = 3 // how many times to retry before giving up

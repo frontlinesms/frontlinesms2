@@ -20,7 +20,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "Can create a new subscription" () {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
@@ -99,7 +99,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "Should not proceed if subscription not named"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
@@ -136,7 +136,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "keyword aliases must be unique if provided"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
@@ -154,7 +154,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "keyword aliases must have valid commas seperated values if provided"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
@@ -165,14 +165,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.leaveKeywords = 'team%^&%^%&'
 			next.click()
 		then:
-			waitFor {validationError.text().contains('Invalid Keyword. Try a, name, word')}
+			waitFor {validationError.text().contains('Invalid keyword. Try a, name, word')}
 			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
 
 	def "autoreply text must be provided if join/leave autoreply is enabled"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
@@ -196,7 +196,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "Confirm screen should display all the necessary data" () {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }

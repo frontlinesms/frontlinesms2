@@ -9,7 +9,7 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
 				new Fmessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
 					it.inbound = true
-					it.save(failOnError:true)
+					it.save(failOnError:true, flush:true)
 				}
 	}
 	
@@ -17,7 +17,7 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 2),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 1, starred: true)].each() {
 					it.inbound = true
-					it.save(failOnError:true)
+					it.save(failOnError:true, flush:true)
 				}
 
 		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
@@ -36,7 +36,7 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 				new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
 					it.inbound = true
-					it.save(failOnError:true)
+					it.save(failOnError:true, flush:true)
 				}
 
 		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
@@ -50,7 +50,7 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 	
 	static createTestContacts() {	
 		[new Contact(name: 'Alice', mobile: '+254778899'),
-			new Contact(name: 'Bob', mobile: '+254987654')].each() { it.save(failOnError:true) }
+			new Contact(name: 'Bob', mobile: '+254987654')].each() { it.save(failOnError:true, flush:true) }
 	}
 }
 

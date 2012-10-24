@@ -274,8 +274,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			def c1 = Contact.build(name:'prudence', mobile:'+12321')
 			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 			g.addToMembers(c1)
-			def m1 = new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi prudence and wilburforce! You are signed up by force').addToDispatches(dst:"+12321", status:DispatchStatus.SENT, dateSent:new Date()).save(flush: true, failOnError:true)
-			m1.addToDispatches(dst:"+1232123", status:DispatchStatus.SENT, dateSent:new Date()).save(flush: true, failOnError:true)
+			def m1 = new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi prudence and wilburforce! You are signed up by force').addToDispatches(dst:"+12321", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
+			m1.addToDispatches(dst:"+1232123", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
 			def subscription = Subscription.findByName('Camping Subscription')
 		when:
 			to PageMessageSent, m1

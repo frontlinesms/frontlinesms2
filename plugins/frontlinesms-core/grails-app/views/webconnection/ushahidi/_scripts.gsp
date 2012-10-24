@@ -17,7 +17,7 @@
 
 		$("input[name=displayed_url]").live("change", function(){
 			var isCrowdMap = $("input[name=serviceType]:checked").val() === "crowdmap"
-			if(isCrowdMap) $("input[name=url]").val("https://" + $(this).val() + ".crowdmap.com");
+			if(isCrowdMap) $("input[name=url]").val("https://" + $(this).val() + ".crowdmap.com" + "/frontlinesms/");
 			else $("input[name=url]").val($(this).val());
 		});
 		var keyword = $("input[name=keywords]").val() || i18n("webconnection.none.label");

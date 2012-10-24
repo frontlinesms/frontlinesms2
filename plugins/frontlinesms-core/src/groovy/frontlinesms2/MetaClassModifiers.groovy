@@ -7,11 +7,16 @@ import org.apache.camel.Exchange
 
 class MetaClassModifiers {
 	static void addAll() {
+		MetaClassModifiers.addTodoConstantToSpecifications()
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
+	}
+
+	static def addTodoConstantToSpecifications() {
+		spock.lang.Specification.metaClass.static.getTODO = { false }
 	}
 
 	static def addZipMethodToFile() {

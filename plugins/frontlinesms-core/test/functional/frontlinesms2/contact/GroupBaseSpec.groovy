@@ -4,16 +4,16 @@ import frontlinesms2.*
 
 abstract class GroupBaseSpec extends grails.plugin.geb.GebSpec {
 	def createTestGroups() {
-		new Group(name: 'Listeners').save()
-		new Group(name: 'Friends').save(failOnError: true, flush: true)
+		new Group(name:'Listeners').save(failOnError:true, flush:true)
+		new Group(name:'Friends').save(failOnError:true, flush:true)
 	}
 
 	def createTestGroupsAndContacts() {
 		def friendsGroup = createTestGroups()
-		def bobby = new Contact(name: 'Bobby').save()
-		def duchamps = new Contact(name: 'Duchamps').save()
+		def bobby = new Contact(name:'Bobby').save(failOnError:true, flush:true)
+		def duchamps = new Contact(name:'Duchamps').save(failOnError:true, flush:true)
 		[bobby, duchamps].each() { friendsGroup.addToMembers(it) }
-		friendsGroup.save(failOnError: true, flush: true)
+		friendsGroup.save(failOnError:true, flush:true)
 	}
 	
 	def createManyContactsAddToGroups() {
