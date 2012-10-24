@@ -200,7 +200,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionFailedFlashMessageEditButton.displayed
 	}
 
-	@spock.lang.IgnoreRest
 	def 'clicking edit in failed connection flash message should launch connection edit dialog'() {
 		given: 'connection exists, is started and failed message is displayed'
 			createBadConnection()
@@ -209,9 +208,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when: 'edit button is clicked'
 			connectionFailedFlashMessageEditButton.click()
 		then: 'modification dialog is displayed'
-			println "popupTitle is $popupTitle"
 			waitFor { at ConnectionDialog }
-			println "popupTitle is $popupTitle"
 	}
 
 	private def createBadConnection() {
