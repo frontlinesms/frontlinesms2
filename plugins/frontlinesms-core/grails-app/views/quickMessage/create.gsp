@@ -27,7 +27,7 @@
 	$("#messageText").live("blur", function() {
 		var value = $(this).val();
 		if(value) {
-			$("#confirm-message-text").html(value);
+			$("#confirm-message-text").html(value).htmlEncode();
 		} else {
 			$("#confirm-message-text").html("none"); // FIXME i18n
 		}
