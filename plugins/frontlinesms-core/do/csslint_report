@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+TARGET_DIR="target/analysis-reports"
+TARGET="$TARGET_DIR/csslint.xml"
+echo "# Generating csslint report in $TARGET ..."
+RULES_TO_IGNORE="ids,adjoining-classes"
+echo "# CSS Lint ignoring rules: $RULES_TO_IGNORE"
+mkdir -p $TARGET_DIR
+csslint --ignore=$RULES_TO_IGNORE --format=lint-xml web-app/css/* > $TARGET
+echo "# Report generated in $TARGET"
+
