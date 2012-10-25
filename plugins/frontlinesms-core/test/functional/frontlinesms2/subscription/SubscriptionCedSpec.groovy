@@ -41,8 +41,8 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.leaveKeywords = 'leave, stop'
 			keywords.defaultAction = "join"
 		then:
-			keywords.joinHelperMessage == "FRIENDS join,FRIENDS start"
-			keywords.leaveHelperMessage == "FRIENDS leave,FRIENDS stop"
+			keywords.joinHelperMessage == "FRIENDS join, FRIENDS start"
+			keywords.leaveHelperMessage == "FRIENDS leave, FRIENDS stop"
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -88,11 +88,11 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			keywords.joinHelperMessage == 'join, start'
 			keywords.leaveHelperMessage == 'leave, stop'
-			keywords.defaultAction.attr('disabled', true);
+			keywords.defaultAction.disabled
 		when:
 			keywords.keywordText = 'a'
 		then:
-			keywords.defaultAction.attr('disabled', false)
+			!keywords.defaultAction.disabled
 	}
 
 	def "Can edit an existing subscription"() {

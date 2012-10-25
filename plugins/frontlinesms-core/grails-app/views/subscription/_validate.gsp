@@ -2,6 +2,7 @@
 	function initializePopup() {
 		initializeTabValidation(createFormValidator());
 		addCustomValidationClasses();
+		updateAliasTips();
 		console.log("called AddCustomVal");
 	}
 

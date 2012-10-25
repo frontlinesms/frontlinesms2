@@ -83,15 +83,16 @@
 	function generateKeywordTips(keyword, alias){
 		var aliases = alias.split(",");
 		var keywords = keyword.split(',');
-		var tip = [];
+		var tipArray = [];
 		var n = 0;
 		$(aliases).each(function(i, v) {
 			$(keywords).each(function(index, key){
-				tip[n] = key + " " + v;
+				tipArray[n] = key + " " + v;
 				n++;
 			});
 		});
-		return tip.splice(0,3).join(',');
+		var tip =  tipArray.splice(0,3).join(', ').trim();
+		return (tip.length > 0 ? tip : "${g.message(code: 'subscription.sorting.tip.prompt')}")
 	}
 
 	function updateJoinTip(topKeyword){
@@ -108,8 +109,17 @@
 
 	function updateAliasTips(){
 		var topKeyword = $('input#topLevelKeywords').val();
+		toggleDefaultAction(topKeyword);
 		updateJoinTip(topKeyword);
 		updateLeaveTip(topKeyword);
+	}
+
+	function toggleDefaultAction(topKeyword){
+		if(topKeyword.trim().length > 0){
+			$('input#defaultAction').attr('disabled',false);
+		}else{
+			$('input#defaultAction').attr('disabled',true);
+		}
 	}
 </r:script>
 
