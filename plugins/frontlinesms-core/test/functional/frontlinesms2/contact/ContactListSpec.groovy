@@ -142,7 +142,7 @@ class ContactListSpec extends ContactBaseSpec {
 			(1..20).each { Fmessage.build(src:'+111', inbound:true, text:"message ${it}") }
 			def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
 				.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
-				.save(failOnError:true)
+				.save(failOnError:true, flush:true)
 		when:
 			to PageContactShow
 			contactList.selectContact 0
@@ -161,7 +161,7 @@ class ContactListSpec extends ContactBaseSpec {
 			(1..20).each { Fmessage.build(src:'+111', inbound:true, text:"message ${it}") }
 			def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
 				.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
-				.save(failOnError:true)
+				.save(failOnError:true, flush:true)
 		when:
 			to PageContactShow
 			contactList.selectContact 0

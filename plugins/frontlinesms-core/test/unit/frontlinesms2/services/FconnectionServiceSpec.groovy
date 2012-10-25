@@ -111,6 +111,7 @@ class FconnectionServiceSpec extends Specification {
 		when:
 			service.handleDisconnection(exchange)
 		then:
+			SystemNotification.count()
 			jobRouteId == connectionId
 		where:
 			routeId          | connectionId
