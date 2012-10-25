@@ -17,7 +17,8 @@
 </div>
 
 <div class="input">
-	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
+	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"
+	 onkeyup="updateAliasTips()"/>
 </div>
 
 <h2><g:message code="subscription.keywords.header"/></h2>
@@ -28,11 +29,19 @@
 	<table class="subscription-aliases">
 		<tr>
 			<td><label for="joinKeywords"><g:message code="subscription.keywords.join"/></label></td>
-			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/></td>
+			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}" onkeyup="updateAliasTips()"/></td>
+		</tr>
+		<tr>
+			<td> <p class="info"> <g:message code="subscription.sorting.tip.label"/> </p> </td>
+			<td><label id="joinHelperMessage"><g:message code="subscription.sorting.tip.prompt"/></label></td>
 		</tr>
 		<tr>
 			<td><label for="leaveKeywords"><g:message code="subscription.keywords.leave"/></label></td>
-			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/></td>
+			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}" onkeyup="updateAliasTips()"/></td>
+		</tr>
+		<tr>
+			<td> <p class="info"> <g:message code="subscription.sorting.tip.label"/> </p> </td>
+			<td><label id="leaveHelperMessage"><g:message code="subscription.sorting.tip.prompt" /></label></td>
 		</tr>
 	</table>
 </div>
@@ -70,5 +79,37 @@
 			}
 		});
 	});
+
+	function generateKeywordTips(keyword, alias){
+		var aliases = alias.split(",");
+		var keywords = keyword.split(',');
+		var tip = [];
+		var n = 0;
+		$(aliases).each(function(i, v) {
+			$(keywords).each(function(index, key){
+				tip[n] = key + " " + v;
+				n++;
+			});
+		});
+		return tip.splice(0,3).join(',');
+	}
+
+	function updateJoinTip(topKeyword){
+		var joinAlias = $('input#joinKeywords').val();
+		var tip = generateKeywordTips(topKeyword,joinAlias);
+		$('#joinHelperMessage').html(tip);
+	}
+
+	function updateLeaveTip(topKeyword){
+		var leaveAlias = $('input#leaveKeywords').val();
+		var tip = generateKeywordTips(topKeyword,leaveAlias);
+		$('#leaveHelperMessage').html(tip);
+	}
+
+	function updateAliasTips(){
+		var topKeyword = $('input#topLevelKeywords').val();
+		updateJoinTip(topKeyword);
+		updateLeaveTip(topKeyword);
+	}
 </r:script>
 

@@ -41,8 +41,8 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.leaveKeywords = 'leave, stop'
 			keywords.defaultAction = "join"
 		then:
-			keywords.joinHelperMessage.containsAll(["FRIENDS JOIN", "FRIENDS START"])
-			keywords.leaveHelperMessage.containsAll(["FRIENDS LEAVE", "FRIENDS STOP"])
+			keywords.joinHelperMessage == "FRIENDS join,FRIENDS start"
+			keywords.leaveHelperMessage == "FRIENDS leave,FRIENDS stop"
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -86,8 +86,8 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.joinKeywords = 'join, start'
 			keywords.leaveKeywords = 'leave, stop'
 		then:
-			keywords.joinHelperMessage.containsAll(["JOIN", "START"])
-			keywords.leaveHelperMessage.containsAll(["LEAVE", "STOP"])
+			keywords.joinHelperMessage == 'join, start'
+			keywords.leaveHelperMessage == 'leave, stop'
 			keywords.defaultAction.attr('disabled', true);
 		when:
 			keywords.keywordText = 'a'
@@ -113,13 +113,13 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			next.click()
 		then:
 			waitFor { keywords.displayed }
-			keywords.joinHelperMessage.containsAll(["CAMPING JOIN", "CAMPING IN", "CAMPING START"])
-			keywords.leaveHelperMessage.containsAll(["CAMPING LEAVE", "CAMPING OUT", "CAMPING STOP"])
+			keywords.joinHelperMessage == "CAMPING JOIN, CAMPING IN, CAMPING START"
+			keywords.leaveHelperMessage == "CAMPING LEAVE, CAMPING OUT, CAMPING STOP"
 		when:
 			keywords.keywordText = 'NOTABOUTFOOTBALL'
 		then:
-			keywords.joinHelperMessage.containsAll(["NOTABOUTFOOTBALL JOIN", "NOTABOUTFOOTBALL IN", "NOTABOUTFOOTBALL START"])
-			keywords.leaveHelperMessage.containsAll(["NOTABOUTFOOTBALL LEAVE", "NOTABOUTFOOTBALL OUT", "NOTABOUTFOOTBALL STOP"])
+			keywords.joinHelperMessage == "NOTABOUTFOOTBALL JOIN, NOTABOUTFOOTBALL IN, NOTABOUTFOOTBALL START"
+			keywords.leaveHelperMessage == "NOTABOUTFOOTBALL LEAVE, NOTABOUTFOOTBALL OUT, NOTABOUTFOOTBALL STOP"
 		when:
 			next.click()
 			autoreply.enableJoinAutoreply.click()

@@ -395,8 +395,8 @@ class SubscriptionKeywordsTab extends geb.Module {
 		joinKeywords {$('input#joinKeywords')}
 		leaveKeywords {$('input#leaveKeywords')}
 		defaultAction { $("input#defaultAction") }
-		joinHelperMessage {$('#joinHelperMessage')}
-		leaveHelperMessage {$('#leaveHelperMessage')}
+		joinHelperMessage {$('#joinHelperMessage').text()}
+		leaveHelperMessage {$('#leaveHelperMessage').text()}
 	}
 }
 
