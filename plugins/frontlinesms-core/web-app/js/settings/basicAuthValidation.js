@@ -1,20 +1,21 @@
 $(function() {
-	jQuery.validator.addMethod("password", function(value, element) {
-			var isValid = true;
-			var passwordField = $("input[name=password]")
-			var password = passwordField.val();
-			var confirmPassword = $("input[name=confirmPassword]").val();
-			if(password.length > 0) {
-				isValid = password === confirmPassword
-				passwordField.removeClass("error");
-				passwordField.addClass("valid");
-				passwordField.siblings("label[generated=true]").hide();
-			} else {
-				isValid = false;
-			}
-			return isValid;
-		}, i18n("basic.authentication.password.mismatch"));
-
+	var validatePassword = function(value, element) {
+		var confirmPassword, password, passwordField, isValid;
+		isValid = true;
+		passwordField = $("input[name=password]");
+		password = passwordField.val();
+		confirmPassword = $("input[name=confirmPassword]").val();
+		if(password.length > 0) {
+			isValid = password === confirmPassword;
+			passwordField.removeClass("error");
+			passwordField.addClass("valid");
+			passwordField.siblings("label[generated=true]").hide();
+		} else {
+			isValid = false;
+		}
+		return isValid;
+	};
+	jQuery.validator.addMethod("password", validatePassword, i18n("basic.authentication.password.mismatch"));
 	basicAuthValidation.toggleFields("#enabledAuthentication");
 	basicAuthValidation.validator("#basic-auth");
 });
@@ -29,12 +30,12 @@ var basicAuthValidation = {
 	showErrors: function(form) {
 			var isValid = false;
 			if($("input[type=text]:not(:disabled), input[type=password]:not(:disabled)").length === 0) {
-				return true
+				return true;
 			}
 			$("input:not(:disabled)").each(function() {
 				isValid = isValid && basicAuthValidation.validator(form).element($(this));
 			});
-			return isValid
+			return isValid;
 		},
 	toggleFields: function(selector) {
 			if($(selector).is(":checked")) {
@@ -45,4 +46,5 @@ var basicAuthValidation = {
 				$("label[generated=true]").hide();
 			}
 		}
-}
+};
+
