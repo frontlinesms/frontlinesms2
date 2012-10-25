@@ -33,8 +33,8 @@ echo "#### Uploading unix build..."
 curl -v -T $local_unix_path -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_upload_path"
 
 echo "#### Creating the xml file with file names"
-touch build_links.json
-echo "{'windows':'$r_windows_path', 'mac':'$r_mac_path', 'unix':'$r_unix_path'}" >> build_links.json
+touch build_links.php
+echo "<?php echo "{\'windows\':\'$r_windows_path\', \'mac\':\'$r_mac_path\', \'unix\':\'$r_unix_path\'}" ?>" >> build_links.php
 echo "#### Uloading xml document with file names"
 local_json_path="build_links.json"
 curl -v -T $local_json_path -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_upload_path"
