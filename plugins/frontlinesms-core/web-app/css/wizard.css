@@ -13,11 +13,6 @@
 
 #tabs div.input > * { display:block; }
 #tabs div.input textarea { width:98%; }
-#tabs div.input p.info {  margin: -3px 0;
-    padding-bottom: 1px;
-    padding-left: 25px;
-    padding-top: 1px;
-	background-position:center left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
 
 #tabs div.input.optional { position:relative; }
 #tabs div.input.optional label { left:0; }
