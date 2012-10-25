@@ -25,9 +25,9 @@
 
 <r:script>
 	$("#messageText").live("blur", function() {
-		var value = $(this).val();
+		var value = $(this).val().htmlEncode();
 		if(value) {
-			$("#confirm-message-text").html(value).htmlEncode();
+			$("#confirm-message-text").html(value);
 		} else {
 			$("#confirm-message-text").html("none"); // FIXME i18n
 		}

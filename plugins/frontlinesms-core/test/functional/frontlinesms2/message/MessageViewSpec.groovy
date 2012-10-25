@@ -21,8 +21,7 @@ class MessageViewSpec extends grails.plugin.geb.GebSpec {
 			header.quickMessage.click()
 			waitFor { at QuickMessageDialog }
 		and: 'test message is entered'
-			compose.textArea = '<hello>'
-			compose.textArea.jquery.blur
+			compose.textArea.value('<hello>')
 			next.click()
 		and: 'test contact is entered'
 			waitFor { recipients.displayed }
