@@ -219,5 +219,13 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec{
 		then:		
 			waitFor { flashMessage.displayed }
 	}
-	
+
+	def "clicking on the sent message filter should display outgoing messages only"() {
+		expect:TODO
+	}
+
+	def "clicking on the received message filter should display incoming messages only"() {
+		expect:TODO
+	}
 }
+
