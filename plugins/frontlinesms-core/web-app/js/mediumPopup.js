@@ -1,14 +1,14 @@
 var mediumPopup = (function() {
 	var ___start___,
-		cancel, submit, submitWithoutClose,
-		range, selectSubscriptionGroup, editConnection,
+		cancel, submit, submitWithoutClose, range,
+		selectSubscriptionGroup, editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
 		createModalBox,
 		launchMediumPopup, launchMediumWizard, launchHelpWizard,
 		getCurrentTab, getCurrentTabDom, getCurrentTabIndex, getTabLength,
 		prevButton, nextButton,
 		addValidation, enableTab, disableTab,
 		changeButtons, getButtonToTabMappings, initializeTabContentWidgets, makeTabsUnfocusable,
-		tabValidates, validateTabSelections, validateAllPreviousTabs, validateSmartGroup,
+		tabValidates, validateTabSelections, validateAllPreviousTabs,
 		messageResponseClick, moveToRelativeTab,
 		___end___;
 	cancel = function() {
@@ -269,6 +269,7 @@ var mediumPopup = (function() {
 			success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('action.send')); }
 		});
 	};
+
 	editConnection = function(id) {
 		$.ajax({
 			url: url_root + "connection/wizard/" + id,
@@ -277,6 +278,7 @@ var mediumPopup = (function() {
 			}
 		});
 	};
+
 	selectSubscriptionGroup = function(groupId) { // FIXME activity-specific code should not be inside this file
 		var labelId = $('input[value=group-'+groupId+']').attr('id');
 		$('label[for='+labelId+']').trigger('click');
@@ -285,6 +287,7 @@ var mediumPopup = (function() {
 	return {
 		addValidation:addValidation,
 		disableTab:disableTab,
+		editConnection:editConnection,
 		enableTab:enableTab,
 		launchMediumPopup:launchMediumPopup,
 		launchMediumWizard:launchMediumWizard,

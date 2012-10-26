@@ -95,7 +95,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			next.click()
 		then:
 			confirmTab.confirm('service') == 'Crowdmap'
-			confirmTab.confirm('url') == 'https://my.crowdmap.com'
+			confirmTab.confirm('url') == 'https://my.crowdmap.com/frontlinesms/'
 			confirmTab.confirm('key') == 'a1b2c3d4e5'
 			confirmTab.confirm('keyword') == 'None'
 	}

@@ -20,7 +20,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "Can create a new subscription" () {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
@@ -138,7 +138,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "Should not proceed if subscription not named"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
@@ -175,7 +175,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "keyword aliases must be unique if provided"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
@@ -193,7 +193,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "keyword aliases must have valid commas seperated values if provided"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
@@ -211,7 +211,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "autoreply text must be provided if join/leave autoreply is enabled"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true)
+			new Group(name:"Friends").save(failOnError:true, flush:true)
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
@@ -231,6 +231,40 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor {validationError.text().contains('Please enter leave autoreply text')}
 			autoreply.enableLeaveAutoreply.displayed
+	}
+
+	def "Confirm screen should display all the necessary data" () {
+		setup:
+			new Group(name:"Friends").save(failOnError:true, flush:true)
+		when:
+			launchSubscriptionPopup()
+			waitFor { at SubscriptionCreateDialog }
+			group.addToGroup Group.findByName('Friends').id
+			next.click()
+		then:
+			waitFor { keywords.displayed }
+		when:
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
+			keywords.defaultAction = "join"
+			next.click()
+		then:
+			waitFor {autoreply.displayed}
+		when:
+			autoreply.enableJoinAutoreply.click()
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
+			autoreply.enableLeaveAutoreply.click()
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			next.click()
+		then:
+			waitFor { confirm.subscriptionName.displayed }
+			confirm.confirm("keyword-text") ==  "FRIENDS"
+			confirm.confirm("join-alias-text") ==  "join, start"
+			confirm.confirm("leave-alias-text") ==  "leave, stop"
+			confirm.confirm("default-action-text") ==  "join"
+			confirm.confirm("join-autoreply-text") ==  "You have been successfully subscribed to Friends group"
+			confirm.confirm("leave-autoreply-text") ==  "You have been unsubscribed from Friends group"
 	}
 
 	def launchSubscriptionPopup() {

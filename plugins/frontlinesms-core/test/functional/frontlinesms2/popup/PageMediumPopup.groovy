@@ -63,6 +63,7 @@ class QuickMessageConfirmTab extends geb.Module {
 	static content = {
 		messagesToSendCount { $('#contacts-count').text() }
 		recipientName { $('td#recipient').text() }
+		messageText { $('td#confirm-message-text').text() }
 	}
 }
 
@@ -256,6 +257,10 @@ class ConnectionDialog extends MediumPopup {
 		confirmType { $("#confirm-type") }
 		confirmPort { $("#confirm-port") }
 
+		basicInfo { connectionType ->
+			$("p.info.$connectionType").text()
+		}
+
 		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name") }
 		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username") }
 		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type") }
@@ -415,6 +420,9 @@ class SubscriptionConfirmTab extends geb.Module {
 	static content = {
 		subscriptionName { $('input#name') }
 		keyword {$("#confirm-keyword").text()}
+		confirm {id->
+			$("#confirm-"+id).text()
+		}
 		joinAliases {$("#confirm-joinAliases").text()}
 		leaveAliases {$("#confirm-leaveAliases").text()}
 		autoreplyText {$("#confirm-autoreplyText").text()}

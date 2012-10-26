@@ -85,7 +85,13 @@
 	}
 
 	function updateConfirmTab() {
-		$("#confirm-group-text").html($("#subscription-group").val());
+		$("#confirm-group-text").html($("#subscriptionGroup option:selected").text()? $("#subscriptionGroup option:selected").text():i18n("announcement.message.none"));
+		$("#confirm-keyword-text").html($("#topLevelKeywords").val()? $("#topLevelKeywords").val():i18n("announcement.message.none"));
+		$("#confirm-join-alias-text").html($("#joinKeywords").val()? $("#joinKeywords").val():i18n("announcement.message.none"));
+		$("#confirm-leave-alias-text").html($("#leaveKeywords").val()? $("#leaveKeywords").val():i18n("announcement.message.none"));
+		$("#confirm-default-action-text").html($("#defaultAction").val()? $("#defaultAction").val():i18n("announcement.message.none"));
+		$("#confirm-join-autoreply-text").html($("#joinAutoreplyText").val()? $("#joinAutoreplyText").val().htmlEncode():i18n("announcement.message.none"));
+		$("#confirm-leave-autoreply-text").html($("#leaveAutoreplyText").val()? $("#leaveAutoreplyText").val().htmlEncode():i18n("announcement.message.none"));
 	}
 
 	function addCustomValidationClasses() {

@@ -29,7 +29,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 	def "move to inbox option should be displayed for folder messages and should work"() {
 		given:
 			createTestFolders()
-			Folder.findByName("Work").addToMessages(new Fmessage(text:'', src: "src", inbound: true)).save(flush: true, failOnError: true)
+			Folder.findByName("Work").addToMessages(new Fmessage(text:'', src: "src", inbound: true)).save(flush:true, failOnError:true)
 		when:
 			to PageMessageFolder, Folder.findByName("Work"), Fmessage.findBySrc("src")
 			singleMessageDetails.moveTo("inbox")
