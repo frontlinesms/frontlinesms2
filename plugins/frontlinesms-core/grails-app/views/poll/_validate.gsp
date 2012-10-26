@@ -361,8 +361,10 @@
 				aliasText += "<p>"+i18n("poll.yes") + " : " + $("ul#poll-aliases li input#keywordsA").val() + "</p>";
 				aliasText += "<p>"+i18n("poll.no") + " : " + $("ul#poll-aliases li input#keywordsB").val() + "</p>";
 			}
-			$("#poll-confirm-aliases").html(aliasText);
+		} else {
+			aliasText += i18n('poll.autoreply.none');
 		}
+		$("#poll-confirm-aliases").html(aliasText);
 	}
 
 	function getFirstAlias(field){

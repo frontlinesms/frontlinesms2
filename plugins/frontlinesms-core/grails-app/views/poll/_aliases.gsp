@@ -7,7 +7,7 @@
 	<div>
 		<ul class="input sorting-options">
 			<li>
-				<g:radio name="enableKeyword" value="enabled" id="noAutosort"
+				<g:radio name="enableKeyword" value="enabled" id="yesAutosort"
 				checked="${activityInstanceToEdit && (activityInstanceToEdit?.keywords?.size() > 0) }"/>
 				<label class="sorting-option-label"><g:message code="activity.generic.enable.sorting"/></label>
 				<div class="sorting-option">
@@ -15,7 +15,7 @@
 				</div>
 			</li>
 			<li>
-				<g:radio name="enableKeyword" value="disabled" id="yesAutosort"
+				<g:radio name="enableKeyword" value="disabled" id="noAutosort"
 				checked="${!(activityInstanceToEdit && (activityInstanceToEdit?.keywords?.size() > 0))}"/>
 				<label class="sorting-option-label"><g:message code="activity.generic.disable.sorting"/></label>
 				<div class="sorting-option">

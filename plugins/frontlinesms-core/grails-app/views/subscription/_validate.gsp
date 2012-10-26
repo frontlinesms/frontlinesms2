@@ -85,11 +85,12 @@
 	}
 
 	function updateConfirmTab() {
+		var state = $("input:radio[name=sorting]:checked").val()  == 'enabled';
 		$("#confirm-group-text").html($("#subscriptionGroup option:selected").text()? $("#subscriptionGroup option:selected").text():i18n("announcement.message.none"));
-		$("#confirm-keyword-text").html($("#topLevelKeywords").val()? $("#topLevelKeywords").val():i18n("announcement.message.none"));
-		$("#confirm-join-alias-text").html($("#joinKeywords").val()? $("#joinKeywords").val():i18n("announcement.message.none"));
-		$("#confirm-leave-alias-text").html($("#leaveKeywords").val()? $("#leaveKeywords").val():i18n("announcement.message.none"));
-		$("#confirm-default-action-text").html($("#defaultAction").val()? $("#defaultAction").val():i18n("announcement.message.none"));
+		$("#confirm-keyword-text").html($("#topLevelKeywords").val() && state ? $("#topLevelKeywords").val():i18n("announcement.message.none"));
+		$("#confirm-join-alias-text").html($("#joinKeywords").val() && state? $("#joinKeywords").val():i18n("announcement.message.none"));
+		$("#confirm-leave-alias-text").html($("#leaveKeywords").val() && state? $("#leaveKeywords").val():i18n("announcement.message.none"));
+		$("#confirm-default-action-text").html($("#defaultAction").val()? $("#defaultAction:checked").val():i18n("announcement.message.none"));
 		$("#confirm-join-autoreply-text").html($("#joinAutoreplyText").val()? $("#joinAutoreplyText").val().htmlEncode():i18n("announcement.message.none"));
 		$("#confirm-leave-autoreply-text").html($("#leaveAutoreplyText").val()? $("#leaveAutoreplyText").val().htmlEncode():i18n("announcement.message.none"));
 	}
