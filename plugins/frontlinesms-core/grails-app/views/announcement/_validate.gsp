@@ -63,7 +63,7 @@
 	}
 	
 	function updateConfirmationMessage() {
-		var sendMessage = $('#messageText').val();
+		var sendMessage = $('#messageText').val().htmlEncode();
 
 		var contactNo = $("#contacts-count").text()
 		

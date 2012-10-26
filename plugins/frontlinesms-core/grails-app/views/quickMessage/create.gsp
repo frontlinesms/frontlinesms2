@@ -25,7 +25,7 @@
 
 <r:script>
 	$("#messageText").live("blur", function() {
-		var value = $(this).val();
+		var value = $(this).val().htmlEncode();
 		if(value) {
 			$("#confirm-message-text").html(value);
 		} else {

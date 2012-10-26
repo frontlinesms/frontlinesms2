@@ -16,15 +16,9 @@ function enableSaveAndCancel() {
 
 $(function() {
 	$(".buttons .cancel").click(function() {
-		window.location = window.location;
+		window.location.reload();
 	});
-
-	$("div.single-contact").keyup(function(event) {
-		enableSaveAndCancel();
-	});
-	
-	$("a.remove-field").click(function(event) {
-		enableSaveAndCancel();
-	});
+	$("div.single-contact").keyup(enableSaveAndCancel);
+	$("a.remove-field").click(enableSaveAndCancel);
 });
 

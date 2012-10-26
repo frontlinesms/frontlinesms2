@@ -1,14 +1,15 @@
 function categorizeClickAction(me) {
-	me = $(me).val()
-	var responseId = me.substring(4, me.length);
-	var ownerId = $("#owner-id").val();
-	var messageSection = $('input:hidden[name=messageSection]').val();
+	var responseId, ownerId, messageSection, messagesToChange, successUrl;
+	me = $(me).val();
+	responseId = me.substring(4, me.length);
+	ownerId = $("#owner-id").val();
+	messageSection = $('input:hidden[name=messageSection]').val();
 	if(getCheckedItemCount('message') > 1) {
-		var messagesToChange = getCheckedList('message');
-		var successUrl = "message/" + messageSection + "/" + ownerId;
+		messagesToChange = getCheckedList('message');
+		successUrl = "message/" + messageSection + "/" + ownerId;
 	} else {
-		var messagesToChange = $("#message-id").val();
-		var successUrl = "message/" + messageSection + "/" + ownerId + "/show/" + messagesToChange;
+		messagesToChange = $("#message-id").val();
+		successUrl = "message/" + messageSection + "/" + ownerId + "/show/" + messagesToChange;
 	}
 
 	// TODO replace pointless AJAX with normal <form/>

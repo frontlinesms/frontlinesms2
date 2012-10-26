@@ -3,9 +3,8 @@ var FsmsButton = function() {
 		_trigger = function() {
 			// Trigger clicking of the button when the anchor is clicked.
 			var button = $(this);
-			if(button.hasClass("disabled")) {
-				return;
-			} else { button.prev().click(); }
+			if(button.hasClass("disabled")) { return; }
+			button.prev().click();
 		},
 		_apply = function(original) {
 			var a, buttonText, copyAttributes, displayNone, i, newController;
@@ -46,7 +45,8 @@ var FsmsButton = function() {
 			var found = $(selecter);
 			if(found.hasClass("fsms-button-replaced")) {
 				return found.next();
-			} else { return found; }
+			}
+			return found;
 		};
 	return { apply:_apply, trigger:_trigger, findAndApply:_findAndApply, find:_find };
 };
