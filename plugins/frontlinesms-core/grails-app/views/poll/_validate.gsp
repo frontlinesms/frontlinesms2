@@ -15,8 +15,6 @@
 			mediumPopup.disableTab("poll-response");
 			$("input[name='pollType']").trigger("change");
 			$("input[name='enableKeyword']").trigger("change");
-			$('#poll-keyword').hide();
-			$('#poll-keywords').hide();
 		</g:else>
 		<g:if test="${activityInstanceToEdit?.archived}">
 			$("input#dontSendMessage").attr('checked', true);

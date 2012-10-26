@@ -124,7 +124,7 @@ function sortingOptionChanged() {
 			});
 		});
 		var tip =  tipArray.splice(0,3).join(', ').trim();
-		return (tip.length > 0 ? tip : "${g.message(code: 'subscription.sorting.tip.prompt')}")
+		return (tip.length > 0 ? tip : i18n('subscription.sorting.tip.prompt'))
 	}
 
 	function updateJoinTip(topKeyword){
