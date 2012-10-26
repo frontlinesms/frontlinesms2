@@ -53,8 +53,8 @@ class ContentFooter extends geb.Module {
 	static content = {
 		showAll { $('a')[0] }
 		showStarred { $('a')[1] }
-		showSent { $('a')[2] }
-		showReceived { $('a')[3] }
+		showSent { $('a')[3] }
+		showReceived { $('a')[2] }
 		nextPage { $('a.nextLink') }
 		prevPage { $('a.prevLink') }
 	}

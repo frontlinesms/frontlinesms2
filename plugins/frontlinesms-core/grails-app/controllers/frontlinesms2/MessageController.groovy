@@ -118,7 +118,7 @@ class MessageController {
 	def activity() {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
-			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : true
+			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent)
 			def sentMessageCount = 0
 			def sentDispatchCount = 0

@@ -228,11 +228,11 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			messageList.messages.size() == 5
 		when:
-			footer.showReceived.click()
+			footer.showSent.click()
 		then:
-			waitFor { messageList.messages.size() == 3 }
+			waitFor { messageList.messages.size() == 2 }
 	}
-
+	
 	def "clicking on the received message filter should display incoming messages only"() {
 		given:
 			def a = createInAndOutTestMessages()
@@ -241,9 +241,9 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			messageList.messages.size() == 5
 		when:
-			footer.showSent.click()
+			footer.showReceived.click()
 		then:
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messages.size() == 3 }
 	}
 
 	private Autoreply createInAndOutTestMessages() {
