@@ -3,68 +3,100 @@
 <div class="info">
 	<p><g:message code="activity.generic.sort.description"/></p>
 </div>
-<div class="input">
-	<ul class="select">
+<div>
+	<ul class="input sorting-options">
 		<li>
-			<g:checkBox name="disableSorting" checked="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
-			<label for="leaveKeywords"><g:message code="subscription.sorting.disable"/></label>
+			<g:radio name="sorting" value="enabled" onchange="sortingOptionChanged()"
+			checked="${activityInstanceToEdit && (activityInstanceToEdit?.keywords?.size() > 0) }"/>
+			<label class="sorting-option-label"><g:message code="activity.generic.enable.sorting"/></label>
+			<div class="sorting-option">
+				<label><g:message code="activity.generic.keywords.title"/></label>
+			</div>
+		</li>
+		<li>
+			<g:radio name="sorting" value="disabled" onchange="sortingOptionChanged()"
+			checked="${!(activityInstanceToEdit && (activityInstanceToEdit?.keywords?.size() > 0))}"/>
+			<label class="sorting-option-label"><g:message code="activity.generic.disable.sorting"/></label>
+			<div class="sorting-option">
+				<label><g:message code="activity.generic.disable.sorting.description"/></label>
+			</div>
 		</li>
 	</ul>
 </div>
-<h2><g:message code="subscription.top.keyword.header"/></h2>
-<div class="info">
-	<p><g:message code="subscription.top.keyword.description"/></p>
-</div>
 
-<div class="input">
-	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"
-	 onkeyup="updateAliasTips()"/>
-</div>
+<r:script>
+function sortingOptionChanged() {
+	var state = $("input:radio[name=sorting]:checked").val();
+	if (state == "enabled") {
+		$('#sorting-details').show();
+		$("#topLevelKeywords").attr("disabled", false);
+		$(".keywords").attr("disabled", false);
+	}
+	else {
+		$('#sorting-details').hide();
+		$("#topLevelKeywords").attr("disabled", "disabled");
+		$(".keywords").attr("disabled", "disabled");
+		$(".error").hide();
+	}
+}
+</r:script>
 
-<h2><g:message code="subscription.keywords.header"/></h2>
-<div class="info">
-	<p><g:message code="subscription.keywords.description"/></p>
-</div>
-<div class="input">
-	<table class="subscription-aliases">
-		<tr>
-			<td><label for="joinKeywords"><g:message code="subscription.keywords.join"/></label></td>
-			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}" onkeyup="updateAliasTips()"/></td>
-		</tr>
-		<tr>
-			<td> <p class="info"> <g:message code="subscription.sorting.tip.label"/> </p> </td>
-			<td><label id="joinHelperMessage"><g:message code="subscription.sorting.tip.prompt"/></label></td>
-		</tr>
-		<tr>
-			<td><label for="leaveKeywords"><g:message code="subscription.keywords.leave"/></label></td>
-			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}" onkeyup="updateAliasTips()"/></td>
-		</tr>
-		<tr>
-			<td> <p class="info"> <g:message code="subscription.sorting.tip.label"/> </p> </td>
-			<td><label id="leaveHelperMessage"><g:message code="subscription.sorting.tip.prompt" /></label></td>
-		</tr>
-	</table>
-</div>
+<div id="sorting-details">
+	<h2><g:message code="subscription.top.keyword.header"/></h2>
+	<div class="info">
+		<p><g:message code="subscription.top.keyword.description"/></p>
+	</div>
 
-<h2><g:message code="subscription.default.action.header"/></h2>
-<div class="info">
-	<p><g:message code="subscription.default.action.description"/></p>
-</div>
-<div class="input">
-	<ul class="select">
-		<li>
-			<label for="defaultAction"><g:message code="subscription.default.action.join"/></label>
-			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.JOIN : true}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
-		</li>
-		<li>
-			<label for="defaultAction"><g:message code="subscription.default.action.leave"/></label>
-			<g:radio name="defaultAction" value="leave" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.LEAVE : false}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
-		</li>
-		<li>
-			<label for="defaultAction"><g:message code="subscription.default.action.toggle"/></label>
-			<g:radio name="defaultAction" value="toggle" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.TOGGLE : false}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
-		</li>
-	</ul>
+	<div class="input">
+		<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"
+		 onkeyup="updateAliasTips()"/>
+	</div>
+
+	<h2><g:message code="subscription.keywords.header"/></h2>
+	<div class="info">
+		<p><g:message code="subscription.keywords.description"/></p>
+	</div>
+	<div class="input">
+		<table class="subscription-aliases">
+			<tr>
+				<td><label for="joinKeywords"><g:message code="subscription.keywords.join"/></label></td>
+				<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}" onkeyup="updateAliasTips()"/></td>
+			</tr>
+			<tr>
+				<td> <p class="info"> <g:message code="subscription.sorting.tip.label"/> </p> </td>
+				<td><label id="joinHelperMessage"><g:message code="subscription.sorting.tip.prompt"/></label></td>
+			</tr>
+			<tr>
+				<td><label for="leaveKeywords"><g:message code="subscription.keywords.leave"/></label></td>
+				<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}" onkeyup="updateAliasTips()"/></td>
+			</tr>
+			<tr>
+				<td> <p class="info"> <g:message code="subscription.sorting.tip.label"/> </p> </td>
+				<td><label id="leaveHelperMessage"><g:message code="subscription.sorting.tip.prompt" /></label></td>
+			</tr>
+		</table>
+	</div>
+
+	<h2><g:message code="subscription.default.action.header"/></h2>
+	<div class="info">
+		<p><g:message code="subscription.default.action.description"/></p>
+	</div>
+	<div class="input">
+		<ul class="select">
+			<li>
+				<label for="defaultAction"><g:message code="subscription.default.action.join"/></label>
+				<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.JOIN : true}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
+			</li>
+			<li>
+				<label for="defaultAction"><g:message code="subscription.default.action.leave"/></label>
+				<g:radio name="defaultAction" value="leave" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.LEAVE : false}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
+			</li>
+			<li>
+				<label for="defaultAction"><g:message code="subscription.default.action.toggle"/></label>
+				<g:radio name="defaultAction" value="toggle" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.TOGGLE : false}" class="subscription-default-action" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
+			</li>
+		</ul>
+	</div>
 </div>
 <r:script>
 	$(function() {

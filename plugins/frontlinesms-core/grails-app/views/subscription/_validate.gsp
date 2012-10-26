@@ -1,6 +1,7 @@
 <r:script>
 	function initializePopup() {
 		initializeTabValidation(createFormValidator());
+		sortingOptionChanged();
 		addCustomValidationClasses();
 		updateAliasTips();
 		console.log("called AddCustomVal");

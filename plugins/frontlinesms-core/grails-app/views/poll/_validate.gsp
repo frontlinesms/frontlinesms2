@@ -92,7 +92,9 @@
 				    valid = false;
 				}
 			});
-			return validator.element('#poll-keyword') && valid;
+
+			if(!$('#poll-keyword').attr("disabled")) valid = validator.element('#poll-keyword') && valid;
+			return valid;
 		};
 		var autoReplyTabValidation = function() {
 			return validator.element('#autoreplyText');

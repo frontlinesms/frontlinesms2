@@ -3,33 +3,38 @@
 	<div class="info">
 		<p><g:message code="poll.sort.description"/></p>
 	</div>
-	<div class="input">
-		<ul class="select">
+
+	<div>
+		<ul class="input sorting-options">
 			<li>
-				<label for="enableKeyword"><g:message code="poll.autosort.no.description"/></label>
-				<g:radio name="enableKeyword" id="noAutosort" value="false" checked="${activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: true}"/>
+				<g:radio name="enableKeyword" value="enabled" id="noAutosort"
+				checked="${activityInstanceToEdit && (activityInstanceToEdit?.keywords?.size() > 0) }"/>
+				<label class="sorting-option-label"><g:message code="activity.generic.enable.sorting"/></label>
+				<div class="sorting-option">
+					<label><g:message code="activity.generic.keywords.title"/></label>
+				</div>
 			</li>
 			<li>
-				<label for="enableKeyword"><g:message code="poll.autosort.description"/></label>
-				<g:radio name="enableKeyword" id="yesAutosort" value="true" checked="${activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: false}"/>
-				<g:textField name="topLevelKeyword" id="poll-keyword" class="sorting-generic-no-spaces sorting-generic-unique validcommas" disabled="${activityInstanceToEdit?.keywords?false:true}" value="${activityInstanceToEdit?.keywords.findAll{it.isTopLevel && it.ownerDetail == null}?.value?.join(',')}"/>
+				<g:radio name="enableKeyword" value="disabled" id="yesAutosort"
+				checked="${!(activityInstanceToEdit && (activityInstanceToEdit?.keywords?.size() > 0))}"/>
+				<label class="sorting-option-label"><g:message code="activity.generic.disable.sorting"/></label>
+				<div class="sorting-option">
+					<label><g:message code="activity.generic.disable.sorting.description"/></label>
+				</div>
 			</li>
 		</ul>
 	</div>
-
 	<r:script>
 		var enableKeyword = function() {
 				var enabled = $(this).val();
-				if(enabled == "true") {
+				if(enabled == "enabled") {
 					$('#poll-keyword').removeAttr("disabled");
-					$('#poll-keyword').show();
-					$('#poll-keywords').show();
+					$('#sorting-details').show();
 					$('input:not(:disabled).keywords').addClass('required');
 				}
 				else {
 					$('#poll-keyword').attr("disabled", "disabled");
-					$('#poll-keyword').hide();
-					$('#poll-keywords').hide();
+					$('#sorting-details').hide();
 					$('input:not(:disabled).keywords').removeClass('required');
 				}
 			};
@@ -37,7 +42,15 @@
 	</r:script>
 
 </div>
-<div id="poll-keywords">
+<div id="sorting-details">
+	<h2><g:message code="subscription.top.keyword.header"/></h2>
+	<div class="info">
+		<p><g:message code="subscription.top.keyword.description"/></p>
+	</div>
+	<div class="input">
+		<g:textField name="topLevelKeyword" id="poll-keyword" class="sorting-generic-no-spaces sorting-generic-unique validcommas" disabled="${activityInstanceToEdit?.keywords?false:true}" value="${activityInstanceToEdit?.keywords.findAll{it.isTopLevel && it.ownerDetail == null}?.value?.join(',')}"/>
+	</div>
+	<h2><g:message code="poll.keywords.header"/></h2>
 	<div class="info">
 		<p><g:message code="poll.aliases.prompt.details"/></p>
 	</div>
