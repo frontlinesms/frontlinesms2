@@ -126,7 +126,7 @@ class Fmessage {
 				if(getOnlyStarred)
 					eq("starred", true)
 				if(!getSent)
-					eq("inbound", true)
+					eq("inbound", getSent)
 			}
 		}
 		unread {
