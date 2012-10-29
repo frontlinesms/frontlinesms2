@@ -36,7 +36,7 @@ class TabsModule extends Module {
 class NotificationsModule extends Module {
 	static content = { 
 		errorMessages { $('.flash.errors')*.text() }
-		flashMessageText { def t = flashMessage.text(); t&&t.size()>1? t[0, -2].trim(): '' }
+		flashMessageText { def t = flashMessage.text(); t&&t.size()>1? t[0..-2].trim(): '' }
 		flashMessage { $('div.flash.message') }
 		systemNotification { $('div.system-notification') }
 		systemNotificationText { systemNotification.text() }
