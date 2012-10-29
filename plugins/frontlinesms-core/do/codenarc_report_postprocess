@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
+REPORT_FILE=target/analysis-reports/codenarc.xml
 echo "# Processing CodeNarc report to correct source locations for jenkins..."
-echo "TODO"
+FILE_LIST=`grep -o "File name='[A-Za-z]\+\.groovy'" $REPORT_FILE | sed -r -e "s/(File name=)?'//g"`
+for FILE_NAME in $FILE_LIST; do
+	FILE_PATH=plugins/frontlinesms-core/`find . -name $FILE_NAME`
+	echo "Processing $FILE_NAME -> $FILE_PATH"
+	sed -i -e "s:$FILE_NAME:$FILE_PATH:g" $REPORT_FILE
+done
 echo "# CoreNarc report postprocess complete."
 
