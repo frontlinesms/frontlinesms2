@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+echo "# Processing CodeNarc report to correct source locations for jenkins..."
+echo "TODO"
+echo "# CoreNarc report postprocess complete."
+
