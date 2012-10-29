@@ -9,6 +9,7 @@ class ExportController {
 	def beforeInterceptor = {
 		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
 		params.starred = params.starred ? params.starred.toBoolean() : false
+		params.inbound = params.inbound ? params.inbound.toBoolean() : null
 		params.failed = params.failed ? params.failed.toBoolean() : false
 		true
 	}
@@ -20,6 +21,7 @@ class ExportController {
 				searchId: params.searchId,
 				ownerId: params.ownerId,
 				starred: params.starred,
+				inbound: params.inbound,
 				failed: params.failed,
 				viewingArchive: params.viewingArchive,
 				reportName:getActivityDescription()]
@@ -28,6 +30,7 @@ class ExportController {
 	def downloadMessageReport() {
 		def messageSection = params.messageSection
 		def messageInstanceList
+		//TODO Clean up switch mess
 		switch(messageSection) {
 			case 'inbox':
 				messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive).list()
@@ -42,10 +45,10 @@ class ExportController {
 				messageInstanceList = Fmessage.trash().list()
 				break
 			case 'activity':
-				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred?:false).list()
+				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred?:false, params.inbound).list()
 				break
 			case 'folder':
-				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred?:false).list()
+				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred?:false, params.inbound).list()
 				break
 			case 'radioShow':
 				messageInstanceList = MessageOwner.get(params.ownerId).getShowMessages().list()
