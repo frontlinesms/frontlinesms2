@@ -116,7 +116,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			confirmTab.name == "Trial"
 			confirmTab.confirm('service') == 'Crowdmap'
-			confirmTab.confirm('url') == 'https://frontlineCrowd.crowdmap.com'
+			confirmTab.confirm('url') == 'https://frontlineCrowd.crowdmap.com/frontlinesms/'
 			confirmTab.confirm('key') == '2343asdasd'
 			confirmTab.confirm('keyword') == 'Repo'
 		when:
