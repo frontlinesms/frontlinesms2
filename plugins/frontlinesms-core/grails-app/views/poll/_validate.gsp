@@ -156,16 +156,16 @@
 			var keywordText = '';
 			var replyText = '';
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
-				keywordText = $("#poll-keyword").val().toUpperCase();
+				keywordText = $("#poll-keyword").val().toUpperCase().split(",")[0];
 				if($("input[name='pollType']:checked").val() == "yesNo") {
-					var yesAlias = getFirstAlias($("ul#poll-aliases li input#keywordsA"))
-					var noAlias = getFirstAlias($("ul#poll-aliases li input#keywordsB"))
+					var yesAlias = getFirstAlias($("#poll-aliases input#keywordsA"))
+					var noAlias = getFirstAlias($("#poll-aliases input#keywordsB"))
 					replyText = i18n("poll.reply.text", keywordText, yesAlias, keywordText, noAlias);
 				} else {
 					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
 						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
-						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
+						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("#poll-aliases input#keywords"+this.name.substring(6,7))), this.value);
 					});
 					replyText = replyText + '.';
 				}
@@ -191,20 +191,20 @@
 		if (yesNo) {
 			var myMap = {'A':'Yes', 'B':'No', 'C':'', 'D':'', 'E':''};
 			$.each(myMap, function(key, value) {
-				$("ul#poll-aliases li label:first[for='keywords"+key+"']").text(value);
+				$("#poll-aliases label:first[for='keywords"+key+"']").text(value);
 				if(value == '') {
-					$("ul#poll-aliases li input#keywords"+key).val('');
-					$("ul#poll-aliases li input#keywords"+key).attr('disabled','disabled');
+					$("#poll-aliases input#keywords"+key).val('');
+					$("#poll-aliases input#keywords"+key).attr('disabled','disabled');
 				} else {
-					$("ul#poll-aliases li input#keywords"+key).removeAttr('disabled');
+					$("#poll-aliases input#keywords"+key).removeAttr('disabled');
 				}
 			});
 		} else {
 			var myArray = ['A', 'B', 'C', 'D', 'E'];
 			$.each(myArray, function(index, value) {
 				var labelValue = $("ul#poll-choices li input#choice"+value).val().trim();
-				var aliasTextFieldLabel = $("ul#poll-aliases li label:first[for='keywords"+value+"']");
-				var aliasTextField = $("ul#poll-aliases li input#keywords"+value);
+				var aliasTextFieldLabel = $("#poll-aliases label:first[for='keywords"+value+"']");
+				var aliasTextField = $("#poll-aliases input#keywords"+value);
 				if(labelValue.length == 0) {
 					aliasTextFieldLabel.text(value);
 					aliasTextField.attr('disabled', 'disabled');
@@ -212,7 +212,7 @@
 				} else {
 					aliasTextFieldLabel.text(labelValue);
 					aliasTextFieldLabel.addClass("field-enabled");
-					$("ul#poll-aliases li input#keywords"+value).removeAttr('disabled');
+					$("#poll-aliases input#keywords"+value).removeAttr('disabled');
 				}
 			});
 		}
@@ -221,8 +221,8 @@
 	function addRespectiveAliases(field) {
 		var yesNo = $("input[name='pollType']:checked").val() == "yesNo";
 		if(yesNo) {
-			var aliasYesTextField = $("ul#poll-aliases li input#keywordsA");
-			var aliasNoTextField = $("ul#poll-aliases li input#keywordsB");
+			var aliasYesTextField = $("#poll-aliases input#keywordsA");
+			var aliasNoTextField = $("#poll-aliases input#keywordsB");
 			var yesAlias = i18n("poll.yes") + ", A";
 			var noAlias = i18n("poll.no") + ", B";
 			var choices = { };
@@ -243,8 +243,8 @@
 			var rawVal = $(field).val().trim();
 			var value = rawVal.split(' ')[0]
 			var key = rawKey.substring(rawKey.length-1);
-			var aliasTextFieldLabel = $("ul#poll-aliases li label[for='keywords" + value + "']");
-			var aliasTextField = $("ul#poll-aliases li input#keywords" + key);
+			var aliasTextFieldLabel = $("#poll-aliases label[for='keywords" + value + "']");
+			var aliasTextField = $("#poll-aliases input#keywords" + key);
 			if($(field).hasClass("create")) {
 				if(value.length > 0){
 					aliases += value + ", " + key;
@@ -349,15 +349,15 @@
 			if($("input[name='pollType']:checked").val() != "yesNo") {
 				$.each(myArray, function(index, value){
 					var choice = $("ul#poll-choices li input#choice"+value).val();
-					var aliases = $("ul#poll-aliases li input#keywords"+value).val();
+					var aliases = $("#poll-aliases input#keywords"+value).val();
 					if(choice.length != 0){
 						aliasText += "<p>"+choice+" : "+aliases + "</p>";
 					}
 				});
 			}
 			else {
-				aliasText += "<p>"+i18n("poll.yes") + " : " + $("ul#poll-aliases li input#keywordsA").val() + "</p>";
-				aliasText += "<p>"+i18n("poll.no") + " : " + $("ul#poll-aliases li input#keywordsB").val() + "</p>";
+				aliasText += "<p>"+i18n("poll.yes") + " : " + $("#poll-aliases input#keywordsA").val() + "</p>";
+				aliasText += "<p>"+i18n("poll.no") + " : " + $("#poll-aliases input#keywordsB").val() + "</p>";
 			}
 		} else {
 			aliasText += i18n('poll.autoreply.none');

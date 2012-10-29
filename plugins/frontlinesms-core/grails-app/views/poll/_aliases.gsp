@@ -55,30 +55,30 @@
 		<p><g:message code="poll.aliases.prompt.details"/></p>
 	</div>
 	<div class="input">
-		<ul id='poll-aliases'>
+		<table id='poll-aliases'>
 			<g:each in="${['A','B','C','D','E']}" var="key" status="i">
-				<li>
+				<tr>
 					<g:if test="${activityInstanceToEdit?.id}">
-						<label for='keywords${key}' class="${key == 'A' || key == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)) ? 'field-enabled': ''}">keywords${key}</label>
+						<td><label for='keywords${key}' class="${key == 'A' || key == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)) ? 'field-enabled': ''}">keywords${key}</label>
 						<% def pollResponse = activityInstanceToEdit?.responses.find {it.key == key} %>
-						<g:if test="${(key == 'A' || key == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 2)))}">
-							<g:textField class='keywords required validcommas sorting-generic-no-spaces' name='keywords${key}' value="${activityInstanceToEdit.keywords.findAll{ it.ownerDetail == pollResponse?.key }.value.join(',')}"/>
+						<g:if test="${(key == 'A' || key == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 2)))}"></td>
+							<td><g:textField class='keywords required validcommas sorting-generic-no-spaces' name='keywords${key}' value="${activityInstanceToEdit.keywords.findAll{ it.ownerDetail == pollResponse?.key }.value.join(',')}"/></td>
 						</g:if>
 						<g:else>
-							<g:textField class='keywords required validcommas sorting-generic-no-spaces' name="keywords${key}" value="" disabled="true"/>
+							<td><g:textField class='keywords required validcommas sorting-generic-no-spaces' name="keywords${key}" value="" disabled="true"/></td>
 						</g:else>
 					</g:if>
 					<g:else>
-						<label for='keywords${key}' class="${key == 'A' || key == 'B' ? 'field-enabled': ''}">${option}</label>
+						<td><label for='keywords${key}' class="${key == 'A' || key == 'B' ? 'field-enabled': ''}">${option}</label></td>
 						<g:if test="${key == 'A' || key == 'B'}">
-							<g:textField class='keywords validcommas sorting-generic-no-spaces' name='keywords${key}'/>
+							<td><g:textField class='keywords validcommas sorting-generic-no-spaces' name='keywords${key}'/></td>
 						</g:if>
 						<g:else>
-							<g:textField class='keywords validcommas sorting-generic-no-spaces' name='keywords${key}' disabled="true"/>
+							<td><g:textField class='keywords validcommas sorting-generic-no-spaces' name='keywords${key}' disabled="true"/></td>
 						</g:else>
 					</g:else>
-				</li>
+				</tr>
 			</g:each>
-		</ul>
+		</table>
 	</div>
 </div>
