@@ -59,13 +59,22 @@ function exportAction() {
 	} else {
 		viewingArchive = false;
 	}
-		
+
+	var params = {
+			messageSection: $("#messageSection").val(),
+			ownerId: $('input:hidden[name=ownerId]').val(),
+			starred: $('input:hidden[name=starred]').val(),
+			inbound: $('input:hidden[name=inbound]').val(),
+			failed: $('input:hidden[name=failed]').val(),
+			viewingArchive: viewingArchive,
+			searchString: $("#searchString").val(),
+			messageTotal: $("#messageTotal").val(),
+			groupId: $("#groupId").val() };
+
 	$.ajax({
 		type:'GET',
 		url: url_root + 'export/messageWizard',
-		data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(),
-				searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
-				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: viewingArchive},
+		data: params,
 		beforeSend: function(){ showThinking(); },
 		success: function(data) {
 			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("action.export"));

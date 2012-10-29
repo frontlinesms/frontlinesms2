@@ -8,6 +8,7 @@ function checkForNew() {
 			messageSection: $("#messageSection").val(),
 			ownerId: $('input:hidden[name=ownerId]').val(),
 			starred: $('input:hidden[name=starred]').val(),
+			inbound: $('input:hidden[name=inbound]').val(),
 			failed: $('input:hidden[name=failed]').val() };
 	
 	$.ajax({url:url_root + 'message/newMessageCount',

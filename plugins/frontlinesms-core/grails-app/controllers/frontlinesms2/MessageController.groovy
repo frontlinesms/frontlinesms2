@@ -39,9 +39,11 @@ class MessageController {
 				messageCount = Fmessage."$section"(params.starred).count()
 			}
 		} else if(section == 'activity') {
-			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred)?.count()
+			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
+			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred, getSent)?.count()
 		} else if(section == 'folder') {
-			messageCount = Folder.get(params.ownerId)?.getFolderMessages(params.starred)?.count()
+			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
+			messageCount = Folder.get(params.ownerId)?.getFolderMessages(params.starred, getSent)?.count()
 		} else messageCount = 0
 		render messageCount
 	}
@@ -144,7 +146,7 @@ class MessageController {
 	def folder() {
 		def folderInstance = Folder.get(params.ownerId)
 		if (folderInstance) {
-			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : true
+			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
 			def messageInstanceList = folderInstance?.getFolderMessages(params.starred, getSent)
 			if (params.flashMessage) { flash.message = params.flashMessage }
 			render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
