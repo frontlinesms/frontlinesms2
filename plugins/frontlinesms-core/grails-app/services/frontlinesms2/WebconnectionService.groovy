@@ -10,6 +10,7 @@ class WebconnectionService{
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
 		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		changeMessageStatus(x, "OWNERDETAIL-PENDING")
 		webConn.preProcess(x)
 	}
 
@@ -18,10 +19,12 @@ class WebconnectionService{
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
 		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		changeMessageStatus(x, "OWNERDETAIL-COMPLETED")
 		webConn.postProcess(x)
 	}
 
 	def handleException(Exchange x) {
+		changeMessageStatus(x, "OWNERDETAIL-FAILED")
 		println "Web Connection request failed with exception: ${x.in.body}"
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
@@ -58,5 +61,11 @@ class WebconnectionService{
 		}
 		webconnectionInstance.save(flush:true, failOnError:true)
 		return webconnectionInstance
+	}
+
+	private changeMessageStatus(Exchange x, String s){
+		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		message.ownerDetail = s
+		message.save()
 	}
 }
