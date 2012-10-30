@@ -43,12 +43,14 @@ function genericSortingValidation() {
 		input.removeClass("error");
 		$.each(rawKeywords.split(","), function(index, value){
 			var keyword = value.trim();
-			if(keywords.hasOwnProperty(keyword)) {
-				//not unique
-				input.addClass("error");
-				isValid = false;
-			} else {
-				keywords[keyword] = true;
+			if(keyword.length > 0) {
+				if(keywords.hasOwnProperty(keyword)) {
+					//not unique
+					input.addClass("error");
+					isValid = false;
+				} else {
+					keywords[keyword] = true;
+				}
 			}
 		});
 		return isValid;
