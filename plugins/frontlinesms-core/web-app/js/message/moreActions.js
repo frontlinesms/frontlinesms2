@@ -53,14 +53,9 @@ function deleteAction() {
 }
 
 function exportAction() {
-	var viewingArchive;
-	if(url.indexOf("/archive/") >= 0) {
-		viewingArchive = true;
-	} else {
-		viewingArchive = false;
-	}
-
-	var params = {
+	var viewingArchive, params;
+	viewingArchive = url.indexOf("/archive/") !== -1;
+	params = {
 			messageSection: $("#messageSection").val(),
 			ownerId: $('input:hidden[name=ownerId]').val(),
 			starred: $('input:hidden[name=starred]').val(),
@@ -81,3 +76,4 @@ function exportAction() {
 			updateExportInfo(); }
 	});
 }
+
