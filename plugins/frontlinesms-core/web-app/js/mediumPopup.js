@@ -287,13 +287,13 @@ var mediumPopup = (function() {
 	return {
 		addValidation:addValidation,
 		disableTab:disableTab,
-		editConnection:editConnection,
+		editConnection:editConnection, // TODO move this somewhere more suitable
 		enableTab:enableTab,
 		launchMediumPopup:launchMediumPopup,
 		launchMediumWizard:launchMediumWizard,
 		launchHelpWizard:launchHelpWizard,
-		messageResponseClick:messageResponseClick,
-		selectSubscriptionGroup:selectSubscriptionGroup,
+		messageResponseClick:messageResponseClick, // TODO move this somewhere more suitable
+		selectSubscriptionGroup:selectSubscriptionGroup, // TODO move this somewhere more suitable
 		submit:submit
 	};
 }());

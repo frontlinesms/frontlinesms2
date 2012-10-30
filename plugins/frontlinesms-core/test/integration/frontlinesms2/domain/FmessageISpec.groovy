@@ -327,8 +327,8 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage received = createMessage(inbound:true)
 			addMessages owner, sent, received
 		then:
-			Fmessage.owned(owner, false, true).list(sort:'date', order:'desc') == [received, sent]
-			Fmessage.owned(owner, false, false).list(sort:'date', order:'desc') == [received]
+			Fmessage.owned(owner, false, null).list(sort:'date', order:'desc') == [received, sent]
+			Fmessage.owned(owner, false, true).list(sort:'date', order:'desc') == [received]
 	}
 
 	def 'search page should display distinct messages'(){

@@ -2,7 +2,7 @@
 	<g:if test="${messageSection}">
 		<div id="message-toggler">
 			<g:message code="fmessage.footer.show"/>:
-			<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'failed' && it.key != 'max' && it.key != 'offset'})}"><g:message code="fmessage.footer.show.all"/></g:link>
+			<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'inbound' && it.key != 'failed' && it.key != 'max' && it.key != 'offset'})}"><g:message code="fmessage.footer.show.all"/></g:link>
 			|
 			<g:if test="${messageSection == 'pending'}">
 				<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [failed: true]}" ><g:message code="fmessage.footer.show.failed"/></g:link>
@@ -10,6 +10,12 @@
 			<g:else>
 				<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" ><g:message code="fmessage.footer.show.starred"/></g:link>
 			</g:else>
+			<g:if test="${messageSection == 'folder' || messageSection == 'activity'}">
+				|
+				<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset' && it.key != 'starred'}) + [inbound: true]}" ><g:message code="fmessage.footer.show.incoming"/></g:link>
+				|
+				<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset' && it.key != 'starred'}) + [inbound: false]}" ><g:message code="fmessage.footer.show.outgoing"/></g:link>
+			</g:if>
 		</div>
 		<div id="paging">
 			<g:hiddenField name="offset" value="${params.offset}" />

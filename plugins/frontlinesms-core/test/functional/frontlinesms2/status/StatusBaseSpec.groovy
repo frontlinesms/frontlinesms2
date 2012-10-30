@@ -8,7 +8,10 @@ class StatusBaseSpec extends grails.plugin.geb.GebSpec {
 	private createTestMessages() {
 		(new Date()..new Date()-14).each {
 			new Fmessage(dateReceived: it, dateCreated: it, src:"+123456789${it}", inbound:true, text: "A message received on ${it}").save(failOnError:true, flush:true)
-			new Fmessage(dateReceived: it, dateCreated: it, src:"+123456789${it}", hasSent:true, text: "A message sent on ${it}").save(failOnError:true, flush:true)
+			new Fmessage(dateReceived: it, dateCreated: it, src:"+123456789${it}", hasSent:true, text: "A message sent on ${it}")
+				.addToDispatches(new Dispatch(dst: '12345', status: DispatchStatus.SENT, dateSent:new Date()-2))
+				.addToDispatches(new Dispatch(dst: '23456', status: DispatchStatus.SENT, dateSent:new Date()-3))
+				.save(failOnError:true, flush:true)
 		}
 	}
 	

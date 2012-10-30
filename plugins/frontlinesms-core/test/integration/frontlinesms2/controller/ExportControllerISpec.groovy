@@ -33,7 +33,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result['messageInstanceList'].size() == 2
+			result.messageInstanceList.size() == 2
 	}
 	
 	def "can export messages from an announcement"() {
@@ -44,7 +44,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result['messageInstanceList'].size() == 1
+			result.messageInstanceList.size() == 1
 	}
 	
 	def "can export all contacts"() {
@@ -53,7 +53,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadContactReport()
 		then:
-			result['contactInstanceList'].size() == 3
+			result.contactInstanceList.size() == 3
 	}
 	
 	def "can export contacts from a group"() {
@@ -65,7 +65,64 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId = Group.findByName('Dwarves').id
 			def result = controller.downloadContactReport()
 		then:
-			result['contactInstanceList'].size() == 2
+			result.contactInstanceList.size() == 2
+	}
+
+	def "can export only sent messages from a folder"() {
+		given:
+			def workFolder = new Folder(name: 'Work')
+			workFolder.addToMessages(Fmessage.build(src: "Bob", inbound: true, date: new Date()))
+			Fmessage m = new Fmessage(text:"test", inbound:false, date:new Date())
+			Dispatch d = new Dispatch(dst: '54321', status: DispatchStatus.PENDING)
+			m.addToDispatches(d)
+			m.save(failOnError:true)
+			workFolder.addToMessages(m)
+			workFolder.save()
+			controller.params.messageSection = "folder"
+			controller.params.ownerId = workFolder.id
+			controller.params.inbound = "false"
+		when:
+			def result = controller.downloadMessageReport()
+		then:
+			result.messageInstanceList.size() == 1
+	}
+
+	def "can export only received messages from a folder"() {
+		given:
+			def workFolder = new Folder(name: 'Work')
+			workFolder.addToMessages(Fmessage.build(src: "Bob", inbound: true, date: new Date()))
+			Fmessage m = new Fmessage(text:"test", inbound:false, date:new Date())
+			Dispatch d = new Dispatch(dst: '54321', status: DispatchStatus.PENDING)
+			m.addToDispatches(d)
+			m.save(failOnError:true)
+			workFolder.addToMessages(m)
+			workFolder.save()
+			controller.params.messageSection = "folder"
+			controller.params.ownerId = workFolder.id
+			controller.params.inbound = "true"
+		when:
+			def result = controller.downloadMessageReport()
+		then:
+			result.messageInstanceList.size() == 1
+	}
+
+	def "can export only received messages from an activity"() {
+		given:
+			def a = new Announcement(name:'Free Food')
+			a.addToMessages(Fmessage.build(src: "Bob", inbound: true, date: new Date()))
+			Fmessage m = new Fmessage(text:"test", inbound:false, date:new Date())
+			Dispatch d = new Dispatch(dst: '54321', status: DispatchStatus.PENDING)
+			m.addToDispatches(d)
+			m.save(failOnError:true)
+			a.addToMessages(m)
+			a.save(failOnError:true)
+			controller.params.messageSection = "activity"
+			controller.params.ownerId = a.id
+			controller.params.inbound = "true"
+		when:
+			def result = controller.downloadMessageReport()
+		then:
+			result.messageInstanceList.size() == 1
 	}
 
 
