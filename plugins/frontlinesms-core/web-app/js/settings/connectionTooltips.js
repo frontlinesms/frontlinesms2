@@ -1,24 +1,3 @@
-$(function() {
-	jQuery.validator.addMethod("password", function(value, element) {
-			var isValid = true;
-			var passwordField = $("input[name=password]")
-			var password = passwordField.val();
-			var confirmPassword = $("input[name=confirmPassword]").val();
-			if(password.length > 0) {
-				isValid = password === confirmPassword
-				passwordField.removeClass("error");
-				passwordField.addClass("valid");
-				passwordField.siblings("label[generated=true]").hide();
-			} else {
-				isValid = false;
-			}
-			return isValid;
-		}, i18n("basic.authentication.password.mismatch"));
-
-	basicAuthValidation.toggleFields("#enabledAuthentication");
-	basicAuthValidation.validator("#basic-auth");
-});
-
 var connectionTooltips = {
 	init: function(connectionType){
 			$(".connection-tip").remove();
