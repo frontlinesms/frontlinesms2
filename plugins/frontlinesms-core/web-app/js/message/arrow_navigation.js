@@ -27,9 +27,9 @@ function changeRowSelection(oldSelected, newSelected) {
 		newSelected.addClass("selected");
 		if(newSelectedId.indexOf("activity") === -1) {
 			if($("input:hidden[name=messageSection]").val() !== "trash") {
-				updateSingleCheckedDetails("message", newSelectedId.substring("message-".length), newSelectedRow);
+				updateSingleCheckedDetails("message", newSelectedId.substring("message-".length), newSelected);
 				oldSelectedRow.find(".message-select-checkbox").prop("checked", false);
-				newSelectedRow.find(".message-select-checkbox").prop("checked", true);
+				newSelected.find(".message-select-checkbox").prop("checked", true);
 			}
 		}
 	}
