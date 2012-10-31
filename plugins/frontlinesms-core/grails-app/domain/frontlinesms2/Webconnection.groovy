@@ -65,8 +65,7 @@ abstract class Webconnection extends Activity {
 			List getRouteDefinitions() {
 				return [from("seda:activity-webconnection-${Webconnection.this.id}")
 						.beanRef('webconnectionService', 'preProcess')
-						.setHeader(Exchange.HTTP_PATH,
-								simple('${header.url}'))
+						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
 						.onException(Exception)
 									.redeliveryDelay(initialRetryDelay)
 									.backOffMultiplier(delayMultiplier)
@@ -116,22 +115,24 @@ abstract class Webconnection extends Activity {
 			urlEncode(it.name) + '=' + urlEncode(it.getProcessedValue(fmessage))
 		}.join('&')
 		println "PARAMS:::$encodedParameters"
-
-		x.out.headers[Exchange.HTTP_METHOD] = this.httpMethod
+		x.in.headers[Exchange.HTTP_PATH] = this.url
+		x.in.headers[Exchange.HTTP_METHOD] = this.httpMethod
 		switch(this.httpMethod) {
 			case 'GET':
-				x.out.headers[Exchange.HTTP_QUERY] = encodedParameters
+				x.in.headers[Exchange.HTTP_QUERY] = encodedParameters
 				break;
 			case 'POST':
-				x.out.body = encodedParameters
-				x.out.headers[Exchange.CONTENT_TYPE] = 'application/x-www-form-urlencoded'
+				x.in.body = encodedParameters
+				x.in.headers[Exchange.CONTENT_TYPE] = 'application/x-www-form-urlencoded'
 				break;
 		}
-		println "x.out.headers = $x.out.headers"
-		println "x.out.body = $x.out.body"
+		println "# Exchange after adding other headers in the Webconnection.preProcess()"
+		println "x.in.headers = $x.in.headers"
+		println "x.in.body = $x.in.body"
 	}
 
 	def postProcess(Exchange x) {
+		println "###### Webconnection.postProcess() with Exchange # ${x}"
 		println "Web Connection Response::\n ${x.in.body}"
 		log.info "Web Connection Response::\n ${x.in.body}"
 	}

@@ -3,14 +3,12 @@ package frontlinesms2
 import frontlinesms2.*
 import org.apache.camel.*
 
-class WebconnectionService{
-
+class WebconnectionService {
 	def preProcess(Exchange x) {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
 		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
-		changeMessageStatus(x, "OWNERDETAIL-PENDING")
 		webConn.preProcess(x)
 	}
 
@@ -18,30 +16,33 @@ class WebconnectionService{
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
+		println "### WebconnectionService.postProcess() ## headers ## ${x.in.headers}"
 		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
-		changeMessageStatus(x, "OWNERDETAIL-COMPLETED")
+		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		changeMessageStatus(message, "OWNERDETAIL-COMPLETED")
 		webConn.postProcess(x)
 	}
 
 	def handleException(Exchange x) {
-		changeMessageStatus(x, "OWNERDETAIL-FAILED")
+		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		changeMessageStatus(message, "OWNERDETAIL-FAILED")
+		println "### WebconnectionService.handleException() ## headers ## ${x.in.headers}"
 		println "Web Connection request failed with exception: ${x.in.body}"
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
 	def handleFailed(Exchange x) {
-
 	}
 
 	def handleCompleted(Exchange x) {
-		
 	}
 
 	def send(Fmessage message){
-		println "*** sending message ${message}"
+		println "## Webconnection.send() ## sending message # ${message}"
 		def headers = [:]
 		headers.'fmessage-id' = message.id
 		headers.'webconnection-id' = message.messageOwner.id
+		changeMessageStatus(message, "OWNERDETAIL-PENDING")
 		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
 	}
 
@@ -63,8 +64,7 @@ class WebconnectionService{
 		return webconnectionInstance
 	}
 
-	private changeMessageStatus(Exchange x, String s){
-		def message = Fmessage.get(x.in.headers.'fmessage-id')
+	private changeMessageStatus(Fmessage message, String s){
 		message.ownerDetail = s
 		message.save()
 	}
