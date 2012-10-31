@@ -1,3 +1,4 @@
+<%@page defaultCodec="html" %>
 <g:hiddenField name="sortField" value="${params.sort}"/>
 <g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
 <g:if test="${messageSection == 'search'}">

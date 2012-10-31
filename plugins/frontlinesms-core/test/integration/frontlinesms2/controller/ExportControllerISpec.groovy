@@ -80,7 +80,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			workFolder.save()
 			controller.params.messageSection = "folder"
 			controller.params.ownerId = workFolder.id
-			controller.params.inbound = "false"
+			controller.params.inbound = false
 		when:
 			def result = controller.downloadMessageReport()
 		then:
@@ -99,7 +99,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			workFolder.save()
 			controller.params.messageSection = "folder"
 			controller.params.ownerId = workFolder.id
-			controller.params.inbound = "true"
+			controller.params.inbound = true
 		when:
 			def result = controller.downloadMessageReport()
 		then:
@@ -118,7 +118,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			a.save(failOnError:true)
 			controller.params.messageSection = "activity"
 			controller.params.ownerId = a.id
-			controller.params.inbound = "true"
+			controller.params.inbound = true
 		when:
 			def result = controller.downloadMessageReport()
 		then:
