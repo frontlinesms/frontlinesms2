@@ -11,7 +11,7 @@ import org.apache.camel.impl.DefaultExchange
 import frontlinesms2.*
 
 @TestFor(MessageStorageService)
-@Mock(Fmessage)
+@Mock([Fmessage, Fconnection])
 class MessageStorageServiceSpec extends Specification {
 	def "it's a processor"() {
 		expect:
@@ -27,12 +27,31 @@ class MessageStorageServiceSpec extends Specification {
 			Fmessage.findAll() == [m]
 	}
 
-	def createTestExchange(def fmessage) {
+	def "incoming Fmessage is populated with receivedOn field using the connection id in the header"() {
+		given:
+			def m = new Fmessage(text:'', src:"12345", inbound:true, date:new Date())
+			def conn = createTestConnection()
+		when:
+			service.process(createTestExchange(m, conn.getId())) // TODO: find a way to 
+		then:
+			Fmessage.findAll() == [m]
+			m.receivedOn == conn
+	}
+
+	def createTestExchange(def fmessage, connectionId=null) {
 		CamelContext context = Mock(CamelContext)
 		def exchange = new DefaultExchange(context)
 		def message = exchange.in
 		message.setBody(fmessage)
+		if (connectionId)
+			message.setHeader("connection-id", connectionId)
 		return exchange
+	}
+
+	def createTestConnection() {
+		Fconnection f = Mock()
+		f.getId() >> 123
+		f
 	}
 }
 
