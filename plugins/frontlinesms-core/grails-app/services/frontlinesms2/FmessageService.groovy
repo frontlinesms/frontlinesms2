@@ -20,10 +20,10 @@ class FmessageService {
 						outgoingMessage.save()
 						messagesToSend << outgoingMessage
 						activity.addToMessages(outgoingMessage)
-					}else if(activity instanceof Webconnection) {
+						activity.save()
+					} else if(activity instanceof Webconnection) {
 						activity.processKeyword(messageInstance, null)
 					}
-					activity.save()
 				} else if (params.ownerId && params.ownerId != 'inbox') {
 					messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save(failOnError:true)
