@@ -66,7 +66,7 @@ class WebconnectionService {
 
 	private changeMessageOwnerDetail(Fmessage message, String s) {
 		message.ownerDetail = s
-		message.save(failOnError:true)
+		message.save(failOnError:true, flush:true)
 		println "Changing Status ${message.ownerDetail}"
 	}
 }
