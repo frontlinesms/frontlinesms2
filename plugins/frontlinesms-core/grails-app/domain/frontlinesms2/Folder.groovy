@@ -24,7 +24,7 @@ class Folder extends MessageOwner {
 	}
 
 //> ACCESSORS
-	def getFolderMessages(getOnlyStarred=false, getSent=true) {
+	def getFolderMessages(getOnlyStarred=false, getSent=null) {
 		Fmessage.owned(this, getOnlyStarred, getSent)
 	}
 	
