@@ -82,7 +82,7 @@ class CreateActivityDialog extends MediumPopup {
 
 class PollDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("poll") || popupTitle.contains("edit activity")
+		popupTitle.contains("poll") || popupTitle.contains("edit poll")
 	}
 	static content = {
 		compose { module ComposeTab }
@@ -98,7 +98,7 @@ class PollDialog extends MediumPopup {
 
 class EditPollDialog extends PollDialog {
 	static at = {
-		popupTitle.contains("edit activity")
+		popupTitle.contains("edit poll")
 	}
 }
 
@@ -301,7 +301,7 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 
 class WebconnectionWizard extends MediumPopup {
 	static at = {
-		waitFor('very slow') { popupTitle.contains("connection") || popupTitle == 'edit activity' }
+		waitFor('very slow') { popupTitle.contains("connection") || popupTitle == 'edit web connection' }
 		return true
 	}
 	static content = {
@@ -371,7 +371,7 @@ class WebconnectionSummary extends geb.Module {
 
 class SubscriptionCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("subscription") || popupTitle.contains("edit activity")
+		popupTitle.contains("subscription") || popupTitle.contains("edit subscription")
 	}
 	static content = {
 		group { module SubscriptionGroupTab }
@@ -474,7 +474,7 @@ class ConfigureUshahidiWebconnectionTab extends geb.Module{
 
 class AutoreplyCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("autoreply") || popupTitle.contains("edit activity")
+		popupTitle.contains("autoreply") || popupTitle.contains("edit autoreply")
 	}
 	static content = {
 		message { module AutoreplyMessageTab}
