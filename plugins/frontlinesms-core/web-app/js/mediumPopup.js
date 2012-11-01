@@ -1,14 +1,14 @@
 var mediumPopup = (function() {
 	var ___start___,
-		cancel, submit, submitWithoutClose,
-		range, selectSubscriptionGroup, editConnection,
+		cancel, submit, submitWithoutClose, range,
+		selectSubscriptionGroup, editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
 		createModalBox,
 		launchMediumPopup, launchMediumWizard, launchHelpWizard,
 		getCurrentTab, getCurrentTabDom, getCurrentTabIndex, getTabLength,
 		prevButton, nextButton,
 		addValidation, enableTab, disableTab,
 		changeButtons, getButtonToTabMappings, initializeTabContentWidgets, makeTabsUnfocusable,
-		tabValidates, validateTabSelections, validateAllPreviousTabs, validateSmartGroup,
+		tabValidates, validateTabSelections, validateAllPreviousTabs,
 		messageResponseClick, moveToRelativeTab,
 		___end___;
 	cancel = function() {
@@ -269,7 +269,16 @@ var mediumPopup = (function() {
 			success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('action.send')); }
 		});
 	};
-	
+
+	editConnection = function(id) {
+		$.ajax({
+			url: url_root + "connection/wizard/" + id,
+			success: function(data){
+				launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false);
+			}
+		});
+	};
+
 	selectSubscriptionGroup = function(groupId) { // FIXME activity-specific code should not be inside this file
 		var labelId = $('input[value=group-'+groupId+']').attr('id');
 		$('label[for='+labelId+']').trigger('click');
@@ -278,12 +287,13 @@ var mediumPopup = (function() {
 	return {
 		addValidation:addValidation,
 		disableTab:disableTab,
+		editConnection:editConnection, // TODO move this somewhere more suitable
 		enableTab:enableTab,
 		launchMediumPopup:launchMediumPopup,
 		launchMediumWizard:launchMediumWizard,
 		launchHelpWizard:launchHelpWizard,
-		messageResponseClick:messageResponseClick,
-		selectSubscriptionGroup:selectSubscriptionGroup,
+		messageResponseClick:messageResponseClick, // TODO move this somewhere more suitable
+		selectSubscriptionGroup:selectSubscriptionGroup, // TODO move this somewhere more suitable
 		submit:submit
 	};
 }());
@@ -293,11 +303,3 @@ $.widget("ui.contentWidget", {
 	validate:function() { return this.options.validate(); },
 	options:{ validate:function() { return true; } } });
 
-function editConnection(id) {
-	$.ajax({
-		url: url_root + "connection/wizard/" + id,
-		success: function(data){
-			mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false);
-		}
-	});
-}

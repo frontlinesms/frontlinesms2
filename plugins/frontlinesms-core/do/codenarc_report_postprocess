@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+REPORT_FILE=target/analysis-reports/codenarc.xml
+echo "# Processing CodeNarc report to correct source locations for jenkins..."
+sed -i -e "s:path=':path='plugins/frontlinesms-core/:g" $REPORT_FILE
+echo "# CoreNarc report postprocess complete."
+

@@ -4,7 +4,7 @@ import frontlinesms2.*
 import spock.lang.*
 import grails.plugin.spock.*
 
-class ExpressionProcessorServiceSpec extends grails.plugin.spock.IntegrationSpec {	
+class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def expressionProcessorService
 
 	@Unroll

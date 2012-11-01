@@ -63,6 +63,7 @@ class QuickMessageConfirmTab extends geb.Module {
 	static content = {
 		messagesToSendCount { $('#contacts-count').text() }
 		recipientName { $('td#recipient').text() }
+		messageText { $('td#confirm-message-text').text() }
 	}
 }
 
@@ -461,7 +462,7 @@ class ConfigureUshahidiWebconnectionTab extends geb.Module{
 		subType(required:false){ type->
 			$('input', name:'serviceType', value:type)
 		} 
-		crowdmapDeployAddress{ $('#displayed_url') }
+		crowdmapDeployAddress { $('#displayed_url') }
 		ushahidiDeployAddress{ $('#displayed_url') }
 		ushahidiKeyLabel { $("label", for:'key').first() }
 		crowdmapKeyLabel { $("label", for:'key').last() }

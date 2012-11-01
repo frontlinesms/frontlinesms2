@@ -51,16 +51,17 @@ var PollGraph = function(pollResponse, ownerId, statsUrl) {
 		pollGraph.css('width', width);
 	},
 	_showGraph = function() {
-		var mainListHead = $("#main-list-head");
-		var top = mainListHead.offset().top + mainListHead.height();
-		var left = mainListHead.offset().left;
-		var width = mainListHead.outerWidth();
-		var pollGraph = $("#pollGraph");
+		var top, left, width, pollGraph, mainListHead, show, stats;
+		mainListHead = $("#main-list-head");
+		top = mainListHead.offset().top + mainListHead.height();
+		left = mainListHead.offset().left;
+		width = mainListHead.outerWidth();
+		pollGraph = $("#pollGraph");
 		_setDimensions($("#pollGraph-container"), top, left, width);
 		_setDimensions(pollGraph, top, left, width - 30);
-		var show = true;
+		show = true;
 		if (_loaded || _refresh) {
-			var stats = _getStats();
+			stats = _getStats();
 			pollGraph.empty();
 			_refresh = false;
 			plot3 = $.jqplot("pollGraph", [stats.data], {
@@ -90,5 +91,5 @@ var PollGraph = function(pollResponse, ownerId, statsUrl) {
 		updateStats:_updateStats,
 		show:_show
 	};
-}
+};
 

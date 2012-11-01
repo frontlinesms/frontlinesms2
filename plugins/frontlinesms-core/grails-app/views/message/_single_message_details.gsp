@@ -1,3 +1,4 @@
+<%@page defaultCodec="html" %>
 <div id="single-message">
 	<g:if test="${messageInstance}">
 		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>

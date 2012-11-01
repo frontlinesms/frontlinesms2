@@ -1,6 +1,7 @@
 <%@ page import="frontlinesms2.*" %>
 <g:hiddenField name="starred" value="${params.starred}"/>
 <g:hiddenField name="failed" value="${params.failed}"/>
+<g:hiddenField name="inbound" value="${params.inbound}"/>
 
 <div class="content ${ownerInstance? ownerInstance.shortName + ' activity': messageSection}">
 	<g:if test="${ownerInstance && messageSection != 'trash'}">

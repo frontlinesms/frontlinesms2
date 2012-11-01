@@ -82,7 +82,7 @@ class Poll extends Activity {
 	}
 	
 	def getResponseStats() {
-		def totalMessageCount = getActivityMessages(false, false).count()
+		def totalMessageCount = getActivityMessages().count()
 		responses.sort {it.key?.toLowerCase()}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,

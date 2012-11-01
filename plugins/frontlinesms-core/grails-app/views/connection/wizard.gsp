@@ -33,12 +33,14 @@ var fconnection = {
 		</g:each>
 		$("#" + connectionType + "-form").css('display', 'inline');
 		fconnection.init();
+		connectionTooltips.init(connectionType);
 	},
 	init: function() {
 		var keys = fconnection[fconnection.getType()].validationSubsectionFieldKeys;
 		$.each(keys, function(index, value) {
 			fconnection.toggleSubFields(value);
 		});
+		connectionTooltips.init(fconnection.getType());
 	},
 	show: function() {
 		setConfirmVal('type', fconnection.humanReadableName());

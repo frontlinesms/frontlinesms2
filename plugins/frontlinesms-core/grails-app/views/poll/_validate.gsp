@@ -272,7 +272,7 @@
 		updateMessageDetails();
 		
 		var currentVal = $("#autoreplyText").val();
-		$("#auto-reply-read-only-text").html(currentVal.trim()? currentVal: i18n("autoreply.text.none"))
+		$("#auto-reply-read-only-text").html(currentVal.trim()? currentVal.htmlEncode(): i18n("autoreply.text.none"))
 		// update auto-sort
 		var autoSort = $("input[name='enableKeyword']:checked").val();
 		var autoSortMessages = $('#auto-sort-confirm p');
@@ -291,7 +291,7 @@
 	
 	function updateMessageDetails() {
 		var sendMessage
-		isGroupChecked("dontSendMessage") ?	sendMessage = i18n("poll.send.messages.none") : sendMessage = $('#messageText').val();
+		isGroupChecked("dontSendMessage") ?	sendMessage = i18n("poll.send.messages.none") : sendMessage = $('#messageText').val().htmlEncode();
 
 		var contactNo = $("#contacts-count").text()
 		

@@ -1,10 +1,9 @@
 $(document.documentElement).keyup(function (event) {
-	var key = 0;
-	
-	if (event == null) {
-		key = event.keyCode;
-	} else { // mozilla
+	var key;
+	if(event) { // mozilla
 		key = event.which;
+	} else {
+		key = event.keyCode;
 	}
 	
 	if(key === 38) {
@@ -20,49 +19,41 @@ $(document.documentElement).keyup(function (event) {
 	}
 });
 
-function showPreviousRow() {
-	if(countSelectedMessages() == 1) {
-		var selectedRow = $('tr.selected');
-		var previousRow = selectedRow.prevAll("tr:first");
-		if(previousRow.attr('id') !== undefined) {
-			selectedRow.removeClass("selected");
-			previousRow.addClass("selected");
-			if(previousRow.attr('id').indexOf("activity") !=-1) {
-				//loadRow(previousRow.attr('id').substring('activity-'.length), previousRow);
-			} else {
-				if($('input:hidden[name=messageSection]').val() != "trash"){
-					loadRow(previousRow.attr('id').substring('message-'.length), previousRow);
-					selectedRow.find('.message-select-checkbox').prop("checked", false);
-					previousRow.find('.message-select-checkbox').prop("checked", true);
-				}
+function changeRowSelection(oldSelected, newSelected) {
+	var newSelectedId;
+	newSelectedId = newSelected.attr("id");
+	if(newSelectedId) {
+		oldSelected.removeClass("selected");
+		newSelected.addClass("selected");
+		if(newSelectedId.indexOf("activity") === -1) {
+			if($("input:hidden[name=messageSection]").val() !== "trash") {
+				updateSingleCheckedDetails("message", newSelectedId.substring("message-".length), newSelected);
+				oldSelectedRow.find(".message-select-checkbox").prop("checked", false);
+				newSelected.find(".message-select-checkbox").prop("checked", true);
 			}
 		}
-	}else{ $("#main-list tbody tr:first").addClass("selected"); }
+	}
+}
+
+function showPreviousRow() {
+	var selectedRow, previousRow;
+	if(countSelectedMessages() === 1) {
+		selectedRow = $('tr.selected');
+		previousRow = selectedRow.prevAll("tr:first");
+		changeRowSelection(selectedRow, previousRow);
+	} else { $("#main-list tbody tr:first").addClass("selected"); }
 }
 
 function showNextRow() {
-	if(countSelectedMessages() == 1) {
-		var selectedRow = $('tr.selected');
-		var nextRow = selectedRow.nextAll("tr:first");
-		if(nextRow.attr('id') !== undefined) {
-			selectedRow.removeClass("selected");
-			nextRow.addClass("selected");
-			if(nextRow.attr('id').indexOf("activity") !=-1) {
-				//loadRow(nextRow.attr('id').substring('activity-'.length), nextRow);
-			} else {
-				if($('input:hidden[name=messageSection]').val() != "trash"){
-					loadRow(nextRow.attr('id').substring('message-'.length), nextRow);
-					selectedRow.find('.message-select-checkbox').prop("checked", false);
-					nextRow.find('.message-select-checkbox').prop("checked", true);
-				}
-			}
-		}
-	}else{ $("#main-list tbody tr:first").addClass("selected"); }
+	var selectedRow, nextRow;
+	if(countSelectedMessages() === 1) {
+		selectedRow = $('tr.selected');
+		nextRow = selectedRow.nextAll("tr:first");
+		changeRowSelection(selectedRow, nextRow);
+	} else { $("#main-list tbody tr:first").addClass("selected"); }
 }
 
-function loadRow(id, row) {
-	updateSingleCheckedDetails("message", id, row)
-}
 function countSelectedMessages() {
     return $('tr.selected').size();
 }
+

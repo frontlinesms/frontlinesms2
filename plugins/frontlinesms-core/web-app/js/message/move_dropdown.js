@@ -23,7 +23,7 @@ function moveAction() {
 		return;
 	}
 
-	if(messageSection === 'result' && !(getCheckedItemCount('message') > 1)) {
+	if(messageSection === 'result' && getCheckedItemCount('message') === 0) {
 		location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection === 'result') {
 		location = url_root + "search/" + messageSection + '?searchId=' + searchId;

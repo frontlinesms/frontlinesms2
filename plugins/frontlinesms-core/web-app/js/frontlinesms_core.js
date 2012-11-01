@@ -9,8 +9,19 @@ if(!Array.prototype.indexOf) {
 // String.trim is not available in IE before IE9, so
 // add it here using the jQuery implementation
 if(!String.prototype.trim) {
-	String.prototype.trim = function(s) {
-		return jQuery.trim(s);
+	String.prototype.trim = function() {
+		return jQuery.trim(this);
+	};
+}
+
+if(!String.prototype.htmlEncode) {
+	String.prototype.htmlEncode = function() {
+		return this
+			.replace(/&/g, '&amp;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#39;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
 	};
 }
 
