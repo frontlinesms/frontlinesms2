@@ -136,6 +136,18 @@ class MessageInboxSpec extends MessageBaseSpec {
 			waitFor { compose.textArea.text() == "test" }
 	}
 
+	def "message details should show the name of the route the message was received through"() {
+		given:
+			def con = SmslibFconnection.build(name:'MTN Dongle', port:'stormyPort')
+			Fmessage.build(src:'+254778899', text:'test', recievedOn:con)
+			def message = Fmessage.build(src:'+254999999', text:'test')
+		when:
+			to PageMessageInbox, message.id
+			waitFor{ singleMessageDetails.receivedOn.displayed }
+		then:
+			singleMessageDetails.receivedOn.text() == "MTN Dongle"
+	}
+
 	def "should only display message details when one message is checked"() {
 		given:
 			createInboxTestMessages()
