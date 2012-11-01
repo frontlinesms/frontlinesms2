@@ -47,7 +47,7 @@
 			webconnectionDialog.updateConfirmationScreen()
 		</g:if>
 		<g:else>
-			var initialScripts = <fsms:render template="/webconnection/generic/scripts"/>;
+			var initialScripts = <fsms:render template="/webconnection/${Webconnection.implementations[0].type}/scripts"/>;
 			webconnectionDialog.setScripts(initialScripts);
 		</g:else>
 		
