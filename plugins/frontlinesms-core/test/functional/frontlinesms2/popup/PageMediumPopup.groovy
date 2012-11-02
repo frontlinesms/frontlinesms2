@@ -75,6 +75,7 @@ class CreateActivityDialog extends MediumPopup {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
 		autoreply { $('input[value="autoreply"]') }
+		autoforward { $('input[value="autoforward"]') }
 		webconnection(wait:true) { $('input[value="webconnection"]') }
 		subscription { $('input[value="subscription"]') }
 	}
@@ -516,5 +517,59 @@ class AutoreplySummaryTab extends geb.Module {
 	static base = { $('div#tabs-4 > div.summary') } //ensures div.summary has been loaded too
 	static content = {
 		message { $("p", 0).text() }
+	}
+}
+
+class AutoforwardCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("autoforward") || popupTitle.contains("edit activity")
+	}
+	static content = {
+		message { module AutoforwardMessageTab}
+		keyword { module AutoforwardKeywordTab}
+		recipients { module AutoforwardKeywordTab}
+		confirm { module AutoforwardConfirmTab}
+		summary { module AutoforwardSummaryTab}
+		validationErrorText { $('label.error').text() }
+		errorText { errorPanel.text()?.toLowerCase() }
+		error { errorPanel }
+		create { $('button#submit') }
+	}
+}
+
+class AutoforwardMessageTab extends geb.Module {
+	static base = { $('div#tabs-1') }
+	static content = {
+		messageText { $('area#messageText') }
+	}
+}
+
+class AutoforwardKeywordTab extends geb.Module {
+	static base = { $('div#tabs-2')}
+	static content = {
+		keywordText { $('#keywords') }
+		blankKeyword {$('#blankKeyword')}
+	}
+}
+
+class AutoforwardRecipientsTab extends geb.Module {
+	static base = { $('div#tabs-3')}
+	static content = {
+		addField { $('input#address') }
+		addButton { $('a.btn.add-address') }
+		manual { $('li.manual.contact') }
+		count { $('#recipient-count').text().toInteger() }
+		manualContacts { $("li.manual").find("input", name:"addresses") }
+		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
+		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
+		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
+	}
+}
+
+class AutoforwardConfirmTab extends geb.Module {
+	static base = { $('div#tabs-4') }
+	static content = {
+		nameText {$("#name")}
+		keywordConfirm {$("#keyword-confirm").text()}
 	}
 }
