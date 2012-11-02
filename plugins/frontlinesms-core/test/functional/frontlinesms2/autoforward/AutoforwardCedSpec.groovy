@@ -49,6 +49,41 @@ class AutoforwardCedSpec extends grails.plugin.geb.GebSpec{
 			summary.message.contains('The autoforward has been created')
 	}
 
+	def "Can edit an existing autoforward"() {
+		given:'create an autoforward'
+			createTestAutoforward()
+		when: 'go to autoforward message page'
+			to PageMessageAutoforward, 'News'
+		then: 'autoforward message page should be open'
+			header.title == 'news autoforward'
+		when: 'edit button is clicked'
+			header.moreActions.value("edit").click()
+		then: 'autoforward wizard should open'
+			waitFor { at AutoforwardCreateDialog }
+		when: 'message tab is skipped'
+			next.click()
+		then: 'Keyword tab should open'
+			keyword.displayed
+		when: 'Keyword is changed'
+			keyword.keywordText = 'Goodbye'
+			next.click()
+		then: 'Recipients tab should open'
+			recipients.displayed
+		when: 'A contact is added'
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
+			next.click()
+		then: 'Confirm tab should open'
+			confirm.displayed
+			confirm.keywordConfirm == 'GOODBYE'
+		when: 'submit is clicked'
+			confirm.name = 'Hello'
+			create.click()
+		then: 'Summary tab should open'
+			waitFor { summary.displayed }
+			summary.message.contains('The autoforward has been created')
+	}
+
 	def "keyword must be provided in autoforward"() {
 		given: 'Open keyword tab'
 			 launchAutoforwardPopup('keyword')

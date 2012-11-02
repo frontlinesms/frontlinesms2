@@ -26,7 +26,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			header[item] == value
 		where:
 			item			| value
-			'title'			| "Breaking News autoforward"
+			'title'			| "news autoforward"
 			'message'		| 'message-content WITHOUT KEYWORD'
 			'keywords'		| 'BREAKING,ALERT'
 			'recipients'	| 'Currently 100 recipients'
