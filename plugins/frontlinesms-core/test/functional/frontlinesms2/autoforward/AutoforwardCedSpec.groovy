@@ -101,7 +101,6 @@ class AutoforwardCedSpec extends grails.plugin.geb.GebSpec{
 			waitFor { errorText.contains("the keyword breaking is already in use by activity 'breakingnews'")}
 	}
 
-
 	def launchAutoforwardPopup(String tab = ''){
 		to PageMessageInbox
 			bodyMenu.newActivity.click()
