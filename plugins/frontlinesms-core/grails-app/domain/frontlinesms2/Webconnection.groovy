@@ -7,6 +7,10 @@ import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
 abstract class Webconnection extends Activity {
+	static final String OWNERDETAIL_SUCCESS = 'success'
+	static final String OWNERDETAIL_PENDING = 'pending'
+	static final String OWNERDETAIL_FAILED = 'failed'
+
 	def camelContext
 	def webconnectionService
 	enum HttpMethod { POST, GET }
@@ -82,6 +86,12 @@ abstract class Webconnection extends Activity {
 	}
 
 	def activate() {
+		try {
+			deactivate()
+		} catch(Exception ex) {
+			log.info("Exception thrown while deactivating webconnection '$name'", ex)
+		}
+
 		println "*** ACTIVATING ACTIVITY ***"
 		try {
 			def routes = this.routeDefinitions

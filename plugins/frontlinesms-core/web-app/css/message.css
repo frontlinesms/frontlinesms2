@@ -39,9 +39,9 @@
 #body.messages #main-list tr.sent td:last-child { background-image:url('../images/message/sent.png'); }
 #body.messages #main-list tr.pending td:last-child { background-image:url('../images/message/pending.png'); }
 
-#body.messages #main-list tr.ownerdetail-completed td:last-child { background-image:url('../images/message/ownerdetail-completed.png'); }
-#body.messages #main-list tr.ownerdetail-failed td:last-child { background-image:url('../images/message/ownerdetail-failed.png'); }
-#body.messages #main-list tr.ownerdetail-pending td:last-child { background-image:url('../images/message/ownerdetail-pending.png'); }
+#body.messages #main-list tr.ownerdetail-webconnection-success td:last-child { background-image:url('../images/message/ownerdetail-completed.png'); }
+#body.messages #main-list tr.ownerdetail-webconnection-failed td:last-child { background-image:url('../images/message/ownerdetail-failed.png'); }
+#body.messages #main-list tr.ownerdetail-webconnection-pending td:last-child { background-image:url('../images/message/ownerdetail-pending.png'); }
 
 #body.messages #main-list tr.selected { background-color:#d8e8ef; }
 #body.messages #main-list tr:hover { background-color:#e5eff3; }
