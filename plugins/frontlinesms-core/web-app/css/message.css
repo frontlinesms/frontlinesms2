@@ -45,6 +45,7 @@
 #body.messages #main-list #new-message-notification a { text-align:center; font-weight:bold; padding:3px 0; cursor:pointer; }
 
 #body.messages #main-list-foot .controls div#message-toggler a { padding:0 10px; }
+#body.messages #main-list-foot .controls div#message-toggler a.active { font-weight: bold; }
 #tabs div.input .controls div.stats{ display:block; margin:3px;}
 
 #body.messages #detail { background-color:#d8e8ef; border-left:solid #9e9e9e 1px; padding:17px; }

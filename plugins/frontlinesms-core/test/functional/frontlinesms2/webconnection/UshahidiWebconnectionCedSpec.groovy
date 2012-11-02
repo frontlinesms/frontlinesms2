@@ -100,7 +100,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.confirm('keyword') == 'None'
 	}
 
-	def "editing a web connection should change values"(){
+	def "editing a web connection should change values"() {
 		given:
 			to PageMessageWebconnection, UshahidiWebconnection.findByName('Trial')
 		when:
@@ -126,7 +126,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			submit.click()
 			waitFor('very slow') { at PageMessageWebconnection }
 			header['name'] == 'trial web connection'
-			header['url'] == 'https://frontlinecrowd.crowdmap.com'
+			header['url'] == 'https://frontlinecrowd.crowdmap.com/frontlinesms/'
 	}
 
 	private def fillValidConfig() {

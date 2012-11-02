@@ -24,7 +24,7 @@ abstract class Activity extends MessageOwner {
 	}
 
 //> ACCESSORS
-	def getActivityMessages(getOnlyStarred=false, getSent=true) {
+	def getActivityMessages(getOnlyStarred=false, getSent=null) {
 		Fmessage.owned(this, getOnlyStarred, getSent)
 	}
 	
