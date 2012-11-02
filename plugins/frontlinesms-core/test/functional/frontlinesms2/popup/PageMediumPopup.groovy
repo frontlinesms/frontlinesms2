@@ -571,5 +571,8 @@ class AutoforwardConfirmTab extends geb.Module {
 	static content = {
 		nameText {$("#name")}
 		keywordConfirm {$("#keyword-confirm").text()}
+		contacts {$("#contacts").text()}
+		group {$("#group").text()}
+		smartGroups {$("#smart-groups").text()}
 	}
 }
