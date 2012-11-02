@@ -14,9 +14,18 @@ class PageGeneralSettings extends PageSettings {
 		}
 		errors(required:false) { $('label.error')}
 		basicAuthentication {module BasicAuthentication}
+		databaseBackup {module DatabaseBackup}
 	}
 	static at = {
 		title.contains('Settings') || title.contains('Mazingira')
+	}
+}
+
+class DatabaseBackup extends geb.Module {
+	static base = { $('#database-backup')}
+
+	static content = {
+		instruction {$("p")}
 	}
 }
 
