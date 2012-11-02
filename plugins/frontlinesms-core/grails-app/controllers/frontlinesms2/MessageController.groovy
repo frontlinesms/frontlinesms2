@@ -39,9 +39,13 @@ class MessageController {
 				messageCount = Fmessage."$section"(params.starred).count()
 			}
 		} else if(section == 'activity') {
-			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred)?.count()
+			def getSent = null
+			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
+			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred, getSent)?.count()
 		} else if(section == 'folder') {
-			messageCount = Folder.get(params.ownerId)?.getFolderMessages(params.starred)?.count()
+			def getSent = null
+			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
+			messageCount = Folder.get(params.ownerId)?.getFolderMessages(params.starred, getSent)?.count()
 		} else messageCount = 0
 		render messageCount
 	}
