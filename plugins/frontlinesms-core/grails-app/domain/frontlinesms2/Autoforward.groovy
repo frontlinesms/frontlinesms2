@@ -1,6 +1,11 @@
 package frontlinesms2
 
 class Autoforward extends Activity {
+
+	static String getShortName() { 'autoforward' }
+
+	String autoforwardText
+
 //> CONSTANTS
 	static def shortName = 'autoforward'
 	private static def RECIPIENT_VALIDATOR = { val, obj ->
