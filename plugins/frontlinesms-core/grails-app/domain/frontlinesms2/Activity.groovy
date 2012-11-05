@@ -4,6 +4,15 @@ abstract class Activity extends MessageOwner {
 //> STATIC PROPERTIES
 	static boolean editable = { true }
 	static def implementations = [Announcement, Autoreply, Poll, Subscription, Webconnection]
+	protected static final def NAME_VALIDATOR = { activityDomainClass ->
+		return { val, obj ->
+			if(obj?.deleted || obj?.archived) return true
+			def identical = activityDomainClass.findAllByNameIlike(val)
+			if(!identical) return true
+			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
+			else return true
+		}
+	}
 
 //> INSTANCE PROPERTIES
 	String sentMessageText

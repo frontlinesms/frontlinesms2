@@ -26,8 +26,8 @@ class MessageSendService {
 	def createOutgoingMessage(params) {
 		def message = new Fmessage(text:(params.messageText), inbound:false)
 		def addresses = [params.addresses].flatten() - null
-		def groups = [params.groups].flatten() - null
-		addresses += getAddressesForGroups(groups)
+		addresses += getAddressesForContacts(params.contacts)
+		addresses += getAddressesForGroups([params.groups].flatten())
 
 		def dispatches = generateDispatches(addresses)
 		dispatches.each {
@@ -36,13 +36,19 @@ class MessageSendService {
 		return message
 	}
 
-	def getAddressesForGroups(List groups) {
-		groups.collect {
-			def g
-			if(it.startsWith('group-')) {
-				g = Group.get(it.substring(6))
-			} else if(it.startsWith('smartgroup-')) {
-				g = SmartGroup.get(it.substring(11))
+	private def getAddressesForContacts(List contacts) {
+		if(contacts) contacts*.mobile
+	}
+
+	private def getAddressesForGroups(List groups) {
+		groups -= null
+		groups.collect { g ->
+			if(g instanceof String) {
+				if(it.startsWith('group-')) {
+					g = Group.get(it.substring(6))
+				} else if(it.startsWith('smartgroup-')) {
+					g = SmartGroup.get(it.substring(11))
+				}
 			}
 			g?.addresses
 		}.flatten()
