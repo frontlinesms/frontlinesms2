@@ -14,8 +14,8 @@ class PageMessageAutoforward extends frontlinesms2.page.PageMessageActivity {
 class AutoforwardHeaderModule extends frontlinesms2.message.ContentHeader {
 	static content = {
 		infoListItems { $('ul.info li')*.text() }
-		message { infoListItems[0] }
-		keywords { infoListItems[1] }
-		recipients { infoListItems[2] }
+		message { infoListItems[1] }
+		keywords { infoListItems[2] }
+		recipients { infoListItems[3] }
 	}
 }

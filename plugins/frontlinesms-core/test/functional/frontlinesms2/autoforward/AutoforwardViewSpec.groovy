@@ -25,11 +25,11 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			waitFor { header.title?.toLowerCase().contains("autoforward") }
 			header[item] == value
 		where:
-			item			| value
-			'title'			| "news autoforward"
-			'message'		| 'message-content WITHOUT KEYWORD'
-			'keywords'		| 'BREAKING,ALERT'
-			'recipients'	| 'Currently 100 recipients'
+			item         | value
+			'title'      | "news autoforward"
+			'message'    | 'message-content WITHOUT KEYWORD'
+			'keywords'   | 'BREAKING,ALERT'
+			'recipients' | 'Currently 100 recipients'
 	}
 
 	def "clicking the edit option opens the Autoforward Dialog for editing"() {

@@ -64,6 +64,7 @@ class CoreBootStrap {
 			dev_initFmessages()
 			dev_initPolls()
 			dev_initAutoreplies()
+			dev_initAutoforwards()
 			dev_initFolders()
 			dev_initAnnouncements()
 			dev_initSubscriptions()
@@ -276,6 +277,14 @@ class CoreBootStrap {
 			.addToKeywords(value:"COLOR")
 			.save(failOnError:true, flush:true)
 	}
+
+	private def dev_initAutoforwards() {
+		if(!bootstrapData) return
+		new Autoforward(name:'Excitement', sentMessageText:'This is exciting: ${messageText}')
+			.addToKeywords(value:'FORWARD')
+			.addToSmartGroups(SmartGroup.findByName('Test Contacts'))
+			.save(failOnError:true, flush:true)
+	}
 	
 	private def dev_initFolders() {
 		if(!bootstrapData) return
@@ -338,7 +347,7 @@ class CoreBootStrap {
 			it.save(failOnError:true, flush:true)
 		}
 		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET)
-			.addToKeywords(value:'FORWARD')
+			.addToKeywords(value:'WEBCONNECTION')
 			.addToKeywords(value:'UPLOAD')
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))

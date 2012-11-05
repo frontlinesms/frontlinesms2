@@ -49,6 +49,61 @@ class AutoforwardSpec extends Specification {
 			1 * sendService.send(forwardMessage)
 	}
 
+	@Unroll
+	def 'getRecipientCount() should count group members and contacts'() {
+		given:
+			def a = new Autoforward(name:'recipient counter')
+			if(contacts) a.contacts = (1..contacts).collect { Contact.build() }
+			if(groups) a.groups = (1..groups).collect { mockGroup(groupMembers) }
+			def sg = []
+			if(smartGroups) sg = (1..smartGroups).collect { def smrt = mockSmartGroup(smartGroupMembers); println "smrt.members=$smrt.members"; return smrt }
+			println "sg = $sg"
+			println "sg.mem = ${sg*.members}"
+			sg.each {
+				println "it.members = $it.members"
+			}
+			a.smartGroups = sg
+			if(smartGroups) println "membaz: " + a.smartGroups*.members
+		expect:
+			a.recipientCount == expectedRecipientCount
+		where:
+			expectedRecipientCount | contacts | groups | groupMembers | smartGroups | smartGroupMembers
+			1                      | 1        | 0      | 0            | 0           | 0
+			0                      | 0        | 1      | 0            | 0           | 0
+			1                      | 0        | 1      | 1            | 0           | 0
+			10                     | 0        | 2      | 5            | 0           | 0
+			12                     | 2        | 2      | 5            | 0           | 0
+			0                      | 0        | 0      | 0            | 1           | 0
+			1                      | 0        | 0      | 0            | 1           | 1
+			10                     | 0        | 0      | 0            | 5           | 2
+			12                     | 2        | 0      | 0            | 5           | 2
+			22                     | 2        | 2      | 5            | 5           | 2
+	}
+
+	private def mockContact() { Contact.build() }
+
+	private def mockGroup(int memberCount) {
+		mockMembers(Group, memberCount)
+	}
+
+	private def mockSmartGroup(int memberCount) {
+		mockMembers(SmartGroup, memberCount)
+	}
+
+	private def mockMembers(gClass, memberCount) {
+		def g = Mock(gClass)
+		if(memberCount) {
+			def members = (1..memberCount).collect { Contact.build() }
+			println "mockMembers() :: members=$members"
+			g.members >> { members }
+			println "mockMembers() :: g.members=$g.members"
+			println "mockMembers() :: g.members=$g.members"
+			println "mockMembers() :: g.members=$g.members"
+			println "mockMembers() :: g.members=$g.members"
+		}
+		return g
+	}
+
 	private def mockFmessage(String messageText, String src=null) {
 		Fmessage m = Mock()
 		m.text >> messageText

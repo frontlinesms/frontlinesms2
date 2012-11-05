@@ -2,6 +2,7 @@ package frontlinesms2
 
 class Autoforward extends Activity {
 //> CONSTANTS
+	static def shortName = 'autoforward'
 	private static def RECIPIENT_VALIDATOR = { val, obj ->
 		println "RECIPIENT_VALIDATOR:: obj=$obj val=$val"
 		def valid = val || obj.contacts || obj.groups || obj.smartGroups
@@ -21,6 +22,13 @@ class Autoforward extends Activity {
 		contacts validator:RECIPIENT_VALIDATOR
 		groups validator:RECIPIENT_VALIDATOR
 		smartGroups validator:RECIPIENT_VALIDATOR
+	}
+
+//> ACCESSORS
+	int getRecipientCount() {
+		(contacts? contacts.size(): 0) +
+				(groups? (groups.collect { it.members?.size()?:0 }?.sum()): 0) +
+				(smartGroups? (smartGroups.collect { it.members?.size()?:0 }?.sum()): 0)
 	}
 
 //> PROCESS METHODS

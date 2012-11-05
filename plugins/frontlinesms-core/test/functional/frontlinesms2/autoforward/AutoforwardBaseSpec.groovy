@@ -4,18 +4,18 @@ import frontlinesms2.*
 
 class AutoforwardBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestAutoforward(){
-		def a = new Autoforward(name:"News",contacts:createContacts())
-			a.addToKeywords(new Keyword(value:"BREAKING"))
-			a.addToKeywords(new Keyword(value:"ALERT"))
-			a.save(flush:true, failOnError:true)
+		def a = new Autoforward(name:"News")
+println "AutoforwardBaseSpec.createTestAutoforward() :: a.contacts=$a.contacts"
+		a.contacts = createContacts()
+		a.addToKeywords(value:"BREAKING")
+		a.addToKeywords(value:"ALERT")
+		a.save(flush:true, failOnError:true)
 	}
 
-	static createContacts(){
-		def contacts = []
-		(0..100).each {
-			contacts[it] = new Contact(name:"user + ${it}")
+	static createContacts() {
+		(0..100).collect {
+			Contact.build(name:"generated-contact-$it")
 		}
-		contacts
 	}
 
 	static createTestMessages(Autoforward a) {
