@@ -222,6 +222,25 @@ class FolderListSpec extends FolderBaseSpec {
 			at PageMessageInbox
 			bodyMenu.folderLinks*.text().containsAll('Projects')
 	}
+
+	def "filter folder messages by incoming messages should not show new outgoing messages"() {
+		given:
+			createTestFolders()
+			createTestMessages()
+			createOutgoingMessage()
+		when:
+			to PageMessageFolder, Folder.findByName('Projects'), Fmessage.findBySrc('Patrick')
+		then:
+			messageList.messages.size() == 3
+		when:
+			footer.showIncoming.click()
+		then:
+			waitFor { messageList.messages.size() == 2 }
+		when:
+			sleep 11000
+		then:
+			!messageList.newMessageNotification.displayed
+	}
 	
 	def deleteFolder() {
 		createTestFolders()
