@@ -66,7 +66,7 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
 
 		// COMPILE
-		compile 'net.frontlinesms.core:camel-smslib:0.0.5'
+		compile 'net.frontlinesms.core:camel-smslib:0.0.6-SNAPSHOT'
 		['mail', 'http'].each { compile camel(it) }
 		compile 'net.frontlinesms.core:serial:1.0.1'
 		compile 'net.frontlinesms.core:at-modem-detector:0.8'

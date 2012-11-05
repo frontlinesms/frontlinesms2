@@ -7,6 +7,7 @@ class MessageSendService {
 		def headers = [:]
 		if(c) headers['requested-fconnection-id'] = c.id
 		m.save()
+		println "#vaneyck# ${m.id} MessageSendService.send() "+(new Date().toString())
 		m.dispatches.each {
 			sendMessageAndHeaders('seda:dispatches', it, headers)
 		}

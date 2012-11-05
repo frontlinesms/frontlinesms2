@@ -1,0 +1,1527 @@
+
+| Loading Grails 2.0.3
+| Error WARNING: Configurational method [:functional-test-development:0.9.3] in grails-app/conf/BuildConfig.groovy doesn't exist. Ignoring..
+| Error WARNING: Configurational method [compile] in grails-app/conf/BuildConfig.groovy doesn't exist. Ignoring..
+| Configuring classpath
+| Configuring classpath.
+| Environment set to development
+| Environment set to development.
+| Environment set to development..
+| Environment set to development...
+| Environment set to development....
+| Environment set to development.....
+| Packaging Grails application
+| Packaging Grails application.
+| Packaging Grails application..
+| Packaging Grails application...
+| Packaging Grails application....
+| Packaging Grails application.....
+| Compiling 8 source files
+| Compiling 8 source files.
+| Compiling 8 source files..
+appName: frontlinesms-core
+WARNING:: DATABASE MIGRATION DISABLED
+| Compiling 8 source files...
+| Compiling 8 source files....
+| Compiling 8 source files.....
+WARNING:: DATABASE MIGRATION DISABLED
+2012-11-05 13:55:57,245 [main] WARN  cfg.ConfigurationHelper  - Unable to load specified config location file:/home/vaneyck//.frontlinesms2-default/log4j.groovy : /home/vaneyck/.frontlinesms2-default/log4j.groovy (No such file or directory)
+| Running Grails application
+2012-11-05 13:56:12,314 [pool-7-thread-1] WARN  servlet.DefaultGrailsApplicationAttributes  - ApplicationContext not found in org.codehaus.groovy.grails.APPLICATION_CONTEXT attribute of servlet context.
+Starting Quartz Scheduler in QuartzFactoryBean
+| Error 2012-11-05 13:56:15,399 [pool-7-thread-1] ERROR resource.ResourceMeta  - While processing /bundle-bundle_frontlinesms-core_head.css, /css/reset.css, /css/layout.css, /css/head.css, /css/controls.css, /css/message.css, /css/contact.css, /css/archive.css, /css/activity.css, /css/activity/webconnection.css, /css/search.css, /css/settings.css, /css/status.css, /css/wizard.css, /css/help.css, a resource was required but not found: /images/icons/sent.png
+| Error 2012-11-05 13:56:15,461 [pool-7-thread-1] ERROR resource.ResourceMeta  - While processing /bundle-bundle_frontlinesms-core_head.css, /css/reset.css, /css/layout.css, /css/head.css, /css/controls.css, /css/message.css, /css/contact.css, /css/archive.css, /css/activity.css, /css/activity/webconnection.css, /css/search.css, /css/settings.css, /css/status.css, /css/wizard.css, /css/help.css, a resource was required but not found: /images/icons/pending.png
+| Error 2012-11-05 13:56:15,580 [pool-7-thread-1] ERROR resource.ResourceMeta  - While processing /bundle-bundle_frontlinesms-core_head.css, /css/reset.css, /css/layout.css, /css/head.css, /css/controls.css, /css/message.css, /css/contact.css, /css/archive.css, /css/activity.css, /css/activity/webconnection.css, /css/search.css, /css/settings.css, /css/status.css, /css/wizard.css, /css/help.css, a resource was required but not found: /css/images/icons/help.png
+BootStrap.init() : Env=DEVELOPMENT
+JNI Path: /home/vaneyck/workspace/frontlinesms2/plugins/frontlinesms-core/web-app/jni
+Absolute location of JNI libraries: /home/vaneyck/workspace/frontlinesms2/plugins/frontlinesms-core/web-app/jni/linux/i686
+Stable Library
+=========================================
+Native lib Version = RXTX-2.1-7
+Java lib Version   = RXTX-2.1-7
+PORTS:
+> Port identifier: serial.CommPortIdentifier@10adc0c
+> Port identifier: serial.CommPortIdentifier@1f49e84
+> Port identifier: serial.CommPortIdentifier@d30ef6
+END OF PORTS LIST
+DeviceDetectionService.init() :: disableDetect? true
+DeviceDetectionService.init() :: detection disabled.
+*** ACTIVATING ACTIVITY ***
+################# Activating Webconnection :: frontlinesms2.GenericWebconnection : 11
+*** ACTIVATING ACTIVITY ***
+################# Activating Webconnection :: frontlinesms2.GenericWebconnection : 12
+*** ACTIVATING ACTIVITY ***
+################# Activating Webconnection :: frontlinesms2.UshahidiWebconnection : 13
+\o/ FrontlineSMS started.
+| Server running. Browse to http://localhost:8080/frontlinesms-core
+FconnectionService.createRoutes() :: ENTRY :: frontlinesms2.SmslibFconnection : 3
+DeviceDetectionService.stopFor(/dev/ttyUSB0)...
+creating route for fconnection frontlinesms2.SmslibFconnection : 3
+SmsLibService class loaded.
+FconnectionService.createRoutes() :: EXIT :: frontlinesms2.SmslibFconnection : 3
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 441 KeywordProcessorService.process() Mon Nov 05 14:01:36 EAT 2012
+#vaneyck# 442 MessageSendService.send() Mon Nov 05 14:01:36 EAT 2012
+Autoreply message sent to +254708093604
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 610] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 610]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 610]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to -1
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 610] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 610]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 610]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:01:56 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 610
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 443 KeywordProcessorService.process() Mon Nov 05 14:02:07 EAT 2012
+Message deleted.
+#vaneyck# 444 MessageSendService.send() Mon Nov 05 14:02:25 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 611] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 611]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 611]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 0
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 611] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 611]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 611]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+#vaneyck# SmslibService.send() Mon Nov 05 14:02:44 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 611
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 445 KeywordProcessorService.process() Mon Nov 05 14:02:56 EAT 2012
+#vaneyck# 446 MessageSendService.send() Mon Nov 05 14:02:56 EAT 2012
+Autoreply message sent to +254708093604
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 612] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 612]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 612]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 1
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 612] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 612]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 612]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:03:16 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 612
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 447 KeywordProcessorService.process() Mon Nov 05 14:03:27 EAT 2012
+#vaneyck# 448 MessageSendService.send() Mon Nov 05 14:03:27 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 613] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 613]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 613]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 2
+Autoreply message sent to +254708093604
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 613] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 613]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 613]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+#vaneyck# SmslibService.send() Mon Nov 05 14:03:42 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 613
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 449 KeywordProcessorService.process() Mon Nov 05 14:04:05 EAT 2012
+#vaneyck# 450 MessageSendService.send() Mon Nov 05 14:04:05 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 614] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 614]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 614]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 3
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 614] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 614]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 614]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:04:20 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 614
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 451 KeywordProcessorService.process() Mon Nov 05 14:04:42 EAT 2012
+#vaneyck# 452 MessageSendService.send() Mon Nov 05 14:04:42 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 615] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 615]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 615]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 4
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 615] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 615]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 615]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:04:57 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 615
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 453 KeywordProcessorService.process() Mon Nov 05 14:05:20 EAT 2012
+#vaneyck# 454 MessageSendService.send() Mon Nov 05 14:05:20 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 616] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 616]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 616]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 5
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 616] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 616]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 616]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:05:35 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 616
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 455 KeywordProcessorService.process() Mon Nov 05 14:05:57 EAT 2012
+#vaneyck# 456 MessageSendService.send() Mon Nov 05 14:05:57 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 617] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 617]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 617]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 6
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 617] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 617]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 617]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:06:12 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 617
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 457 KeywordProcessorService.process() Mon Nov 05 14:06:35 EAT 2012
+#vaneyck# 458 MessageSendService.send() Mon Nov 05 14:06:35 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 618] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 618]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 618]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 7
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 618] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 618]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 618]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:06:50 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 618
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 459 KeywordProcessorService.process() Mon Nov 05 14:07:12 EAT 2012
+#vaneyck# 460 MessageSendService.send() Mon Nov 05 14:07:12 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 619] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 619]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 619]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 8
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 619] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 619]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 619]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:07:27 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 619
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 461 KeywordProcessorService.process() Mon Nov 05 14:07:45 EAT 2012
+#vaneyck# 462 MessageSendService.send() Mon Nov 05 14:07:45 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 620] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 620]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 620]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 9
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 620] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 620]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 620]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:08:10 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 620
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 463 KeywordProcessorService.process() Mon Nov 05 14:08:21 EAT 2012
+#vaneyck# 464 MessageSendService.send() Mon Nov 05 14:08:21 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 621] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 621]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 621]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 10
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 621] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 621]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 621]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:08:47 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 621
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 465 KeywordProcessorService.process() Mon Nov 05 14:08:58 EAT 2012
+#vaneyck# 466 MessageSendService.send() Mon Nov 05 14:08:58 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 622] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 622]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 622]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 11
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 622] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 622]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 622]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:09:23 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 622
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 467 KeywordProcessorService.process() Mon Nov 05 14:09:29 EAT 2012
+#vaneyck# 468 MessageSendService.send() Mon Nov 05 14:09:29 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 623] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 623]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 623]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 12
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 623] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 623]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 623]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:09:50 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 623
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 469 KeywordProcessorService.process() Mon Nov 05 14:10:06 EAT 2012
+#vaneyck# 470 MessageSendService.send() Mon Nov 05 14:10:06 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 624] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 624]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 624]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 13
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 624] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 624]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 624]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:10:26 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 624
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 471 KeywordProcessorService.process() Mon Nov 05 14:10:42 EAT 2012
+#vaneyck# 472 MessageSendService.send() Mon Nov 05 14:10:42 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 625] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 625]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 625]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 14
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 625] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 625]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 625]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:11:03 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 625
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 473 KeywordProcessorService.process() Mon Nov 05 14:11:19 EAT 2012
+#vaneyck# 474 MessageSendService.send() Mon Nov 05 14:11:19 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 626] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 626]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 626]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 15
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 626] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 626]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 626]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:11:39 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 626
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 475 KeywordProcessorService.process() Mon Nov 05 14:11:50 EAT 2012
+#vaneyck# 476 MessageSendService.send() Mon Nov 05 14:11:50 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 627] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 627]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 627]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 16
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 627] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 627]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 627]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:12:11 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 627
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 477 KeywordProcessorService.process() Mon Nov 05 14:12:22 EAT 2012
+#vaneyck# 478 MessageSendService.send() Mon Nov 05 14:12:22 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 628] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 628]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 628]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 17
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 628] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 628]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 628]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:12:37 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 628
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 479 KeywordProcessorService.process() Mon Nov 05 14:12:59 EAT 2012
+#vaneyck# 480 MessageSendService.send() Mon Nov 05 14:12:59 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 629] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 629]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 629]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 18
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 629] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 629]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 629]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:13:14 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 629
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 481 KeywordProcessorService.process() Mon Nov 05 14:13:32 EAT 2012
+#vaneyck# 482 MessageSendService.send() Mon Nov 05 14:13:32 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 630] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 630]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 630]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 19
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 630] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 630]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 630]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:13:57 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 630
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 483 KeywordProcessorService.process() Mon Nov 05 14:14:03 EAT 2012
+#vaneyck# 484 MessageSendService.send() Mon Nov 05 14:14:03 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 631] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 631]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 631]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 20
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 631] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 631]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 631]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:14:24 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 631
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 485 KeywordProcessorService.process() Mon Nov 05 14:14:40 EAT 2012
+#vaneyck# 486 MessageSendService.send() Mon Nov 05 14:14:40 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 632] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 632]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 632]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 21
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 632] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 632]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 632]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:15:00 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 632
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 487 KeywordProcessorService.process() Mon Nov 05 14:15:11 EAT 2012
+#vaneyck# 488 MessageSendService.send() Mon Nov 05 14:15:11 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 633] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 633]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 633]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 22
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 633] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 633]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 633]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:15:32 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 633
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 489 KeywordProcessorService.process() Mon Nov 05 14:15:38 EAT 2012
+#vaneyck# 490 MessageSendService.send() Mon Nov 05 14:15:38 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 634] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 634]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 634]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 23
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 634] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 634]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 634]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:15:53 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 634
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 491 KeywordProcessorService.process() Mon Nov 05 14:16:15 EAT 2012
+#vaneyck# 492 MessageSendService.send() Mon Nov 05 14:16:15 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 635] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 635]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 635]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 24
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 635] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 635]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 635]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:16:31 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 635
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 493 KeywordProcessorService.process() Mon Nov 05 14:16:53 EAT 2012
+#vaneyck# 494 MessageSendService.send() Mon Nov 05 14:16:53 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 636] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 636]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 636]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 25
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 636] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 636]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 636]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:17:08 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 636
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 495 KeywordProcessorService.process() Mon Nov 05 14:17:30 EAT 2012
+#vaneyck# 496 MessageSendService.send() Mon Nov 05 14:17:31 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 637] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 637]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 637]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 26
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 637] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 637]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 637]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:17:46 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 637
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 497 KeywordProcessorService.process() Mon Nov 05 14:18:08 EAT 2012
+#vaneyck# 498 MessageSendService.send() Mon Nov 05 14:18:08 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 638] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 638]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 638]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 27
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 638] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 638]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 638]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:18:23 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 638
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 499 KeywordProcessorService.process() Mon Nov 05 14:18:41 EAT 2012
+#vaneyck# 500 MessageSendService.send() Mon Nov 05 14:18:41 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 639] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 639]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 639]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 28
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 639] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 639]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 639]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:19:06 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 639
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 501 KeywordProcessorService.process() Mon Nov 05 14:19:17 EAT 2012
+#vaneyck# 502 MessageSendService.send() Mon Nov 05 14:19:17 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 640] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 640]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 640]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 29
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 640] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 640]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 640]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:19:42 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 640
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 503 KeywordProcessorService.process() Mon Nov 05 14:19:49 EAT 2012
+#vaneyck# 504 MessageSendService.send() Mon Nov 05 14:19:49 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 641] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 641]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 641]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 30
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 641] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 641]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 641]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:20:09 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 641
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 505 KeywordProcessorService.process() Mon Nov 05 14:20:25 EAT 2012
+#vaneyck# 506 MessageSendService.send() Mon Nov 05 14:20:25 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 642] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 642]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 642]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 31
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 642] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 642]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 642]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:20:45 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 642
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 507 KeywordProcessorService.process() Mon Nov 05 14:21:02 EAT 2012
+#vaneyck# 508 MessageSendService.send() Mon Nov 05 14:21:02 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 643] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 643]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 643]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 32
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 643] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 643]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 643]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:21:22 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 643
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 509 KeywordProcessorService.process() Mon Nov 05 14:21:33 EAT 2012
+#vaneyck# 510 MessageSendService.send() Mon Nov 05 14:21:33 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 644] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 644]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 644]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 33
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 644] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 644]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 644]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:21:53 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 644
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 511 KeywordProcessorService.process() Mon Nov 05 14:22:05 EAT 2012
+#vaneyck# 512 MessageSendService.send() Mon Nov 05 14:22:05 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 645] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 645]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 645]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 34
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 645] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 645]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 645]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:22:20 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 645
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 513 KeywordProcessorService.process() Mon Nov 05 14:22:42 EAT 2012
+#vaneyck# 514 MessageSendService.send() Mon Nov 05 14:22:42 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 646] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 646]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 646]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 35
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 646] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 646]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 646]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:22:57 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 646
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 515 KeywordProcessorService.process() Mon Nov 05 14:23:20 EAT 2012
+#vaneyck# 516 MessageSendService.send() Mon Nov 05 14:23:20 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 647] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 647]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 647]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 36
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 647] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 647]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 647]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:23:35 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 647
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 517 KeywordProcessorService.process() Mon Nov 05 14:23:52 EAT 2012
+#vaneyck# 518 MessageSendService.send() Mon Nov 05 14:23:52 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 648] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 648]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 648]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 37
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 648] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 648]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 648]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:24:17 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 648
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 519 KeywordProcessorService.process() Mon Nov 05 14:24:29 EAT 2012
+#vaneyck# 520 MessageSendService.send() Mon Nov 05 14:24:29 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 649] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 649]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 649]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 38
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 649] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 649]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 649]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:24:54 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 649
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 521 KeywordProcessorService.process() Mon Nov 05 14:25:05 EAT 2012
+#vaneyck# 522 MessageSendService.send() Mon Nov 05 14:25:05 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 650] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 650]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 650]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 39
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 650] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 650]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 650]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:25:30 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 650
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 523 KeywordProcessorService.process() Mon Nov 05 14:25:42 EAT 2012
+#vaneyck# 524 MessageSendService.send() Mon Nov 05 14:25:42 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 651] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 651]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 651]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 40
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 651] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 651]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 651]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:26:07 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 651
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 525 KeywordProcessorService.process() Mon Nov 05 14:26:18 EAT 2012
+#vaneyck# 526 MessageSendService.send() Mon Nov 05 14:26:18 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 652] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 652]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 652]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 41
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 652] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 652]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 652]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:26:43 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 652
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 527 KeywordProcessorService.process() Mon Nov 05 14:26:55 EAT 2012
+#vaneyck# 528 MessageSendService.send() Mon Nov 05 14:26:55 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 653] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 653]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 653]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 42
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 653] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 653]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 653]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:27:20 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 653
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 529 KeywordProcessorService.process() Mon Nov 05 14:27:31 EAT 2012
+#vaneyck# 530 MessageSendService.send() Mon Nov 05 14:27:31 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 654] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 654]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 654]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 43
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 654] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 654]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 654]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:27:56 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 654
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 531 KeywordProcessorService.process() Mon Nov 05 14:28:03 EAT 2012
+#vaneyck# 532 MessageSendService.send() Mon Nov 05 14:28:03 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 655] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 655]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 655]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 44
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 655] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 655]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 655]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:28:23 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 655
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 533 KeywordProcessorService.process() Mon Nov 05 14:28:39 EAT 2012
+#vaneyck# 534 MessageSendService.send() Mon Nov 05 14:28:39 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 656] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 656]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 656]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 45
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 656] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 656]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 656]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:28:59 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 656
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 535 KeywordProcessorService.process() Mon Nov 05 14:29:11 EAT 2012
+#vaneyck# 536 MessageSendService.send() Mon Nov 05 14:29:11 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 657] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 657]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 657]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 46
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 657] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 657]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 657]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:29:31 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 657
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 537 KeywordProcessorService.process() Mon Nov 05 14:29:42 EAT 2012
+#vaneyck# 538 MessageSendService.send() Mon Nov 05 14:29:42 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 658] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 658]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 658]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 47
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 658] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 658]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 658]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:29:57 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 658
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 539 KeywordProcessorService.process() Mon Nov 05 14:30:20 EAT 2012
+#vaneyck# 540 MessageSendService.send() Mon Nov 05 14:30:20 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 659] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 659]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 659]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 48
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 659] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 659]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 659]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:30:35 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 659
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 541 KeywordProcessorService.process() Mon Nov 05 14:30:57 EAT 2012
+#vaneyck# 542 MessageSendService.send() Mon Nov 05 14:30:57 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 660] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 660]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 660]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 49
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 660] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 660]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 660]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+#vaneyck# SmslibService.send() Mon Nov 05 14:31:12 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 660
+DispatchRouterService.handleCompleted() : EXIT
+Message deleted.
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 543 KeywordProcessorService.process() Mon Nov 05 14:31:30 EAT 2012
+#vaneyck# 544 MessageSendService.send() Mon Nov 05 14:31:30 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 661] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 661]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 661]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 50
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 661] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 661]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 661]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:31:55 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 661
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 545 KeywordProcessorService.process() Mon Nov 05 14:32:01 EAT 2012
+#vaneyck# 546 MessageSendService.send() Mon Nov 05 14:32:01 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 662] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 662]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 662]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 51
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 662] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 662]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 662]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:32:22 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 662
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 547 KeywordProcessorService.process() Mon Nov 05 14:32:38 EAT 2012
+#vaneyck# 548 MessageSendService.send() Mon Nov 05 14:32:38 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 663] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 663]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 663]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 52
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 663] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 663]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 663]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:32:58 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 663
+DispatchRouterService.handleCompleted() : EXIT
+SmslibConsumer.process() : ENTRY
+SmslibConsumer.process() : calling processor.process()...
+SmslibConsumer.process() : processor.process() called.
+SmslibConsumer.process() : EXIT
+Deleting message...
+#vaneyck# 549 KeywordProcessorService.process() Mon Nov 05 14:33:14 EAT 2012
+#vaneyck# 550 MessageSendService.send() Mon Nov 05 14:33:14 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 664] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 664]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 664]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 53
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 664] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 664]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 664]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+Autoreply message sent to +254708093604
+Message deleted.
+#vaneyck# SmslibService.send() Mon Nov 05 14:33:35 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 664
+DispatchRouterService.handleCompleted() : EXIT
+#vaneyck# 551 MessageSendService.send() Mon Nov 05 14:37:16 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 665] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 665]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 665]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 54
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 665] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 665]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 665]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+#vaneyck# SmslibService.send() Mon Nov 05 14:37:57 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 665
+DispatchRouterService.handleCompleted() : EXIT
+2012-11-05 14:39:32,346 [http-bio-8080-exec-1] WARN  StatefulPersistenceContext.ProxyWarnLog  - Narrowing proxy to class frontlinesms2.Activity - this operation breaks ==
+#vaneyck# 552 MessageSendService.send() Mon Nov 05 14:42:12 EAT 2012
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 666] with previous endpoint null and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 666]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 666]?.in?.headers
+DispatchRouterService.getDispatchConnectionId() : Routes available: [out-modem-3]
+DispatchRouterService.getDispatchConnectionId() : Counter has counted up to 55
+DispatchRouterService.slip() : Sending with route: out-modem-3
+DispatchRouterService.slip() : Routing to seda:out-3
+DispatchRouterService.slip() : ENTRY
+DispatchRouterService.slip() : Routing exchange Exchange[Message: frontlinesms2.Dispatch : 666] with previous endpoint seda://out-3 and target fconnection null
+DispatchRouterService.slip() : x.in=Exchange[Message: frontlinesms2.Dispatch : 666]?.in
+DispatchRouterService.slip() : x.in.headers=Exchange[Message: frontlinesms2.Dispatch : 666]?.in?.headers
+DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null.
+#vaneyck# SmslibService.send() Mon Nov 05 14:42:56 EAT 2012
+DispatchRouterService.handleCompleted() : ENTRY
+DispatchRouterService.updateDispatch() : dispatch=frontlinesms2.Dispatch : 666
+DispatchRouterService.handleCompleted() : EXIT
