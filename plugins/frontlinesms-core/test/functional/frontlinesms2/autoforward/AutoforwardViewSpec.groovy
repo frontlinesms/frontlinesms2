@@ -27,8 +27,8 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		where:
 			item         | value
 			'title'      | "news autoforward"
-			'message'    | 'message-content WITHOUT KEYWORD'
-			'keywords'   | 'BREAKING,ALERT'
+			'message'    | 'Content of my test message.'
+			'keywords'   | 'Keywords : BREAKING,ALERT'
 			'recipients' | 'Currently 100 recipients'
 	}
 
@@ -96,7 +96,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			messageList.messages[0].checkbox.click()
 		then:
 			waitFor { singleMessageDetails.displayed }
-			waitFor { singleMessageDetails.text == "Test message 0" }
+			waitFor { singleMessageDetails.text == 'Sudden shock 0' }
 	}
 
 	def "selecting multiple messages reveals the multiple message view"() {
@@ -123,7 +123,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { singleMessageDetails.displayed }
 			messageList.messages[3].hasClass("selected")
-			singleMessageDetails.text == "Test message 3"
+			singleMessageDetails.text == "Sudden shock 3"
 	}
 
 	def "delete single message action works "() {
@@ -139,7 +139,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			singleMessageDetails.delete.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.contains("Test message 0")
+			!messageList.messages*.text.contains("Sudden shock 0")
 	}
 
 	def "delete multiple message action works for multiple select"(){
@@ -157,7 +157,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			multipleMessageDetails.deleteAll.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
 	}
 
 	def "move single message action works"() {
@@ -169,18 +169,18 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			messageList.messages[0].checkbox.click()
 		then:
 			waitFor { singleMessageDetails.displayed }
-			waitFor { singleMessageDetails.text == "Test message 0" }
+			waitFor { singleMessageDetails.text == "Sudden shock 0" }
 		when:
 			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { at PageMessageAutoforward }
 			waitFor { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.contains("Test message 0")
+			!messageList.messages*.text.contains("Sudden shock 0")
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.contains("Test message 0")
+			messageList.messages*.text.contains("Sudden shock 0")
 	}
 
 	def "move multiple message action works"() {
@@ -198,12 +198,12 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
 	}
 
 	def "moving a message from another activity to a autoforward displays an update message"() {
