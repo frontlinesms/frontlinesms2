@@ -1,11 +1,6 @@
 package frontlinesms2
 
 class Autoforward extends Activity {
-
-	static String getShortName() { 'autoforward' }
-
-	String autoforwardText
-
 //> CONSTANTS
 	static def shortName = 'autoforward'
 	private static def RECIPIENT_VALIDATOR = { val, obj ->
@@ -27,6 +22,7 @@ class Autoforward extends Activity {
 		contacts validator:RECIPIENT_VALIDATOR
 		groups validator:RECIPIENT_VALIDATOR
 		smartGroups validator:RECIPIENT_VALIDATOR
+		sentMessageText blank:false
 	}
 
 //> ACCESSORS

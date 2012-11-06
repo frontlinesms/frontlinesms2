@@ -6,7 +6,7 @@ class AutoforwardService {
 
     def saveInstance(Autoforward autoforward, params) {
 		autoforward.name = params.name ?: autoforward.name
-		autoforward.autoforwardText = params.messageText ?: autoforward.autoforwardText
+		autoforward.sentMessageText = params.messageText ?: autoforward.sentMessageText
 		autoforward.keywords?.clear()
 
 		def newContacts = params.addresses.collect { return Contact.findByMobile(it)?:new Contact(mobile:it).save() }
