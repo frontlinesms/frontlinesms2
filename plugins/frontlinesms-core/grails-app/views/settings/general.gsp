@@ -74,6 +74,7 @@
 					</table>
 				</g:form>
 			</div>
+			<div id="database-backup"></div>
 		</div>
 	</body>
 </html>
