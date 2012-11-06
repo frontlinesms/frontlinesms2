@@ -18,9 +18,37 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 		expect:
 			processedMessageText == expectedMessageText
 		where:
-			messageText                                             | expectedMessageText
-			'message text sample'                                   | 'message text sample'
-			'please call us on ${contact_number}'                   | 'please call us on 10983'
-			'sender name ${contact_name}, number ${contact_number}' | 'sender name Gedi, number 10983'
+			messageText                                                 | expectedMessageText
+			'message text sample'                                       | 'message text sample'
+			'please call us on ${recipient_number}'                     | 'please call us on 10983'
+			'sender name ${recipient_name}, number ${recipient_number}' | 'sender name Gedi, number 10983'
+	}
+
+	@Unroll
+	def 'process should work for autoforward expressions which require further context from the message and its owner'() {
+		setup:
+			def source =new Contact(name:'Source', mobile:"112233").save(failOnError:true, flush:true)
+			def destination =new Contact(name:'Destination', mobile:"445566").save(failOnError:true, flush:true)
+			def autoforward = new Autoforward(name:'I forward stuff', sentMessageText:'This is not too relevant as we are manually setting message text')
+				.addToKeywords(value:'INCOMING')
+				.addToContacts(destination)
+				.save(failOnError:true, flush:true)
+			def inbound = new Fmessage(src: '112233', inbound: true, archived: false, hasSent: false, date: new Date(), text:'Incoming Message Text')
+			autoforward.addToMessages(inbound)
+			def outbound = new Fmessage(src: '0', inbound: false, archived: false, hasSent: false, date: new Date(), ownerDetail: inbound.id, text: outboundMessageText)
+			Dispatch dis = new Dispatch(dst: '445566', status: DispatchStatus.PENDING)
+			outbound.addToDispatches(dis)
+			outbound.text = outboundMessageText
+			autoforward.addToMessages(outbound).save(failOnError:true)
+			def processedMessageText = expressionProcessorService.process(dis)
+		expect:
+			processedMessageText == expectedDispatchText
+		where:
+			outboundMessageText                                            | expectedDispatchText
+			'message text sample'                                          | 'message text sample'
+			'this message is from ${sender_name} to ${recipient_name}'     | 'this message is from Source to Destination'
+			'this message is from ${sender_number} to ${recipient_number}' | 'this message is from 112233 to 445566'
+			'the original message says: ${message_text}'                   | 'the original message says: Message Text'
+			'the original message says: ${message_text_with_keyword}'      | 'the original message says: Incoming Message Text'
 	}
 }

@@ -1,5 +1,6 @@
 package frontlinesms2
 class ExpressionProcessorService {
+	def i18nUtilService
 	static transactional = true	
 	static regex = /[$][{]*[a-z_]*[}]/
 	// fields map holds the available expressions for replacement
@@ -32,6 +33,14 @@ class ExpressionProcessorService {
 
 	def getExpressions(messageText) {
 		return messageText.findAll(regex)
+	}
+
+	String getUnsubstitutedDisplayText(messageText) {
+		def matches = getExpressions(messageText)
+		matches.each {
+			messageText = messageText.replaceFirst(regex, '<em class="dynamic-field">'+i18nUtilService.getMessage(code:"dynamicfield."+"${(it - '\${' - '}')}"+".label") + '</em>')
+		}
+		messageText
 	}
 
 	private getReplacement(expression, dispatch) {

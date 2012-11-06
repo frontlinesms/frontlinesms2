@@ -27,7 +27,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		where:
 			item         | value
 			'title'      | "news autoforward"
-			'message'    | 'Content of my test message.'
+			'message'    | 'Message is message text'
 			'keywords'   | 'Keywords : BREAKING,ALERT'
 			'recipients' | 'Currently 100 recipients'
 	}
