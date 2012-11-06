@@ -5,6 +5,8 @@ import frontlinesms2.message.*
 import frontlinesms2.popup.*
 import frontlinesms2.announcement.*
 
+import spock.lang.*
+
 class WebconnectionViewSpec extends WebconnectionBaseSpec {
 	def setup() {
 		createWebconnections()
@@ -12,7 +14,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		createTestMessages(Webconnection.findByName("Sync"))
 	}
 
-	@spock.lang.Unroll
+	@Unroll
 	def "Webconnection page should show the details of a generic Webconnection in the header"() {
 		setup:
 			def webconnection  = Webconnection.findByName("Sync")
@@ -27,9 +29,22 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			'url'       | 'http://www.frontlinesms.com/sync'
 			'sendMethod'| 'get'
 			'subtitle'  | 'http web connection'
+			'api'       | '(disabled)'
 	}
 
-	@spock.lang.Unroll
+	@Unroll
+	def 'Webconnection page should show API url, excluding secret, iff API is enabled'() {
+		setup:
+			def c = Webconnection.build(apiEnabled:true, secret:secret)
+		when:
+			to PageMessageWebconnection, c
+		then:
+			header.api.endsWith "/api/webconnection/$c.id"
+		where:
+			secret << [null, 'imagine']
+	}
+
+	@Unroll
 	def "Webconnection page should show the details of an Ushahidi Webconnection in the header"() {
 		setup:
 			def webconnection  = Webconnection.findByName("Ush")
