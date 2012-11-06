@@ -38,7 +38,7 @@ class ExpressionProcessorService {
 	String getUnsubstitutedDisplayText(messageText) {
 		def matches = getExpressions(messageText)
 		matches.each {
-			messageText = messageText.replaceFirst(regex, i18nUtilService.getMessage(code:"dynamicfield."+"${(it - '\${' - '}')}"+".label"))
+			messageText = messageText.replaceFirst(regex, '<em class="dynamic-field">'+i18nUtilService.getMessage(code:"dynamicfield."+"${(it - '\${' - '}')}"+".label") + '</em>')
 		}
 		messageText
 	}
