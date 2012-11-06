@@ -14,7 +14,7 @@ abstract class Webconnection extends Activity {
 	def camelContext
 	def webconnectionService
 	enum HttpMethod { POST, GET }
-	static String getShortName() { 'webconnection' }
+	static String shortName = 'webconnection'
 	static String getType() { '' }
 	static def implementations = [UshahidiWebconnection, 
 			GenericWebconnection]
@@ -48,8 +48,8 @@ abstract class Webconnection extends Activity {
 			if(obj?.deleted || obj?.archived) return true
 			def identical = Webconnection.findAllByNameIlike(val)
 			if(!identical) return true
-			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
-			else return true
+			if (identical.any { it.id != obj.id && !it.archived && !it.deleted }) return false
+			return true
 			})
 	}
 	static mapping = {

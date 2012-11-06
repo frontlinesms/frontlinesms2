@@ -52,6 +52,9 @@ class WebconnectionService {
 		webconnectionInstance.name = params.name
 		webconnectionInstance.initialize(params)
 		webconnectionInstance.save(failOnError:true)
+
+		webconnectionInstance.keywords?.clear()
+		webconnectionInstance.save(flush:true, failOnError:true)
 		if (params.sorting == 'disabled') {
 			println "##### WebconnectionService.saveInstance() # removing keywords"
 		} else if(params.sorting == 'global') {
