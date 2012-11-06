@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
+@Mixin(ControllerUtils)
 class WebconnectionController extends ActivityController {
 	def webconnectionService
 
@@ -68,9 +69,6 @@ class WebconnectionController extends ActivityController {
 		}
 	}
 
-	private def withWebconnection(Closure c) {
-		def webconnectionInstance = Webconnection.get(params.id)
-		if (webconnectionInstance) c webconnectionInstance
-		else render(text: message(code:'activity.id.exist.not', args: [message(code: params.id), ''])) // TODO handle error state properly
-	}
+	private def withWebconnection = withDomainObject Webconnection
 }
+

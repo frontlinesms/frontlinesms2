@@ -1,5 +1,6 @@
 package frontlinesms2
 
+@Mixin(ControllerUtils)
 class SettingsController {
 	def i18nUtilService
 	def appSettingsService
@@ -56,14 +57,6 @@ class SettingsController {
 		render view:'general', model:general()
 	}
 
-	private def withFconnection(Closure c) {
-		def connection = Fconnection.get(params.id)
-		if(connection) {
-			c connection
-		} else {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])
-			render(view:'show_connections', model: [fconnectionInstanceTotal: 0])
-		}
-	}
+	private def withFconnection = withDomainObject Fconnection, { params.id }, { render(view:'show_connections', model: [fconnectionInstanceTotal: 0]) }
 }
 

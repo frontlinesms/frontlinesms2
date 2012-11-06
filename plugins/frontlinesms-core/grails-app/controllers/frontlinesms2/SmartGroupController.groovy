@@ -2,8 +2,10 @@ package frontlinesms2
 
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 
+@Mixin(ControllerUtils)
 class SmartGroupController {
 	private static final String CUSTOM_FIELD_ID_PREFIX = 'custom:'
+	private def withSmartGroup = withDomainObject SmartGroup
 	
 	def create() {
 		def smartGroupInstance = new SmartGroup()
@@ -111,14 +113,5 @@ class SmartGroupController {
 		def smartGroupRuleFields = (new DefaultGrailsDomainClass(SmartGroup.class)).persistentProperties*.name - "name"
 		smartGroupRuleFields
 	}
-	
-	private def withSmartGroup(Closure c) {
-		def sg
-		if(params.id) sg = SmartGroup.get(params.id)
-		else sg = new SmartGroup()
-		if(sg) {
-			c.call(sg)
-		}
-		else render(text: message(code: 'smartgroup.id.exist.not', args: [params.id]))
-	}
 }
+

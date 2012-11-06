@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
+@Mixin(ControllerUtils)
 class AnnouncementController extends ActivityController {
 	def announcementService
 	def index() { redirect(action: 'save') }
@@ -13,7 +14,7 @@ class AnnouncementController extends ActivityController {
 	def save() {
 		def announcementInstance
 		announcementInstance = Announcement.get(params.ownerId) ?: new Announcement()
-		try{
+		try {
 			announcementInstance = announcementService.saveInstance(announcementInstance, params)
 			flash.message = message(code: 'announcement.saved')
 			params.activityId = announcementInstance.id
@@ -21,7 +22,7 @@ class AnnouncementController extends ActivityController {
 				json { render([ok:true, ownerId: announcementInstance.id] as JSON)}
 				html { [ownerId: announcementInstance.id]}
 			}
-		}catch(Exception e){
+		} catch(Exception e) {
 			def errors = announcementInstance.errors.allErrors.collect { message(error:it)}.join("\n")
 			withFormat {
 				json { render([ok:false, text:errors] as JSON)}
@@ -29,9 +30,6 @@ class AnnouncementController extends ActivityController {
 		}
 	}
 
-	private def withAnnouncement(Closure c) {
-		def announcementInstance = Announcement.get(params.id)
-		if (announcementInstance) c announcementInstance
-		else render(text: message(code:'announcement.id.exist.not', args:[message(code:params.id), ''])) // TODO handle error state properly
-	}
+	private def withAnnouncement = withDomainObject Announcement
 }
+
