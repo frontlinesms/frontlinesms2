@@ -255,6 +255,10 @@ class FsmsTagLib {
 		out << '</div>'
 	}
 
+	def unsubstitutedMessageText = { att ->
+		out << expressionProcessorService.getUnsubstitutedDisplayText(att.messageText)
+	}
+
 	def trafficLightStatus = { att ->
 		out << '<span id="status-indicator" class="indicator '
 		def connections = Fconnection.list()

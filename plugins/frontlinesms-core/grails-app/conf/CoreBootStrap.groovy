@@ -280,7 +280,7 @@ class CoreBootStrap {
 
 	private def dev_initAutoforwards() {
 		if(!bootstrapData) return
-		new Autoforward(name:'Excitement', sentMessageText:'This is exciting: ${messageText}')
+		new Autoforward(name:'Excitement', sentMessageText:'This is exciting: ${message_text}')
 			.addToKeywords(value:'FORWARD')
 			.addToSmartGroups(SmartGroup.findByName('Test Contacts'))
 			.save(failOnError:true, flush:true)
