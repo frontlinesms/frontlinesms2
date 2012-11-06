@@ -5,7 +5,7 @@ import frontlinesms2.*
 abstract class SmallPopup extends geb.Page {
 	static content = {
 		popupTitle {
-			$('#ui-dialog-title-modalBox').text().toLowerCase()
+			$('#ui-dialog-title-modalBox').text()?.toLowerCase()
 		}
 		cancel { $('button#cancel') }
 		ok { $('button#done') }
