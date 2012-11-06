@@ -8,7 +8,7 @@ class AutoforwardBaseSpec extends grails.plugin.geb.GebSpec {
 		a.contacts = createContacts()
 		a.addToKeywords(value:"BREAKING")
 		a.addToKeywords(value:"ALERT")
-		a.sentMessageText = 'Content of my test message.'
+		a.sentMessageText = 'Message is \${message_text}'
 		a.save(flush:true, failOnError:true)
 	}
 
