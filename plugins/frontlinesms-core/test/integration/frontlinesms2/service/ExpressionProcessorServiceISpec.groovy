@@ -18,10 +18,10 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 		expect:
 			processedMessageText == expectedMessageText
 		where:
-			messageText                                             | expectedMessageText
-			'message text sample'                                   | 'message text sample'
-			'please call us on ${contact_number}'                   | 'please call us on 10983'
-			'sender name ${contact_name}, number ${contact_number}' | 'sender name Gedi, number 10983'
+			messageText                                                 | expectedMessageText
+			'message text sample'                                       | 'message text sample'
+			'please call us on ${recipient_number}'                     | 'please call us on 10983'
+			'sender name ${recipient_name}, number ${recipient_number}' | 'sender name Gedi, number 10983'
 	}
 
 	@Unroll
