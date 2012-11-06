@@ -11,8 +11,21 @@ import org.apache.camel.impl.DefaultExchange
 import frontlinesms2.*
 
 @TestFor(MessageStorageService)
-@Mock([Fmessage, Fconnection])
+@Mock([Fmessage, Fconnection, SmslibFconnection])
 class MessageStorageServiceSpec extends Specification {
+	def conn 
+
+	def setup() {
+		// Not sure why this is necessary with Test Mixins, but it seems to be:
+		Fconnection.metaClass.addToMessages = { m ->
+			if(delegate.messages) delegate.messages << m
+			else delegate.messages = [m]
+			return delegate
+		}
+
+		conn = new SmslibFconnection(name:"testConnection", baud:"9600", port:"/dev/ttyUSB0", send:true).save(failOnError:true)
+	}
+
 	def "it's a processor"() {
 		expect:
 			service instanceof org.apache.camel.Processor
@@ -22,20 +35,9 @@ class MessageStorageServiceSpec extends Specification {
 		given:
 			def m = new Fmessage(text:'', src:"12345", inbound:true, date:new Date())
 		when:
-			service.process(createTestExchange(m))
+			service.process(createTestExchange(m, conn.id))
 		then:
 			Fmessage.findAll() == [m]
-	}
-
-	def "incoming Fmessage is populated with receivedOn field using the connection id in the header"() {
-		given:
-			def m = new Fmessage(text:'', src:"12345", inbound:true, date:new Date())
-			def conn = createTestConnection()
-		when:
-			service.process(createTestExchange(m, conn.getId())) // TODO: find a way to 
-		then:
-			Fmessage.findAll() == [m]
-			m.receivedOn == conn
 	}
 
 	def createTestExchange(def fmessage, connectionId=null) {
@@ -44,14 +46,8 @@ class MessageStorageServiceSpec extends Specification {
 		def message = exchange.in
 		message.setBody(fmessage)
 		if (connectionId)
-			message.setHeader("connection-id", connectionId)
+			message.setHeader(Fconnection.HEADER_FCONNECTION_ID, connectionId)
 		return exchange
-	}
-
-	def createTestConnection() {
-		Fconnection f = Mock()
-		f.getId() >> 123
-		f
 	}
 }
 

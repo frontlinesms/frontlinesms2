@@ -51,6 +51,7 @@ class MessageController {
 		def ownerInstance = MessageOwner.get(params?.ownerId)
 		messageInstance.read = true
 		messageInstance.save()
+
 		def model = [messageInstance: messageInstance,
 				ownerInstance:ownerInstance,
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),

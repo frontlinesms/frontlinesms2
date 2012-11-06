@@ -380,13 +380,15 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	def "if an FMessage's receivedOn connection is deleted, the field should update to null"() {
 		when:
 			def connection = SmslibFconnection.build(name:'MTN Dongle', port:'stormyPort')
-			def message = Fmessage.build(src:'111', receivedOn: connection)
+			def message = Fmessage.build(src:'111', text:"bla")
+			connection.addToMessages(message)
+			connection.save(failOnError:true)
 		then:
-			message.receivedOn == connection
+			message.receivedOn.id == connection.id
 		when:
 			connection.delete()
 		then:
-			message.refresh().receivedOn == null
+			message.receivedOn == null
 	}
 	
 	private Folder getTestFolder(params=[]) {
