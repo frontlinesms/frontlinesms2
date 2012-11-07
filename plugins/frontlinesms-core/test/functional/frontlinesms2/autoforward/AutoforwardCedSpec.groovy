@@ -44,7 +44,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			create.click()
 		then: 'Summary should display'
 			waitFor { summary.displayed }
-			summary.message.contains('The autoforward has been created')
+			summary.message.text().contains('The autoforward has been created')
 	}
 
 	def "Can edit an existing autoforward"() {
@@ -79,7 +79,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			create.click()
 		then: 'Summary tab should open'
 			waitFor { summary.displayed }
-			summary.message.contains('The autoforward has been created')
+			summary.message.text().contains('The autoforward has been created')
 	}
 
 	def "keyword must be provided in autoforward"() {
