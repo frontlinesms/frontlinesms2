@@ -131,7 +131,7 @@ class ActivityController {
 			params.activityId = instance.id
 			withFormat {
 				json { render([ok:true, ownerId:instance.id] as JSON) }
-				html { [ownerId:webconnectionInstance.id] }
+				html { [ownerId:instance.id] }
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace()
