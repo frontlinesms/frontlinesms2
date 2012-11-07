@@ -74,7 +74,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webconnectionService.postProcess(x)
 		then:
-			Fmessage.findByText("simple").ownerDetail == "OWNERDETAIL-COMPLETED"
+			Fmessage.findByText("simple").ownerDetail == "success"
 	}
 
 	def 'webconnectionservice.send() should change ownerDetail to onwerdetail-pending'() {
@@ -85,7 +85,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webconnectionService.send(Fmessage.findByText("simple"))
 		then:
-			Fmessage.findByText("simple").ownerDetail == "OWNERDETAIL-PENDING"
+			Fmessage.findByText("simple").ownerDetail == "pending"
 	}
 
 	def 'webconnectionService.handleException() shoulf change ownerDetail to onwerdetail-failed'(){
@@ -94,7 +94,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webconnectionService.handleException(x)
 		then:
-			Fmessage.findByText("simple").ownerDetail == "OWNERDETAIL-FAILED"
+			Fmessage.findByText("simple").ownerDetail == "failed"
 	}
 
 	Exchange mockExchange(messageText,method,messageOnly){
