@@ -7,6 +7,7 @@
 			var i18nString = i18n(i18nKey);
 			return i18nKey == i18nString? "": i18nString;
 		};
+		var _handlers = {}
 		var generateMessages = function(fieldsAndRules) {
 			var messageMap = {};
 			for(field in fieldsAndRules) {
@@ -34,8 +35,10 @@
 			setScripts: function(scripts) {
 				webconnectionDialog.resetValidator(scripts.validation);
 				webconnectionDialog.updateConfirmationScreen = scripts.updateConfirmationScreen;
+				webconnectionDialog.handlers = scripts.handlers
 			},
 			updateConfirmationScreen:_updateConfirmationScreen,
+			handlers:_handlers,
 			___end___:null
 		};
 	})();
