@@ -29,7 +29,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			'url'       | 'http://www.frontlinesms.com/sync'
 			'sendMethod'| 'get'
 			'subtitle'  | 'http web connection'
-			'api'       | '(disabled)'
+			'api'       | '(api disabled)'
 	}
 
 	@Unroll

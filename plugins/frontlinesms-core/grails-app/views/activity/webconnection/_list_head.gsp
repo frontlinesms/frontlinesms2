@@ -20,7 +20,7 @@
 		</g:if>
 	</li>
 	<li>
-		<span id="api">${FrontlineApi1Utils.generateUrl(ownerInstance) ?: g.message(code:'nothing.to.see.here')}</span>
+		<span id="api">${FrontlineApi1Utils.generateUrl(ownerInstance) ?: '('+g.message(code:'webconnection.api.disabled')+')'}</span>
 	</li>
 	<g:if test="${ownerInstance?.keywords}">
 		<li id="web_connection_keywords"><g:message code="poll.keywords"/> : ${ownerInstance?.keywords*.value.join(',')}</li>
