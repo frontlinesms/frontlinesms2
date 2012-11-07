@@ -5,13 +5,15 @@ import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
+import frontlinesms2.api.*
 
-abstract class Webconnection extends Activity {
+abstract class Webconnection extends Activity implements FrontlineApi {
 	def camelContext
 	def webconnectionService
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webconnection' }
 	static String getType() { '' }
+	static String apiUrl = 'webconnection'
 	static def implementations = [UshahidiWebconnection, 
 			GenericWebconnection]
 
@@ -37,6 +39,7 @@ abstract class Webconnection extends Activity {
 	/// Variables
 	String url
 	HttpMethod httpMethod
+	boolean apiEnabled = false
 	static hasMany = [requestParameters:RequestParameter]
 	
 	static constraints = {
@@ -155,6 +158,15 @@ abstract class Webconnection extends Activity {
 	private String urlEncode(String s) throws UnsupportedEncodingException {
 		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
 		return URLEncoder.encode(s, "UTF-8");
+	}
+
+	//> FrontlineAPI methods
+	String getSecret() {
+		//TODO: CORE-1639
+	}
+
+	def apiProcess(controller) {
+		//TODO: CORE-1639
 	}
 }
 	
