@@ -9,5 +9,7 @@ class GeneralSettingsSpec extends grails.plugin.geb.GebSpec {
 			to PageGeneralSettings
 		then:
 			databaseBackup.displayed
+			databaseBackup.title == 'configuration location'
+			databaseBackup.instruction.contains('database')
 	}
 }

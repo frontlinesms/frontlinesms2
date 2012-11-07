@@ -22,10 +22,11 @@ class PageGeneralSettings extends PageSettings {
 }
 
 class DatabaseBackup extends geb.Module {
-	static base = { $('#database-backup')}
+	static base = { $('#database-backup') }
 
 	static content = {
-		instruction {$("p")}
+		title { $("h2").text()?.toLowerCase() }
+		instruction { $("p").text()?.toLowerCase() }
 	}
 }
 
