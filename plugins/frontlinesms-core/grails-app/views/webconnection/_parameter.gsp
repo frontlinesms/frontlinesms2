@@ -7,10 +7,10 @@
 		<g:textField name="param-value" class="param-value" value='${value}'/>
 	</td>
 	<td>
-		<fsms:magicWand target="param-value" fields="${Webconnection.subFields*.key}" onchange='autofillValue(this);'/>
+		<fsms:magicWand target="param-value" fields="${Webconnection.subFields*.key}" onchange='webconnectionDialog.handlers.autofillValue(this);'/>
 	</td>
 	<td>
-		<a onclick="removeRule(this)" class="remove-command" />
+		<a onclick="webconnectionDialog.handlers.removeRule(this)" class="remove-command" />
 	</td>
 </tr>
 
