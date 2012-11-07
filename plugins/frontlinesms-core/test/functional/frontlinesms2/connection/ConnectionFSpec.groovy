@@ -134,6 +134,16 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			confirmSmssyncSendEnabled.text() == 'Yes'
 	}
 
+	def 'each connection type in the list has a description under its name'() {
+		when:
+			launchCreateWizard()
+		then:
+			basicInfo("smslib") == "Connect to USB, serial and bluetooth modems or phones"
+			basicInfo("smssync") == "Use an Android phone with the Smssync app installed to send and receive SMS with FrontlineSMS"
+			basicInfo("clickatell") == "Send an receive messages through a Clickatell account"
+			basicInfo("intellisms") == "Send an receive messages through an Intellisms account"
+	}
+
 	def 'can set up a new Smssync connection with no secret'() {
 		when:
 			launchCreateWizard('smssync')
@@ -200,7 +210,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionFailedFlashMessageEditButton.displayed
 	}
 
-	@spock.lang.IgnoreRest
 	def 'clicking edit in failed connection flash message should launch connection edit dialog'() {
 		given: 'connection exists, is started and failed message is displayed'
 			createBadConnection()
@@ -209,9 +218,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when: 'edit button is clicked'
 			connectionFailedFlashMessageEditButton.click()
 		then: 'modification dialog is displayed'
-			println "popupTitle is $popupTitle"
 			waitFor { at ConnectionDialog }
-			println "popupTitle is $popupTitle"
 	}
 
 	private def createBadConnection() {

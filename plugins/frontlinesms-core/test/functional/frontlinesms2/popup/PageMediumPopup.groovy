@@ -63,6 +63,7 @@ class QuickMessageConfirmTab extends geb.Module {
 	static content = {
 		messagesToSendCount { $('#contacts-count').text() }
 		recipientName { $('td#recipient').text() }
+		messageText { $('td#confirm-message-text').text() }
 	}
 }
 
@@ -242,6 +243,34 @@ class DeleteDialog extends MediumPopup {
 	static content = {
 		title { $("#title").text() }
 		done { $('button#done') }
+	}
+}
+
+class ConnectionDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains('connection')
+	}
+	static content = {
+		connectionType { $("#connectionType") }
+		connectionForm { $('#connectionForm') }
+		confirmName { $("#confirm-name") }
+		confirmType { $("#confirm-type") }
+		confirmPort { $("#confirm-port") }
+
+		basicInfo { connectionType ->
+			$("p.info.$connectionType").text()
+		}
+
+		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name") }
+		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username") }
+		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type") }
+
+		confirmSmssyncName { $('#smssync-confirm #confirm-name') }
+		confirmSmssyncSecret { $('#smssync-confirm #confirm-secret') }
+		confirmSmssyncReceiveEnabled { $('#smssync-confirm #confirm-receiveEnabled') }
+		confirmSmssyncSendEnabled { $('#smssync-confirm #confirm-sendEnabled') }
+
+		error {$('label', class:'error')}
 	}
 }
 
@@ -433,7 +462,7 @@ class ConfigureUshahidiWebconnectionTab extends geb.Module{
 		subType(required:false){ type->
 			$('input', name:'serviceType', value:type)
 		} 
-		crowdmapDeployAddress{ $('#displayed_url') }
+		crowdmapDeployAddress { $('#displayed_url') }
 		ushahidiDeployAddress{ $('#displayed_url') }
 		ushahidiKeyLabel { $("label", for:'key').first() }
 		crowdmapKeyLabel { $("label", for:'key').last() }

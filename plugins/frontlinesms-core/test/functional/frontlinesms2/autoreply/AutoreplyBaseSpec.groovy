@@ -3,7 +3,6 @@ package frontlinesms2.autoreply
 import frontlinesms2.*
 
 class AutoreplyBaseSpec extends grails.plugin.geb.GebSpec {
-
 	static createTestAutoreply(){
 		def a = new Autoreply(name:"Fruits", autoreplyText:"Hello, this is an autoreply message")
 			a.addToKeywords(new Keyword(value:"MANGO"))
@@ -24,3 +23,4 @@ class AutoreplyBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'announce')
 	}
 }
+

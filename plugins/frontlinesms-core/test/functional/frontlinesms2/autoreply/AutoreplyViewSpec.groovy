@@ -7,9 +7,9 @@ import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.announcement.PageMessageAnnouncement
 import spock.lang.*
 
-class AutoreplyViewSpec extends AutoreplyBaseSpec{
+class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
-	def setup(){
+	def setup() {
 		createTestAutoreply()
 		createTestActivities()
 		createTestMessages(Autoreply.findByName("Fruits"))
@@ -219,5 +219,43 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec{
 		then:		
 			waitFor { flashMessage.displayed }
 	}
+
+	def "clicking on the sent message filter should display outgoing messages only"() {
+		given:
+			def a = createInAndOutTestMessages()
+		when:
+			to PageMessageAutoreply, a
+		then:
+			messageList.messages.size() == 5
+		when:
+			footer.showOutgoing.click()
+		then:
+			waitFor { messageList.messages.size() == 2 }
+	}
 	
+	def "clicking on the received message filter should display incoming messages only"() {
+		given:
+			def a = createInAndOutTestMessages()
+		when:
+			to PageMessageAutoreply, a
+		then:
+			messageList.messages.size() == 5
+		when:
+			footer.showIncoming.click()
+		then:
+			waitFor { messageList.messages.size() == 3 }
+	}
+
+	private Autoreply createInAndOutTestMessages() {
+		Autoreply a = Autoreply.build(name:'Vegetables')
+		3.times { a.addToMessages(Fmessage.build()) }
+		2.times {
+			def sentMessage = Fmessage.buildWithoutSave(inbound:false)
+			sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
+			sentMessage.save(failOnError:true, flush:true)
+			a.addToMessages(sentMessage) }
+		a.save(failOnError:true, flush:true)
+		return a
+	}
 }
+

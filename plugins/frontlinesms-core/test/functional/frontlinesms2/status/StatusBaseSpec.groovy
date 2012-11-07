@@ -7,8 +7,11 @@ class StatusBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	private createTestMessages() {
 		(new Date()..new Date()-14).each {
-			new Fmessage(dateReceived: it, dateCreated: it, src:"+123456789${it}", inbound:true, text: "A message received on ${it}").save()
-			new Fmessage(dateReceived: it, dateCreated: it, src:"+123456789${it}", hasSent:true, text: "A message sent on ${it}").save()
+			new Fmessage(dateReceived: it, dateCreated: it, src:"+123456789${it}", inbound:true, text: "A message received on ${it}").save(failOnError:true, flush:true)
+			new Fmessage(dateReceived: it, dateCreated: it, src:"+123456789${it}", hasSent:true, text: "A message sent on ${it}")
+				.addToDispatches(new Dispatch(dst: '12345', status: DispatchStatus.SENT, dateSent:new Date()-2))
+				.addToDispatches(new Dispatch(dst: '23456', status: DispatchStatus.SENT, dateSent:new Date()-3))
+				.save(failOnError:true, flush:true)
 		}
 	}
 	
@@ -23,8 +26,8 @@ class StatusBaseSpec extends grails.plugin.geb.GebSpec {
 		def sentMessage1 = new Fmessage(text:"sent message 1", inbound:false, date:new Date()-2, hasSent:true).addToDispatches(dis1).save(flush:true, failOnError:true)
 		def dis2 = new Dispatch(dst: '34523', status: DispatchStatus.SENT, dateSent:new Date()-2)
 		def sentMessage2 = new Fmessage(text:"sent message 2", inbound:false, date:new Date()-2, hasSent:true).addToDispatches(dis2).save(failOnError:true, flush:true)
-		def message1 = new Fmessage(src:'Bob', inbound:true, text:'hi Bob', date:new Date(), starred: true).save(flush: true, failOnError:true)
-		def message2 = new Fmessage(src:'Jim', inbound:true, text:'hi Bob', date:new Date()).save(flush: true, failOnError:true)
+		def message1 = new Fmessage(src:'Bob', inbound:true, text:'hi Bob', date:new Date(), starred: true).save(flush:true, failOnError:true)
+		def message2 = new Fmessage(src:'Jim', inbound:true, text:'hi Bob', date:new Date()).save(flush:true, failOnError:true)
 		def p = new Poll(name: 'This is a poll')
 		p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 		p.save(failOnError:true, flush:true)
@@ -32,12 +35,12 @@ class StatusBaseSpec extends grails.plugin.geb.GebSpec {
 		PollResponse.findByValue('Barcelona').addToMessages(message2)
 		p.save(flush:true, failOnError:true)
 		
-		def f = new Folder(name:'test').save(failOnError:true)
-		def m = new Fmessage(date: new Date(), inbound: true, src: 'src').save(failOnError:true)
+		def f = new Folder(name:'test').save(failOnError:true, flush:true)
+		def m = new Fmessage(date: new Date(), inbound: true, src: 'src').save(failOnError:true, flush:true)
 		f.addToMessages(m).save(flush:true)
 		
 		def announcementMessage = new Fmessage(text:"Test announcement", hasSent:true, inbound:false, date:new Date()).addToDispatches(new Dispatch(dst: '12345', status: DispatchStatus.SENT, dateSent:new Date())).save(flush:true, failOnError:true)
-		def a = new Announcement(name:'test', messages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
+		def a = new Announcement(name:'test', messages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true, flush:true)
 		a.addToMessages(announcementMessage)
 		a.addToMessages(new Fmessage(date: new Date(), src: 'src', inbound: true))
 		a.save(flush:true, failOnError:true)
@@ -47,7 +50,7 @@ class StatusBaseSpec extends grails.plugin.geb.GebSpec {
 		[new SmslibFconnection(name:'MTN Dongle', port:'stormyPort'),
 				new EmailFconnection(name:'Miriam\'s Clickatell account', receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 						serverPort:993, username:'mr.testy@zoho.com', password:'mister')].each() {
-			it.save(flush:true, failOnError: true)
+			it.save(flush:true, failOnError:true)
 		}
 	}
 

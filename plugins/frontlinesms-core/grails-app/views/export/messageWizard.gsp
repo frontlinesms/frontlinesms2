@@ -6,6 +6,7 @@
 		<g:hiddenField name="ownerId" value="${ownerId}"/>
 		<g:hiddenField name="searchId" value="${searchId}"/>
 		<g:hiddenField name="starred" value="${starred}"/>
+		<g:hiddenField name="inbound" value="${inbound}"/>
 		<g:hiddenField name="viewingArchive" value="${viewingArchive}"/>
 		<g:hiddenField name="failed" value="${failed}"/>
 

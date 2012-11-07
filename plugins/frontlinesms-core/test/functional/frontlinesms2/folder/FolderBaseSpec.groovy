@@ -25,5 +25,14 @@ class FolderBaseSpec extends grails.plugin.geb.GebSpec {
 		}
 		projectsFolder.save(failOnError:true, flush:true)
 	}
+
+	def createOutgoingMessage() {
+		def projectsFolder = Folder.findByName("Projects")
+		def dis = new Dispatch(dst: '12345', status: DispatchStatus.PENDING)
+		def m = new Fmessage(src:'Patrick', text:'Project has started', date:new Date()-2, inbound:false)
+		m.addToDispatches(dis)
+		projectsFolder.addToMessages(m)
+		projectsFolder.save(failOnError:true, flush:true)
+	}
 }
 

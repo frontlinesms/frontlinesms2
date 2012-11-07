@@ -117,8 +117,8 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 			createTestMessages()
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
+			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true, flush:true)
+			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
 			messageList.messages[0].checkbox.click()
@@ -221,6 +221,25 @@ class FolderListSpec extends FolderBaseSpec {
 		then:
 			at PageMessageInbox
 			bodyMenu.folderLinks*.text().containsAll('Projects')
+	}
+
+	def "filter folder messages by incoming messages should not show new outgoing messages"() {
+		given:
+			createTestFolders()
+			createTestMessages()
+			createOutgoingMessage()
+		when:
+			to PageMessageFolder, Folder.findByName('Projects'), Fmessage.findBySrc('Patrick')
+		then:
+			messageList.messages.size() == 3
+		when:
+			footer.showIncoming.click()
+		then:
+			waitFor { messageList.messages.size() == 2 }
+		when:
+			sleep 11000
+		then:
+			!messageList.newMessageNotification.displayed
 	}
 	
 	def deleteFolder() {

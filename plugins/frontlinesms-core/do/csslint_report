@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+TARGET_DIR="target/analysis-reports"
+TARGET="$TARGET_DIR/csslint.xml"
+echo "# Generating csslint report in $TARGET ..."
+RULES_TO_IGNORE="adjoining-classes,ids,qualified-headings,unique-headings"
+echo "# CSS Lint ignoring rules: $RULES_TO_IGNORE"
+echo "# Creating analysis report dir"
+mkdir -p $TARGET_DIR
+echo "# Linting..."
+csslint --ignore=$RULES_TO_IGNORE --format=lint-xml web-app/css/* > $TARGET || echo "# Violations detected."
+echo "# Report generated in $TARGET"
+echo "# Processing CSS Lint report to correct source locations for jenkins..."
+sed -i -e "s:name=\":name=\"plugins/frontlinesms-core/:g" $TARGET
+echo "# CSS Lint report generation complete."
+

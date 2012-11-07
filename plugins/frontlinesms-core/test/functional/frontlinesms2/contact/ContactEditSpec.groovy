@@ -31,7 +31,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			def alice = Contact.findByName('Alice')
 			Group g = new Group(name: 'Excellent').save(failOnError:true, flush:true)
 			alice.addToGroups(g)
-			alice.save(flush: true)
+			alice.save(flush:true)
 		when:
 			to PageContactShow, g, Contact.findByName('Alice')
 			singleContactDetails.name.value('Kate')

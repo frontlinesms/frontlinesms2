@@ -45,51 +45,6 @@
 		</g:else>
 	</tbody>
 </table>
-<a class="btn addNew" onclick="addNewParam()">
+<a class="btn addNew" onclick="webconnectionDialog.handlers.addNewParam()">
 	<g:message code="webconnection.add.anotherparam"/>
 </a></br>
-
-<r:script>
-
-	function removeRule(_removeAnchor) {
-			var row = $(_removeAnchor).closest('.web-connection-parameter');
-			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
-			if($('.web-connection-parameter').length === 1) {
-				row.addClass("disabled");
-				row.find("input").removeClass("error");
-				row.find("input").attr("disabled", "disabled");
-				row.hide();
-			} else { row.remove();}
-		}
-
-	function autofillValue(list) {
-		var varName = $(list).val();
-		if(varName !== "na") {
-			$(list).parents(".web-connection-parameter").find("input[name=param-value]").val("\$\{" + varName + "\}");
-		}
-		$(list).trigger("keyup");
-	}
-
-	function addNewParam() {
-		if($('.web-connection-parameter:hidden').length === 1) {
-				$('.web-connection-parameter').show();
-				$('.web-connection-parameter').removeClass("disabled");
-				$('.web-connection-parameter').find("input").attr("disabled", false);
-				return;
-		}
-		var template = $('.web-connection-parameter').last();
-		var target = "param.value";
-		// Selectmenu is destroyed here to allow cloning. Rebuilt after clone
-		if($(".error").size() > 1) { $(".error-panel").show(); }
-		template.find("select").selectmenu("destroy");
-		template.find('.remove-command').show();
-		var newRow = template.clone();
-		newRow.removeAttr("id");
-		newRow.find('input.param-name').val("");
-		newRow.find('input.param-value').val("");
-		newRow.find('.remove-command').show();
-		$('#web-connection-param-table tbody').append(newRow);
-		magicwand.init(newRow.find('select[id^="magicwand-select"]'));
-		magicwand.reset(template.find("select"));
-	}
-</r:script>

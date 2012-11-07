@@ -52,7 +52,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	def 'clicking X next to custom field in list removes it from visible list, but does not change database if no other action is taken'() {
 		given:
 			def bob = Contact.findByName("Bob")
-			bob.addToCustomFields(name:'lake', value: 'Erie').save(failOnError: true, flush: true)
+			bob.addToCustomFields(name:'lake', value: 'Erie').save(failOnError:true, flush:true)
 		when:
 			to PageContactShow, bob
 			singleContactDetails.contactsCustomFields.size() == 2

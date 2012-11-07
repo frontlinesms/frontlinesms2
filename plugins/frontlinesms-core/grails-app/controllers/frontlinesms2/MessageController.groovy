@@ -39,9 +39,13 @@ class MessageController {
 				messageCount = Fmessage."$section"(params.starred).count()
 			}
 		} else if(section == 'activity') {
-			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred)?.count()
+			def getSent = null
+			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
+			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred, getSent)?.count()
 		} else if(section == 'folder') {
-			messageCount = Folder.get(params.ownerId)?.getFolderMessages(params.starred)?.count()
+			def getSent = null
+			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
+			messageCount = Folder.get(params.ownerId)?.getFolderMessages(params.starred, getSent)?.count()
 		} else messageCount = 0
 		render messageCount
 	}
@@ -118,7 +122,8 @@ class MessageController {
 	def activity() {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
-			def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
+			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
+			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent)
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
 			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
@@ -143,7 +148,8 @@ class MessageController {
 	def folder() {
 		def folderInstance = Folder.get(params.ownerId)
 		if (folderInstance) {
-			def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
+			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
+			def messageInstanceList = folderInstance?.getFolderMessages(params.starred, getSent)
 			if (params.flashMessage) { flash.message = params.flashMessage }
 			render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
 						messageSection:'folder',
