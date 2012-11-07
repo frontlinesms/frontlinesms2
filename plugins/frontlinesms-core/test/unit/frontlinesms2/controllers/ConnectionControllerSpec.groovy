@@ -1,6 +1,7 @@
-package frontlinesms2
+package frontlinesms2.controllers
 
-import grails.test.mixin.*
+import frontlinesms2.*
+
 import spock.lang.*
 
 @TestFor(ConnectionController)

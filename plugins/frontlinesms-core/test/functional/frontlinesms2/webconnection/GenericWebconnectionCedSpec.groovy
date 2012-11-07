@@ -141,6 +141,36 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			// N.B. there is no text displayed for this error
 	}
 
+	def 'secret is enabled when API is exposed'() {
+		when:
+			startAtTab('api')
+		then:
+			apiTab.secret.disabled
+		when:
+			apiTab.enableApi = true
+		then:
+			waitFor { !apiTab.secret.disabled }
+	}
+
+	def 'can save a webconnection with API enabled'() {
+		given:
+			startAtTab 'api'
+		when:
+			apiTab.enableApi = true
+			apiTab.secret = 'spray-on-shoes'
+		then:
+			nextTab keywordTab
+			nextTab confirmTab
+		when:
+			confirmTab.name = 'random webconnection'
+			submit.click()
+		then:
+			waitFor { summary.displayed }
+			def c = Webconnection.findByName('random webconnection')
+			c.apiEnabled
+			c.secret == 'spray-on-shoes'
+	}
+
 	private def startAtTab(tabName) {
 		launchWizard('generic')
 		waitFor { requestTab.displayed }
