@@ -39,6 +39,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	/// Variables
 	String url
 	HttpMethod httpMethod
+	String secret
 	boolean apiEnabled = false
 	static hasMany = [requestParameters:RequestParameter]
 	
@@ -50,6 +51,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
 			else return true
 			})
+		secret(nullable:true)
 	}
 	static mapping = {
 		requestParameters cascade: "all-delete-orphan"
@@ -161,10 +163,6 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	}
 
 	//> FrontlineAPI methods
-	String getSecret() {
-		//TODO: CORE-1639
-	}
-
 	def apiProcess(controller) {
 		//TODO: CORE-1639
 	}
