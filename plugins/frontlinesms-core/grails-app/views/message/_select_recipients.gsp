@@ -51,6 +51,7 @@
 <r:script disposition="head">
 	var groupAndMembers = {}
 	function selectMembers(groupIdString, groupName, allContacts) {
+		return;
 		groupAndMembers[groupIdString] = allContacts
 		$.each(allContacts, function(index, contact) {
 			setValueForCheckBox(contact, isCheckboxSelected(groupIdString));

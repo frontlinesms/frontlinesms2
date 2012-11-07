@@ -527,7 +527,7 @@ class AutoforwardCreateDialog extends MediumPopup {
 	static content = {
 		message { module AutoforwardMessageTab}
 		keyword { module AutoforwardKeywordTab}
-		recipients { module AutoforwardKeywordTab}
+		recipients { module AutoforwardRecipientsTab}
 		confirm { module AutoforwardConfirmTab}
 		summary { module AutoforwardSummaryTab}
 		validationErrorText { $('label.error').text() }
@@ -540,7 +540,7 @@ class AutoforwardCreateDialog extends MediumPopup {
 class AutoforwardMessageTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
-		messageText { $('area#messageText') }
+		messageText { $('#messageText') }
 	}
 }
 
@@ -574,5 +574,12 @@ class AutoforwardConfirmTab extends geb.Module {
 		contacts {$("#contacts").text()}
 		group {$("#group").text()}
 		smartGroups {$("#smart-groups").text()}
+	}
+}
+
+class AutoforwardSummaryTab extends geb.Module {
+	static base = { $('div#tabs-5') }
+	static content = {
+		message { $("div.summary") }
 	}
 }

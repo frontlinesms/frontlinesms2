@@ -44,10 +44,10 @@ class MessageSendService {
 		groups -= null
 		groups.collect { g ->
 			if(g instanceof String) {
-				if(it.startsWith('group-')) {
-					g = Group.get(it.substring(6))
-				} else if(it.startsWith('smartgroup-')) {
-					g = SmartGroup.get(it.substring(11))
+				if(g.startsWith('group-')) {
+					g = Group.get(g.substring(6))
+				} else if(g.startsWith('smartgroup-')) {
+					g = SmartGroup.get(g.substring(11))
 				}
 			}
 			g?.addresses

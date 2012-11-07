@@ -41,10 +41,10 @@ class AutoforwardService {
 
 			def newGroups = []
 			def newSmartGroups = []
-			[params.groups].flatten().each{
-				if(it.startsWith('group')){
+			([params.groups].flatten() - null).each{
+				if(it?.startsWith('group')){
 					newGroups << Group.get(it.substring(it.indexOf('-')+1))
-				} else {
+				} else if (it?.startsWith('smartgroup')) {
 					newSmartGroups << SmartGroup.get(it.substring(it.indexOf('-')+1))
 				}
 			}
