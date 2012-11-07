@@ -15,4 +15,3 @@
 		<g:message code="autoforward.recipientcount.current" args="${[ownerInstance.recipientCount]}"/>
 	</li>
 </ul>
-

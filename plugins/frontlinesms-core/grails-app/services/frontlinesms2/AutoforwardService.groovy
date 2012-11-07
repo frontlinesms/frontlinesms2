@@ -34,35 +34,27 @@ class AutoforwardService {
 
 	def editContacts(autoforward, params){
 		try{
-			def newContacts = params.addresses.collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
-			println "#### Contacts from the form : ${newContacts}"
-			(autoforward.contacts?:[] - newContacts?:[]).each { autoforward.removeFromContacts(it) }
-			autoforward.save(failOnError:true)
-			(newContacts?:[] - autoforward.contacts?:[]).each { autoforward.addToContacts(it) }
+			def newContacts = [params.addresses].flatten().collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
+			def oldContacts = autoforward.contacts?:[]
+			(oldContacts - newContacts?:[]).each { autoforward.removeFromContacts(it) }
+			(newContacts?:[] - oldContacts).each { autoforward.addToContacts(it) }
 
 			def newGroups = []
 			def newSmartGroups = []
-			params.groups.each{
+			[params.groups].flatten().each{
 				if(it.startsWith('group')){
-					newGroups << Group.get(it.substring(6,it.length()))
+					newGroups << Group.get(it.substring(it.indexOf('-')+1))
 				} else {
-					newSmartGroups << SmartGroup.get(it.substring(11,it.length()))
+					newSmartGroups << SmartGroup.get(it.substring(it.indexOf('-')+1))
 				}
 			}
 
-			(autoforward.groups?:[] - newGroups?:[]).each{ autoforward.removeFromGroups(it) }
-			println "Remaining groups # $autoforward.groups"
-			println "To add into Groups ${(newGroups?:[] - autoforward.groups?:[])}"
-			autoforward.save(failOnError:true)
-			(newGroups?:[] - autoforward.groups?:[]).each{ autoforward.addToGroups(it) }
-			println "Adding groups # $autoforward.groups"
-
-			(autoforward.smartGroups?:[] - newSmartGroups?:[]).each{ autoforward.removeFromSmartGroups(it) }
-			println "Remaining smartGroups # $autoforward.smartGroups"
-			println "To add to smartGroups ${(newSmartGroups?:[] - autoforward.smartGroups?:[])}"
-			autoforward.save(failOnError:true)
-			(newSmartGroups?:[] - autoforward.smartGroups?:[]).each{ autoforward.addToSmartGroups(it) }
-			println "Adding smartGroups # $autoforward.smartGroups"
+			def oldGroups = autoforward.groups?:[]
+			(oldGroups - newGroups?:[]).each{ autoforward.removeFromGroups(it) }
+			(newGroups?:[] - oldGroups).each{ autoforward.addToGroups(it) }
+			def oldSmartGroups = autoforward.smartGroups?:[]
+			(oldSmartGroups - newSmartGroups?:[]).each{ autoforward.removeFromSmartGroups(it) }
+			(newSmartGroups?:[] - oldSmartGroups).each{ autoforward.addToSmartGroups(it) }
 
 		} catch(Exception e) {
 			println "# 1 ######### $autoforward.errors.allErrors"
