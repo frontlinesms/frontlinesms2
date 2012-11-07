@@ -38,6 +38,8 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		SmssyncFconnectionQueuedDispatch.getDispatches(this)
 	}
 
+	boolean isApiEnabled() { return this.sendEnabled || this.receiveEnabled }
+
 	List<RouteDefinition> getRouteDefinitions() {
 		def routeDefinitions = new RouteBuilder() {
 			@Override void configure() {}
