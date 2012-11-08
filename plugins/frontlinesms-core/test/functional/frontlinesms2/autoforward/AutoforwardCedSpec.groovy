@@ -44,7 +44,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			create.click()
 		then: 'Summary should display'
 			waitFor { summary.displayed }
-			summary.message.text().contains('The autoforward has been created')
+			summary.message.jquery.html().contains('The autoforward has been created')
 	}
 
 	def "Can edit an existing autoforward"() {
@@ -79,7 +79,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			create.click()
 		then: 'Summary tab should open'
 			waitFor { summary.displayed }
-			summary.message.text().contains('The autoforward has been created')
+			summary.message.jquery.html().contains('The autoforward has been created')
 	}
 
 	def "keyword must be provided in autoforward"() {
@@ -128,13 +128,36 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		then: 'Confirm tab should open'
 			confirm.displayed
 			confirm.keywordConfirm == 'BREAKING'
-			confirm.autoforwardConfirm == "Welcome Sir/Madam. This is an autoforward response!"
+			//confirm.autoforwardConfirm == "Welcome Sir/Madam. This is an autoforward response!"
 		when: 'When create is clicked'
 			confirm.nameText.value('Hello')
 			create.click()
 		then: 'Summary tab should NOT be displayed'
 			confirm.displayed
-			waitFor { errorText.contains("the keyword breaking is already in use by activity 'breakingnews'")}
+			waitFor { errorText.contains("the keyword breaking is already in use by activity 'news'")}
+	}
+
+	def 'contact and groups of an autoforward should be preselected duting editing'(){
+		given:'create an autoforward'
+			createTestAutoforward()
+		when: 'go to autoforward message page'
+			to PageMessageAutoforward, 'News'
+		then: 'autoforward message page should be open'
+			header.title == 'news autoforward'
+		when: 'edit button is clicked'
+			header.moreActions.value("edit").click()
+		then: 'autoforward wizard should open'
+			waitFor { at AutoforwardCreateDialog }
+		when: 'message tab is skipped'
+			next.click()
+		then: 'Keyword tab should open'
+			keyword.displayed
+		when: 'Keyword is changed'
+			keyword.keywordText = 'Goodbye'
+			next.click()
+		then: 'Contacts should be selected'
+			println "############# ${recipients.contactCheckboxesChecked*.value()}"
+			recipients.contactCheckboxesChecked*.value().containsAll((1..10).collect{ Contact.findByMobile(it).mobile })
 	}
 
 	def launchAutoforwardPopup(String tab = ''){

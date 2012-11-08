@@ -11,7 +11,15 @@
 		</tr>
 		<tr>
 			<td><g:message code="autoforward.name.label"/></td>
-			<td id="autoforward-confirm"/>
+			<td id="autoforward-confirm-messagetext"/>
+		</tr>
+		<tr>
+			<td><g:message code="autoforward.contacts"/></td>
+			<td id="autoforward-confirm-contacts"/>
+		</tr>
+		<tr>
+			<td><g:message code="autoforward.groups"/></td>
+			<td id="autoforward-confirm-groups"/>
 		</tr>
 	</table>
 </div>

@@ -30,7 +30,7 @@
 		var recipientTabValidation = function() {
 			var valid = false;
 			addAddressHandler();
-			valid = $('input[name=addresses]:checked').length > 0;
+			valid = ($('input[name=addresses]:checked').length > 0) || ($('input[name=groups]:checked').length > 0);
 			return valid;
 		};
 
@@ -49,14 +49,25 @@
 	}
 
 	function updateConfirmationMessage() {
+		var regx = new RegExp("/\(\d+\)/", "g");
 		var autoforwardText = $('#messageText').val().htmlEncode();
+		var contactInputIds = $('input[name=addresses]:checked').map(function() { return this.id; });
+		var contactsList = contactInputIds.map(function(){ return $("label[for="+ this +"]").text(); });
+		var contacts = jQuery.makeArray(contactsList).join(', ');
+
+		var groupInputIds = $('input[name=groups]:checked').map(function() { return this.id; });
+		var groupsList = groupInputIds.map(function(){ return $("label[for="+ this +"]").text() });
+		var groups = jQuery.makeArray(groupsList).join(', ').replace(/\s*\(\d+\)/g, "");
+
 		if(!(isGroupChecked("blankKeyword"))){
 			var keywords = $('#keywords').val().toUpperCase();
 			$("#keyword-confirm").html('<p>' + keywords  + '</p>');
 		} else {
 			$("#keyword-confirm").html('<p>' + i18n("autoforward.blank.keyword")  + '</p>');
 		}
-		$("#autoforward-confirm").html('<p>' + autoforwardText  + '</p>');
+		$("#autoforward-confirm-messagetext").html('<p>' + autoforwardText  + '</p>');
+		$("#autoforward-confirm-contacts").html('<p>' + contacts + '</p>');
+		$("#autoforward-confirm-groups").html('<p>' + groups + '</p>');
 	}
 	
 	function checkSavedContactsAndGroups(){

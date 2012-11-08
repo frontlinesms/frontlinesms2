@@ -559,9 +559,10 @@ class AutoforwardRecipientsTab extends geb.Module {
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
 		count { $('#recipient-count').text().toInteger() }
-		manualContacts { $("li.manual").find("input", name:"addresses") }
+		manualContacts { $("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
 		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
+		contactCheckboxesChecked { $('input:checked', type:'checkbox', name:'addresses') }
 		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
 	}
 }

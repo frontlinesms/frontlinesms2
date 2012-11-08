@@ -34,18 +34,23 @@ class AutoforwardService {
 
 	def editContacts(autoforward, params){
 		try{
-			def newContacts = [params.addresses].flatten().collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
-			def oldContacts = autoforward.contacts?:[]
-			(oldContacts - newContacts?:[]).each { autoforward.removeFromContacts(it) }
-			(newContacts?:[] - oldContacts).each { autoforward.addToContacts(it) }
+			if(params.addresses){
+				def newContacts = [params.addresses].flatten().collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
+				def oldContacts = autoforward.contacts?:[]
+				(oldContacts - newContacts?:[]).each { autoforward.removeFromContacts(it) }
+				(newContacts?:[] - oldContacts).each { autoforward.addToContacts(it) }
+			}
 
 			def newGroups = []
 			def newSmartGroups = []
-			([params.groups].flatten() - null).each{
-				if(it?.startsWith('group')){
-					newGroups << Group.get(it.substring(it.indexOf('-')+1))
-				} else if (it?.startsWith('smartgroup')) {
-					newSmartGroups << SmartGroup.get(it.substring(it.indexOf('-')+1))
+
+			if(params.groups){
+				([params.groups].flatten() - null).each{
+					if(it?.startsWith('group')){
+						newGroups << Group.get(it.substring(it.indexOf('-')+1))
+					} else if (it?.startsWith('smartgroup')) {
+						newSmartGroups << SmartGroup.get(it.substring(it.indexOf('-')+1))
+					}
 				}
 			}
 

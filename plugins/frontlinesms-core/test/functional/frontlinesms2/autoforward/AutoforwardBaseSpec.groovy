@@ -13,8 +13,8 @@ class AutoforwardBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	static createContacts() {
-		(1..100).collect {
-			Contact.build(name:"generated-contact-$it")
+		(1..10).collect {
+			Contact.build(name:"generated-contact-$it", mobile:it)
 		}
 	}
 
