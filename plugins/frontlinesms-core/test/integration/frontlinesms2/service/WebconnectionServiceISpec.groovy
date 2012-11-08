@@ -22,8 +22,8 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webconnectionService.preProcess(x)
 			println "**** " + x.out.headers.url
 		then:
-			x.out.headers[Exchange.HTTP_QUERY].contains("username=bob")
-			x.out.headers[Exchange.HTTP_QUERY].contains("password=secret")
+			x.in.headers[Exchange.HTTP_QUERY].contains("username=bob")
+			x.in.headers[Exchange.HTTP_QUERY].contains("password=secret")
 	}
 
 	def 'out_body should contains the substituted RequestParameters for POST request'(){
@@ -32,7 +32,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webconnectionService.preProcess(x)
 		then:
-			1 * x.out.setBody({ bodyContent ->
+			1 * x.in.setBody({ bodyContent ->
 				bodyContent.contains("message=test+message")
 			})
 	}
@@ -52,7 +52,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webconnectionService.preProcess(x)
 		then:
-			1* x.out.setBody({ bodyContent ->
+			1* x.in.setBody({ bodyContent ->
 				bodyContent.contains("message=simple") && 
 				bodyContent.contains("username=bob") && 
 				bodyContent.contains("password=secret")
@@ -66,6 +66,35 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webconnectionService.postProcess(x)
 		then:
 			notThrown(RuntimeException)
+	}
+
+	def 'webconnectionservice.postProcess() should change ownerDetail to onwerdetail-completed'() {
+		given:
+			def x = mockExchange("simple","post", false)
+		when:
+			webconnectionService.postProcess(x)
+		then:
+			Fmessage.findByText("simple").ownerDetail == "success"
+	}
+
+	def 'webconnectionservice.send() should change ownerDetail to onwerdetail-pending'() {
+		given:
+			def webconnection =  Webconnection.findByName("Sync")
+			webconnection.addToMessages(Fmessage.build(text:"simple"))
+			webconnection.save(flush:true)
+		when:
+			webconnectionService.send(Fmessage.findByText("simple"))
+		then:
+			Fmessage.findByText("simple").ownerDetail == "pending"
+	}
+
+	def 'webconnectionService.handleException() shoulf change ownerDetail to onwerdetail-failed'(){
+		given:
+			def x = mockExchange("simple","post", false)
+		when:
+			webconnectionService.handleException(x)
+		then:
+			Fmessage.findByText("simple").ownerDetail == "failed"
 	}
 
 	Exchange mockExchange(messageText,method,messageOnly){
@@ -83,8 +112,9 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webconnection.addToRequestParameters(p2)
 			webconnection.addToRequestParameters(p3)
 		}
-		webconnection.save(failOnError:true, flush:true)
 		def message = Fmessage.build(text:messageText)
+		webconnection.addToMessages(message)
+		webconnection.save(failOnError:true, flush:true)
 		Exchange exchange = Mock(Exchange)
 		exchange.in >> mockExchangeMessage(['fmessage-id':message.id,'webconnection-id':webconnection.id], null)
 		exchange.out >> mockExchangeMessage([:], null)

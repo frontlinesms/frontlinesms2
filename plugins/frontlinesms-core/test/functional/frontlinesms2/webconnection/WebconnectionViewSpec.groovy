@@ -231,4 +231,12 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor { messageList.displayed }
 			messageList.messages*.text.containsAll("Test message 0", "Test message 1")
 	}
+
+	def "should display SENT message status for successfully forwarded messages"() {
+		when:
+			to PageMessageWebconnection, Webconnection.findByName("Sync")
+		then:
+			waitFor { messageList.displayed }
+			messageList.messages*.any { it.hasStatus("sent")}
+	}
 }
