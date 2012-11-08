@@ -7,6 +7,10 @@ class GenericWebconnection extends Webconnection {
 		this.httpMethod = Webconnection.HttpMethod."${params.httpMethod.toUpperCase()}"
 		this.url = params.url
 		this.name = params.name
+		// API setup
+		this.apiEnabled = params.enableApi?:false
+		this.secret = params.secret
+
 		processRequestParameters(params)
 		this
 	}

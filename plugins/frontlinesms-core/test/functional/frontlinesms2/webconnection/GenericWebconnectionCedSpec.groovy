@@ -25,6 +25,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			requestTab.parameters[0].name = "text"
 			requestTab.parameters[0].value = "message_body"
 		then:
+			nextTab(apiTab)
 			nextTab(keywordTab)
 		when:
 			keywordTab.keyword = "SENDME"
@@ -44,6 +45,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			requestTab.parameters[0].value = "message_body"
 			requestTab.parameters[0].name = "text"
 		then:
+			nextTab(apiTab)
 			nextTab(keywordTab)
 		when:
 			keywordTab.keyword = "SENDME"
@@ -90,7 +92,8 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			requestTab.parameters[1].name = "contact"
 			next.click()
 		then:
-			waitFor { keywordTab.displayed }
+			nextTab('apiTab')
+			nextTab('keywordTab')
 		when:
 			keywordTab.keyword = "SENDME"
 			nextTab(confirmTab)
@@ -178,12 +181,16 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 
 		requestTab.url = "http://www.myurl.com"
 
+		nextTab(apiTab)
+		if(tabName == 'api') return;
+
+
 		nextTab(keywordTab)
 		if(tabName == 'keyword') return;
 
 		keywordTab.useKeyword('disabled').jquery.click() // disable keyword
-
 		nextTab(confirmTab)
+
 		if(tabName == 'confirm') return;
 	}
 

@@ -337,7 +337,7 @@ class CoreBootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET)
+		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET, apiEnabled: true, secret: "shh")
 			.addToKeywords(value:'FORWARD')
 			.addToKeywords(value:'UPLOAD')
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
