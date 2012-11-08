@@ -344,7 +344,8 @@ class WebconnectionRequestFormatTab extends geb.Module {
 class WebconnectionAPITab extends geb.Module {
 	static base = { $('div#webconnection-api') }
 	static content = {
-		
+		enableApi { $("#enableApi") }
+		secret { $("#secret") }
 	}
 }
 

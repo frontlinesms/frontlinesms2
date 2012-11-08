@@ -20,8 +20,8 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		given:
 			startAtTab('request')
 		when:
-			requestTab.post.click()
 			requestTab.url = "http://www.myurl.com"
+			requestTab.get.click()
 			requestTab.parameters[0].name = "text"
 			requestTab.parameters[0].value = "message_body"
 		then:
@@ -41,7 +41,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			startAtTab('request')
 		when:
 			requestTab.url = "http://www.myurl.com"
-			requestTab.get.click()
+			requestTab.post.click()
 			requestTab.parameters[0].value = "message_body"
 			requestTab.parameters[0].name = "text"
 		then:
@@ -90,20 +90,21 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		when:
 			requestTab.parameters[1].value = "contact_name"
 			requestTab.parameters[1].name = "contact"
-			next.click()
 		then:
-			nextTab('apiTab')
-			nextTab('keywordTab')
+			nextTab(apiTab)
+			nextTab(keywordTab)
 		when:
 			keywordTab.keyword = "SENDME"
 			nextTab(confirmTab)
 			previousTab(keywordTab)
+			previousTab(apiTab)
 			previousTab(requestTab)
 			requestTab.parameters[0].remove.click()
 		then:
 			waitFor { requestTab.parameters.size() == 1 }
 			requestTab.parameters[0].value.jquery.val() == "contact_name"
 		when:
+			nextTab(apiTab)
 			nextTab(keywordTab)
 			nextTab(confirmTab)
 			confirmTab.name = "my ext cmd"
@@ -163,6 +164,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			apiTab.secret = 'spray-on-shoes'
 		then:
 			nextTab keywordTab
+			keywordTab.useKeyword('disabled').jquery.click() // disable keyword
 			nextTab confirmTab
 		when:
 			confirmTab.name = 'random webconnection'
