@@ -1,5 +1,5 @@
 <meta name="layout" content="popup"/>
-<fsms:wizard url="[action:'save', controller:'autoforward', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]" name="create_autoforward" method="post" onSuccess="checkForSuccessfulSave(data, i18n('autoreply.label'))"
+<fsms:wizard url="[action:'save', controller:'autoforward', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]" name="create_autoforward" method="post" onSuccess="checkForSuccessfulSave(data, i18n('autoforward.label'))"
 		verticalTabs="autoforward.create.message,
 				activity.generic.sorting,
 				autoforward.recipients,
