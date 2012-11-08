@@ -7,7 +7,10 @@ import spock.lang.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 
+import grails.buildtestdata.mixin.Build
+
 @TestFor(WebconnectionService)
+@Build([Group, SmartGroup, Contact])
 class WebconnectionServiceSpec extends Specification {
 	def requestedId
 	def mockConnection
@@ -38,6 +41,99 @@ class WebconnectionServiceSpec extends Specification {
 		then:
 			requestedId == '123'
 			1 * mockConnection.postProcess(x)
+	}
+
+	def 'apiProcess should reject a send request without message or recipients'() {
+		given:
+			def controller = Mock(ApiController)
+			controller.request >> [JSON:requestBody]
+		when:
+			def responseBody = service.apiProcess(controller)
+		then:
+			1 * controller.sendError(400)
+			responseBody == expectedResponse
+		where:
+			requestBody                         | expectedResponse
+			[]                                  | [reason:'missing required field(s): message, recipients']
+			[message:'asdf']                    | [reason:'missing required field(s): recipients']
+			[recipients:[[type:'group', id:1]]] | [reason:'missing required field(s): message']
+			[message:'asdf', recipients:[]]     | [reason:'no recipients supplied']
+	}
+
+	def 'apiProcess should trigger messages to groups referenced by ID or name'() {
+		given:
+			def testGroups = [Group.build(name:'a'), Group.build(name:'b')]
+			def controller = Mock(ApiController)
+			controller.request >> [JSON:requestBody]
+			def messageSendService = Mock(MessageSendService)
+			def m = Mock(Fmessage)
+			messageSendService.createOutgoingMessage(_) >> m
+			service.messageSendService = messageSendService
+		when:
+			service.apiProcess(controller)
+		then:
+			1 * messageSendService.createOutgoingMessage([groups:testGroups])
+			1 * messageSendService.send(m)
+		where:
+			requestBody << [[[type:'group', id:1], [type:'group', id:2]],
+					[[type:'group', name:'a'], [type:'group', name:'b']]]
+	}
+
+	def 'apiProcess should trigger messages to smartGroups referenced by ID or name'() {
+		given:
+			def testGroups = [SmartGroup.build(name:'a'), SmartGroup.build(name:'b')]
+			def controller = Mock(ApiController)
+			controller.request >> [JSON:requestBody]
+			def messageSendService = Mock(MessageSendService)
+			def m = Mock(Fmessage)
+			messageSendService.createOutgoingMessage(_) >> m
+			service.messageSendService = messageSendService
+		when:
+			service.apiProcess(controller)
+		then:
+			1 * messageSendService.createOutgoingMessage([groups:testGroups])
+			1 * messageSendService.send(m)
+		where:
+			requestBody << [[[type:'smartgroup', id:1], [type:'smartgroup', id:2]],
+					[[type:'smartgroup', name:'a'], [type:'smartgroup', name:'b']]]
+	}
+
+	def 'apiProcess should trigger messages to contacts referenced by ID or name'() {
+		given:
+			def testContacts = [Contact.build(name:'a'), Contact.build(name:'b')]
+			def controller = Mock(ApiController)
+			controller.request >> [JSON:requestBody]
+			def messageSendService = Mock(MessageSendService)
+			def m = Mock(Fmessage)
+			messageSendService.createOutgoingMessage(_) >> m
+			service.messageSendService = messageSendService
+		when:
+			service.apiProcess(controller)
+		then:
+			1 * messageSendService.createOutgoingMessage([contacts:testContacts])
+			1 * messageSendService.send(m)
+		where:
+			requestBody << [[[type:'contact', id:1], [type:'contact', id:2]],
+					[[type:'contact', name:'a'], [type:'contact', name:'b']]]
+	}
+
+	def 'apiProcess should trigger messages to explicitly listed addresses'() {
+		given:
+			def controller = Mock(ApiController)
+			controller.request >> [JSON:requestBody]
+			def messageSendService = Mock(MessageSendService)
+			def m = Mock(Fmessage)
+			messageSendService.createOutgoingMessage(_) >> m
+			service.messageSendService = messageSendService
+		when:
+			service.apiProcess(controller)
+		then:
+			1 * messageSendService.createOutgoingMessage([addresses:expectedAddresses])
+			1 * messageSendService.send(m)
+		where:
+			requestBody                                                           | expectedAddresses
+			[[type:'address', value:'+123457890']]                                | ['+123457890']
+			[[type:'address', value:'+123457890'], [type:'address', value:'213']] | ['+123457890', '213']
 	}
 
 	Exchange mockExchange(body, Map headers) {

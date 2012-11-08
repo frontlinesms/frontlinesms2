@@ -3,7 +3,8 @@ package frontlinesms2
 import frontlinesms2.*
 import org.apache.camel.*
 
-class WebconnectionService{
+class WebconnectionService {
+	def messageSendService
 
 	def preProcess(Exchange x) {
 		println "x: ${x}"
@@ -51,4 +52,8 @@ class WebconnectionService{
 		webconnectionInstance.save(flush:true, failOnError:true)
 		return webconnectionInstance
 	}
+
+	def apiProcess(controller) {
+	}
 }
+
