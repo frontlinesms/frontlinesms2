@@ -8,9 +8,9 @@ class UshahidiWebconnection extends Webconnection {
 	}
 
 	def initialize(params) {
-		this.addToRequestParameters(new RequestParameter(name:"s", value:'${message_src_number}'))
-		this.addToRequestParameters(new RequestParameter(name:"m", value:'${message_body}'))
-		this.addToRequestParameters(new RequestParameter(name:"key", value:params.key))
+		this.addToRequestParameters(name:"s", value:'${message_src_number}')
+		this.addToRequestParameters(name:"m", value:'${message_body}')
+		this.addToRequestParameters(name:"key", value:params.key)
 		//TODO Test for urls which end with /
 		this.url = params.url
 		this.httpMethod = Webconnection.HttpMethod.GET

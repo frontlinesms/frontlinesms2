@@ -136,11 +136,6 @@ abstract class Webconnection extends Activity {
 		log.info "Web Connection Response::\n ${x.in.body}"
 	}
 
-	private def addRequestParameter(name, value) {
-		def requestParam = new RequestParameter(name:name, value:value)
-		this.addToRequestParameters(requestParam)
-	}
-
 	private String urlEncode(String s) throws UnsupportedEncodingException {
 		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
 		return URLEncoder.encode(s, "UTF-8");
