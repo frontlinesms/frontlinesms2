@@ -7,7 +7,10 @@ import spock.lang.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 
+import grails.buildtestdata.mixin.Build
+
 @TestFor(WebconnectionService)
+@Build([Group, SmartGroup, Contact])
 class WebconnectionServiceSpec extends Specification {
 	def requestedId
 	def mockConnection
@@ -59,7 +62,7 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'apiProcess should trigger messages to groups referenced by ID or name'() {
 		given:
-			testGroups = [Group.build(name:'a'), Group.build(name:'b')]
+			def testGroups = [Group.build(name:'a'), Group.build(name:'b')]
 			def controller = Mock(ApiController)
 			controller.request >> [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
@@ -78,7 +81,7 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'apiProcess should trigger messages to smartGroups referenced by ID or name'() {
 		given:
-			testGroups = [SmartGroup.build(name:'a'), SmartGroup.build(name:'b')]
+			def testGroups = [SmartGroup.build(name:'a'), SmartGroup.build(name:'b')]
 			def controller = Mock(ApiController)
 			controller.request >> [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
@@ -97,7 +100,7 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'apiProcess should trigger messages to contacts referenced by ID or name'() {
 		given:
-			testContacts = [Contact.build(name:'a'), Contact.build(name:'b')]
+			def testContacts = [Contact.build(name:'a'), Contact.build(name:'b')]
 			def controller = Mock(ApiController)
 			controller.request >> [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
