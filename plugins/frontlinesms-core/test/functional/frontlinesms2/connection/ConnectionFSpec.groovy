@@ -137,6 +137,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'each connection type in the list has a description under its name'() {
 		when:
 			launchCreateWizard()
+			at ConnectionDialog
 		then:
 			basicInfo("smslib") == "Connect to USB, serial and bluetooth modems or phones"
 			basicInfo("smssync") == "Use an Android phone with the Smssync app installed to send and receive SMS with FrontlineSMS"
