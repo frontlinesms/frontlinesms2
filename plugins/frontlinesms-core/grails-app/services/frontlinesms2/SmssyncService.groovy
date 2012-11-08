@@ -30,6 +30,7 @@ class SmssyncService {
 			if(connection.secret) payload = [secret:connection.secret] + payload
 			return [payload:payload]
 		} catch(FrontlineApiException ex) {
+// FIXME should send a non-200 status code here
 			return failure(ex)
 		}
 	}
