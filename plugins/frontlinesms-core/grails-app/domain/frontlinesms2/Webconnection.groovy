@@ -147,17 +147,6 @@ abstract class Webconnection extends Activity {
 		log.info "Web Connection Response::\n ${x.in.body}"
 	}
 
-	private def processRequestParameters(params) {
-		def paramsName = params.'param-name'
-		def paramsValue = params.'param-value'
-		this.requestParameters?.clear()
-		if(paramsName instanceof String[]) {
-			paramsName?.size()?.times {
-				addRequestParameter(paramsName[it], paramsValue[it])
-			}
-		} else { if(paramsName) addRequestParameter(paramsName, paramsValue)}
-	}
-
 	private def addRequestParameter(name, value) {
 		def requestParam = new RequestParameter(name:name, value:value)
 		this.addToRequestParameters(requestParam)
