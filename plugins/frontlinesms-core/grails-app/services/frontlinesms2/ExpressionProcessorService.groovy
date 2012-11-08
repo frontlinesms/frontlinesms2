@@ -44,10 +44,25 @@ class ExpressionProcessorService {
 	}
 
 	private getReplacement(expression, dispatch) {
-		if (expression == "\${contact_name}")
-			return Contact.findByMobileLike(dispatch.dst)? Contact.findByMobileLike(dispatch.dst).name : dispatch.dst
-		if (expression == "\${contact_number}")
+		def incomingMessage = Fmessage.get(dispatch.message.ownerDetail)
+		if (expression == "\${message_text}"){
+			def keyword = incomingMessage.messageOwner?.keywords?.find{ incomingMessage.text.toUpperCase().startsWith(it.value) }?.value
+			def text = incomingMessage.text
+			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
+				text = text.substring(keyword.size()).trim()
+			}
+			return text
+		}
+		if (expression == "\${message_text_with_keyword}")
+			return incomingMessage.text
+		if (expression == "\${sender_number}")
+			return incomingMessage.src
+		if (expression == "\${sender_name}")
+			return Contact.findByMobileLike(incomingMessage.src)? Contact.findByMobileLike(incomingMessage.src).name : incomingMessage.src
+		if (expression == "\${recipient_number}")
 			return dispatch.dst
+		if (expression == "\${recipient_name}")
+			return Contact.findByMobileLike(dispatch.dst)? Contact.findByMobileLike(dispatch.dst).name : dispatch.dst
 		return ""
 	}
 

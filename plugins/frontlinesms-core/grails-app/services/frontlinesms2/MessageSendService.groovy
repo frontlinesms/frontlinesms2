@@ -36,7 +36,7 @@ class MessageSendService {
 		return message
 	}
 
-	private def getAddressesForContacts(List contacts) {
+	private def getAddressesForContacts(contacts) {
 		if(contacts) contacts*.mobile
 	}
 
