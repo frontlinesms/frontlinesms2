@@ -4,8 +4,6 @@
     color: #666666;
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 1em;
-/*    height: 300px;
-    width: 400px;*/
 }
 
 /*rules applied to all axes*/
@@ -36,46 +34,20 @@
     white-space: pre;
 }
 
-
-.jqplot-xaxis-tick {
-    top: 0px;
-    /* initial position untill tick is drawn in proper place */
-    left: 15px;
-/*    padding-top: 10px;*/
-    vertical-align: top;
-}
-
-.jqplot-x2axis-tick {
-    bottom: 0px;
-    /* initial position untill tick is drawn in proper place */
-    left: 15px;
-/*    padding-bottom: 10px;*/
-    vertical-align: bottom;
-}
-
-.jqplot-yaxis-tick {
-    right: 0px;
-    /* initial position untill tick is drawn in proper place */
-    top: 15px;
-/*    padding-right: 10px;*/
-    text-align: right;
-}
-
+.jqplot-xaxis-tick { top:0; left:15px; vertical-align:top; }
+.jqplot-x2axis-tick { bottom:0; left:15px; vertical-align:bottom; }
+.jqplot-yaxis-tick { right:0; top:15px; text-align:right; }
 .jqplot-yaxis-tick.jqplot-breakTick {
 	right: -20px;
 	margin-right: 0px;
 	padding:1px 5px 1px 5px;
-/*	background-color: white;*/
 	z-index: 2;
 	font-size: 1.5em;
 }
 
 .jqplot-y2axis-tick, .jqplot-y3axis-tick, .jqplot-y4axis-tick, .jqplot-y5axis-tick, .jqplot-y6axis-tick, .jqplot-y7axis-tick, .jqplot-y8axis-tick, .jqplot-y9axis-tick {
-    left: 0px;
-    /* initial position untill tick is drawn in proper place */
+    left: 0;
     top: 15px;
-/*    padding-left: 10px;*/
-/*    padding-right: 15px;*/
     text-align: left;
 }
 
@@ -143,22 +115,6 @@ td.jqplot-table-legend {
     vertical-align:middle;
 }
 
-/*
-These rules could be used instead of assigning
-element styles and relying on js object properties.
-*/
-
-/*
-td.jqplot-table-legend-swatch {
-    padding-top: 0.5em;
-    text-align: center;
-}
-
-tr.jqplot-table-legend:first td.jqplot-table-legend-swatch {
-    padding-top: 0px;
-}
-*/
-
 td.jqplot-seriesToggle:hover, td.jqplot-seriesToggle:active {
     cursor: pointer;
 }
@@ -173,8 +129,8 @@ div.jqplot-table-legend-swatch-outline {
 }
 
 div.jqplot-table-legend-swatch {
-    width:0px;
-    height:0px;
+    width:0;
+    height:0;
     border-top-width: 5px;
     border-bottom-width: 5px;
     border-left-width: 6px;
@@ -186,8 +142,8 @@ div.jqplot-table-legend-swatch {
 }
 
 .jqplot-title {
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     padding-bottom: 0.5em;
     font-size: 1.2em;
 }
