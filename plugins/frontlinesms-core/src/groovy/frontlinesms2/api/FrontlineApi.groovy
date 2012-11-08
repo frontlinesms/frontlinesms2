@@ -10,5 +10,6 @@ interface FrontlineApi {
 	String getSecret();
 	def apiProcess(controller);
 	boolean isApiEnabled();
+	Long getId();
 }
 

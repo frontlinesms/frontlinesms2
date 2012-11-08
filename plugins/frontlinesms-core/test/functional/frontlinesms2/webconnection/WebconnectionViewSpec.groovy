@@ -29,17 +29,17 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			'url'       | 'http://www.frontlinesms.com/sync'
 			'sendMethod'| 'get'
 			'subtitle'  | 'http web connection'
-			'api'       | '(disabled)'
+			'api'       | '(api disabled)'
 	}
 
 	@Unroll
 	def 'Webconnection page should show API url, excluding secret, iff API is enabled'() {
 		setup:
-			def c = Webconnection.build(apiEnabled:true, secret:secret)
+			def c = GenericWebconnection.build(apiEnabled:true, secret:secret)
 		when:
 			to PageMessageWebconnection, c
 		then:
-			header.api.endsWith "/api/webconnection/$c.id"
+			header.api.endsWith "/api/1/webconnection/$c.id/"
 		where:
 			secret << [null, 'imagine']
 	}
