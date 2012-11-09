@@ -5,10 +5,19 @@ import spock.lang.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Autoforward)
-@Mock([Keyword, SmartGroup, Group, Contact])
+@Mock([Keyword, SmartGroup, Group, Contact, Fmessage, MessageSendService])
 @Build([Contact, Autoforward])
 class AutoforwardSpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
+	
+	def setup() {
+		// Not sure why this is necessary with Test Mixins, but it seems to be:
+		Autoforward.metaClass.addToMessages = { m ->
+			if(delegate.messages) delegate.messages << m
+			else delegate.messages = [m]
+			return delegate
+		}
+	}
 
 	@Unroll
 	def "Test Constraints"() {
@@ -79,6 +88,20 @@ class AutoforwardSpec extends Specification {
 			12                     | 2        | 0      | 0            | 5           | 2
 			22                     | 2        | 2      | 5            | 5           | 2
 	}
+@spock.lang.IgnoreRest
+	def "the outgoing message created by processKeyword should have the owner detail set to the id of the triggering incoming message"() {
+		setup:
+			def outgoigMessage = mockFmessage("text","23423")
+			def autoforward = Autoforward.build(contacts:[Contact.build(mobile:TEST_NUMBER)], sentMessageText:'some forward text')
+			def sendService = Mock(MessageSendService)
+			sendService.createOutgoingMessage([contacts:autoforward.contacts, groups:autoforward.groups?:[] + autoforward.smartGroups?:[], messageText:autoforward.sentMessageText]) >> { println "I was called here as well"; outgoigMessage }
+			autoforward.messageSendService = sendService
+			def inMessage = mockFmessage("message text", '+123457890', "nully")
+		when:	
+			autoforward.processKeyword(inMessage, Mock(Keyword))
+		then:
+			1 * outgoigMessage.setOwnerDetail(_)
+	}
 
 	private def mockContact() { Contact.build() }
 
@@ -104,10 +127,12 @@ class AutoforwardSpec extends Specification {
 		return g
 	}
 
-	private def mockFmessage(String messageText, String src=null) {
+	private def mockFmessage(String messageText, String src=null, String ownerDetail=null) {
 		Fmessage m = Mock()
+		m.id >> 1
 		m.text >> messageText
 		m.src >> src
+		m.setOwnerDetail >> ownerDetail
 		return m
 	}
 }

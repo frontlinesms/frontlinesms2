@@ -29,7 +29,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			'title'      | "news autoforward"
 			'message'    | 'Message is message text'
 			'keywords'   | 'Keywords : BREAKING,ALERT'
-			'recipients' | 'Currently 100 recipients'
+			'recipients' | 'Currently 10 recipients'
 	}
 
 	def "clicking the edit option opens the Autoforward Dialog for editing"() {

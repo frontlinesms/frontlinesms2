@@ -34,11 +34,14 @@ class Autoforward extends Activity {
 
 //> PROCESS METHODS
 	def processKeyword(Fmessage message, Keyword matchedKeyword) {
+		println "#####Mocked OwnerDetail ## $message.ownerDetail"
+		println "#####Mocked id ## $message.id"
 		def m = messageSendService.createOutgoingMessage([contacts:contacts, groups:groups?:[] + smartGroups?:[], messageText:sentMessageText])
+		println "#####Mocked OutgoingMessage ## $m.id"
 		m.ownerDetail = message.id
 		this.addToMessages(m)
 		m.save(failOnError:true)
-		println "############# OwnerDetail ## $m ####### $m.ownerDetail"
+		println "############# OwnerDetail of OutgoingMessage ## $m ####### $m.ownerDetail"
 		messageSendService.send(m)
 	}
 }
