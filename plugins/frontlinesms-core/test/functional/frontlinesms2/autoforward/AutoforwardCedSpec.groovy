@@ -160,6 +160,33 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			recipients.contactCheckboxesChecked*.value().containsAll((1..10).collect{ Contact.findByMobile(it).mobile })
 	}
 
+	def "comfirm page should have correct data listed" () {
+		given: 'Create Autoforward wizard is open'
+			createTestAutoforward()
+			launchAutoforwardPopup()
+		when: 'Message tab is open'
+			message.displayed
+			message.messageText.value('message to send')
+			next.click()
+			keyword.keywordText = 'Hello'
+			next.click()
+		then: 'Recipients tab should open'
+			recipients.displayed
+		when: 'a recipient is added'
+			recipients.addField.value('1234567890')
+			recipients.addButton.click()
+			recipients.selectContact('1')
+			recipients.selectContact('2')
+			next.click()
+		then: 'Confirm tab should open'
+			confirm.displayed
+			confirm.keywordConfirm == 'HELLO'
+			confirm.groups == ""
+			confirm.contacts.contains('generated-contact-1')
+			confirm.contacts.contains('generated-contact-2')
+			confirm.contacts.contains('1234567890')
+	}
+
 	def launchAutoforwardPopup(String tab = ''){
 		to PageMessageInbox
 			bodyMenu.newActivity.click()

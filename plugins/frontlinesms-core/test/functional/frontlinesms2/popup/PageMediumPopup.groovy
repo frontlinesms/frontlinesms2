@@ -564,6 +564,8 @@ class AutoforwardRecipientsTab extends geb.Module {
 		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
 		contactCheckboxesChecked { $('input:checked', type:'checkbox', name:'addresses') }
 		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
+		selectGroup {group-> $("input", name:"groups", value:"${group}").jquery.click() }
+		selectContact {contact-> $("input", name:"addresses", value:"${contact}").jquery.click() }
 	}
 }
 
@@ -572,8 +574,8 @@ class AutoforwardConfirmTab extends geb.Module {
 	static content = {
 		nameText {$("#name")}
 		keywordConfirm {$("#keyword-confirm").text()}
-		contacts {$("#contacts").text()}
-		group {$("#group").text()}
+		contacts {$("#autoforward-confirm-contacts").text()}
+		groups {$("#autoforward-confirm-groups").text()}
 		smartGroups {$("#smart-groups").text()}
 	}
 }

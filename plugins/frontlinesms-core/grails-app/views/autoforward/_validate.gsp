@@ -52,8 +52,13 @@
 		var regx = new RegExp("/\(\d+\)/", "g");
 		var autoforwardText = $('#messageText').val().htmlEncode();
 		var contactInputIds = $('input[name=addresses]:checked').map(function() { return this.id; });
-		var contactsList = contactInputIds.map(function(){ return $("label[for="+ this +"]").text(); });
-		var contacts = jQuery.makeArray(contactsList).join(', ');
+		var contactsList = contactInputIds.map(function(){
+			if($("label[for="+ this +"]").text().length > 0){
+				return $("label[for="+ this +"]").text();
+			}
+		});
+		var manualContactsList = $('li.manual.contact input').map(function() { return this.value; });
+		var contacts = jQuery.merge(jQuery.makeArray(manualContactsList), jQuery.makeArray(contactsList)).join(', ');
 
 		var groupInputIds = $('input[name=groups]:checked').map(function() { return this.id; });
 		var groupsList = groupInputIds.map(function(){ return $("label[for="+ this +"]").text() });
