@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+TARGET="$@"
+TEMP_JS=target/temp.js
+
+if [ -z "$TARGET" ]; then
+	TARGET=`find grails-app/views/ -name "*.gsp" -print`
+fi
+echo "# Will lint Javascript from $TARGET"
+
+echo "# Cleaning $TEMP_JS..."
+echo "// jslint_for_gsp run at `date`" > $TEMP_JS
+echo "# Cleaned $TEMP_JS."
+
+echo "# Extracting Javascript from GSP files..."
+for F in $TARGET; do
+	echo "# Linting $F..."
+	echo "// Starting javascript from file: $F" >> $TEMP_JS
+	sgrep '("<r:script".."</r:script>") or ("<g:javascript".."</g:javascript>") or ("<script".."</script>")' $F | grep -E -v "r:script|g:javascript|<script|</script>" >> $TEMP_JS || echo "# Apparently failed for $F (this message is probably harmless though)"
+	echo "// Finished javascript from file: $F" >> $TEMP_JS
+done
+echo "# done extracting javascript from GSPs."
+
