@@ -33,12 +33,12 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 		given:
 			WebconnectionService s = Mock()
 			def c = new GenericWebconnection()
-			c.webconnectionService = c
+			c.webconnectionService = s
 			def controller = [:]
 		when:
 			c.apiProcess(controller)
 		then:
-			1 * s.apiProcess(c, s)
+			1 * s.apiProcess(c, controller)
 	}
 }
 

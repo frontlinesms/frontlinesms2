@@ -165,6 +165,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	//> FrontlineAPI methods
 	def apiProcess(controller) {
 		//TODO: CORE-1639
+		webconnectionService.apiProcess(this, controller)
 	}
 }
 	

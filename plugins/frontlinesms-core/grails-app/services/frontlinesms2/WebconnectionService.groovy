@@ -53,7 +53,7 @@ class WebconnectionService {
 		return webconnectionInstance
 	}
 
-	def apiProcess(controller) {
+	def apiProcess(webcon, controller) {
 	}
 }
 
