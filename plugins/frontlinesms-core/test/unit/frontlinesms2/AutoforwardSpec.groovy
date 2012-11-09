@@ -88,20 +88,6 @@ class AutoforwardSpec extends Specification {
 			12                     | 2        | 0      | 0            | 5           | 2
 			22                     | 2        | 2      | 5            | 5           | 2
 	}
-@spock.lang.IgnoreRest
-	def "the outgoing message created by processKeyword should have the owner detail set to the id of the triggering incoming message"() {
-		setup:
-			def outgoigMessage = mockFmessage("text","23423")
-			def autoforward = Autoforward.build(contacts:[Contact.build(mobile:TEST_NUMBER)], sentMessageText:'some forward text')
-			def sendService = Mock(MessageSendService)
-			sendService.createOutgoingMessage([contacts:autoforward.contacts, groups:autoforward.groups?:[] + autoforward.smartGroups?:[], messageText:autoforward.sentMessageText]) >> { println "I was called here as well"; outgoigMessage }
-			autoforward.messageSendService = sendService
-			def inMessage = mockFmessage("message text", '+123457890', "nully")
-		when:	
-			autoforward.processKeyword(inMessage, Mock(Keyword))
-		then:
-			1 * outgoigMessage.setOwnerDetail(_)
-	}
 
 	private def mockContact() { Contact.build() }
 
