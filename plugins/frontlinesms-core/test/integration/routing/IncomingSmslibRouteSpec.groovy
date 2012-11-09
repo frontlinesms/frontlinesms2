@@ -32,6 +32,7 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			// wait for message to be read from mock serial device
 			while(mockPortHandler.receiveMessages) { sleep(100) }
 			sleep 1000
+			sessionFactory.currentSession.flush()
 		then:
 			def poll = Poll.findByName('What do you think of goo?')
 			def messages = Fmessage.findAll()
