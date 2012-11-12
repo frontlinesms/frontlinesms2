@@ -36,7 +36,7 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			sleep 3000
 		then:
 			def poll = Poll.findByName('What do you think of goo?')
-			def messages = Fmessage.findAll()
+			def messages = Fmessage.findAll()*.refresh()
 			messages.size() == 1
 			messages[0].text == 'Good morning'
 			messages[0].messageOwner == poll
