@@ -302,9 +302,10 @@ class CoreBootStrap {
 		}
 
 		def m = Fmessage.findByText("modem message")
-		def modem = SmslibFconnection.findByName("Geoffrey's Modem")
+		def modem = SmslibFconnection.list()[0]
 		modem.addToMessages(m)
 		modem.save(failOnError:true, flush:true)
+
 	}
 	
 	private def dev_initAnnouncements() {
