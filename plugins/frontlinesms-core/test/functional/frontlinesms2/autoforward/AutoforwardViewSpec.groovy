@@ -233,7 +233,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.messages.size() == 2 }
 	}
-	
+
 	def "clicking on the received message filter should display incoming messages only"() {
 		given:
 			def a = createInAndOutTestMessages()
@@ -248,14 +248,15 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 	}
 
 	private Autoforward createInAndOutTestMessages() {
-		Autoforward a = Autoforward.build(name:'Vegetables',contacts:[new Contact(name:"name")])
+		def a = new Autoforward(name:"Vegetables")
+		a.addToContacts(new Contact(name:"name"))
+		a.addToKeywords(value:"VEGS")
+		a.sentMessageText = 'Message is \${message_text}'
 		3.times { a.addToMessages(Fmessage.build()) }
 		2.times {
-			def sentMessage = Fmessage.buildWithoutSave(inbound:false)
+			def sentMessage = new Fmessage(text:'this is a sent message',inbound:false)
 			sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
-			sentMessage.save(failOnError:true, flush:true)
 			a.addToMessages(sentMessage) }
-		a.save(failOnError:true, flush:true)
-		return a
+		a.save(flush:true, failOnError:true)
 	}
 }
