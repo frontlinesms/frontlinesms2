@@ -36,7 +36,7 @@
 	function initializePopup() {
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				updateMessageCount();
+				updateRecipientCount();
 				return true;
 			}
 		});
