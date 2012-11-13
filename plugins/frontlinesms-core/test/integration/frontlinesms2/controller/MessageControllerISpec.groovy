@@ -220,8 +220,24 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			m3.messageOwner == announcement2
 	}
 
+	def 'move action should reset message.ownerDetail'() {
+		given:
+			def webConnection =  GenericWebconnection.build()
+			def announcement = Announcement.build()
+			def message = Fmessage.build(ownerDetail:'ownerdetail-pending')
+			webConnection.addToMessages(message)
+			webConnection.save(failOnError:true, flush:true)
+		when:
+			controller.params.messageId = message.id
+			controller.params.ownerId = announcement.id
+			controller.params.messageSection = 'activity'
+			controller.move()
+		then:
+			message.messageOwner.id == announcement.id
+			message.ownerDetail != 'ownerdetail-pending'
+	}
+
 	private Date createDate(String dateAsString) {
 		new SimpleDateFormat("yyyy/MM/dd").parse(dateAsString)
 	}
 }
-

@@ -47,10 +47,10 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.format = 'html'
 			
 		when:
-			def model = controller.save()
-			
+			controller.save()
+
 		then: 'the auto reply has been updated'
-			def autoreply = Autoreply.get(model.ownerId)
+			def autoreply = Autoreply.findByName(name)
 			autoreply.name == name
 			autoreply.keywords[0].value == finalKeyword
 			autoreply.autoreplyText == autoreplyText
@@ -74,9 +74,9 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.format = 'html'
 			controller.params.sorting = "enabled"
 		when:
-			def model = controller.save()
+			controller.save()
 		then:
-			def autoreply = Autoreply.get(model.ownerId)
+			def autoreply = Autoreply.findByName("Fruit")
 			autoreply.autoreplyText == 'Some Text'
 			autoreply.keywords?.size() == 3
 			autoreply.keywords[0].value == 'MANGO'
@@ -98,11 +98,9 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.format = 'html'
 			controller.params.sorting = "enabled"
 		when:
-			def model = controller.save()
-			println "MODEL::: $model"
-			def autoreply = Autoreply.get(model?.ownerId)
+			controller.save()
 		then: 'the auto reply has been updated'
-			autoreply != null
+			def autoreply = Autoreply.findByName("Matunda")
 			autoreply.name == "Matunda"
 			autoreply.keywords[0].value == "APPLE"
 			autoreply.keywords[1].value == "STRAWBERRY"
@@ -125,11 +123,9 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.format = 'html'
 			controller.params.sorting = "enabled"
 		when:
-			def model = controller.save()
-			println "MODEL::: $model"
-			def autoreply = Autoreply.get(model?.ownerId)
+			controller.save()
 		then: 'the auto reply has been updated'
-			autoreply != null
+			def autoreply = Autoreply.findByName("Matunda")
 			autoreply.name == "Matunda"
 			autoreply.keywords[0].value == "MANGO"
 			autoreply.keywords[1].value == "BANANA"
@@ -166,9 +162,9 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.format = 'html'
 			controller.params.sorting = "global"
 		when:
-			def model = controller.save()
+			controller.save()
 		then:
-			def autoreply = Autoreply.get(model.ownerId)
+			def autoreply = Autoreply.findByName("Fruit")
 			autoreply.autoreplyText == 'Some Text'
 			autoreply.keywords?.size() == 1
 			autoreply.keywords[0].value == ''
@@ -182,9 +178,9 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.format = 'html'
 			controller.params.sorting = "disabled"
 		when:
-			def model = controller.save()
+			controller.save()
 		then:
-			def autoreply = Autoreply.get(model.ownerId)
+			def autoreply = Autoreply.findByName("Fruit")
 			autoreply.autoreplyText == 'Some Text'
 			autoreply.keywords == null
 	}

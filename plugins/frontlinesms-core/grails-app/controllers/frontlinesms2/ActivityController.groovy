@@ -28,8 +28,6 @@ class ActivityController {
 		}
 	}
 
-	// TODO: if we implement a save() action, call Activity.activate() and Activity.deactivate() appropriately
-	
 	def rename() {}
 	
 	def update() {
@@ -123,6 +121,39 @@ class ActivityController {
 		}
 		println "colliding keywords:: $collidingKeywords"
 		return collidingKeywords
+	}
+
+	protected void doSave(classShortname, service, instance) {
+		try {
+			service.saveInstance(instance, params)
+			instance.activate()
+			flash.message = message(code:classShortname + '.saved')
+			params.activityId = instance.id
+			withFormat {
+				json { render([ok:true, ownerId:instance.id] as JSON) }
+				html { [ownerId:instance.id] }
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace()
+			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords)
+			def errors
+			if (collidingKeywords) {
+				errors = collidingKeywords.collect {
+					if(it.key == '') {
+						message(code:'activity.generic.global.keyword.in.use', args:[it.value])
+					} else {
+						message(code:'activity.generic.keyword.in.use', args:[it.key, it.value])
+					}
+				}.join('\n')
+			} else {
+				errors = instance.errors.allErrors.collect {
+					message(code:it.codes[0], args:it.arguments.flatten(), defaultMessage:it.defaultMessage)
+				}.join('\n')
+			}
+			withFormat {
+				json { render([ok:false, text:errors] as JSON) }
+			}
+		}
 	}
 	
 	private def withActivity(Closure c) {

@@ -12,17 +12,18 @@ while [[ $1 == "--"* ]]; do
 	shift
 done
 
-echo "Flags to pass directly to jslint: $EXTRA_FLAGS"
-echo "Other args: $@"
+echo "# Flags to pass directly to jslint: $EXTRA_FLAGS"
+echo "# Other args: $@"
 
 # check spidermonkey is installed
-jslint || echo "Please install jslint"
+jslint || echo "# Please install jslint"
 
 # check that jslint is available in temp
 
 # run jslint
 if [ -z "$@" ]; then
-	FILES=`find web-app/js/ -name "*.js" | grep -v jqplot | grep -v jquery`
+	do/extract_js_from_gsps
+	FILES=`find web-app/js/ -name "*.js" | grep -v jqplot | grep -v jquery` " target/temp.js"
 else
 	FILES="$@"
 fi

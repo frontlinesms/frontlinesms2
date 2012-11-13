@@ -25,5 +25,6 @@
 		$("#confirm-url").html('<p>' + $("input[name=url]").val()  + '</p>');
 		$("#confirm-key").html('<p>' + $("input[name=key]").val()  + '</p>');
 		$("#confirm-keyword").html('<p>' + keyword  + '</p>');
-	}
+	},
+	handlers: {}
 }

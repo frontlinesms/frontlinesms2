@@ -53,6 +53,10 @@ abstract class Activity extends MessageOwner {
 
 	def processKeyword(Fmessage message, Keyword match) {}
 
+	/**
+	 * Activcate this activity.  If it is already activated, this method should
+	 * deactivate it and then reactivate it.
+	 */
 	def activate() {}
 
 	def deactivate() {}

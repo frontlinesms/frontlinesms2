@@ -1,0 +1,16 @@
+#!/bin/bash
+TEST_PHASE=$1
+INFECTED_TEST=$2
+echo "# Detecting test polution for $INFECTED_TEST..."
+echo "# test phase: $TEST_PHASE"
+
+TEST_LIST=`grep testsuite target/test-reports/TESTS-TestSuites.xml | grep -v testsuites | cut -d\  -f8-9 | sed -E 's/name="(.*)" package="(.*)"/\2.\1/' | grep .`
+echo "# Running over test list $TEST_LIST"
+
+TEST_ORDER_FILE=target/bisect_test_order
+echo "# Outputting test order list to $TEST_ORDER_FILE..."
+echo $TEST_LIST > $TEST_ORDER_FILE
+
+echo "# running bisection..."
+groovy do/bisectGrailsTests --testOrderFilePath=$TEST_ORDER_FILE --pollutedTest=$INFECTED_TEST --testPhase=$TEST_PHASE
+

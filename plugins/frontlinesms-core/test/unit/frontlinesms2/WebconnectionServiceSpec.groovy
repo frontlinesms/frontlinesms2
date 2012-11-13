@@ -16,6 +16,9 @@ class WebconnectionServiceSpec extends Specification {
 			requestedId = id
 			return mockConnection
 		}
+		Fmessage.metaClass.static.get = { Serializable id ->
+			return Mock(Fmessage)
+		}
 	}
 
 	def 'preprocess call is handed back to the relevant domain object'() {
@@ -30,7 +33,7 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'postprocess call is handed back to the relevant domain object'() {
 		given:
-			def x = mockExchange(null, ['webconnection-id':'123'])
+			def x = mockExchange(null, ['webconnection-id':'123','fmessage-id':'1'])
 		when:
 			service.postProcess(x)
 		then:

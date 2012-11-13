@@ -7,10 +7,14 @@ import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
 abstract class Webconnection extends Activity {
+	static final String OWNERDETAIL_SUCCESS = 'success'
+	static final String OWNERDETAIL_PENDING = 'pending'
+	static final String OWNERDETAIL_FAILED = 'failed'
+
 	def camelContext
 	def webconnectionService
 	enum HttpMethod { POST, GET }
-	static String getShortName() { 'webconnection' }
+	static String shortName = 'webconnection'
 	static String getType() { '' }
 	static def implementations = [UshahidiWebconnection, 
 			GenericWebconnection]
@@ -44,8 +48,8 @@ abstract class Webconnection extends Activity {
 			if(obj?.deleted || obj?.archived) return true
 			def identical = Webconnection.findAllByNameIlike(val)
 			if(!identical) return true
-			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
-			else return true
+			if (identical.any { it.id != obj.id && !it.archived && !it.deleted }) return false
+			return true
 			})
 	}
 	static mapping = {
@@ -65,8 +69,7 @@ abstract class Webconnection extends Activity {
 			List getRouteDefinitions() {
 				return [from("seda:activity-webconnection-${Webconnection.this.id}")
 						.beanRef('webconnectionService', 'preProcess')
-						.setHeader(Exchange.HTTP_PATH,
-								simple('${header.url}'))
+						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
 						.onException(Exception)
 									.redeliveryDelay(initialRetryDelay)
 									.backOffMultiplier(delayMultiplier)
@@ -83,6 +86,12 @@ abstract class Webconnection extends Activity {
 	}
 
 	def activate() {
+		try {
+			deactivate()
+		} catch(Exception ex) {
+			log.info("Exception thrown while deactivating webconnection '$name'", ex)
+		}
+
 		println "*** ACTIVATING ACTIVITY ***"
 		try {
 			def routes = this.routeDefinitions
@@ -116,40 +125,26 @@ abstract class Webconnection extends Activity {
 			urlEncode(it.name) + '=' + urlEncode(it.getProcessedValue(fmessage))
 		}.join('&')
 		println "PARAMS:::$encodedParameters"
-
-		x.out.headers[Exchange.HTTP_METHOD] = this.httpMethod
+		x.in.headers[Exchange.HTTP_PATH] = this.url
+		x.in.headers[Exchange.HTTP_METHOD] = this.httpMethod
 		switch(this.httpMethod) {
 			case 'GET':
-				x.out.headers[Exchange.HTTP_QUERY] = encodedParameters
+				x.in.headers[Exchange.HTTP_QUERY] = encodedParameters
 				break;
 			case 'POST':
-				x.out.body = encodedParameters
-				x.out.headers[Exchange.CONTENT_TYPE] = 'application/x-www-form-urlencoded'
+				x.in.body = encodedParameters
+				x.in.headers[Exchange.CONTENT_TYPE] = 'application/x-www-form-urlencoded'
 				break;
 		}
-		println "x.out.headers = $x.out.headers"
-		println "x.out.body = $x.out.body"
+		println "# Exchange after adding other headers in the Webconnection.preProcess()"
+		println "x.in.headers = $x.in.headers"
+		println "x.in.body = $x.in.body"
 	}
 
 	def postProcess(Exchange x) {
+		println "###### Webconnection.postProcess() with Exchange # ${x}"
 		println "Web Connection Response::\n ${x.in.body}"
 		log.info "Web Connection Response::\n ${x.in.body}"
-	}
-
-	private def processRequestParameters(params) {
-		def paramsName = params.'param-name'
-		def paramsValue = params.'param-value'
-		this.requestParameters?.clear()
-		if(paramsName instanceof String[]) {
-			paramsName?.size()?.times {
-				addRequestParameter(paramsName[it], paramsValue[it])
-			}
-		} else { if(paramsName) addRequestParameter(paramsName, paramsValue)}
-	}
-
-	private def addRequestParameter(name, value) {
-		def requestParam = new RequestParameter(name:name, value:value)
-		this.addToRequestParameters(requestParam)
 	}
 
 	private String urlEncode(String s) throws UnsupportedEncodingException {
