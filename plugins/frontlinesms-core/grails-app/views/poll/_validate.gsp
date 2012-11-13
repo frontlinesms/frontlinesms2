@@ -104,9 +104,9 @@
 			if(!isGroupChecked('dontSendMessage')) {
 				var valid = false;
 				addAddressHandler();
-				valid = $('input[name=addresses]:checked').length > 0;
+				valid = $("#recipient-count").html() > 0;
 				var addressListener = function() {
-					if($('input[name=addresses]:checked').length > 0) {
+					if($("#recipient-count").html() > 0) {
 						validator.element($('#contacts').find("input[name=addresses]"));
 						$('#recipients-list').removeClass("error");
 						$(".error").hide();

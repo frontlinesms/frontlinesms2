@@ -142,6 +142,8 @@
 			mobileNumbersArray = $('#mobileNumbers').val().split(',');
 		}
 		var contactCount = mobileNumbersArray? mobileNumbersArray.length:0 ;
+		$('#contacts-count').html(contactCount);
+		$('#messages-count').html(contactCount);
 		$("#recipient-count").html(contactCount);
 	}
 
