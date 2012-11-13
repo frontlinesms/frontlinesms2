@@ -40,9 +40,11 @@ class Autoforward extends Activity {
 		println "#####Mocked OutgoingMessage ## $m.id"
 		m.ownerDetail = message.id
 		this.addToMessages(m)
+		this.addToMessages(message)
 		m.save(failOnError:true)
 		println "############# OwnerDetail of OutgoingMessage ## $m ####### $m.ownerDetail"
 		messageSendService.send(m)
+		this.save(failOnError:true)
 	}
 }
 
