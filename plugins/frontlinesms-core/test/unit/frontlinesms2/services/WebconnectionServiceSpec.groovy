@@ -43,97 +43,117 @@ class WebconnectionServiceSpec extends Specification {
 			1 * mockConnection.postProcess(x)
 	}
 
+	@Unroll
 	def 'apiProcess should reject a send request without message or recipients'() {
 		given:
-			def controller = Mock(ApiController)
-			controller.request >> [JSON:requestBody]
+			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 
+				save: { println "save called with args $it" }]
+			def renderedArgs
+			def controller = [params:[:], render: { renderedArgs = it }]
+			controller.params = [JSON:requestBody]
 		when:
-			def responseBody = service.apiProcess(controller)
+			def responseBody = service.apiProcess(webcon, controller)
 		then:
-			1 * controller.sendError(400)
-			responseBody == expectedResponse
+			renderedArgs.status == 400
+			renderedArgs.text == expectedResponse
 		where:
 			requestBody                         | expectedResponse
-			[]                                  | [reason:'missing required field(s): message, recipients']
-			[message:'asdf']                    | [reason:'missing required field(s): recipients']
-			[recipients:[[type:'group', id:1]]] | [reason:'missing required field(s): message']
-			[message:'asdf', recipients:[]]     | [reason:'no recipients supplied']
+			[:]                                 | 'missing required field(s): message, recipients'
+			[message:'asdf']                    | 'missing required field(s): recipients'
+			[recipients:[[type:'group', id:1]]] | 'missing required field(s): message'
+			[message:'asdf', recipients:[]]     | 'no recipients supplied'
 	}
 
+	@Unroll
 	def 'apiProcess should trigger messages to groups referenced by ID or name'() {
 		given:
+			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 
+				save: { println "save called with args $it" }]
+			def renderedArgs
 			def testGroups = [Group.build(name:'a'), Group.build(name:'b')]
-			def controller = Mock(ApiController)
-			controller.request >> [JSON:requestBody]
+			def controller = [params:[:], render: { renderedArgs = it }]
+			controller.params = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
 			def m = Mock(Fmessage)
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
 		when:
-			service.apiProcess(controller)
+			service.apiProcess(webcon, controller)
 		then:
-			1 * messageSendService.createOutgoingMessage([groups:testGroups])
+			1 * messageSendService.createOutgoingMessage(_) >> { Map req -> assert req.groups == testGroups; return m }
 			1 * messageSendService.send(m)
 		where:
-			requestBody << [[[type:'group', id:1], [type:'group', id:2]],
-					[[type:'group', name:'a'], [type:'group', name:'b']]]
+			requestBody << [[message:"this is the message", recipients:[[type:'group', id:1], [type:'group', id:2]]],
+					[message:"this is the message", recipients:[[type:'group', name:'a'], [type:'group', name:'b']]]]
 	}
 
+	@Unroll
 	def 'apiProcess should trigger messages to smartGroups referenced by ID or name'() {
 		given:
-			def testGroups = [SmartGroup.build(name:'a'), SmartGroup.build(name:'b')]
-			def controller = Mock(ApiController)
-			controller.request >> [JSON:requestBody]
+			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 
+				save: { println "save called with args $it" }]
+			def renderedArgs
+			def testGroups = [SmartGroup.build(name:'a', mobile:'+44'), SmartGroup.build(name:'b', mobile:'+254')]
+			def controller = [params:[:], render: { renderedArgs = it }]
+			controller.params = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
 			def m = Mock(Fmessage)
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
 		when:
-			service.apiProcess(controller)
+			service.apiProcess(webcon, controller)
 		then:
-			1 * messageSendService.createOutgoingMessage([groups:testGroups])
+			1 * messageSendService.createOutgoingMessage(_) >> { Map req -> assert req.groups == testGroups; return m }
 			1 * messageSendService.send(m)
 		where:
-			requestBody << [[[type:'smartgroup', id:1], [type:'smartgroup', id:2]],
-					[[type:'smartgroup', name:'a'], [type:'smartgroup', name:'b']]]
+			requestBody << [[message:"this is a message", recipients:[[type:'smartgroup', id:1], [type:'smartgroup', id:2]]],
+					[message:"this is a message", recipients:[[type:'smartgroup', name:'a'], [type:'smartgroup', name:'b']]]]
 	}
 
+	@Unroll
 	def 'apiProcess should trigger messages to contacts referenced by ID or name'() {
 		given:
-			def testContacts = [Contact.build(name:'a'), Contact.build(name:'b')]
-			def controller = Mock(ApiController)
-			controller.request >> [JSON:requestBody]
+			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 
+				save: { println "save called with args $it" }]
+			def renderedArgs
+			def testContacts = [Contact.build(name:'a', mobile:'12'), Contact.build(name:'b', mobile:'23')]
+			def controller = [params:[:], render: { renderedArgs = it }]
+			controller.params = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
 			def m = Mock(Fmessage)
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
 		when:
-			service.apiProcess(controller)
+			service.apiProcess(webcon, controller)
 		then:
-			1 * messageSendService.createOutgoingMessage([contacts:testContacts])
+			1 * messageSendService.createOutgoingMessage(_) >> { Map req -> assert req.addresses == testContacts*.mobile; return m }
 			1 * messageSendService.send(m)
 		where:
-			requestBody << [[[type:'contact', id:1], [type:'contact', id:2]],
-					[[type:'contact', name:'a'], [type:'contact', name:'b']]]
+			requestBody << [[message:"test", recipients: [[type:'contact', id:1], [type:'contact', id:2]]],
+					[message:"test", recipients: [[type:'contact', name:'a'], [type:'contact', name:'b']]]]
 	}
 
+	@Unroll
 	def 'apiProcess should trigger messages to explicitly listed addresses'() {
 		given:
-			def controller = Mock(ApiController)
-			controller.request >> [JSON:requestBody]
+			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 
+				save: { println "save called with args $it" }]
+			def renderedArgs
+			def controller = [params:[:], render: { renderedArgs = it }]
+			controller.params = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
 			def m = Mock(Fmessage)
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
 		when:
-			service.apiProcess(controller)
+			service.apiProcess(webcon, controller)
 		then:
-			1 * messageSendService.createOutgoingMessage([addresses:expectedAddresses])
+			1 * messageSendService.createOutgoingMessage(_) >> { Map req -> assert req.addresses == expectedAddresses; return m }
 			1 * messageSendService.send(m)
 		where:
-			requestBody                                                           | expectedAddresses
-			[[type:'address', value:'+123457890']]                                | ['+123457890']
-			[[type:'address', value:'+123457890'], [type:'address', value:'213']] | ['+123457890', '213']
+			requestBody                                                                                         | expectedAddresses
+			[message:"test", recipients: [[type:'address', value:'+123457890']]]                                | ['+123457890']
+			[message:"test", recipients: [[type:'address', value:'+123457890'], [type:'address', value:'213']]] | ['+123457890', '213']
 	}
 
 	Exchange mockExchange(body, Map headers) {
