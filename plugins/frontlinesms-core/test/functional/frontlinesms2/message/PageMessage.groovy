@@ -134,6 +134,7 @@ class SingleMessageDetails extends geb.Module {
 			$('select#move-actions').jquery.trigger("change")
 		}
 		moveActions { $('select#move-actions option')*.text() }
+		receivedOn(required:false) { $("#message-detail-fconnection") }
 	}
 }
 

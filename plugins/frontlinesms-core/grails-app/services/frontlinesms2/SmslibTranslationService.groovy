@@ -19,6 +19,7 @@ class SmslibTranslationService {
 			message.date = new Date(bod.date)
 			assert exchange.out != null
 			exchange.out.body = message	
+			exchange.out.headers."${Fconnection.HEADER_FCONNECTION_ID}" = exchange.in.headers."${Fconnection.HEADER_FCONNECTION_ID}"
 		}
 	}
 	

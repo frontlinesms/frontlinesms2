@@ -12,6 +12,8 @@ class Fconnection {
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
 
+	static hasMany = [messages: Fmessage]
+
 	def fconnectionService
 	
 	static def implementations = [SmslibFconnection,
@@ -36,6 +38,14 @@ class Fconnection {
 	
 	String name
 	
+	static namedQueries = {
+		findByMessages { messageInstance ->
+				messages {
+					eq 'id', messageInstance.id
+				}
+		}
+	}
+
 	def getStatus() {
 		fconnectionService.getConnectionStatus(this)
 	}
