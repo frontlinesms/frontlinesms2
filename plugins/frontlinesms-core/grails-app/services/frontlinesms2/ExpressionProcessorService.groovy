@@ -6,8 +6,8 @@ class ExpressionProcessorService {
 	// fields map holds the available expressions for replacement
 	// key is the expression name, and value is the controllers it is applicable to
 	def fields = [
-		'recipient_number' : ['quickMessage', 'announcement', 'poll', 'autoreply', 'subscription'],
-		'recipient_name' : ['quickMessage', 'announcement', 'poll', 'autoreply', 'subscription'],
+		'recipient_number' : ['quickMessage', 'announcement', 'poll', 'autoreply', 'subscription', 'autoforward'],
+		'recipient_name' : ['quickMessage', 'announcement', 'poll', 'autoreply', 'subscription', 'autoforward'],
 		'sender_number' : ['autoforward'],
 		'sender_name' : ['autoforward'],
 		'message_text' : ['poll', 'autoreply', 'subscription','autoforward'],
