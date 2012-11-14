@@ -17,20 +17,10 @@ class ApiControllerSpec extends Specification {
 			response.status == 404
 	}
 
-	def 'bad secret should return a 401 error status'() {
-		given:
-			def id = Webconnection.build(secret:'skyfall').id
-			params = [entityClassApiUrl:'webconnection', secret:'toffee', entityId:id]
-		when:
-			controller.index()
-		then:
-			response.status == 401
-	}
-
 	def 'good request should return 200 status'() {
 		given:
 			def id = Webconnection.build(secret:'skyfall').id
-			params = [entityClassApiUrl:'webconnection', secret:'skyfall', entityId:id]
+			params = [entityClassApiUrl:'webconnection', entityId:id]
 		when:
 			controller.index()
 		then:
