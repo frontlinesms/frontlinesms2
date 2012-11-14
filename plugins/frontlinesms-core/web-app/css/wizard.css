@@ -1,3 +1,4 @@
+#modalBox { overflow-y: auto; }
 #modalBox #export-form > * { margin:0 0 15px 0; }
 #modalBox #export-form > a { display:block; text-align:center; }
 #modalBox #export-form > :last-child { margin:0; }

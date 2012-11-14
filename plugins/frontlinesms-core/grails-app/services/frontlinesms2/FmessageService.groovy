@@ -21,6 +21,8 @@ class FmessageService {
 						activity.addToMessages(outgoingMessage)
 					}else if(activity instanceof Webconnection) {
 						activity.processKeyword(messageInstance, null)
+					}else if(activity instanceof Autoforward) {
+						activity.processKeyword(messageInstance, null)
 					}
 					activity.save()
 				} else if (params.ownerId && params.ownerId != 'inbox') {
