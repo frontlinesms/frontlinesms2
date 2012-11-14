@@ -13,4 +13,15 @@ class HelpFSpec extends grails.plugin.geb.GebSpec{
 		then: 'the help dialog is visible'
 			at PageHelp
 	}
+
+	def 'submenus should be collapsed'(){
+		given: 'the inbox is open'
+			to PageMessageInbox
+		when: 'the help link is clicked'
+			systemMenu.help.click()
+		then: 'the help dialog is visible'
+			at PageHelp
+		when:
+			//something
+	}
 }
