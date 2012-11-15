@@ -1,6 +1,10 @@
 package frontlinesms2
 
+import frontlinesms2.*
+
 class HelpController {
+	def applicationPropertiesService
+
 	def index() { redirect action:'main' }
 	
 	def main() {}
@@ -21,5 +25,19 @@ class HelpController {
 			render text:helpText.markdownToHtml()		
 		}
 	}
-}
+	def updateShowNewFeatures(){
+		println "######### $params.disableNewFeaturesPopup"
+		applicationPropertiesService.showNewFeaturesPopup = (params.disableNewFeaturesPopup == "checked")?true:false
+		applicationPropertiesService.lastVersionPopupAlreadyDisplayed = true
+		render "success"
+	}
 
+	def newfeatures(){
+		if(applicationPropertiesService.lastVersionPopupAlreadyDisplayed){
+			render text:"last version already displayed"
+		} else {
+			def markdownFile = new File("web-app/help/core/features/new.txt")
+			render template:'/help/newfeatures', model:[newfeatures:markdownFile.text.markdownToHtml()]
+		}
+	}
+}

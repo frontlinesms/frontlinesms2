@@ -16,6 +16,8 @@ import serial.mock.CommPortIdentifier
 import org.mockito.Mockito
 import grails.converters.JSON
 
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+
 class CoreBootStrap {
 	def applicationContext
 	def appSettingsService
@@ -26,6 +28,7 @@ class CoreBootStrap {
 	def camelContext
 	def messageSource
 	def quartzScheduler
+	def applicationPropertiesService
 
 	def bootstrapData = Environment.current == Environment.DEVELOPMENT || Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']?:'')
 	
@@ -80,6 +83,7 @@ class CoreBootStrap {
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
 		activateActivities()
+		updateFeaturePropertyFileValues()
 		println '\\o/ FrontlineSMS started.'
 	}
 
@@ -488,6 +492,15 @@ class CoreBootStrap {
 	private def activateActivities() {
 		Activity.findAllByArchivedAndDeleted(false, false).each { activity ->
 			activity.activate()
+		}
+	}
+
+	private def updateFeaturePropertyFileValues(){
+		def version = ApplicationHolder.application.metadata.'app.version' 
+		if(applicationPropertiesService.lastVersionRun != version){
+			applicationPropertiesService.lastVersionRun = version
+			applicationPropertiesService.showNewFeaturesPopup = true
+			applicationPropertiesService.lastVersionPopupAlreadyDisplayed = false
 		}
 	}
 

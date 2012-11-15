@@ -168,4 +168,23 @@ $(function() {
 	});
 });
 
-
+$(function(){
+	$.ajax({
+		url: url_root + 'help/newfeatures',
+		cache: false,
+		success: function(data) {
+			if(data != "last version already displayed"){
+				mediumPopup.launchNewFeaturePopup(i18n("new.features"), data, i18n("action.close"), function(){
+					$.ajax({
+						url: url_root + 'help/updateShowNewFeatures',
+						cache: false,
+						success: function(data) { 
+							$('#modalBox').parent().remove();
+						}
+					});
+				});
+				$('#modalBox').addClass('help');
+			}
+		}
+	});
+});

@@ -3,7 +3,7 @@ var mediumPopup = (function() {
 		cancel, submit, submitWithoutClose, range,
 		selectSubscriptionGroup, editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
 		createModalBox,
-		launchMediumPopup, launchMediumWizard, launchHelpWizard,
+		launchMediumPopup, launchNewFeaturePopup, launchMediumWizard, launchHelpWizard,
 		getCurrentTab, getCurrentTabDom, getCurrentTabIndex, getTabLength,
 		prevButton, nextButton,
 		addValidation, enableTab, disableTab,
@@ -45,6 +45,18 @@ var mediumPopup = (function() {
 		});
 		addChangeHandlersForRadiosAndCheckboxes();
 		initializePopup(modalBox);
+	};
+	launchNewFeaturePopup = function(title, html, btnFinishedText, submitAction) {
+		var modalBox = createModalBox(html);
+		modalBox.dialog({
+				modal: true,
+				width: 675,
+				height: 500,
+				title: title,
+				buttons: [{ text:btnFinishedText, click:submitAction, id:"submit" }],
+				close: function() { $(this).remove(); }
+		});
+		addChangeHandlersForRadiosAndCheckboxes();
 	};
 	launchMediumWizard = function(title, html, btnFinishedText, width, height) {
 		launchMediumWizard(title, html, btnFinishedText, width, height, true);
@@ -290,6 +302,7 @@ var mediumPopup = (function() {
 		editConnection:editConnection, // TODO move this somewhere more suitable
 		enableTab:enableTab,
 		launchMediumPopup:launchMediumPopup,
+		launchNewFeaturePopup:launchNewFeaturePopup,
 		launchMediumWizard:launchMediumWizard,
 		launchHelpWizard:launchHelpWizard,
 		messageResponseClick:messageResponseClick, // TODO move this somewhere more suitable
