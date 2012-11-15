@@ -4,7 +4,7 @@ import frontlinesms2.*
 
 import spock.lang.*
 
-class WebConnectionApiControllerISpec extends Specification {
+class WebconnectionApiControllerISpec extends Specification {
 	def 'request with bad content should return 400 status'() {
 		given:
 			def id = Webconnection.build(secret:'skyfall').id
