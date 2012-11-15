@@ -39,5 +39,3 @@
 span.ui-icon { padding-left:4px; }
 .ui-accordion-header.ui-state-active { background-image: url("../images/icons/headerSelected.png"); background-repeat: no-repeat; }
 .ui-accordion-header.ui-state-default { background-image: url("../images/icons/header.png");  background-repeat: no-repeat;}
-a,.ui-accordion-header.ui-state-active { background-image: none; }
-a,.ui-accordion-header.ui-state-default { background-image: none; }
