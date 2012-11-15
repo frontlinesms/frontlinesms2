@@ -34,3 +34,10 @@
 #modalBox.help #help-content ul, #modalBox.help #help-content ol { margin:6px 0; }
 #modalBox.help #help-content li { padding-left:1.5em; text-indent:-1em; }
 #modalBox.help #help-content li:before { content:"\00BB \0020" }
+
+.ui-accordion-header { padding-left:4px; }
+span.ui-icon { padding-left:4px; }
+.ui-accordion-header.ui-state-active { background-image: url("../images/icons/headerSelected.png"); background-repeat: no-repeat; }
+.ui-accordion-header.ui-state-default { background-image: url("../images/icons/header.png");  background-repeat: no-repeat;}
+a,.ui-accordion-header.ui-state-active { background-image: none; }
+a,.ui-accordion-header.ui-state-default { background-image: none; }
