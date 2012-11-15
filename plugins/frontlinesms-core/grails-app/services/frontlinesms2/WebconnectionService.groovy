@@ -63,12 +63,12 @@ class WebconnectionService {
 	}
 
 	def generateApiResponse(webcon, controller) {
-		def message = controller.params['JSON'].message
-		def recipients = controller.params['JSON'].recipients
+		def message = controller.request['JSON'].message
+		def recipients = controller.request['JSON'].recipients
 		def errors = [invalid:[], missing:[]]
-		println "JSON IS ${controller.params['JSON']}"
-		println "MESSAGE IS ${controller.params['JSON'].message}"
-		println "RECIPIENTS IS ${controller.params['JSON'].recipients}"
+		println "JSON IS ${controller.request['JSON']}"
+		println "MESSAGE IS ${controller.request['JSON'].message}"
+		println "RECIPIENTS IS ${controller.request['JSON'].recipients}"
 
 		//> Detect and return error conditions
 		if (!message)

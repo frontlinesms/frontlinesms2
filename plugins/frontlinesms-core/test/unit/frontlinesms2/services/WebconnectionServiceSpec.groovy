@@ -49,8 +49,8 @@ class WebconnectionServiceSpec extends Specification {
 			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 
 				save: { println "save called with args $it" }]
 			def renderedArgs
-			def controller = [params:[:], render: { renderedArgs = it }]
-			controller.params = [JSON:requestBody]
+			def controller = [request:[:], render: { renderedArgs = it }]
+			controller.request = [JSON:requestBody]
 		when:
 			def responseBody = service.apiProcess(webcon, controller)
 		then:
@@ -71,8 +71,8 @@ class WebconnectionServiceSpec extends Specification {
 				save: { println "save called with args $it" }]
 			def renderedArgs
 			def testGroups = [Group.build(name:'a'), Group.build(name:'b')]
-			def controller = [params:[:], render: { renderedArgs = it }]
-			controller.params = [JSON:requestBody]
+			def controller = [request:[:], render: { renderedArgs = it }]
+			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
 			def m = Mock(Fmessage)
 			messageSendService.createOutgoingMessage(_) >> m
@@ -94,8 +94,8 @@ class WebconnectionServiceSpec extends Specification {
 				save: { println "save called with args $it" }]
 			def renderedArgs
 			def testGroups = [SmartGroup.build(name:'a', mobile:'+44'), SmartGroup.build(name:'b', mobile:'+254')]
-			def controller = [params:[:], render: { renderedArgs = it }]
-			controller.params = [JSON:requestBody]
+			def controller = [request:[:], render: { renderedArgs = it }]
+			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
 			def m = Mock(Fmessage)
 			messageSendService.createOutgoingMessage(_) >> m
@@ -117,8 +117,8 @@ class WebconnectionServiceSpec extends Specification {
 				save: { println "save called with args $it" }]
 			def renderedArgs
 			def testContacts = [Contact.build(name:'a', mobile:'12'), Contact.build(name:'b', mobile:'23')]
-			def controller = [params:[:], render: { renderedArgs = it }]
-			controller.params = [JSON:requestBody]
+			def controller = [request:[:], render: { renderedArgs = it }]
+			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
 			def m = Mock(Fmessage)
 			messageSendService.createOutgoingMessage(_) >> m
@@ -139,8 +139,8 @@ class WebconnectionServiceSpec extends Specification {
 			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 
 				save: { println "save called with args $it" }]
 			def renderedArgs
-			def controller = [params:[:], render: { renderedArgs = it }]
-			controller.params = [JSON:requestBody]
+			def controller = [request:[:], render: { renderedArgs = it }]
+			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
 			def m = Mock(Fmessage)
 			messageSendService.createOutgoingMessage(_) >> m
