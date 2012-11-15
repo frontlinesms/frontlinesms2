@@ -26,7 +26,7 @@ class MessageSendServiceISpec extends grails.plugin.spock.IntegrationSpec {
 				addresses:["+66666", "+77777"]]
 			def generatedAddresses = messageSendService.createOutgoingMessage(params).dispatches*.dst
 		then:
-			generatedAddresses.size() == 6
-			generatedAddresses.containsAll(["+11111", "+22222", "+33333", "+44444", "+55555", "+66666", "+77777"])
+			generatedAddresses?.sort() == ['+11111', '+22222', '+33333', '+334455', '+44444', '+66666', '+77777']
 	}
 }
+
