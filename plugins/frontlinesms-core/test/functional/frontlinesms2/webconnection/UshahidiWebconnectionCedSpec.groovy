@@ -129,6 +129,17 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			header['url'] == 'https://frontlinecrowd.crowdmap.com/frontlinesms/'
 	}
 
+	def '"Test Connection" button is displayed on confirm screen'() {
+		given:
+			launchWizard('ushahidi')
+		and:
+			fillValidConfig()
+		when: 'skip past sorting page'
+			next.click()
+		then:
+			testConnectionButton.displayed
+	}
+
 	private def fillValidConfig() {
 		configureUshahidi.subType('crowdmap').click()
 		configureUshahidi.crowdmapDeployAddress = 'default'

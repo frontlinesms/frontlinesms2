@@ -328,7 +328,7 @@ class WebconnectionConfirmTab extends geb.Module {
 		keyword { $("#confirm-keyword").text() }
 		type { $("#confirm-type").text() }
 		url { $("#confirm-url").text() }
-		
+		testConnectionButton { $("#testRoute")}
 		confirm{ label->
 			$("#confirm-"+label).text()
 		}

@@ -141,6 +141,23 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			// N.B. there is no text displayed for this error
 	}
 
+	def "Test Webconnection button is displayed on the confirm tab"() {
+		given:
+			startAtTab('keyword')
+		when:
+			keywordTab.keyword = ""
+			keywordTab.useKeyword('disabled').click() // to disable
+			next.click()
+		then:
+			waitFor { confirmTab.displayed }
+		when:
+			confirmTab.name = "my ext cmd"
+			submit.click()
+		then:
+			waitFor { summary.displayed }
+			testConnectionButton.displayed
+	}
+
 	private def startAtTab(tabName) {
 		launchWizard('generic')
 		waitFor { requestTab.displayed }
