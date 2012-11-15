@@ -147,6 +147,10 @@ abstract class Webconnection extends Activity {
 		log.info "Web Connection Response::\n ${x.in.body}"
 	}
 
+	static def testRoute(Map params) {
+
+	}
+
 	private String urlEncode(String s) throws UnsupportedEncodingException {
 		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
 		return URLEncoder.encode(s, "UTF-8");

@@ -47,6 +47,10 @@ class WebconnectionService {
 		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
 	}
 
+	def testRoute(Webconnection webconnectionInstance) {
+
+	}
+
 	def saveInstance(Webconnection webconnectionInstance, params) {
 		webconnectionInstance.keywords?.clear()
 		webconnectionInstance.name = params.name
