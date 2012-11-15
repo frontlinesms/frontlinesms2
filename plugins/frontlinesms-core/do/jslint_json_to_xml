@@ -1,4 +1,4 @@
-#!/bin/groovy
+#!/usr/bin/env groovy
 @Grab('commons-lang:commons-lang:2.5')
 import org.apache.commons.lang.StringEscapeUtils
 import groovy.json.JsonSlurper
