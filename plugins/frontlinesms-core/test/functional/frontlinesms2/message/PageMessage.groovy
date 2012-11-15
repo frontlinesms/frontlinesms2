@@ -53,8 +53,8 @@ class ContentFooter extends geb.Module {
 	static content = {
 		showAll { $('a')[0] }
 		showStarred { $('a')[1] }
-		showSent { $('a')[3] }
-		showReceived { $('a')[2] }
+		showOutgoing { $('a')[3] }
+		showIncoming { $('a')[2] }
 		nextPage { $('a.nextLink') }
 		prevPage { $('a.prevLink') }
 	}
@@ -108,6 +108,7 @@ class MessageListRow extends geb.Module {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse($('td.message-date-cell').text())
 		}
 		linkUrl { $('td.message-text-cell a').@href }
+		hasStatus { status -> $(':first-child').parent().hasClass(status) }
 	}
 }
 
@@ -133,6 +134,7 @@ class SingleMessageDetails extends geb.Module {
 			$('select#move-actions').jquery.trigger("change")
 		}
 		moveActions { $('select#move-actions option')*.text() }
+		receivedOn(required:false) { $("#message-detail-fconnection") }
 	}
 }
 

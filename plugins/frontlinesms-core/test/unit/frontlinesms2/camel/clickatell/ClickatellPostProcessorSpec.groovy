@@ -38,9 +38,10 @@ class ClickatellPostProcessorSpec extends Specification {
 		then:
 			thrown(ex)
 		where:
-			responseText 				|ex
-			"ERR: 001, Authentication Failure"	|AuthenticationException
-			"ERR: 108, Invalid AppID"		|InvalidApiIdException
+			responseText 				        |    ex
+			"ERR: 001, Authentication Failure"	|    AuthenticationException
+			"ERR: 108, Invalid AppID"		    |    InvalidApiIdException
+			"ERR: 301, No Credit Left"          |    InsufficientCreditException
 	}
 	
 	private def mockExchange(httpResponseText) {

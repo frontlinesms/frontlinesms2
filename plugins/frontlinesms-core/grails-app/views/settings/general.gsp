@@ -42,6 +42,10 @@
 					<label for="importCsvFile"><g:message code="import.prompt"/></label>
 				</g:uploadForm>
 			</div>
+			<div id="database-backup">
+				<h2><g:message code="configuration.location.title"/></h2>
+				<p><g:message code="configuration.location.instructions" args="${['file://'+frontlinesms2.ResourceUtils.resourcePath, frontlinesms2.ResourceUtils.resourcePath]}"/></p>
+			</div>
 			<div id="basic-authentication">
 				<h2><g:message code="basic.authentication" /></h2>
 				<p class="info">

@@ -7,6 +7,7 @@ class FmessageService {
     	def messagesToSend = []
     	messageList.each { messageInstance ->
     		if(messageInstance.isMoveAllowed()){
+    			messageInstance.ownerDetail = null
     			messageInstance.isDeleted = false
 				Trash.findByObject(messageInstance)?.delete(failOnError:true)
 				if (params.messageSection == 'activity') {
@@ -19,12 +20,12 @@ class FmessageService {
 						outgoingMessage.save()
 						messagesToSend << outgoingMessage
 						activity.addToMessages(outgoingMessage)
-					}else if(activity instanceof Webconnection) {
+						activity.save()
+					} else if(activity instanceof Webconnection) {
 						activity.processKeyword(messageInstance, null)
 					}else if(activity instanceof Autoforward) {
 						activity.processKeyword(messageInstance, null)
 					}
-					activity.save()
 				} else if (params.ownerId && params.ownerId != 'inbox') {
 					messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save(failOnError:true)

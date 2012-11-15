@@ -71,15 +71,16 @@ class ExportController {
 	}
 	
 	def downloadContactReport() {
-		def groupId = params.groupId
 		def contactInstanceList
-		if(!params.groupId)
+		if(!params.groupId) {
 			contactInstanceList = Contact.getAll()
-		else if(params.contactsSection == 'group')
+		} else if(params.contactsSection == 'group') {
 			contactInstanceList = Group.get(params.groupId).getMembers()
-		else if(params.contactsSection == 'smartgroup')
+		} else if(params.contactsSection == 'smartgroup') {
 			contactInstanceList = SmartGroup.get(params.groupId).getMembers()
-		else throw new RuntimeException("Unrecognised section: $params.contactsSection")
+		} else {
+			throw new RuntimeException("Unrecognised section: $params.contactsSection")
+		}
 		generateContactReport(contactInstanceList)
 	}
 
@@ -131,27 +132,24 @@ class ExportController {
 	private def getActivityDescription() {
 		if(params.ownerId){
 			def messageOwner = MessageOwner.findById(params.ownerId)
-			String name = message(code: 'export.messages.name1', args: [messageOwner.name, messageOwner.shortName, params.messageTotal])
+			return message(code: 'export.messages.name1', args: [messageOwner.name, messageOwner.shortName, params.messageTotal])
 		} else {
-			String name = message(code: 'export.messages.name2', args: [params.messageSection, params.messageTotal])
+			return message(code: 'export.messages.name2', args: [params.messageSection, params.messageTotal])
 		}
 	}
 
 	private def getGroupDescription() {
 		if(params.groupId){
-			String name
-			 switch(params.contactsSection) {
+			switch(params.contactsSection) {
 				case 'group':
 					def group = Group.findById(params.groupId)
-					name = message(code: 'export.contacts.name1', args: [group.name, group.getMembers().size()])
-					break
+					return message(code: 'export.contacts.name1', args: [group.name, group.getMembers().size()])
 				case 'smartGroup':
 					def smartGroup = SmartGroup.findById(params.groupId)
-					name = message(code: 'export.contacts.name2', args: [smartGroup.name, smartGroup.getMembers().size()])
-					break
+					return message(code: 'export.contacts.name2', args: [smartGroup.name, smartGroup.getMembers().size()])
 			}
 		} else {
-			String name = message(code: 'export.contacts.name3', args: [params.contactTotal])
+			return message(code: 'export.contacts.name3', args: [params.contactTotal])
 		}
 	}
 

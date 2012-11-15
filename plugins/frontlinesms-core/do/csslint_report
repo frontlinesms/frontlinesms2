@@ -3,7 +3,7 @@ set -e
 TARGET_DIR="target/analysis-reports"
 TARGET="$TARGET_DIR/csslint.xml"
 echo "# Generating csslint report in $TARGET ..."
-RULES_TO_IGNORE="ids,adjoining-classes"
+RULES_TO_IGNORE="adjoining-classes,ids,qualified-headings,unique-headings"
 echo "# CSS Lint ignoring rules: $RULES_TO_IGNORE"
 echo "# Creating analysis report dir"
 mkdir -p $TARGET_DIR

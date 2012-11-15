@@ -23,6 +23,8 @@ class ClickatellPostProcessor implements Processor {
 						throw new AuthenticationException("Clickatell gateway error: ${m[0][2]}")
 					case "108"://Missing or invalid Api_Id
 						throw new InvalidApiIdException("Clickatell gateway error: ${m[0][2]}")
+					case "301":
+						throw new InsufficientCreditException("Clickatell gateway error: ${m[0][2]}")
 					default:
 						throw new RuntimeException("Clickatell gateway error: ${m[0][2]}")
 				}

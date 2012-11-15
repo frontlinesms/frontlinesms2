@@ -17,8 +17,6 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "should translate a CIncomingMessage into a Fmessage then save it then deliver it to KeywordProcessor"() {
 		given:
-			def originalFlush = sessionFactory.currentSession.flushMode
-			sessionFactory.currentSession.flushMode = FlushMode.ALWAYS
 			def mockPortHandler = MockModemUtils.createMockPortHandler(false, [1:'0891534875001040F30414D0537AD91C7683A465B71E0000013020017560400CC7F79B0C6ABFE5EEB4FB0C'])
 			// initialise mock serial device with message available
  			MockModemUtils.initialiseMockSerial(['/dev/test-modem': new CommPortIdentifier("COM99",
@@ -34,9 +32,11 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			// wait for message to be read from mock serial device
 			while(mockPortHandler.receiveMessages) { sleep(100) }
 			sleep 3000
+			sessionFactory.currentSession.flush()
+			sleep 3000
 		then:
 			def poll = Poll.findByName('What do you think of goo?')
-			def messages = Fmessage.findAll()
+			def messages = Fmessage.findAll()*.refresh()
 			messages.size() == 1
 			messages[0].text == 'Good morning'
 			messages[0].messageOwner == poll
@@ -45,9 +45,6 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			if(connection) fconnectionService.destroyRoutes(connection)
 			// remove mock serial port
 			MockSerial.reset()
-			Fmessage.findAll()*.delete()
-			MessageOwner.findAll()*.delete()
-			sessionFactory.currentSession.flushMode = originalFlush
 	}
 
 	def createPoll(attrs) {
@@ -61,3 +58,4 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 		return p
 	}
 }
+

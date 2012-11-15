@@ -228,7 +228,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			messageList.messages.size() == 5
 		when:
-			footer.showSent.click()
+			footer.showOutgoing.click()
 		then:
 			waitFor { messageList.messages.size() == 2 }
 	}
@@ -241,7 +241,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			messageList.messages.size() == 5
 		when:
-			footer.showReceived.click()
+			footer.showIncoming.click()
 		then:
 			waitFor { messageList.messages.size() == 3 }
 	}

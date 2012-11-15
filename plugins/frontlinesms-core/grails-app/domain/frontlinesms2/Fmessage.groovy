@@ -7,7 +7,7 @@ class Fmessage {
 	static final int MAX_TEXT_LENGTH = 1600
 
 	static belongsTo = [messageOwner:MessageOwner]
-	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList']
+	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'receivedOn']
 	
 	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
 	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
@@ -24,14 +24,15 @@ class Fmessage {
 	boolean isDeleted
 	
 	boolean inbound
-	static hasMany = [dispatches:Dispatch]
 
+	static hasMany = [dispatches:Dispatch]
 
 	static mapping = {
 		sort date:'desc'
 		inboundContactName formula:'(SELECT c.name FROM contact c WHERE c.mobile=src)'
 		outboundContactName formula:'(SELECT MAX(c.name) FROM contact c, dispatch d WHERE c.mobile=d.dst AND d.message_id=id)'
 		version false
+
 	}
 	
 	static constraints = {
@@ -318,5 +319,8 @@ class Fmessage {
 			}
 		}
 	}
-}
 
+	def getReceivedOn() {
+		Fconnection.findByMessages(this).list()[0]
+	}
+}

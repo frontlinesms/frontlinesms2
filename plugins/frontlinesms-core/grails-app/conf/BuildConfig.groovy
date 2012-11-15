@@ -83,7 +83,7 @@ grails.project.dependency.resolution = {
 
 		runtime ":export:1.1"
 		runtime ":markdown:1.0.0.RC1"
-		runtime ":routing:1.2.0"
+		runtime ':routing:1.2.2'
 		runtime ":csv:0.3.1"
 		compile ":quartz2:0.2.3-frontlinesms"
 
@@ -94,7 +94,7 @@ grails.project.dependency.resolution = {
 
 		test ':build-test-data:2.0.2'
 		test ':remote-control:1.2'
-		compile ':functional-test-development:0.9.3' {
+		compile(':functional-test-development:0.9.3') {
 			exclude 'hibernate'
 		}
 

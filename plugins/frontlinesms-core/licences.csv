@@ -3,13 +3,10 @@ antlr,antlr,2.7.7,BSD License,http://www.antlr.org/license.html,ivy
 aopalliance,aopalliance,1,Eclipse Public License - v 1.0,http://aopalliance.sourceforge.net/,
 aopalliance,aopalliance,1,Public Domain,http://aopalliance.sourceforge.net/,
 apache-taglibs,standard,1.1.2,Apache 2.0 licence,http://jakarta.apache.org/taglibs/doc/standard-doc/ReleaseNotes.html,
-asm,asm,3.3.1,Apache 2.0 licence,http://static.springsource.org/spring-ldap/site/license.html,
 asm,asm,3.3.1,BSD,"https://en.wikipedia.org/wiki/ObjectWeb_ASM#Uses, http://asm.ow2.org/license.html",
 asm,Asm-analysis,3.3.1,BSD,"https://en.wikipedia.org/wiki/ObjectWeb_ASM#Uses, http://asm.ow2.org/license.html",
-asm,asm-tree,3.3.1,BSD,http://asm.ow2.org/license.html,
 asm,asm-tree,3.3.1,BSD,"https://en.wikipedia.org/wiki/ObjectWeb_ASM#Uses, http://asm.ow2.org/license.html",
 asm,Asm-util,3.3.1,BSD,"https://en.wikipedia.org/wiki/ObjectWeb_ASM#Uses, http://asm.ow2.org/license.html",
-asm,asm-util,3.3.1,BSD,,licenceDb
 cglib,cglib,2.2,ASF 2.0,,ivy
 cglib,cglib-nodep,2.1_3,Apache 2.0 licence,http://www.docjar.com/docs2web/inside/cglib-nodep-2.1_3.jar/detail/LICENSE,
 com.googlecode.concurrentlinkedhashmap,concurrentlinkedhashmap-lru,1.0_jdk5,Apache 2.0 licence,http://repo1.maven.org/maven2/com/googlecode/concurrentlinkedhashmap/concurrentlinkedhashmap-lru/1.0_jdk5/concurrentlinkedhashmap-lru-1.0_jdk5.pom,
@@ -21,7 +18,6 @@ commons-codec,commons-codec,1.5,"Apache License, Version 2.0",https://commons.ap
 commons-collections,commons-collections,3.2.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-collections/commons-collections/3.2.1,
 commons-dbcp,commons-dbcp,1.3,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.3,
 commons-dbcp,commons-dbcp,1.4,"Apache License, Version 2.0",http://commons.apache.org/dbcp/license.html,
-commons-el,commons-el,1,Apache 2.0 licence,https://commons.apache.org/el/license.html,
 commons-el,commons-el,1,"Apache License, Version 2.0",http://commons.apache.org/el/license.html,ivy
 commons-fileupload,commons-fileupload,1.2.1,Apache 2.0 licence,http://olex.openlogic.com/packages/commons-fileupload/1.2.1,
 commons-fileupload,commons-fileupload,1.2.2,"Apache License, Version 2.0",http://commons.apache.org/fileupload/dependencies.html,
@@ -30,66 +26,38 @@ commons-io,commons-io,1.4,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.
 commons-io,commons-io,2.1,"Apache License, Version 2.0",https://commons.apache.org/codec/license.html,
 commons-lang,commons-lang,2.4,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-lang/commons-lang/2.4,
 commons-lang,commons-lang,2.6,"Apache License, Version 2.0",https://commons.apache.org/lang/license.html,
-commons-logging,commons-logging,1.1.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1,
-commons-logging,Commons-logging,1.1.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1,
-Commons-logging,commons-logging,1.1.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1,
-Commons-logging,Commons-logging,1.1.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1,
 commons-logging,commons-logging,1.1.1,"Apache License, Version 2.0",http://commons.apache.org/logging/license.html,licenceDb
-commons-logging,Commons-logging-api,1.1.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1,
-Commons-logging,commons-logging-api,1.1.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1,
-commons-logging,Commons-logging-api,1.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1,
 Commons-logging,commons-logging-api,1.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1,
-Commons-logging,commons-logging-api,1.1,Apache 2.0 licence,http://olex.openlogic.com/packages/commons-logging,
-Commons-logging,commons-logging-api,1.1,Apache 2.0 licence,http://tiles.apache.org/2.0/framework/tiles-api/license.html,
 commons-pool,commons-pool,1.5.5,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/commons-pool/commons-pool/1.5.5,
 commons-pool,commons-pool,1.5.6,"Apache License, Version 2.0",http://projects.apache.org/projects/commons_pool.html,
-commons-validator,commons-validator,1.3.1,Apache 2.0 licence,http://repo1.maven.org/maven2/commons-validator/commons-validator/1.3.1/commons-validator-1.3.1.pom,
 commons-validator,commons-validator,1.3.1,"Apache License, Version 2.0",http://commons.apache.org/validator/license.html,ivy
 dom4j,dom4j,1.6.1,BSD,http://dom4j.sourceforge.net/dom4j-1.6.1/license.html,
-dom4j,dom4j,1.6.1,BSD,,licenceDb
 hsqldb,hsqldb,1.8.0.10,New BSD License,http://hsqldb.org/web/hsqlLicense.html,
 javassist,javassist,3.11.0.GA,"MPL, LGPL, Apache",http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/,
 javassist,javassist,3.12.0.GA,"MPL, LGPL, or Apache License.",http://www.jboss.org/javassist,ivy
-javax.activation,activation,1.1,CDDL (Common Development and Distribution License),http://www.jarvana.com/jarvana/inspect-pom/javax/activation/activation/1.1/activation-1.1.pom,
 javax.activation,activation,1.1,Common Development and Distribution License (CDDL) v1.0,https://glassfish.dev.java.net/public/CDDLv1.0.html,ivy
 javax.comm,comm,2.0.3,Binary Code License Agreement,http://java.sun.com/products/javacomm/COMM3.0_license.txt,
-javax.comm,comm,2.0.3,Binary Code License Agreement,,licenceDb
 javax.mail,mail,1.4.3,CDDL (Common Development and Distribution License),http://www.grepcode.com/snapshot/repo1.maven.org/maven2/javax.mail/mail/1.4.3,
 javax.mail,mail,1.4.4,"Oracle Corporation (""ORACLE"")",http://download.oracle.com/otn-pub/java/javamail/1.4.4/javamail1_4_4.zip,
-javax.servlet,jstl,1.1.2,Apache 2.0 licence,http://www.jarvana.com/jarvana/inspect-pom/org/hdiv/hdiv-jstl-taglibs-1.1.2/2.0.3/hdiv-jstl-taglibs-1.1.2-2.0.3.pom,
 javax.servlet,jstl,1.1.2,Apache 2.0 licence,,licenceDb
-javax.transaction,jta,1.1,CDDL (Common Development and Distribution License),http://grepcode.com/file/repo1.maven.org/maven2/javax.transaction/jta/1.1/javax/transaction/UserTransaction.java,
 javax.transaction,jta,1.1,CDDL (Common Development and Distribution License),,licenceDb
 javax.validation,validation-api,1.0.0.GA,"Apache License, Version 2.0",license.txt,ivy
-junit,junit,3.8.1,Common Public License Version 1.0,http://grepcode.com/snapshot/repo1.maven.org/maven2/junit/junit/3.8.1,
-junit,junit,3.8.1,Common Public License Version 1.0,http://junit.sourceforge.net/cpl-v10.html,
 junit,junit,3.8.1,Common Public License Version 1.0,http://www.opensource.org/licenses/cpl1.0.txt,ivy
 junit,junit,3.8.1,Public License Version 1.0,http://search-hadoop.com/c/Hive:/testlibs/junit-3.8.1.LICENSE.txt,
 log4j,log4j,1.2.15,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/log4j/log4j/1.2.15,
-log4j,log4j,1.2.16,Apache 2.0 licence,http://logging.apache.org/log4j/1.2/license.html,
 log4j,log4j,1.2.16,"Apache License, Version 2.0",http://logging.apache.org/log4j/1.2/license.html,ivy
 log4j,log4j,1.2.9,Apache 1.1 licence,http://source.appfuse.org/browse/appfuse/trunk/lib/jakarta-log4j-1.2.9/LICENSE.txt?r=923,
 log4j,log4j by,1.2.16,Apache 2.0 licence,http://logging.apache.org/log4j/1.2/license.html,
-net.frontlinesms.core,at-modem-detector,0.1- SNAPSHOT,,,
 net.frontlinesms.core,at-modem-detector,0.8,,,
-net.frontlinesms.core,camel-smslib,0.0.2-SNAPSHOT,,,
 net.frontlinesms.core,camel-smslib,0.0.5,"Apache License, Version 2.0",http://camel.apache.org/what-is-the-license.html,
 net.frontlinesms.core,serial,1.0.0,,,
-net.frontlinesms.core,serial,1.0.1,,,
-net.frontlinesms.core,serial,1.0.1-SNAPSHOT,,,
 net.frontlinesms.core,serial,1.0.1- SNAPSHOT,Apache 2.0 licence,http://openjpa.apache.org/license.html,
 net.frontlinesms.core,smslib,1.1.0-SNAPSHOT,,,
 net.frontlinesms.core,smslib,1.1.1,"Apache License, Version 2.0",http://smslib.org/,
-net.frontlinesms,frontlinesms-test,0.01.01,GNU Lesser General Public Licence,https://github.com/alxndrsn/frontlinesms-plugin-httptrigger/blob/master/pom.xml.releaseBackup,
-net.frontlinesms,frontlinesms-test,0.01.01,GNU Lesser General Public License,,
-net.frontlinesms,frontlinesms-test,0.01.01,GNU Lesser General Public License v3,https://github.com/alxndrsn/frontlinesms-pom-parent/blob/master/pom.xml,
 net.frontlinesms,frontlinesms-test,0.01.01,GNU Lesser General Public License v3 or later,http://www.gnu.org/copyleft/lesser.html,ivy
 net.frontlinesms.test,frontlinesms-test,0.1.2,GNU Lesser General Public License v3 or later,http://www.gnu.org/copyleft/lesser.html,ivy
-net.frontlinesms.test,hayescommandset-test,0.0.2-SNAPSHOT,,,
 net.frontlinesms.test,Hayescommandset-test,0.0.2-SNAPSHOT,,,
 net.frontlinesms.test,hayescommandset-test,0.0.4,,,
-net.frontlinesms.test,serial-test,0.0.2,,,
-net.frontlinesms.test,serial-test,0.0.2-SNAPSHOT,,,
 net.frontlinesms.test,Serial-test,0.0.2-SNAPSHOT,,,
 net.sf.ehcache,ehcache-core,1.7.1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/net.sf.ehcache/ehcache-core/1.7.1,
 net.sf.ehcache,ehcache-core,2.4.6,"The Apache Software License, Version 2.0",src/assemble/EHCACHE-CORE-LICENSE.txt,ivy
@@ -100,9 +68,7 @@ opensymphony,sitemesh,2.4,Apache 2.0 licence,http://repo1.maven.org/maven2/opens
 opensymphony,sitemesh,2.4,"The Apache Software License, Version 1.1",http://www.opensymphony.com/sitemesh/license.action,ivy
 org.apache.ant,ant,1.7.0,Apache 2.0 licence,http://www.apache.org/licenses/LICENSE-2.0.html,
 org.apache.ant,ant-launcher,1.7.0,GNU LESSER GENERAL PUBLIC LICENSE,http://checkstyle.sourceforge.net/dependencies.html,
-org.apache.camel,camel-core,2.5.0,Apache 2.0 licence,http://camel.apache.org/maven/camel-2.2.0/camel-core/license.html,
 Org.apache.camel,Camel-core,2.5.0,Apache 2.0 licence,http://camel.apache.org/maven/camel-2.2.0/camel-core/license.htmlLGPL 2.1,
-org.apache.camel,camel-core,2.5.0,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.apache.camel/camel-core/2.5.0,
 org.apache.camel,camel-core,2.9.2,Apache 2.0 licence,http://camel.apache.org/what-is-the-license.html,
 org.apache.camel,camel-groovy,2.5.0,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.apache.camel/camel-groovy/2.7.2,
 org.apache.camel,camel-groovy,2.9.0,"Apache License, Version 2.0",http://www.apache.org/licenses/,
@@ -110,12 +76,10 @@ org.apache.camel,Camel-http,2.5.0,BSD license,https://camel.apache.org/what-is-t
 org.apache.camel,camel-http,2.9.2,Apache 2.0 licence,http://camel.apache.org/what-is-the-license.html,
 org.apache.camel,camel-mail,2.5.0,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.apache.camel/camel-mail/2.5.0,
 org.apache.camel,camel-mail,2.9.2,Apache 2.0 licence,http://camel.apache.org/what-is-the-license.html,
-org.apache.camel,camel-spring,2.5.0,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.apache.camel/camel-spring/2.5.0,
 org.apache.camel,Camel-spring,2.5.0,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.apache.camel/camel-spring/2.5.0,
 org.apache.camel,camel-spring,2.9.0,"Apache License, Version 2.0",http://www.apache.org/licenses/,
 org.apache.camel,Camel-stream,2.5.0,Apache 2.0 licence,http://camel.apache.org/what-is-the-license.htmllikely licences e.g.:,
 org.apache.camel,camel-stream,2.9.0,"Apache License, Version 2.0",http://www.apache.org/licenses/,
-org.apache.commons,commons-lang3,3.1,Apache 2.0 licence,https://commons.apache.org/license.html,
 org.apache.commons,commons-lang3,3.1,Apache 2.0 licence,,licenceDb
 org.apache.geronimo.specs,geronimo-servlet_2.4_spec,1.1.1,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.apache.geronimo.specs/geronimo-servlet_2.4_spec/1.1/META-INF/maven/org.apache.geronimo.specs/geronimo-servlet_2.4_spec/pom.xml,
 org.apache.geronimo.specs,geronimo-servlet_2.5_spec,1.1.2,"Apache License, Version 2.0",https://cwiki.apache.org/GMOxPMGT/geronimo-privacy-policy.html,
@@ -125,8 +89,6 @@ org.aspectj,aspectjweaver,1.6.10,Eclipse Public License - v 1.0,http://www.eclip
 org.aspectj,aspectjweaver,1.6.8,Eclipse Public License - v 1.0,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.aspectj/aspectjweaver/1.6.8,
 org.codehaus.groovy,groovy-all,1.7.8,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.codehaus.groovy/groovy-all/1.7.8/META-INF/LICENSE.txt,
 org.codehaus.groovy,groovy-all,1.8.6,"Apache License, Version 2.0",http://groovy.codehaus.org/License+Information,ivy
-org.fusesource.commonman,commons-management,1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.fusesource.commonman/commons-management/1.0,
-org.fusesource.commonman,Commons-management,1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.fusesource.commonman/commons-management/1.0,
 org.fusesource.commonman,Commons-management,1,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.fusesource.commonman/commons-management/1.0Apache v2,
 org.grails,grails-bootstrap,1.3.7,Apache 2.0 licence,http://www.jarvana.com/jarvana/inspect-pom/org/grails/grails-bootstrap/1.3.7/grails-bootstrap-1.3.7.pom,
 org.grails,grails-bootstrap,2.0.3,"The Apache Software License, Version 2.0",http://mvnrepository.com/artifact/org.grails/grails-bootstrap/2.0.3,
@@ -186,16 +148,13 @@ org.hibernate,hibernate-validator,4.1.0.Final,"Apache License, Version 2.0",http
 org.hibernate.javax.persistence,hibernate-jpa-2.0-api,1.0.1.Final,Unknown License,license.txt,ivy
 org.jsoup,jsoup,1.6.1,The MIT License,http://jsoup.com/license,ivy
 org.liquibase,liquibase-core,2.0.1,"Apache License, Version 2.0",http://www.liquibase.org/download,
-org.mockito,mockito-all,1.8.2,MIT LICENSE,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.mockito/mockito-all/1.8.2,
 org.mockito,Mockito-all,1.8.2,MIT LICENSE,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.mockito/mockito-all/1.8.2,
 org.mockito,mockito-all,1.9.0,The MIT License,http://code.google.com/p/mockito/wiki/License,ivy
 org.parboiled,parboiled-core,1.0.2,Apache 2,,ivy
 org.parboiled,parboiled-java,1.0.2,Apache 2,,ivy
 org.pegdown,pegdown,1.1.0,Apache 2,,ivy
 org.quartz-scheduler,quartz,2.1.5,"Apache License, Version 2.0",http://quartz-scheduler.org/overview/license-and-copyright,
-org.rxtx,rxtx,2.1.7,GNU Lesser General Public Licence,http://on.cs.unibas.ch/osiris-se/dependencies.html,
 org.rxtx,rxtx,2.1.7,"GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.",http://www.fsf.org/licensing/licenses/lgpl.html,ivy
-org.rxtx,rxtx,2.1.7,GNU LGPL license,http://code.google.com/p/gogolib4java/downloads/detail?name=rxtx-2.1-7-bins-r2.zip&can=2&q=,
 org.slf4j,jcl-over-slf4j,1.5.8,MIT LICENSE,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.slf4j/jcl-over-slf4j/1.5.11,
 org.slf4j,jcl-over-slf4j,1.6.2,The MIT License,http://slf4j.org/license.html,
 org.slf4j,jul-to-slf4j,1.5.8,MIT LICENSE,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.slf4j/jul-to-slf4j/1.6.1,
@@ -219,43 +178,26 @@ org.springframework,org.springframework.oxm,3.0.5.,Apache 2.0 licence,http://gre
 org.springframework,org.springframework.transaction,3.0.5.,Apache 2.0 licence,http://grepcode.com/file/repository.springsource.com/org.springframework/org.springframework.transaction/3.0.5/org/springframework/transaction/TransactionException.java,
 org.springframework,org.springframework.web,3.0.5.,Apache 2.0 licence,http://javasourcecode.org/html/open-source/spring/spring-3.0.5/org/springframework/web/context/request/RequestScope.java.html,
 org.springframework,org.springframework.web.servlet,3.0.5.,GNU General Public License v3,http://osdir.com/ml/linux.freshmeat.announce/2008-05/msg00011.html,
-org.springframework,spring-aop,3.0.4.,Apache 2.0 licence,http://i2.grepcode.com/file/repo1.maven.org/maven2/org.springframework/spring-aop/3.0.4.RELEASE/org/springframework/aop/ProxyMethodInvocation.java/,
 org.springframework,Spring-aop,3.0.4.,Apache 2.0 licence,http://i2.grepcode.com/file/repo1.maven.org/maven2/org.springframework/spring-aop/3.0.4.RELEASE/org/springframework/aop/ProxyMethodInvocation.java/,
 org.springframework,spring-aop,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
-org.springframework,spring-asm,3.0.4.,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.springframework.security/spring-security-web/3.0.4.RELEASE,
-org.springframework,spring-asm,3.0.4.,Apache 2.0 licence,http://grepo.codehaus.org/grepo-core/license.html,
 org.springframework,Spring-asm,3.0.4.,Apache 2.0 licence,http://grepo.codehaus.org/grepo-core/license.html,
 org.springframework,spring-asm,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
 org.springframework,spring-aspects,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
-org.springframework,spring-beans,3.0.4.,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.springframework.security/spring-security-taglibs/3.0.4.RELEASE,
-org.springframework,spring-beans,3.0.4.,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.springframework.security/spring-security-web/3.0.4.RELEASE,
 org.springframework,spring-beans,3.0.4.,Apache 2.0 licence,http://grepo.codehaus.org/grepo-core/license.html,
 org.springframework,spring-beans,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
-org.springframework,spring-context,2.5.6,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.springframework/spring-context/3.0.4.RELEASE/org/springframework/scripting/groovy/GroovyObjectCustomizer.java,
 org.springframework,spring-context,2.5.6,"Common Public License Version 1.0,Public Domain,Apache 2.0 licence",http://grepo.codehaus.org/grepo-core/dependencies.html,
-org.springframework,spring-context,3.0.4.,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.springframework/spring-context/3.0.4.RELEASE/org/springframework/scripting/groovy/GroovyObjectCustomizer.java,
-org.springframework,spring-context,3.0.4.,Apache 2.0 licence,http://grepo.codehaus.org/grepo-core/license.html,
-org.springframework,spring-context,3.0.4.,Apache 2.0 licence,http://www.jarvana.com/jarvana/inspect-pom/org/springframework/spring-context/2.5.6/spring-context-2.5.6.pom,
 org.springframework,spring-context,3.0.4.,"Common Public License Version 1.0,Public Domain,Apache 2.0 licence",http://grepo.codehaus.org/grepo-core/dependencies.html,
 org.springframework,spring-context,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
-org.springframework,spring-cont ext-support,3.0.4.,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.springframework/spring-context-support/2.5.6.SEC03,
 org.springframework,spring-context-support,3.0.4.,Apache 2.0 licence,http://static.springsource.org/spring-batch/1.0.x/spring-batch-samples/dependencies.html#org.springframework:spring-context-support:jar,
 org.springframework,spring-context-support,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
-org.springframework,spring-core,3.0.4.,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.springframework.security/spring-security-core/3.0.4.RELEASE,
-org.springframework,Spring-core,3.0.4.,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.springframework.security/spring-security-core/3.0.4.RELEASE,
-org.springframework,spring-core,3.0.4.,Apache 2.0 licence,http://grepo.codehaus.org/grepo-core/license.html,
 org.springframework,Spring-core,3.0.4.,Apache 2.0 licence,http://www.springsource.org/about,
 org.springframework,spring-core,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
-org.springframework,spring-expression,3.0.4.,Apache 2.0 licence,http://javasourcecode.org/html/open-source/spring/spring-3.0.4/org/springframework/expression/spel/SpelMessage.java.html,
-org.springframework,Spring-expression,3.0.4.,Apache 2.0 licence,http://javasourcecode.org/html/open-source/spring/spring-3.0.4/org/springframework/expression/spel/SpelMessage.java.html,
 org.springframework,spring-expression,3.0.4.,"Public Domain,Apache 2.0 licence,LGPL 2.1",http://brutos.sourceforge.net/dependencies.html,
 org.springframework,spring-expression,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
 org.springframework,spring-jdbc,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
 org.springframework,spring-jms,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
 org.springframework,spring-orm,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
-org.springframework,spring-test,2.5.6,Apache 2.0 licence,http://grepcode.com/snapshot/repo1.maven.org/maven2/org.springframework/spring-test/2.5.6,
 org.springframework,spring-test,2.5.6,"The Apache Software License, Version 2.0",,ivy
-org.springframework,spring-tx,3.0.4.,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.springframework/spring-tx/3.0.4.RELEASE/org/springframework/transaction/support/ResourceHolderSupport.java,
 org.springframework,Spring-tx,3.0.4.,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.springframework/spring-tx/3.0.4.RELEASE/org/springframework/transaction/support/ResourceHolderSupport.java,
 org.springframework,spring-tx,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
 org.springframework,spring-web,3.1.0,"The Apache Software License, Version 2.0",http://www.springsource.org/spring-framework,
@@ -263,8 +205,6 @@ org.springframework,spring-webmvc,3.1.0,"The Apache Software License, Version 2.
 org.springframework.webflow,org.springframework.binding,2.0.8,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.springframework.webflow/spring-binding/2.0.8.RELEASE/org/springframework/binding/convert/ConversionException.java#ConversionException,
 org.springframework.webflow,org.springframework.js,2.0.8,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.springframework.webflow/spring-js/2.0.8.RELEASE/org/springframework/js/ajax/AjaxUrlBasedViewResolver.java#AjaxUrlBasedViewResolver,
 org.springframework.webflow,org.springframework.webflow,2.0.8,Apache 2.0 licence,http://grepcode.com/file/repo1.maven.org/maven2/org.springframework.webflow/spring-webflow/2.0.8.RELEASE/org/springframework/webflow/execution/FlowExecution.java#FlowExecution,
-oro,oro,2.0.8,Apache 2.0 licence,http://svn.apache.org/repos/asf/jakarta/oro/trunk/LICENSE,
-oro,oro,2.0.8,Apache license,http://www.jpackage.org/browser/rpm.php?jppversion=5.0-updates&id=8560,
 oro,oro,2.0.8,"Apache License, Version 2.0",http://svn.apache.org/repos/asf/jakarta/oro/trunk/LICENSE,licenceDb
 xpp3,xpp3_min,1.1.3.4.O,"Apache 2.0 licence, GNU GENERAL PUBLIC LICENSE",http://www.jcurl.org/m2/site/jc-xsio/0.7-SNAPSHOT/dependencies.html,
 xpp3,xpp3_min,1.1.4c,Public Domain,http://creativecommons.org/licenses/publicdomain,ivy

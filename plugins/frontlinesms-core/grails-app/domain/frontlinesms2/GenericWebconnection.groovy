@@ -12,4 +12,18 @@ class GenericWebconnection extends Webconnection {
 	}
 
 	def getServiceType() {'generic'}
+
+	private def processRequestParameters(params) {
+		def paramsName = params.'param-name'
+		def paramsValue = params.'param-value'
+		this.requestParameters?.clear()
+		if(paramsName instanceof String[]) {
+			paramsName?.size()?.times {
+				addToRequestParameters(name:paramsName[it], value:paramsValue[it])
+			}
+		} else if(paramsName) {
+			addToRequestParameters(name:paramsName, value:paramsValue)
+		}
+	}
 }
+
