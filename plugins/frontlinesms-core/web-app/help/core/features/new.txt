@@ -1,23 +1,24 @@
-# Awesome new features in FrontlineSMS version 2.2
-# 2.2
-## Subscriptions
-These are a new activity which allow you to automatically curate contact groups!
-## Webconnections
+# New features in FrontlineSMS 
+## FrontlineSMS v 2.2.0
+### Subscriptions
+A subscriptions allows users to text in messages that match certain specified keywords. The 
+
+### Webconnections
 Push SMS to CrowdMap or other online services, and allow 3rd party services to push out SMS to your users!
 
-# 2.1.3
-## Aliases in Poll Activity
+## FrontlineSMS v 2.1.3
+### Aliases in Poll Activity
 You can now do this and that.............
 
-# 2.0
-## Acivities
+## FrontlineSMS v 2.0.0
+### Acivities
 Activities are somthing like....
 
-## Autoreplies
+### Autoreplies
 Text in a message that matches a keyword and get a message sent to you automatically
 
-## Announcements
+### Announcements
 Send messages to many people
 
-## Polls
+### Polls
 Generate simple statistics based on a sms bases poll.....aaauwwii creating help docs is HARD

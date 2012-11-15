@@ -1,4 +1,5 @@
 <markdown:renderHtml>
+* [New Features on FrontlineSMS] [100]
 * [Messages][2]
 	* The Basics
 		* [How do I select more than one message?][5]
@@ -134,5 +135,6 @@
 [97]: core/settings/6.edit_delete_connection
 [98]: core/settings/5.manually_adding_device
 [99]: core/settings/7.translatingfrontlinesms
+[100]: core/features/new
 </markdown:renderHtml>
 
