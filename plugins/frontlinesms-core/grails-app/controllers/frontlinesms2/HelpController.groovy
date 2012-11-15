@@ -27,15 +27,15 @@ class HelpController {
 	}
 	def updateShowNewFeatures(){
 		applicationPropertiesService.showNewFeaturesPopup = (params.enableNewFeaturesPopup)?:false
-		applicationPropertiesService.lastVersionPopupAlreadyDisplayed = true
 		render "success"
 	}
 
 	def newfeatures(){
-		if(applicationPropertiesService.lastVersionPopupAlreadyDisplayed){
+		if(!applicationPropertiesService.showPopupInCurrentSession){
 			render text:"last version already displayed"
 		} else {
 			def markdownFile = new File("web-app/help/core/features/new.txt")
+			applicationPropertiesService.showPopupInCurrentSession = false
 			render template:'/help/newfeatures', model:[newfeatures:markdownFile.text.markdownToHtml()]
 		}
 	}

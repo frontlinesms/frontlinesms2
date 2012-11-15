@@ -43,7 +43,7 @@ class CoreBootStrap {
 			quartzScheduler.start()
 			test_initGeb(servletContext)
 			dev_disableSecurityFilter()
-			applicationPropertiesService.lastVersionPopupAlreadyDisplayed = true // never show new popup during tests
+			applicationPropertiesService.showNewFeaturesPopup = false // never show new popup during tests
 		}
 
 		if(Environment.current == Environment.DEVELOPMENT) {
@@ -502,8 +502,8 @@ class CoreBootStrap {
 		if(applicationPropertiesService.lastVersionRun != version){
 			applicationPropertiesService.lastVersionRun = version
 			applicationPropertiesService.showNewFeaturesPopup = true
-			applicationPropertiesService.lastVersionPopupAlreadyDisplayed = false
 		}
+		applicationPropertiesService.showPopupInCurrentSession = applicationPropertiesService.showNewFeaturesPopup
 	}
 
 	private def initialiseMockSerial() {

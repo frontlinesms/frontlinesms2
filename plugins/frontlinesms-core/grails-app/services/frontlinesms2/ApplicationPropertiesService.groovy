@@ -2,8 +2,7 @@ package frontlinesms2
 
 class ApplicationPropertiesService {
 	def propertyFileLocation = ResourceUtils.resourceDirectory.absolutePath + "/features.properties"
-	def lastVersionPopupAlreadyDisplayed
-
+	def showPopupInCurrentSession = false
 //getters
 	def getLastVersionRun(){
 		return getApplicationProperty('last.version.run')?:null
@@ -13,9 +12,6 @@ class ApplicationPropertiesService {
 		return (getApplicationProperty('show.new.features.popup') == "true")?true:false
 	}
 
-	def getLastVersionPopupAlreadyDisplayed(){
-		return (getApplicationProperty('last.version.popup.already.displayed') == "true")?true:false
-	}
 //setters
 	def setLastVersionRun(value){
 		storeProperty("last.version.run",value)
@@ -23,10 +19,6 @@ class ApplicationPropertiesService {
 
 	def setShowNewFeaturesPopup(value){
 		storeProperty("show.new.features.popup",value)	
-	}
-
-	def setLastVersionPopupAlreadyDisplayed(value){
-		storeProperty("last.version.popup.already.displayed",value)	
 	}
 
 	private void storeProperty(key,value){
@@ -65,8 +57,11 @@ class ApplicationPropertiesService {
 	def getApplicationProperty(key){
 		def MATCHER = key.replace('.', /\./) + /=(.*)/
 		def match
-		new File(propertyFileLocation).eachLine {
-			if(it ==~ MATCHER) match = (it =~ MATCHER)[0][1]
+		def file = new File(propertyFileLocation)
+		if (file.exists()) {
+			file.eachLine {
+				if(it ==~ MATCHER) match = (it =~ MATCHER)[0][1]
+			}
 		}
 		return match
 	}
