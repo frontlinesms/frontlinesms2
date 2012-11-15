@@ -3,6 +3,6 @@
 		${newfeatures}
 	</div>
 	<div>
-		<g:checkBox name="disableNewFeaturesPopup" checked="true"/> Display this every time FrontlineSMS starts
+		<g:checkBox name="enableNewFeaturesPopup" checked="true"/> Display this every time FrontlineSMS starts
 	</div>
 </div>

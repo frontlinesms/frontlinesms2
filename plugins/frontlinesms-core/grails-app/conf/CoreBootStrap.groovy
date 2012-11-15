@@ -43,6 +43,7 @@ class CoreBootStrap {
 			quartzScheduler.start()
 			test_initGeb(servletContext)
 			dev_disableSecurityFilter()
+			applicationPropertiesService.lastVersionPopupAlreadyDisplayed = true // never show new popup during tests
 		}
 
 		if(Environment.current == Environment.DEVELOPMENT) {
@@ -57,6 +58,7 @@ class CoreBootStrap {
 			// upgrade our Camel dependencies.
 			//camelContext.tracing = true
 			dev_disableSecurityFilter()
+			updateFeaturePropertyFileValues()
 		}
 
 		if(bootstrapData) {
@@ -76,6 +78,7 @@ class CoreBootStrap {
 
 		if(Environment.current == Environment.PRODUCTION) {
 			createWelcomeNote()
+			updateFeaturePropertyFileValues()
 		}
 
 		setCustomJSONRenderers()
@@ -83,7 +86,6 @@ class CoreBootStrap {
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
 		activateActivities()
-		updateFeaturePropertyFileValues()
 		println '\\o/ FrontlineSMS started.'
 	}
 

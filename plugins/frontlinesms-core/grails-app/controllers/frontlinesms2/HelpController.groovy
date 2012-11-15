@@ -26,8 +26,7 @@ class HelpController {
 		}
 	}
 	def updateShowNewFeatures(){
-		println "######### $params.disableNewFeaturesPopup"
-		applicationPropertiesService.showNewFeaturesPopup = (params.disableNewFeaturesPopup == "checked")?true:false
+		applicationPropertiesService.showNewFeaturesPopup = (params.enableNewFeaturesPopup)?:false
 		applicationPropertiesService.lastVersionPopupAlreadyDisplayed = true
 		render "success"
 	}
