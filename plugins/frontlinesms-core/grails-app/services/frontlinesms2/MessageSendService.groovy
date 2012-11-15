@@ -38,11 +38,13 @@ class MessageSendService {
 
 	def getAddressesForGroups(List groups) {
 		groups.collect {
-			def g
-			if(it.startsWith('group-')) {
-				g = Group.get(it.substring(6))
-			} else if(it.startsWith('smartgroup-')) {
-				g = SmartGroup.get(it.substring(11))
+			def g = it
+			if(g instanceof String || g instanceof GString) {
+				if(it.startsWith('group-')) {
+					g = Group.get(it.substring(6))
+				} else if(it.startsWith('smartgroup-')) {
+					g = SmartGroup.get(it.substring(11))
+				}
 			}
 			g?.addresses
 		}.flatten()
