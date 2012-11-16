@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class AppSettingsService {
+	def grailsApplication
 	private static final File PROPERTIES_FILE = new File(ResourceUtils.resourceDirectory, 'app-settings.properties')
 	private def settings = [:]
 
@@ -42,5 +43,9 @@ class AppSettingsService {
 			ex.printStackTrace()
 			// probably not the end of the world
 		}
+	}
+
+	def getServerPort() {
+		grailsApplication.config.grails.serverPort?:System.properties['server.port']?: '8080'
 	}
 }

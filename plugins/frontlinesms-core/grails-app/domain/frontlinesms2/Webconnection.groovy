@@ -10,6 +10,7 @@ import frontlinesms2.api.*
 abstract class Webconnection extends Activity implements FrontlineApi {
 	def camelContext
 	def webconnectionService
+	def appSettingsService
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webconnection' }
 	static String getType() { '' }
@@ -52,6 +53,9 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			else return true
 			})
 		secret(nullable:true)
+		url(nullable:false, validator: { val, obj ->
+			return val.startsWith("http://") || val.startsWith("https://")
+		})
 	}
 	static mapping = {
 		requestParameters cascade: "all-delete-orphan"
@@ -166,6 +170,10 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	def apiProcess(controller) {
 		//TODO: CORE-1639
 		webconnectionService.apiProcess(this, controller)
+	}
+
+	String getFullApiUrl() {
+		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
 	}
 }
 	
