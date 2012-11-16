@@ -13,6 +13,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	static final defaultValues = [sendEnabled:true, receiveEnabled:true]
 
 	def smssyncService
+	def appSettingsService
 
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
@@ -55,6 +56,10 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 			}
 		}.routeDefinitions
 		return routeDefinitions
+	}
+
+	String getFullApiUrl() {
+		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
 	}
 }
 
