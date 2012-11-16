@@ -490,3 +490,12 @@ class AutoreplySummaryTab extends geb.Module {
 		message { $("p", 0).text() }
 	}
 }
+
+
+class NewFeaturesDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("feature")
+	}
+	static content = {
+	}
+}
