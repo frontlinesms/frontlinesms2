@@ -20,6 +20,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		given:
 			startAtTab('request')
 		when:
+			waitFor { requestTab.get.displayed }
 			requestTab.url = "http://www.myurl.com"
 			requestTab.get.click()
 			requestTab.parameters[0].name = "text"
