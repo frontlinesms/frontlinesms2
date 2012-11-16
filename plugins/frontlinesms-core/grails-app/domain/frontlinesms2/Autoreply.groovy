@@ -8,13 +8,7 @@ class Autoreply extends Activity {
 	String autoreplyText
 	
 	static constraints = {
-		name(blank:false, maxSize:255, validator: { val, obj ->
-			if(obj?.deleted || obj?.archived) return true
-			def identical = Autoreply.findAllByNameIlike(val)
-			if(!identical) return true
-			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
-			else return true
-			})
+		name(blank:false, maxSize:255, validator:NAME_VALIDATOR(Autoreply))
 		autoreplyText(blank:false)
 	}
 	

@@ -16,6 +16,7 @@
 #body.messages #main-list-head ul.buttons li { display:inline-block; }
 
 #body.messages #main-list-head .activity ul.info { padding-bottom:15px; }
+#body.messages #main-list-head .activity ul.info .dynamic-field { font-style: italic; }
 #body.messages #main-list-head .activity.folder ul.info { padding-bottom:0; }
 #body.messages #main-list-head .activity ul.info li { display:block; padding:5px 10px; }
 #body.messages #main-list-head .activity .header-buttons { text-align:right; }

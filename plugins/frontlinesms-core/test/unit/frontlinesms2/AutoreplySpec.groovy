@@ -34,25 +34,6 @@ class AutoreplySpec extends Specification {
 			'test' | 'something' | true
 	}
 
-	def 'processKeyword should generate an autoreply for blank keyword if non-exact match'() {
-		given:
-			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
-
-			def sendService = Mock(MessageSendService)
-			autoreply.messageSendService = sendService
-
-			def replyMessage = mockFmessage("woteva")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
-			}) >> replyMessage
-
-			def inMessage = mockFmessage("message text", TEST_NUMBER)
-		when:
-			autoreply.processKeyword(inMessage, Mock(Keyword))
-		then:
-			1 * sendService.send(replyMessage)
-	}
-
 	def 'processKeyword should generate an autoreply'() {
 		given:
 			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')

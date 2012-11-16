@@ -75,6 +75,7 @@ class CreateActivityDialog extends MediumPopup {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
 		autoreply { $('input[value="autoreply"]') }
+		autoforward { $('input[value="autoforward"]') }
 		webconnection(wait:true) { $('input[value="webconnection"]') }
 		subscription { $('input[value="subscription"]') }
 	}
@@ -491,11 +492,77 @@ class AutoreplySummaryTab extends geb.Module {
 	}
 }
 
-
 class NewFeaturesDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains("feature")
 	}
 	static content = {
+	}
+}
+
+class AutoforwardCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("autoforward") || popupTitle.contains("edit activity")
+	}
+	static content = {
+		message { module AutoforwardMessageTab}
+		keyword { module AutoforwardKeywordTab}
+		recipients { module AutoforwardRecipientsTab}
+		confirm { module AutoforwardConfirmTab}
+		summary { module AutoforwardSummaryTab}
+		validationErrorText { $('label.error').text() }
+		errorText { errorPanel.text()?.toLowerCase() }
+		error { errorPanel }
+		create { $('button#submit') }
+	}
+}
+
+class AutoforwardMessageTab extends geb.Module {
+	static base = { $('div#tabs-1') }
+	static content = {
+		messageText { $('#messageText') }
+	}
+}
+
+class AutoforwardKeywordTab extends geb.Module {
+	static base = { $('div#tabs-2')}
+	static content = {
+		keywordText { $('#keywords') }
+		blankKeyword {$('#blankKeyword')}
+	}
+}
+
+class AutoforwardRecipientsTab extends geb.Module {
+	static base = { $('div#tabs-3')}
+	static content = {
+		addField { $('input#address') }
+		addButton { $('a.btn.add-address') }
+		manual { $('li.manual.contact') }
+		count { $('#recipient-count').text().toInteger() }
+		manualContacts { $("input", name:"addresses") }
+		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
+		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
+		contactCheckboxesChecked { $('input:checked', type:'checkbox', name:'addresses') }
+		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
+		selectGroup {group-> $("input", name:"groups", value:"${group}").jquery.click() }
+		selectContact {contact-> $("input", name:"addresses", value:"${contact}").jquery.click() }
+	}
+}
+
+class AutoforwardConfirmTab extends geb.Module {
+	static base = { $('div#tabs-4') }
+	static content = {
+		nameText {$("#name")}
+		keywordConfirm {$("#keyword-confirm").text()}
+		contacts {$("#autoforward-confirm-contacts").text()}
+		groups {$("#autoforward-confirm-groups").text()}
+		smartGroups {$("#smart-groups").text()}
+	}
+}
+
+class AutoforwardSummaryTab extends geb.Module {
+	static base = { $('div#tabs-5') }
+	static content = {
+		message { $("div.summary") }
 	}
 }

@@ -23,6 +23,8 @@ class FmessageService {
 						activity.save()
 					} else if(activity instanceof Webconnection) {
 						activity.processKeyword(messageInstance, null)
+					}else if(activity instanceof Autoforward) {
+						activity.processKeyword(messageInstance, null)
 					}
 				} else if (params.ownerId && params.ownerId != 'inbox') {
 					messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)

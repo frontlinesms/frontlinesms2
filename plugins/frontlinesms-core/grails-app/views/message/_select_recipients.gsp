@@ -1,5 +1,6 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
+	<g:hiddenField name="mobileNumbers" value=""/>
 	<div id="manual-address">
 		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label" /></label>
 		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
@@ -11,7 +12,7 @@
 		<ul id="groups">
 			<g:each in="${groupList}" var="entry" status='i'>
 				<li class="group">
-					<g:checkBox id="groups-${i}" name="groups" value="${entry.key}" onclick="selectMembers('${entry.key}', '${entry.value.name}', ${entry.value.addresses as JSON})" checked="${false}"/>
+					<g:checkBox id="groups-${i}" name="groups" value="${entry.key}" onclick="selectMembers(this,'${entry.key}', '${entry.value.name}', ${entry.value.addresses as JSON})" checked="${false}" groupMembers="${entry.value.addresses as JSON}"/>
 					<label for="groups-${i}">${entry.value.name} (${entry.value.addresses.size()})</label>
 				</li>
 			</g:each>
@@ -25,7 +26,7 @@
 		<ul id="contacts">
 			<g:each in="${contactList}" var="contact" status="i">
 				<li class="contact" f-name="${contact.name}" f-number="${contact.mobile}">
-					<g:checkBox id="addresses-${i}" name="addresses" value="${contact.mobile}" onclick="setContact('${contact.mobile}')" checked="${recipients?.contains(contact.mobile)}"/>
+					<g:checkBox id="addresses-${i}" name="addresses" value="${contact.mobile}" onclick="setContact(this,'${contact.mobile}')" checked="${recipients?.contains(contact.mobile)}"/>
 					<label for="addresses-${i}">${contact.name ?: contact.mobile}</label>
 					<span class="matched-search-result" id="matched-search-result-${i}">
 						<g:message code="contact.mobile.label"/> : ${contact.mobile}
@@ -50,31 +51,83 @@
 
 <r:script disposition="head">
 	var groupAndMembers = {}
-	function selectMembers(groupIdString, groupName, allContacts) {
-		groupAndMembers[groupIdString] = allContacts
-		$.each(allContacts, function(index, contact) {
-			setValueForCheckBox(contact, isCheckboxSelected(groupIdString));
+	function selectMembers(element, groupIdString, groupName, allContacts) {
+		var contactMobileNumbers = {};
+		$.each($('#mobileNumbers').val().split(','), function(index, value) { 
+  			if(!(value in contactMobileNumbers) && (value != '')){
+  				contactMobileNumbers[value] = true;
+  			}
 		});
-		
-		$.each(getSelectedGroupElements('groups'), function(index, groupInputElement) {
-			if(groupInputElement.value != groupName) {
-				$.each(groupAndMembers[groupInputElement.value], function(index, member) {
-					setValueForCheckBox(member, true);
-				});
-			}
-		});
-		updateMessageCount();
-	}
 
-	function setContact(contactNumber) {
-		if (!($(this).is(":checked"))) {
-			$.each(groupAndMembers, function(key, value) {
-				var partOfGroup = $.inArray(contactNumber, groupAndMembers[key]) > -1 ? true : false;
-				if (partOfGroup)
-					findInputWithValue(key).attr('checked', false);
+		if($(element).attr('checked')){
+			console.log('adding');
+			$.each(allContacts, function(index, value) { 
+	  			if(!(value in contactMobileNumbers)){
+	  				contactMobileNumbers[value] = true;
+	  			}
+			});
+		} else {
+			console.log('Unchecked');
+			$.each(allContacts, function(index, value) {
+	  			if(value in contactMobileNumbers){
+	  				if(! inCheckedGroup(value)){
+	  					delete contactMobileNumbers[value];
+	  				}
+	  			}
 			});
 		}
-		updateMessageCount();
+
+		var mobileNumbers = $.map(contactMobileNumbers, function(index, value){
+			return value;
+		});
+
+		$('#mobileNumbers').val(($.makeArray(mobileNumbers).join(',')));
+		console.log($('#mobileNumbers').val());
+
+		updateRecipientCount();
+	}
+
+	function inCheckedGroup(value){
+		var checkedGroups = $('li.group input:checked');
+		var t = false;
+	  	$.each(checkedGroups, function(index, element){
+	  		if($.inArray(value, $.makeArray($(element).attr('groupMembers')))){
+	  			t =  true;
+	  		}
+	  	});
+	  	return t;
+	}
+
+	function setContact(element,contactNumber) {
+		var contactMobileNumbers = {};
+		$.each($('#mobileNumbers').val().split(','), function(index, value) { 
+  			if(!(value in contactMobileNumbers) && (value != '')){
+  				contactMobileNumbers[value] = true;
+  			}
+		});
+
+		if($(element).attr('checked')){
+			console.log('adding');
+  			if(!(contactNumber in contactMobileNumbers)){
+  				contactMobileNumbers[contactNumber] = true;
+  			}
+		} else {
+			console.log('Unchecked');
+  			if(contactNumber in contactMobileNumbers){
+  				if(! inCheckedGroup(contactNumber)){
+  					delete contactMobileNumbers[contactNumber];
+  				}
+  			}
+		}
+
+		var mobileNumbers = $.map(contactMobileNumbers, function(index, value){
+			return value;
+		});
+
+		$('#mobileNumbers').val(($.makeArray(mobileNumbers).join(',')));
+		console.log($('#mobileNumbers').val());
+
+		updateRecipientCount();
 	}
 
 	function setValueForCheckBox(value, checked) {
@@ -83,19 +136,15 @@
 		checkBox.change();
 	}
 
-	function updateMessageCount() {
-		var addressCount = getSelectedGroupElements("addresses").size();
-		$.each(["#recipient-count", "#contacts-count"],
-			function(index, id) {
-				if($(id)) $(id).html(addressCount);
-			}
-		);
-		
-		var messageStats = $("#send-message-stats").text();
-		noOfMessages = messageStats.substring(messageStats.indexOf("(")+1, messageStats.indexOf(" S"));
-		noOfMessages = noOfMessages == 0 ? 1 : noOfMessages;
-		messageCount = addressCount * parseInt(noOfMessages);
-		$("#messages-count").html(messageCount);
+	function updateRecipientCount() {
+		var mobileNumbersArray;
+		if($('#mobileNumbers').val() != ""){
+			mobileNumbersArray = $('#mobileNumbers').val().split(',');
+		}
+		var contactCount = mobileNumbersArray? mobileNumbersArray.length:0 ;
+		$('#contacts-count').html(contactCount);
+		$('#messages-count').html(contactCount);
+		$("#recipient-count").html(contactCount);
 	}
 
 	function validateAddressEntry() {
@@ -114,7 +163,7 @@
 		}
 	}
 
-	 function addAddressHandler() {
+	function addAddressHandler() {
 		var address = $('#address').val();
 		if(address == '') {
 			return true;
@@ -123,8 +172,10 @@
 			if(address[0] == '+') sanitizedAddress = '+' + sanitizedAddress;
 			var checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val();
 			if(checkbox !== address) {
-				$("#contacts").prepend("<li class='manual contact' f-name='' f-number='" + sanitizedAddress + "'><input contacts='true' type='checkbox' onclick='setContact(" + sanitizedAddress + ")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>")
-				updateMessageCount();
+				$("#contacts").prepend("<li class='manual contact' f-name='' f-number='" + sanitizedAddress + "'><input contacts='true' type='checkbox' onclick='setContact(this," + sanitizedAddress + ")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>")
+				$("li.manual.contact[f-number='"+sanitizedAddress+"'] input").trigger('click');
+				$("li.manual.contact[f-number='"+sanitizedAddress+"'] input").attr('checked','checked');
+				updateRecipientCount();
 			}
 			$('#address').val("");
 			$("#address").removeClass('error');

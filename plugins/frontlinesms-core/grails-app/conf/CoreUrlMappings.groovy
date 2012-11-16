@@ -33,6 +33,7 @@ class CoreUrlMappings {
 		"/announcement/save"(controller:'announcement', action: 'save')
 		"/autoreply/create"(controller:'autoreply', action: 'create')
 		"/autoreply/save"(controller:'autoreply', action: 'save')
+		"/autoforward/create"(controller:'autoforward', action: 'create')
 		
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}

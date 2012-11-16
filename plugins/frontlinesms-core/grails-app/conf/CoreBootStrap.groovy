@@ -69,6 +69,7 @@ class CoreBootStrap {
 			dev_initFmessages()
 			dev_initPolls()
 			dev_initAutoreplies()
+			dev_initAutoforwards()
 			dev_initFolders()
 			dev_initAnnouncements()
 			dev_initSubscriptions()
@@ -173,7 +174,7 @@ class CoreBootStrap {
 				text:'A really long message which should be beautifully truncated so we can all see what happens in the UI when truncation is required.',
 				inbound:true,
 				date: new Date()).save(failOnError:true)
-		
+				
 		[new Fmessage(src:'+123456789', text:'manchester rules!', date:new Date()),
 				new Fmessage(src:'+198765432', text:'go manchester', date:new Date()),
 				new Fmessage(src:'Joe', text:'pantene is the best', date:new Date()-1),
@@ -198,6 +199,8 @@ class CoreBootStrap {
 		m2.addToDispatches(dst:'+254114433', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
 		m3.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
 		m4.addToDispatches(dst:'+254115533', status:DispatchStatus.PENDING).save(failOnError:true)
+
+		new Fmessage(src:'+33445566', text:"modem message", inbound:true, date: new Date()).save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFconnections() {
@@ -212,10 +215,11 @@ class CoreBootStrap {
 		if(!bootstrapData) return
 		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
 		new SmslibFconnection(name:"MobiGater Modem", port:'/dev/ttyACM0', baud:9600, pin:'1149').save(failOnError:true)
 		new SmssyncFconnection(name:"SMSSync connection", secret:'secret').save(flush: true, failOnError:true)
+		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
+		
 	}
 	
 	
@@ -282,6 +286,14 @@ class CoreBootStrap {
 			.addToKeywords(value:"COLOR")
 			.save(failOnError:true, flush:true)
 	}
+
+	private def dev_initAutoforwards() {
+		if(!bootstrapData) return
+		new Autoforward(name:'Excitement', sentMessageText:'This is exciting: ${message_text}')
+			.addToKeywords(value:'FORWARD')
+			.addToSmartGroups(SmartGroup.findByName('Test Contacts'))
+			.save(failOnError:true, flush:true)
+	}
 	
 	private def dev_initFolders() {
 		if(!bootstrapData) return
@@ -303,6 +315,12 @@ class CoreBootStrap {
 				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
 			it.save(failOnError:true, flush:true)
 		}
+
+		def m = Fmessage.findByText("modem message")
+		def modem = SmslibFconnection.list()[0]
+		modem.addToMessages(m)
+		modem.save(failOnError:true, flush:true)
+
 	}
 	
 	private def dev_initAnnouncements() {
@@ -344,7 +362,7 @@ class CoreBootStrap {
 			it.save(failOnError:true, flush:true)
 		}
 		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET)
-			.addToKeywords(value:'FORWARD')
+			.addToKeywords(value:'WEBCONNECTION')
 			.addToKeywords(value:'UPLOAD')
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))

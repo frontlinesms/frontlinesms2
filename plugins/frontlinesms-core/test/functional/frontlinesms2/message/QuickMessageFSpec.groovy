@@ -121,25 +121,6 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { recipients.count == 2 }
 	}
 
-	def "should deselect all member recipients when a group is un checked"() {
-		setup:
-			createData()
-		when:
-			launchQuickMessageDialog()
-			waitFor { next.displayed }
-			next.click()
-		then:
-			recipients.groupCheckboxes[0].displayed
-		when:
-			recipients.groupCheckboxes[0].click()
-		then:
-			waitFor { recipients.count == 2 }
-		when:
-			recipients.groupCheckboxes[0].click()
-		then:
-			waitFor { recipients.count == 0 }
-	}
-
 	def "should not allow to proceed if the recipients are not selected in the quick message screen"() {
 		setup:
 			createData()
@@ -156,28 +137,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { errorPanel.displayed }
 	}
 
-	def "selected group should get unchecked when a member drops off"() {
-		setup:
-			createData()
-		when:
-			launchQuickMessageDialog()
-			waitFor { next.displayed }
-			next.click()
-		then:
-			recipients.groupCheckboxes[0].displayed
-		when:
-			recipients.groupCheckboxes[0].click()
-		then:
-			waitFor { recipients.count == 2 }
-		when:
-			recipients.recipientCheckboxByValue("12345678").click()
-		then:
-			waitFor { !recipients.groupCheckboxes[0].checked }
-			waitFor { !recipients.groupCheckboxes[1].checked }
-			waitFor { recipients.count == 1 }
-	}
-
-	def "should not deselect common members across groups when one of the group is unchecked"() {
+	def "when common memeber is deselected the count should not change unless all parent groups are deselected"() {
 		setup:
 			createData()
 		when:
@@ -253,10 +213,10 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			compose.textArea << "Hello, "
 			compose.textArea.jquery.trigger('keyup')
 		then:
-			compose.magicWand.jquery.val('contact_name')
+			compose.magicWand.jquery.val('recipient_number')
 			compose.magicWand.jquery.trigger('change')
 		then:
-			waitFor { compose.textArea.jquery.val() == 'Hello, ${contact_name}' }
+			waitFor { compose.textArea.jquery.val() == 'Hello, ${recipient_number}' }
 	}
 	
 	private def createData() {

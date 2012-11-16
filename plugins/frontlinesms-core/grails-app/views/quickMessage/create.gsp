@@ -36,7 +36,7 @@
 	function initializePopup() {
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				updateMessageCount();
+				updateRecipientCount();
 				return true;
 			}
 		});
@@ -44,7 +44,7 @@
 		$("#tabs-2").contentWidget({
 			validate: function() {
 				addAddressHandler();
-				return isGroupChecked("addresses");
+				return ($("#recipient-count").html() > 0);
 			}
 		});
 	}

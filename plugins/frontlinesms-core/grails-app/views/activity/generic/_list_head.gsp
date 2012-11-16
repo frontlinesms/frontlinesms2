@@ -6,7 +6,7 @@
 		<g:formatDate date="${ownerInstance.dateCreated}"/>
 	</li>
 	<li>
-		${ownerInstance.autoreplyText}
+		${ownerInstance.sentMessageText}
 	</li>
 	<g:if test="${ownerInstance?.keywords}">
 		<li id="web_connection_keywords"><g:message code="poll.keywords"/> : ${ownerInstance?.keywords*.value.join(',')}</li>

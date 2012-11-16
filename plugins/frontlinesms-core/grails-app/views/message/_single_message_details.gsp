@@ -8,7 +8,7 @@
 				<span>
 					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
 						<g:remoteLink controller="message" action="listRecipients" params="[messageId: messageInstance.id]" onSuccess="showRecipientList(data)">
-							<g:message code="fmessage.to.multiple" args="${[] << messageInstance.displayName}" />
+							<g:message code="fmessage.to.multiple" args="${[messageInstance.displayName]}" />
 						</g:remoteLink>
 					</g:if>
 					<g:else>
@@ -22,6 +22,9 @@
 				</g:if>
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.date}"/></p>
+			<g:if test="${messageInstance.inbound && messageInstance.receivedOn}">
+				<p id="message-detail-fconnection"><g:message code="fmessage.connection.receivedon"/>${messageInstance.receivedOn?.name}</p>
+			</g:if>
 			<g:if test="${messageInstance.messageOwner}">
 				<p id="message-detail-owner" class="${messageInstance.messageOwner.shortName}">
 					<g:link action="${messageInstance.messageOwner.shortName}" params="[ownerId: messageInstance.messageOwner.id]">
