@@ -46,7 +46,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.subType('ushahidi').click()
 		then:
 			configureUshahidi.ushahidiDeployAddress.displayed
-			configureUshahidi.ushahidiKeyLabel.text() == 'API Key:'
+			configureUshahidi.ushahidiKeyLabel.text() == 'Ushahidi API Key:'
 	}
 
 	@Unroll
@@ -62,7 +62,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		and:
 			next.click()
 		then:
-			(valid && keywordTab.keyword.displayed ) || (!valid && errorPanel.displayed)
+			(valid && apiTab.secret.displayed ) || (!valid && errorPanel.displayed)
 		where:
 			deployAddress     | apiKey       | valid
 			'www.example.com' | 'ABCDE12345' | true
@@ -88,7 +88,15 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		and:
 			configureUshahidi.subType('crowdmap').click()
 			configureUshahidi.crowdmapDeployAddress.value('my')
+			configureUshahidi.crowdmapDeployAddress.jquery.trigger('change')
+			configureUshahidi.crowdmapDeployAddress.jquery.trigger('keyup')
 			configureUshahidi.crowdmapApiKey.value('a1b2c3d4e5')
+			configureUshahidi.crowdmapApiKey.jquery.trigger('change')
+			configureUshahidi.crowdmapApiKey.jquery.trigger('keyup')
+		when:
+			next.click()
+		then:
+			apiTab.secret.displayed
 		when:
 			next.click()
 			keywordTab.useKeyword('global').click()
@@ -96,7 +104,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			confirmTab.confirm('service') == 'Crowdmap'
 			confirmTab.confirm('url') == 'https://my.crowdmap.com/frontlinesms/'
-			confirmTab.confirm('key') == 'a1b2c3d4e5'
+			confirmTab.crowdmap_api_key == 'a1b2c3d4e5'
 			confirmTab.confirm('keyword') == 'None'
 	}
 
@@ -108,8 +116,11 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			waitFor { at WebconnectionWizard }
 			configureUshahidi.crowdmapDeployAddress.displayed
 			configureUshahidi.crowdmapDeployAddress.value("frontlineCrowd")
+			configureUshahidi.crowdmapDeployAddress.jquery.trigger('change')
+			configureUshahidi.crowdmapDeployAddress.jquery.trigger('keyup')
 			configureUshahidi.crowdmapApiKey.value("2343asdasd")
 			next.click()
+			next.click() // skip api tab
 		and:
 			keywordTab.keyword = "Repo"
 			next.click()
@@ -117,7 +128,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.name == "Trial"
 			confirmTab.confirm('service') == 'Crowdmap'
 			confirmTab.confirm('url') == 'https://frontlineCrowd.crowdmap.com/frontlinesms/'
-			confirmTab.confirm('key') == '2343asdasd'
+			confirmTab.crowdmap_api_key == '2343asdasd'
 			confirmTab.confirm('keyword') == 'Repo'
 		when:
 			submit.click()
@@ -133,6 +144,8 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		configureUshahidi.subType('crowdmap').click()
 		configureUshahidi.crowdmapDeployAddress = 'default'
 		configureUshahidi.crowdmapApiKey = 'aaa111bbb222'
+		next.click()
+		waitFor { apiTab.secret.displayed }
 		next.click()
 		keywordTab.useKeyword('global').click()
 	}
