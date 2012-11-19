@@ -1,7 +1,7 @@
 {
 	validation:{ displayed_url:"required", key:"required", keyword:"required"},
 	updateConfirmationScreen:function() {
-		var apiKey = ('('+ i18n('webconnection.api.disabled') +')');
+		var fsmsApiKey = ('('+ i18n('webconnection.api.disabled') +')');
 		if ($("input[name=enableApi]").is(":checked"))
 			fsmsApiKey = $("input[name=secret]").val();
 		$("#webconnection-config label.hidden").hide();
