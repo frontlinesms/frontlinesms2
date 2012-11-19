@@ -5,6 +5,6 @@
 </div>
 <div class="confirm">
 	<h2><g:message code="webconnection.details.label"/></h2>
-	<fsms:activityConfirmTable fields="service, url, key, keyword" type="${UshahidiWebconnection.type}" instanceClass="${UshahidiWebconnection}"/>
+	<fsms:activityConfirmTable fields="service, url, crowdmapkey, fsmskey, keyword" type="${UshahidiWebconnection.type}" instanceClass="${UshahidiWebconnection}"/>
 </div>
 

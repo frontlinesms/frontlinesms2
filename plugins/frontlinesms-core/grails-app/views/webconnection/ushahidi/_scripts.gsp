@@ -3,7 +3,7 @@
 	updateConfirmationScreen:function() {
 		var apiKey = ('('+ i18n('webconnection.api.disabled') +')');
 		if ($("input[name=enableApi]").is(":checked"))
-			apiKey = $("input[name=secret]").val();
+			fsmsApiKey = $("input[name=secret]").val();
 		$("#webconnection-config label.hidden").hide();
 		var selectType = function(ctx) {
 			var show = $(ctx).val();
@@ -26,7 +26,8 @@
 		var keyword = $("input[name=keywords]").val() || i18n("webconnection.none.label");
 		$("#confirm-service").html('<p style="text-transform:capitalize">' + $("input[name=serviceType]:checked").val() + '</p>');
 		$("#confirm-url").html('<p>' + $("input[name=url]").val()  + '</p>');
-		$("#confirm-key").html('<p>' + apiKey + '</p>');
+		$("#confirm-fsmskey").html('<p>' + fsmsApiKey + '</p>');
+		$("#confirm-crowdmapkey").html('<p>' + $('input#key').val() + '</p>');
 		$("#confirm-keyword").html('<p>' + keyword  + '</p>');
 	}
 }
