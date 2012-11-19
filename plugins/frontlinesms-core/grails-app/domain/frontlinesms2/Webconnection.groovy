@@ -7,6 +7,7 @@ import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 import frontlinesms2.api.*
 
+@FrontlineApiAnnotations(apiUrl="webconnection")
 abstract class Webconnection extends Activity implements FrontlineApi {
 	def camelContext
 	def webconnectionService

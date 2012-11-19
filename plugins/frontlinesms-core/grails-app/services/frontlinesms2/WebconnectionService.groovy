@@ -63,12 +63,12 @@ class WebconnectionService {
 	}
 
 	def generateApiResponse(webcon, controller) {
-		def message = controller.request['JSON'].message
-		def recipients = controller.request['JSON'].recipients
+		def message = controller.request.JSON?.message
+		def recipients = controller.request.JSON?.recipients
 		def errors = [invalid:[], missing:[]]
-		println "JSON IS ${controller.request['JSON']}"
-		println "MESSAGE IS ${controller.request['JSON'].message}"
-		println "RECIPIENTS IS ${controller.request['JSON'].recipients}"
+		println "JSON IS ${controller.request.JSON}"
+		println "MESSAGE IS ${controller.request.JSON?.message}"
+		println "RECIPIENTS IS ${controller.request.JSON?.recipients}"
 
 		//> Detect and return error conditions
 		if (!message)
@@ -105,9 +105,9 @@ class WebconnectionService {
 			}
 			else if (it.type == "contact") {
 				if(it.id != null)
-					addresses << Contact.get(it.id).mobile
+					addresses << Contact.get(it.id)?.mobile
 				else if(it.name)
-					addresses << Contact.findByName(it.name).mobile
+					addresses << Contact.findByName(it.name)?.mobile
 			}
 			else if (it.type == "address") {
 				addresses << it.value

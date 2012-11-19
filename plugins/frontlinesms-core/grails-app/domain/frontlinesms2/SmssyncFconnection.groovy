@@ -5,6 +5,7 @@ import org.apache.camel.model.RouteDefinition
 
 import frontlinesms2.api.*
 
+@FrontlineApiAnnotations(apiUrl="smssync")
 class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	static final String apiUrl = 'smssync'
 	static String getShortName() { 'smssync' }
