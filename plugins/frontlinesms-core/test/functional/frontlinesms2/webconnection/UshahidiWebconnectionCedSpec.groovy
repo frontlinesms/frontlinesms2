@@ -46,7 +46,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.subType('ushahidi').click()
 		then:
 			configureUshahidi.ushahidiDeployAddress.displayed
-			configureUshahidi.ushahidiKeyLabel.text() == 'API Key:'
+			configureUshahidi.ushahidiKeyLabel.text() == 'Ushahidi API Key:'
 	}
 
 	@Unroll
@@ -89,8 +89,10 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.subType('crowdmap').click()
 			configureUshahidi.crowdmapDeployAddress.value('my')
 			configureUshahidi.crowdmapDeployAddress.jquery.trigger('change')
+			configureUshahidi.crowdmapDeployAddress.jquery.trigger('keyup')
 			configureUshahidi.crowdmapApiKey.value('a1b2c3d4e5')
 			configureUshahidi.crowdmapApiKey.jquery.trigger('change')
+			configureUshahidi.crowdmapApiKey.jquery.trigger('keyup')
 		when:
 			next.click()
 		then:
@@ -102,7 +104,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			confirmTab.confirm('service') == 'Crowdmap'
 			confirmTab.confirm('url') == 'https://my.crowdmap.com/frontlinesms/'
-			confirmTab.confirm('crowdmap_api_key') == 'a1b2c3d4e5'
+			confirmTab.crowdmap_api_key == 'a1b2c3d4e5'
 			confirmTab.confirm('keyword') == 'None'
 	}
 
@@ -115,6 +117,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.crowdmapDeployAddress.displayed
 			configureUshahidi.crowdmapDeployAddress.value("frontlineCrowd")
 			configureUshahidi.crowdmapDeployAddress.jquery.trigger('change')
+			configureUshahidi.crowdmapDeployAddress.jquery.trigger('keyup')
 			configureUshahidi.crowdmapApiKey.value("2343asdasd")
 			next.click()
 			next.click() // skip api tab
@@ -125,7 +128,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.name == "Trial"
 			confirmTab.confirm('service') == 'Crowdmap'
 			confirmTab.confirm('url') == 'https://frontlineCrowd.crowdmap.com/frontlinesms/'
-			confirmTab.confirm('crowdmap_api_key') == '2343asdasd'
+			confirmTab.crowdmap_api_key == '2343asdasd'
 			confirmTab.confirm('keyword') == 'Repo'
 		when:
 			submit.click()
