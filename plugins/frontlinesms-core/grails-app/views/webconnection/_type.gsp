@@ -14,3 +14,8 @@
 		</ul>
 	</div>
 </g:if>
+<r:script>
+$(function() {
+	setType('generic');
+});
+</r:script>
