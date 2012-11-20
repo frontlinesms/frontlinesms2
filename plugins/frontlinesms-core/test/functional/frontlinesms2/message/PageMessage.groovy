@@ -117,7 +117,7 @@ class SingleMessageDetails extends geb.Module {
 	static content = {
 		noneSelected { $('#message-detail-content').text().toLowerCase() == "no message selected" }
 		sender { $('#message-detail-sender').text() }
-		senderLink(required:false) { $('#message-detail-sender a') }
+		senderLink { $('#message-detail-sender a') }
 		addToContacts(required:false) { $('#add-contact') }
 		text { $('#message-detail-content').text() }
 		date {
