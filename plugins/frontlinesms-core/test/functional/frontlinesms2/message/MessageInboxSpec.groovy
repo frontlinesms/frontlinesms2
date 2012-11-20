@@ -144,8 +144,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			messageList.messages[0].checkbox.click()
 			messageList.messages[1].checkbox.click()
 		then:
-			waitFor("veryslow") { multipleMessageDetails.displayed }
-			waitFor("veryslow") { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
+			waitFor('very slow') { multipleMessageDetails.displayed }
+			waitFor('very slow') { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
 			messageList.messages[1].checkbox.click()
 		then:
@@ -241,6 +241,40 @@ class MessageInboxSpec extends MessageBaseSpec {
 			js.refreshMessageCount()
 		then:
 			waitFor { tabs.unreadcount == 2}
+	}
+
+	def "should show create contact link for a recipient that is not in the contact list"() {
+		given: 'test message is created'
+			Fmessage.build(src:'369258147', text:'A sent message')
+		when : 'test message is selected'
+			to PageMessageSent, Fmessage.findBySrc('369258147').id
+		then : 'add contact icon is displayed'
+			waitFor { singleMessageDetails.text == 'A sent message' }
+			singleMessageDetails.senderLink.displayed
+	}
+
+	def "should not show create contact link for a recipient that is in the contact list"() {
+		given: 'test message is created'
+			Fmessage.build(src:'Donald', text:'A sent message')
+		when : 'test message is selected'
+			to PageMessageSent, Fmessage.findBySrc('Donald').id
+		then : 'add contact icon is displayed'
+			waitFor { singleMessageDetails.text == 'A sent message' }
+			!singleMessageDetails.senderLink.displayed
+	}
+
+	def "should not show create contact link for multiple recipients that are not in the contact list"() {
+		given: 'test message is created'
+			def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
+				.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
+				.addToDispatches(dst:"+222", status:DispatchStatus.SENT, dateSent:new Date())
+				.addToDispatches(dst:"+333", status:DispatchStatus.SENT, dateSent:new Date())
+				.save(failOnError:true, flush:true)
+		when : 'test message is selected'
+			to PageMessageSent, Fmessage.findBySrc('000').id
+		then : 'add contact icon is displayed'
+			waitFor { singleMessageDetails.text == 'outgoing message to Pedro' }
+			!singleMessageDetails.senderLink.displayed
 	}
 
 	String dateToString(Date date) {
