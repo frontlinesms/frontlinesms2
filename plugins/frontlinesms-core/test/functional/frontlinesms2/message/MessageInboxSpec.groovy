@@ -272,7 +272,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageSent, Fmessage.findBySrc('369258147').id
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'A sent message' }
-			singleMessageDetails.senderLink.displayed
+			singleMessageDetails.addToContacts.displayed
 	}
 
 	def "should not show create contact link for a recipient that is in the contact list"() {
@@ -282,7 +282,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageSent, Fmessage.findBySrc('Donald').id
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'A sent message' }
-			!singleMessageDetails.senderLink.displayed
+			!singleMessageDetails.addToContacts.displayed
 	}
 
 	def "should not show create contact link for multiple recipients that are not in the contact list"() {
@@ -296,7 +296,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageSent, Fmessage.findBySrc('000').id
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'outgoing message to Pedro' }
-			!singleMessageDetails.senderLink.displayed
+			!singleMessageDetails.addToContacts.displayed
 	}
 
 	String dateToString(Date date) {
