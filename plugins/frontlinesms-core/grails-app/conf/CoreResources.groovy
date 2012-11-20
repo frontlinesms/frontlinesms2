@@ -38,6 +38,9 @@ modules = {
 		resource url:[dir:'js', file:'magicwand.js'], disposition:'head'
 		resource url:[dir:'js', file:'selectmenuTools.js'], disposition:'head'
 		resource url:[dir:'js', file:"activity/popupCustomValidation.js"], disposition:'head'
+		
+		resource url:[dir:'js', file:"guiders-1.2.8.js"], disposition:'head'
+		resource url:[dir:'css', file:"guiders-1.2.8.css"], disposition:'head'
 	}
 	
 	messages {

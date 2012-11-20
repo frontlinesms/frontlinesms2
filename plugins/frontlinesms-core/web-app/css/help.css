@@ -12,12 +12,12 @@
 #modalBox.help #help-index li a:hover { background-color:#e5eff3; }
 
 #modalBox.help #help-index > ul > li { text-indent:17px; }
-#modalBox.help #help-index li a { text-indent:-17px; padding-left:34px; padding-right:17px; }
-#modalBox.help #help-index > ul > li > ul > li { text-indent:28px; }
-#modalBox.help #help-index li li a { text-indent:-17px; padding-left:44px; padding-right:17px; }
-#modalBox.help #help-index li li li a { text-indent:-17px; padding-left:54px; padding-right:17px; }
+#modalBox.help #help-index li a { text-indent:0px; padding-left:34px; padding-right:17px; }
+#modalBox.help #help-index > ul > li > ul > li { text-indent:15px; }
+#modalBox.help #help-index li li a { text-indent:0px; padding-left:30px; padding-right:17px; }
+#modalBox.help #help-index li li li a { text-indent:0px; padding-left:0px; padding-right:5px; }
 
-
+#help-content .ui-accordion .ui-accordion-content,.ui-accordion-content-active { padding:0px 0px 0px 20px !important; margin:2px 0px;}
 #modalBox.help #help-content { padding:17px; line-height:140%; }
 #modalBox.help #help-content h1 { font-weight:bold; font-size:150%; margin:0 0 17px 0; }
 #modalBox.help #help-content h2 { font-weight:bold; font-size:130%; margin:17px 0 12px 0; }
@@ -32,5 +32,10 @@
 #modalBox.help #help-content p:nth-child(2) { font-style:italic; }
 
 #modalBox.help #help-content ul, #modalBox.help #help-content ol { margin:6px 0; }
-#modalBox.help #help-content li { padding-left:1.5em; text-indent:-1em; }
+#modalBox.help #help-content li { padding-left:1.5em; margin-top:3px !important; text-indent:-1em; }
 #modalBox.help #help-content li:before { content:"\00BB \0020" }
+
+.ui-accordion-header { padding-left:4px; }
+span.ui-icon { padding-left:4px; }
+.ui-accordion-header.ui-state-active { background-image: url("../images/icons/headerSelected.png"); background-repeat: no-repeat; }
+.ui-accordion-header.ui-state-default { background-image: url("../images/icons/header.png");  background-repeat: no-repeat;}

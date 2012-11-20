@@ -189,3 +189,52 @@ $(function(){
 		}
 	});
 });
+
+$(function(){
+
+	guiders.createGuider({
+		buttons: [{name: "Next"}],
+		description: "Welcome to the Subscription guider",
+		id: "first",
+		next: "second",
+		//overlay: true,
+		title: "Subscription guider"
+	});
+
+	guiders.createGuider({
+		attachTo: "#create-new-activity", 
+		buttons: [{name: "Next"}],
+		description: "Click this button to create a new activity",
+		id: "second",
+		next: "third",
+		position: 3,
+		highlight: "#create-new-activity",
+		overlay: true,
+		title: "New activity",
+		width: 500
+	});
+
+	var divSelector = $('input[value="subscription"]').parent().find("div.info").css('border','2px solid red !important');
+	//divSelector.css('border', '2px solid red !important');
+	guiders.createGuider({
+		attachTo: divSelector, 
+		buttons: [{name: "Next"}],
+		description: "This is the quick message guider",
+		id: "third",
+		next: "fourth",
+		position: 12,
+		highlight: divSelector,
+		overlay: true,
+		title: "Quick message"
+	});
+
+	guiders.createGuider({
+		buttons: [{name: "Next"}],
+		description: "Asynchronous worked",
+		id: "fourth",
+		next: "fifth",
+		overlay: true,
+		title: "Asynchronous",
+		width: 500
+	});
+});
