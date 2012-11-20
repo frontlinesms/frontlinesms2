@@ -586,9 +586,9 @@ class CoreBootStrap {
 	}
 
 	private def dev_disableSecurityFilter() {
-		appSettingsService.set("enabledAuthentication", '')
-		appSettingsService.set("username", '') 
-		appSettingsService.set("password", '')
+		appSettingsService.set("auth.basic.enabled", '')
+		appSettingsService.set("auth.basic.username", '')
+		appSettingsService.set("auth.basic.password", '')
 	}
 
 	private Date createDate(String dateAsString) {

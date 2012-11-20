@@ -6,7 +6,7 @@ class SecurityFilters {
 	def filters = {
 		basicAuth(controller:'*', action:'*', uriExclude:'/api/**') {
 			before = {
-				def enabledAuthentication = appSettingsService.get("enabledAuthentication")
+				def enabledAuthentication = appSettingsService.get("auth.basic.enabled")
 				if(enabledAuthentication) {
 					def basicAuthRequired = { credentialsProvided ->
 						if(credentialsProvided) response.status = 403
@@ -16,8 +16,8 @@ class SecurityFilters {
 						}
 						return false
 					}
-					def username = new String(appSettingsService.get("username").decodeBase64())
-					def password = new String(appSettingsService.get("password").decodeBase64())
+					def username = new String(appSettingsService.get("auth.basic.username").decodeBase64())
+					def password = new String(appSettingsService.get("auth.basic.password").decodeBase64())
 
 					def authString = request.getHeader('Authorization')
 					if(!authString) return basicAuthRequired()
