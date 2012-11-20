@@ -65,12 +65,19 @@ class WebconnectionService {
 	def generateApiResponse(webcon, controller) {
 		def message = controller.request.JSON?.message
 		def recipients = controller.request.JSON?.recipients
+		def secret = controller.request.JSON?.secret
 		def errors = [invalid:[], missing:[]]
 		println "JSON IS ${controller.request.JSON}"
 		println "MESSAGE IS ${controller.request.JSON?.message}"
 		println "RECIPIENTS IS ${controller.request.JSON?.recipients}"
 
-		//> Detect and return error conditions
+		//> Detect and return 401 (authentication) error conditions
+		if(!secret)
+			return [status:401, text:"no secret provided"]
+		if(secret != webcon.secret)
+			return [status:401, text:"invalid secret"]
+
+		//> Detect and return 400 (invalid request) error conditions
 		if (!message)
 			errors.missing << "message"
 		if (recipients == null)
@@ -95,19 +102,19 @@ class WebconnectionService {
 				if(it.id != null)
 					groups << Group.get(it.id)
 				else if(it.name)
-					groups << Group.findByName(it.name)
+					groups << Group.findByNameIlike(it.name.toLowerCase())
 			}
 			else if (it.type == "smartgroup") {
 				if(it.id != null)
 					groups << SmartGroup.get(it.id)
 				else if(it.name)
-					groups << SmartGroup.findByName(it.name)
+					groups << SmartGroup.findByNameIlike(it.name.toLowerCase())
 			}
 			else if (it.type == "contact") {
 				if(it.id != null)
 					addresses << Contact.get(it.id)?.mobile
 				else if(it.name)
-					addresses << Contact.findByName(it.name)?.mobile
+					addresses << Contact.findByNameIlike(it.name.toLowerCase())?.mobile
 			}
 			else if (it.type == "address") {
 				addresses << it.value
@@ -120,9 +127,12 @@ class WebconnectionService {
 		//> Send message
 		def m = messageSendService.createOutgoingMessage([messageText: message, addresses: addresses, groups: groups])
 		println "I am about to send $m"
+		if(m.dispatches?.size() == 0)
+			return [status:400, text:"no recipients supplied"]
 		messageSendService.send(m)
 		webcon.addToMessages(m)
 		webcon.save(failOnError: true)
+		"message successfully queued to send to ${m.dispatches.size()} recipient(s)"
 	}
 }
 
