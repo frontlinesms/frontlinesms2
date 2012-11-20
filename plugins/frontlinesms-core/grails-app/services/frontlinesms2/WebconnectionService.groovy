@@ -127,7 +127,7 @@ class WebconnectionService {
 		//> Send message
 		def m = messageSendService.createOutgoingMessage([messageText: message, addresses: addresses, groups: groups])
 		println "I am about to send $m"
-		if(m.dispatches?.size() == 0)
+		if(!m.dispatches)
 			return [status:400, text:"no recipients supplied"]
 		messageSendService.send(m)
 		webcon.addToMessages(m)
