@@ -24,7 +24,7 @@
 							<h2>'${c.name}'</h2>
 							<p class="connection-type">(<g:message code="${c.getClass().simpleName.toLowerCase()}.label"/>)</p>
 							<g:if test="${c instanceof frontlinesms2.SmssyncFconnection}">
-								<p class="smssync-url">${"http://you-ip-address"+createLink(uri: '/')+"api/1/smssync/"+c.id+"/"+(c.secret?:'')}</p>
+								<p class="smssync-url">${"http://you-ip-address"+createLink(uri: '/')+"api/1/smssync/"+c.id+"/"}</p>
 							</g:if>
 							<p class="connection-status"><g:message code="${c.status.i18n}"/></p>
 						</div>

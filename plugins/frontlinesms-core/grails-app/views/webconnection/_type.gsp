@@ -7,10 +7,15 @@
 				<li>
 					<label for="webconnectionType"><g:message code="webconnection.${it.type}.label"/></label>
 					<p class="info"><g:message code="webconnection.${it.type}.description"/></p>
-					<g:radio name="webconnectionType" checked="${i == 0}"
-							value="${it.type}" onclick="setType('${it.type}')"/>
+					<g:radio name="webconnectionType" checked="${it.type == 'generic'}"
+							value="${it.type}" onchange="setType('${it.type}')"/>
 				</li>
 			</g:each>
 		</ul>
 	</div>
 </g:if>
+<r:script>
+$(function() {
+	setType('generic');
+});
+</r:script>

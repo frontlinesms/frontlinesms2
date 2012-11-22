@@ -40,14 +40,14 @@ class MessageSendService {
 		if(contacts) contacts*.mobile
 	}
 
-	private def getAddressesForGroups(List groups) {
-		groups -= null
-		groups.collect { g ->
-			if(g instanceof String) {
-				if(g.startsWith('group-')) {
-					g = Group.get(g.substring(6))
-				} else if(g.startsWith('smartgroup-')) {
-					g = SmartGroup.get(g.substring(11))
+	def getAddressesForGroups(List groups) {
+		groups.collect {
+			def g = it
+			if(g instanceof String || g instanceof GString) {
+				if(it.startsWith('group-')) {
+					g = Group.get(it.substring(6))
+				} else if(it.startsWith('smartgroup-')) {
+					g = SmartGroup.get(it.substring(11))
 				}
 			}
 			g?.addresses

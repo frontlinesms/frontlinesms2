@@ -5,6 +5,9 @@
 		var httpMethod = $("input[name=httpMethod]:checked").val().toUpperCase();
 		var requestParameters = "";
 		var keyword = $("input#keywords").val() || i18n("webconnection.none.label");
+		var apiKey = ('('+ i18n('webconnection.api.disabled') +')');
+		if ($("input[name=enableApi]").is(":checked"))
+			apiKey = $("input[name=secret]").val();
 		if($(".web-connection-parameter.disabled").is(":hidden")) { 
 			requestParameters = i18n("webconnection.none.label")
 		} else {
@@ -18,6 +21,7 @@
 		$("#confirm-url").html('<p>' + url  + '</p>');
 		$("#confirm-httpMethod").html('<p>' + httpMethod  + '</p>');
 		$("#confirm-keyword").html('<p>' + keyword  + '</p>');
+		$("#confirm-key").html('<p>' + apiKey + '</p>');
 		$("#confirm-parameters").html('<p>' + requestParameters  + '</p>');
 
 	},

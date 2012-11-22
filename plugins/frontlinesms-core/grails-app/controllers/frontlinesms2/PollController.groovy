@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
+@Mixin(ControllerUtils)
 class PollController extends ActivityController {
 	def pollService
 
@@ -31,8 +32,6 @@ class PollController extends ActivityController {
 		}
 	}
 
-	private def withPoll(Closure c) {
-		def pollInstance = Poll.get(params.ownerId)?: new Poll()
-		c.call(pollInstance)
-	}
+	private def withPoll = withDomainObject Poll, { params.ownerId }
 }
+
