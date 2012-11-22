@@ -52,6 +52,6 @@ function goToSection() {
 <div id="help-index">
 	<fsms:render template="index"/>
 </div>
-<div id="help-content">
+<div id="help-content" class="help-content">
 </div>
 

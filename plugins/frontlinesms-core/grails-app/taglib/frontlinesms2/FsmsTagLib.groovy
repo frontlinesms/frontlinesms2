@@ -5,8 +5,16 @@ import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
 
 class FsmsTagLib {
 	static namespace = 'fsms'
+
+	def appSettingsService
 	def expressionProcessorService
 	def grailsApplication
+
+	def ifAppSetting = { att, body ->
+		if(Boolean.parseBoolean(appSettingsService[att.test])) {
+			out << body()
+		}
+	}
 
 	def wizard = { att, body ->
 		out << "<div id='tabs' class=\"vertical-tabs\">"

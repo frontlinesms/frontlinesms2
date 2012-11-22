@@ -5,12 +5,20 @@ class AppSettingsService {
 	private static final File PROPERTIES_FILE = new File(ResourceUtils.resourceDirectory, 'app-settings.properties')
 	private def settings = [:]
 
+	def propertyMissing(String name) {
+		return get(name)
+	}
+
+	def propertyMissing(String name, value) {
+		set(name, value)
+	}
+
 	synchronized def init() {
 		load()
 	}
 
 	synchronized def set(key, value) {
-		settings[key] = value
+		settings[key] = value?.toString()
 		persist()
 	}
 

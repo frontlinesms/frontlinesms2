@@ -28,7 +28,6 @@ class CoreBootStrap {
 	def camelContext
 	def messageSource
 	def quartzScheduler
-	def applicationPropertiesService
 
 	def bootstrapData = Environment.current == Environment.DEVELOPMENT || Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']?:'')
 	
@@ -43,7 +42,8 @@ class CoreBootStrap {
 			quartzScheduler.start()
 			test_initGeb(servletContext)
 			dev_disableSecurityFilter()
-			applicationPropertiesService.showNewFeaturesPopup = false // never show new popup during tests
+			// never show new popup during tests
+			appSettingsService['newfeatures.popup.show.immediately'] = false
 		}
 
 		if(Environment.current == Environment.DEVELOPMENT) {
@@ -517,12 +517,14 @@ class CoreBootStrap {
 	}
 
 	private def updateFeaturePropertyFileValues(){
-		def version = ApplicationHolder.application.metadata.'app.version' 
-		if(applicationPropertiesService.lastVersionRun != version){
-			applicationPropertiesService.lastVersionRun = version
-			applicationPropertiesService.showNewFeaturesPopup = true
+		def currentVersion = ApplicationHolder.application.metadata.'app.version'
+		def previousVersionRun = appSettingsService['version.lastrun']
+		if(currentVersion != previousVersionRun) {
+			appSettingsService['newfeatures.popup.show.infuture'] = true
+			appSettingsService['version.lastrun'] = currentVersion
+			appSettingsService.persist()
 		}
-		applicationPropertiesService.showPopupInCurrentSession = applicationPropertiesService.showNewFeaturesPopup
+		appSettingsService['newfeatures.popup.show.immediately'] = appSettingsService['newfeatures.popup.show.infuture']
 	}
 
 	private def initialiseMockSerial() {

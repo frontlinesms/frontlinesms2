@@ -1,5 +1,5 @@
 <markdown:renderHtml>
-* [New Features on FrontlineSMS] [100]
+* [New Features] [1]
 * [Messages][2]
 	* ### The Basics
 		* [How do I select more than one message?][5]
@@ -31,9 +31,8 @@
 			* [How do I Rename an Activity?][36]
 			* [How do I resend failed messages in an activity?][37]
 	* ### Folders
-		* ### Overview
-			* [How do I Create a Folder?][40]
-			* [How do I move messages into a folder?][41]
+		* [How do I Create a Folder?][40]
+		* [How do I move messages into a folder?][41]
 	* ### Archive
 		* ### Overview
 			* [How do I get around the Archive tab?][43]
@@ -76,7 +75,7 @@
 	* [How do I get FrontlineSMS to detect my device?][98]
 	* [How do I translate the interface into my language?][99]
 
-
+[1]: core/features/new
 [2]: core/messages/1.getting_around_the_messages_tab
 [5]: core/messages/2.sss
 [6]: core/messages/3.quick_message
@@ -136,5 +135,4 @@
 [97]: core/settings/6.edit_delete_connection
 [98]: core/settings/5.manually_adding_device
 [99]: core/settings/7.translatingfrontlinesms
-[100]: core/features/new
 </markdown:renderHtml>

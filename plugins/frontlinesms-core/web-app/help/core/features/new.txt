@@ -1,32 +1,15 @@
-# New features in FrontlineSMS 
-## FrontlineSMS v 2.2.0
-### Subscriptions
+# FrontlineSMS v 2.2.0
+## Subscriptions
 A subscriptions allows users to join groups by texting in messages that match certain specified keywords. Subscriptions allows users to text in messages specifically for joining and leaving a group. For example, a user may text on 'join' to join a group or 'leave' to leave a group. Support for two keyword subscriptions is offered, where a user can text in 'Football join' to join the group or 'Football leave' to leave the group.
 
-### Webconnections
+## Webconnections
 A FrontlineSMS deployment instance can upload messages to a specified url, using an activity called Webconnection.
 
-### UshahidiWebconnection
-Related to Webconnection is the Ushahidi webconnection. This activity uploads messages that match certain keywords to an ushahidi or crowdmap instance.
+## Ushahidi
+Related to Web Cconnection is the Ushahidi Web Connection. This activity uploads messages that match certain keywords to an ushahidi or crowdmap instance.
 
-### Multiple keywords for activities
+## Multiple keywords for activities
 Autoreply, Poll, Webconnection and subcriptions now support use of more than one keyword. The activities will hence accept messages that match a wider range of keywrds.
 
 With regard to Polls, keywords allows users to text in single word messages, so as to submit an etry into a poll. Support for twe keyword polls is offered, where a user can text in 'Food pie' for Pir or 'Food soda' for Soda.
 
-## FrontlineSMS v 2.1.3
-### Aliases in Poll Activity
-You can now do this and that.............
-
-## FrontlineSMS v 2.0.0
-### Acivities
-Activities are somthing like....
-
-### Autoreplies
-Text in a message that matches a keyword and get a message sent to you automatically
-
-### Announcements
-Send messages to many people
-
-### Polls
-Generate simple statistics based on a sms bases poll.....aaauwwii creating help docs is HARD
