@@ -215,7 +215,7 @@ $(function(){
 
 	guiders.createGuider({
 		attachTo: "div#modalBox.ui-dialog-content.ui-widget-content",
-		buttons: [{name: "Next"}],
+		buttons: [{name: "Next"},{name: "Close"}],
 		description: "third",
 		id: "third",
 		next: "fourth",
@@ -228,9 +228,18 @@ $(function(){
 	/*$('#modalBox').focus(function(){
 		console.log("focused");
 	});*/
+	$('input[value="announcement"]').change(function(){
+		alert("announcement");
+	});
+
+	
+
 	$("#create-new-activity").click(function(){
 		guiders.hideAll();
 		guiders.show("third");
+		setTimeout(function(){
+			console.log("title:"+$('#modalBox').title);
+		},3000);
 	});
 	
 });
