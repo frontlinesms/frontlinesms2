@@ -169,6 +169,8 @@ $(function() {
 });
 
 $(function(){
+	return;
+	// TODO this should be done in the GSP, and events should not be bound in web-app/js files
 	$.ajax({
 		url: url_root + 'help/newfeatures',
 		cache: false,
