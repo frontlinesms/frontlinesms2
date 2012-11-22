@@ -9,7 +9,7 @@ class CoreUrlMappings {
 			action = 'show'
 		}
 		
-		"/search/no_search/$messageId"(controller:'search', action:'no_search') {}
+		"/search/no_search/$messageId?"(controller:'search', action:'no_search') {}
 		"/search/result/show/"(controller:'search', action:'result') {}
 		"/search/result/show/$messageId"(controller:'search', action:'result') {}
 		
