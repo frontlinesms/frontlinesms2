@@ -3,7 +3,7 @@ package frontlinesms2
 import frontlinesms2.*
 import grails.converters.JSON
 
-class HelpController {
+class HelpController extends ControllerUtils {
 	def appSettingsService
 
 	def index() { redirect action:'main' }

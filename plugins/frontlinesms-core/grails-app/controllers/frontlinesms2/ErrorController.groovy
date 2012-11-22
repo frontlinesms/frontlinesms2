@@ -3,7 +3,7 @@ package frontlinesms2
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-class ErrorController {
+class ErrorController extends ControllerUtils {
 	static final def DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd")
 
 	def logs() { supplyDownload('log') }

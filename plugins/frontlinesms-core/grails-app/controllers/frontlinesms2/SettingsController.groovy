@@ -1,7 +1,7 @@
 package frontlinesms2
 
-@Mixin(ControllerUtils)
-class SettingsController {
+
+class SettingsController extends ControllerUtils {
 	def i18nUtilService
 	def appSettingsService
 

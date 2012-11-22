@@ -2,8 +2,8 @@ package frontlinesms2
 
 import grails.converters.*
 
-@Mixin(ControllerUtils)
-class SystemNotificationController {
+
+class SystemNotificationController extends ControllerUtils {
 	def markRead() {
 		withNotification {
 			it.read = true

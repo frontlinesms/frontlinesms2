@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class QuickMessageController {
+class QuickMessageController extends ControllerUtils {
 	def create() {
 		if( params.recipients?.contains(',')) {
 			def recipientList = []

@@ -2,7 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-@Mixin(ControllerUtils)
+
 class WebconnectionController extends ActivityController {
 	static final def WEB_CONNECTION_TYPE_MAP = [generic:GenericWebconnection,
 			ushahidi:UshahidiWebconnection]

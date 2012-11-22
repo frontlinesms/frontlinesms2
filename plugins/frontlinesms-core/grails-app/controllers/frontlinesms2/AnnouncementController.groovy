@@ -2,7 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-@Mixin(ControllerUtils)
+
 class AnnouncementController extends ActivityController {
 	def announcementService
 

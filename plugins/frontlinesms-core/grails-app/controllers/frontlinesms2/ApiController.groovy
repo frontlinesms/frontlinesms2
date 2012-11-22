@@ -2,7 +2,7 @@ package frontlinesms2
 
 import frontlinesms2.api.*
 
-class ApiController {
+class ApiController extends ControllerUtils {
 	def grailsApplication
 	def index() {
 		println "entityClassApiUrl = $params?.entityClassApiUrl"

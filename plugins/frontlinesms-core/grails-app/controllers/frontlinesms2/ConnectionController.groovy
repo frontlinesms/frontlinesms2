@@ -2,8 +2,8 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-@Mixin(ControllerUtils)
-class ConnectionController {
+
+class ConnectionController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete:'GET']
 
 	def fconnectionService

@@ -2,8 +2,8 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-@Mixin(ControllerUtils)
-class ContactController {
+
+class ContactController extends ControllerUtils {
 //> STATIC PROPERTIES
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 

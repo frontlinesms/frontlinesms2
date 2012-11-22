@@ -2,8 +2,8 @@ package frontlinesms2
 
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 
-@Mixin(ControllerUtils)
-class SmartGroupController {
+
+class SmartGroupController extends ControllerUtils {
 	private static final String CUSTOM_FIELD_ID_PREFIX = 'custom:'
 	private def withSmartGroup = withDomainObject SmartGroup
 	

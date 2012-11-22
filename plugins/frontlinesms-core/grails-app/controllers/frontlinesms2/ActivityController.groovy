@@ -2,8 +2,8 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-@Mixin(ControllerUtils)
-class ActivityController {
+
+class ActivityController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def messageSendService

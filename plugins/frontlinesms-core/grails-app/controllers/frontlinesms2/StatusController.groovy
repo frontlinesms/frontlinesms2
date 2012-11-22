@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class StatusController {
+class StatusController extends ControllerUtils {
 	def deviceDetectionService
 	
 	def index() {

@@ -2,8 +2,8 @@ package frontlinesms2
 
 import grails.converters.*
 
-@Mixin(ControllerUtils)
-class MessageController {
+
+class MessageController extends ControllerUtils {
 //> CONSTANTS
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST", archive: "POST"]
 
