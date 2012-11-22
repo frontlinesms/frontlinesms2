@@ -41,6 +41,7 @@ modules = {
 
 		resource url:[dir:'css', file:'guiders.css']
 		resource url:[dir:'js', file:'guiders.js']
+		resource url:[dir:'js', file:'newFeatureWalkthroughs.js']
 	}
 	
 	messages {
