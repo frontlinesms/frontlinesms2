@@ -1,4 +1,6 @@
-package frontlinesms2
+package frontlinesms2.controllers
+
+import frontlinesms2.*
 
 import grails.test.mixin.*
 import spock.lang.*

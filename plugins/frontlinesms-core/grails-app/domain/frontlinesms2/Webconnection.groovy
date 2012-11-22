@@ -5,17 +5,21 @@ import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
+import frontlinesms2.api.*
 
-abstract class Webconnection extends Activity {
+@FrontlineApiAnnotations(apiUrl="webconnection")
+abstract class Webconnection extends Activity implements FrontlineApi {
 	static final String OWNERDETAIL_SUCCESS = 'success'
 	static final String OWNERDETAIL_PENDING = 'pending'
 	static final String OWNERDETAIL_FAILED = 'failed'
 
 	def camelContext
 	def webconnectionService
+	def appSettingsService
 	enum HttpMethod { POST, GET }
 	static String shortName = 'webconnection'
 	static String getType() { '' }
+	static String apiUrl = 'webconnection'
 	static def implementations = [UshahidiWebconnection, 
 			GenericWebconnection]
 
@@ -41,6 +45,8 @@ abstract class Webconnection extends Activity {
 	/// Variables
 	String url
 	HttpMethod httpMethod
+	String secret
+	boolean apiEnabled = false
 	static hasMany = [requestParameters:RequestParameter]
 	
 	static constraints = {
@@ -51,6 +57,10 @@ abstract class Webconnection extends Activity {
 			if (identical.any { it.id != obj.id && !it.archived && !it.deleted }) return false
 			return true
 			})
+		secret(nullable:true)
+		url(nullable:false, validator: { val, obj ->
+			return val.startsWith("http://") || val.startsWith("https://")
+		})
 	}
 	static mapping = {
 		requestParameters cascade: "all-delete-orphan"
@@ -150,6 +160,16 @@ abstract class Webconnection extends Activity {
 	private String urlEncode(String s) throws UnsupportedEncodingException {
 		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
 		return URLEncoder.encode(s, "UTF-8");
+	}
+
+	//> FrontlineAPI methods
+	def apiProcess(controller) {
+		//TODO: CORE-1639
+		webconnectionService.apiProcess(this, controller)
+	}
+
+	String getFullApiUrl() {
+		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
 	}
 }
 	

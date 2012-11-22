@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
+@Mixin(ControllerUtils)
 class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete:'GET']
 
@@ -168,14 +169,6 @@ class ConnectionController {
 		}
 	}
 
-	private def withFconnection(id = params?.id, Closure c) {
-		def connection = Fconnection.get(id)
-		if(connection) {
-			c connection
-		} else {
-			flash.message = LogEntry.log(message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id]))
-			redirect(controller:'connection', action:'list')
-		}
-	}
+	private def withFconnection = withDomainObject Fconnection, { params.id }, { redirect(controller:'connection', action:'list') }
 }
 

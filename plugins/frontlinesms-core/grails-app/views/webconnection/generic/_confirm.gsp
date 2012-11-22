@@ -5,6 +5,6 @@
 </div>
 <div class="confirm">
 	<h2><g:message code="webconnection.details.label"/></h2>
-	<fsms:activityConfirmTable fields="httpMethod, url, keyword, parameters" type="${GenericWebconnection.type}" instanceClass="${GenericWebconnection}"/>
+	<fsms:activityConfirmTable fields="httpMethod, url, keyword, parameters, key" type="${GenericWebconnection.type}" instanceClass="${GenericWebconnection}"/>
 </div>
 

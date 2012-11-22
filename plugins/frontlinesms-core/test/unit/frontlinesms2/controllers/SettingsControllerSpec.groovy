@@ -1,4 +1,6 @@
-package frontlinesms2
+package frontlinesms2.controllers
+
+import frontlinesms2.*
 
 import spock.lang.*
 import grails.test.mixin.*
@@ -56,9 +58,9 @@ class SettingsControllerSpec extends Specification {
 		when:
 			controller.basicAuth()
 		then:
-			1 * appSettingsService.set('enabledAuthentication', 'true')
-			1 * appSettingsService.set('username', 'test'.bytes.encodeBase64().toString())
-			1 * appSettingsService.set('password', 'pass'.bytes.encodeBase64().toString())
+			1 * appSettingsService.set('auth.basic.enabled', 'true')
+			1 * appSettingsService.set('auth.basic.username', 'test'.bytes.encodeBase64().toString())
+			1 * appSettingsService.set('auth.basic.password', 'pass'.bytes.encodeBase64().toString())
 			0 * appSettingsService.set(_, _)
 	}
 

@@ -28,5 +28,17 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 			''     | false
 			null   | false
 	}
+
+	def 'apiProcess should pass call to service'() {
+		given:
+			WebconnectionService s = Mock()
+			def c = new GenericWebconnection()
+			c.webconnectionService = s
+			def controller = [:]
+		when:
+			c.apiProcess(controller)
+		then:
+			1 * s.apiProcess(c, controller)
+	}
 }
 

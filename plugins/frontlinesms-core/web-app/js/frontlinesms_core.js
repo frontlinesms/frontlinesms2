@@ -146,6 +146,7 @@ function insertAtCaret(areaId, text) {
 }
 
 $(function() {
+	// FIXME no binding to events should take place in this file
 	setInterval(refreshMessageCount, 30000);
 	$.extend($.validator.messages, {
 		required: i18n("jquery.validation.required"),

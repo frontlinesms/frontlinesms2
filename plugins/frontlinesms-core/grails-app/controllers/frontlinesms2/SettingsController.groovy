@@ -1,5 +1,6 @@
 package frontlinesms2
 
+@Mixin(ControllerUtils)
 class SettingsController {
 	def i18nUtilService
 	def appSettingsService
@@ -25,9 +26,9 @@ class SettingsController {
 	}
 
 	def general() {
-		def enabledAuthentication = appSettingsService.get("enabledAuthentication")
-		def username = new String(appSettingsService.get("username").decodeBase64())
-		def password = new String(appSettingsService.get("password").decodeBase64())
+		def enabledAuthentication = appSettingsService.get("auth.basic.enabled")
+		def username = new String(appSettingsService.get("auth.basic.username").decodeBase64())
+		def password = new String(appSettingsService.get("auth.basic.password").decodeBase64())
 
 		[currentLanguage:i18nUtilService.getCurrentLanguage(request),
 				enabledAuthentication:enabledAuthentication,
@@ -42,13 +43,13 @@ class SettingsController {
 	}
 
 	def basicAuth() {
-		if(appSettingsService.get("enabledAuthentication") && appSettingsService.get("username") && appSettingsService.get("password")) {
-			appSettingsService.set('enabledAuthentication', params.enabledAuthentication)
+		if(appSettingsService.get("auth.basic.enabled") && appSettingsService.get("auth.basic.username") && appSettingsService.get("auth.basic.password")) {
+			appSettingsService.set('auth.basic.enabled', params.enabledAuthentication)
 		}
 		if(params.password && params.password == params.confirmPassword) {
-			appSettingsService.set('enabledAuthentication', params.enabledAuthentication)
-			appSettingsService.set('username', params.username.bytes.encodeBase64().toString())
-			appSettingsService.set('password', params.password.bytes.encodeBase64().toString())
+			appSettingsService.set('auth.basic.enabled', params.enabledAuthentication)
+			appSettingsService.set('auth.basic.username', params.username.bytes.encodeBase64().toString())
+			appSettingsService.set('auth.basic.password', params.password.bytes.encodeBase64().toString())
 		} else if(params.password != params.confirmPassword) {
 			flash.message = message(code:"basic.authentication.password.mismatch")
 		}
@@ -56,14 +57,6 @@ class SettingsController {
 		render view:'general', model:general()
 	}
 
-	private def withFconnection(Closure c) {
-		def connection = Fconnection.get(params.id)
-		if(connection) {
-			c connection
-		} else {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])
-			render(view:'show_connections', model: [fconnectionInstanceTotal: 0])
-		}
-	}
+	private def withFconnection = withDomainObject Fconnection, { params.id }, { render(view:'show_connections', model: [fconnectionInstanceTotal: 0]) }
 }
 

@@ -5,14 +5,14 @@ import frontlinesms2.api.*
 class ApiController {
 	def grailsApplication
 	def index() {
-		println "entityClassApiUrl = $params.entityClassApiUrl"
-		println "entityId = $params.entityId"
-		println "secret = $params.secret"
+		println "entityClassApiUrl = $params?.entityClassApiUrl"
+		println "entityId = $params?.entityId"
 		println "params = $params"
 		def entityClass = grailsApplication.domainClasses*.clazz.find {
-			FrontlineApi.isAssignableFrom(it) && it.apiUrl == params.entityClassApiUrl
+			FrontlineApi.isAssignableFrom(it) && (it.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl() == params.entityClassApiUrl)
 		}
-		def entity = entityClass?.findByIdAndSecret(params.entityId, params.secret)
+		println "ApiController Params as JSON # ${this.request.JSON}"
+		def entity = entityClass?.findById(params.entityId)
 
 		if(entity) entity.apiProcess(this)
 		else render text:"no access"
