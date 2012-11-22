@@ -1,6 +1,12 @@
 function processNewTour() {
+	var pathname = window.location.pathname;
+	var yets = pathname.split("/");
+	console.log("url:"+yets[3]);
 	if(getURLParameter('tourEnabled') === 'true' && getURLParameter('tourName') === 'subscription') {
-		showActivityWalkthrough('subscription', 'Subscription', 'Subscriptions let your end users join and leave groups using SMS');
+		showActivityWalkthrough('subscription', 'Subscription', 'Subscriptions lets your end users join and leave groups using SMS');
+	}
+	else if(getURLParameter('tourEnabled') === 'true' && getURLParameter('tourName') === 'connection'){
+		showConnectionWalkthrough('connection', 'Connection', 'This tour guides you on how to make a connection with a phone/usb modem, your Clickatel or/and IntelliSms account as well as Smsync');
 	}
 }
 
@@ -14,7 +20,55 @@ function getURLParameter(name) {
         (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
     );
 }
+function showConnectionWalkthrough(shortName, friendlyName, descriptiveText){
+	createAndShowGuider({
+		buttons: [{name: "Start Tour", onclick: guiders.next},{name:"Close"}],
+		description: descriptiveText,
+		id: "new_act_1",
+		next: "new_act_2",
+		overlay: true,
+		title: friendlyName,
+	});
 
+	guiders.createGuider({
+		attachTo: "ul#system-menu li:first-child a",
+		buttons: [{name:"Next"}],
+		description: "click this linkn to redirect to the connections page",
+		id: "new_act_2",
+		next: "new_act_3",
+		position: 9,
+		highlight:"ul#system-menu li:first-child a",
+		overlay: true,
+	});
+
+	guiders.createGuider({
+		attachTo: "div#body-menu ul li:nth-child(2)",
+		buttons: [{name: "Next"}],
+		description: "Click this link to open the connections page",
+		id: "new_act_3",
+		next: "new_act_4",
+		position: 3,
+		highlight: "div#body-menu ul li:nth-child(2)",
+		overlay: true,
+		title: "Guiders can be customized.",
+	});
+
+	guiders.createGuider({
+		attachTo: 'a[name="addConnection"]',
+		buttons: [{name: "Close", onclick: guiders.hideAll}],
+		description: "Click this button to open the connection wizard",
+		id: "new_act_4",
+		position: 9,
+		highlight: 'a[name="addConnection"]',
+		overlay: true,
+		xButton: true,
+		title: "Guiders can be customized.",
+	});
+
+	$('a[name="addConnection"]').click(function(){
+		guiders.hideAll();
+	});
+}
 function showActivityWalkthrough(shortName, friendlyName, descriptiveText) {
 	createAndShowGuider({
 		buttons: [{name: "Start Tour", onclick: guiders.next},{name:"Close"}],
