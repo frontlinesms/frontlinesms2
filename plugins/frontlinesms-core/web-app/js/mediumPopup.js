@@ -41,7 +41,8 @@ var mediumPopup = (function() {
 				title: title,
 				buttons: [{ text:i18n("action.cancel"), click:cancel, id:"cancel" }, { text:i18n("action.back"), disabled:"true" },
 						{ text:btnFinishedText, click:submitAction, id:"submit" }],
-				close: function() { $(this).remove(); }
+				close: function() { $(this).remove(); },
+				open: function(){ console.log("opened"); }
 		});
 		addChangeHandlersForRadiosAndCheckboxes();
 		initializePopup(modalBox);
