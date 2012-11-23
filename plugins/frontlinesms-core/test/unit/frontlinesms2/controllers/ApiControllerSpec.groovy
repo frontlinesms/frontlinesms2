@@ -6,11 +6,16 @@ import spock.lang.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(ApiController)
-@Build([Webconnection])
 class ApiControllerSpec extends Specification {
+	def setup() {
+		def grailsApplication = [domainClasses:[[clazz:Webconnection]]]
+		controller.grailsApplication = grailsApplication
+
+		Webconnection.metaClass.static.findById = { id -> Mock(GenericWebconnection) }
+		Webconnection.metaClass.static.findAllByNameIlike = { name -> Mock(GenericWebconnection) }
+	}
+
 	def 'bad URL should return a 404 error status'() {
-		given:
-			params = [:]
 		when:
 			controller.index()
 		then:
@@ -19,8 +24,8 @@ class ApiControllerSpec extends Specification {
 
 	def 'good request should return 200 status'() {
 		given:
-			def id = Webconnection.build(secret:'skyfall').id
-			params = [entityClassApiUrl:'webconnection', entityId:id]
+			params.entityClassApiUrl = 'webconnection'
+			params.entityId = 1
 		when:
 			controller.index()
 		then:

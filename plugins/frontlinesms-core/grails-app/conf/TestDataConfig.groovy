@@ -23,6 +23,9 @@ testDataConfig {
 			emailUserName = 'ename'
 			emailPassword = 'pword'
 		}
+		'frontlinesms2.GenericWebconnection' {
+			url = "http://example.com/${++counter}/"
+		}
 	}
 }
 
