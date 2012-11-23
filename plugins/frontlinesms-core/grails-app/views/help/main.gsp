@@ -5,7 +5,6 @@ function initializePopup() {
 	$("#modalBox.help #help-content").delegate("a", "click", goToSection);
 	$("div#help-index a:first").click();
 
-	var selecters = ['#help-index > ul','#help-index > ul > li > ul','#help-index > ul > li > ul > li > ul']
 	$.each($("#help-index > ul,li:has(ul)"), function(i, selecter) {
         $(selecter).accordion({ 
 			collapsible: true,

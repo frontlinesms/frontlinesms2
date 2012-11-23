@@ -12,7 +12,7 @@
 			<fsms:menuitem class="" selected="${a == ownerInstance}" controller="message" action="activity" code="${a.shortName.toLowerCase()}.title" msgargs="${[a.name]}" params="[ownerId: a.id]"/>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onLoading="showThinking();" onSuccess="hideThinking(); mediumPopup.launchMediumPopup(i18n('popup.activity.create'), data, (i18n('action.next')), chooseActivity); setTimeout(function(){guiders.next();},1000);">
+			<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onLoading="showThinking();" onSuccess="hideThinking(); mediumPopup.launchMediumPopup(i18n('popup.activity.create'), data, (i18n('action.next')), chooseActivity); ">
 						<g:message code="activities.create"/>
 			</g:remoteLink>
 		</fsms:menuitem>

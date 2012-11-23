@@ -43,6 +43,7 @@ function processNewTour() {
 				showConnectionWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
 			else
 				showActivityWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
+			return
 		}
 	});
 }
@@ -50,6 +51,16 @@ function processNewTour() {
 function createAndShowGuider(params) {
 		guiders.hideAll();
 		guiders.createGuider(params).show();
+}
+
+function newFeaturesLink (){
+	guiders.hideAll();
+	$.ajax({
+		url: '/frontlinesms-core/help/main',
+		success: function(data) {
+			mediumPopup.launchHelpWizard(data);
+		}
+	});
 }
 
 function getURLParameter(name) {
@@ -108,15 +119,6 @@ function showConnectionWalkthrough(shortName, friendlyName, descriptiveText){
 }
 function showActivityWalkthrough(shortName, friendlyName, descriptiveText) {
 	createAndShowGuider({
-		buttons: [{name: "Start Tour", onclick: guiders.next},{name:"Close"}],
-		description: descriptiveText,
-		id: "new_act_1",
-		next: "new_act_2",
-		overlay: true,
-		title: friendlyName,
-	});
-
-	guiders.createGuider({
 		attachTo: "#create-new-activity",
 		buttons: [{name: "Close"}],
 		description: "Click this button to launch the 'new activity' wizard",
@@ -148,7 +150,7 @@ function showActivityWalkthrough(shortName, friendlyName, descriptiveText) {
 		else if($(this).find("div#tabs-1").is(":visible")) {
 			// webconnection wizard
 			createAndShowGuider({
-				buttons: [{name: "Close and end Tour", onclick: guiders.hideAll}, {name: "Continue Editing"}],
+				buttons: [{name: "Close and end Tour", onclick: guiders.hideAll }/*, {name: "To new features", onclick: newFeaturesLink }*/],
 				description: "Follow the steps in the wizard to complete setup",
 				id: "new_act_4",
 				overlay: true,
