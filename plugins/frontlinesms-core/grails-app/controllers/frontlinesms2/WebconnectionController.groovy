@@ -11,14 +11,7 @@ class WebconnectionController extends ActivityController {
 	def create() {}
 
 	def save() {
-		def webconnectionInstance
-		Class<Webconnection> clazz = WebconnectionController.WEB_CONNECTION_TYPE_MAP[params.webconnectionType]
-		if(params.ownerId) {
-			webconnectionInstance = clazz.get(params.ownerId)
-		} else {
-			webconnectionInstance = clazz.newInstance()
-		}
-		doSave('webconnection', webconnectionService, webconnectionInstance)
+		doSave('webconnection', webconnectionService, getWebconnectionInstance())
 	}
 
 	def config() {
@@ -29,6 +22,24 @@ class WebconnectionController extends ActivityController {
 			[it, g.render(template:"/webconnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
 		}
 		render responseMap as JSON
+	}
+
+	def testRoute() {
+		println "<<<<params>>>> $params"
+		def webconnectionInstance = getWebconnectionInstance()
+		doSave('webconnection', webconnectionService, webconnectionInstance, false)
+		webconnectionService.testRoute(webconnectionInstance)
+	}
+
+	private def getWebconnectionInstance() {
+		def webconnectionInstance
+		Class<Webconnection> clazz = WebconnectionController.WEB_CONNECTION_TYPE_MAP[params.webconnectionType]
+		if(params.ownerId) {
+			webconnectionInstance = clazz.get(params.ownerId)
+		} else {
+			webconnectionInstance = clazz.newInstance()
+		}
+
 	}
 }
 

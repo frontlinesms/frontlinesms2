@@ -123,10 +123,10 @@ class ActivityController {
 		return collidingKeywords
 	}
 
-	protected void doSave(classShortname, service, instance) {
+	protected void doSave(classShortname, service, instance, activate=true) {
 		try {
 			service.saveInstance(instance, params)
-			instance.activate()
+			if(activate) instance.activate()
 			flash.message = message(code:classShortname + '.saved')
 			params.activityId = instance.id
 			withFormat {
@@ -135,27 +135,31 @@ class ActivityController {
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace()
-			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords)
-			def errors
-			if (collidingKeywords) {
-				errors = collidingKeywords.collect {
-					if(it.key == '') {
-						message(code:'activity.generic.global.keyword.in.use', args:[it.value])
-					} else {
-						message(code:'activity.generic.keyword.in.use', args:[it.key, it.value])
-					}
-				}.join('\n')
-			} else {
-				errors = instance.errors.allErrors.collect {
-					message(code:it.codes[0], args:it.arguments.flatten(), defaultMessage:it.defaultMessage)
-				}.join('\n')
-			}
-			withFormat {
-				json { render([ok:false, text:errors] as JSON) }
-			}
+			generateErrorMessages(instance)
 		}
 	}
 	
+	protected def generateErrorMessages(instance) {
+		def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords)
+		def errors
+		if (collidingKeywords) {
+			errors = collidingKeywords.collect {
+				if(it.key == '') {
+					message(code:'activity.generic.global.keyword.in.use', args:[it.value])
+				} else {
+					message(code:'activity.generic.keyword.in.use', args:[it.key, it.value])
+				}
+			}.join('\n')
+		} else {
+			errors = instance.errors.allErrors.collect {
+				message(code:it.codes[0], args:it.arguments.flatten(), defaultMessage:it.defaultMessage)
+			}.join('\n')
+		}
+		withFormat {
+			json { render([ok:false, text:errors] as JSON) }
+		}
+	}
+
 	private def withActivity(Closure c) {
 		def activityInstance = Activity.get(params.id)
 		if (activityInstance) c activityInstance

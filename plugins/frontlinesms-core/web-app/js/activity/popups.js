@@ -14,10 +14,23 @@ function chooseActivity() {
 }
 	
 function checkForSuccessfulSave(response, type) {
-	var errors, messageDialog;
 	$("#submit").removeAttr('disabled');
 	if (response.ok) {
-		$("div.confirm").parent().hide();
+		loadSummaryTab(type);
+	} else {
+		displayErrors(response);
+	}
+}
+	
+function summaryRedirect() {
+	var activityId = $(".summary #activityId").val();
+	$(this).dialog('close');
+	window.location.replace(url_root + "message/activity/" + activityId);
+}
+
+function loadSummaryTab(type) {
+	var messageDialog;
+	$("div.confirm").parent().hide();
 		$(".ui-tabs-nav").hide();
 		$("div.summary").show();
 		$(".summary #activityId").val(response.ownerId);
@@ -34,17 +47,12 @@ function checkForSuccessfulSave(response, type) {
 			}
 		);
 		messageDialog.css("height", "389px");
-		
-	} else {
-		errors = $(".error-panel");
-		errors.text(response.text);
-		errors.show();
-		$("#submit").removeAttr('disabled');
-	}
 }
-	
-function summaryRedirect() {
-	var activityId = $(".summary #activityId").val();
-	$(this).dialog('close');
-	window.location.replace(url_root + "message/activity/" + activityId);
+
+function displayErrors(response) {
+	var errors;
+	errors = $(".error-panel");
+	errors.text(response.text);
+	errors.show();
+	$("#submit").removeAttr('disabled');
 }

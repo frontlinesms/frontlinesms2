@@ -63,6 +63,26 @@ abstract class Webconnection extends Activity {
 		webconnectionService.send(message)
 	}
 
+	List<RouteDefinition> getTestRouteDefinitions() {
+		return new RouteBuilder() {
+			@Override void configure() {}
+			List getRouteDefinitions() {
+				return [from("seda:activity-webconnection-${Webconnection.this.id}")
+						.beanRef('webconnectionService', 'preProcess')
+						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
+						.onException(Exception)
+									.redeliveryDelay(0)
+									.handled(true)
+									.beanRef('webconnectionService', 'handleException')
+									.end()
+						.to(Webconnection.this.url)
+						.beanRef('webconnectionService', 'postProcess')
+						.beanRef('webconnectionService', 'deactivate')
+						.routeId("activity-webconnection-${Webconnection.this.id}")]
+			}
+		}.routeDefinitions
+	}
+
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
 			@Override void configure() {}
@@ -93,8 +113,11 @@ abstract class Webconnection extends Activity {
 		}
 
 		println "*** ACTIVATING ACTIVITY ***"
+		createRoute(this.routeDefinitions)
+	}
+
+	def createRoute(routes) {
 		try {
-			def routes = this.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
 			println "################# Activating Webconnection :: ${this}"
 			LogEntry.log("Created Webconnection routes: ${routes*.id}")
@@ -102,8 +125,7 @@ abstract class Webconnection extends Activity {
 			println ex
 		} catch(Exception ex) {
 			println ex
-			camelContext.stopRoute("activity-webconnection-${this.id}")
-			camelContext.removeRoute("activity-webconnection-${this.id}")
+			deactivate()
 		}
 	}
 
@@ -145,10 +167,7 @@ abstract class Webconnection extends Activity {
 		println "###### Webconnection.postProcess() with Exchange # ${x}"
 		println "Web Connection Response::\n ${x.in.body}"
 		log.info "Web Connection Response::\n ${x.in.body}"
-	}
-
-	static def testRoute(Map params) {
-
+		x
 	}
 
 	private String urlEncode(String s) throws UnsupportedEncodingException {

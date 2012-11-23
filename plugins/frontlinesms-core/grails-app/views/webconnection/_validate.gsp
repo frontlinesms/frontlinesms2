@@ -112,6 +112,63 @@
 		}
 		setPara("#keyword-confirm", keywordConfirmationText);
 		setPara("#autoreply-confirm", $('#messageText').val());
-	}	
+	}
+
+
+	function toggleTestButton(ctx) {
+		if(ctx.checked) {
+			showTestRouteBtn();
+		} else {
+			hideTestRouteBtn();
+		}
+	}
+
+	function showTestRouteBtn() {
+		var buttonSet, testRouteBtn; 
+		buttonSet = $('.ui-dialog-buttonset');
+		buttonSet.find("#submit").hide();
+		testRouteBtn = buttonSet.find("#testRoute");
+		if(testRouteBtn.length === 0) {
+			testRouteBtn = $('<input/>', {
+								id: "testRoute",
+								type:"submit",
+								value: i18n('webconnection.testroute.label'),
+								click: testRouteStatus
+							});
+		} else {
+			testRouteBtn.show();
+		}
+		buttonSet.append(testRouteBtn);
+	}
+
+	function hideTestRouteBtn() {
+		$("#submit").css("display", "inline");
+		$("#testRoute").hide();
+	}
+
+	function testRouteStatus() {
+		if(mediumPopup.tabValidates(mediumPopup.getCurrentTab())) {
+			$.ajax({
+				type: 'post',
+				data: $("#new-webconnection-form").serialize(),
+				url: "${g.createLink(controller:'webconnection', action:'testRoute', params:['ownerId': activityInstanceToEdit?.id, 'format':'json'])}",
+				success: function(data, textStatus) {  	checkRouteStatus(data)}
+			});	
+		} else {
+			$('.error-panel').show();
+		}
+		return false;
+	}
+
+	function checkRouteStatus(response) {
+		$("#testRoute").attr('disabled');
+		if (response.ok) {
+			$("#testRoute").attr("value", i18n('webconnection.testing.label'));
+			alert("Poll for success status");			
+		} else {
+			displayErrors(response)
+		}
+	}
+
 </r:script>
 
