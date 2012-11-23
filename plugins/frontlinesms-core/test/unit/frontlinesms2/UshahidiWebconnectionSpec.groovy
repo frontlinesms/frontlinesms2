@@ -20,7 +20,7 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def connection = new UshahidiWebconnection(name:name, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
+			def connection = new UshahidiWebconnection(name:name, url:"http://www.ushahidi.com/frontlinesms2", httpMethod:method)
 		then:
 			println connection.errors
 			connection.validate() == valid
