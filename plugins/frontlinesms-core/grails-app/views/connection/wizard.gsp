@@ -202,7 +202,7 @@ function setConfirmation(fieldName) {
 }
 
 function setSecretConfirmation(fieldName) {
-	var val = isFieldSet(fieldName)? '****': 'None';
+	var val = isFieldSet(fieldName)? '****': 'None'; // FIXME i18n
 	setConfirmVal(fieldName, val);
 }
 
