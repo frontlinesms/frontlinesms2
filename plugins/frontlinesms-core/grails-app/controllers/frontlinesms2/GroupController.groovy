@@ -2,7 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-class GroupController {
+class GroupController extends ControllerUtils {
 	static allowedMethods = [update: "POST"]
 
 	def list() {

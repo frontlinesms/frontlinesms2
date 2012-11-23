@@ -44,6 +44,9 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		} else if(webconnectionType == "generic"){
 			waitFor { requestTab.post.displayed }
 		}
+		if(webconnectionType == "generic"){
+			waitFor { requestTab.post.displayed }
+		}
 		return true
 	}
 }

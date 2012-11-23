@@ -3,7 +3,7 @@ package frontlinesms2
 import java.text.DateFormat;
 import java.text.SimpleDateFormat
 
-class ExportController {
+class ExportController extends ControllerUtils {
 	def exportService
 	
 	def beforeInterceptor = {

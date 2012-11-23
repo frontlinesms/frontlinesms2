@@ -2,7 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-class FolderController {
+class FolderController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def trashService

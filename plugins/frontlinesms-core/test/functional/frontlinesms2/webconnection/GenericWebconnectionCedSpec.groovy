@@ -20,11 +20,13 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		given:
 			startAtTab('request')
 		when:
-			requestTab.post.click()
+			waitFor { requestTab.get.displayed }
 			requestTab.url = "http://www.myurl.com"
+			requestTab.get.click()
 			requestTab.parameters[0].name = "text"
 			requestTab.parameters[0].value = "message_body"
 		then:
+			nextTab(apiTab)
 			nextTab(keywordTab)
 		when:
 			keywordTab.keyword = "SENDME"
@@ -40,10 +42,11 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			startAtTab('request')
 		when:
 			requestTab.url = "http://www.myurl.com"
-			requestTab.get.click()
+			requestTab.post.click()
 			requestTab.parameters[0].value = "message_body"
 			requestTab.parameters[0].name = "text"
 		then:
+			nextTab(apiTab)
 			nextTab(keywordTab)
 		when:
 			keywordTab.keyword = "SENDME"
@@ -88,19 +91,21 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		when:
 			requestTab.parameters[1].value = "contact_name"
 			requestTab.parameters[1].name = "contact"
-			next.click()
 		then:
-			waitFor { keywordTab.displayed }
+			nextTab(apiTab)
+			nextTab(keywordTab)
 		when:
 			keywordTab.keyword = "SENDME"
 			nextTab(confirmTab)
 			previousTab(keywordTab)
+			previousTab(apiTab)
 			previousTab(requestTab)
 			requestTab.parameters[0].remove.click()
 		then:
 			waitFor { requestTab.parameters.size() == 1 }
 			requestTab.parameters[0].value.jquery.val() == "contact_name"
 		when:
+			nextTab(apiTab)
 			nextTab(keywordTab)
 			nextTab(confirmTab)
 			confirmTab.name = "my ext cmd"
@@ -141,6 +146,37 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			// N.B. there is no text displayed for this error
 	}
 
+	def 'secret is enabled when API is exposed'() {
+		when:
+			startAtTab('api')
+		then:
+			apiTab.secret.disabled
+		when:
+			apiTab.enableApi = true
+		then:
+			waitFor { !apiTab.secret.disabled }
+	}
+
+	def 'can save a webconnection with API enabled'() {
+		given:
+			startAtTab 'api'
+		when:
+			apiTab.enableApi = true
+			apiTab.secret = 'spray-on-shoes'
+		then:
+			nextTab keywordTab
+			keywordTab.useKeyword('disabled').jquery.click() // disable keyword
+			nextTab confirmTab
+		when:
+			confirmTab.name = 'random webconnection'
+			submit.click()
+		then:
+			waitFor { summary.displayed }
+			def c = Webconnection.findByName('random webconnection')
+			c.apiEnabled
+			c.secret == 'spray-on-shoes'
+	}
+
 	private def startAtTab(tabName) {
 		launchWizard('generic')
 		waitFor { requestTab.displayed }
@@ -148,12 +184,16 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 
 		requestTab.url = "http://www.myurl.com"
 
+		nextTab(apiTab)
+		if(tabName == 'api') return;
+
+
 		nextTab(keywordTab)
 		if(tabName == 'keyword') return;
 
 		keywordTab.useKeyword('disabled').jquery.click() // disable keyword
-
 		nextTab(confirmTab)
+
 		if(tabName == 'confirm') return;
 	}
 

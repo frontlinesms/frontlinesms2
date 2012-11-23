@@ -18,7 +18,7 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def extComm = new GenericWebconnection(name:name, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET)
+			def extComm = new GenericWebconnection(name:name, url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET)
 		then:
 			extComm.validate() == valid
 		where:
@@ -27,6 +27,18 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 			'test' | true
 			''     | false
 			null   | false
+	}
+
+	def 'apiProcess should pass call to service'() {
+		given:
+			WebconnectionService s = Mock()
+			def c = new GenericWebconnection()
+			c.webconnectionService = s
+			def controller = [:]
+		when:
+			c.apiProcess(controller)
+		then:
+			1 * s.apiProcess(c, controller)
 	}
 }
 

@@ -31,6 +31,7 @@ modules = {
 		resource url:[dir:'js', file:"jquery.ui.selectmenu.js"], disposition:'head'
 		resource url:[dir:'js', file:"jquery.validate.min.js"], disposition:'head'
 		resource url:[dir:'js', file:"mediumPopup.js"], disposition:'head'
+		resource url:[dir:'js', file:"new_features.js"], disposition:'head'
 		resource url:[dir:'js', file:"pagination.js"], disposition:'head'
 		resource url:[dir:'js', file:"smallPopup.js"], disposition:'head'
 		resource url:[dir:'js', file:"status_indicator.js"], disposition:'head'
@@ -42,6 +43,7 @@ modules = {
 		resource url:[dir:'css', file:'guiders.css']
 		resource url:[dir:'js', file:'guiders.js']
 		resource url:[dir:'js', file:'newFeatureWalkthroughs.js']
+
 	}
 	
 	messages {

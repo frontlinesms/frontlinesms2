@@ -281,6 +281,7 @@ class WebconnectionWizard extends MediumPopup {
 		error { $("label.error").text()}
 		keywordTab { module WebconnectionKeywordTab }
 		requestTab { module WebconnectionRequestFormatTab }
+		apiTab { module WebconnectionAPITab }
 		confirmTab(required:false) { module WebconnectionConfirmTab }
 		summary { module WebconnectionSummary }
 
@@ -313,6 +314,14 @@ class WebconnectionRequestFormatTab extends geb.Module {
 	}
 }
 
+class WebconnectionAPITab extends geb.Module {
+	static base = { $('div#webconnection-api') }
+	static content = {
+		enableApi { $("#enableApi") }
+		secret { $("#secret") }
+	}
+}
+
 class WebconnectionParam extends geb.Module {
 	static content = {
 		value { $('input.param-value') }
@@ -328,6 +337,8 @@ class WebconnectionConfirmTab extends geb.Module {
 		keyword { $("#confirm-keyword").text() }
 		type { $("#confirm-type").text() }
 		url { $("#confirm-url").text() }
+		frontline_api_key { $("#confirm-fsmskey").text() }
+		crowdmap_api_key { $("#confirm-crowdmapkey").text() }
 		
 		confirm{ label->
 			$("#confirm-"+label).text()
@@ -336,7 +347,7 @@ class WebconnectionConfirmTab extends geb.Module {
 }
 
 class WebconnectionSummary extends geb.Module {
-	static base = { $('div#tabs-4') }
+	static base = { $('div#tabs-5') }
 	static content = {
 		message { $("div.summary") }
 	}

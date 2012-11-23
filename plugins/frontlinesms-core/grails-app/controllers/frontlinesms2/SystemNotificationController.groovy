@@ -2,7 +2,8 @@ package frontlinesms2
 
 import grails.converters.*
 
-class SystemNotificationController {
+
+class SystemNotificationController extends ControllerUtils {
 	def markRead() {
 		withNotification {
 			it.read = true
@@ -16,13 +17,7 @@ class SystemNotificationController {
 		def data = notifications.collectEntries { [it.id, it.text] }
 		render data as JSON
 	}
-	
-	private def withNotification(Closure c) {
-		SystemNotification s = SystemNotification.get(params.id)
-		if(s) {
-			c.call(s)
-		} else {
-			render text: message(code: 'system.notification.fail')
-		}
-	}
+
+	private def withNotification = withDomainObject SystemNotification
 }
+

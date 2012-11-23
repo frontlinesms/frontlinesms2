@@ -2,7 +2,8 @@ package frontlinesms2
 
 import grails.converters.*
 
-class MessageController {
+
+class MessageController extends ControllerUtils {
 //> CONSTANTS
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST", archive: "POST"]
 
@@ -286,11 +287,7 @@ class MessageController {
 //> PRIVATE HELPERS
 	boolean isViewingArchive() { params.controller=='archive' }
 
-	private def withFmessage(messageId = params.messageId, Closure c) {
-		def m = Fmessage.get(messageId)
-		if(m) c.call(m)
-		else render(text:defaultMessage('notfound', messageId))
-	}
+	private def withFmessage = withDomainObject Fmessage, { params.messageId }
 
 	private def getShowModel(messageInstanceList) {
 		def messageInstance = params.messageId? Fmessage.get(params.messageId): null

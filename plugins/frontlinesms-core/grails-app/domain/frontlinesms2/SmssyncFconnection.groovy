@@ -5,6 +5,7 @@ import org.apache.camel.model.RouteDefinition
 
 import frontlinesms2.api.*
 
+@FrontlineApiAnnotations(apiUrl="smssync")
 class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	static final String apiUrl = 'smssync'
 	static String getShortName() { 'smssync' }
@@ -13,6 +14,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	static final defaultValues = [sendEnabled:true, receiveEnabled:true]
 
 	def smssyncService
+	def appSettingsService
 
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
@@ -38,6 +40,8 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		SmssyncFconnectionQueuedDispatch.getDispatches(this)
 	}
 
+	boolean isApiEnabled() { return this.sendEnabled || this.receiveEnabled }
+
 	List<RouteDefinition> getRouteDefinitions() {
 		def routeDefinitions = new RouteBuilder() {
 			@Override void configure() {}
@@ -53,6 +57,10 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 			}
 		}.routeDefinitions
 		return routeDefinitions
+	}
+
+	String getFullApiUrl() {
+		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
 	}
 }
 

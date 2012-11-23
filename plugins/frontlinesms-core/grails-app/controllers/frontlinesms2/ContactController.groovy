@@ -2,7 +2,8 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-class ContactController {
+
+class ContactController extends ControllerUtils {
 //> STATIC PROPERTIES
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -197,14 +198,7 @@ class ContactController {
 				nonSharedGroupInstanceList:groups.nonShared])
 	}
 	
-	private def withContact(contactId = params.contactId, Closure c) {
-		def contactInstance = Contact.get(contactId)
-		if(contactInstance) {
-			c.call(contactInstance)
-		} else {
-			c.call(new Contact())
-		}
-	}
+	private def withContact = withDomainObject Contact, { params.contactId }
 
 	private def getCheckedContacts() {
 		Contact.getAll(getCheckedContactIds()) - null

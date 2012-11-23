@@ -28,7 +28,6 @@ class CoreBootStrap {
 	def camelContext
 	def messageSource
 	def quartzScheduler
-	def applicationPropertiesService
 
 	def bootstrapData = Environment.current == Environment.DEVELOPMENT || Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']?:'')
 	
@@ -43,7 +42,8 @@ class CoreBootStrap {
 			quartzScheduler.start()
 			test_initGeb(servletContext)
 			dev_disableSecurityFilter()
-			applicationPropertiesService.showNewFeaturesPopup = false // never show new popup during tests
+			// never show new popup during tests
+			appSettingsService['newfeatures.popup.show.immediately'] = false
 		}
 
 		if(Environment.current == Environment.DEVELOPMENT) {
@@ -361,8 +361,9 @@ class CoreBootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET)
-			.addToKeywords(value:'WEBCONNECTION')
+
+		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET, apiEnabled: true, secret: "shh")
+			.addToKeywords(value:'WEBCONN')
 			.addToKeywords(value:'UPLOAD')
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))
@@ -516,12 +517,14 @@ class CoreBootStrap {
 	}
 
 	private def updateFeaturePropertyFileValues(){
-		def version = ApplicationHolder.application.metadata.'app.version' 
-		if(applicationPropertiesService.lastVersionRun != version){
-			applicationPropertiesService.lastVersionRun = version
-			applicationPropertiesService.showNewFeaturesPopup = true
+		def currentVersion = ApplicationHolder.application.metadata.'app.version'
+		def previousVersionRun = appSettingsService['version.lastrun']
+		if(currentVersion != previousVersionRun) {
+			appSettingsService['newfeatures.popup.show.infuture'] = true
+			appSettingsService['version.lastrun'] = currentVersion
+			appSettingsService.persist()
 		}
-		applicationPropertiesService.showPopupInCurrentSession = applicationPropertiesService.showNewFeaturesPopup
+		appSettingsService['newfeatures.popup.show.immediately'] = appSettingsService['newfeatures.popup.show.infuture']
 	}
 
 	private def initialiseMockSerial() {
@@ -586,9 +589,9 @@ class CoreBootStrap {
 	}
 
 	private def dev_disableSecurityFilter() {
-		appSettingsService.set("enabledAuthentication", '')
-		appSettingsService.set("username", '') 
-		appSettingsService.set("password", '')
+		appSettingsService.set("auth.basic.enabled", '')
+		appSettingsService.set("auth.basic.username", '')
+		appSettingsService.set("auth.basic.password", '')
 	}
 
 	private Date createDate(String dateAsString) {

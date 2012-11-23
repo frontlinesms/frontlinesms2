@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+echo "# Checking for Unsafe null dereference calls to .text() method e.g. text().toLowerCase()"
+BAD_TEXT_CALLS=`grep -rl ".text()\." test/functional/`
+if [ -n "$BAD_TEXT_CALLS" ]; then
+	echo "Found unsafe calls to .text() in the following tests:"
+	grep -rl ".text()\." test/functional/
+	exit 1
+fi
+
+echo "# There were no violations"
+

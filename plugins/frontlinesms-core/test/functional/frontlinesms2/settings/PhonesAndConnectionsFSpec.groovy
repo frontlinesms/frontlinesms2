@@ -32,7 +32,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			go 'connection/list'
 		then:
 			at PageConnectionSettings
-			(/http:\/\/you-ip-address\/frontlinesms-core\/api\/.*\/smssync\/.*/ =~ connections[2].children().text()[2])
+			(/http:\/\/you-ip-address\/frontlinesms-core\/api\/.*\/smssync\// =~ connections[2].children().text()[2])
 	}
 
 	def createTestConnections() {
