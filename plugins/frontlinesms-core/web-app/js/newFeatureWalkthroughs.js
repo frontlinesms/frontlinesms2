@@ -1,13 +1,50 @@
 function processNewTour() {
-	var pathname = window.location.pathname;
-	var yets = pathname.split("/");
-	console.log("url:"+yets[3]);
-	if(getURLParameter('tourEnabled') === 'true' && getURLParameter('tourName') === 'subscription') {
-		showActivityWalkthrough('subscription', 'Subscription', 'Subscriptions lets your end users join and leave groups using SMS');
+
+	var allGuider = {
+		"autoforward": {
+			"shortName": "autoforward" ,
+			"friendlyName": "Autoforward" ,
+			"descriptiveText": "Autoforward allows you to automatically forward messages to contacts"
+		},
+		"autoreply": {
+			"shortName": "autoreply" ,
+			"friendlyName": "Autoreply" ,
+			"descriptiveText": "Autoreply allows you to automatically respond to incoming messages"
+		},
+		"announcement": {
+			"shortName": "announcement" ,
+			"friendlyName": "Announcement" ,
+			"descriptiveText": "Announcement allows you to send an announcement and organise the responses"
+		},
+		"poll": {
+			"shortName": "poll" ,
+			"friendlyName": "Poll" ,
+			"descriptiveText" : "Poll allows you to send a question and analyze the responses"
+		},
+		"subscription": {
+			"shortName": "subscription" ,
+			"friendlyName": "Subscription" ,
+			"descriptiveText": "Subscriptions lets your end users join and leave groups using SMS"
+		},
+		"webconnection": {
+			"shortName": "webconnection" ,
+			"friendlyName": "Webconnection" ,
+			"descriptiveText": "Webconnection allows you to connect to a web service as well as Crowdmap/Ushahidi"
+		},
+		"connection": {
+			"shortName": "connection" ,
+			"friendlyName": "Connection" ,
+			"descriptiveText": "This tour guides you on how to make a connection with a phone/usb modem, your Clickatel or/and IntelliSms account as well as Smsync"
+		}
 	}
-	else if(getURLParameter('tourEnabled') === 'true' && getURLParameter('tourName') === 'connection'){
-		showConnectionWalkthrough('connection', 'Connection', 'This tour guides you on how to make a connection with a phone/usb modem, your Clickatel or/and IntelliSms account as well as Smsync');
-	}
+	$.each(allGuider, function(key, value) {
+		if(key ==  getURLParameter('tourName')) {
+			if(key == "connection")
+				showConnectionWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
+			else
+				showActivityWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
+		}
+	});
 }
 
 function createAndShowGuider(params) {
@@ -82,7 +119,7 @@ function showActivityWalkthrough(shortName, friendlyName, descriptiveText) {
 	guiders.createGuider({
 		attachTo: "#create-new-activity",
 		buttons: [{name: "Close"}],
-		description: "Launch the 'new activity' wizard",
+		description: "Click this button to launch the 'new activity' wizard",
 		id: "new_act_2",
 		next: "new_act_3",
 		highlight: "#create-new-activity",
@@ -111,7 +148,7 @@ function showActivityWalkthrough(shortName, friendlyName, descriptiveText) {
 		else if($(this).find("div#tabs-1").is(":visible")) {
 			// webconnection wizard
 			createAndShowGuider({
-				buttons: [{name: "Close and end Tour"}, {name: "Continue Editing"}],
+				buttons: [{name: "Close and end Tour", onclick: guiders.hideAll}, {name: "Continue Editing"}],
 				description: "Follow the steps in the wizard to complete setup",
 				id: "new_act_4",
 				overlay: true,
