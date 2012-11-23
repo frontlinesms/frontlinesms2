@@ -22,10 +22,13 @@ class QuickMessageController extends ControllerUtils {
 		def contacts = Contact.list(sort: "name")
 		def configureTabs = params.configureTabs ? configTabs(params.configureTabs): ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
+		def nonContactRecipients = []
+		recipients.each { if (!Contact.findByMobile(it)) nonContactRecipients << it }
 		[contactList: contacts,
 				configureTabs: configureTabs,
 				groupList:groupList,
 				recipients:recipients,
+				nonContactRecipients:nonContactRecipients,
 				recipientName: recipientName,
 				messageText: params.messageText ? params.messageText : [],
 				nonExistingRecipients:recipients - contacts*.getMobile() - contacts*.getEmail()]
