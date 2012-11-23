@@ -11,10 +11,8 @@ class SecurityFiltersSpec extends Specification {
 	def appSettingsService
 
 	def setup() {
-		appSettingsService = new AppSettingsService()
-		appSettingsService.load()
+		appSettingsService = ["auth.basic.enabled":true, "auth.basic.username":"bla", "auth.basic.password":"pass"]
 		SecurityFilters.metaClass.appSettingsService = appSettingsService
-		appSettingsService.set("auth.basic.enabled", true)
 		controller = new GroupController()
 	}
 
@@ -29,8 +27,8 @@ class SecurityFiltersSpec extends Specification {
 
 	def "should enable application access when the right credentials are specified"() {
 		setup:
-			appSettingsService.set("auth.basic.username", "bla".bytes.encodeBase64().toString())
-			appSettingsService.set("auth.basic.password", "pass".bytes.encodeBase64().toString())
+			appSettingsService."auth.basic.username" = "bla".bytes.encodeBase64().toString()
+			appSettingsService."auth.basic.password" = "pass".bytes.encodeBase64().toString()
 		when:
 			def password = "bla:pass".bytes.encodeBase64().toString()
 			request.addHeader('Authorization', password)
@@ -43,9 +41,9 @@ class SecurityFiltersSpec extends Specification {
 
 	def "disabling password authentication should enable global application access"() {
 		setup:
-			appSettingsService.set("auth.basic.enabled", false)
-			appSettingsService.set("auth.basic.username", "bla")
-			appSettingsService.set("auth.basic.password", "pass".bytes.encodeBase64().toString())
+			appSettingsService."auth.basic.enabled" = false
+			appSettingsService."auth.basic.username" = "bla"
+			appSettingsService."auth.basic.password" = "pass".bytes.encodeBase64().toString()
 		when:
 			withFilters(action: 'list') {
 				controller.list()
