@@ -18,7 +18,7 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def extComm = new GenericWebconnection(name:name, url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET)
+			def extComm = new GenericWebconnection(name:name, url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET)
 		then:
 			extComm.validate() == valid
 		where:
