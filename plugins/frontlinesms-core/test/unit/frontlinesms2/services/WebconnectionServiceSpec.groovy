@@ -10,7 +10,7 @@ import org.apache.camel.Message
 import grails.buildtestdata.mixin.Build
 
 @TestFor(WebconnectionService)
-@Build([Group, SmartGroup, Contact])
+@Build([Group, SmartGroup, Contact, Fmessage])
 class WebconnectionServiceSpec extends Specification {
 	def requestedId
 	def mockConnection
@@ -35,7 +35,8 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'postprocess call is handed back to the relevant domain object'() {
 		given:
-			def x = mockExchange(null, ['webconnection-id':'123','fmessage-id':'1'])
+			def m = Fmessage.build()
+			def x = mockExchange(null, ['webconnection-id':'123','fmessage-id':m.id])
 		when:
 			service.postProcess(x)
 		then:
