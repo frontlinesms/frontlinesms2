@@ -84,18 +84,18 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createTestPoll(archived=false, deleted=false) {
-		Poll.metaClass.processKeyword = { Fmessage m, Keyword k -> 
-			println "# Poll.processKeyword() :: keyword=$k, value=$k.value"
+		Poll p = new Poll(name:'test poll', archived: archived, deleted: deleted)
+		p.addToKeywords(new Keyword(value:"TOP", isTopLevel: true))
+		(1..5).each {
+			p.addToResponses(new PollResponse(value: "poll response ${it}"))
+			p.addToKeywords(new Keyword(value: "BOTTOM${it}", isTopLevel: false, ownerDetail: "${it}"))
+		}
+		p.addToResponses(PollResponse.createUnknown())
+		p.metaClass.processKeyword = { Fmessage m, Keyword k ->
+			println "processing keyword $k, value: ${k.value}"
 			k.ownerDetail = "PROCESSED"
 			k.save(failOnError:true, flush:true)
 		}
-		Poll p = new Poll(name:'test poll', archived:archived, deleted:deleted)
-		p.addToKeywords(new Keyword(value:"TOP", isTopLevel:true))
-		(1..5).each {
-			p.addToResponses(new PollResponse(value:"poll response ${it}"))
-			p.addToKeywords(new Keyword(value:"BOTTOM${it}", isTopLevel:false, ownerDetail:"${it}"))
-		}
-		p.addToResponses(PollResponse.createUnknown())
 		p.save(failOnError:true, flush:true)
 		return p
 	}
