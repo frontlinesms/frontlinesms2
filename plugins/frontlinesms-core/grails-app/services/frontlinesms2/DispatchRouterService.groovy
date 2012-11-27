@@ -5,6 +5,7 @@ import org.apache.camel.Header
 
 /** This is a Dynamic Router */
 class DispatchRouterService {
+	def appSettingsService
 	def camelContext
 
 	int counter = -1
@@ -20,8 +21,8 @@ class DispatchRouterService {
 		log "ENTRY"
 		log "Routing exchange $exchange with previous endpoint $previous and target fconnection $requestedFconnectionId"
 		log "x.in=$exchange?.in"
-		log "x.in.headers=$exchange?.in?.headers"
-		
+		log "x.in.headers=$exchange.in.headers"
+
 		if(previous) {
 			// We only want to pass this message to a single endpoint, so if there
 			// is a previous one set, we should exit the slip.
@@ -31,7 +32,31 @@ class DispatchRouterService {
 			log "Target is set, so forwarding exchange to fconnection $requestedFconnectionId"
 			return "seda:out-$requestedFconnectionId"
 		} else {
-			def routeId = getDispatchRouteId()
+			def routeId
+			if(appSettingsService.get('routing.uselastreceiver') == true){
+				def d = Dispatch.get(exchange.in.getHeader('frontlinesms.dispatch.id'))
+				println "dispatch to send # $d ### d.dst # $d?.dst"
+				def latestReceivedMessage = Fmessage.findBySrcAndOrderByDateCreated(d.dst)
+				if(latestReceivedMessage?.receivedOn) {
+					println "## Sending message with receivedOn Connection ##"
+					def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
+					println "Id of prefered route ## $latestReceivedMessage.receivedOn"
+					println "allOutRoutes ## $allOutRoutes"
+					def routeToTake = allOutRoutes.find{ it.id == "out-${latestReceivedMessage.receivedOn}" }
+					println "Chosen Route ## $routeToTake"
+					routeId = routeToTake?routeToTake.id:null
+				}
+			}
+
+			if(!routeId){ // if uselastreceiver did not set the routeId
+				if(appSettingsService.get('routing.otherwise') == 'any') {
+					println "Sending to any available connection"
+					routeId = getDispatchRouteId()
+				}else{
+					println "Not sending message at all"
+				}
+			}
+
 			if(routeId) {
 				log "Sending with route: $routeId"
 				def fconnectionId = (routeId =~ /.*-(\d+)$/)[0][1]
