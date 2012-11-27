@@ -1,6 +1,19 @@
 function processNewTour() {
+	$.each(guider(), function(key, value) {
+		if(key ==  getURLParameter('tourName')) {
+			if(key == "connection")
+				showConnectionWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
+			else if(key == "basicAuth")
+				showBasicAuthWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
+			else
+				showActivityWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
+			return
+		}
+	});
+}
 
-	var allGuider = {
+function guider(){
+	var allGuiders = {
 		"autoforward": {
 			"shortName": "autoforward" ,
 			"friendlyName": "Autoforward" ,
@@ -35,17 +48,14 @@ function processNewTour() {
 			"shortName": "connection" ,
 			"friendlyName": "Connection" ,
 			"descriptiveText": "This tour guides you on how to make a connection with a phone/usb modem, your Clickatel or/and IntelliSms account as well as Smsync"
+		},
+		"basicAuth": {
+			"shortName": "basicAuth" ,
+			"friendlyName": "Basic Authorization" ,
+			"descriptiveText": "Allows you to add a username and password which will be required to access FrontlineSMS on this network"
 		}
 	}
-	$.each(allGuider, function(key, value) {
-		if(key ==  getURLParameter('tourName')) {
-			if(key == "connection")
-				showConnectionWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
-			else
-				showActivityWalkthrough(value.shortName, value.friendlyName, value.descriptiveText);
-			return
-		}
-	});
+	return allGuiders;
 }
 
 function createAndShowGuider(params) {
@@ -68,6 +78,19 @@ function getURLParameter(name) {
         (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
     );
 }
+function showBasicAuthWalkthrough(shortName, friendlyName, descriptiveText){
+	createAndShowGuider({
+		attachTo: "#basic-auth > table",
+		buttons: [{name: "Close"}],
+		description: descriptiveText,
+		id: "new_act_1",
+		highlight: "#basic-auth > table",
+		position: 11,
+		overlay: true,
+		title: friendlyName,
+		width: 500
+	});
+}
 function showConnectionWalkthrough(shortName, friendlyName, descriptiveText){
 	createAndShowGuider({
 		buttons: [{name: "Start Tour", onclick: guiders.next},{name:"Close"}],
@@ -84,7 +107,7 @@ function showConnectionWalkthrough(shortName, friendlyName, descriptiveText){
 		description: "click this linkn to redirect to the connections page",
 		id: "new_act_2",
 		next: "new_act_3",
-		position: 9,
+		position: 5,
 		highlight:"ul#system-menu li:first-child a",
 		overlay: true,
 	});
@@ -98,7 +121,7 @@ function showConnectionWalkthrough(shortName, friendlyName, descriptiveText){
 		position: 3,
 		highlight: "div#body-menu ul li:nth-child(2)",
 		overlay: true,
-		title: "Guiders can be customized.",
+		title: friendlyName,
 	});
 
 	guiders.createGuider({
@@ -110,7 +133,7 @@ function showConnectionWalkthrough(shortName, friendlyName, descriptiveText){
 		highlight: 'a[name="addConnection"]',
 		overlay: true,
 		xButton: true,
-		title: "Guiders can be customized.",
+		title: friendlyName,
 	});
 
 	$('a[name="addConnection"]').click(function(){
@@ -150,11 +173,12 @@ function showActivityWalkthrough(shortName, friendlyName, descriptiveText) {
 		else if($(this).find("div#tabs-1").is(":visible")) {
 			// webconnection wizard
 			createAndShowGuider({
+				attachTo: "#messageText",
 				buttons: [{name: "Close and end Tour", onclick: guiders.hideAll }/*, {name: "To new features", onclick: newFeaturesLink }*/],
-				description: "Follow the steps in the wizard to complete setup",
+				description: "If you want to find this popup again, look in Help",
 				id: "new_act_4",
 				overlay: true,
-				position: 6,
+				position: 12,
 				title: "Configure your new "+friendlyName,
 				width: 500
 			});

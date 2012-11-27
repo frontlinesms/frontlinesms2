@@ -1,9 +1,9 @@
 # FrontlineSMS v 2.2.0
 ## Subscriptions
-A subscriptions allows users to join groups by texting in messages that match certain specified keywords. Subscriptions allows users to text in messages specifically for joining and leaving a group. For example, a user may text on 'join' to join a group or 'leave' to leave a group. Support for two keyword subscriptions is offered, where a user can text in 'Football join' to join the group or 'Football leave' to leave the group. [show me] (http://localhost:8080/frontlinesms-core/message/inbox?tourName=subscription)
+A subscriptions allows users to join groups by texting in messages that match certain specified keywords. Subscriptions allows users to text in messages specifically for joining and leaving a group. For example, a user may text on 'join' to join a group or 'leave' to leave a group. Support for two keyword subscriptions is offered, where a user can text in 'Football join' to join the group or 'Football leave' to leave the group. [show me] [1]
 
 ## Webconnections
-A FrontlineSMS deployment instance can upload messages to a specified url, using an activity called Webconnection. [show me] (http://localhost:8080/frontlinesms-core/message/inbox?tourName=webconnection)
+A FrontlineSMS deployment instance can upload messages to a specified url, using an activity called Webconnection. [show me] [2]
 
 ## Ushahidi
 Related to Web Cconnection is the Ushahidi Web Connection. This activity uploads messages that match certain keywords to an ushahidi or crowdmap instance.
@@ -13,3 +13,5 @@ Autoreply, Poll, Webconnection and subcriptions now support use of more than one
 
 With regard to Polls, keywords allows users to text in single word messages, so as to submit an etry into a poll. Support for twe keyword polls is offered, where a user can text in 'Food pie' for Pir or 'Food soda' for Soda.
 
+[1]: http://localhost:8080/frontlinesms-core/message/inbox?tourName=subscription
+[2]: http://localhost:8080/frontlinesms-core/message/inbox?tourName=webconnection
