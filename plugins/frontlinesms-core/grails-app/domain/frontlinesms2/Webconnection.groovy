@@ -19,7 +19,6 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	enum HttpMethod { POST, GET }
 	static String shortName = 'webconnection'
 	static String getType() { '' }
-	static String apiUrl = 'webconnection'
 	static def implementations = [UshahidiWebconnection, 
 			GenericWebconnection]
 

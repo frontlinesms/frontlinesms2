@@ -7,7 +7,6 @@ import frontlinesms2.api.*
 
 @FrontlineApiAnnotations(apiUrl="smssync")
 class SmssyncFconnection extends Fconnection implements FrontlineApi {
-	static final String apiUrl = 'smssync'
 	static String getShortName() { 'smssync' }
 	static final configFields = ['name', 'receiveEnabled', 'sendEnabled', 'secret']
 	static final passwords = ['secret']
