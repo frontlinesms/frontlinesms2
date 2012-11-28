@@ -1,5 +1,5 @@
 var newFeatures = (function() {
-	var closePopup, showPopup, _doPopupDisplay, _handlePopupClose;
+	var closePopup, showPopup, _doPopupDisplay, _handlePopupClose, showGuider, _doShowGuider;
 	_doPopupDisplay = function(data) {
 		var modalBox;
 		mediumPopup.launchNewFeaturePopup(
@@ -34,9 +34,21 @@ var newFeatures = (function() {
 			success: _handlePopupClose
 		});
 	};
+	showGuider = function(name) {
+		jQuery.ajax({
+			url:url_root + "help/guider",
+			data:{ name:name },
+			dataType:'json',
+			success:_doShowGuider,
+			error:function() { alert(i18n("guider.error.notfound", name)); } });
+	};
+	_doShowGuider = function(data) {
+		alert("Should now show guider using data: " + JSON.stringify(data));
+	};
 	return {
 		showPopup:showPopup,
-		closePopup:closePopup
+		closePopup:closePopup,
+		showGuider:showGuider
 	};
 }());
 
