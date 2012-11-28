@@ -5,6 +5,5 @@ sed -i "s:\(-Dfrontlinesms\.resource\.path=~/.*\)</string>:\1-SNAPSHOT</string>:
 sed -i "s:\(resource\.path=.*\):\1-SNAPSHOT:" ../frontlinesms-core/install/fileset/filtered/launcher.properties
 
 echo "# TODO update this to support other flavours than core"
-sed -i -e    "/^install4j\.applicationId=.*$/d" \
-       -e "s/^\(install4j\.applicationId\.SNAPSHOT\)=\(.*\)$/\1=\2\ninstall4j.applicationId=\2/" \
-		install/frontlinesms-core.install.properties
+do/install_property_to_snapshot install4j.applicationId
+

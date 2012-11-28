@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+do/install_property_change SNAPSHOT $@
+
