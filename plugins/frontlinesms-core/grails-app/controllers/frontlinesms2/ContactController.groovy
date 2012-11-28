@@ -66,7 +66,7 @@ class ContactController extends ControllerUtils {
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = contactList.contactInstanceTotal
-		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
+		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList ? contactInstanceList[0] : null))
 		def usedFields = contactInstance?.customFields ?: []
 		def usedFieldNames = []
 		usedFields.each() { field ->
