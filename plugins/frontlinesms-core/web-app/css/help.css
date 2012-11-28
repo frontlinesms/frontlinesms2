@@ -1,7 +1,7 @@
 .ui-dialog.help .ui-dialog-buttonset { position:absolute; top:0; right:0; width:auto; border:none; }
 #modalBox.help { position:relative; }
 #modalBox.help #help-index, #modalBox.help .help-content { position:absolute; top:0; bottom:0; overflow:auto; }
-#modalBox.help #help-index { left:0; right:80%; }
+#modalBox.help #help-index { left:0; right:80%; border-right: 1px solid #9E9E9E; }
 #modalBox.help .help-content { left:0; right:0; }
 #modalBox.help #help-content { left:20%; }
 
@@ -19,8 +19,8 @@
 #modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion .ui-accordion-header { text-indent:51px; background-position:34px center; }
 #modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion .ui-accordion-content { text-indent:68px; }
 #modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion .ui-accordion-content a { text-indent:0; padding-left:68px; }
-#modalBox.help #help-index .ui-accordion-header.ui-state-active { background-image:url("../images/icons/headerSelected.png"); }
-#modalBox.help #help-index .ui-accordion-header.ui-state-default { background-image:url("../images/icons/header.png"); }
+#modalBox.help #help-index .ui-accordion-header.ui-state-active { background-image:url("../images/icons/accordion-expanded.png"); background-size:11px; background-position: 2% 50%; }
+#modalBox.help #help-index .ui-accordion-header.ui-state-default { background-image:url("../images/icons/accordion-unexpanded.png"); background-size:12px; background-position: 2% 50%; }
 
 #modalBox.help .help-content { line-height:140%; }
 #modalBox.help #help-content { padding:17px; }
