@@ -80,7 +80,7 @@
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.InstallerApplication">
               <void property="arguments">
-                <string>${compiler:exec.args.additional} -Dfrontlinesms.resource.path=~/.${compiler:app.shortName}</string>
+                <string>${compiler:db.migrations} -Dfrontlinesms.resource.path=~/.${compiler:app.shortName}</string>
               </void>
               <void property="customIconImageFiles">
                 <void method="add">
