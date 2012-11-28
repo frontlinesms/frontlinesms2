@@ -312,7 +312,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageInstanceList.size() == 1
 	}
 
-	def "ensure dispatch count in message results is correct"(){
+	def "ensure dispatch count in message results is correct"() {
 		setup:
 			def message = new Fmessage(text:"test")
 			message.addToDispatches(dst:'999', status:DispatchStatus.PENDING)
@@ -331,3 +331,4 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageInstanceList.first().displayName == "103"
 	}
 }
+

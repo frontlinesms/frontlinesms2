@@ -44,11 +44,11 @@ The connection will be deleted. If this was your active connection then you will
 [Setting up a Connection to an IntelliSMS Account][6]
 [Manually Setting up a Connection][7]
 
-[1]: settings/4.setting_up_a_device
-[3]: settings/1.getting_around_the_settings_menu
-[5]: settings/4b.clickatell
-[6]: settings/4a.intellisms
-[7]: settings/5.manually_adding_device
+[1]: core/settings/4.setting_up_a_device
+[3]: core/settings/1.getting_around_the_settings_menu
+[5]: core/settings/4b.clickatell
+[6]: core/settings/4a.intellisms
+[7]: core/settings/5.manually_adding_device
 [8]: ../images/help/settings_connections.png
 [9]: ../images/help/edit_connection.png
 [10]: ../images/help/phone_modem_confirm.png

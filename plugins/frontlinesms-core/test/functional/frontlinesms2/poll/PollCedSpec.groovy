@@ -474,7 +474,6 @@ class PollCedSpec extends PollBaseSpec {
 			response.choice("C").hasClass("error")
 			response.errorLabel("C").text().contains("A saved choice cannot")
 	}
-	// TODO: add alias-specific tests
 
 	def deletePoll() {
 		def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
