@@ -29,12 +29,15 @@ class SettingsController extends ControllerUtils {
 		def enabledAuthentication = appSettingsService.get("auth.basic.enabled")
 		def username = new String(appSettingsService.get("auth.basic.username").decodeBase64())
 		def password = new String(appSettingsService.get("auth.basic.password").decodeBase64())
+		def appSettings = [:] 
+		appSettings['version.check.updates'] = appSettingsService.get("version.check.updates")
 
 		[currentLanguage:i18nUtilService.getCurrentLanguage(request),
 				enabledAuthentication:enabledAuthentication,
 				username:username,
 				password:password,
-				languageList:i18nUtilService.allTranslations]
+				languageList:i18nUtilService.allTranslations,
+				appSettings:appSettings]
 	}
 
 	def selectLocale() {
@@ -55,6 +58,12 @@ class SettingsController extends ControllerUtils {
 		}
 		// render general rather than redirecting so that auth is not immediately asked for
 		render view:'general', model:general()
+	}
+
+	def saveCheckUpdates(){
+		def checkUpdates = params.checkUpdates?true:false
+		appSettingsService.set('version.check.updates', checkUpdates)
+		redirect action:'general'
 	}
 
 	private def withFconnection = withDomainObject Fconnection, { params.id }, { render(view:'show_connections', model: [fconnectionInstanceTotal: 0]) }

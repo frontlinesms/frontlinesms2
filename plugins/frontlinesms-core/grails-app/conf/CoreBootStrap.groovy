@@ -59,6 +59,7 @@ class CoreBootStrap {
 			//camelContext.tracing = true
 			dev_disableSecurityFilter()
 			updateFeaturePropertyFileValues()
+			appSettingsService.set("version.check.updates","false")
 		}
 
 		if(bootstrapData) {
@@ -80,6 +81,7 @@ class CoreBootStrap {
 		if(Environment.current == Environment.PRODUCTION) {
 			createWelcomeNote()
 			updateFeaturePropertyFileValues()
+			appSettingsService.set("version.check.updates","false")
 		}
 
 		setCustomJSONRenderers()

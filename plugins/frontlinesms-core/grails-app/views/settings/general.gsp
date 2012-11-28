@@ -78,6 +78,15 @@
 					</table>
 				</g:form>
 			</div>
+			<div id="check-updates">
+				<h2><g:message code="version.title" /></h2>
+				<g:form controller="settings" action="saveCheckUpdates">
+				<p class="info">
+					<g:checkBox name="checkUpdates" value="true" checked="${appSettings['version.check.updates']}"/> <g:message code="version.info"/>
+				</p>
+				<p><g:submitButton name="saveCheckUpdates" class="btn" value="${message(code:'action.save')}"/></p>
+				</g:form>
+			</div>
 		</div>
 	</body>
 </html>
