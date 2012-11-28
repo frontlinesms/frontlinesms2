@@ -25,7 +25,7 @@ class Fmessage {
 	
 	boolean inbound
 
-	static hasMany = [dispatches:Dispatch]
+	static hasMany = [dispatches:Dispatch, details:MessageDetail]
 
 	static mapping = {
 		sort date:'desc'
