@@ -47,20 +47,20 @@ Your folder will now appear in the [messages][1] tab.
 [Sending a Message][14]  
 [Forwarding messages][15]  
 
-[1]: messages/1.getting_around_the_messages_tab
-[2]: archive/2.archiving_messages
-[3]: archive/1a.inbox_archive
-[4]: archive/1.getting_around_the_archive_tab
-[5]: archive/1b.sent_archive
-[6]: archive/1b.sent_archive
-[7]: messages/5.sent
-[8]: archive/4.unarchive
-[9]: archive/1c.activity_archive
-[10]: archive/4.unarchive
-[11]: archive/1d.folder_archive
-[12]: folders/2.creating_a_folder
-[13]: activities/2.creating_an_activity
-[14]: messages/3.quick_message
-[15]: messages/8.mrfd
+[1]: core/messages/1.getting_around_the_messages_tab
+[2]: core/archive/2.archiving_messages
+[3]: core/archive/1a.inbox_archive
+[4]: core/archive/1.getting_around_the_archive_tab
+[5]: core/archive/1b.sent_archive
+[6]: core/archive/1b.sent_archive
+[7]: core/messages/5.sent
+[8]: core/archive/4.unarchive
+[9]: core/archive/1c.activity_archive
+[10]: core/archive/4.unarchive
+[11]: core/archive/1d.folder_archive
+[12]: core/folders/2.creating_a_folder
+[13]: core/activities/2.creating_an_activity
+[14]: core/messages/3.quick_message
+[15]: core/messages/8.mrfd
 [16]: ../images/help/unarchive_message.png
 [17]: ../images/help/activityunarchive.png

@@ -37,13 +37,13 @@ _**Note:** This will **not** remove the custom field from the "Add more informat
 [Creating a Smart Group][9]   
 [Creating a Group][10]  
 
-[1]: contacts/5.creating_a_smart_group
-[2]: search/1.getting_around_the_search_tab
-[3]: contacts/3.add_remove_a_custom_field
-[4]: contacts/1.getting_around_the_contacts_tab
-[6]: contacts/3.add_remove_a_custom_field
-[7]: contacts/6.add_remove_contact_to_from_a_group
-[9]: contacts/5.creating_a_smart_group
-[10]: contacts/4.creating_a_group
+[1]: core/contacts/5.creating_a_smart_group
+[2]: core/search/1.getting_around_the_search_tab
+[3]: core/contacts/3.add_remove_a_custom_field
+[4]: core/contacts/1.getting_around_the_contacts_tab
+[6]: core/contacts/3.add_remove_a_custom_field
+[7]: core/contacts/6.add_remove_contact_to_from_a_group
+[9]: core/contacts/5.creating_a_smart_group
+[10]: core/contacts/4.creating_a_group
 [11]: ../images/help/add_more_info.png
 [12]: ../images/help/namecustomfield.png

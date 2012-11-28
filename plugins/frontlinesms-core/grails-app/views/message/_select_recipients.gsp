@@ -1,6 +1,6 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
-	<g:hiddenField name="mobileNumbers" value=""/>
+	<g:hiddenField name="mobileNumbers" value="${nonContactRecipients?.join(',')}"/>
 	<div id="manual-address">
 		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label" /></label>
 		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
@@ -60,14 +60,12 @@
 		});
 
 		if($(element).attr('checked')){
-			console.log('adding');
 			$.each(allContacts, function(index, value) { 
 	  			if(!(value in contactMobileNumbers)){
 	  				contactMobileNumbers[value] = true;
 	  			}
 			});
 		} else {
-			console.log('Unchecked');
 			$.each(allContacts, function(index, value) {
 	  			if(value in contactMobileNumbers){
 	  				if(! inCheckedGroup(value)){
@@ -82,7 +80,6 @@
 		});
 
 		$('#mobileNumbers').val(($.makeArray(mobileNumbers).join(',')));
-		console.log($('#mobileNumbers').val());
 
 		updateRecipientCount();
 	}
@@ -107,12 +104,10 @@
 		});
 
 		if($(element).attr('checked')){
-			console.log('adding');
   			if(!(contactNumber in contactMobileNumbers)){
   				contactMobileNumbers[contactNumber] = true;
   			}
 		} else {
-			console.log('Unchecked');
   			if(contactNumber in contactMobileNumbers){
   				if(! inCheckedGroup(contactNumber)){
   					delete contactMobileNumbers[contactNumber];
@@ -125,7 +120,6 @@
 		});
 
 		$('#mobileNumbers').val(($.makeArray(mobileNumbers).join(',')));
-		console.log($('#mobileNumbers').val());
 
 		updateRecipientCount();
 	}

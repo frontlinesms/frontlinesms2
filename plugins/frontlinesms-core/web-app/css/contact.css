@@ -12,7 +12,7 @@
 #body.contacts #main-list-head .group h1 { background-image:url("../images/icons/groups.png"); }
 #body.contacts #main-list-head .smartgroup h1 { background-image:url("../images/icons/smartgroups.png"); }
 
-#body.contacts #main-list li { padding:7px 0 7px 24px; }
+#body.contacts #main-list li { padding:0; position:relative; }
 #body.contacts #main-list li:first-child { 
 	background-image:url("../images/menubar.png");
 	background-position:center top;
@@ -21,9 +21,8 @@
 }
 #body.contacts #main-list li:not(:first-child):hover { background-color:#e5eff3; }
 #body.contacts #main-list li.selected { background-color:#d8e8ef; }
-#body.contacts #main-list li label { padding-left:7px; padding-right:24px; }
-#body.contacts #main-list li a { padding-left:7px; padding-right:24px; }
-#body.contacts #main-list li input[type="checkbox"] { vertical-align:middle; }
+#body.contacts #main-list li a, #body.contacts #main-list li label { padding:8px 0 9px 46px; display:block; }
+#body.contacts #main-list li input[type="checkbox"] { vertical-align:middle; position:absolute; top:7px; left:22px; }
 
 #body.contacts #detail { padding:37px; background-color:#d8e8ef; border-left:1px solid #9e9e9e; }
 

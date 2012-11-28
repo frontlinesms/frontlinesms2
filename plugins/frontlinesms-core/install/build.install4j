@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="5.0.11" transformSequenceNumber="3">
   <directoryPresets config="." />
-  <application name="${compiler:build.name}" distributionSourceDir="" applicationId="${compiler:install4j.applicationId}" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="${compiler:app.shortName}" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:sys.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="false" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="${compiler:build.name}" distributionSourceDir="" applicationId="${compiler:install4j.applicationId}" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="${compiler:app.shortName}" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:sys.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="false" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -80,7 +80,7 @@
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.InstallerApplication">
               <void property="arguments">
-                <string>-Dfrontlinesms.resource.path=~/.${compiler:app.shortName}</string>
+                <string>${compiler:db.migrations} -Dfrontlinesms.resource.path=~/.${compiler:app.shortName}</string>
               </void>
               <void property="customIconImageFiles">
                 <void method="add">

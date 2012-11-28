@@ -15,7 +15,7 @@ FrontlineSMS will change to the language you have specified.
 [Importing Contacts and Messages][2]  
 [Configuring Detected Devices][3]  
 
-[1]: settings/2.changing_languages
-[2]: settings/3.restoring_a_backup
-[3]: settings/1.getting_around_the_settings_menu
+[1]: core/settings/2.changing_languages
+[2]: core/settings/3.restoring_a_backup
+[3]: core/settings/1.getting_around_the_settings_menu
 [4]: ../images/help/settings_language.png

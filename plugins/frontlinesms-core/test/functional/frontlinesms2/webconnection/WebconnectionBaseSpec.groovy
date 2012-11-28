@@ -35,18 +35,25 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		waitFor { at CreateActivityDialog }
 		webconnection.click()
 		at WebconnectionWizard
-		if(webconnectionType) {
-			option(webconnectionType).click()
-			next.click()
+
+		// TODO sort this out so we don't need ugly sleep calls
+		// sleep here because otherwise option() calls are either very slow or timeout completely
+		sleep 1000
+
+		if(!webconnectionType) {
+			waitFor { option('generic').displayed }
+			return true
 		}
-		if(webconnectionType == "ushahidi"){
+
+		option(webconnectionType).click()
+		next.click()
+
+		if(webconnectionType == "ushahidi") {
 			waitFor { configureUshahidi.subType('crowdmap').displayed }
-		} else if(webconnectionType == "generic"){
+		} else if(webconnectionType == "generic") {
 			waitFor { requestTab.post.displayed }
 		}
-		if(webconnectionType == "generic"){
-			waitFor { requestTab.post.displayed }
-		}
+
 		return true
 	}
 }

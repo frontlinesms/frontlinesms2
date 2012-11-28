@@ -90,11 +90,11 @@ cf.name=:custom_${it.name.replaceAll(' ', '_')}_name AND LOWER(cf.value) LIKE LO
 	}
 
 	static def getMembersByNameIlike(id, String searchString, Map pageParams) {
-		SmartGroup.get(id).getMembersByName(searchString, pageParams)
+		SmartGroup.get(id)?.getMembersByName(searchString, pageParams)
 	}
 
 	static def countMembersByNameIlike(id, String searchString) {
-		SmartGroup.get(id).countMembersByName(searchString)
+		SmartGroup.get(id)?.countMembersByName(searchString) ?: 0
 	}
 	
 	static HashMap<String, List<String>> getGroupDetails() {

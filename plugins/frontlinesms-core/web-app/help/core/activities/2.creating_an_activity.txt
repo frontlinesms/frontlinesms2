@@ -15,8 +15,8 @@ There are currently three kinds of activities:
 [Activities][3]  
 [Auto Reply][4]  
 
-[1]: activities/2.creating_an_activity
-[2]: activities/3.creating_a_poll
-[3]: activities/2.creating_an_activity
-[4]: activities/5.creating_an_auto-reply
+[1]: core/activities/2.creating_an_activity
+[2]: core/activities/3.creating_a_poll
+[3]: core/activities/2.creating_an_activity
+[4]: core/activities/5.creating_an_auto-reply
 [5]: ../images/help/creating_activity.png

@@ -23,7 +23,8 @@ jslint || echo "# Please install jslint"
 # run jslint
 if [ -z "$@" ]; then
 	do/extract_js_from_gsps
-	FILES=`find web-app/js/ -name "*.js" | grep -v jqplot | grep -v jquery` " target/temp.js"
+	FILES=`find web-app/js/ -name "*.js" | grep -v jqplot | grep -v jquery`
+	FILES="$FILES target/temp.js"
 else
 	FILES="$@"
 fi

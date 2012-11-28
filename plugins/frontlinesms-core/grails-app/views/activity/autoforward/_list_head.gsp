@@ -6,7 +6,7 @@
 		<g:formatDate date="${ownerInstance.dateCreated}"/>
 	</li>
 	<li>
-		<g:message code='autoforward.message.format'/> : </em><fsms:unsubstitutedMessageText messageText="${ownerInstance.sentMessageText}" />
+		<g:message code='autoforward.message.format'/>: </em><fsms:unsubstitutedMessageText messageText="${ownerInstance.sentMessageText}" />
 	</li>
 	<g:if test="${ownerInstance?.keywords}">
 		<li id="web_connection_keywords"><g:message code="poll.keywords"/> : ${ownerInstance?.keywords*.value.join(',') ?: g.message(code: 'autoforward.keyword.none.generic')}</li>

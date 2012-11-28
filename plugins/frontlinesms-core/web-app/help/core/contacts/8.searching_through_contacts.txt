@@ -19,11 +19,11 @@ This search filter works by matching the contents of the 'Name' field of your co
 [Creating a Smart Group][6]   
 [Creating a Group][7]  
 
-[1]: contacts/8.searching_through_contacts
-[2]: contacts/1.getting_around_the_contacts_tab
-[3]: contacts/8.searching_through_contacts
-[4]: contacts/6.add_remove_contact_to_from_a_group
-[5]: messages/9.exporting
-[6]: contacts/5.creating_a_smart_group
-[7]: contacts/4.creating_a_group
+[1]: core/contacts/8.searching_through_contacts
+[2]: core/contacts/1.getting_around_the_contacts_tab
+[3]: core/contacts/8.searching_through_contacts
+[4]: core/contacts/6.add_remove_contact_to_from_a_group
+[5]: core/messages/9.exporting
+[6]: core/contacts/5.creating_a_smart_group
+[7]: core/contacts/4.creating_a_group
 [8]: ../images/help/contact_search.png
