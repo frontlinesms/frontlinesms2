@@ -74,12 +74,35 @@ class DispatchRouterServiceSpec extends Specification {
 			routedTo == "seda:out-2"
 	}
 
-	def 'slip should not assign messages to any route and should set message status to failed if routing preference is not to send messages'(){
+	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'(){
+		given:
+			mockAppSettingsService(false,'dontsend')
+			mockRoutes(1, 2, 3)
+		when:
+			def routedTo = service.slip(mockExchange(), null, null)
+		then:
+			thrown java.lang.RuntimeException
+			routedTo == null
+	}
 
+	def 'slip should not assign messages to any route if routing preference is not to send messages when routes are not avalilable'(){
+		given:
+			mockAppSettingsService(false,'dontsend')
+		when:
+			def routedTo = service.slip(mockExchange(), null, null)
+		then:
+			thrown java.lang.RuntimeException
+			routedTo == null
 	}
 
 	def 'slip should fall back to the -otherwise- if received connection is set as prefered route and it is not avalilable'(){
-
+		given://'route 2 is the receivedOn route and it is not available'
+			mockAppSettingsService(true,'any')
+			mockRoutes(1,3)
+		when:
+			def routedTo = service.slip(mockExchange(), null, null)
+		then: 'message routed to available message'
+			routedTo == "seda:out-1"
 	}
 
 	def 'slip should assign messages to round robin if routing preference is set to use avalilable routes'() {
