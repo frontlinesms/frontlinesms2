@@ -38,7 +38,7 @@ class DispatchRouterService {
 				println "dispatch to send # $d ### d.dst # $d?.dst"
 				def latestReceivedMessage = Fmessage.findBySrcAndOrderByDateCreated(d.dst)
 				if(latestReceivedMessage?.receivedOn) {
-					println "## Sending message with receivedOn Connection ##"
+					log "## Sending message with receivedOn Connection ##"
 					def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
 					println "Id of prefered route ## $latestReceivedMessage.receivedOn"
 					println "allOutRoutes ## $allOutRoutes"
@@ -50,10 +50,10 @@ class DispatchRouterService {
 
 			if(!routeId){ // if uselastreceiver did not set the routeId
 				if(appSettingsService.get('routing.otherwise') == 'any') {
-					println "Sending to any available connection"
+					log "## Sending to any available connection ##"
 					routeId = getDispatchRouteId()
 				}else{
-					println "Not sending message at all"
+					log "## Not sending message at all ##"
 				}
 			}
 

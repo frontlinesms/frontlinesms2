@@ -29,12 +29,16 @@ class SettingsController extends ControllerUtils {
 		def enabledAuthentication = appSettingsService.get("auth.basic.enabled")
 		def username = new String(appSettingsService.get("auth.basic.username").decodeBase64())
 		def password = new String(appSettingsService.get("auth.basic.password").decodeBase64())
+		def appSettings = [:] 
+		appSettings['routing.uselastreceiver'] = appSettingsService.get("routing.uselastreceiver")
+		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
 
 		[currentLanguage:i18nUtilService.getCurrentLanguage(request),
 				enabledAuthentication:enabledAuthentication,
 				username:username,
 				password:password,
-				languageList:i18nUtilService.allTranslations]
+				languageList:i18nUtilService.allTranslations,
+				appSettings:appSettings]
 	}
 
 	def selectLocale() {
@@ -55,6 +59,12 @@ class SettingsController extends ControllerUtils {
 		}
 		// render general rather than redirecting so that auth is not immediately asked for
 		render view:'general', model:general()
+	}
+
+	def changeRoutingPreferences() {
+		appSettingsService.set('routing.uselastreceiver',params.uselastreceiver)
+		appSettingsService.set('routing.otherwise', params.otherwise)
+		redirect action:'general'
 	}
 
 	private def withFconnection = withDomainObject Fconnection, { params.id }, { render(view:'show_connections', model: [fconnectionInstanceTotal: 0]) }

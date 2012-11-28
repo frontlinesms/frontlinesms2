@@ -78,6 +78,31 @@
 					</table>
 				</g:form>
 			</div>
+			<div id="routing-preferences">
+				<h2><g:message code="routing.title" /></h2>
+				<p class="info">
+					<g:message code="routing.info"/>
+				</p>
+				<g:form name="routing-form" controller="settings" action="changeRoutingPreferences">
+					<div id="custom-routing">
+						<p class="info">
+							<g:message code="routing.when.sending"/>
+						</p>
+						<ul>
+							<li>
+								<g:checkBox name="uselastreceiver" value="true" checked="${appSettings['routing.uselastreceiver']}"/><g:message code="routing.use.last.received"/>
+							</li>
+						</ul>
+					</div>
+					<div id="default-routing">
+						<p class="info">
+							<g:message code="routing.otherwise"/>
+						</p>
+						<fsms:radioGroup name="otherwise" values="any,dontsend" labels="${g.message(code:'routing.use.any')}, ${g.message(code:'routing.dont.send')}" checked="${appSettings['routing.otherwise']}"/>
+					</div>
+					<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}"/>
+				</g:form>
+			</div>
 		</div>
 	</body>
 </html>
