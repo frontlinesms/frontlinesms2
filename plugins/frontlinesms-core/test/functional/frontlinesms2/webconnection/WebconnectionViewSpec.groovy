@@ -264,5 +264,6 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			header.moreActions.value("retry failed uploads").jquery.click()
 		then:
 			waitFor { notifications.flashMessageText.contains("Failed uploads have been requeued for upload") }
+			at PageMessageWebconnection
 	}
 }
