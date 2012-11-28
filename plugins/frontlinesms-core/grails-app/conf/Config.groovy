@@ -1,7 +1,3 @@
-import org.apache.log4j.ConsoleAppender
-import org.apache.log4j.RollingFileAppender
-
-
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
@@ -91,36 +87,29 @@ environments {
 grails.config.locations = []
 grails.config.locations << "file:${frontlinesms2.ResourceUtils.resourcePath}/log4j.groovy"
 log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
-
-    warn 'org.codehaus.groovy.grails.web.servlet',  //  controllers
 	environments {
-		def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
 		production {
 			def conf = frontlinesms2.ResourceUtils.resourcePath
-			appender new RollingFileAppender(name:"prod",
-					layout:layout, file:"$conf/standard.log",
-					threshold:org.apache.log4j.Level.INFO)
-			appender new RollingFileAppender(name:"prod-stacktrace",
-					layout:layout, file:"$conf/stacktrace.log",
-					threshold:org.apache.log4j.Level.ERROR)
-			info 'prod-stacktrace'
-			error 'prod'
+			println "Logging conf dir: $conf"
+			rollingFile name:"prod",
+					file:"$conf/standard.log",
+					maxFileSize:10240000,
+					threshold:org.apache.log4j.Level.INFO
+			rollingFile name:"prod-stacktrace",
+					file:"$conf/stacktrace.log",
+					maxFileSize:10240000,
+					threshold:org.apache.log4j.Level.WARN
 		}
-		development {
-			appender new ConsoleAppender(name:'console-logger',
-					layout:layout,
-					threshold:org.apache.log4j.Level.INFO)
-			info 'console-logger'
-		}
+		development { console name:'dev', threshold:org.apache.log4j.Level.INFO }
+		test { console name:'test', threshold:org.apache.log4j.Level.INFO }
 	}
 
-	warn 'org.codehaus.groovy.grails.web.servlet',  //  controllers
+	root {
+		all 'dev', 'test', 'prod', 'prod-stacktrace'
+	}
+
+
+	all 'org.codehaus.groovy.grails.web.servlet',  //  controllers
 		'org.codehaus.groovy.grails.web.pages', //  GSP
 		'org.codehaus.groovy.grails.web.sitemesh', //  layouts
 		'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping

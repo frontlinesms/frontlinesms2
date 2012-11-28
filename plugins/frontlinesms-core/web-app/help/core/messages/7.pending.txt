@@ -34,11 +34,11 @@ Please see [here][2]
 [Unarchiving Messages][11]  
 [Moving, Deleting, Forwarding and Replying][2]   
 
-[1]: messages/5.sent
-[2]: messages/8.mrfd
-[3]: archive/2.archiving_messages
-[4]: messages/9.exporting
-[6]: messages/1.getting_around_the_messages_tab
-[8]: activities/2.creating_an_activity
-[11]: archive/4.unarchive
+[1]: core/messages/5.sent
+[2]: core/messages/8.mrfd
+[3]: core/archive/2.archiving_messages
+[4]: core/messages/9.exporting
+[6]: core/messages/1.getting_around_the_messages_tab
+[8]: core/activities/2.creating_an_activity
+[11]: core/archive/4.unarchive
 [12]: ../images/help/pending.png

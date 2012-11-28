@@ -35,12 +35,12 @@ The selected messages will be moved to your chosen destination.
 [Archiving messages][7]  
 [Unarchiving Messages][9]  
 
-[1]: messages/8.mrfd
-[3]: messages/1.getting_around_the_messages_tab
-[4]: archive/1b.sent_archive
-[6]: activities/1.getting_around_activities
-[7]: archive/2.archiving_messages
-[8]: folders/1.getting_around_folders
-[9]: archive/4.unarchive
+[1]: core/messages/8.mrfd
+[3]: core/messages/1.getting_around_the_messages_tab
+[4]: core/archive/1b.sent_archive
+[6]: core/activities/1.getting_around_activities
+[7]: core/archive/2.archiving_messages
+[8]: core/folders/1.getting_around_folders
+[9]: core/archive/4.unarchive
 [10]: ../images/help/sent.png
 [11]: ../images/help/messageforward.png
