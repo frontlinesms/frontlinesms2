@@ -188,4 +188,23 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			"enabled"|"TEST,TESTING"
 			"disabled"|null
 	}
+
+	def 'retry failed action should result in all failed uploads being reattempted'() {
+		setup:
+			def keyword = new Keyword(value:'TEST')
+			def webconnection = new GenericWebconnection(name:"Webconnection with failures", url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
+			webconnection.addToKeywords(keyword)
+			// adding 3 successful uploads, two failed ones, and one pending
+			5.times { it ->
+				webconnection.addToMessages(new Fmessage(text: "test", inbound: true, src:"+12345$it", ownerDetail: ((it % 2) ? Webconnection.OWNERDETAIL_FAILED : Webconnection.OWNERDETAIL_SUCCESS )))
+			}
+			webconnection.addToMessages(new Fmessage(text: "test", inbound: true, src:"+123455", ownerDetail: Webconnection.OWNERDETAIL_PENDING))
+			webconnection.save(failOnError:true)
+		when:
+			controller.params.ownerId = webconnection.id
+			controller.retryFailed()
+		then:
+			["+12340", "+12342", "+12344"].collect { Fmessage.findBySrc(it).ownerDetail }.unique() == [Webconnection.OWNERDETAIL_SUCCESS]
+			["+12341", "+12343", "+12345"].collect { Fmessage.findBySrc(it).ownerDetail }.unique() == [Webconnection.OWNERDETAIL_PENDING]
+	}
 }
