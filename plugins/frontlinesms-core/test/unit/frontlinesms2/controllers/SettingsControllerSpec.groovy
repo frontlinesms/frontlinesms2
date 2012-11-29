@@ -64,6 +64,15 @@ class SettingsControllerSpec extends Specification {
 			0 * appSettingsService.set(_, _)
 	}
 
+	def 'can enabled application update checking from settings'(){
+		given:
+			params.checkUpdates = true
+		when:
+			controller.saveCheckUpdates()
+		then:
+			1 * appSettingsService.set('version.check.updates', (params.checkUpdates?true:false))
+	}
+
 	def "should not enable application authentication from settings if details don't validate"() {
 		given:
 			mockAppSettings(enabledAuthentication: false,
