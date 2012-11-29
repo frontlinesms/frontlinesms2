@@ -13,5 +13,6 @@ Autoreply, Poll, Webconnection and subcriptions now support use of more than one
 
 With regard to Polls, keywords allows users to text in single word messages, so as to submit an etry into a poll. Support for twe keyword polls is offered, where a user can text in 'Food pie' for Pir or 'Food soda' for Soda.
 
-[1]: http://localhost:8080/frontlinesms-core/message/inbox?tourName=subscription
-[2]: http://localhost:8080/frontlinesms-core/message/inbox?tourName=webconnection
+[1]: javascript:newFeatures.showGuider('subscription')
+[2]: javascript:newFeatures.showGuider('webconnection')
+

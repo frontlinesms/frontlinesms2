@@ -31,6 +31,9 @@ function goToSection() {
 		} else {
 			return true;
 		} 
+	} else if(section.indexOf("javascript:") == 0) {
+		eval(section.slice(11));
+		return false;
 	}
 	$("#modalBox.help #help-index li.selected").removeClass("selected");
 	menuItem.parent().addClass("selected");
