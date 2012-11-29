@@ -6,27 +6,30 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
+import java.util.Properties;
 
 
 class AppSettingsConfig {
-	public static void setAppProperty(String key, String value){
+	public static void setAppProperty(String key, String value) throws IOException {
 		File propertiesFile = getPropertiesFile("app-settings.properties");
 		Properties properties = new Properties();
 		try {
-			properties.load(new InputStreamReader(new FileInputStream(regPropFile), "UTF-8"));
+			properties.load(new InputStreamReader(new FileInputStream(propertiesFile), "UTF-8"));
 			properties.setProperty(key,value);
-			properties.store(new OutputStreamWriter(new FileOutputStream(regPropFile), "UTF-8"),null);
+			properties.store(new OutputStreamWriter(new FileOutputStream(propertiesFile), "UTF-8"),null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void getAppProperty(String key){
+	public static String getAppProperty(String key) throws IOException {
 		File propertiesFile = getPropertiesFile("app-settings.properties");
 		Properties properties = new Properties();
 		try {
 			properties.load(new InputStreamReader(new FileInputStream(propertiesFile), "UTF-8"));
-			return properties.getProperty(key);
+			return properties.getProperty(key).toString();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
