@@ -323,4 +323,30 @@ class Fmessage {
 	def getReceivedOn() {
 		Fconnection.findByMessages(this).list()[0]
 	}
+
+	def getMessageDetailValue(owner) {
+		def ownerType = getOwnerType(owner)	
+		if (ownerType) {
+			return this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }?.value
+		}
+		else
+			return null
+	}
+
+	def setMessageDetailValue(owner, value) {
+		def ownerType = getOwnerType(owner)
+		if (!ownerType)
+			return
+		def messageDetailInstance = this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }
+		if(!messageDetailInstance) {
+			messageDetailInstance = new OwnerDetail(ownerType: ownerType, ownerId: owner.id)
+			this.addToDetails(messageDetailInstance)
+		}
+		messageDetailInstance.value = value
+		messageDetailInstance.save(failOnError:true)
+	}
+
+	private def getOwnerType(owner) {
+		(owner instanceOf Activity)? ownerType = MessageDetail.OwnerType.ACTIVITY : (owner instanceOf Step) ? MessageDetail.OwnerType.STEP : null
+	}
 }
