@@ -7,7 +7,7 @@ class FmessageService {
     	def messagesToSend = []
     	messageList.each { messageInstance ->
     		if(messageInstance.isMoveAllowed()){
-    			messageInstance.ownerDetail = null
+    			messageInstance.clearAllDetails()
     			messageInstance.isDeleted = false
 				Trash.findByObject(messageInstance)?.delete(failOnError:true)
 				if (params.messageSection == 'activity') {

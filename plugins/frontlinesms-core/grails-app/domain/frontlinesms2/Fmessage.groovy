@@ -16,7 +16,6 @@ class Fmessage {
 	String text
 	String inboundContactName
 	String outboundContactName
-	String ownerDetail
 	
 	boolean read
 	boolean starred
@@ -50,7 +49,7 @@ class Fmessage {
 				val ^ (obj.dispatches? true: false)
 		})
 		dispatches nullable:true
-		ownerDetail nullable:true
+		details nullable:true
 	}
 
 	def beforeInsert = {
@@ -339,14 +338,27 @@ class Fmessage {
 			return
 		def messageDetailInstance = this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }
 		if(!messageDetailInstance) {
-			messageDetailInstance = new OwnerDetail(ownerType: ownerType, ownerId: owner.id)
+			messageDetailInstance = new MessageDetail(ownerType: ownerType, ownerId: owner.id)
 			this.addToDetails(messageDetailInstance)
 		}
 		messageDetailInstance.value = value
 		messageDetailInstance.save(failOnError:true)
 	}
 
+	//> GETTER AND SETTER OF MESSAGE DETAIL THAT USE CURRENT MESSAGE OWNER
+	def getOwnerDetail() {
+		getMessageDetailValue(this.messageOwner)
+	}
+
+	def setOwnerDetail(val) {
+		setMessageDetailValue(this.messageOwner, val)
+	}
+
 	private def getOwnerType(owner) {
 		(owner instanceOf Activity)? ownerType = MessageDetail.OwnerType.ACTIVITY : (owner instanceOf Step) ? MessageDetail.OwnerType.STEP : null
+	}
+
+	def clearAllDetails() {
+		this.details.clear()
 	}
 }
