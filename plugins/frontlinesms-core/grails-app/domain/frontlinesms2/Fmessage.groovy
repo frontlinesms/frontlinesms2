@@ -359,6 +359,6 @@ class Fmessage {
 	}
 
 	def clearAllDetails() {
-		this.details.clear()
+		this.details?.clear()
 	}
 }
