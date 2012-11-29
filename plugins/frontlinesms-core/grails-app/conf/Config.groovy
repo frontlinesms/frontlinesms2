@@ -120,6 +120,8 @@ log4j = {
 		}
 	}
 
+	debug 'org.smslib'
+
 	warn 'org.codehaus.groovy.grails.web.servlet',  //  controllers
 		'org.codehaus.groovy.grails.web.pages', //  GSP
 		'org.codehaus.groovy.grails.web.sitemesh', //  layouts
