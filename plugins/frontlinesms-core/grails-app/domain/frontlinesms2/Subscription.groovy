@@ -103,7 +103,6 @@ class Subscription extends Activity{
 
 	def processKeyword(Fmessage message, Keyword k) {
 		def action = getAction(k)
-		message.ownerDetail = action.toString()
 		if(action == Action.JOIN){
 			processJoin(message)
 		}else if(action == Action.LEAVE) {

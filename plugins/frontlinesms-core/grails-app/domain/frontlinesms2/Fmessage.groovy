@@ -355,7 +355,8 @@ class Fmessage {
 	}
 
 	private def getOwnerType(owner) {
-		owner instanceof Activity ? MessageDetail.OwnerType.ACTIVITY : null // TODO: Once step is implemented: ((owner instanceof Step) ? MessageDetail.OwnerType.STEP : null)
+		def ownerType = owner instanceof Activity ? MessageDetail.OwnerType.ACTIVITY : null // TODO: Once step is implemented: ((owner instanceof Step) ? MessageDetail.OwnerType.STEP : null)
+		ownerType
 	}
 
 	def clearAllDetails() {

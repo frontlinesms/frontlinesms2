@@ -4,7 +4,7 @@ class MessageDetail {
 	static belongsTo = [message: Fmessage]
 	enum OwnerType { ACTIVITY, STEP }
 
-	String ownerType
+	OwnerType ownerType
 	Long ownerId
 	String value
 	
