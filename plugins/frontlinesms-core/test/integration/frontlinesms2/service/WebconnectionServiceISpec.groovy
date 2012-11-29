@@ -97,6 +97,25 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			Fmessage.findByText("simple").ownerDetail == "failed"
 	}
 
+	def 'webconnectionservice.getWebconnectionStatus should return NOT_CONNECTED when the webconnection is not active'() {
+		given:
+			def webconnection = new GenericWebconnection(name:"Sync", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
+		expect:
+			service.getStatusOf(webconnection) == ConnectionStatus.NOT_CONNECTED
+	}
+
+	def 'webconnectionservice.getWebconnectionStatus should return CONNECTED when the webconnection is active'() {
+		setup:
+			def camelContext = Mock(CamelContext)
+			def webconnection = new GenericWebconnection(name:"Sync", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
+			webconnection.camelContext = camelContext
+			webconnection.save(failOnError:true)
+		when:
+			webconnection.activate()
+		then:
+			webconnectionservice.getStatusOf(webconnection) == ConnectionStatus.CONNECTED
+	}
+
 	Exchange mockExchange(messageText,method,messageOnly){
 		def webconnection =  Webconnection.findByName("Sync")
 		if(method ==  'get'){

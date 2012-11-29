@@ -296,7 +296,9 @@ var mediumPopup = (function() {
 		selectSubscriptionGroup:selectSubscriptionGroup, // TODO move this somewhere more suitable
 		submit:submit,
 		tabValidates:tabValidates,
-		getCurrentTab:getCurrentTab
+		getCurrentTab:getCurrentTab,
+		getCurrentTabIndex:getCurrentTabIndex,
+		getTabLength:getTabLength
 	};
 }());
 

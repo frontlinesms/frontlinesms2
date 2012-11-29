@@ -6,7 +6,6 @@ import org.apache.camel.*
 
 class WebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def webCService = Mock(WebconnectionService)
-	def camelContext = Mock(CamelContext)
 
 	def 'incoming message matching keyword should trigger http message sending'() {
 		given:
@@ -35,18 +34,26 @@ class WebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 			1 * webCService.send(incomingMessage)
 	}
 
-	def 'testRoute should shut down route after execution'() {
+
+	def 'testRoute should set message ownerDetail to failed when it fails'() {
 		given:
-			def params = [url: "www.frontlinesms.com/sync", httpMethod:Webconnection.HttpMethod.GET]
-			params.'param-name' = ['username', 'password'] as String[]
-			params.'param-value' = ['bob','secret'] as String[]
+			def camelContext = Mock(CamelContext)
+			def webconnection = new GenericWebconnection(name:"Sync", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
+			webconnection.camelContext = camelContext
+			webconnection.save(failOnError:true)
 		when:
-			Webconnection.testRoute(params)
+			webconnection.testRoute()
 		then:
-			1 * camelContext.addRouteDefinitions(_)
-			camelContext.routes.findAll { it.id == "test-webconnection-null"} //This might be modified based on implementation
-			1 * camelContext.stopRoute(_)
-			webCService.testRoute() == false
-			!Fmessage.count()
+			Fmessage.findByMessageOwnerAndText(webconnection, WebconnectionService.TEST_MESSAGE_TEXT).ownerDetail == "failed"
 	}
+
+	// @IgnoreRest
+	// def "test route should work"() {
+	// 	when:
+	// 		def conn = Webconnection.list()[0] ?: new GenericWebconnection(name:"Sync", url:"http://localhost:8080/webservice-debugger",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
+	// 		conn.testRoute()
+	// 	then:
+	// 		sleep 10000
+	// 		Fmessage.findByMessageOwnerAndText(conn, WebconnectionService.TEST_MESSAGE_TEXT).ownerDetail == "failed"
+	// }
 }

@@ -2,10 +2,10 @@ package frontlinesms2
 
 import spock.lang.*
 
-import org.apache.camel.Exchange
-import org.apache.camel.Message
+import org.apache.camel.*
 
 @TestFor(WebconnectionService)
+@Mock([GenericWebconnection, Fmessage])
 class WebconnectionServiceSpec extends Specification {
 	def requestedId
 	def mockConnection
@@ -30,6 +30,7 @@ class WebconnectionServiceSpec extends Specification {
 			requestedId == '123'
 			1 * mockConnection.preProcess(x)
 	}
+
 
 	def 'postprocess call is handed back to the relevant domain object'() {
 		given:

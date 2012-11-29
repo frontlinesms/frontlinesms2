@@ -28,7 +28,20 @@ class WebconnectionController extends ActivityController {
 		println "<<<<params>>>> $params"
 		def webconnectionInstance = getWebconnectionInstance()
 		doSave('webconnection', webconnectionService, webconnectionInstance, false)
-		webconnectionService.testRoute(webconnectionInstance)
+		TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
+		return
+	}
+
+	def checkRouteStatus() {
+		println "<<<params>>> $params"
+		def webconnectionInstance = Webconnection.get(params.ownerId)
+		def response = [ownerId:params.ownerId, ok:true]
+		if(webconnectionInstance) {
+			def message = Fmessage.findByMessageOwnerAndText(webconnectionInstance, Fmessage.TEST_MESSAGE_TEXT)
+			response.status = message?.ownerDetail
+		}
+
+		render response as JSON
 	}
 
 	private def getWebconnectionInstance() {

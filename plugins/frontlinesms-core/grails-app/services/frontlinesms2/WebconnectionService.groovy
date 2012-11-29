@@ -4,8 +4,8 @@ import frontlinesms2.*
 import org.apache.camel.*
 
 class WebconnectionService {
-	static String TEST_MESSAGE_TEXT = "Test Message"
 	def camelContext
+	def i18nUtilService
 
 	def preProcess(Exchange x) {
 		println "x: ${x}"
@@ -35,10 +35,14 @@ class WebconnectionService {
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
-	def deactivate(Exchange x) {
+	def createStatusNotification(Exchange x) {
 		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
-		println "### DEACTIVATING AFTER TEST ${webConn.name} ###"
-		webConn.deactivate()
+		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		def text = i18nUtilService.getMessage(code:"webconnection.${message.ownerDetail}.label", args:[webConn.name])
+		println "######## StatusNotification::: $text #########"
+		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+		notification.read = false
+		notification.save(failOnError:true, flush:true)
 	}
 
 	def send(Fmessage message) {
@@ -70,7 +74,8 @@ class WebconnectionService {
 	}
 
 	def testRoute(Webconnection webconnectionInstance) {
-		def message = Fmessage.findByMessageOwnerAndText(webconnectionInstance, TEST_MESSAGE_TEXT)
+		def message = Fmessage.findByMessageOwnerAndText(webconnectionInstance, Fmessage.TEST_MESSAGE_TEXT)
+		println "testRoute::: $message"
 		if(!message) {
 			message = createTestMessage()
 			webconnectionInstance.addToMessages(message)
@@ -99,7 +104,7 @@ class WebconnectionService {
 	}
 
 	private Fmessage createTestMessage() {
-		Fmessage fm = new Fmessage(src:"0000", text:TEST_MESSAGE_TEXT, inbound:true)
+		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)
 		fm.save(failOnError:true, flush:true)
 	}
 }

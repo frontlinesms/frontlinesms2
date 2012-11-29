@@ -74,10 +74,11 @@ abstract class Webconnection extends Activity {
 									.redeliveryDelay(0)
 									.handled(true)
 									.beanRef('webconnectionService', 'handleException')
+									.beanRef('webconnectionService', 'createStatusNotification')
 									.end()
 						.to(Webconnection.this.url)
 						.beanRef('webconnectionService', 'postProcess')
-						.beanRef('webconnectionService', 'deactivate')
+						.beanRef('webconnectionService', 'createStatusNotification')
 						.routeId("activity-webconnection-${Webconnection.this.id}")]
 			}
 		}.routeDefinitions
@@ -118,6 +119,7 @@ abstract class Webconnection extends Activity {
 
 	def createRoute(routes) {
 		try {
+			deactivate()
 			camelContext.addRouteDefinitions(routes)
 			println "################# Activating Webconnection :: ${this}"
 			LogEntry.log("Created Webconnection routes: ${routes*.id}")
@@ -132,7 +134,9 @@ abstract class Webconnection extends Activity {
 	def deactivate() {
 		println "################ Deactivating Webconnection :: ${this}"
 		camelContext.stopRoute("activity-webconnection-${this.id}")
+		println "############### Just stopped the route ################"
 		camelContext.removeRoute("activity-webconnection-${this.id}")
+		println "###############  camel route removed ################"
 	}
 
 	abstract def initialize(params)

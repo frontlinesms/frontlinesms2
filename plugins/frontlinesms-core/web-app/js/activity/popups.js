@@ -16,7 +16,7 @@ function chooseActivity() {
 function checkForSuccessfulSave(response, type) {
 	$("#submit").removeAttr('disabled');
 	if (response.ok) {
-		loadSummaryTab(type);
+		loadSummaryTab(response, type);
 	} else {
 		displayErrors(response);
 	}
@@ -28,7 +28,7 @@ function summaryRedirect() {
 	window.location.replace(url_root + "message/activity/" + activityId);
 }
 
-function loadSummaryTab(type) {
+function loadSummaryTab(response, type) {
 	var messageDialog;
 	$("div.confirm").parent().hide();
 		$(".ui-tabs-nav").hide();
