@@ -107,12 +107,6 @@ abstract class Webconnection extends Activity {
 	}
 
 	def activate() {
-		try {
-			deactivate()
-		} catch(Exception ex) {
-			log.info("Exception thrown while deactivating webconnection '$name'", ex)
-		}
-
 		println "*** ACTIVATING ACTIVITY ***"
 		createRoute(this.routeDefinitions)
 	}
@@ -134,9 +128,7 @@ abstract class Webconnection extends Activity {
 	def deactivate() {
 		println "################ Deactivating Webconnection :: ${this}"
 		camelContext.stopRoute("activity-webconnection-${this.id}")
-		println "############### Just stopped the route ################"
 		camelContext.removeRoute("activity-webconnection-${this.id}")
-		println "###############  camel route removed ################"
 	}
 
 	abstract def initialize(params)

@@ -289,6 +289,7 @@ class WebconnectionWizard extends MediumPopup {
 		option { shortName -> $('input', name:'webconnectionType', value:shortName) }
 		getTitle { shortName -> option(shortName).previous('label').text() }
 		getDescription { shortName -> option(shortName).previous('p').text() }
+		testConnectionButton(required:false) { $("#testRoute")}
 	}
 }
 
@@ -328,7 +329,6 @@ class WebconnectionConfirmTab extends geb.Module {
 		keyword { $("#confirm-keyword").text() }
 		type { $("#confirm-type").text() }
 		url { $("#confirm-url").text() }
-		testConnectionButton { $("#testRoute")}
 		confirm{ label->
 			$("#confirm-"+label).text()
 		}

@@ -118,15 +118,6 @@
 		setPara("#autoreply-confirm", $('#messageText').val());
 	}
 
-
-	function toggleTestButton(ctx) {
-		if(ctx.checked) {
-			showTestRouteBtn();
-		} else {
-			hideTestRouteBtn();
-		}
-	}
-
 	function showTestRouteBtn() {
 		var buttonSet, testRouteBtn; 
 		buttonSet = $('.ui-dialog-buttonset');
@@ -142,11 +133,6 @@
 			testRouteBtn.show();
 		}
 		buttonSet.append(testRouteBtn);
-	}
-
-	function hideTestRouteBtn() {
-		$("#submit").css("display", "inline");
-		$("#testRoute").hide();
 	}
 
 	function testRouteStatus() {
@@ -165,8 +151,21 @@
 
 	var pollInterval
 
+	function toggleWizardButtons() {
+		if($("#submit").is(":disabled")) {
+			$("#testRoute").attr('disabled', false);
+			$("#submit").attr('disabled', false);
+			$("#cancel").attr('disabled', false);
+			$("#prevPage").attr('disabled', false);
+		} else {
+			$("#testRoute").attr('disabled', "disabled");
+			$("#submit").attr('disabled', "disabled");
+			$("#cancel").attr('disabled', "disabled");
+			$("#prevPage").attr('disabled', "disabled");
+		}
+	}
+
 	function checkRouteStatus(response) {
-		$("#testRoute").attr('disabled');
 		if(response.ok) {
 			$("#testRoute").attr("value", i18n('webconnection.testing.label'));
 			$.ajaxSetup({
@@ -174,13 +173,14 @@
 				data: {ownerId:response.ownerId},
 				url: "${g.createLink(controller:'webconnection', action:'checkRouteStatus')}"
 			});
-			
+			toggleWizardButtons();
 			pollInterval = setInterval( function() {
 				$.ajax({
 					success: function(response) {
 								if(response.status === "${Webconnection.OWNERDETAIL_SUCCESS}" || response.status === "${Webconnection.OWNERDETAIL_FAILED}") {
 									$(".error-panel").text(i18n('webconnection.popup.'+ response.status + '.label'));
 									$(".error-panel").show();
+									toggleWizardButtons();
 									if(response.status === "${Webconnection.OWNERDETAIL_SUCCESS}") {
 										loadSummaryTab(response, i18n('webconnection.label'));
 									} else {

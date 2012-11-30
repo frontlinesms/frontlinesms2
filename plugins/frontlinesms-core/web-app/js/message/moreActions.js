@@ -37,7 +37,7 @@ function editAction() {
 		data: {id: $("#ownerId").val()},
 		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			hideThinking(); mediumPopup.launchMediumWizard(title, data, i18n('wizard.ok'), 675, 500, false); }
+			hideThinking(); mediumPopup.launchMediumWizard(title, data, i18n('wizard.save'), 675, 500, false); }
 	});
 }
 

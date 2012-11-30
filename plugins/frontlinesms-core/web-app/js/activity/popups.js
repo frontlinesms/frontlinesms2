@@ -9,7 +9,7 @@ function chooseActivity() {
 		dataType: "html",
 		url: url_root + activityUrl,
 		beforeSend: function(){ showThinking(); },
-		success: function(data, textStatus) { hideThinking(); mediumPopup.launchMediumWizard(title, data, i18n('wizard.create'), 675, 500, false); }
+		success: function(data, textStatus) { hideThinking(); mediumPopup.launchMediumWizard(title, data, i18n('wizard.save'), 675, 500, false); }
 	});
 }
 	

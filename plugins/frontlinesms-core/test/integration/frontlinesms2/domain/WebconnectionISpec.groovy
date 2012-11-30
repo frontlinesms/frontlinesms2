@@ -33,27 +33,4 @@ class WebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			1 * webCService.send(incomingMessage)
 	}
-
-
-	def 'testRoute should set message ownerDetail to failed when it fails'() {
-		given:
-			def camelContext = Mock(CamelContext)
-			def webconnection = new GenericWebconnection(name:"Sync", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
-			webconnection.camelContext = camelContext
-			webconnection.save(failOnError:true)
-		when:
-			webconnection.testRoute()
-		then:
-			Fmessage.findByMessageOwnerAndText(webconnection, WebconnectionService.TEST_MESSAGE_TEXT).ownerDetail == "failed"
-	}
-
-	// @IgnoreRest
-	// def "test route should work"() {
-	// 	when:
-	// 		def conn = Webconnection.list()[0] ?: new GenericWebconnection(name:"Sync", url:"http://localhost:8080/webservice-debugger",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
-	// 		conn.testRoute()
-	// 	then:
-	// 		sleep 10000
-	// 		Fmessage.findByMessageOwnerAndText(conn, WebconnectionService.TEST_MESSAGE_TEXT).ownerDetail == "failed"
-	// }
 }

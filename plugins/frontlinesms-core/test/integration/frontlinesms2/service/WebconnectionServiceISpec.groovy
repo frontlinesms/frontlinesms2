@@ -2,7 +2,7 @@ package frontlinesms2.service
 
 import frontlinesms2.*
 import spock.lang.*
-import org.apache.camel.Exchange
+import org.apache.camel.*
 import org.apache.camel.Message
 import org.apache.camel.spi.UnitOfWork
 import org.apache.camel.spi.RouteContext
@@ -99,21 +99,34 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 
 	def 'webconnectionservice.getWebconnectionStatus should return NOT_CONNECTED when the webconnection is not active'() {
 		given:
-			def webconnection = new GenericWebconnection(name:"Sync", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
+			def webconnection =  Webconnection.findByName("Sync")
 		expect:
-			service.getStatusOf(webconnection) == ConnectionStatus.NOT_CONNECTED
+			webconnectionService.getStatusOf(webconnection) == ConnectionStatus.NOT_CONNECTED
 	}
 
 	def 'webconnectionservice.getWebconnectionStatus should return CONNECTED when the webconnection is active'() {
 		setup:
 			def camelContext = Mock(CamelContext)
-			def webconnection = new GenericWebconnection(name:"Sync", url:"www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).save(failOnError:true)
+			def webconnection =  Webconnection.findByName("Sync")
 			webconnection.camelContext = camelContext
+			webconnectionService.metaClass.getStatusOf = {Webconnection w -> ConnectionStatus.CONNECTED}
 			webconnection.save(failOnError:true)
 		when:
 			webconnection.activate()
 		then:
-			webconnectionservice.getStatusOf(webconnection) == ConnectionStatus.CONNECTED
+			webconnectionService.getStatusOf(webconnection) == ConnectionStatus.CONNECTED
+	}
+
+	def 'testRoute should set message ownerDetail to failed when it fails'() {
+		setup:
+			def camelContext = Mock(CamelContext)
+			def webconnection =  Webconnection.findByName("Sync")
+			webconnection.camelContext = camelContext
+			webconnection.save(failOnError:true)
+		when:
+			webconnectionService.testRoute(webconnection)
+		then:
+			Fmessage.findByMessageOwnerAndText(webconnection, Fmessage.TEST_MESSAGE_TEXT).ownerDetail
 	}
 
 	Exchange mockExchange(messageText,method,messageOnly){
