@@ -3,6 +3,7 @@ package frontlinesms2
 import frontlinesms2.*
 
 class AutoreplyService {
+	def messageSendService
 	def saveInstance(Autoreply autoreply, params) {
 		autoreply.name = params.name ?: autoreply.name
 		autoreply.autoreplyText = params.messageText ?: autoreply.autoreplyText
