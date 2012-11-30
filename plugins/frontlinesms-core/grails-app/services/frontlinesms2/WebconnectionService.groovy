@@ -185,7 +185,6 @@ class WebconnectionService {
 		webcon.save(failOnError: true)
 		"message successfully queued to send to ${m.dispatches.size()} recipient(s)"
 	}
-}
 
 	private Fmessage createTestMessage() {
 		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)

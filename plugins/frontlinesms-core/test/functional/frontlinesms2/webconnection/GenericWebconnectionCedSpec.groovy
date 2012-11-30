@@ -161,6 +161,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { summary.displayed }
 			testConnectionButton.displayed
+	}
 
 	def 'secret is enabled when API is exposed'() {
 		when:

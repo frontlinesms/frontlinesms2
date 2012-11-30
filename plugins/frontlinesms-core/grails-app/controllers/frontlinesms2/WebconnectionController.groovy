@@ -12,7 +12,9 @@ class WebconnectionController extends ActivityController {
 	def create() {}
 
 	def save() {
-		doSave('webconnection', webconnectionService, getWebconnectionInstance())
+		withWebconnection { webconnectionInstance ->
+			doSave('webconnection', webconnectionService, webconnectionInstance)
+		}
 	}
 
 	def config() {
@@ -29,7 +31,7 @@ class WebconnectionController extends ActivityController {
 		println "<<<<params>>>> $params"
 		withWebconnection { webconnectionInstance ->
 			doSave('webconnection', webconnectionService, webconnectionInstance, false)
-			TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
+			if(webconnectionService)	TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
 		}
 	}
 
@@ -45,6 +47,6 @@ class WebconnectionController extends ActivityController {
 		render response as JSON
 	}
 
-	private def withWebconnection = withDomainObject Webconnection
+	private def withWebconnection = withDomainObject WebconnectionController.WEB_CONNECTION_TYPE_MAP[params.webconnectionType]
 }
 
