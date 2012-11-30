@@ -8,6 +8,7 @@ abstract class Step {
 	static constraints = {
 		// the following assumes all configFields are mandatory
 		stepProperties(nullable: true, validator: { val, obj ->
+			if (!val) return false
 			val*.key?.containsAll(obj.configFields?.collect { name, type -> name })
 		})
 	}
