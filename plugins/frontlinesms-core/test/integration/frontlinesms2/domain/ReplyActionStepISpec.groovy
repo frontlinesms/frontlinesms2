@@ -16,6 +16,6 @@ class ReplyActionStepISpec extends grails.plugin.spock.IntegrationSpec {
 			addStepProperty | stepPropertyKey | expectedOutcome
 			false           | null            | false
 			true            | 'woteva'        | false
-			true            | 'message'       | true
+			true            | 'autoreplyText' | true
 	}
 }

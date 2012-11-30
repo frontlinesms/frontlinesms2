@@ -16,4 +16,8 @@ abstract class Step {
 	def process(Fmessage message) {
 
 	}
+
+	String getPropertyValue(key) {
+		stepProperties?.find { it.key == key }?.value
+	}
 }

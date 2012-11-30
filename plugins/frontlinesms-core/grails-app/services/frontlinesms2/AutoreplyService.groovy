@@ -22,5 +22,24 @@ class AutoreplyService {
 		}
 		autoreply.save(failOnError:true, flush:true)
 	}
+
+	def doReply(activityOrStep, message) {
+		def autoreplyText
+		if (activityOrStep instanceof Activity) {
+			autoreplyText = activityOrStep.autoreplyText
+		}
+		else if (activityOrStep instanceof Step) {
+			autoreplyText = activityOrStep.getPropertyValue('autoreplyText')
+		}
+		def params = [:]
+		params.addresses = message.src
+		params.messageText = autoreplyText
+		def outgoingMessage = messageSendService.createOutgoingMessage(params)
+		if (activityOrStep instanceof Activity) {
+			activityOrStep.addToMessages(outgoingMessage)
+		}
+		messageSendService.send(outgoingMessage)
+		activityOrStep.save()
+	}
 }
 
