@@ -13,12 +13,19 @@ class AutoreplyServiceSpec extends Specification {
 			def invoker = Mock(invokerType)
 			def messageSendService = Mock(MessageSendService)
 			def incoming = Mock(Fmessage)
+			incoming.src >> "123"
 			def outgoing = Mock(Fmessage)
 			service.messageSendService = messageSendService
+			invoker.getPropertyValue('autoreplyText') >> 'step autoreply text'
+			invoker.autoreplyText >> 'activity autoreply text'
 		when:
 			service.doReply(invoker, incoming)
 		then:
-			1 * messageSendService.createOutgoingMessage(_) >> { Map req -> assert true; return outgoing }
+			1 * messageSendService.createOutgoingMessage(_) >> { Map req ->
+				assert req.addresses == "123"
+				assert req.messageText == (invokerType == Autoreply ? 'activity autoreply text' : 'step autoreply text');
+				return outgoing
+			}
 			1 * messageSendService.send(outgoing)
 		where:
 			invokerType << [Autoreply, ReplyActionStep]

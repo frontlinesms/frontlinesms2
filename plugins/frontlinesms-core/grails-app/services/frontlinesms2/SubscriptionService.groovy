@@ -35,5 +35,9 @@ class SubscriptionService {
 		subscriptionInstance.save(flush:true, failOnError: true)
 		return subscriptionInstance
 	}
+
+	def doJoin() {
+		
+	}
 }
 
