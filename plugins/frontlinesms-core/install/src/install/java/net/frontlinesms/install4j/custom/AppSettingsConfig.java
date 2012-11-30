@@ -11,14 +11,14 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 
-class AppSettingsConfig {
+public class AppSettingsConfig {
 	public static void setAppProperty(String key, String value) throws IOException {
 		File propertiesFile = getPropertiesFile("app-settings.properties");
 		Properties properties = new Properties();
 		try {
 			properties.load(new InputStreamReader(new FileInputStream(propertiesFile), "UTF-8"));
 			properties.setProperty(key,value);
-			properties.store(new OutputStreamWriter(new FileOutputStream(propertiesFile), "UTF-8"),null);
+			properties.store(new OutputStreamWriter(new FileOutputStream(propertiesFile), "UTF-8"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

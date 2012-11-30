@@ -25,7 +25,7 @@ rm -rf $PROJECT_DIR/install/src/web-app/
 
 echo "# build-installers"
 grails clean
-grails -Dfrontlinesms2.build.confirmNotProd=true build-installers $@
+grails $@ -Dfrontlinesms2.build.confirmNotProd=true build-installers
 
 echo "# uninstall old version"
 $INSTALL_DIR/uninstall -q || echo "# Could not run uninstaller in $INSTALL_DIR"

@@ -80,7 +80,7 @@
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.InstallerApplication">
               <void property="arguments">
-                <string>${compiler:db.migrations} -Dfrontlinesms.resource.path=~/.${compiler:app.shortName}</string>
+                <string>${compiler:db.migrations} -Dfrontlinesms.resource.path=~/.${compiler:app.shortName}-SNAPSHOT-SNAPSHOT-SNAPSHOT-SNAPSHOT-SNAPSHOT-SNAPSHOT-SNAPSHOT-SNAPSHOT</string>
               </void>
               <void property="customIconImageFiles">
                 <void method="add">
@@ -1666,7 +1666,9 @@ To edit the information before submitting click BACK.</string>
             <condition />
             <validation />
             <preActivation />
-            <postActivation>import net.frontlinesms.install4j.custom.FrontlineRegistration;
+            <postActivation>
+
+import net.frontlinesms.install4j.custom.FrontlineRegistration;
 import net.frontlinesms.install4j.custom.AppSettingsConfig;
 
 WizardContext c = context.getWizardContext();
@@ -1676,7 +1678,7 @@ FrontlineRegistration f = new FrontlineRegistration();
 f.send(formEnvironment,context);
 
 String checkUpdates = Boolean.toString(context.getBooleanVariable("var_check_updates"));
-AppSettingsConfig.setAppProperty('version.check.updates',checkUpdates);
+AppSettingsConfig.setAppProperty("version.check.updates", checkUpdates);
 
 </postActivation>
             <actions />

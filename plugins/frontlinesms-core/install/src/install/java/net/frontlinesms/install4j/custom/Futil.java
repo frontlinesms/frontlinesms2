@@ -77,7 +77,7 @@ public class Futil {
 		System.out.println("\t: "+s);
 	}
 
-	public static void setRegistered(String value){
+	public static void setRegistered(String value) {
 		Properties properties = new Properties();
 		File regPropFile = Futil.getRegistrationPropertiesFile();
 		try {
