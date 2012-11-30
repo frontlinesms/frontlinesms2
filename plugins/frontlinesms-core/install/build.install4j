@@ -1245,6 +1245,22 @@ c.setCancelButtonVisible(false);</postActivation>
                 <initScript />
                 <visibilityScript />
               </formComponent>
+              <formComponent name="" id="580" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>I would like FrontlineSMS to check for software updates weekly.</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_check_updates</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
             </formComponents>
           </screen>
           <screen name="Staying in Touch" id="177" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
@@ -1651,11 +1667,16 @@ To edit the information before submitting click BACK.</string>
             <validation />
             <preActivation />
             <postActivation>import net.frontlinesms.install4j.custom.FrontlineRegistration;
+import net.frontlinesms.install4j.custom.AppSettingsConfig;
+
 WizardContext c = context.getWizardContext();
 c.setCancelButtonVisible(false);
 
 FrontlineRegistration f = new FrontlineRegistration();
 f.send(formEnvironment,context);
+
+String checkUpdates = Boolean.toString(context.getBooleanVariable("var_check_updates"));
+AppSettingsConfig.setAppProperty('version.check.updates',checkUpdates);
 
 </postActivation>
             <actions />
