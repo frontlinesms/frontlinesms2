@@ -1,6 +1,7 @@
 <markdown:renderHtml>
+* [New Features] [1]
 * [Messages][2]
-	* The Basics
+	* ### The Basics
 		* [How do I select more than one message?][5]
 		* [How do I send a message?][6]
 		* [How to move, delete, reply and forward messages][7]
@@ -8,64 +9,63 @@
 		* [How do I see messages that I have sent?][12]
 		* [How do I see messages that I have deleted?][13]
 		* [How do I see messages that have had a problem whilst sending?][14]
-	* Managing Your Messages
+	* ### Managing Your Messages
 		* [How do I sort and mark my messages as important?][16]
 		* [How do I see only starred messages?][18]
 		* [How do I resend a message that has failed to send?][19]
 		* [All of my messages arent being displayed, where are they?][20]
-	* Activities
-		* Overview
+	* ### Activities
+		* ### Overview
 			* [What are Activities?][23]
 			* [How do I get around an Activity?][24]
-		* Polls
+		* ### Polls
 			* [How do I create a poll][26]
 			* [How do I manually categorise a message?][30]
-		* Announcement
+		* ### Announcement
 			* [How do I create an announcement][31]
-		* Auto Reply
+		* ### Auto Reply
 			* [How do I create an Auto-Reply?][32]
-		* Managing your Activities
+		* ### Managing your Activities
 			* [How do I Archive an Activity?][34]
 			* [How do I Export an Activity?][35]
 			* [How do I Rename an Activity?][36]
 			* [How do I resend failed messages in an activity?][37]
-	* Folders
-		* Overview
-			* [How do I Create a Folder?][40]
-			* [How do I move messages into a folder?][41]
-	* Archive
-		* Overview
+	* ### Folders
+		* [How do I Create a Folder?][40]
+		* [How do I move messages into a folder?][41]
+	* ### Archive
+		* ### Overview
 			* [How do I get around the Archive tab?][43]
 			* [The Inbox Archive][45]
 			* [The Sent Archive][46]
 			* [The Activity Archive][47]
 			* [The Folder Archive][48]
-		* The Basics
+		* ### The Basics
 			* [How do I archive a Message or Messages?][50]
 			* [How do I Archive an Activity or Folder?][51]
 			* [Can I reply and forward Archived messages?][53]
 			* [How do I restore archived messages?][54]
-* Contacts
-	* Basics
+* ### Contacts
+	* ### Basics
 		* [How do I create a Contact?][58]
 		* [How do I delete a Contact/s?][59]
 		* [How do I create a Group?][60]
-	* Managing your Contacts
+	* ### Managing your Contacts
 		* [How do I see the messages that have been sent and received by a particular contact?][62]
 		* [How do I export contacts?][63]
 		* [How do I search through the contacts list?][64]
-	* Advanced
+	* ### Advanced
 		* [How do I add/remove custom information to/from a contact?][66]
 		* [How do I add/remove contacts to/from a group?][67]
-* Search
-	* Basic
+* ### Search
+	* ### Basic
 		* [How do I perform a simple search?][72] 
-	* Advanced
+	* ### Advanced
 		* [How do I perform a much more detailed search?][74]
-* Status
+* ### Status
 	* [What is the Status Tab?][82]
 	* [How do I see how many messages I have sent or received?][87]
-* Settings
+* ### Settings
 	* [How do I change the Language?][91]
 	* [How do I import Messages and Contacts?][92]
 	* [How do I use my modem/phone with FrontlineSMS?][94]
@@ -75,6 +75,7 @@
 	* [How do I get FrontlineSMS to detect my device?][98]
 	* [How do I translate the interface into my language?][99]
 
+[1]: core/features/new
 [2]: core/messages/1.getting_around_the_messages_tab
 [5]: core/messages/2.sss
 [6]: core/messages/3.quick_message
@@ -135,4 +136,3 @@
 [98]: core/settings/5.manually_adding_device
 [99]: core/settings/7.translatingfrontlinesms
 </markdown:renderHtml>
-

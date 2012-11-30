@@ -118,6 +118,7 @@ class SingleMessageDetails extends geb.Module {
 		noneSelected { $('#message-detail-content').text().toLowerCase() == "no message selected" }
 		sender { $('#message-detail-sender').text() }
 		senderLink { $('#message-detail-sender a') }
+		addToContacts(required:false) { $('#add-contact') }
 		text { $('#message-detail-content').text() }
 		date {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)

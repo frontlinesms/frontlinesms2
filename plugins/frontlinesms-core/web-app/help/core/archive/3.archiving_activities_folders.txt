@@ -31,17 +31,17 @@ To view your archived folder, navigate to the [archive tab][4] and then click on
 [Creating a Poll][10]  
 [Creating an Announcement][14]  
 
-[1]: activities/1.getting_around_activities
-[2]: messages/1.getting_around_the_messages_tab
-[3]: archive/1d.folder_archive
-[4]: archive/1.getting_around_the_archive_tab
-[5]: messages/9.exporting
-[6]: activities/6.renaming_an_activity
-[7]: messages/8.mrfd
-[8]: archive/1c.activity_archive
-[10]: activities/3.creating_a_poll
-[11]: archive/3.archiving_activities_folders
-[12]: folders/1.getting_around_folders
-[13]: archive/4.unarchive
-[14]: activities/4.creating_an_announcement
+[1]: core/activities/1.getting_around_activities
+[2]: core/messages/1.getting_around_the_messages_tab
+[3]: core/archive/1d.folder_archive
+[4]: core/archive/1.getting_around_the_archive_tab
+[5]: core/messages/9.exporting
+[6]: core/activities/6.renaming_an_activity
+[7]: core/messages/8.mrfd
+[8]: core/archive/1c.activity_archive
+[10]: core/activities/3.creating_a_poll
+[11]: core/archive/3.archiving_activities_folders
+[12]: core/folders/1.getting_around_folders
+[13]: core/archive/4.unarchive
+[14]: core/activities/4.creating_an_announcement
 [15]: ../images/help/archive_activity.png

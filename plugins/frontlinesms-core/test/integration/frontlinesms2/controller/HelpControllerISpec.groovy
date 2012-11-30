@@ -4,6 +4,8 @@ import frontlinesms2.*
 
 class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
+
+	def appSettingsService
 	
 	def setup() {
 		controller = new HelpController()
@@ -16,5 +18,26 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.section()
 		then:
 			controller.response.text == '<p>This help file is not yet available, sorry.</p>'
+	}
+
+	def 'appSettingsService should be updated prooperly on new popup display'() {
+		when:
+			controller.newfeatures()
+		then:
+			appSettingsService['newfeatures.popup.show.infuture'] == 'false'
+	}
+
+	@spock.lang.Unroll
+	def 'appSettingsService should persist the relevant data when -show when frontlinesms starts checkbox- is changed'() {
+		given:
+			controller.params.enableNewFeaturesPopup = inValue
+		when:
+			controller.updateShowNewFeatures()
+		then:
+			appSettingsService['newfeatures.popup.show.infuture'] == outValue
+		where:
+			inValue | outValue
+			true    | 'true'
+			false   | 'false'
 	}
 }

@@ -3,9 +3,15 @@ package frontlinesms2
 import frontlinesms2.*
 import org.apache.camel.*
 
+import grails.converters.JSON
+
+import frontlinesms2.api.*
+
+
 class WebconnectionService {
 	def camelContext
 	def i18nUtilService
+	def messageSendService
 
 	def preProcess(Exchange x) {
 		println "x: ${x}"
@@ -102,6 +108,84 @@ class WebconnectionService {
 		message.save(failOnError:true, flush:true)
 		println "Changing Status ${message.ownerDetail}"
 	}
+
+	def apiProcess(webcon, controller) {
+		controller.render(generateApiResponse(webcon, controller))
+	}
+
+	def generateApiResponse(webcon, controller) {
+		def message = controller.request.JSON?.message
+		def recipients = controller.request.JSON?.recipients
+		def secret = controller.request.JSON?.secret
+		def errors = [invalid:[], missing:[]]
+		println "JSON IS ${controller.request.JSON}"
+		println "MESSAGE IS ${controller.request.JSON?.message}"
+		println "RECIPIENTS IS ${controller.request.JSON?.recipients}"
+
+		//> Detect and return 401 (authentication) error conditions
+		if(!secret)
+			return [status:401, text:"no secret provided"]
+		if(secret != webcon.secret)
+			return [status:401, text:"invalid secret"]
+
+		//> Detect and return 400 (invalid request) error conditions
+		if (!message)
+			errors.missing << "message"
+		if (recipients == null)
+			errors.missing << "recipients"
+		if (recipients == [])
+			errors.invalid << "no recipients supplied"
+		if (errors.invalid || errors.missing) {
+			def errorList = []
+			if (errors.invalid) errorList << (errors.invalid.join(", "))
+			if (errors.missing) errorList << "missing required field(s): " + errors.missing.join(", ")
+			def errorMessage = errorList.join(", ")
+			println "errorMessage ::: $errorMessage"
+			return [status:400, text:errorMessage]
+		}
+
+		//> Populate destinations
+		println "evaluating the destinations for $recipients ...."
+		def groups = []
+		def addresses = []
+		recipients.each {
+			if(it.type == "group") {
+				if(it.id != null)
+					groups << Group.get(it.id)
+				else if(it.name)
+					groups << Group.findByNameIlike(it.name.toLowerCase())
+			}
+			else if (it.type == "smartgroup") {
+				if(it.id != null)
+					groups << SmartGroup.get(it.id)
+				else if(it.name)
+					groups << SmartGroup.findByNameIlike(it.name.toLowerCase())
+			}
+			else if (it.type == "contact") {
+				if(it.id != null)
+					addresses << Contact.get(it.id)?.mobile
+				else if(it.name)
+					addresses << Contact.findByNameIlike(it.name.toLowerCase())?.mobile
+			}
+			else if (it.type == "address") {
+				addresses << it.value
+			}
+		}
+		groups = groups.unique()
+		addresses = addresses.unique()
+		println "groups: $groups. Addresses: $addresses"
+
+		//> Send message
+		def m = messageSendService.createOutgoingMessage([messageText: message, addresses: addresses, groups: groups])
+		println "I am about to send $m"
+		if(!m.dispatches)
+			return [status:400, text:"no recipients supplied"]
+		messageSendService.send(m)
+		webcon.addToMessages(m)
+		webcon.save(failOnError: true)
+		"message successfully queued to send to ${m.dispatches.size()} recipient(s)"
+	}
+}
 
 	private Fmessage createTestMessage() {
 		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)

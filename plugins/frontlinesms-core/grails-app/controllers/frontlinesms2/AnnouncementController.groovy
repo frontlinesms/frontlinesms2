@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
+
 class AnnouncementController extends ActivityController {
 	def announcementService
 
@@ -16,10 +17,6 @@ class AnnouncementController extends ActivityController {
 		doSave('announcement', announcementService, announcementInstance)
 	}
 
-	private def withAnnouncement(Closure c) {
-		def announcementInstance = Announcement.get(params.id)
-		if (announcementInstance) c announcementInstance
-		else render(text: message(code:'announcement.id.exist.not', args:[message(code:params.id), ''])) // TODO handle error state properly
-	}
+	private def withAnnouncement = withDomainObject Announcement
 }
 

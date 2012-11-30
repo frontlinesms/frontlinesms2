@@ -50,5 +50,12 @@
 			setInterval(statusIndicator.refresh, 10000);
 		});
 	</g:else>
+
+	<fsms:ifAppSetting test="newfeatures.popup.show.immediately">
+		$(function() {
+			newFeatures.showPopup();
+		});
+	</fsms:ifAppSetting>
 </r:script>
+
 

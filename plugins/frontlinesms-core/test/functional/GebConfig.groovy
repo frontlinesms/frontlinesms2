@@ -10,11 +10,11 @@ waiting {
 	presets {
 		slow {
 			timeout = jenkins? 40: 10
-			retryInterval = 1
+			retryInterval = 0.2
 		}
 		'very slow' {
 			timeout = jenkins? 60: 15
-			retryInterval = 1
+			retryInterval = 0.2
 		}
 	}
 }

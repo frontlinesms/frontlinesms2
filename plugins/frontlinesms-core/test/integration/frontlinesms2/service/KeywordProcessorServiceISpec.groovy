@@ -6,8 +6,6 @@ import spock.lang.*
 class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def keywordProcessorService
 
-	def keywordsThatHaveBeenProcessed = [:]
-
 	@Unroll
 	def "activity.processKeyword should be called with most specific keyword match"() {
 		given:
@@ -16,8 +14,10 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			keywordProcessorService.process(m)
 		then:
-			println "*** all Keywords::::"
-			Keyword.findAll().each { println "::: ${it.value}"}
+			println "# all Keywords"
+			println "# value | ownerDetail"
+			Keyword.findAll().each { println "# $it.value | $it.ownerDetail" }
+			println "# --- end of keywords"
 			Keyword.findAllByValue(matchedKeyword) == Keyword.findAllByOwnerDetail("PROCESSED")
 		where:
 			messageText      | matchedKeyword
@@ -91,10 +91,10 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			p.addToKeywords(new Keyword(value: "BOTTOM${it}", isTopLevel: false, ownerDetail: "${it}"))
 		}
 		p.addToResponses(PollResponse.createUnknown())
-		Poll.metaClass.processKeyword = { Fmessage m, Keyword k -> 
+		p.metaClass.processKeyword = { Fmessage m, Keyword k ->
 			println "processing keyword $k, value: ${k.value}"
 			k.ownerDetail = "PROCESSED"
-			k.save(failOnError:true)
+			k.save(failOnError:true, flush:true)
 		}
 		p.save(failOnError:true, flush:true)
 		return p

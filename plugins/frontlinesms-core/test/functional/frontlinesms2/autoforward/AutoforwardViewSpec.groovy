@@ -27,7 +27,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		where:
 			item         | value
 			'title'      | "news autoforward"
-			'message'    | 'Message is Message text'
+			'message'    | 'Message: Message is Message text'
 			'keywords'   | 'Keywords : BREAKING,ALERT'
 			'recipients' | 'Currently 10 recipients'
 	}
@@ -229,7 +229,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			messageList.messages.size() == 5
 		when:
-			footer.showSent.click()
+			footer.showOutgoing.click()
 		then:
 			waitFor { messageList.messages.size() == 2 }
 	}
@@ -242,7 +242,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			messageList.messages.size() == 5
 		when:
-			footer.showReceived.click()
+			footer.showIncoming.click()
 		then:
 			waitFor { messageList.messages.size() == 3 }
 	}

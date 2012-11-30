@@ -1,15 +1,24 @@
 package frontlinesms2
 
 class AppSettingsService {
+	def grailsApplication
 	private static final File PROPERTIES_FILE = new File(ResourceUtils.resourceDirectory, 'app-settings.properties')
 	private def settings = [:]
+
+	def propertyMissing(String name) {
+		return get(name)
+	}
+
+	def propertyMissing(String name, value) {
+		set(name, value)
+	}
 
 	synchronized def init() {
 		load()
 	}
 
 	synchronized def set(key, value) {
-		settings[key] = value
+		settings[key] = value?.toString()
 		persist()
 	}
 
@@ -42,5 +51,9 @@ class AppSettingsService {
 			ex.printStackTrace()
 			// probably not the end of the world
 		}
+	}
+
+	def getServerPort() {
+		grailsApplication.config.grails.serverPort?:System.properties['server.port']?: '8080'
 	}
 }

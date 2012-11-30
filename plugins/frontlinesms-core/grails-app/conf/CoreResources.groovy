@@ -31,6 +31,7 @@ modules = {
 		resource url:[dir:'js', file:"jquery.ui.selectmenu.js"], disposition:'head'
 		resource url:[dir:'js', file:"jquery.validate.min.js"], disposition:'head'
 		resource url:[dir:'js', file:"mediumPopup.js"], disposition:'head'
+		resource url:[dir:'js', file:"new_features.js"], disposition:'head'
 		resource url:[dir:'js', file:"pagination.js"], disposition:'head'
 		resource url:[dir:'js', file:"smallPopup.js"], disposition:'head'
 		resource url:[dir:'js', file:"status_indicator.js"], disposition:'head'
@@ -38,6 +39,9 @@ modules = {
 		resource url:[dir:'js', file:'magicwand.js'], disposition:'head'
 		resource url:[dir:'js', file:'selectmenuTools.js'], disposition:'head'
 		resource url:[dir:'js', file:"activity/popupCustomValidation.js"], disposition:'head'
+		
+		resource url:[dir:'js', file:"guiders-1.2.8.js"], disposition:'head'
+		resource url:[dir:'css', file:"guiders-1.2.8.css"], disposition:'head'
 	}
 	
 	messages {

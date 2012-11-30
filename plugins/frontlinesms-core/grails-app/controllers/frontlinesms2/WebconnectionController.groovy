@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
+
 class WebconnectionController extends ActivityController {
 	static final def WEB_CONNECTION_TYPE_MAP = [generic:GenericWebconnection,
 			ushahidi:UshahidiWebconnection]
@@ -26,10 +27,10 @@ class WebconnectionController extends ActivityController {
 
 	def testRoute() {
 		println "<<<<params>>>> $params"
-		def webconnectionInstance = getWebconnectionInstance()
-		doSave('webconnection', webconnectionService, webconnectionInstance, false)
-		TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
-		return
+		withWebconnection { webconnectionInstance ->
+			doSave('webconnection', webconnectionService, webconnectionInstance, false)
+			TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
+		}
 	}
 
 	def checkRouteStatus() {
@@ -44,15 +45,6 @@ class WebconnectionController extends ActivityController {
 		render response as JSON
 	}
 
-	private def getWebconnectionInstance() {
-		def webconnectionInstance
-		Class<Webconnection> clazz = WebconnectionController.WEB_CONNECTION_TYPE_MAP[params.webconnectionType]
-		if(params.ownerId) {
-			webconnectionInstance = clazz.get(params.ownerId)
-		} else {
-			webconnectionInstance = clazz.newInstance()
-		}
-
-	}
+	private def withWebconnection = withDomainObject Webconnection
 }
 

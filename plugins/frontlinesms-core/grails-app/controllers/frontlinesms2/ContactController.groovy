@@ -2,7 +2,8 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-class ContactController {
+
+class ContactController extends ControllerUtils {
 //> STATIC PROPERTIES
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -65,7 +66,7 @@ class ContactController {
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = contactList.contactInstanceTotal
-		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
+		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList ? contactInstanceList[0] : null))
 		def usedFields = contactInstance?.customFields ?: []
 		def usedFieldNames = []
 		usedFields.each() { field ->
@@ -197,14 +198,7 @@ class ContactController {
 				nonSharedGroupInstanceList:groups.nonShared])
 	}
 	
-	private def withContact(contactId = params.contactId, Closure c) {
-		def contactInstance = Contact.get(contactId)
-		if(contactInstance) {
-			c.call(contactInstance)
-		} else {
-			c.call(new Contact())
-		}
-	}
+	private def withContact = withDomainObject Contact, { params.contactId }
 
 	private def getCheckedContacts() {
 		Contact.getAll(getCheckedContactIds()) - null

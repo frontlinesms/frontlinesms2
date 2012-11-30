@@ -2,7 +2,7 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-class ActivityController {
+class ActivityController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def messageSendService
@@ -139,7 +139,7 @@ class ActivityController {
 		}
 	}
 	
-	protected def generateErrorMessages(instance) {
+	private def generateErrorMessages(instance) {
 		def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords)
 		def errors
 		if (collidingKeywords) {
@@ -160,11 +160,7 @@ class ActivityController {
 		}
 	}
 
-	private def withActivity(Closure c) {
-		def activityInstance = Activity.get(params.id)
-		if (activityInstance) c activityInstance
-		else render(text: message(code:'activity.id.exist.not', args: [message(code: params.id), ''])) // TODO handle error state properly
-	}
+	private def withActivity = withDomainObject Activity
 
 	private def defaultMessage(String code, args=[]) {
 		def activityName = message code:'activity.label'

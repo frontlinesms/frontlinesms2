@@ -22,10 +22,10 @@ _**Note:** Activity names must be unique. You cannot have two activities with th
 [Creating an Announcement][4]  
 [Manually Categorising a Response][5]  
 
-[1]: activities/6.renaming_an_activity
-[2]: activities/7.exporting_an_activity
-[3]: activities/3.creating_a_poll
-[4]: activities/4.creating_an_announcement
-[5]: activities/3a.manually_categorising
+[1]: core/activities/6.renaming_an_activity
+[2]: core/activities/7.exporting_an_activity
+[3]: core/activities/3.creating_a_poll
+[4]: core/activities/4.creating_an_announcement
+[5]: core/activities/3a.manually_categorising
 [6]: ../images/help/rename_poll.png
 [7]: ../images/help/rename_poll_dialog.png

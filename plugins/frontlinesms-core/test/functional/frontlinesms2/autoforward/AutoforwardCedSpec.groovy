@@ -181,7 +181,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		then: 'Confirm tab should open'
 			confirm.displayed
 			confirm.keywordConfirm == 'HELLO'
-			confirm.groups == ""
+			confirm.groups == "None"
 			confirm.contacts.contains('generated-contact-1')
 			confirm.contacts.contains('generated-contact-2')
 			confirm.contacts.contains('1234567890')

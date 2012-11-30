@@ -16,7 +16,9 @@ class MetaClassModifiers {
 	}
 
 	static def addTodoConstantToSpecifications() {
-		spock.lang.Specification.metaClass.static.getTODO = { false }
+		try {
+			Class.forName("spock.lang.Specification")?.metaClass.static.getTODO = { false }
+		} catch(Exception ex) { /* presumably we are in prod mode and spock is not on the classpath */ }
 	}
 
 	static def addZipMethodToFile() {

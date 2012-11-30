@@ -1,4 +1,4 @@
-<%@page defaultCodec="html" %>
+<%@ page defaultCodec="html" import="frontlinesms2.*" %>
 <div id="single-message">
 	<g:if test="${messageInstance}">
 		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
@@ -17,7 +17,7 @@
 					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed"/>)</g:if>
 					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed"/>)</g:elseif>
 				</span> 
-				<g:if test="${messageInstance.displayName ==~ /^\+?\d+$/}">
+				<g:if test="${messageInstance.displayName ==~ /^\+?\d+$/ && (messageInstance.inbound || messageInstance.dispatches.size() == 1)}">
 					<g:link class="add" elementId="add-contact" controller="contact" title="${g.message(code:'fmessage.addsender')}" action="createContact" params="[mobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"><g:message code="contact.new"/></g:link>
 				</g:if>
 			</p>
@@ -45,7 +45,7 @@
 			<p id="message-detail-sender">
 				<g:message code="${ownerInstance.shortName}.title" args="${[ownerInstance.name]}"/>
 			</p>
-			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
+			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${Trash.findByObject(ownerInstance).dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.messages.size() == 1 ? g.message(code:'fmessage.count') : ownerInstance.messages.size() + " " + g.message(code:'fmessage.many')}</p></div>
 		</div>
 		<fsms:render template="/message/message_actions"/>

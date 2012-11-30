@@ -281,12 +281,13 @@ class WebconnectionWizard extends MediumPopup {
 		error { $("label.error").text()}
 		keywordTab { module WebconnectionKeywordTab }
 		requestTab { module WebconnectionRequestFormatTab }
+		apiTab { module WebconnectionAPITab }
 		confirmTab(required:false) { module WebconnectionConfirmTab }
 		summary { module WebconnectionSummary }
 
 		configureUshahidi(required:false) { module ConfigureUshahidiWebconnectionTab }
 
-		option { shortName -> $('input', name:'webconnectionType', value:shortName) }
+		option(wait:true, cache:false) { shortName -> $('input', name:'webconnectionType', value:shortName) }
 		getTitle { shortName -> option(shortName).previous('label').text() }
 		getDescription { shortName -> option(shortName).previous('p').text() }
 		testConnectionButton(required:false) { $("#testRoute")}
@@ -314,6 +315,14 @@ class WebconnectionRequestFormatTab extends geb.Module {
 	}
 }
 
+class WebconnectionAPITab extends geb.Module {
+	static base = { $('div#webconnection-api') }
+	static content = {
+		enableApi { $("#enableApi") }
+		secret { $("#secret") }
+	}
+}
+
 class WebconnectionParam extends geb.Module {
 	static content = {
 		value { $('input.param-value') }
@@ -329,6 +338,9 @@ class WebconnectionConfirmTab extends geb.Module {
 		keyword { $("#confirm-keyword").text() }
 		type { $("#confirm-type").text() }
 		url { $("#confirm-url").text() }
+		frontline_api_key { $("#confirm-fsmskey").text() }
+		crowdmap_api_key { $("#confirm-crowdmapkey").text() }
+		
 		confirm{ label->
 			$("#confirm-"+label).text()
 		}
@@ -336,7 +348,7 @@ class WebconnectionConfirmTab extends geb.Module {
 }
 
 class WebconnectionSummary extends geb.Module {
-	static base = { $('div#tabs-4') }
+	static base = { $('div#tabs-5') }
 	static content = {
 		message { $("div.summary") }
 	}
@@ -489,6 +501,14 @@ class AutoreplySummaryTab extends geb.Module {
 	static base = { $('div#tabs-4 > div.summary') } //ensures div.summary has been loaded too
 	static content = {
 		message { $("p", 0).text() }
+	}
+}
+
+class NewFeaturesDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("feature")
+	}
+	static content = {
 	}
 }
 

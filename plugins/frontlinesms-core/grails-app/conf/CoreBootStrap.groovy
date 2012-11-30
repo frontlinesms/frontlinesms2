@@ -16,6 +16,8 @@ import serial.mock.CommPortIdentifier
 import org.mockito.Mockito
 import grails.converters.JSON
 
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+
 class CoreBootStrap {
 	def applicationContext
 	def appSettingsService
@@ -40,6 +42,8 @@ class CoreBootStrap {
 			quartzScheduler.start()
 			test_initGeb(servletContext)
 			dev_disableSecurityFilter()
+			// never show new popup during tests
+			appSettingsService['newfeatures.popup.show.immediately'] = false
 		}
 
 		if(Environment.current == Environment.DEVELOPMENT) {
@@ -54,6 +58,7 @@ class CoreBootStrap {
 			// upgrade our Camel dependencies.
 			//camelContext.tracing = true
 			dev_disableSecurityFilter()
+			updateFeaturePropertyFileValues()
 		}
 
 		if(bootstrapData) {
@@ -74,6 +79,7 @@ class CoreBootStrap {
 
 		if(Environment.current == Environment.PRODUCTION) {
 			createWelcomeNote()
+			updateFeaturePropertyFileValues()
 		}
 
 		setCustomJSONRenderers()
@@ -355,8 +361,9 @@ class CoreBootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET)
-			.addToKeywords(value:'WEBCONNECTION')
+
+		def extCmd = new GenericWebconnection(name:'GET to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:Webconnection.HttpMethod.GET, apiEnabled: true, secret: "shh")
+			.addToKeywords(value:'WEBCONN')
 			.addToKeywords(value:'UPLOAD')
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))
@@ -509,6 +516,17 @@ class CoreBootStrap {
 		}
 	}
 
+	private def updateFeaturePropertyFileValues(){
+		def currentVersion = ApplicationHolder.application.metadata.'app.version'
+		def previousVersionRun = appSettingsService['version.lastrun']
+		if(currentVersion != previousVersionRun) {
+			appSettingsService['newfeatures.popup.show.infuture'] = true
+			appSettingsService['version.lastrun'] = currentVersion
+			appSettingsService.persist()
+		}
+		appSettingsService['newfeatures.popup.show.immediately'] = appSettingsService['newfeatures.popup.show.infuture']
+	}
+
 	private def initialiseMockSerial() {
 		dev_initMockSmslibFconnections()
 		
@@ -571,9 +589,9 @@ class CoreBootStrap {
 	}
 
 	private def dev_disableSecurityFilter() {
-		appSettingsService.set("enabledAuthentication", '')
-		appSettingsService.set("username", '') 
-		appSettingsService.set("password", '')
+		appSettingsService.set("auth.basic.enabled", '')
+		appSettingsService.set("auth.basic.username", '')
+		appSettingsService.set("auth.basic.password", '')
 	}
 
 	private Date createDate(String dateAsString) {

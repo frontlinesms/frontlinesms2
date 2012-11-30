@@ -4,6 +4,15 @@ function initializePopup() {
 	$("#modalBox.help #help-index li a").click(goToSection);
 	$("#modalBox.help #help-content").delegate("a", "click", goToSection);
 	$("div#help-index a:first").click();
+
+	$.each($("#help-index > ul, #help-index li:has(ul)"), function(i, selecter) {
+		$(selecter).accordion({
+			collapsible: true,
+			heightStyle: "content",
+			autoHeight: false, 
+			active: true 
+		});
+	});
 }
 
 function goToSection() {
@@ -41,6 +50,6 @@ function goToSection() {
 <div id="help-index">
 	<fsms:render template="index"/>
 </div>
-<div id="help-content">
+<div id="help-content" class="help-content">
 </div>
 
