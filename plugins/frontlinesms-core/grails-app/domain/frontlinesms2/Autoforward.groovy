@@ -27,9 +27,15 @@ class Autoforward extends Activity {
 
 //> ACCESSORS
 	int getRecipientCount() {
-		(contacts? contacts.size(): 0) +
-				(groups? (groups.collect { it.members?.size()?:0 }?.sum()): 0) +
-				(smartGroups? (smartGroups.collect { it.members?.size()?:0 }?.sum()): 0)
+		def numbers = []
+		contacts.each { numbers << it.mobile }
+		groups.each { it.members.each { numbers << it.mobile }}
+		smartGroups.each { it.members.each { numbers << it.mobile }}
+		def totalRecipients = 0
+		numbers.unique().each{
+			totalRecipients++
+		}
+		totalRecipients
 	}
 
 //> PROCESS METHODS
