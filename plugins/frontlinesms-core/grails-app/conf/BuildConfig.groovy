@@ -66,7 +66,7 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
 
 		// COMPILE
-		compile 'net.frontlinesms.core:smslib:1.1.3'
+		compile 'net.frontlinesms.core:smslib:1.1.4'
 		compile('net.frontlinesms.core:camel-smslib:0.0.5') {
 			excludes 'smslib'
 		}
