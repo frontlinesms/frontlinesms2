@@ -120,8 +120,11 @@
 		setPara("#autoreply-confirm", $('#messageText').val());
 	}
 
-	$(function() {
-		setType('generic');
-	});
 </r:script>
-
+<g:if test="${!activityInstanceToEdit}">
+	<r:script>
+		$(function() {
+			setType('generic');
+		});
+	</r:script>
+</g:if>
