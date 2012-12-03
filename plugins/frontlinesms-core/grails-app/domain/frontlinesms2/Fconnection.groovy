@@ -8,18 +8,27 @@ import org.apache.camel.model.RouteDefinition
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
+
+	def fconnectionService
+	
 	static final String HEADER_FCONNECTION_ID = 'fconnection-id'
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
 
 	static hasMany = [messages: Fmessage]
-
-	def fconnectionService
 	
-	static def implementations = [SmslibFconnection,
-			ClickatellFconnection,
-			IntelliSmsFconnection,
-			SmssyncFconnection]
+	static def getImplementations() {
+		if(Environment.current == Environment.PRODUCTION) {
+			[SmslibFconnection,
+				ClickatellFconnection,
+				IntelliSmsFconnection]
+		} else {
+			[SmslibFconnection,
+				ClickatellFconnection,
+				IntelliSmsFconnection,
+				SmssyncFconnection]
+		}
+	}
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
