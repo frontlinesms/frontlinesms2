@@ -96,6 +96,12 @@
 
 			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
 			webconnectionDialog.updateConfirmationScreen();
+			if(type == 'generic') {
+				mediumPopup.enableTab('webconnection-api');
+			}
+			else {
+				mediumPopup.disableTab('webconnection-api');
+			}
 		});
 	}
 
@@ -112,6 +118,10 @@
 		}
 		setPara("#keyword-confirm", keywordConfirmationText);
 		setPara("#autoreply-confirm", $('#messageText').val());
-	}	
+	}
+
+	$(function() {
+		setType('generic');
+	});
 </r:script>
 
