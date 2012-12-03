@@ -8,7 +8,7 @@ import org.smslib.NotConnectedException
 
 class SmslibFconnection extends Fconnection {
 	static passwords = ['pin']
-	static configFields = ['name', 'port', 'baud', 'pin', 'imsi', 'serial', 'send', 'receive']
+	static configFields = ['name', 'manufacturer', 'model', 'port', 'baud', 'pin', 'imsi', 'serial', 'send', 'receive']
 	static defaultValues = [send:true, receive:true]
 	static String getShortName() { 'smslib' }
 	
@@ -16,9 +16,12 @@ class SmslibFconnection extends Fconnection {
 		def optional = { name, val ->
 			return val? "&$name=$val": ''
 		}
-		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages"
+println "alxndrsn: SmslibFconnection.camelAddress() :: manufacturer=$manufacturer; model=$model"
+		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages&manufacturer=$manufacturer&model=$model"
 	}
 
+	String manufacturer
+	String model
 	String port
 	int baud
 	String serial
@@ -31,10 +34,12 @@ class SmslibFconnection extends Fconnection {
 	boolean receive = true
 
 	static constraints = {
+		manufacturer nullable:true
+		model nullable:true
 		port blank:false
-		imsi(nullable: true)
-		pin(nullable: true)
-		serial(nullable: true)
+		imsi nullable:true
+		pin nullable:true
+		serial nullable:true
 		send(nullable:true, validator: { val, obj ->
 			if(!val) {
 				return obj.receive
