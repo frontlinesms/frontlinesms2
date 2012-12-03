@@ -127,8 +127,9 @@ class FsmsTagLib {
 			// TODO this could likely be streamlined by using i18nUtilService.getCurrentLanguage(request)
 			['', "_${locale.language}",
 					"_${locale.language}_${locale.country}",
-					"_${locale.language}_${locale.country}_${locale.variant}"].each {
-				out << "<script type=\"text/javascript\" src=\"${request.contextPath}/i18n/${bundle}_messages${it}.js\" charset=\"UTF-8\"></script>" }
+					"_${locale.language}_${locale.country}_${locale.variant}"].each { localeSuffix ->
+				def link = g.resource plugin:bundle, dir:'i18n', file:"messages${localeSuffix}.js"
+				out << "<script type=\"text/javascript\" src=\"$link\" charset=\"UTF-8\"></script>\n" }
 		}
 	}
 	
