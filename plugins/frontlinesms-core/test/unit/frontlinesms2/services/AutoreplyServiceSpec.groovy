@@ -23,7 +23,6 @@ class AutoreplyServiceSpec extends Specification {
 		then:
 			1 * messageSendService.createOutgoingMessage(_) >> { Map req ->
 				assert req.addresses == "123"
-				assert req.messageText == (invokerType == Autoreply ? 'activity autoreply text' : 'step autoreply text');
 				return outgoing
 			}
 			1 * messageSendService.send(outgoing)
