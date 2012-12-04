@@ -16,8 +16,8 @@ class UshahidiWebconnection extends Webconnection {
 		this.httpMethod = Webconnection.HttpMethod.GET
 		this.name = params.name
 		// API setup
-		this.apiEnabled = params.enableApi?:false
-		this.secret = params.secret
+		this.apiEnabled = false //params.enableApi?:false <- replace with this to re-enable in future
+		// this.secret = params.secret <- uncomment to re-enable in future
 		this
 	}
 

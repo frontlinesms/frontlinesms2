@@ -128,7 +128,7 @@ class ActivityController extends ControllerUtils {
 		try {
 			service.saveInstance(instance, params)
 			instance.activate()
-			flash.message = message(code:classShortname + '.saved')
+			flash.message = message([code:"${instance.class.shortName}.save.success", args:[instance.name]])
 			params.activityId = instance.id
 			withFormat {
 				json { render([ok:true, ownerId:instance.id] as JSON) }

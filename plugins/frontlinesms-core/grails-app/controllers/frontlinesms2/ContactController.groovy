@@ -79,6 +79,22 @@ class ContactController extends ControllerUtils {
 				unusedFields.add(it)
 		}
 		def contactGroupInstanceList = contactInstance?.groups ?: []
+		if(params.contactId && !contactInstance) {
+			flash.message = message(code:'contact.not.found')
+			redirect(action: 'show')
+			return false
+		}
+		else if(params.groupId && !contactList.contactsSection) {
+			flash.message = message(code:'group.not.found')
+			redirect(action: 'show')
+			return false
+		}
+		else if(params.smartGroupId && !contactList.contactsSection) {
+			flash.message = message(code:'smartgroup.not.found')
+			redirect(action: 'show')
+			return false
+		}
+
 		[contactInstance: contactInstance,
 				checkedContactList: ',',
 				contactInstanceList: contactInstanceList,

@@ -6,7 +6,8 @@ import spock.lang.*
 
 class AutoforwardControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
-	
+	def i18nUtilService
+
 	def setup() {
 		controller = new AutoforwardController()
 	}
@@ -21,5 +22,6 @@ class AutoforwardControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 		then:
 			Autoforward.findByName('Forward')
+			controller.flash.message == i18nUtilService.getMessage([code:"autoforward.save.success", args:[Autoforward.findByName('Forward').name]])
 	}
 }
