@@ -17,6 +17,9 @@ abstract class MediumPopup extends geb.Page {
 		tab { tabId -> 
 			$('#tabs a[href="#tabs-'+tabId+'"]')
 		}
+		tabByName { tabName ->
+			$("#tabs a.tab-${tabName}")
+		}
 		errorPanel { $('div.error-panel') }
 		validationError { $('label.error') }
 		error { errorPanel.text()?.toLowerCase() }
@@ -347,9 +350,8 @@ class WebconnectionConfirmTab extends geb.Module {
 }
 
 class WebconnectionSummary extends geb.Module {
-	static base = { $('div#tabs-5') }
 	static content = {
-		message { $("div.summary") }
+		message { $("p#webconnection-dialog-summary") }
 	}
 }
 

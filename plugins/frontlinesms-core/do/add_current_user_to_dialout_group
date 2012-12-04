@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+U=`id -nu`
+G=dialout
+echo "# Adding user '$U' to group '$G'..."
+sudo usermod -a -G $G $U
+echo "# Added."
+
