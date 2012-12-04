@@ -31,11 +31,7 @@ class Autoforward extends Activity {
 		contacts.each { numbers << it.mobile }
 		groups.each { it.members.each { numbers << it.mobile }}
 		smartGroups.each { it.members.each { numbers << it.mobile }}
-		def totalRecipients = 0
-		numbers.unique().each{
-			totalRecipients++
-		}
-		totalRecipients
+		numbers.unique().size()
 	}
 
 //> PROCESS METHODS
