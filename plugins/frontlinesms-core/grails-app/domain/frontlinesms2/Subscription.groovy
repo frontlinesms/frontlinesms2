@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class Subscription extends Activity{
+class Subscription extends Activity {
 //> CONSTANTS
 	static String getShortName() { 'subscription' }
 
