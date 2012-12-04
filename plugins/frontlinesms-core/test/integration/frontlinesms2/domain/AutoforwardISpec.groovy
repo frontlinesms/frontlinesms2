@@ -24,5 +24,19 @@ class AutoforwardISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			outbound.ownerDetail == "${inbound.id}"
 	}
+	def 'Deleting a contact that is part of an autoforward should remove the contact from the autoforward'(){
+		when:
+			def contact = new Contact(name:'dude', mobileNumber:'+0727272727').save(failOnError:true)
+			def contactId = contact.id 
+			def autoforward  = new Autoforward(name:'Test', sentMessageText: "this is a sample message")
+			autoforward.addToContacts(contact)
+			autoforward.save(failOnError:true)
+			def controller = new ContactController()
+			controller.params['contact-select'] = [contactId]
+		and:
+			controller.delete()
+		then:
+			!Autoforward.findByName("Test").contacts.contains(contactId)
+	}
 }
 

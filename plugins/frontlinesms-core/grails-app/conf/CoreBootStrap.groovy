@@ -18,6 +18,8 @@ import grails.converters.JSON
 
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 
+import org.grails.datastore.mapping.core.Datastore
+
 class CoreBootStrap {
 	def applicationContext
 	def appSettingsService
@@ -35,6 +37,16 @@ class CoreBootStrap {
 		println "BootStrap.init() : Env=${Environment.current}"
 		initialiseSerial()
 		MetaClassModifiers.addAll()
+		//add listener for all CRUD operations in FrontlineSMS
+		def appContext = grailsApplication.mainContext//getParentContext()
+		println "################### ApplicationContext # Application Context ${appContext}"
+		println "################### BeansOfType(DataStore) # ${appContext.getBeansOfType(Datastore)}"
+		println "################### BeansOfType(DataStore) 2 # ${appContext.eventTriggeringInterceptor.datastores}"
+
+		appContext.eventTriggeringInterceptor.datastores.values().each{
+			println "################### Ma Datastore ### ${it}"
+			appContext.addApplicationListener(new FrontlinesmsCrudEventListener(it))
+		}
 
 		initAppSettings()
 

@@ -67,4 +67,7 @@ class AutoforwardService {
 		}
 		autoforward
 	}
+	def handleDeleteContact(contact) {
+		
+	}
 }
