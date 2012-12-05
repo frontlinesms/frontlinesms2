@@ -3,7 +3,6 @@ package frontlinesms2
 import frontlinesms2.*
 
 class AutoforwardService {
-
     def saveInstance(Autoforward autoforward, params) {
     	println "##### Saving Autoforward in Service"
 		autoforward.name = params.name ?: autoforward.name
@@ -67,7 +66,19 @@ class AutoforwardService {
 		}
 		autoforward
 	}
-	def handleDeleteContact(contact) {
-		
+
+	@grails.events.Listener(topic = 'beforeDelete', namespace = "gorm")
+	def handleDeleteRecipient(Contact contact) {
+		println "## Deleting a Contact $contact #####"
+		Autoforward.findAll().each { autoforward->
+			println "Contacts before Removing ${autoforward.contacts}"
+			if(autoforward.contacts*.id.contains(contact.id)){
+				println "## Just about to remove ${contact} from ${autoforward}"
+				autoforward.removeFromContacts(contact)
+				autoforward.save(failOnError:true, flush:true)
+				println "Contacts after removing ${autoforward.contacts}"
+			}
+		}
+		println "## Deleting Successful ##"
 	}
 }
