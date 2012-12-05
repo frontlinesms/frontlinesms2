@@ -29,7 +29,7 @@
 
 		var recipientTabValidation = function() {
 			var valid = false;
-			addAddressHandler();
+			recipientSelecter.addAddressHandler();
 			valid = ($('input[name=addresses]:checked').length > 0) || ($('input[name=groups]:checked').length > 0);
 			return valid;
 		};

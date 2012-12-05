@@ -103,7 +103,7 @@
 		var recipientTabValidation = function() {
 			if(!isGroupChecked('dontSendMessage')) {
 				var valid = false;
-				addAddressHandler();
+				recipientSelecter.addAddressHandler();
 				valid = $("#recipient-count").html() > 0;
 				var addressListener = function() {
 					if($("#recipient-count").html() > 0) {
