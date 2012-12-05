@@ -46,6 +46,7 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 		where:
 			outboundMessageText                                            | expectedDispatchText
 			'message text sample'                                          | 'message text sample'
+			'message text sample ${keyword}'                               | 'message text sample INCOMING'
 			'this message is from ${sender_name} to ${recipient_name}'     | 'this message is from Source to Destination'
 			'this message is from ${sender_number} to ${recipient_number}' | 'this message is from 112233 to 445566'
 			'the original message says: ${message_text}'                   | 'the original message says: Message Text'

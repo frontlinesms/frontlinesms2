@@ -7,9 +7,51 @@ class AnnouncementControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	private static final String JSON_MIME_TYPE = 'application/json'
 
 	def controller
+	def i18nUtilService
 
 	def setup() {
 		controller = new AnnouncementController()
+	}
+
+	def "can save new announcement"() {
+		setup:
+			controller.params.name = "announcement"
+			controller.params.addresses = "1234567890"
+			controller.params.messageText = "sending this"
+		when:
+			controller.save()
+			def announcement = Announcement.findByName("announcement")
+		then:
+			controller.flash.message == i18nUtilService.getMessage([code:"announcement.save.success", args:[announcement.name]])
+			announcement.name == 'announcement'
+			announcement.sentMessageText.contains('sending this')
+			announcement
+	}
+
+	def "can edit an announcement"() {
+		setup:
+			def message = Fmessage.build()
+			def announcement = new Announcement(name: 'Test', addresses: "12345")
+			announcement.addToMessages(message)
+			announcement.save(failOnError:true, flush:true)
+			controller.params.ownerId = announcement.id
+			controller.params.name = "renamed announcement"
+		when:
+			controller.save()
+			def editedAnnouncement = Announcement.get(announcement.id)
+		then:
+			!Announcement.findByName('name')
+			editedAnnouncement.name == "renamed announcement"
+	}
+
+	def "list of smart groups should be included in the group list"() {
+		given:
+			def s = new SmartGroup(name:'English numbers', mobile:'+44').save(flush:true)
+		when:
+			def model = controller.create()
+		then:
+			model.groupList["smartgroup-$s.id"]?.name == 'English numbers'
+			model.groupList["smartgroup-$s.id"]?.addresses == []
 	}
 
 	@Unroll

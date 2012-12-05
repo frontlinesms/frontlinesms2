@@ -62,7 +62,7 @@ class AutoforwardSpec extends Specification {
 	def 'getRecipientCount() should count group members and contacts'() {
 		given:
 			def a = new Autoforward(name:'recipient counter')
-			if(contacts) a.contacts = (1..contacts).collect { Contact.build() }
+			if(contacts) a.contacts = (1..contacts).collect { Contact.build(mobile:"+123${Contact.count()}") }
 			if(groups) a.groups = (1..groups).collect { mockGroup(groupMembers) }
 			def sg = []
 			if(smartGroups) sg = (1..smartGroups).collect { def smrt = mockSmartGroup(smartGroupMembers); println "smrt.members=$smrt.members"; return smrt }
@@ -102,7 +102,7 @@ class AutoforwardSpec extends Specification {
 	private def mockMembers(gClass, memberCount) {
 		def g = Mock(gClass)
 		if(memberCount) {
-			def members = (1..memberCount).collect { Contact.build() }
+			def members = (1..memberCount).collect { Contact.build(mobile:"+123${Contact.count()}") }
 			println "mockMembers() :: members=$members"
 			g.members >> { members }
 			println "mockMembers() :: g.members=$g.members"

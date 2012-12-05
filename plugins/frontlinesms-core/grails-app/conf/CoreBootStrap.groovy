@@ -461,11 +461,18 @@ class CoreBootStrap {
 		else
 			initialiseRealSerial()
 
-		println "PORTS:"
-		serial.CommPortIdentifier.portIdentifiers.each {
-			println "> Port identifier: ${it}"
+		def ports = serial.CommPortIdentifier.portIdentifiers
+		if(ports) {
+			println "PORTS:"
+			ports.each {
+				println "> Port identifier: ${it}"
+			}
+			println "END OF PORTS LIST"
+		} else {
+			println '''NO SERIAL PORTS DETECTED.  IF YOU ARE RUNNING *NIX, PLEASE CHECK THAT YOU
+ARE A MEMBER OF THE APPROPRIATE GROUP (e.g. "dialout").  OTHERWISE MAKE SURE THAT
+YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		}
-		println "END OF PORTS LIST"
 	}
 	
 	private def initialiseRealSerial() {
@@ -595,7 +602,7 @@ class CoreBootStrap {
 	}
 
 	private Date createDate(String dateAsString) {
-		DateFormat format = createDateFormat();
+		DateFormat format = createDateFormat()
 		return format.parse(dateAsString)
 	}
 
@@ -605,8 +612,7 @@ class CoreBootStrap {
 
 	private def ensureResourceDirExists() {
 		def dir = new File(ResourceUtils.getResourcePath())
-		if (!dir.exists())
-		{
+		if (!dir.exists()) {
 			dir.mkdirs()
 			log.info "creating resource directory at {$dir.absolutePath}"
 		}
@@ -614,12 +620,13 @@ class CoreBootStrap {
 
 	private def setCustomJSONRenderers() {
 		JSON.registerObjectMarshaller(Announcement) {
-            def returnArray = [:]
-            returnArray['id'] = it.id
-            returnArray['dateCreated'] = it.dateCreated
-            returnArray['name'] = it.name
-            returnArray['sentMessageText'] = it.sentMessageText
-            return returnArray
-        }
+			def returnArray = [:]
+			returnArray['id'] = it.id
+			returnArray['dateCreated'] = it.dateCreated
+			returnArray['name'] = it.name
+			returnArray['sentMessageText'] = it.sentMessageText
+			return returnArray
+		}
 	}
 }
+
