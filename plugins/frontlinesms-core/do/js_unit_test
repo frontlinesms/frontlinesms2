@@ -1,0 +1,16 @@
+#!/bin/bash
+function check_npm_module_available() {
+	MODULE_NAME=$1
+	echo "# Checking for NPM module: $MODULE_NAME..."
+	INSTALL_COUNT=`(npm list; npm -g list) | grep -c "^[├└]─[─┬] $MODULE_NAME\@"`
+	if [ 0 -eq $INSTALL_COUNT ]; then
+		echo "# NPM module missing: $MODULE_NAME.  Please run 'npm install $MODULE_NAME' or 'sudo npm i -g $MODULE_NAME'"
+		exit 1
+	fi
+	echo "# NPM Module found: $MODULE_NAME"
+}
+check_npm_module_available fs
+check_npm_module_available jquery
+check_npm_module_available jsdom
+set -e
+qunit -c web-app/js/recipient_selecter.js -t test/js/recipient_selecter_tests.js
