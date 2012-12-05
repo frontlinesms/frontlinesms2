@@ -10,6 +10,7 @@ import grails.converters.JSON
 class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def trashService
+	def i18nUtilService
 	def withUshahidiWebconnection = { c -> c.call(UshahidiWebconnection.get(controller.params.ownerId) ?: UshahidiWebconnection.newInstance()) }
 	def withGenericWebconnection = { c -> c.call(GenericWebconnection.get(controller.params.ownerId) ?: GenericWebconnection.newInstance()) }
 
@@ -31,6 +32,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 		then:
 			Webconnection.findByName("Test Webconnection").name == controller.params.name
+			controller.flash.message == i18nUtilService.getMessage([code:"webconnection.save.success", args:[Webconnection.findByName("Test Webconnection").name]])
 			Webconnection.findByName("Test Webconnection").url == "http://www.ushahidi.com"
 			RequestParameter.findByName('key').value == '12345678'
 			RequestParameter.findByName('m').value == '${message_body}'

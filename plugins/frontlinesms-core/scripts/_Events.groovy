@@ -131,7 +131,7 @@ println "appName: $appName"
 		props.each { k, v -> m[k] = v }
 		builder(m)
 
-		jsFilename = appName + '_' + f.name - '.properties' + '.js'
+		jsFilename = f.name - '.properties' + '.js'
 		new File("web-app/i18n/$jsFilename").setText(
 				"var i18nStrings = i18nStrings || {}; i18nStrings[\"$appName\"] = $builder;",
 				'UTF-8')

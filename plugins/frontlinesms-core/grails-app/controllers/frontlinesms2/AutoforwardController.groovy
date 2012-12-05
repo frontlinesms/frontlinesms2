@@ -10,6 +10,6 @@ class AutoforwardController extends ActivityController {
 		}
 	}
 
-	private def withAutoforward = withDomainObject Autoforward
+	private def withAutoforward = withDomainObject Autoforward, { params.ownerId }
 }
 

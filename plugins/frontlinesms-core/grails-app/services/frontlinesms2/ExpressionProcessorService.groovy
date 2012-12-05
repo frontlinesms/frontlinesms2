@@ -10,6 +10,7 @@ class ExpressionProcessorService {
 		'recipient_name' : ['quickMessage', 'announcement', 'poll', 'autoreply', 'subscription', 'autoforward'],
 		'sender_number' : ['autoforward'],
 		'sender_name' : ['autoforward'],
+		'keyword' : ['autoforward'],
 		'message_text' : ['poll', 'autoreply', 'subscription','autoforward'],
 		'message_text_with_keyword' : ['quickMessage','poll', 'autoreply', 'subscription','autoforward']]
 
@@ -67,6 +68,10 @@ class ExpressionProcessorService {
 			return dispatch.dst
 		if (expression == "\${recipient_name}")
 			return Contact.findByMobileLike(dispatch.dst)? Contact.findByMobileLike(dispatch.dst).name : dispatch.dst
+		if (expression == "\${keyword}"){
+			def keyword = incomingMessage.messageOwner?.keywords?.find{ incomingMessage.text.toUpperCase().startsWith(it.value) }?.value
+			return keyword
+		}
 		return ""
 	}
 

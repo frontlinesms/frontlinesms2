@@ -123,9 +123,9 @@ class WebconnectionService {
 		println "RECIPIENTS IS ${controller.request.JSON?.recipients}"
 
 		//> Detect and return 401 (authentication) error conditions
-		if(!secret)
+		if(webcon.secret && !secret)
 			return [status:401, text:"no secret provided"]
-		if(secret != webcon.secret)
+		if(webcon.secret && secret != webcon.secret)
 			return [status:401, text:"invalid secret"]
 
 		//> Detect and return 400 (invalid request) error conditions

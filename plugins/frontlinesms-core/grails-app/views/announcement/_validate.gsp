@@ -31,7 +31,7 @@
 
 		var recepientTabValidation = function() {
 			var valid = true;
-			addAddressHandler();
+			recipientSelecter.addAddressHandler();
 			valid = $('input[name=addresses]:checked').length > 0;
 			var addressListener = function() {
 				if($('input[name=addresses]:checked').length > 0) {

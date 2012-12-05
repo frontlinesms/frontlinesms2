@@ -12,9 +12,14 @@ class ContactSearchService {
 	private def getContacts(params) {
 		def searchString = getSearchString(params)
 		if(params.groupId) {
-			GroupMembership.searchForContacts(asLong(params.groupId), searchString, params.sort,
-					params.max,
-			                params.offset)
+			if (!Group.get(params.groupId)) {
+				return []
+			}
+			else {
+				GroupMembership.searchForContacts(asLong(params.groupId), searchString, params.sort,
+						params.max,
+				                params.offset)
+			}
 		} else if(params.smartGroupId) {
 			SmartGroup.getMembersByNameIlike(asLong(params.smartGroupId), searchString, [max:params.max, offset:params.offset])
 		} else Contact.findAllByNameIlikeOrMobileIlike(searchString, searchString, params)
@@ -24,7 +29,12 @@ class ContactSearchService {
 		def searchString = getSearchString(params)
 		
 		if(params.groupId) {
-			GroupMembership.countSearchForContacts(asLong(params.groupId), searchString)
+			if (!Group.get(params.groupId)) {
+				return 0
+			}
+			else {
+				GroupMembership.countSearchForContacts(asLong(params.groupId), searchString)
+			}
 		} else if(params.smartGroupId) {
 			SmartGroup.countMembersByNameIlike(asLong(params.smartGroupId), searchString)
 		} else Contact.countByNameIlikeOrMobileIlike(searchString, searchString)

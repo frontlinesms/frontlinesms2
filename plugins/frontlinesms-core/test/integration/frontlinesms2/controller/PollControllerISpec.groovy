@@ -5,13 +5,14 @@ import frontlinesms2.*
 class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def trashService
+	def i18nUtilService
 
 	def setup() {
 		controller = new PollController()
 		controller.trashService = trashService
 		controller.params.addresses = '123'
 	}
-
+	
 	def "can save new poll"() {
 		setup:
 			controller.params.name = "poll"
@@ -25,6 +26,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = Poll.findByName("poll")
 		then:
 			poll
+			controller.flash.message == i18nUtilService.getMessage([code:"poll.save.success", args:[poll.name]])
 			poll.autoreplyText == "automatic reply text"
 			(poll.responses*.value).containsAll(['yes', 'no', 'maybe'])
 	}
