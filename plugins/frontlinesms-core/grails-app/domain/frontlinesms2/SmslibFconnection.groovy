@@ -16,8 +16,7 @@ class SmslibFconnection extends Fconnection {
 		def optional = { name, val ->
 			return val? "&$name=$val": ''
 		}
-println "alxndrsn: SmslibFconnection.camelAddress() :: manufacturer=$manufacturer; model=$model"
-		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages&manufacturer=$manufacturer&model=$model"
+		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages${optional('manufacturer', manufacturer)}${optional('model', model)}"
 	}
 
 	String manufacturer
