@@ -1,8 +1,5 @@
 package frontlinesms2
 
-import groovyx.net.http.HTTPBuilder
-import static groovyx.net.http.ContentType.URLENC
-
 class UploadRegistrationDataJob {
 
 	File regPropFile
@@ -13,26 +10,33 @@ class UploadRegistrationDataJob {
 	
 
 	static triggers = {
-		//simple repeatInterval: 5000l // execute job once in 5 seconds
-		cron name: 'RegistrationTrigger',cronExpression: '0 0 6-18 ? 1-12 MON'
+		long week = 7 * 24 * 3600 * 1000 // execute job once in 7 days
+		simple name:'RegistrationUpload', startDelay:0, repeatInterval:week, repeatCount:1
 	}
 
 	def execute() {
+		println "UploadRegistrationDataJob: Attempting to upload registration data..."
 		Properties properties = getRegistrationProperties()
 		if(!properties || properties?.isEmpty()){
+			println "SKIPPED : Registration data not available!"
 			return //there is no registration data to send
 		}
 		def dataMap = convertPropertiestoMap(properties)
 		def registered = (dataMap['registered'] == 'true')?:false
 		if(registered) {
+			println "SKIPPED : Registration data has already been uploaded!"
 			return //registration data has already been uploaded
 		}		
 		try{
-			dataUploadService.upload(UPLOAD_URL,dataMap)
+			boolean success = dataUploadService.upload(UPLOAD_URL,dataMap)
+			if(!success){
+				println "FAILED : Registration data upload NOT successful, check your Internet connection!"
+				return
+			}
 			writeRegistrationPropertiesFile(properties)
+			println "SUCCESS : Successfully uploaded registration data!"
 		}catch(Exception e){
-			e.printStackTrace()
-			throw new org.quartz.JobExecutionException(e)
+			println "FAILED : Registration data upload NOT successful, check your Internet connection!"
 		}	
 	}
 
