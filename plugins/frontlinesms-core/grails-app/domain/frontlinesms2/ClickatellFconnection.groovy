@@ -9,14 +9,23 @@ import frontlinesms2.camel.exception.*
 
 class ClickatellFconnection extends Fconnection {
 	private static final String CLICKATELL_URL = 'http://api.clickatell.com/http/sendmsg?'
-	static final configFields = ['name', 'apiId', 'username', 'password']
+	static final configFields = [name:null, apiId:null, username:null, password:null, sendToUsa:['fromNumber']]
 	static final defaultValues = []
 	static String getShortName() { 'clickatell' }
 	
 	String apiId
 	String username
 	String password // FIXME maybe encode this rather than storing plaintext
+	boolean sendToUsa
+	String fromNumber
 	
+	static constraints = {
+		fromNumber(nullable: true, validator: { val, obj ->
+			println "checking them constraints..... and returning ${!obj.sendToUsa || val}"
+			return !obj.sendToUsa || val
+		})
+	}
+
 	static passwords = ['password']
 
 	static mapping = {
@@ -39,7 +48,8 @@ class ClickatellFconnection extends Fconnection {
 										'user=${header.clickatell.username}&' + 
 										'password=${header.clickatell.password}&' + 
 										'to=${header.clickatell.dst}&' +
-										'text=${body}'))
+										'text=${body}' +
+										(sendToUsa ? '&mo=1&from=${header.clickatell.fromNumber}' : '')))
 						.to(CLICKATELL_URL)
 						.process(new ClickatellPostProcessor())
 						.routeId("out-internet-${ClickatellFconnection.this.id}")]
