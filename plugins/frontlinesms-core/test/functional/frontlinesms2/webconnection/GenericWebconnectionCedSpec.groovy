@@ -155,11 +155,6 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			next.click()
 		then:
 			waitFor { confirmTab.displayed }
-		when:
-			confirmTab.name = "my ext cmd"
-			submit.click()
-		then:
-			waitFor { summary.displayed }
 			testConnectionButton.displayed
 	}
 
