@@ -121,7 +121,7 @@ var recipientSelecter = (function() {
 		}
 		checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val();
 		if(checkbox !== address) {
-			$("#contacts").prepend("<li class='manual contact' f-name='' f-number='" + sanitizedAddress + "'><input contacts='true' type='checkbox' onclick='setContact(this," + sanitizedAddress + ")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>");
+			$("#contacts").prepend("<li class='manual contact' f-name='' f-number='" + sanitizedAddress + "'><input contacts='true' type='checkbox' onclick='recipientSelecter.setContact(this, \"" + sanitizedAddress + "\")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>");
 			$("li.manual.contact[f-number='"+sanitizedAddress+"'] input").trigger('click');
 			$("li.manual.contact[f-number='"+sanitizedAddress+"'] input").attr('checked','checked');
 			updateRecipientCount();
