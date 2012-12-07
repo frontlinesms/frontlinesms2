@@ -50,7 +50,7 @@
 			webconnectionDialog.updateConfirmationScreen()
 		</g:if>
 		<g:else>
-			var initialScripts = <fsms:render template="/webconnection/${Webconnection.implementations[0].type}/scripts"/>;
+			var initialScripts = <fsms:render template="/webconnection/${Webconnection.implementations[1].type}/scripts"/>;
 			webconnectionDialog.setScripts(initialScripts);
 			toggleApiTab();
 			
@@ -106,7 +106,6 @@
 			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
 
 			$("#webconnection-confirm").html(data.confirm);
-
 			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
 			webconnectionDialog.updateConfirmationScreen();
 		});
