@@ -52,6 +52,8 @@
 		<g:else>
 			var initialScripts = <fsms:render template="/webconnection/${Webconnection.implementations[0].type}/scripts"/>;
 			webconnectionDialog.setScripts(initialScripts);
+			toggleApiTab();
+			
 		</g:else>
 		
 		aliasCustomValidation();
@@ -84,6 +86,17 @@
 		});
 	}
 
+	function toggleApiTab() {
+		$("#webconnectionType").live('change', function() {
+				if($(this).val() === 'generic') {
+					mediumPopup.enableTab('webconnection-api');
+				}
+				else {
+					mediumPopup.disableTab('webconnection-api');
+				}
+			});
+	}
+
 	function setType(type) {
 		$.getJSON(url_root + "webconnection/" + type + "/config", function(data) {
 			var configTab = $("#webconnection-config");
@@ -96,12 +109,6 @@
 
 			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
 			webconnectionDialog.updateConfirmationScreen();
-			if(type == 'generic') {
-				mediumPopup.enableTab('webconnection-api');
-			}
-			else {
-				mediumPopup.disableTab('webconnection-api');
-			}
 		});
 	}
 
@@ -121,10 +128,3 @@
 	}
 
 </r:script>
-<g:if test="${!activityInstanceToEdit}">
-	<r:script>
-		$(function() {
-			setType('generic');
-		});
-	</r:script>
-</g:if>
