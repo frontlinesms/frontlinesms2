@@ -1,7 +1,7 @@
 <r:script>
 	function initializePopup() {
 		<g:if test="${activityInstanceToEdit?.id}">
-			$("#messageText").val("${activityInstanceToEdit.autoreplyText}");
+			$("#messageText").val("${activityInstanceToEdit.autoreplyText.escapeForJavascript()}");
 			$("#messageText").trigger("keyup");
 		</g:if>
 		
