@@ -1,7 +1,6 @@
 <r:script>
 	function initializePopup() {
 		<g:if test="${activityInstanceToEdit?.id}">
-			$("#messageText").val("${activityInstanceToEdit.sentMessageText}");
 			$("#messageText").trigger("keyup");
 			checkSavedContactsAndGroups();
 		</g:if>

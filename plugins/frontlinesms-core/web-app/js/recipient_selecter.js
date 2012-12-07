@@ -1,4 +1,4 @@
-var recipientSelecter = (function() {
+recipientSelecter = (function() {
 	var addAddressHandler, updateRecipientCount, searchForContacts, selectMembers, setContact, validateAddressEntry;
 
 	function inCheckedGroup(value) {
@@ -60,7 +60,7 @@ var recipientSelecter = (function() {
 			}
 		} else {
 			if(contactNumber in contactMobileNumbers) {
-				if(! inCheckedGroup(contactNumber)) {
+				if(!inCheckedGroup(contactNumber)) {
 					delete contactMobileNumbers[contactNumber];
 				}
 			}
@@ -83,11 +83,12 @@ var recipientSelecter = (function() {
 	}
 
 	updateRecipientCount = function() {
-		var contactCount, mobileNumbersArray;
-		if($("#mobileNumbers").val() != "") {
-			mobileNumbersArray = $("#mobileNumbers").val().split(",");
+		var contactCount, mobileNumbersArray, mobileNumbersString;
+		mobileNumbersString = $("#mobileNumbers").val();
+		if(mobileNumbersString) {
+			mobileNumbersArray = mobileNumbersString.split(",");
 		}
-		contactCount = mobileNumbersArray? mobileNumbersArray.length:0 ;
+		contactCount = mobileNumbersArray? mobileNumbersArray.length: 0;
 		$("#contacts-count").html(contactCount);
 		$("#messages-count").html(contactCount);
 		$("#recipient-count").html(contactCount);
