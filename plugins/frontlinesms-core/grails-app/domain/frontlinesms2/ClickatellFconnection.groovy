@@ -20,6 +20,9 @@ class ClickatellFconnection extends Fconnection {
 	String fromNumber
 	
 	static constraints = {
+		apiId blank:false
+		username blank:false
+		password blank:false
 		fromNumber(nullable: true, validator: { val, obj ->
 			println "checking them constraints..... and returning ${!obj.sendToUsa || val}"
 			return !obj.sendToUsa || val
