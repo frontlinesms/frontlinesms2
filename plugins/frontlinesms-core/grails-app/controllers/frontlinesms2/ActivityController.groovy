@@ -16,7 +16,7 @@ class ActivityController extends ControllerUtils {
 	def create() {
 		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 		[contactList: Contact.list(),
-				groupList:groupList]
+				groupList:groupList, activityType: params.controller]
 	}
 	
 	def edit() {
@@ -25,7 +25,7 @@ class ActivityController extends ControllerUtils {
 			def activityType = activityInstance.shortName
 			render view:"../$activityType/create", model:[contactList: Contact.list(),
 				groupList:groupList,
-				activityInstanceToEdit: activityInstance]
+				activityInstanceToEdit: activityInstance, activityType: params.controller]
 		}
 	}
 

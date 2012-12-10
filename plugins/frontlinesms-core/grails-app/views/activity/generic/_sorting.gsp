@@ -1,7 +1,7 @@
 <div class="generic_sorting_tab">
 	<h2><g:message code="activity.generic.sort.header"/></h2>
 	<div class="info">
-		<p><g:message code="activity.generic.sort.description"/></p>
+		<p><g:message code="activity.${activityType == 'autoreply' ? 'autoreply' : 'generic'}.sort.description"/></p>
 	</div>
 	<ul class="sorting-options">
 		<li>
