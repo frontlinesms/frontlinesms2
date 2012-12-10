@@ -158,6 +158,7 @@ class ConnectionController extends ControllerUtils {
 				}
 			}
 		} else {
+			println "errors::: ${fconnectionInstance.errors}"
 			withFormat {
 				html {
 					flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
