@@ -25,7 +25,7 @@ class ActivityController extends ControllerUtils {
 			def activityType = activityInstance.shortName
 			render view:"../$activityType/create", model:[contactList: Contact.list(),
 				groupList:groupList,
-				activityInstanceToEdit: activityInstance, activityType: params.controller]
+				activityInstanceToEdit: activityInstance, activityType: activityType]
 		}
 	}
 
