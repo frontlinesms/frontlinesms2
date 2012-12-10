@@ -12,5 +12,20 @@ function check_npm_module_available() {
 check_npm_module_available fs
 check_npm_module_available jquery
 check_npm_module_available jsdom
+check_npm_module_available qunit
+
 set -e
-qunit -c web-app/js/recipient_selecter.js -t test/js/recipient_selecter_tests.js
+
+function run_test() {
+	TARGET=$1
+	echo "# Running tests for $TARGET..."
+	qunit -c "web-app/js/${TARGET}.js" -d `ls test/js/lib/*.js` -t "test/js/${TARGET}_tests.js"
+}
+
+pushd test/js
+TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
+popd
+echo "# Tests to run: $TESTS"
+
+run_test recipient_selecter
+

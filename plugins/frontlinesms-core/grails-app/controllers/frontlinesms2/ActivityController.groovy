@@ -110,14 +110,14 @@ class ActivityController extends ControllerUtils {
 	
 	def create_new_activity() {}
 
-	def getCollidingKeywords(topLevelKeywords) {
+	def getCollidingKeywords(topLevelKeywords, instance) {
 		if (topLevelKeywords == null)
 			return [:]
 		def collidingKeywords = [:]
 		def currentKeyword
 		topLevelKeywords.toUpperCase().split(",").collect { it.trim() }.each { 
 			currentKeyword = Keyword.getFirstLevelMatch(it)
-			if(currentKeyword)
+			if(currentKeyword && (currentKeyword.activity.id != instance.id))
 				collidingKeywords << [(currentKeyword.value):"'${currentKeyword.activity.name}'"]
 		}
 		println "colliding keywords:: $collidingKeywords"
@@ -135,8 +135,8 @@ class ActivityController extends ControllerUtils {
 				html { [ownerId:instance.id] }
 			}
 		} catch(Exception ex) {
-			ex.printStackTrace()
-			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords)
+			//ex.printStackTrace()
+			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords, instance)
 			def errors
 			if (collidingKeywords) {
 				errors = collidingKeywords.collect {

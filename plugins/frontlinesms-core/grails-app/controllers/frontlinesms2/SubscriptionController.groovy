@@ -52,6 +52,7 @@ class SubscriptionController extends ActivityController {
 
 	def save() {
 		def subscriptionInstance = Subscription.get(params.ownerId)?: new Subscription()
+		params.keywords = (params.topLevelKeywords.trim().length() > 0)?params.topLevelKeywords:("${params.joinKeywords},${params.leaveKeywords}")
 		doSave('subscription', subscriptionService, subscriptionInstance)
 	}
 
