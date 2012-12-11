@@ -249,13 +249,19 @@ databaseChangeLog = {
 		addForeignKeyConstraint(baseColumnNames: "group_id", baseTableName: "subscription", constraintName: "FK1456591D9083EA62", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "grup", referencesUniqueColumn: "false")
 	}
 
-	// changeSet(author: "geoffrey", id:"1355230052153-35") {
-	// 	grailsChange{
-	// 		change{
-				
-	// 		}
-	// 	}
-	// }
+	// TODO: this should transform old keywords into top level keywords, and old poll Aliases into second level keywords
+	changeSet(author: "sitati", id:"1355230052153-35") {
+		grailsChange{
+			change{
+				println "MIGRATIONS:::::::::: about to migrate pollResponses"
+				sql.executeUpdate("UPDATE keyword SET is_top_level = true")
+				sql.eachRow("SELECT * FROM POLL_RESPONSE") { pollResponse -> 
+					println "MIGRATIONS::::::::: migrating pollResponse $pollResponse"
+					// sql.execute('INSERT INTO keyword ()') TODO
+				}
+			}
+		}
+	}
 
 	//make this changelog work with preexisting polls
 	changeSet(author: "geoffrey (generated)", id: "1355230052153-36") {
