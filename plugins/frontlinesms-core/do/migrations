@@ -1,0 +1,38 @@
+#!bin/bash
+
+#Generate initial database in prod mode without any data in background
+grails prod run-app
+
+RESPONSE="000"
+SERVER_PORT=8080
+CONTEXT_PATH=frontlinesms-core
+PING_URL=http://localhost:$SERVER_PORT$CONTEXT_PATH/status/show
+echo "# Waiting for server to start"
+echo "# Ping URL: $PING_URL"
+until [ "$RESPONSE" -ne "000" ]; do
+        echo "#   Pinging $PING_URL..."
+        RESPONSE=`curl -o /dev/null --silent --head --write-out '%{http_code}' $PING_URL` || echo "Setting response seems to give an error code"
+        echo "#   Pinged server at $PING_URL and got response: $RESPONSE"
+        sleep 10
+done
+
+echo "# Final server response: $RESPONSE"
+if [ "$RESPONSE" -eq "200" ]; then
+        echo "# Started FrontlineSMS successfully \\o/"
+
+	#Kill grails and do migrations
+	do/kill-grails
+	#enter changelog details	
+	echo "Enter name of the changelog"
+	read -e CHANGELOG_NAME
+	grails prod gorm-diff $CHANGELOG_NAME.groovy
+	less grails-app/migrations/$CHANGELOG_NAME.groovy
+        EXIT_CODE=0
+else
+        echo "# Error starting FrontlineSMS"
+        EXIT_CODE=1
+fi
+
+
+
+#view changelog
