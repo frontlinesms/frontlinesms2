@@ -18,7 +18,7 @@ class TrashService {
 		if (object instanceof frontlinesms2.Fmessage) {
 			object.isDeleted = true
 			new Trash(displayName:object.displayName,
-					displayText:object.text,
+					displayText:object.text.truncate(252),
 					objectClass:object.class.name,
 					objectId:object.id).save()
 			object.save(failOnError:true, flush:true)
