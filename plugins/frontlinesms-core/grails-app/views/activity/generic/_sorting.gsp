@@ -1,7 +1,7 @@
 <div class="generic_sorting_tab">
 	<h2><g:message code="activity.generic.sort.header"/></h2>
 	<div class="info">
-		<p><g:message code="activity.generic.sort.description"/></p>
+		<p><g:message code="activity.${activityType == 'autoreply' ? 'autoreply' : 'generic'}.sort.description"/></p>
 	</div>
 	<ul class="sorting-options">
 		<li>
@@ -26,7 +26,7 @@
 			checked="${(activityInstanceToEdit?.keywords?.size() == 0)}"/>
 			<label class="sorting-option-label"><g:message code="activity.generic.disable.sorting"/></label>
 			<div class="sorting-option">
-				<label><g:message code="activity.generic.disable.sorting.description"/></label>
+				<label><g:message code="activity.${activityType == 'autoreply' ? 'autoreply' : 'generic'}.disable.sorting.description"/></label>
 			</div>
 		</li>
 	</ul>
