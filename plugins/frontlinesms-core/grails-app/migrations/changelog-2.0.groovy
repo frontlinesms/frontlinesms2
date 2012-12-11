@@ -177,6 +177,7 @@ databaseChangeLog = {
 		}
 	}
 
+	//TODO:: WHAT IS THIS? I think it is breaking existing keywords
 	changeSet(author: "geoffrey (generated)", id: "1355230052153-17") {
 		addColumn(tableName: "keyword") {
 			column(name: "keywords_idx", type: "integer")
@@ -257,7 +258,9 @@ databaseChangeLog = {
 				sql.executeUpdate("UPDATE keyword SET is_top_level = true")
 				sql.eachRow("SELECT * FROM POLL_RESPONSE") { pollResponse -> 
 					println "MIGRATIONS::::::::: migrating pollResponse $pollResponse"
-					// sql.execute('INSERT INTO keyword ()') TODO
+					pollResponse.ALIASES.each { aliasValue ->
+						sql.execute("INSERT INTO keyword (activity_id, owner_detail, value, is_top_level) values ($pollResponse.POLL_ID, $pollResponse.ID, $aliasValue, false)")
+					}
 				}
 			}
 		}
