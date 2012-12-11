@@ -125,18 +125,21 @@ recipientSelecter = (function() {
 		var valid, addressListener;
 		addAddressHandler();
 
-//		valid = $('input[name=addresses]:checked').length > 0;
 		valid = getMobileNumbersArray().length > 0;
 
 		// TODO why is there listener setup here?
 		addressListener = function() {
 // FIXME we need to pass the validator in here, otherwise we will never have access to it
 			if($('input[name=addresses]:checked').length > 0) {
-				if("undefined" !== typeof validator) validator.element($('#contacts').find("input[name=addresses]"));
+				if("undefined" !== typeof validator) {
+					validator.element($('#contacts').find("input[name=addresses]"));
+				}
 				$('#recipients-list').removeClass("error");
 			} else {
 				$('#recipients-list').addClass("error");
-				if("undefined" !== typeof validator) validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
+				if("undefined" !== typeof validator) {
+					validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
+				}
 			}
 		};
 		if (!valid) {
