@@ -89,6 +89,7 @@ grails.project.dependency.resolution = {
 		runtime ':routing:1.2.2-camel-2.9.4'
 		runtime ":csv:0.3.1"
 		compile ":quartz2:0.2.3-frontlinesms"
+		compile "commons-validator:commons-validator:1.4.0"
 
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.17"
