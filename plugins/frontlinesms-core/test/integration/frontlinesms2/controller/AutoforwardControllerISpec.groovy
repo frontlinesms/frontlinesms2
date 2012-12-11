@@ -43,4 +43,18 @@ class AutoforwardControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Autoforward.findByName('Forward')
 			controller.flash.message == i18nUtilService.getMessage([code:"autoforward.save.success", args:[Autoforward.findByName('Forward').name]])
 	}
+
+	def 'moving a message into an autoforward that does not have contacts or groups should just fail the outgoing messages'() {
+		setup:
+			def autoforward = new Autoforward(name: "test", sentMessageText: "Someone said something").save(failOnError:true)
+			def message = Fmessage.build(text:'This should be moved to Autoforward')
+			def controller = new MessageController()
+			controller.params.messageId = message.id
+			controller.params.ownerId = autoforward.id
+			controller.params.messageSection = 'activity'
+		when:
+			controller.move()
+		then:
+			Fmessage.findByText("This should be moved to Autoforward").messageOwner.id == autoforward.id
+	}
 }

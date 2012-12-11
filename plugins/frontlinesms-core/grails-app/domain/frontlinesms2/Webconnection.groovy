@@ -12,7 +12,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	static final String OWNERDETAIL_SUCCESS = 'success'
 	static final String OWNERDETAIL_PENDING = 'pending'
 	static final String OWNERDETAIL_FAILED = 'failed'
-
+	
 	def camelContext
 	def webconnectionService
 	def appSettingsService
