@@ -3,12 +3,6 @@ package frontlinesms2
 class Autoforward extends Activity {
 //> CONSTANTS
 	static def shortName = 'autoforward'
-	private static def RECIPIENT_VALIDATOR = { val, obj ->
-		println "RECIPIENT_VALIDATOR:: obj=$obj val=$val"
-		def valid = val || obj.contacts || obj.groups || obj.smartGroups
-		println "Valid: $valid"
-		return valid
-	}
 
 //> SERVICES
 	def messageSendService
@@ -19,9 +13,6 @@ class Autoforward extends Activity {
 //> DOMAIN SETUP
 	static constraints = {
 		name blank:false, maxSize:255, validator:NAME_VALIDATOR(Autoforward)
-		contacts validator:RECIPIENT_VALIDATOR
-		groups validator:RECIPIENT_VALIDATOR
-		smartGroups validator:RECIPIENT_VALIDATOR
 		sentMessageText blank:false
 	}
 
