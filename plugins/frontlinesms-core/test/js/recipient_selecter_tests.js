@@ -31,13 +31,6 @@ function assertRecipientCountEquals(expectedCount) {
 	equal(jQuery("#recipient-count").text(), expectedCount, "recipient count check");
 }
 
-
-test("a basic test example", function (assert) {
-	ok(true, "this test is fine");
-	var value = "hello";
-	equal("hello", value, "We expect value to be hello");
-});
-
 test("validate should fail if no mobile number, contact, group or smart group selected", function() {
 	// given
 	setup();
@@ -144,5 +137,4 @@ test("setContact should add a contact if he is not already there", function() {
 	equal(jQuery("#mobileNumbers").val(), "+7890", "Mobile number should now be included in list");
 	equal(jQuery("#recipient-count").text(), 1, "Should have one recipient.");
 });
-
 
