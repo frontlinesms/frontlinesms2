@@ -24,5 +24,23 @@ class AutoforwardISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			outbound.ownerDetail == "${inbound.id}"
 	}
+
+	def 'Autoforward.addressesAvailable return proper values'(){
+		setup:
+			def group = new Group (name:'Group 1').save(failOnError:true)
+			def smartGroup = new SmartGroup(name:'Group 2', mobile:'+44').save(failOnError:true)
+			def contact1 = new Contact(name:"Soja", mobile:"12345").save(failOnError:true)
+			def contact2 = new Contact(name:"tim", mobile:"+4412345321").save(failOnError:true)
+			def contact3 = new Contact(name:"Hijo", mobile:"34534534").save(failOnError:true)
+			group.addToMembers(contact1).save(failOnError:true)
+			def autoforward = new Autoforward(name: "test", sentMessageText: "Someone said something")
+				.addToKeywords(new Keyword(value:"DOESNTMATTER"))
+				.addToContacts(contact3)
+				.addToGroups(group)
+				.addToSmartGroups(smartGroup)
+				.save(failOnError:true)
+		expect:
+			autoforward.addressesAvailable()
+	}
 }
 
