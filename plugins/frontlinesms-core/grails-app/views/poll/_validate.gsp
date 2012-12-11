@@ -94,34 +94,18 @@
 			});
 			return validator.element('#poll-keyword') && valid;
 		};
+
 		var autoReplyTabValidation = function() {
 			return validator.element('#autoreplyText');
 		};
+
 		var composeMessageTabValidation = function() {
 			return validator.element('#messageText');
 		};
+
 		var recipientTabValidation = function() {
-			if(!isGroupChecked('dontSendMessage')) {
-				var valid = false;
-				recipientSelecter.addAddressHandler();
-				valid = $("#recipient-count").html() > 0;
-				var addressListener = function() {
-					if($("#recipient-count").html() > 0) {
-						validator.element($('#contacts').find("input[name=addresses]"));
-						$('#recipients-list').removeClass("error");
-						$(".error").hide();
-					} else {
-						$('#recipients-list').addClass("error");
-						validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
-					}
-				};
-				if (!valid) {
-					$('input[name=addresses]').change(addressListener);
-					$('input[name=addresses]').trigger("change");
-				}
-				return valid;
-			}
-			return true;
+			return isGroupChecked('dontSendMessage') ||
+					recipientSelecter.validateImmediate();
 		};
 
 		var confirmTabValidation = function() {
