@@ -80,4 +80,21 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		then: 'still only 1 trash item exists for activity'
 			Trash.findAllByObjectIdAndObjectClass(a.id, a.class.name).size() == 1
 	}
+
+	def 'should be able to delete a very long message without trash service failing'() {
+		given: 'message exists'
+			def m = Fmessage.build(text: '''This message could go on and on and on and on and on and on and
+					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 
+					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 
+					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 
+					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 
+					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on''')
+		when: 'message deleted'
+			trashService.sendToTrash(m)
+		then: '1 trash item exists for message'
+			Trash.findAllByObjectIdAndObjectClass(m.id, m.class.name).size() == 1
+			Trash.findByObjectIdAndObjectClass(m.id, m.class.name).displayText == '''This message could go on and on and on and on and on and on and
+					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 
+					on and on and on and on and on and on and on and on and on and on and on a…'''
+	}
 }
