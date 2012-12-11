@@ -58,7 +58,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			})
 		secret(nullable:true)
 		url(nullable:false, validator: { val, obj ->
-			return val.startsWith("http://") || val.startsWith("https://")
+			return new org.apache.commons.validator.UrlValidator().isValid(val)
 		})
 	}
 	static mapping = {
