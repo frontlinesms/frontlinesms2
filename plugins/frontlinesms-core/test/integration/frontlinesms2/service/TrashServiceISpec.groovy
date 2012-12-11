@@ -95,6 +95,6 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			Trash.findAllByObjectIdAndObjectClass(m.id, m.class.name).size() == 1
 			Trash.findByObjectIdAndObjectClass(m.id, m.class.name).displayText == '''This message could go on and on and on and on and on and on and
 					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 
-					on and on and on and on and on and on and on and on and on and on and o…'''
+					on and on and on and on and on and on and on and on and on and on and on a…'''
 	}
 }
