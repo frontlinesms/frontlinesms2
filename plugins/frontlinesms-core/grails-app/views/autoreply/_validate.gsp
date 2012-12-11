@@ -1,5 +1,7 @@
 <r:script>
 	function initializePopup() {
+		var validator, keyWordTabValidation, messageTextTabValidation, confirmTabValidation;
+
 		<g:if test="${activityInstanceToEdit?.id}">
 			$("#messageText").val("${activityInstanceToEdit.autoreplyText.escapeForJavascript()}");
 			$("#messageText").trigger("keyup");
@@ -8,7 +10,7 @@
 		aliasCustomValidation();
 		genericSortingValidation();
 
-		var validator = $("#create_autoreply").validate({
+		validator = $("#create_autoreply").validate({
 			errorContainer: ".error-panel",
 			rules: {
 				messageText: { required:true },
@@ -16,17 +18,17 @@
 			}
 		});
 
-		var keyWordTabValidation = function() {
+		keyWordTabValidation = function() {
 			if(!isGroupChecked("blankKeyword")){
 				return validator.element('#keywords');
 			}
 			 else return true;
 		};
-		var messageTextTabValidation = function() {
+		messageTextTabValidation = function() {
 			return validator.element('#messageText');
 		};
 
-		var confirmTabValidation = function() {
+		confirmTabValidation = function() {
 			return validator.element('input[name=name]');
 		};
 
@@ -40,9 +42,10 @@
 	}
 	
 	function updateConfirmationMessage() {
-		var autoreplyText = $('#messageText').val().htmlEncode();
+		var autoreplyText, keywords;
+		autoreplyText = $('#messageText').val().htmlEncode();
 		if(!(isGroupChecked("blankKeyword"))){
-			var keywords = $('#keywords').val().toUpperCase();
+			keywords = $('#keywords').val().toUpperCase();
 			$("#keyword-confirm").html('<p>' + keywords  + '</p>');
 		} else {
 			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
