@@ -31,8 +31,8 @@ class AutoforwardSpec extends Specification {
 			autoforward.validate() == valid
 		where:
 			valid | props
-			false | [name:"name"]
-			false | [name:"name", keywords:[new Keyword(value:"keyword")]]
+			true  | [name:"name"]
+			true  | [name:"name", keywords:[new Keyword(value:"keyword")]]
 			true  | [name:"name", contacts:[new Contact(name:"name")]]
 			true  | [name:"name", contacts:[new Contact(name:"name")], keywords:[new Keyword(value:"keyword")]]
 			true  | [name:"name", smartGroups:[new SmartGroup(name:"SmartGroup", contactName:"contactName")], keywords:[new Keyword(value:"keyword")]]
