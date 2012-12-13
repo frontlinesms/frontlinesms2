@@ -82,7 +82,6 @@ grails.project.dependency.resolution = {
 		runtime ":database-migration:1.0"
 		runtime ":jquery:1.7.1"
 		runtime ':jquery-ui:1.8.15'
-		runtime ":resources:1.1.6"
 
 		runtime ":export:1.1"
 		runtime ":markdown:1.0.0.RC1"
@@ -90,6 +89,8 @@ grails.project.dependency.resolution = {
 		runtime ":csv:0.3.1"
 		compile ":quartz2:0.2.3-frontlinesms"
 		compile "commons-validator:commons-validator:1.4.0"
+
+		compile ':platform-core:1.0.RC2'
 
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.17"
