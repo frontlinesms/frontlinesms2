@@ -13,7 +13,7 @@ import org.apache.camel.Message
 @Mock([Dispatch, Fmessage])
 class DispatchRouterServiceSpec extends Specification {
 	def setup() {
-		Fmessage.metaClass.static.findBySrcAndOrderByDateCreated = { src->
+		Fmessage.metaClass.static.findBySrc = { src, map->
 			def m = Mock(Fmessage)
 			m.receivedOn >> '2'
 			return m

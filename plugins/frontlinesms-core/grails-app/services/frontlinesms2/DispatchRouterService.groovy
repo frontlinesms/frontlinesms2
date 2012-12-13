@@ -36,7 +36,8 @@ class DispatchRouterService {
 			if(appSettingsService.get('routing.uselastreceiver') == true){
 				def d = Dispatch.get(exchange.in.getHeader('frontlinesms.dispatch.id'))
 				println "dispatch to send # $d ### d.dst # $d?.dst"
-				def latestReceivedMessage = Fmessage.findBySrcAndOrderByDateCreated(d.dst)
+				def latestReceivedMessage = Fmessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
+				println "## latestReceivedMessage ## is $latestReceivedMessage"
 				if(latestReceivedMessage?.receivedOn) {
 					log "## Sending message with receivedOn Connection ##"
 					def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
