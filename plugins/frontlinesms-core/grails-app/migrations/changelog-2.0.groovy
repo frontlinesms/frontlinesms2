@@ -250,31 +250,62 @@ databaseChangeLog = {
 		addForeignKeyConstraint(baseColumnNames: "group_id", baseTableName: "subscription", constraintName: "FK1456591D9083EA62", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "grup", referencesUniqueColumn: "false")
 	}
 
-	// TODO: this should transform old keywords into top level keywords, and old poll Aliases into second level keywords
+	//> POLL, ALIAS AND KEYWORD TRANSFORMATIONS
 	changeSet(author: "sitati", id:"1355230052153-35") {
 		grailsChange{
 			change{
-				println "MIGRATIONS:::::::::: about to migrate pollResponses"
+				// first set all existing keywords as top-level, and as first in the keyword list for the poll
 				sql.executeUpdate("UPDATE keyword SET is_top_level = true, keywords_idx = 0")
 				sql.eachRow("SELECT * FROM POLL") { poll ->
-					def pollKeywordIndex = 1 // because top level keyword already set as zero
-					sql.eachRow("SELECT * FROM POLL_RESPONSE WHERE POLL_ID = ${poll.ID}") { pollResponse -> 
-						pollResponse.ALIASES?.split(',').each { aliasValue ->
-							sql.execute("INSERT INTO keyword (activity_id, owner_detail, value, is_top_level, keywords_idx) values ($poll.ID, $pollResponse.KEY, ${aliasValue.trim()}, false, $pollKeywordIndex)")
-							pollKeywordIndex += 1
+					println "MIGRATIONS:::::::::: about to migrate poll: ${poll}"
+					// check if poll has keywords (if not, it has automatic sorting disabled, no need to act on aliases)
+					def pollKeywordCount = 0
+					sql.eachRow("SELECT * FROM keyword WHERE activity_id = ${poll.ID}") { pollKeyword -> pollKeywordCount += 1 }
+					if(pollKeywordCount) {
+						def pollKeywordIndex = 1 // because top level keyword already set as zero
+						sql.eachRow("SELECT * FROM POLL_RESPONSE WHERE POLL_ID = ${poll.ID}") { pollResponse -> 
+							println "MIGRATIONS:::::::::: for poll: ${poll}, migrating poll response:::: ${pollResponse}"
+							pollResponse.ALIASES?.split(',').each { aliasValue ->
+								println "MIGRATIONS:::::::::: for poll: ${poll}, migrating poll response ${pollResponse}: alias::: ${aliasValue}"
+								sql.execute("INSERT INTO keyword (activity_id, owner_detail, value, is_top_level, keywords_idx) values ($poll.ID, $pollResponse.KEY, ${aliasValue.trim()}, false, $pollKeywordIndex)")
+								pollKeywordIndex += 1
+							}
 						}
+					}
+					else {
+						println "Poll had no keywords, skipping alias migration"
+					}
+					// update ${contact_name} and ${contact_number} substitutions to ${recipient_name} and ${recipient_number}
+					if(poll.AUTOREPLY_TEXT?.contains('${contact_name}') || poll.AUTOREPLY_TEXT?.contains('${contact_number}')) {
+						def newAutoreplyText = poll.AUTOREPLY_TEXT.replace('${contact_name}', '${recipient_name}').replace('${contact_number}', '${recipient_number}').replace('"', '\\"')
+						sql.executeUpdate("UPDATE poll SET AUTOREPLY_TEXT = $newAutoreplyText WHERE poll.ID = ${poll.id}")
 					}
 				}
 			}
 		}
 	}
 
-	//make this changelog work with preexisting polls
-	changeSet(author: "geoffrey (generated)", id: "1355230052153-36") {
+	//> AUTOREPLY TRANSFORMATIONS
+	changeSet(author: "sitati", id:"1355230052153-36") {
+		grailsChange{
+			change{
+				sql.eachRow("SELECT * FROM AUTOREPLY") { autoreply ->
+					// update ${contact_name} and ${contact_number} substitutions to ${recipient_name} and ${recipient_number}
+					if(autoreply.AUTOREPLY_TEXT?.contains('${contact_name}') || autoreply.AUTOREPLY_TEXT?.contains('${contact_number}')) {
+						def newAutoreplyText = autoreply.AUTOREPLY_TEXT.replace('${contact_name}', '${recipient_name}').replace('${contact_number}', '${recipient_number}').replace('"', '\\"')
+						sql.executeUpdate("UPDATE autoreply SET AUTOREPLY_TEXT = '"+newAutoreplyText + "' WHERE autoreply.ID = ${autoreply.id}")
+					}
+				}
+			}
+		}
+	}
+
+	//> POLL CLEANUP
+	changeSet(author: "geoffrey (generated)", id: "1355230052153-37") {
 		dropColumn(columnName: "ALIASES", tableName: "POLL_RESPONSE")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1355230052153-37") {
+	changeSet(author: "geoffrey (generated)", id: "1355230052153-38") {
 		addNotNullConstraint(columnDataType: "boolean", columnName: "IS_TOP_LEVEL", tableName: "KEYWORD")
 	}
 }
