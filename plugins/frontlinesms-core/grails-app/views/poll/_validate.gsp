@@ -149,7 +149,13 @@
 					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
 						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
-						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
+						if (this.value) {
+							if(keywordText) {
+								replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
+							} else {
+								replyText = i18n("poll.reply.text1.notoplevel", replyText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
+							}
+						}
 					});
 					replyText = replyText + '.';
 				}
