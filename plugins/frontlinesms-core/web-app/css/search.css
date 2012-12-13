@@ -11,4 +11,6 @@
 
 #body-menu.search a.search { margin:10px 0; }
 #body-menu.search a.clear { border:none; background:transparent; text-align:left; padding-left:0; margin-left:0; }
-#body-menu.search #more-options a { padding-left:0; margin-left:0; }
+#body-menu.search #more-options a { padding-left:0; margin-left:0; background-position:center right;
+		background-repeat:no-repeat; background-image:url("../images/icons/accordion-unexpanded.png"); }
+#body-menu.search #more-options a.expanded { background-image:url("../images/icons/accordion-expanded.png"); }
