@@ -255,11 +255,14 @@ databaseChangeLog = {
 		grailsChange{
 			change{
 				println "MIGRATIONS:::::::::: about to migrate pollResponses"
-				sql.executeUpdate("UPDATE keyword SET is_top_level = true")
-				sql.eachRow("SELECT * FROM POLL_RESPONSE") { pollResponse -> 
-					println "MIGRATIONS::::::::: migrating pollResponse $pollResponse"
-					pollResponse.ALIASES.each { aliasValue ->
-						sql.execute("INSERT INTO keyword (activity_id, owner_detail, value, is_top_level) values ($pollResponse.POLL_ID, $pollResponse.ID, $aliasValue, false)")
+				sql.executeUpdate("UPDATE keyword SET is_top_level = true, keywords_idx = 0")
+				sql.eachRow("SELECT * FROM POLL") { poll ->
+					def pollKeywordIndex = 1 // because top level keyword already set as zero
+					sql.eachRow("SELECT * FROM POLL_RESPONSE WHERE POLL_ID = ${poll.ID}") { pollResponse -> 
+						pollResponse.ALIASES?.split(',').each { aliasValue ->
+							sql.execute("INSERT INTO keyword (activity_id, owner_detail, value, is_top_level, keywords_idx) values ($poll.ID, $pollResponse.KEY, ${aliasValue.trim()}, false, $pollKeywordIndex)")
+							pollKeywordIndex += 1
+						}
 					}
 				}
 			}
