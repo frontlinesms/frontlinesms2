@@ -49,7 +49,7 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
 		// runtime 'mysql:mysql-connector-java:5.1.16'
-		def seleniumVersion = '2.25.0'
+		def seleniumVersion = '2.28.0'
 		def camel = {
 			def camelVersion = "2.9.4"
 			"org.apache.camel:camel-$it:$camelVersion"
@@ -82,6 +82,7 @@ grails.project.dependency.resolution = {
 		runtime ":database-migration:1.0"
 		runtime ":jquery:1.7.1"
 		runtime ':jquery-ui:1.8.15'
+		runtime ':resources:1.2.RC3'
 
 		runtime ":export:1.1"
 		runtime ":markdown:1.0.0.RC1"
