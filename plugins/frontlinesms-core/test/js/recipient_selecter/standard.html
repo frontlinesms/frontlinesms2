@@ -1,0 +1,38 @@
+<html>
+	<head></head>
+	<body>
+		<div id="artificial-elements">
+			<input type='checkbox' name='whatever' checked='checked'/>
+			<span id='recipient-count'>0</span>
+		</div>
+		<div>
+			<input type="hidden" id="mobileNumbers" value="" name="mobileNumbers"/>
+			<div id="manual-address">
+				<input type="text" value="" name="address" id="address"/>
+			</div>
+			<div id="recipients-list">
+				<ul id="groups">
+					<li class="group">
+						<input type="hidden" name="_groups"/>
+						<input type="checkbox" groupmembers="[]" id="groups-0" value="group-4" name="groups"/>
+						<label for="groups-0">Adults (0)</label>
+					</li>
+					<li class="group">
+						<input type="hidden" name="_groups"/>
+						<input type="checkbox" groupmembers="[&quot;+123456789&quot;,&quot;+198765432&quot;]"
+								id="groups-5" value="group-3" name="groups"/>
+						<label for="groups-5">Not Cats (2)</label>
+					</li>
+				</ul>
+				<ul id="contacts">
+					<li f-number="+123456789" f-name="Alice" class="contact">
+						<input type="hidden" name="_addresses"/>
+						<input type="checkbox" id="addresses-0" value="+123456789" name="addresses"/>
+						<label for="addresses-0">Alice</label>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>
+

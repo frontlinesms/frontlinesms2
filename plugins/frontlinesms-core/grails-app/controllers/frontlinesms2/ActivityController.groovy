@@ -135,7 +135,6 @@ class ActivityController extends ControllerUtils {
 				html { [ownerId:instance.id] }
 			}
 		} catch(Exception ex) {
-			//ex.printStackTrace()
 			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords, instance)
 			def errors
 			if (collidingKeywords) {
@@ -147,9 +146,7 @@ class ActivityController extends ControllerUtils {
 					}
 				}.join('\n')
 			} else {
-				errors = instance.errors.allErrors.collect {
-					message(code:it.codes[0], args:it.arguments.flatten(), defaultMessage:it.defaultMessage)
-				}.join('\n')
+				errors = instance.errors.allErrors.collect { message(error:it) }.join('\n')
 			}
 			withFormat {
 				json { render([ok:false, text:errors] as JSON) }

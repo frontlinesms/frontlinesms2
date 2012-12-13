@@ -26,20 +26,13 @@
 			return validator.element('#messageText');
 		};
 
-		var recipientTabValidation = function() {
-			var valid = false;
-			recipientSelecter.addAddressHandler();
-			valid = ($('input[name=addresses]:checked').length > 0) || ($('input[name=groups]:checked').length > 0);
-			return valid;
-		};
-
 		var confirmTabValidation = function() {
 			return validator.element('input[name=name]');
 		};
 
 		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
 		mediumPopup.addValidation('autoforward-create-message', messageTextTabValidation);
-		mediumPopup.addValidation('autoforward-recipients', recipientTabValidation);
+		mediumPopup.addValidation('autoforward-recipients', recipientSelecter.validateDeferred);
 		mediumPopup.addValidation('autoforward-confirm', confirmTabValidation);
 
 		$("#tabs").bind("tabsshow", function(event, ui) {

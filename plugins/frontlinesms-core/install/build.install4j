@@ -42,7 +42,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="net.frontlinesms2.systraymonitor.Main" vmParameters="-Djava.encoding=UTF-8" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="net.frontlinesms2.systraymonitor.Main" vmParameters="-Djava.encoding=UTF-8 ${compiler:db.migrations}" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <scanDirectory location="cp" failOnError="true" />
         </classPath>
@@ -80,7 +80,7 @@
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.InstallerApplication">
               <void property="arguments">
-                <string>${compiler:db.migrations} -Dfrontlinesms.resource.path=~/.${compiler:app.shortName}</string>
+                <string>-Dfrontlinesms.resource.path=~/.${compiler:app.shortName}</string>
               </void>
               <void property="customIconImageFiles">
                 <void method="add">
