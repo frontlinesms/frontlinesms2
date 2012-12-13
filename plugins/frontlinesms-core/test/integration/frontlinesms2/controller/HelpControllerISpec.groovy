@@ -20,7 +20,7 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.text == '<p>This help file is not yet available, sorry.</p>'
 	}
 
-	def 'appSettingsService should be updated prooperly on new popup display'() {
+	def 'appSettingsService should be updated properly on new popup display'() {
 		when:
 			controller.newfeatures()
 		then:

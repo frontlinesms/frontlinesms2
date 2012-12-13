@@ -57,9 +57,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			return true
 			})
 		secret(nullable:true)
-		url(nullable:false, validator: { val, obj ->
-			return new org.apache.commons.validator.UrlValidator().isValid(val)
-		})
+		url nullable:false, url:true, validator:{ val, obj -> val ==~ 'http(s?)://.*' }
 	}
 	static mapping = {
 		requestParameters cascade: "all-delete-orphan"
