@@ -1,5 +1,5 @@
-<div class="content ${messageSection}">
-	<h1 class="search ${params.action == 'no_search' ? 'message' : 'activity'}">
+<div class="content search ${messageSection}">
+	<h1 class="${params.action == 'no_search' ? 'message' : 'activity'}">
 		<g:message code="search.header"/>
 	</h1>
 	<g:if test="${searchDescription}">

@@ -1,4 +1,6 @@
-#body.messages #main-list-head h1.search { background-image:url("../images/icons/search.png"); }
+#body.messages #main-list-head .search h1 { background-image:url("../images/icons/search.png"); }
+#body.messages #main-list-head .search .buttons { padding:6px 0; }
+#body.messages #main-list-head .search .buttons > * { margin:2px 0; }
 
 #body-menu.search { padding:17px; }
 #body-menu.search form > * { margin-bottom:15px; }
