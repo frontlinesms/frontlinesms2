@@ -18,7 +18,7 @@ class PollService{
 		println "#### Round 1 Save!!"
 		if(params.enableKeyword == "true"){
 			poll.editKeywords(params)
-		}else{
+		} else {
 			poll.noKeyword()
 		}
 		poll.save(failOnError:true)
