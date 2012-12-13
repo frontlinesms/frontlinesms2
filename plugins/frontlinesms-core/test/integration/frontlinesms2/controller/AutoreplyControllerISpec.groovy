@@ -6,7 +6,8 @@ import spock.lang.*
 
 class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
-	
+	def i18nUtilService
+
 	def setup() {
 		controller = new AutoreplyController()
 	}
@@ -22,6 +23,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 		then:
 			def autoreply = Autoreply.findByName(name)
+			controller.flash.message == i18nUtilService.getMessage([code:"autoreply.save.success", args:[autoreply.name]])
 			autoreply.autoreplyText == autoreplyText
 			autoreply.keywords?.size() == 1
 			autoreply.keywords[0].value == keyword

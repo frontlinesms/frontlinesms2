@@ -37,16 +37,16 @@ If you attach a device while FrontlineSMS is running, you may need to press the 
 [Creating a new connection][5]  
 [Deleting a Connection][4]  
 
-[1]: status/1.getting_around_the_status_tab
-[2]: status/1.getting_around_the_status_tab
-[3]: status/1.getting_around_the_status_tab
-[4]: status/1.getting_around_the_status_tab
-[5]: status/1.getting_around_the_status_tab
-[6]: status/1.getting_around_the_status_tab
-[7]: status/1.getting_around_the_status_tab
-[8]: status/1.getting_around_the_status_tab
-[9]: status/1.getting_around_the_status_tab
-[10]: status/1.getting_around_the_status_tab
-[11]: status/1.getting_around_the_status_tab
-[12]: status/1.getting_around_the_status_tab
+[1]: core/status/1.getting_around_the_status_tab
+[2]: core/status/1.getting_around_the_status_tab
+[3]: core/status/1.getting_around_the_status_tab
+[4]: core/status/1.getting_around_the_status_tab
+[5]: core/status/1.getting_around_the_status_tab
+[6]: core/status/1.getting_around_the_status_tab
+[7]: core/status/1.getting_around_the_status_tab
+[8]: core/status/1.getting_around_the_status_tab
+[9]: core/status/1.getting_around_the_status_tab
+[10]: core/status/1.getting_around_the_status_tab
+[11]: core/status/1.getting_around_the_status_tab
+[12]: core/status/1.getting_around_the_status_tab
 [13]: ../images/help/status_overview.png

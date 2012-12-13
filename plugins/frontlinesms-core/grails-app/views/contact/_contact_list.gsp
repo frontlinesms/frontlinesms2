@@ -1,16 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 	<g:if test="${contactInstanceTotal > 0}">
 		<ul id="main-list">
-			<g:if test="${contactInstance && !contactInstance.id}">
-				<li class="selected" id="newContact">
-					<g:checkBox disabled="disabled" class="contact-select" name='new-contact-select'/>
-					<a disabled="disabled" class="contact-name" href="#"><g:message code="contact.new"/></a>
-				</li>
-			</g:if>
 			<g:if test="${contactInstanceTotal}">
 				<li>
 					<fsms:checkBox name="contact-select" class="contact-select" id="contact-select-all" value="0" checked="false" onclick="checkAll('contact')" />
 					<label for="contact-select" class="contact-name"><g:message code="contact.name.label"/></label>
+				</li>
+			</g:if>
+			<g:if test="${contactInstance && !contactInstance.id}">
+				<li class="selected" id="newContact">
+					<g:checkBox disabled="disabled" class="contact-select" name='new-contact-select'/>
+					<a disabled="disabled" class="contact-name" href="#"><g:message code="contact.new"/></a>
 				</li>
 			</g:if>
 			<g:each in="${contactInstanceList}" status="i" var="c">

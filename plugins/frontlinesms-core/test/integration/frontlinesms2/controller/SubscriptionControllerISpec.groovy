@@ -10,6 +10,8 @@ import grails.converters.JSON
 class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def trashService
+	def i18nUtilService
+
 	def setup() {
 		controller = new SubscriptionController()
 	}
@@ -28,13 +30,14 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.save()
 		then:
-			def s = Subscription.findByName("Test")
-			s.keywords.findAll { it.ownerDetail == "JOIN" && !it.isTopLevel }*.value.sort().join(',') == "IN,JOINING,TUKO"
-			s.keywords.findAll { !it.ownerDetail && it.isTopLevel }*.value.sort().join(',') == "SUBSCRIPTION"
-			s.keywords.findAll { it.ownerDetail == "LEAVE" && !it.isTopLevel }*.value.sort().join(',') == "OUT,SPAM,STOP"
-			s.defaultAction == Subscription.Action.TOGGLE
-			s.joinAutoreplyText == "welcome"
-			s.leaveAutoreplyText == 'bye bye'
+			def subscription = Subscription.findByName("Test")
+			controller.flash.message == i18nUtilService.getMessage([code:"subscription.save.success", args:[subscription.name]])
+			subscription.keywords.findAll { it.ownerDetail == "JOIN" && !it.isTopLevel }*.value.sort().join(',') == "IN,JOINING,TUKO"
+			subscription.keywords.findAll { !it.ownerDetail && it.isTopLevel }*.value.sort().join(',') == "SUBSCRIPTION"
+			subscription.keywords.findAll { it.ownerDetail == "LEAVE" && !it.isTopLevel }*.value.sort().join(',') == "OUT,SPAM,STOP"
+			subscription.defaultAction == Subscription.Action.TOGGLE
+			subscription.joinAutoreplyText == "welcome"
+			subscription.leaveAutoreplyText == 'bye bye'
 	}
 
 	def 'top level keywords are optional'() {

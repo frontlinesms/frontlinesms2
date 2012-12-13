@@ -1,4 +1,4 @@
-<%@page defaultCodec="html" %>
+<%@ page defaultCodec="html" import="frontlinesms2.*" %>
 <div id="single-message">
 	<g:if test="${messageInstance}">
 		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
@@ -7,7 +7,7 @@
 			<p id="message-detail-sender">
 				<span>
 					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
-						<g:remoteLink controller="message" action="listRecipients" params="[messageId: messageInstance.id]" onSuccess="showRecipientList(data)">
+						<g:remoteLink controller="message" action="listRecipients" params="[messageId: messageInstance.id]" onSuccess="showRecipientList(data)" class="btn">
 							<g:message code="fmessage.to.multiple" args="${[messageInstance.displayName]}" />
 						</g:remoteLink>
 					</g:if>
@@ -45,7 +45,7 @@
 			<p id="message-detail-sender">
 				<g:message code="${ownerInstance.shortName}.title" args="${[ownerInstance.name]}"/>
 			</p>
-			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
+			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${Trash.findByObject(ownerInstance).dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.messages.size() == 1 ? g.message(code:'fmessage.count') : ownerInstance.messages.size() + " " + g.message(code:'fmessage.many')}</p></div>
 		</div>
 		<fsms:render template="/message/message_actions"/>

@@ -16,7 +16,7 @@ class ActivityController extends ControllerUtils {
 	def create() {
 		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 		[contactList: Contact.list(),
-				groupList:groupList]
+				groupList:groupList, activityType: params.controller]
 	}
 	
 	def edit() {
@@ -25,7 +25,7 @@ class ActivityController extends ControllerUtils {
 			def activityType = activityInstance.shortName
 			render view:"../$activityType/create", model:[contactList: Contact.list(),
 				groupList:groupList,
-				activityInstanceToEdit: activityInstance]
+				activityInstanceToEdit: activityInstance, activityType: activityType]
 		}
 	}
 
@@ -110,14 +110,14 @@ class ActivityController extends ControllerUtils {
 	
 	def create_new_activity() {}
 
-	def getCollidingKeywords(topLevelKeywords) {
+	def getCollidingKeywords(topLevelKeywords, instance) {
 		if (topLevelKeywords == null)
 			return [:]
 		def collidingKeywords = [:]
 		def currentKeyword
 		topLevelKeywords.toUpperCase().split(",").collect { it.trim() }.each { 
 			currentKeyword = Keyword.getFirstLevelMatch(it)
-			if(currentKeyword)
+			if(currentKeyword && (currentKeyword.activity.id != instance.id))
 				collidingKeywords << [(currentKeyword.value):"'${currentKeyword.activity.name}'"]
 		}
 		println "colliding keywords:: $collidingKeywords"
@@ -128,15 +128,15 @@ class ActivityController extends ControllerUtils {
 		try {
 			service.saveInstance(instance, params)
 			instance.activate()
-			flash.message = message(code:classShortname + '.saved')
+			flash.message = message([code:"${instance.class.shortName}.save.success", args:[instance.name]])
 			params.activityId = instance.id
 			withFormat {
 				json { render([ok:true, ownerId:instance.id] as JSON) }
 				html { [ownerId:instance.id] }
 			}
 		} catch(Exception ex) {
-			ex.printStackTrace()
-			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords)
+			//ex.printStackTrace()
+			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords, instance)
 			def errors
 			if (collidingKeywords) {
 				errors = collidingKeywords.collect {
@@ -147,9 +147,7 @@ class ActivityController extends ControllerUtils {
 					}
 				}.join('\n')
 			} else {
-				errors = instance.errors.allErrors.collect {
-					message(code:it.codes[0], args:it.arguments.flatten(), defaultMessage:it.defaultMessage)
-				}.join('\n')
+				errors = instance.errors.allErrors.collect { message(error:it) }.join('\n')
 			}
 			withFormat {
 				json { render([ok:false, text:errors] as JSON) }

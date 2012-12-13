@@ -29,14 +29,14 @@ You can [reply][9], [move][9], [forward][9], [delete][9] and [unarchive][12] mes
 [Archiving Messages][11]  
 [Unarchiving Messages, Activities and Folders][12]  
 
-[1]: archive/1.getting_around_the_archive_tab
-[2]: archive/1a.inbox_archive
-[3]: archive/1b.sent_archive
-[4]: archive/1c.activity_archive
-[5]: archive/1d.folder_archive
-[7]: messages/2.sss
-[9]: messages/8.mrfd
-[10]: archive/3.archiving_activities_folders
-[11]: archive/2.archiving_messages
-[12]: archive/4.unarchive
+[1]: core/archive/1.getting_around_the_archive_tab
+[2]: core/archive/1a.inbox_archive
+[3]: core/archive/1b.sent_archive
+[4]: core/archive/1c.activity_archive
+[5]: core/archive/1d.folder_archive
+[7]: core/messages/2.sss
+[9]: core/messages/8.mrfd
+[10]: core/archive/3.archiving_activities_folders
+[11]: core/archive/2.archiving_messages
+[12]: core/archive/4.unarchive
 [13]: ../images/help/archive_overview.png

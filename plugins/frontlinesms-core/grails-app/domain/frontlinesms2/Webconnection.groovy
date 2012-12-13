@@ -12,7 +12,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	static final String OWNERDETAIL_SUCCESS = 'success'
 	static final String OWNERDETAIL_PENDING = 'pending'
 	static final String OWNERDETAIL_FAILED = 'failed'
-
+	
 	def camelContext
 	def webconnectionService
 	def appSettingsService
@@ -58,7 +58,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			})
 		secret(nullable:true)
 		url(nullable:false, validator: { val, obj ->
-			return val.startsWith("http://") || val.startsWith("https://")
+			return new org.apache.commons.validator.UrlValidator().isValid(val)
 		})
 	}
 	static mapping = {
@@ -168,7 +168,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	}
 
 	String getFullApiUrl() {
-		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
+		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/${Webconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()}/$id/" : ""
 	}
 }
 	
