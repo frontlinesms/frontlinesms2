@@ -177,7 +177,6 @@ databaseChangeLog = {
 		}
 	}
 
-	//TODO:: WHAT IS THIS? I think it is breaking existing keywords
 	changeSet(author: "geoffrey (generated)", id: "1355230052153-17") {
 		addColumn(tableName: "keyword") {
 			column(name: "keywords_idx", type: "integer")
@@ -300,12 +299,22 @@ databaseChangeLog = {
 		}
 	}
 
-	//> POLL CLEANUP
+	//> POLL RESPONSE ALIAS CLEANUP
 	changeSet(author: "geoffrey (generated)", id: "1355230052153-37") {
 		dropColumn(columnName: "ALIASES", tableName: "POLL_RESPONSE")
 	}
 
+	//> INSTATING REQUIRED NOT_NULL CONSTRAINT ON KEYWORD.IS_TOP_LEVEL
 	changeSet(author: "geoffrey (generated)", id: "1355230052153-38") {
 		addNotNullConstraint(columnDataType: "boolean", columnName: "IS_TOP_LEVEL", tableName: "KEYWORD")
+	}
+
+	//> CLICKATEL FCONNECTION TRANSFORMATIONS
+	changeSet(author: "sitati", id:"1355230052153-39") {
+		grailsChange{
+			change{
+				sql.executeUpdate("UPDATE clickatell_fconnection SET send_to_usa = false")
+			}
+		}
 	}
 }
