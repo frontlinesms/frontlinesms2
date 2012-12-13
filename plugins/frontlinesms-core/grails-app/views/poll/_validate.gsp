@@ -140,7 +140,7 @@
 			var keywordText = '';
 			var replyText = '';
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
-				keywordText = $("#poll-keyword").val().toUpperCase();
+				keywordText = getFirstAlias($("#poll-keyword")).toUpperCase();
 				if($("input[name='pollType']:checked").val() == "yesNo") {
 					var yesAlias = getFirstAlias($("ul#poll-aliases li input#keywordsA"))
 					var noAlias = getFirstAlias($("ul#poll-aliases li input#keywordsB"))
