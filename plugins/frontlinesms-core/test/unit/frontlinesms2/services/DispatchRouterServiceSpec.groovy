@@ -66,7 +66,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should assign message to the last received route if route preference set to last received route'(){
 		given:
-			mockAppSettingsService(true,'any')
+			mockAppSettingsService('true','any')
 			mockRoutes(1, 2, 3)
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
@@ -76,7 +76,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'(){
 		given:
-			mockAppSettingsService(false,'dontsend')
+			mockAppSettingsService('false','dontsend')
 			mockRoutes(1, 2, 3)
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
@@ -87,7 +87,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should not assign messages to any route if routing preference is not to send messages when routes are not avalilable'(){
 		given:
-			mockAppSettingsService(false,'dontsend')
+			mockAppSettingsService('false','dontsend')
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
 		then:
@@ -107,7 +107,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should assign messages to round robin if routing preference is set to use avalilable routes'() {
 		given:
-			mockAppSettingsService(false,'any')
+			mockAppSettingsService('false','any')
 			mockRoutes(1, 2, 3)
 		when:
 			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
@@ -117,7 +117,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should prioritise internet services over modems if routing preference is set to use avalilable routes'() {
 		given:
-			mockAppSettingsService(false,'any')
+			mockAppSettingsService('false','any')
 			mockRoutes(1:'internet', 2:'modem', 3:'internet', 4:'modem')
 		when:
 			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
@@ -127,7 +127,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	private def mockExchange() {
 		def exchange = Mock(Exchange)
-		exchange.in >> mockExchangeMessage(['frontlinesms.dispatch.id':'1'], null)
+		exchange.in >> mockExchangeMessage(['frontlinesms.dispatch.id':'1'], Mock(Dispatch))
 		exchange.out >> mockExchangeMessage([:], null)
 		println "x.in.headers ######### $exchange.in.headers"
 		return exchange
@@ -135,6 +135,7 @@ class DispatchRouterServiceSpec extends Specification {
 	
 	private mockExchangeMessage(headers, body){
 		def m = Mock(Message)
+		body.id >> 1
 		m.body >> body
 		m.headers >> headers
 		return m

@@ -33,11 +33,13 @@ class DispatchRouterService {
 			return "seda:out-$requestedFconnectionId"
 		} else {
 			def routeId
-			if(appSettingsService.get('routing.uselastreceiver') == true){
-				def d = Dispatch.get(exchange.in.getHeader('frontlinesms.dispatch.id'))
-				println "dispatch to send # $d ### d.dst # $d?.dst"
+			log "appSettingsService.['routing.uselastreceiver'] is ${appSettingsService.get('routing.uselastreceiver')}"
+			if(appSettingsService.get('routing.uselastreceiver') == 'true'){
+				log "Dispatch is ${exchange.in.getBody()}"
+				def d = exchange.in.getBody()
+				log "dispatch to send # $d ### d.dst # $d?.dst"
 				def latestReceivedMessage = Fmessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
-				println "## latestReceivedMessage ## is $latestReceivedMessage"
+				log "## latestReceivedMessage ## is $latestReceivedMessage"
 				if(latestReceivedMessage?.receivedOn) {
 					log "## Sending message with receivedOn Connection ##"
 					def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
