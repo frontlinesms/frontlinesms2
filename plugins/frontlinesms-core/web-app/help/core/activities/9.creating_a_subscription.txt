@@ -1,0 +1,58 @@
+# Creating a Subsctiption #
+
+A subscription is a type of acrtivity that allows users to join certain groups or leave that grouop based on the message that they text in and how it matches the set keywords.
+
+### [How to Create an Subsctiption ] []
+1.  From the [messages tab][3] click on 'Create New Activity'.
+2.  A new window will appear and you will be presented with a number of options. Choose "Subscription" and click next
+![Select Activity][9]
+
+**_Select a Group_**
+You can select the group that contacts will join or leave
+
+When you have selected the desired group click next.
+
+**_Setup Keywords_**
+On this screen you will be able to determine if messages will be sorted into the subscription or not.
+To disbale automatic sorting of message into the subscription, please check the 'Disable automatic sorting' in the Automatic Sorting section. This is the first section on that Sorting Tab.
+
+If you want contact to automatically join and leave the group then you need to have sorting enabled.
+Therefore, you may decide to enter a top level keywords(seperated by commas) or to leave it blank. The top level keyword is optional. Either one of the top level keywords seperated by the commas will work.
+
+A subscription needs keywords that will match to the join action(Contact will join the group) and keywords that will match the leave action(Contact will leave the group). The keywords for subscription actions are not optional and need to filled in. At least one keyword per acton needs to be present. The keywords in a subsciption, inclucing top level and subsctipition action keywords need to be unique within that subsctiption.
+The top level keywords if provided needs to be unique across all activities and their respective top level keywords. If the top level keyword is not provided then the subscriptiona action keywords become top level and need to be unique across all activites and their top level keywords.
+
+A subscription allows a default action to be triggered if a message matched a top level keyword only but no subscription keyword is not matched.
+
+Take fot example a subscription where sorting is enabled and keywords look as follows.
+Top level keywords : 'team, tim, tom'
+Join Keywords : 'join, in, inthere'
+Leave Ketwords : 'leave, out, ouththere'
+Default Action : Add Contact to the Group
+
+The incoming message will be mapped to action as illustrated below
+
+Incoming Message | Action Triggered
+team join | Joined Group
+team in | Joined Group
+team inthere | Joined Group
+tim join | Joined Group
+tim in | Joined Group
+tim inthere | Joined Group
+team leave | Joined Group
+team out | Joined Group
+team outhere | Joined Group
+team | Default Action
+tim | Default Action
+tom | Default Action
+
+
+**_Send Autoreplies_** 
+On this tab you can setup the autoreplies that will be sent to the contact after they have joined or left a group.
+You can setup seperate messages one that is sent when a contact joins the group and one that is sent when a contact leaves the group.
+Setting up this messages is optional.
+
+**_Confirm Screen_**
+On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send.
+
+On this screen you can set/edit the name of the subscription. The name needs to be unique among other subscriptions. Two subscriptions cannot share the same name.
