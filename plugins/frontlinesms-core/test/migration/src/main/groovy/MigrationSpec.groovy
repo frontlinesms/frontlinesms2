@@ -65,7 +65,7 @@ class MigrationSpec {
 		def grailsServer = executeInBackground "cd ../../../$contextPath && grails -Dserver.port=$serverPort test run-app"
 		println "# Waiting for grails server to start..."
 		try {
-			grailsServer.outputStream.eachLine { line ->
+			grailsServer.inputStream.eachLine { line ->
 				println "# [grails] $line"
 				if(line.trim().startsWith('| Server running. Browse to ')) {
 					throw new EOFException('Server started successfully.')
