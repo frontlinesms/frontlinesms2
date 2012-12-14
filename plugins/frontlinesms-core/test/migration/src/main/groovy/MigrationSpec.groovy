@@ -80,11 +80,14 @@ class MigrationSpec {
 		println "# Checking out FrontlineSMS version: $version..."
 		execute("git checkout $gitTag")
 		execute(/sed -i -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "$contextPath/grails-app/conf/BuildConfig.groovy")
+		println "# TODO enabling grails-remote-control-plugin for prod..."
+
+		println "# TODO changing grails DataSource location for prod..."
 
 		def grailsServer
 		try {
 			println "# Starting grails server on port $serverPort..."
-			grailsServer = executeInBackground "cd $contextPath && grails -Dserver.port=$serverPort test run-app"
+			grailsServer = executeInBackground "cd $contextPath && grails -Dserver.port=$serverPort prod run-app"
 			println "# Waiting for grails server to start..."
 			try {
 				grailsServer.inputStream.eachLine { line ->
