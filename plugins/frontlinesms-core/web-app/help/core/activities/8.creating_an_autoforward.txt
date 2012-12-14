@@ -1,0 +1,66 @@
+# Creating an Autoforward
+
+An autoforward activity allows you to automatically forward incoming SMS to selected contacts. Autoforwards can set up to be global, thereby acting on all incoming messages, or they can be set up so that only messages matching one of the configured keywords are forwarded. The message sent to the selected recipients can be configured to contain more information than just the original message content. Both incoming messages that triggered the Autoforward and the resultant outgoing messages are stored under the Autoforward activity for ease of access. When setting up an autoforward, you can select any number of individual contacts, groups or smart groups to forward to. Autoforwards can be used to enable communication between members of a group, and can form part of a opt-in information service when used together with [subscriptions][1]
+
+### How to Create an AutoForward
+
+From the [messages tab][2] click on 'Create New Activity'.
+
+![Select Activity][7]
+
+A new window will appear and you will be presented with a number of options. Choose "Autoforward" and click next.
+
+![Enter Message][8]
+
+In the first step you can configure the message that will be sent when an incoming message triggers an Autoforward. There are various substitution expressions, available through the 'magic wand' button, which you can use to populate the message content. The default value, '${message_text}', will forward incoming messages without any changes.
+
+**Automatic Sorting**
+![Auto sorting][9]
+
+On the next tab, you can configure FrontlineSMS to automatically trigger your Autoforward on incoming messages. With the 'Sort incoming messages that match a keyword' option, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the Autoforward. Alternatively, you can select the 'Do not use a keyword' setting, which will result in all incoming messages triggering the Autoforward, provided they do not match any other activities' keywords. Only one activity at a time can have this setting. If you choose to, you can also disable automatic sorting altogether. With this setting, you can still use your Autoforward's functionality by manually moving messages into your new activity from the inbox or any other activity or folder.
+
+When you have finished setting up your automatic sorting options, click next.
+
+**Select Recipients** 
+
+![Select Recipients][10]
+
+In this step, you can select the recipients you want your Autoforward to send messages to. A list of all your saved contacts, groups and smart groups is available to choose from, and you can search the list using the search bar at the bottom. Using the text field above the list, you can also manually enter any number of phone numbers to forward messages to. When using groups or smart groups in an Autoforward, FrontlineSMS will forward the message to the current members of the group at the time when the incoming message arrives. This means that after setting up your Autoforward you can add and remove members from your groups, possibly using a [Subscription][1], and all the latest members will receive messages from the Autoforward.
+
+Once you have populated your recipient list, click next.
+
+**Confirm Screen**  
+
+On this screen you will find a summary of all the options you have selected, so you can confirm that you entered the correct settings before creating the activity. You will also be prompted to give a name to your Autoforward to make it easily recognisable from the list of activities on the messages tab.
+
+![Confirm][11]
+
+Clicking Create will save the [activity][3].
+
+**_Confirmation_**  
+
+Once successfully created, you will see a confirmation screen. This means that your Autoforward has successfully been saved and will now actively forward incoming messages according to your automatic sorting rules. If there were any errors when saving the activity, a yellow error message will prompt you about the changes required. This will usually be because you have reused a keyword that another activity is using, or given the Autoforward the same name as an existing activity. Once you correct any of these issues, click 'Create' again to save the Autoforward.
+
+![Summary][12]
+
+Clicking OK will take you back to the [Messages Tab][2]
+
+Your Autoforward will appear under the Activities sub-heading.
+
+### Related Actions
+[Creating a Poll][4]  
+[Creating a Group][5]  
+[Creating a Smart Group][6]  
+
+[1]: core/activities/9.creating_a_subscription
+[2]: core/messages/1.getting_around_the_messages_tab
+[3]: core/activities/1.getting_around_activities
+[4]: core/activities/3.creating_a_poll
+[5]: core/contacts/4.creating_a_group
+[6]: core/contacts/5.creating_a_smart_group
+[7]: ../images/help/autoforward1.png
+[8]: ../images/help/autoforward2.png
+[9]: ../images/help/autoforward3.png
+[10]: ../images/help/autoforward4.png
+[11]: ../images/help/autoforward5.png
+[12]: ../images/help/autoforward6.png
