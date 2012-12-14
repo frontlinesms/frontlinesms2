@@ -145,6 +145,7 @@ class ConnectionController extends ControllerUtils {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
 		fconnectionInstance.validate()
+		println fconnectionInstance.errors.allErrors
 		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
 		if (fconnectionInstance.save()) {
 			withFormat {
@@ -163,7 +164,7 @@ class ConnectionController extends ControllerUtils {
 					redirect(controller:'connection', action:"list")
 				}
 				json {
-					render([ok:false, text:connectionErrors.join(", ").toString()] as JSON)
+					render([ok:false, text:connectionErrors.unique().join(", ").toString()] as JSON)
 				}
 			}
 		}

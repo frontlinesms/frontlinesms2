@@ -444,7 +444,7 @@ class FsmsTagLib {
 	}
 
 	private def isRequired(instanceClass, field) {
-		!instanceClass.constraints[field].nullable
+		!instanceClass.constraints[field].blank
 	}
 
 	private def isInteger(instanceClass, groovyKey) {
