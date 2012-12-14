@@ -74,7 +74,7 @@ class MigrationSpec {
 		} catch(EOFException _) {}
 
 		println "# Running test script with remote control..."
-		def remoteControl = getRemoteControl()
+		def remoteControl = getRemoteControl(contextPath)
 		def testOutput = remoteControl.exec(remoteCode)
 
 		println "# Killing remote server"
