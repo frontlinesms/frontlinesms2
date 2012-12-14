@@ -14,7 +14,7 @@ class MigrationSpec {
 	}
 
 	private String getServerAddress(String contextPath) {
-		"http://localhost:$SERVER_PORT/$contextPath/grails-remote-control"
+		"http://localhost:$serverPort/$contextPath/grails-remote-control"
 	}
 
 	private static void init() {
