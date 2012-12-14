@@ -81,7 +81,7 @@ class MigrationSpec {
 	}
 
 	def test() {
-		withFrontlineSMS('2.1.3') {
+		withFrontlineSMS('2.1.3', 'core') {
 			new ClickatellFconnection(name:"Test Clickatell connection", apiId: "doesntmatter", username:"testuser", password:"testpass").save(failOnError:true)
 			def keyword = new Keyword(value: 'FOOTBALL')
 			def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:'Thank you, ${contact_name}, for participating in the football poll', keyword: keyword)
