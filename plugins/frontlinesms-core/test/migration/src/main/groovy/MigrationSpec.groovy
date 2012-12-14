@@ -31,9 +31,13 @@ class MigrationSpec {
 		}
 	}
 
-	private static int simpleExecute(String command) {
+	private static Process executeInBackground(String command) {
 		println "# Executing command: $command"
-		return ['bash', '-c', command].execute().waitFor()
+		return ['bash', '-c', command].execute()
+	}
+
+	private static int simpleExecute(String command) {
+		return executeInBackground(command).waitFor()
 	}
 
 	private static int execute(String command, String errorMessage=null, boolean throwExceptionOnFailure=true) {
@@ -55,18 +59,30 @@ class MigrationSpec {
 
 		println "# Checking out FrontlineSMS version: $version..."
 		execute("git checkout $gitTag")
-		execute(/sed -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "../../../$contextPath/grails-app/conf/BuildConfig.groovy")
-		execute('grep --silent "remote-control" ../../grails-app/conf/BuildConfig.groovy || sed -E -e "s/plugins\\s*\\{/plugins {\\ncompile \\":remote-control:1.3\\"/"')
+		execute(/sed -i -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "../../../$contextPath/grails-app/conf/BuildConfig.groovy")
+
 		println "# Starting grails server on port $serverPort..."
-		// TODO start server
+		def grailsServer = executeInBackground "cd ../../../$contextPath && grails -Dserver.port=$serverPort test run-app"
+		println "# Waiting for grails server to start..."
+		try {
+			grailsServer.outputStream.eachLine { line ->
+				println "# [grails] $line"
+				if(line.trim().startsWith('| Server running. Browse to ')) {
+					throw new EOFException('Server started successfully.')
+				}
+			}
+		} catch(EOFException _) {}
+
 		println "# Running test script with remote control..."
-		// TODO run test script on remote server
 		def remoteControl = getRemoteControl()
-		remoteControl.exec(remoteCode)
+		def testOutput = remoteControl.exec(remoteCode)
+
 		println "# Killing remote server"
-		// TODO kill remote server
+		grailsServer.destroy()
+
 		println "# Checking test response code..."
-		// TODO check response code and exit on failure
+		println "# Test output: $testOutput"
+		// TODO handle errors and finally cleanup
 	}
 
 	def withCurrentFrontlineSMS = { Closure remoteCode ->
