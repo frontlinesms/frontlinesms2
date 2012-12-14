@@ -100,7 +100,7 @@ class MigrationSpec {
 		} finally {
 			println "# Killing remote server"
 			grailsServer.destroy()
-			println "# Grails exit code: ${grailsServer.exitCode()}"
+			println "# Grails exit code: ${grailsServer.exitValue()}"
 		}
 
 		println "# Checking test response code..."
