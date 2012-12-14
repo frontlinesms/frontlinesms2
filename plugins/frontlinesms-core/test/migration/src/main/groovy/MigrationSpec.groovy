@@ -19,7 +19,7 @@ class MigrationSpec {
 			exitCode = 1
 		} finally {
 			try {
-				simpleExecute('cd ../../../.. && git reset --hard && git clean -xdf')
+				simpleExecute('git reset --hard && git clean -xdf')
 			} catch(Exception _) { _.printStackTrace() }
 			try {
 				simpleExecute("git checkout $originalGitBranch")
@@ -52,7 +52,7 @@ class MigrationSpec {
 
 	private static Process executeInBackground(String command) {
 		println "# Executing command: $command"
-		return ['bash', '-c', command].execute()
+		return ['bash', '-c', command].execute([], '../../..')
 	}
 
 	private static int simpleExecute(String command) {
@@ -78,10 +78,10 @@ class MigrationSpec {
 
 		println "# Checking out FrontlineSMS version: $version..."
 		execute("git checkout $gitTag")
-		execute(/sed -i -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "../../../$contextPath/grails-app/conf/BuildConfig.groovy")
+		execute(/sed -i -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "$contextPath/grails-app/conf/BuildConfig.groovy")
 
 		println "# Starting grails server on port $serverPort..."
-		def grailsServer = executeInBackground "cd ../../../$contextPath && grails -Dserver.port=$serverPort test run-app"
+		def grailsServer = executeInBackground "cd $contextPath && grails -Dserver.port=$serverPort test run-app"
 		println "# Waiting for grails server to start..."
 		try {
 			grailsServer.inputStream.eachLine { line ->
