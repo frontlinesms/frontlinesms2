@@ -1,6 +1,0 @@
-Autoreplies in verison 2.2.0 have also undergone changes since version 2.1.3. In version 2.1.3 Autoreplies allowed users to only use one keyword, but with version 2.2.0 Autoreplies can have multiple keywords stored as comma seperated values.
-For example, in version 2.1.3, an Food auroreply would reply with a message of the special meal served at the restaurant for tha day if the user texted in 'food'.
-But now in version 2.2.0 that autoreply can be setup with keywords "food,special,meal,today". The user can text in meal or food or special or today and they will still get the message containing the special served at the restaurant.
-
-Likewise the multiple keywords can be used to handle spelling mistakes that user can make when testing in.
-In autoreplies, the keywords "food,special,meal,today" are the top level keywords and the individually need to be unique across all activities. Once the autoreply is saved then, another activity cannot use food,meal,special,today as part of the that activities top level keywords.
