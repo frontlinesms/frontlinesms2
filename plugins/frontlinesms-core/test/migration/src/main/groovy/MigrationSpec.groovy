@@ -21,7 +21,7 @@ class MigrationSpec {
 		// TODO fail if git working directory not clean
 
 		if(gitWorkingDirectoryMustBeClean &&
-				'git status --porcelain | grep --quiet "."; echo $?'.execute().text != "0") {
+				'git status --porcelain | grep --quiet "."; echo $?'.execute().text != "1") {
 			throw new RuntimeException("GIT WORKING DIRECTORY IS NOT CLEAN.  TERMINATING.")
 		}
 	}
