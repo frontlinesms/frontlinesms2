@@ -1,0 +1,77 @@
+# The FrontlineSMS Web Connection API
+
+FrontlineSMS lets you set up Web Connections to external web services. The primary function of Web Connections is to trigger HTTP requests on the external service when messages are received. However, in addition to this, you can enable the FrontlineSMS API through a Web Connection Activity, which allows your external web service to trigger outgoing messages through FrontlineSMS.
+
+## Enabling the API
+
+In the Web Connection walkthrough, you will be given the option to enable the FrontlineSMS API for that Activity. The only required configuration is the API Key that the remote service will need to use in each request. See [Creating a Web Connection][] for details on setting up a Web Connection.
+
+## API Details
+
+The URL for a specific Activity's API endpoint will be showin in the activity's header.
+
+The Web Connection API expects a JSON Map with the following parameters:
+- secret
+- message
+- recipients
+
+### secret (required if Api Secret is set in Web Connection instance)
+When configuring a Web Connection, you will be prompted to enter a Api Secret. Incoming requests will only be processed if the secret parameter matches what was set up in the Web Connection walkthough. If no secret was provided, the secret parameter can be left out of a request.
+
+### message (required)
+This is the message body that will be sent out as the SMS. Substitution variables of the type used within FrontlineSMS are supported (so, for example, ${contact_name} will be replaced with the receiving contact's name). As with any SMS, extra cost may be incurred if this message body is longer than 160 characters.
+
+### recipients (required)
+This is a list of entities the message should be sent to. Each entity will have a 'type' parameter and a corresponding value parameter, depending on the type. The available recipient entities are listed below.
+
+#### group
+
+The value parameter here can either be a 'name', which takes a literal string representing the group name, or 'id', which takes the FrontlineSMS database id of the group.
+
+#### smartgroup
+
+The value parameter here can either be a 'name', which takes a literal string representing the smartgroup name, or 'id', which takes the FrontlineSMS database id of the smartgroup.
+
+#### contact
+
+The value parameter here can either be a 'name', which takes a literal string representing the contact name, or 'id', which takes the FrontlineSMS database id of the contact.
+
+#### address
+
+This represents a phone number. It must be accompanied by a 'value' attribute, which represents the phone number to send to. Phone numbers should be passed in international format without spaces or brackets.
+
+
+Below is an example of a valid requestst body, utilising all the valid combinations of recipient types.
+
+	URL: [api/webconnection/${activityId}/${secret}]/send
+	METHOD: POST
+	FORMAT: JSON
+	CONTENT: {
+		secret: "secret",
+		message:"Hello, ${contact_name}",
+		recipients: {
+			{ "type":"group", "id":"1" },
+			{ "type":"group", "name":"friends" },
+			{ "type":"smartgroup", "id":"3" },
+			{ "type":"smartgroup", "name":"humans" },
+			{ "type":"contact", "id":"2" },
+			{ "type":"contact", "name":"bobby" },
+			{ "type":"address", "value":"+1234567890" }
+	    }
+	}
+
+## Responses
+
+FrontlineSMS will return various HTTP response codes depending on the outcome of the request.
+
+### 200 (Success)
+
+This will be accompanied by a text body stating how many recipients received the message. Note that this only signifies successful submission of the request to FrontlineSMS, and does not necessarily mean the outgoing message will be successfully delivered. If there are no routes available, or a problem with any of the active routes, the outgoing messages may fail despite the 200 response
+
+### 400 (Bad Request)
+
+This will be accompanied by an error message stating what was missing in the request. Examples are "no recipients supplied" and "missing required field(s): message". Note that if you specify valid group or smartgroup names, you may still get a 400 if there are currently no members of those groups
+
+### 401 (Authentication required)
+
+This error code will occur when the Web Connection requires a 'secret' parameter and none was supplied, or the secret provided was incorrect. The body will specify which of these two conditions occurred, as it will either be "no secret provided" or "invalid secret"

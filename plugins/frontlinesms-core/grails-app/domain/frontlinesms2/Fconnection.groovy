@@ -44,6 +44,10 @@ class Fconnection {
 		sort id:'asc'
 		tablePerHierarchy false
 	}
+
+	static constraints = {
+		name blank:false
+	}
 	
 	String name
 	

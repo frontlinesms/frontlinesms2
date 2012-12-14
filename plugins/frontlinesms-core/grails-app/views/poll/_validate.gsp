@@ -140,16 +140,28 @@
 			var keywordText = '';
 			var replyText = '';
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
-				keywordText = $("#poll-keyword").val().toUpperCase();
+				keywordText = getFirstAlias($("#poll-keyword")).toUpperCase();
 				if($("input[name='pollType']:checked").val() == "yesNo") {
-					var yesAlias = getFirstAlias($("ul#poll-aliases li input#keywordsA"))
-					var noAlias = getFirstAlias($("ul#poll-aliases li input#keywordsB"))
-					replyText = i18n("poll.reply.text", keywordText, yesAlias, keywordText, noAlias);
+					var yesAlias = getFirstAlias($("ul#poll-aliases li input#keywordsA"));
+					var noAlias = getFirstAlias($("ul#poll-aliases li input#keywordsB"));
+					if(keywordText) {
+						yesAlias = keywordText + " " + yesAlias;
+						noAlias = keywordText + " " + noAlias;
+					}
+					replyText = i18n("poll.reply.text", yesAlias, noAlias);
 				} else {
 					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
-						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
-						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
+						if (replyText !== 'Reply' && this.value) {
+							replyText = replyText + ',';
+						}
+						if (this.value) {
+							var choiceKeyword = getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6, 7)));
+							if(keywordText) {
+								choiceKeyword = keywordText + " " + choiceKeyword;
+							}
+							replyText = i18n("poll.reply.text1", replyText, choiceKeyword, this.value);
+						}
 					});
 					replyText = replyText + '.';
 				}

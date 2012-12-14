@@ -135,7 +135,6 @@ class ActivityController extends ControllerUtils {
 				html { [ownerId:instance.id] }
 			}
 		} catch(Exception ex) {
-			//ex.printStackTrace()
 			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords, instance)
 			def errors
 			if (collidingKeywords) {

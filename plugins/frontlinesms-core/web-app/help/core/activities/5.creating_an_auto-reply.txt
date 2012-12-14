@@ -8,21 +8,16 @@ An auto reply is a type of activity which allows you to set up FrontlineSMS to a
 2.  A new window will appear and you will be presented with a number of options. Choose "AutoReply" and click next.
 ![Select Activity][9]
 
-**_Enter Keyword_**  
+## Automatic Sorting
+![Auto sorting][10]
 
-![Keyword][10]
+On the next tab, you can configure FrontlineSMS to automatically move messages into your Autoreply and trigger the HTTP request. With the 'Sort incoming messages that match a keyword' option, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the Web Connection. Alternatively, you can select the 'Do not use a keyword' setting, which will result in all incoming messages triggering the Web Connection, provided they do not match any other activities' keywords. Only one activity at a time can have this setting. If you choose to, you can also disable automatic sorting altogether. With this setting, you can still use your Web Connection's functionality by manually moving messages into your new activity from the inbox or any other activity or folder.
 
-In this step you can choose to enter a keyword to trigger the autoreply. If you would like to set up an auto reply that will be triggered by a keyword then enter unique keyword here.  
-Messages that trigger the autoreply will be moved into the activity's folder along with a copy of the autoreply.
+#### Note
+Likewise the multiple keywords can be used to handle spelling mistakes that user can make when testing in to FrontlineSMS.
+An autoreply can have the keywords "food,special,meal,today" as the top level keywords and these individual keywords need to be unique across all activities. Once the autoreply is saved then, another activity cannot use food,meal,special or today as part of the that activities top level keywords.
 
-**Global autoreply**
-
-To set up a global autoreply please check the box next to "Do not use keyword".  
-All messages that are received after the autoreply is created will be copied into the activity's folder. The [inbox][2] will still contain all your received messages.
-
-**_Note:** A global autoreply will reply to **ALL** received messages. If you receive a large volume of messages in daily use, a global autoreply could result in substantial costs on top of your typical usage._  
-
-When you have finished setting up a keyword, or have chosen a global autoreply, click next.
+When you have finished setting up your automatic sorting options, click next.
 
 **_Enter Message_**  
 
