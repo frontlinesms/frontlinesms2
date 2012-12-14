@@ -6,11 +6,13 @@ When viewing a message list anywhere in the program, you can search within that 
 
 ![Filtering Messages][6]
 
-1.  At the bottom of the message list (1) you will see the above option to show All or [Starred][1].
-2.  Clicking on [starred][1] will cause only starred messages to appear in the message list.
-3.  Clicking on All will cause all messages to be displayed.
+At the bottom of the message list (1) you will see the above option to show All or [Starred][1]. Clicking on [starred][1] will cause only starred messages to appear in the message list. Clicking on All will cause all messages to be displayed.
 
 _**Note**: Navigating away from this list will cause the message list to revert to its default state of showing All messages._
+
+When in an activity or folder, there will be more filtering options present, allowing you to view only incoming or outgoing messages.
+
+![Filtering Messages][7]
 
 ### Related Actions:
 [How to Mark Important Messages][1]  
@@ -20,3 +22,4 @@ _**Note**: Navigating away from this list will cause the message list to revert 
 [4]: core/search/1.getting_around_the_search_tab
 [5]: core/messages/8.mrfd
 [6]: ../images/help/filtering_messages.png
+[7]: ../images/help/filtering2.png
