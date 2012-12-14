@@ -1,5 +1,50 @@
+#!/usr/bin/env groovy
 // migrations test
+@Grab('org.codehaus.groovy.modules.remote:remote-transport-http:0.5')
+import groovyx.remote.transport.http.HttpTransport
+import groovyx.remote.client.RemoteControl
 
+def SERVER_PORT='8080'
+
+// define remote classes we need to compile
+class Autoreply {}
+class ClickatelFconnection {}
+class Fmessage {}
+class Keyword {}
+class Poll {}
+
+def getRemoteControl() {
+}
+
+// TODO fail if git working directory not clean
+
+// TEST HELPERS
+def withFrontlineSMS = { String version, Closure remoteCode ->
+	println "# Checking out FrontlineSMS version: $version..."
+	// TODO check out correct code
+	println "# Starting grails server on port $SERVER_PORT..."
+	// TODO start server
+	println "# Running test script with remote control..."
+	// TODO run test script on remote server
+	def remoteControl = getRemoteControl()
+	println "# Killing remote server"
+	// TODO kill remote server
+	println "# Checking test response code..."
+	// TODO check response code and exit on failure
+}
+
+def withCurrentFrontlineSMS = { Closure remoteCode ->
+	println "# Starting grails server on port $SERVER_PORT..."
+	// TODO start server
+	println "# Running test script with remote control..."
+	// TODO run test script on remote server
+}
+
+def performMigration = { Closure remoteCode ->
+	println "# TODO run migration..."
+}
+
+// TEST SCRIPTS
 withFrontlineSMS('2.1.3') {
 	new ClickatelFconnection(name:"Test Clickatel connection", apiId: "doesntmatter", username:"testuser", password:"testpass").save(failOnError:true)
 	def keyword = new Keyword(value: 'FOOTBALL')

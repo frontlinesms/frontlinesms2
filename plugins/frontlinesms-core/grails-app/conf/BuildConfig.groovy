@@ -98,7 +98,7 @@ grails.project.dependency.resolution = {
 		test ":geb:$gebVersion"
 
 		test ':build-test-data:2.0.2'
-		test ':remote-control:1.2'
+		compile ':remote-control:1.3'
 		compile(':functional-test-development:0.9.3') {
 			exclude 'hibernate'
 		}
