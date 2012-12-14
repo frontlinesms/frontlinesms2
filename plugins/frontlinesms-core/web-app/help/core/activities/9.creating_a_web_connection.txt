@@ -29,7 +29,7 @@ If you selected 'Other Web Service', you will be prompted to enter the URL for t
 ## Enabling the FrontlineSMS API
 ![Configuring API][9]
 
-For 'Other Web Service' Web Connections, you can enable the FrontlineSMS API, which allows your external web service to trigger outgoing SMS by invoking an HTTP request on your FrontlineSMS instance. All messages sent through the API will be saved in the Web Connection activity. See the [Api Documentation][2] for more information.
+For 'Other Web Service' Web Connections, you can enable the FrontlineSMS API, which allows your external web service to trigger outgoing SMS by invoking an HTTP request on your FrontlineSMS instance. All messages sent through the API will be saved in the Web Connection activity. See the [Api Documentation][15] for more information.
 
 ## Automatic Sorting
 ![Auto sorting][10]
@@ -66,6 +66,7 @@ Your Web Connection will appear under the Activities sub-heading.
 [3]: core/activities/3.creating_a_poll
 [4]: core/contacts/4.creating_a_group
 [5]: core/contacts/5.creating_a_smart_group
+[15]: core/activities/10.web_connection_api
 
 [6]: ../images/help/webconnection1.png
 [7]: ../images/help/webconnection2.png
