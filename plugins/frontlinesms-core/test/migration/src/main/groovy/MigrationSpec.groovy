@@ -80,24 +80,27 @@ class MigrationSpec {
 		execute("git checkout $gitTag")
 		execute(/sed -i -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "$contextPath/grails-app/conf/BuildConfig.groovy")
 
-		println "# Starting grails server on port $serverPort..."
-		def grailsServer = executeInBackground "cd $contextPath && grails -Dserver.port=$serverPort test run-app"
-		println "# Waiting for grails server to start..."
 		try {
-			grailsServer.inputStream.eachLine { line ->
-				println "# [grails] $line"
-				if(line.trim().startsWith('| Server running. Browse to ')) {
-					throw new EOFException('Server started successfully.')
+			println "# Starting grails server on port $serverPort..."
+			def grailsServer = executeInBackground "cd $contextPath && grails -Dserver.port=$serverPort test run-app"
+			println "# Waiting for grails server to start..."
+			try {
+				grailsServer.inputStream.eachLine { line ->
+					println "# [grails] $line"
+					if(line.trim().startsWith('| Server running. Browse to ')) {
+						throw new EOFException('Server started successfully.')
+					}
 				}
-			}
-		} catch(EOFException _) {}
+			} catch(EOFException _) {}
 
-		println "# Running test script with remote control..."
-		def remoteControl = getRemoteControl(contextPath)
-		def testOutput = remoteControl.exec(remoteCode)
-
-		println "# Killing remote server"
-		grailsServer.destroy()
+			println "# Running test script with remote control..."
+			def remoteControl = getRemoteControl(contextPath)
+			def testOutput = remoteControl.exec(remoteCode)
+		} finally {
+			println "# Killing remote server"
+			grailsServer.destroy()
+			println "# Grails exit code: ${grailsServer.exitCode()}"
+		}
 
 		println "# Checking test response code..."
 		println "# Test output: $testOutput"
