@@ -36,7 +36,7 @@ Once you have entered all your choices, click next to set up Automatic Sorting.
 ### Automatic Sorting  
 You will be able to specify a keyword, that when included in an incoming message, will allow the system to automatically sort it into the relevant Poll.   
 
-![Automatic Sorting][11]
+![Automatic Sorting][17]
   
 _**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. For a poll, if the top level keyword is not provided the keywords for the responses become top level keywords, and hence forth they have to be unique across all the activity top level keywords.
 
@@ -95,7 +95,7 @@ This feature is quite usefull if you want frontlinesms to handle spelling mistak
 
 The Sorting tab looks as follows
 
-![Aliases][17]
+![Keywords][17]
 
 Each choice is followed by an area where you can enter text. You will see two aliases already entered into the text area. These are the default settings. 
 
@@ -193,7 +193,7 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [5]: core/contacts/4.creating_a_group
 [6]: core/contacts/5.creating_a_smart_group
 [7]: core/messages/1.getting_around_the_messages_tab
-[8]: ../images/help/poll1.png
+[8]: ../images/help/autoforward1.png
 [9]: ../images/help/poll2.png
 [10]: ../images/help/poll3.png
 [11]: ../images/help/poll4.png
@@ -202,4 +202,4 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [14]: ../images/help/poll7.png
 [15]: ../images/help/poll8.png
 [16]: ../images/help/poll9.png
-[17]: ../images/help/aliases.png
+[17]: ../images/help/pollkeywords.png
