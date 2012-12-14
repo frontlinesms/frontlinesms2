@@ -3,6 +3,7 @@ import groovyx.remote.transport.http.HttpTransport
 import groovyx.remote.client.RemoteControl
 
 class MigrationSpec {
+	static File EXECUTE_BASE_DIRECTORY = new File().parent.parent.parent
 	static boolean gitWorkingDirectoryMustBeClean = true
 
 	String serverPort
@@ -51,9 +52,8 @@ class MigrationSpec {
 	}
 
 	private static Process executeInBackground(String command) {
-		def workingDirectory = new File('../../..')
-		println "# Executing command: $command in $workingDirectory.absolutePath"
-		return ['bash', '-c', command].execute([], workingDirectory)
+		println "# Executing command: $command in $EXECUTE_BASE_DIRECTORY.absolutePath"
+		return ['bash', '-c', command].execute([], EXECUTE_BASE_DIRECTORY)
 	}
 
 	private static int simpleExecute(String command) {
