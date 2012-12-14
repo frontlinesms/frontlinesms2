@@ -52,7 +52,7 @@ class MigrationSpec {
 
 	private static Process executeInBackground(String command) {
 		println "# Executing command: $command"
-		return ['bash', '-c', command].execute([], '../../..')
+		return ['bash', '-c', command].execute([], new File('../../..'))
 	}
 
 	private static int simpleExecute(String command) {
