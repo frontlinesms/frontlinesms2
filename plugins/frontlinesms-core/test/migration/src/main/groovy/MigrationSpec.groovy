@@ -3,7 +3,7 @@ import groovyx.remote.transport.http.HttpTransport
 import groovyx.remote.client.RemoteControl
 
 class MigrationSpec {
-	static File EXECUTE_BASE_DIRECTORY = new File('').parentFile.parentFile.parentFile
+	static File EXECUTE_BASE_DIRECTORY = new File(new File('').absolutePath).parentFile.parentFile.parentFile
 	static boolean gitWorkingDirectoryMustBeClean = true
 
 	String serverPort
