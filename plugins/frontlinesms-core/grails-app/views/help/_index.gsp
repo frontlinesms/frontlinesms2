@@ -27,6 +27,8 @@
 			* [How do I create an Auto-Reply?][32]
 		* ### Auto Forward
 			* [How do I create an Auto-Forward?][100]
+		* ### Subscription
+			* [How do I create an Subscription][101]
 		* ### Managing your Activities
 			* [How do I Archive an Activity?][34]
 			* [How do I Export an Activity?][35]
@@ -138,4 +140,5 @@
 [98]: core/settings/5.manually_adding_device
 [99]: core/settings/7.translatingfrontlinesms
 [100]: core/activities/8.creating_an_autoforward
+[101]: core/activities/9.creating_a_subscription
 </markdown:renderHtml>
