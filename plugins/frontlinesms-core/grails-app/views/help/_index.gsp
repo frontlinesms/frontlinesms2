@@ -74,6 +74,7 @@
 * ### Settings
 	* [How do I change the Language?][91]
 	* [How do I import Messages and Contacts?][92]
+	* [How do I password-protect my FrontlineSMS installation?][103]
 	* [How do I use my modem/phone with FrontlineSMS?][94]
 	* [How do I set up an IntelliSMS account?][95]
 	* [How do I set up a Clickatell account?][96]
@@ -144,4 +145,5 @@
 [100]: core/activities/8.creating_an_autoforward
 [101]: core/activities/9.creating_a_subscription
 [102]: core/activities/9.creating_a_web_connection
+[103]: core/settings/8.basic_auth
 </markdown:renderHtml>
