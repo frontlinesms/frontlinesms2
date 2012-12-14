@@ -55,7 +55,7 @@ class MigrationSpec {
 
 		println "# Checking out FrontlineSMS version: $version..."
 		execute("git checkout $gitTag")
-		execute(/sed -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" ../../../$contextPath/grails-app/conf/BuildConfig.groovy/)
+		execute(/sed -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "../../../$contextPath/grails-app/conf/BuildConfig.groovy")
 		execute('grep --silent "remote-control" ../../grails-app/conf/BuildConfig.groovy || sed -E -e "s/plugins\\s*\\{/plugins {\\ncompile \\":remote-control:1.3\\"/"')
 		println "# Starting grails server on port $serverPort..."
 		// TODO start server
