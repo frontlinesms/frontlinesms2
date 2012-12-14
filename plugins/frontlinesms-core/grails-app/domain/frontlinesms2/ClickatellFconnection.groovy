@@ -24,7 +24,6 @@ class ClickatellFconnection extends Fconnection {
 		username blank:false
 		password blank:false
 		fromNumber(nullable: true, validator: { val, obj ->
-			println "checking them constraints..... and returning ${!obj.sendToUsa || val}"
 			return !obj.sendToUsa || val
 		})
 	}
