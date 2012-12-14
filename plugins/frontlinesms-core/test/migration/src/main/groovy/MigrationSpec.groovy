@@ -3,32 +3,47 @@ import groovyx.remote.transport.http.HttpTransport
 import groovyx.remote.client.RemoteControl
 
 class MigrationSpec {
-	private final String serverPort
-	private final String serverAddress
+	static boolean gitWorkingDirectoryMustBeClean = true
 
-	MigrationSpec(String serverPort, String serverAddress) {
-		this.serverPort = serverPort
-		this.serverAddress = serverAddress
-	}
+	String serverPort
 
 	public static void main(String... args) {
-		def SERVER_PORT='8080'
-		def SERVER_ADDRESS="http://localhost:$SERVER_PORT/frontlinesms-core/grails-remote-control" // FIXME check this URL is correct
-		new MigrationSpec(SERVER_PORT, SERVER_ADDRESS).test()
+		init()
+		gitWorkingDirectoryMustBeClean = !('--dirty' in args)
+		new MigrationSpec(serverPort:8080).test()
 	}
 
-	def getRemoteControl = {
-		def transport = new HttpTransport(serverAddress)
+	private String getServerAddress(String contextPath) {
+		"http://localhost:$SERVER_PORT/$contextPath/grails-remote-control"
+	}
+
+	private static void init() {
+		// TODO fail if git working directory not clean
+
+		if(gitWorkingDirectoryMustBeClean &&
+				'git status --porcelain | grep --quiet "."; echo $?'.execute().text != "0") {
+			throw new RuntimeException("GIT WORKING DIRECTORY IS NOT CLEAN.  TERMINATING.")
+		}
+	}
+
+	private static int execute(String command, String errorMessage=null, boolean throwExceptionOnFailure=true) {
+		def exitCode = command.execute().exitValue()
+		if(throwExceptionOnFailure && exitCode) {
+			throw new RuntimeException(errorMessage?: "Command failed: $command; exit code: $exitCode")
+		}
+		return exitCode as Integer
+	}
+
+	def getRemoteControl = { contextPath ->
+		def transport = new HttpTransport(getServerAddress(contextPath))
 		return new RemoteControl(transport)
 	}
 
-	// TODO fail if git working directory not clean
-
 	// TEST HELPERS
-	def withFrontlineSMS = { String version, Closure remoteCode ->
+	def withFrontlineSMS = { String version, contextPath = 'frontlinesms-core', Closure remoteCode ->
 		println "# Checking out FrontlineSMS version: $version..."
-		// TODO check out correct code
-		// TODO if remote-control plugin is not enabled, inject it now with sed
+		execute("git checkout $version")
+		execute('grep --silent "remote-control" ../../grails-app/conf/BuildConfig.groovy || sed -E -e "s/plugins\\s*\\{/plugins {\\ncompile \\":remote-control:1.3\\"/"')
 		println "# Starting grails server on port $serverPort..."
 		// TODO start server
 		println "# Running test script with remote control..."
