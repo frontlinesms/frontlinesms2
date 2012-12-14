@@ -21,9 +21,9 @@ class MigrationSpec {
 		// TODO fail if git working directory not clean
 
 		if(gitWorkingDirectoryMustBeClean) {
-			def porcelainOutput = 'git status --porcelain | grep --quiet "."; echo $?'.execute().text
+			def porcelainOutput = simpleExecute('git status --porcelain | /usr/bin/env grep --quiet "."')
 			println "# porcelainOutput=$porcelainOutput"
-			def clean = porcelainOutput == "1"
+			def clean = porcelainOutput == 1
 			println "# Git working directory is clean? $clean"
 			if(!clean) {
 				throw new RuntimeException("GIT WORKING DIRECTORY IS NOT CLEAN.  TERMINATING.")
@@ -31,8 +31,12 @@ class MigrationSpec {
 		}
 	}
 
+	private static int simpleExecute(String command) {
+		return ['bash', '-c', command].execute().waitFor()
+	}
+
 	private static int execute(String command, String errorMessage=null, boolean throwExceptionOnFailure=true) {
-		def exitCode = command.execute().exitValue()
+		def exitCode = simpleExecute(command)
 		if(throwExceptionOnFailure && exitCode) {
 			throw new RuntimeException(errorMessage?: "Command failed: $command; exit code: $exitCode")
 		}
