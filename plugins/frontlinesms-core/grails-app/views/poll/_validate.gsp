@@ -94,34 +94,18 @@
 			});
 			return validator.element('#poll-keyword') && valid;
 		};
+
 		var autoReplyTabValidation = function() {
 			return validator.element('#autoreplyText');
 		};
+
 		var composeMessageTabValidation = function() {
 			return validator.element('#messageText');
 		};
+
 		var recipientTabValidation = function() {
-			if(!isGroupChecked('dontSendMessage')) {
-				var valid = false;
-				addAddressHandler();
-				valid = $("#recipient-count").html() > 0;
-				var addressListener = function() {
-					if($("#recipient-count").html() > 0) {
-						validator.element($('#contacts').find("input[name=addresses]"));
-						$('#recipients-list').removeClass("error");
-						$(".error").hide();
-					} else {
-						$('#recipients-list').addClass("error");
-						validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
-					}
-				};
-				if (!valid) {
-					$('input[name=addresses]').change(addressListener);
-					$('input[name=addresses]').trigger("change");
-				}
-				return valid;
-			}
-			return true;
+			return isGroupChecked('dontSendMessage') ||
+					recipientSelecter.validateImmediate();
 		};
 
 		var confirmTabValidation = function() {
@@ -156,7 +140,7 @@
 			var keywordText = '';
 			var replyText = '';
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
-				keywordText = $("#poll-keyword").val().toUpperCase();
+				keywordText = getFirstAlias($("#poll-keyword")).toUpperCase();
 				if($("input[name='pollType']:checked").val() == "yesNo") {
 					var yesAlias = getFirstAlias($("ul#poll-aliases li input#keywordsA"))
 					var noAlias = getFirstAlias($("ul#poll-aliases li input#keywordsB"))
@@ -165,7 +149,13 @@
 					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
 						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
-						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
+						if (this.value) {
+							if(keywordText) {
+								replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
+							} else {
+								replyText = i18n("poll.reply.text1.notoplevel", replyText, getFirstAlias($("ul#poll-aliases li input#keywords"+this.name.substring(6,7))), this.value);
+							}
+						}
 					});
 					replyText = replyText + '.';
 				}

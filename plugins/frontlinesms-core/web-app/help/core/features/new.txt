@@ -10,7 +10,7 @@ This activity allows you to set up a connection to a web-based server or service
 We have made a major improvement to the way keywords function, so that you can make it simpler for your users to text you.
 
 ### Multiple keywords for activities
-Autor-eplies, Polls, Web Connections and Subscriptions now allow you to list more that one keyword to trigger a specific activity. This means  you can support more than one language or spelling of a word.
+Auto-replies, Polls, Web Connections and Subscriptions now allow you to list more that one keyword to trigger a specific activity. This means  you can support more than one language or spelling of a word.
 
 ### Single keywords in Poll
 Similarly, Polls now optionally allows you to set only one keyword for poll responses - so answers could just be YES, NO, or whatever multiple choice answer you set. You can still set two-level keywords, for example in the poll about food, sample answers might be FOOD PIE or FOOD SODA. The new single keyword setting allows you simply to text in PIE or SODA

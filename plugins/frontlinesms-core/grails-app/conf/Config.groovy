@@ -62,6 +62,7 @@ grails.hibernate.cache.queries = true
 
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 // Allow disabling of migrations via system property
+println "MIGRATIONS: System.properties.'db.migrations' = ${System.properties['db.migrations']}"
 grails.plugin.databasemigration.updateOnStart = System.properties['db.migrations'] != 'false'
 
 // set per-environment settings
