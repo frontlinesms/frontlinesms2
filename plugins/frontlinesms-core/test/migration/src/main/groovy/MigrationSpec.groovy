@@ -51,8 +51,9 @@ class MigrationSpec {
 	}
 
 	private static Process executeInBackground(String command) {
-		println "# Executing command: $command"
-		return ['bash', '-c', command].execute([], new File('../../..'))
+		def workingDirectory = new File('../../..')
+		println "# Executing command: $command in $workingDirectory.absolutePath"
+		return ['bash', '-c', command].execute([], workingDirectory)
 	}
 
 	private static int simpleExecute(String command) {
