@@ -11,7 +11,7 @@ class MigrationSpec {
 		init()
 		gitWorkingDirectoryMustBeClean = !('--dirty' in args)
 		def exitCode = 0
-		def originalGitBranch = executeGetText('git branch | grep '*' | cut -d" " -f2')
+		def originalGitBranch = executeGetText('git branch | grep \'*\' | cut -d" " -f2')
 		try {
 			new MigrationSpec(serverPort:8080).test()
 		} catch(Exception ex) {
