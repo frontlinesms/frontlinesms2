@@ -25,6 +25,8 @@
 			* [How do I create an announcement][31]
 		* ### Auto Reply
 			* [How do I create an Auto-Reply?][32]
+		* ### Auto Forward
+			* [How do I create an Auto-Forward?][100]
 		* ### Managing your Activities
 			* [How do I Archive an Activity?][34]
 			* [How do I Export an Activity?][35]
@@ -135,4 +137,5 @@
 [97]: core/settings/6.edit_delete_connection
 [98]: core/settings/5.manually_adding_device
 [99]: core/settings/7.translatingfrontlinesms
+[100]: core/activities/8.creating_an_autoforward
 </markdown:renderHtml>
