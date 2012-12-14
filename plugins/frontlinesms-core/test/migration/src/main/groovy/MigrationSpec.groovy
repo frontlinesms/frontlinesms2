@@ -10,7 +10,22 @@ class MigrationSpec {
 	public static void main(String... args) {
 		init()
 		gitWorkingDirectoryMustBeClean = !('--dirty' in args)
-		new MigrationSpec(serverPort:8080).test()
+		def exitCode = 0
+		def originalGitBranch = executeGetText('git branch | grep '*' | cut -d" " -f2')
+		try {
+			new MigrationSpec(serverPort:8080).test()
+		} catch(Exception ex) {
+			ex.printStackTrace()
+			exitCode = 1
+		} finally {
+			try {
+				simpleExecute('cd ../../../.. && git reset --hard && git clean -xdf')
+			} catch(Exception _) { _.printStackTrace() }
+			try {
+				simpleExecute("git checkout $originalGitBranch")
+			} catch(Exception _) { _.printStackTrace() }
+		}
+		System.exit(exitCode)
 	}
 
 	private String getServerAddress(String contextPath) {
@@ -29,6 +44,10 @@ class MigrationSpec {
 				throw new RuntimeException("GIT WORKING DIRECTORY IS NOT CLEAN.  TERMINATING.")
 			}
 		}
+	}
+
+	private static String executeGetText(String command) {
+		return executeInBackground(command).text
 	}
 
 	private static Process executeInBackground(String command) {
