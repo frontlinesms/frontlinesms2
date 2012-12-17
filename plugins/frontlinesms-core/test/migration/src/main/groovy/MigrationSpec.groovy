@@ -4,13 +4,12 @@ import groovyx.remote.client.RemoteControl
 
 class MigrationSpec {
 	static File EXECUTE_BASE_DIRECTORY = new File(new File('').absolutePath).parentFile.parentFile.parentFile
-	static boolean gitWorkingDirectoryMustBeClean = true
 
+	boolean changesStashed
 	String serverPort
 
 	public static void main(String... args) {
 		init()
-		gitWorkingDirectoryMustBeClean = !('--dirty' in args)
 		def exitCode = 0
 		def originalGitBranch = executeGetText('git branch | grep \'*\' | cut -d" " -f2')
 		try {
@@ -25,6 +24,11 @@ class MigrationSpec {
 			try {
 				simpleExecute("git checkout $originalGitBranch")
 			} catch(Exception _) { _.printStackTrace() }
+			if(changesStashed) {
+				try {
+					simpleExecute("git stash apply")
+				} catch(Exception _) { _.printStackTrace() }
+			}
 		}
 		System.exit(exitCode)
 	}
@@ -34,16 +38,13 @@ class MigrationSpec {
 	}
 
 	private static void init() {
-		// TODO fail if git working directory not clean
-
-		if(gitWorkingDirectoryMustBeClean) {
-			def porcelainOutput = simpleExecute('git status --porcelain | /usr/bin/env grep --quiet "."')
-			println "# porcelainOutput=$porcelainOutput"
-			def clean = porcelainOutput == 1
-			println "# Git working directory is clean? $clean"
-			if(!clean) {
-				throw new RuntimeException("GIT WORKING DIRECTORY IS NOT CLEAN.  TERMINATING.")
-			}
+		def porcelainOutput = simpleExecute('git status --porcelain | /usr/bin/env grep --quiet "."')
+		println "# porcelainOutput=$porcelainOutput"
+		def clean = porcelainOutput == 1
+		println "# Git working directory is clean? $clean"
+		if(!clean) {
+			simpleExecute('git stash --include-untracked')
+			changesStashed = true
 		}
 	}
 
