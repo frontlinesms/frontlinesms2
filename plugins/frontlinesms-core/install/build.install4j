@@ -84,7 +84,7 @@
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.InstallerApplication">
               <void property="arguments">
-                <string>-Dfrontlinesms.resource.path=~/.${compiler:app.shortName}-SNAPSHOT-SNAPSHOT-SNAPSHOT-SNAPSHOT</string>
+                <string>-Dfrontlinesms.resource.path=~/.${compiler:app.shortName}-SNAPSHOT-SNAPSHOT-SNAPSHOT-SNAPSHOT-SNAPSHOT</string>
               </void>
               <void property="customIconImageFiles">
                 <void method="add">
