@@ -18,16 +18,10 @@ class MigrationSpec {
 			ex.printStackTrace()
 			exitCode = 1
 		} finally {
-			try {
-				simpleExecute('git reset --hard && git clean -xdf')
-			} catch(Exception _) { _.printStackTrace() }
-			try {
-				simpleExecute("git checkout $originalGitBranch")
-			} catch(Exception _) { _.printStackTrace() }
+			simpleExecute_ignoreExceptions('git reset --hard && git clean -xdf')
+			simpleExecute_ignoreExceptions("git checkout $originalGitBranch")
 			if(changesStashed) {
-				try {
-					simpleExecute("git stash apply")
-				} catch(Exception _) { _.printStackTrace() }
+				simpleExecute_ignoreExceptions("git stash apply")
 			}
 		}
 		System.exit(exitCode)
@@ -57,8 +51,22 @@ class MigrationSpec {
 		return ['bash', '-c', command].execute([], EXECUTE_BASE_DIRECTORY)
 	}
 
+	/** @return command's exit status, or -1 if there was an Exception thrown */
+	private static int simpleExecute_ignoreExceptions(String command) {
+		try {
+			return simpleExecute(command)
+		} catch(Exception _) {
+			_.printStackTrace()
+			return -1
+		}
+	}
+
 	private static int simpleExecute(String command) {
 		return executeInBackground(command).waitFor()
+	}
+
+	private static void executeAndEcho(String command) {
+		println executeGetText(command)
 	}
 
 	private static int execute(String command, String errorMessage=null, boolean throwExceptionOnFailure=true) {
@@ -81,10 +89,15 @@ class MigrationSpec {
 		println "# Checking out FrontlineSMS version: $version..."
 		execute("git checkout $gitTag")
 		execute(/sed -i -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "$contextPath/grails-app/conf/BuildConfig.groovy")
-		println "# TODO enabling grails-remote-control-plugin for prod..."
+		println "# enabling grails-remote-control-plugin for prod..."
+		execute "echo 'remoteControl.enabled = true' >> $contextPath/grails-app/conf/Config.groovy"
 
-		println "# TODO changing grails DataSource location for prod..."
+		println "# changing grails DataSource location for prod..."
+		execute "sed -i -e 's_^\\s*url = .*\$_url = \"jdbc:h2:\$userHome/frontlinesms2-migration-test-database;MVCC=TRUE\"_' $contextPath/grails-app/conf/DataSource.groovy"
 
+		println "# Displaying changes to working version..."
+		executeAndEcho('git status')
+		executeAndEcho('git diff')
 		def grailsServer
 		try {
 			println "# Starting grails server on port $serverPort..."
@@ -106,6 +119,9 @@ class MigrationSpec {
 			println "# Killing remote server"
 			grailsServer.destroy()
 			println "# Grails exit code: ${grailsServer.exitValue()}"
+
+			println "# cleaning and resetting git repository..."
+			simpleExecute_ignoreExceptions('git reset --hard && git clean -xdf')
 		}
 
 		println "# Checking test response code..."
