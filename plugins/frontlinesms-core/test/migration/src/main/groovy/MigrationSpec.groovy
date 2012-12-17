@@ -45,7 +45,7 @@ class MigrationSpec {
 
 	private static Process executeInBackground(String command) {
 		println "# Executing command: $command in $EXECUTE_BASE_DIRECTORY.absolutePath"
-		return ['bash', '-c', command].execute([], EXECUTE_BASE_DIRECTORY)
+		return ['bash', '-c', 'set -x\n' + command].execute(null, EXECUTE_BASE_DIRECTORY)
 	}
 
 	/** @return command's exit status, or -1 if there was an Exception thrown */
@@ -111,11 +111,11 @@ class MigrationSpec {
 		def grailsServer
 		try {
 			println "# Starting grails server on port $serverPort..."
-			grailsServer = executeInBackground "cd $contextPath && grails -Dserver.port=$serverPort prod run-app"
+			grailsServer = executeInBackground "echo \"# grails executable: `which grails`\"; cd $contextPath && grails -Dserver.port=$serverPort prod run-app"
 			println "# Waiting for grails server to start..."
 			boolean startedOk = false
 			try {
-				grailsServer.inputStream.eachLine { line ->
+				grailsServer.in.eachLine { line ->
 					println "# [grails] $line"
 					if(line.trim().startsWith('| Server running. Browse to ')) {
 						println 'Server started successfully.'
@@ -130,9 +130,10 @@ class MigrationSpec {
 			def remoteControl = getRemoteControl(contextPath)
 			def testOutput = remoteControl.exec(remoteCode)
 		} finally {
-			println "# Killing remote server"
+			println "# Killing remote server..."
 			grailsServer.destroy()
-			println "# Grails exit code: ${grailsServer.exitValue()}"
+			grailsServer.waitFor()
+			println "# Remote server killed; exit code: ${grailsServer.exitValue()}"
 
 			println "# cleaning and resetting git repository..."
 			simpleExecute_ignoreExceptions('git reset --hard && git clean -xdf')
