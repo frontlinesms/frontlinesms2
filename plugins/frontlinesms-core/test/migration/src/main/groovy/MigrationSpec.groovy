@@ -29,6 +29,10 @@ class MigrationSpec {
 	}
 
 	private static void init() {
+		println "# Deleting test database..."
+		simpleExecute_ignoreExceptions 'rm ~/frontlinesms2-migration-test-database.*'
+		println "# Test database deleted."
+
 		def porcelainOutput = simpleExecute('git status --porcelain | /usr/bin/env grep --quiet "."')
 		println "# porcelainOutput=$porcelainOutput"
 		def clean = porcelainOutput == 1
@@ -126,9 +130,13 @@ class MigrationSpec {
 
 			if(!startedOk) throw new RuntimeException("Server failed to start ${version? "for '$version'": 'in original state'}")
 
-			println "# Running test script with remote control..."
+			println "# Creating remote control..."
 			def remoteControl = getRemoteControl(contextPath)
+			println "# Remote control created."
+
+			println "# Running test script with remote control..."
 			def testOutput = remoteControl.exec(remoteCode)
+			println "# Remote test script executed successfully."
 		} finally {
 			println "# Killing remote server..."
 			grailsServer.destroy()
@@ -160,7 +168,7 @@ class MigrationSpec {
 			poll1.save(failOnError:true, flush:true)
 			PollResponse.findByValue('manchester').addToMessages(new Fmessage(src:'+123', date:new Date(), text:'UTD!'))
 			PollResponse.findByValue('manchester').addToMessages(new Fmessage(src:'+123', date:new Date(), text:'MUFC!'))
-			PollResponse.findByValue('unknown').addToMessages(new Fmessage(src:'+123', date:new Date(), text:'All I want is a good game.'))
+			PollResponse.findByValue('Unknown').addToMessages(new Fmessage(src:'+123', date:new Date(), text:'All I want is a good game.'))
 
 			def barcelonaResponse = PollResponse.findByValue('barcelona');
 			10.times {
