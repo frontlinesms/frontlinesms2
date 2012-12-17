@@ -5,7 +5,7 @@ import groovyx.remote.client.RemoteControl
 class MigrationSpec {
 	static File EXECUTE_BASE_DIRECTORY = new File(new File('').absolutePath).parentFile.parentFile.parentFile
 
-	boolean changesStashed
+	static boolean changesStashed
 	String serverPort
 
 	public static void main(String... args) {
