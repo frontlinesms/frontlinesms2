@@ -266,7 +266,7 @@ databaseChangeLog = {
 							println "MIGRATIONS:::::::::: for poll: ${poll}, migrating poll response:::: ${pollResponse}"
 							pollResponse.ALIASES?.split(',').each { aliasValue ->
 								println "MIGRATIONS:::::::::: for poll: ${poll}, migrating poll response ${pollResponse}: alias::: ${aliasValue}"
-								sql.execute("INSERT INTO keyword (activity_id, owner_detail, value, is_top_level, keywords_idx) values ($poll.ID, $pollResponse.KEY, ${aliasValue.trim()}, false, $pollKeywordIndex)")
+								sql.execute("INSERT INTO keyword (activity_id, owner_detail, value, is_top_level, keywords_idx) values ($poll.ID, $pollResponse.KEY, ${aliasValue.trim().toUpperCase()}, false, $pollKeywordIndex)")
 								pollKeywordIndex += 1
 							}
 						}
