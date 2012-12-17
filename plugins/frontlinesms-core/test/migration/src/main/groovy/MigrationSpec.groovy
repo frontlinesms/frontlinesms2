@@ -5,24 +5,21 @@ import groovyx.remote.client.RemoteControl
 class MigrationSpec {
 	static File EXECUTE_BASE_DIRECTORY = new File(new File('').absolutePath).parentFile.parentFile.parentFile
 
+	static String originalGitBranch
 	static boolean changesStashed
 	String serverPort
 
 	public static void main(String... args) {
 		init()
 		def exitCode = 0
-		def originalGitBranch = executeGetText('git branch | grep \'*\' | cut -d" " -f2')
+		originalGitBranch = executeGetText('git branch | grep \'*\' | cut -d" " -f2')
 		try {
 			new MigrationSpec(serverPort:8080).test()
 		} catch(Exception ex) {
 			ex.printStackTrace()
 			exitCode = 1
 		} finally {
-			simpleExecute_ignoreExceptions('git reset --hard && git clean -xdf')
-			simpleExecute_ignoreExceptions("git checkout $originalGitBranch")
-			if(changesStashed) {
-				simpleExecute_ignoreExceptions("git stash apply")
-			}
+			returnToOriginalState()
 		}
 		System.exit(exitCode)
 	}
@@ -77,18 +74,31 @@ class MigrationSpec {
 		return exitCode as Integer
 	}
 
+	private static void returnToOriginalState() {
+		// checkout the working state we started with
+		simpleExecute_ignoreExceptions("git checkout $originalGitBranch")
+		if(changesStashed) {
+			simpleExecute_ignoreExceptions("git stash apply")
+		}
+	}
+
 	def getRemoteControl = { contextPath ->
 		def transport = new HttpTransport(getServerAddress(contextPath))
 		return new RemoteControl(transport)
 	}
 
 	// TEST HELPERS
-	def withFrontlineSMS = { String version, contextPath = 'frontlinesms-core', Closure remoteCode ->
-		def gitTag = (version ==~  /\d+(\.\d+)*/)? "frontlinesms$version": version
+	def withFrontlineSMS = { String version = null, contextPath = 'frontlinesms-core', Closure remoteCode ->
+		if(version) {
+			def gitTag = (version ==~  /\d+(\.\d+)*/)? "frontlinesms$version": version
 
-		println "# Checking out FrontlineSMS version: $version..."
-		execute("git checkout $gitTag")
-		execute(/sed -i -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "$contextPath/grails-app/conf/BuildConfig.groovy")
+			println "# Checking out FrontlineSMS version: $version..."
+			execute("git checkout $gitTag")
+			execute(/sed -i -E -e "s:^.*remote-control.*\$::" -e "s\/plugins\s*\{\/plugins {\\ncompile \":remote-control:1.3\"\/" / + "$contextPath/grails-app/conf/BuildConfig.groovy")
+		} else {
+			returnToOriginalState()
+		}
+
 		println "# enabling grails-remote-control-plugin for prod..."
 		execute "echo 'remoteControl.enabled = true' >> $contextPath/grails-app/conf/Config.groovy"
 
@@ -103,14 +113,18 @@ class MigrationSpec {
 			println "# Starting grails server on port $serverPort..."
 			grailsServer = executeInBackground "cd $contextPath && grails -Dserver.port=$serverPort prod run-app"
 			println "# Waiting for grails server to start..."
+			boolean startedOk = false
 			try {
 				grailsServer.inputStream.eachLine { line ->
 					println "# [grails] $line"
 					if(line.trim().startsWith('| Server running. Browse to ')) {
+						println 'Server started successfully.'
 						throw new EOFException('Server started successfully.')
 					}
 				}
-			} catch(EOFException _) {}
+			} catch(EOFException _) { startedOk = true }
+
+			if(!startedOk) throw new RuntimeException("Server failed to start ${version? "for '$version'": 'in original state'}")
 
 			println "# Running test script with remote control..."
 			def remoteControl = getRemoteControl(contextPath)
@@ -127,13 +141,6 @@ class MigrationSpec {
 		println "# Checking test response code..."
 		println "# Test output: $testOutput"
 		// TODO handle errors and finally cleanup
-	}
-
-	def withCurrentFrontlineSMS = { Closure remoteCode ->
-		println "# Starting grails server on port $serverPort..."
-		// TODO start server
-		println "# Running test script with remote control..."
-		// TODO run test script on remote server
 	}
 
 	def performMigration = { Closure remoteCode ->
@@ -169,7 +176,7 @@ class MigrationSpec {
 			new Autoreply(name:"Toothpaste", keyword: new Keyword(value: 'MENO'), autoreplyText: "Thanks for the input. Your number, ${contact_number}, has been added to our records").save(failOnError:true, flush:true)
 		}
 
-		withFrontlineSMS('2.2.0') {
+		withStartingFrontlineSMS {
 			// check data migrated properly
 			def click = ClickatellFconnection.findByName("Test Clickatell connection")
 			assert click.apiId == "doesntmatter"
@@ -204,7 +211,7 @@ class MigrationSpec {
 			// some migration you're trying to test out...
 		}
 
-		withCurrentFrontlineSMS {
+		withStartingFrontlineSMS {
 			// check that the `performMigration` executed OK
 		}
 	}
