@@ -182,7 +182,7 @@ class MigrationSpec {
 			poll2.addToResponses(key:'B', value:'no')
 			poll2.addToResponses(PollResponse.createUnknown())		
 			poll2.save(failOnError:true, flush:true)
-			new Autoreply(name:"Toothpaste", keyword: new Keyword(value: 'MENO'), autoreplyText: "Thanks for the input. Your number, ${contact_number}, has been added to our records").save(failOnError:true, flush:true)
+			new Autoreply(name:"Toothpaste", keyword: new Keyword(value: 'MENO'), autoreplyText: 'Thanks for the input. Your number, ${contact_number}, has been added to our records').save(failOnError:true, flush:true)
 		}
 
 		withStartingFrontlineSMS {
