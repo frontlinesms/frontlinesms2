@@ -10,6 +10,12 @@ class AutoforwardController extends ActivityController {
 		}
 	}
 
+	def create() {
+		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
+		[contactList: Contact.list(), messageText: '${message_text}',
+				groupList:groupList, activityType: params.controller]
+	}
+
 	private def withAutoforward = withDomainObject Autoforward, { params.ownerId }
 }
 
