@@ -8,6 +8,5 @@ fi
 echo "# running grails clean..."
 grails clean
 echo "# build installers with migrations disabled for grails env $GRAILS_ENV..."
-grails -Dfrontlinesms2.build.db.migrations=false $GRAILS_ENV build-installers
-echo "# installers built.  Have a nice day."
+grails -Dfrontlinesms2.build.db.migrations=false $GRAILS_ENV build-installers && echo "# installers built.  Have a nice day."
 

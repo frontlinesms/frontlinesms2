@@ -25,6 +25,12 @@
 			* [How do I create an announcement][31]
 		* ### Auto Reply
 			* [How do I create an Auto-Reply?][32]
+		* ### Auto Forward
+			* [How do I create an Auto-Forward?][100]
+		* ### Subscription
+			* [How do I create an Subscription][101]
+		* ### Web Connection
+			* [How do I create an Web Connection?][102]
 		* ### Managing your Activities
 			* [How do I Archive an Activity?][34]
 			* [How do I Export an Activity?][35]
@@ -68,6 +74,7 @@
 * ### Settings
 	* [How do I change the Language?][91]
 	* [How do I import Messages and Contacts?][92]
+	* [How do I password-protect my FrontlineSMS installation?][103]
 	* [How do I use my modem/phone with FrontlineSMS?][94]
 	* [How do I set up an IntelliSMS account?][95]
 	* [How do I set up a Clickatell account?][96]
@@ -135,4 +142,8 @@
 [97]: core/settings/6.edit_delete_connection
 [98]: core/settings/5.manually_adding_device
 [99]: core/settings/7.translatingfrontlinesms
+[100]: core/activities/8.creating_an_autoforward
+[101]: core/activities/9.creating_a_subscription
+[102]: core/activities/9.creating_a_web_connection
+[103]: core/settings/8.basic_auth
 </markdown:renderHtml>

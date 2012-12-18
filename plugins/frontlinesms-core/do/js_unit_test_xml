@@ -1,0 +1,3 @@
+#!/bin/bash
+set -e
+do/js_unit_test | sgrep '("<?xml".."</testsuites>")' | sed -e '/\/testsuites/,$d'; echo "</testsuites>"

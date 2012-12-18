@@ -4,6 +4,11 @@
 		<meta name="layout" content="settings"/>
 		<title><g:message code="settings.general.header"/></title>
 		<export:resource/>
+	<r:script>
+		$(function() {
+			addBasicAuthValidator();
+		});
+	</r:script>
 	</head>
 	<body>
 		<div id="body-content-head">

@@ -1,16 +1,25 @@
-var recipientSelecter = (function() {
-	var addAddressHandler, updateRecipientCount, searchForContacts, selectMembers, setContact, validateAddressEntry;
+recipientSelecter = (function() {
+	var addAddressHandler, updateRecipientCount, searchForContacts, selectMembers, setContact, validateAddressEntry, validateImmediate, validateDeferred;
 
 	function inCheckedGroup(value) {
 		var checkedGroups, t;
 		checkedGroups = $("li.group input:checked");
 		t = false;
 		$.each(checkedGroups, function(index, element) {
-			if($.inArray(value, $.makeArray($(element).attr("groupMembers")))) {
+			element = $(element);
+			if($.inArray(value, $.makeArray(element.attr("groupMembers")))) {
 				t = true;
 			}
 		});
 		return t;
+	}
+
+	function getMobileNumbersArray() {
+		var mobileNumbersString = $("#mobileNumbers").val();
+		if(mobileNumbersString) {
+			return mobileNumbersString.split(",");
+		}
+		return [];
 	}
 
 	selectMembers = function(element, groupIdString, groupName, allContacts) {
@@ -43,6 +52,7 @@ var recipientSelecter = (function() {
 
 		$("#mobileNumbers").val(($.makeArray(mobileNumbers).join(",")));
 
+
 		updateRecipientCount();
 	};
 
@@ -60,7 +70,7 @@ var recipientSelecter = (function() {
 			}
 		} else {
 			if(contactNumber in contactMobileNumbers) {
-				if(! inCheckedGroup(contactNumber)) {
+				if(!inCheckedGroup(contactNumber)) {
 					delete contactMobileNumbers[contactNumber];
 				}
 			}
@@ -73,7 +83,7 @@ var recipientSelecter = (function() {
 		$("#mobileNumbers").val(($.makeArray(mobileNumbers).join(",")));
 
 		updateRecipientCount();
-	}
+	};
 
 	// FIXME current this method is unused
 	function setValueForCheckBox(value, checked) {
@@ -83,11 +93,12 @@ var recipientSelecter = (function() {
 	}
 
 	updateRecipientCount = function() {
-		var contactCount, mobileNumbersArray;
-		if($("#mobileNumbers").val() != "") {
-			mobileNumbersArray = $("#mobileNumbers").val().split(",");
+		var contactCount, mobileNumbersArray, mobileNumbersString;
+		mobileNumbersString = $("#mobileNumbers").val();
+		if(mobileNumbersString) {
+			mobileNumbersArray = mobileNumbersString.split(",");
 		}
-		contactCount = mobileNumbersArray? mobileNumbersArray.length:0 ;
+		contactCount = mobileNumbersArray? mobileNumbersArray.length: 0;
 		$("#contacts-count").html(contactCount);
 		$("#messages-count").html(contactCount);
 		$("#recipient-count").html(contactCount);
@@ -107,7 +118,44 @@ var recipientSelecter = (function() {
 			return false;
 		}
 		return true;
-	}
+	};
+
+	/** Validate that at least one contact or mobile number is selected NOW! */
+	validateImmediate = function() {
+		var valid, addressListener;
+		addAddressHandler();
+
+		valid = getMobileNumbersArray().length > 0;
+
+		// TODO why is there listener setup here?
+		addressListener = function() {
+// FIXME we need to pass the validator in here, otherwise we will never have access to it
+			if($('input[name=addresses]:checked').length > 0) {
+				if("undefined" !== typeof validator) {
+					validator.element($('#contacts').find("input[name=addresses]"));
+				}
+				$('#recipients-list').removeClass("error");
+			} else {
+				$('#recipients-list').addClass("error");
+				if("undefined" !== typeof validator) {
+					validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
+				}
+			}
+		};
+		if (!valid) {
+			$('input[name=addresses]').change(addressListener);
+			$('input[name=addresses]').trigger("change");
+		}
+		return valid;
+	};
+
+	/**
+	 * Validate that at least one contact, mobile number, group or smart group
+	 * is selected, but allow empty groups.
+	 */
+	validateDeferred = function() {
+		return $("#groups li.group input[type='checkbox']:checked").size() || validateImmediate();
+	};
 
 	addAddressHandler = function() {
 		var address, checkbox, sanitizedAddress;
@@ -119,7 +167,7 @@ var recipientSelecter = (function() {
 		if(address[0] === "+") {
 			sanitizedAddress = "+" + sanitizedAddress;
 		}
-		checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val();
+		checkbox = $("li.manual").find(":checkbox[value='" + sanitizedAddress + "']").val();
 		if(checkbox !== address) {
 			$("#contacts").prepend("<li class='manual contact' f-name='' f-number='" + sanitizedAddress + "'><input contacts='true' type='checkbox' onclick='recipientSelecter.setContact(this, \"" + sanitizedAddress + "\")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>");
 			$("li.manual.contact[f-number='"+sanitizedAddress+"'] input").trigger('click');
@@ -151,7 +199,7 @@ var recipientSelecter = (function() {
 				}
 			});
 		}
-	}
+	};
 
 	return {
 		addAddressHandler:addAddressHandler,
@@ -159,7 +207,9 @@ var recipientSelecter = (function() {
 		searchForContacts:searchForContacts,
 		selectMembers:selectMembers,
 		setContact:setContact,
-		validateAddressEntry:validateAddressEntry
+		validateAddressEntry:validateAddressEntry,
+		validateImmediate:validateImmediate,
+		validateDeferred:validateDeferred
 	};
 }());
 

@@ -17,6 +17,7 @@
 <r:script>
 
 var fconnection = {
+	validator : function() { return $("#connectionForm").validate({ errorContainer: ".error-panel"})},
 	getType: function() {
 		<g:if test="${fconnectionInstance}">return "${fconnectionInstance?.shortName}";</g:if>
 		<g:else>return $("input[name=connectionType]:checked").val();</g:else>
@@ -49,21 +50,13 @@ var fconnection = {
 	},
 	isValid: function() {
 		var valid = true;
-		var keys = fconnection[fconnection.getType()].validationSubsectionFieldKeys;
-		if(keys.length > 1) {
-			valid = validateSections(keys);
-			if(!valid) return valid;
-			$.each(keys, function(index, value) {
-				valid = valid && isFieldValid(value);
-				return valid;
-			});
-		} else {
-			var fields = fconnection[fconnection.getType()].requiredFields;
-			$.each(fields, function(index, value) {
-				valid = valid && isFieldValid(value);
-				return valid;
-			});
-		}
+		var fields = $('input:enabled:visible.required');
+		$.each(fields, function(index, value) {
+			if (!fconnection.validator().element(value) && valid) {
+				valid = false;
+				$(".error-panel").text(i18n("connection.validation.prompt"));
+			}
+		});
 		return valid;
 	},
 	humanReadableName: function() {
@@ -125,31 +118,6 @@ function isFieldValid(fieldName) {
 function isFieldSet(fieldName) {
 	var val = getFieldVal(fieldName);
 	return val!==null && val.length>0;
-}
-
-function validateSubsectionFields(field) {
-	var valid = false;
-	var subSectionFields = $('.' + field + '-subsection-member');
-	var requiredFields = fconnection[fconnection.getType()].requiredFields;
-	$.each(subSectionFields, function(index, value) {
-		var field = $(value).attr("field");
-		if(requiredFields.indexOf(field) > -1) {
-			valid = isFieldValid(field);
-			return valid;
-		}
-	});
-	return valid;
-}
-
-function validateSections(keys) {
-	var valid = false;
-	$.each(keys, function(index, value) {
-		if(isSubsection(value)) {
-			valid = getFieldVal(value);
-			if(valid) return false;
-		}
-	});
-	return valid;
 }
 
 function isSubsection(fieldName) {
@@ -214,7 +182,7 @@ function attachCheckBoxListener() {
 }
 
 function initializePopup() {
-	$("#connectionForm").validate();
+	fconnection.validator();
 	<g:if test="${!fconnectionInstance}">
 		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
 	</g:if>
