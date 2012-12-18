@@ -119,7 +119,11 @@ class MigrationSpec {
 		def grailsServer, testOutput
 		try {
 			println "# Starting grails server on port $serverPort..."
-			grailsServer = executeInBackground "echo \"# grails executable: `which grails`\"; cd $contextPath && grails -Dserver.port=$serverPort prod run-app"
+			grailsServer = ['grails',
+					"-Dserver.port=$serverPort",
+					'--non-interactive',
+					'prod',
+					'run-app'].execute(null, new File(EXECUTE_BASE_DIRECTORY, contextPath))
 			println "# Waiting for grails server to start..."
 			boolean startedOk = false
 			try {
