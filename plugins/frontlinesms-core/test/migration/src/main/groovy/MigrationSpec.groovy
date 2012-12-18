@@ -92,6 +92,10 @@ class MigrationSpec {
 	}
 
 	// TEST HELPERS
+	def withStartingFrontlineSMS = { Closure remoteCode ->
+		withFrontlineSMS remoteCode
+	}
+
 	def withFrontlineSMS = { String version = null, contextPath = 'frontlinesms-core', Closure remoteCode ->
 		if(version) {
 			def gitTag = (version ==~  /\d+(\.\d+)*/)? "frontlinesms$version": version
@@ -112,7 +116,7 @@ class MigrationSpec {
 		println "# Displaying changes to working version..."
 		executeAndEcho('git status')
 		executeAndEcho('git diff')
-		def grailsServer
+		def grailsServer, testOutput
 		try {
 			println "# Starting grails server on port $serverPort..."
 			grailsServer = executeInBackground "echo \"# grails executable: `which grails`\"; cd $contextPath && grails -Dserver.port=$serverPort prod run-app"
@@ -135,7 +139,7 @@ class MigrationSpec {
 			println "# Remote control created."
 
 			println "# Running test script with remote control..."
-			def testOutput = remoteControl.exec(remoteCode)
+			testOutput = remoteControl.exec(remoteCode)
 			println "# Remote test script executed successfully."
 		} finally {
 			println "# Killing remote server..."
@@ -183,6 +187,8 @@ class MigrationSpec {
 			poll2.addToResponses(PollResponse.createUnknown())		
 			poll2.save(failOnError:true, flush:true)
 			new Autoreply(name:"Toothpaste", keyword: new Keyword(value: 'MENO'), autoreplyText: 'Thanks for the input. Your number, ${contact_number}, has been added to our records').save(failOnError:true, flush:true)
+
+			return true
 		}
 
 		withStartingFrontlineSMS {
@@ -214,6 +220,7 @@ class MigrationSpec {
 			assert autoreply.autoreplyText == 'Thanks for the input. Your number, ${recipient_number}, has been added to our records'
 
 			// create any additional data for future
+			return true
 		}
 
 		performMigration {
