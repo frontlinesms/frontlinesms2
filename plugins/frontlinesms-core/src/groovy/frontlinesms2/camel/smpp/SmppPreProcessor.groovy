@@ -16,7 +16,8 @@ class SmppPreProcessor implements Processor {
 		def destination = d.dst
 		if(destination && destination.charAt(0)=='+') destination = destination.substring(1)
 		set x, 'dst', destination
-		
+		//Setting the destination of the message
+		x.in.setHeader("CamelSmppDestAddr", d.dst)
 		// Add auth details to header
 		log "Calculating connection ID..."
 		def connectionId = x.fconnectionId

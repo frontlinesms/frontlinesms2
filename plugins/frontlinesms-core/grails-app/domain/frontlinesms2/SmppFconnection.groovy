@@ -8,8 +8,8 @@ import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
 class SmppFconnection extends Fconnection {
-	static final configFields = [name:null, url:null, port:null, username:null, password:null, fromNumber:null]
-	static final defaultValues = []
+	static final configFields = [name:null, url:null, port:null, username:null, password:null, fromNumber:null, send:null , receive:null]
+	static defaultValues = [send:true, receive:true]
 	static String getShortName() { 'smpp' }
 	
 	String url
@@ -17,6 +17,8 @@ class SmppFconnection extends Fconnection {
 	String username
 	String password
 	String fromNumber
+	Boolean send = true
+	Boolean receive = true
 	
 	static constraints = {
 		url blank:false
@@ -36,21 +38,39 @@ class SmppFconnection extends Fconnection {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				return [from("seda:out-${SmppFconnection.this.id}")
-						.onException(RuntimeException)
-									.handled(true)
-									.beanRef('fconnectionService', 'handleDisconnection')
-									.end()
-						.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(SmppFconnection.this.id.toString()))
-						.process(new SmppPreProcessor())
-						.to(SmppFconnection.this.fullUrl)
-						.process(new SmppPostProcessor())
-						.routeId("out-internet-${SmppFconnection.this.id}")]
+				def definitions = []
+				
+				if(SmppFconnection.this.send){
+					definitions << from("seda:out-${SmppFconnection.this.id}")
+								.setHeader("CamelSmppSourceAddr", simple(SmppFconnection.this.fromNumber))
+								.onException(RuntimeException)
+											.handled(true)
+											.beanRef('fconnectionService', 'handleDisconnection')
+											.end()
+								.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(SmppFconnection.this.id.toString()))
+								.process(new SmppPreProcessor())
+								.to(SmppFconnection.this.sendingUrl)
+								.process(new SmppPostProcessor())
+								.routeId("out-internet-${SmppFconnection.this.id}")
+				}
+
+				if(SmppFconnection.this.receive){
+					definitions << from(SmppFconnection.this.receivingUrl)
+							.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(SmppFconnection.this.id.toString()))
+							.beanRef('smppTranslationService', 'process')
+							.to('seda:incoming-fmessages-to-store')
+							.routeId("in-${SmppFconnection.this.id}")
+				}
+				return definitions
 			}
 		}.routeDefinitions
 	}
 
-	private getFullUrl(){
+	private getSendingUrl(){
 		return "smpp://${this.username}@${this.url}:${this.port}?password=${this.password}&enquireLinkTimer=3000&transactionTimer=5000&systemType=producer"
+	}
+
+	private getReceivingUrl(){
+		return "smpp://${this.username}@${this.url}:${this.port}?password=${this.password}&enquireLinkTimer=3000&transactionTimer=5000&systemType=consumer"
 	}
 }
