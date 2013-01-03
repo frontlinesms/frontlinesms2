@@ -21,12 +21,14 @@ class Fconnection {
 		if(Environment.current == Environment.PRODUCTION) {
 			[SmslibFconnection,
 				ClickatellFconnection,
-				IntelliSmsFconnection]
+				IntelliSmsFconnection,
+				SmppFconnection]
 		} else {
 			[SmslibFconnection,
 				ClickatellFconnection,
 				IntelliSmsFconnection,
-				SmssyncFconnection]
+				SmssyncFconnection,
+				SmppFconnection]
 		}
 	}
 
