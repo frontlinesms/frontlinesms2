@@ -108,6 +108,7 @@ class ConnectionController extends ControllerUtils {
 	}
 	
 	def createRoute() {
+		params.count = SystemNotification.countByRead(false)
 		CreateRouteJob.triggerNow([connectionId:params.id])
 		params.createRoute = true
 		flash.message = message(code: 'connection.route.connecting')

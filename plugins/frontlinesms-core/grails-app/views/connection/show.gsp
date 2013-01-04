@@ -7,7 +7,7 @@
 			<r:script>
 				$(function() {
 					var count = 0;
-					var oldSystemNotificationCount = $("div.system-notification").length;
+					var oldSystemNotificationCount = "${params.count}";
 					var connectionTimer = setInterval(refreshConnectionStatus, 2000);
 					function refreshConnectionStatus() {
 						$.get("${createLink(controller:'connection', action:'list', id:params?.id)}", function(data) {
