@@ -2,7 +2,8 @@
 <html>
 	<head>
 		<meta name="layout" content="status_layout"/>
-	</head>
+		<title><g:message code="status.header"/></title>
+		</head>
 	<body>
 		<fsms:render template="traffic"/>
 		<div id="right-column">

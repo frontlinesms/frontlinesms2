@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta name="layout" content="archive"/>
-        <title>${pageTitle?:params.action.capitalize()}</title>
+        <title><g:message code="archive.header.${pageTitle?:params.action}"/></title>
     </head>
     <body>
     </body>
