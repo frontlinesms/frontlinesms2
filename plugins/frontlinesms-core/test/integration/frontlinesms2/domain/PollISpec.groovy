@@ -25,7 +25,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p.getActivityMessages().count() == 1
 	}
 
-	def 'Response stats are calculated correctly, even when messages are deleted'() {
+	def 'Response stats are calculated correctly, even when messages are deleted and there are outbound messages'() {
 		given:
 			def p = new Poll(name: 'Who is badder?')
 			p.editResponses(choiceA:'Michael-Jackson', choiceB:'Chuck-Norris')
@@ -41,8 +41,20 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:"Unknown", count:0, percent:0]
 			]
 		when:
+			def outbound1 = new Fmessage(inbound:false, text:'who is badder in your opinion?')
+			outbound1.addToDispatches(new Dispatch(dst:"123", status:DispatchStatus.SENT, dateSent:new Date()))
+			p.addToMessages(outbound1)
+			p.save(failOnError:true, flush:true)
+		then:
+			p.responseStats == [
+				[id:mjId, value:"Michael-Jackson", count:0, percent:0],
+				[id:cnId, value:"Chuck-Norris", count:0, percent:0],
+				[id:ukId, value:"Unknown", count:0, percent:0]
+			]
+		when:
 			PollResponse.findByValue('Michael-Jackson').addToMessages(new Fmessage(text:'MJ', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
 			PollResponse.findByValue('Chuck-Norris').addToMessages(new Fmessage(text:'big charlie', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
+			println "POLL MESSAGE COUNT: ${p.messages.size()}"
 		then:
 			p.responseStats == [
 				[id:mjId, value:'Michael-Jackson', count:1, percent:50],
@@ -52,6 +64,17 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			Fmessage.findByText('MJ').isDeleted = true
 			Fmessage.findByText('MJ').save(flush:true)
+		then:
+			p.responseStats == [
+				[id:mjId, value:'Michael-Jackson', count:0, percent:0],
+				[id:cnId, value:'Chuck-Norris', count:1, percent:100],
+				[id:ukId, value:'Unknown', count:0, percent:0]
+			]
+		when:
+			def outbound = new Fmessage(inbound:false, text:'thanks for your response')
+			outbound.addToDispatches(new Dispatch(dst:"123", status:DispatchStatus.SENT, dateSent:new Date()))
+			p.addToMessages(outbound)
+			p.save(failOnError:true, flush:true)
 		then:
 			p.responseStats == [
 				[id:mjId, value:'Michael-Jackson', count:0, percent:0],
