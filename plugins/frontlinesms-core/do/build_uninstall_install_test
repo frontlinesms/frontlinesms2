@@ -16,16 +16,21 @@ ALL_USER_INSTALL_DIR=/opt/frontlinesms2
 SETTINGS_DIR=~/.frontlinesms2
 SERVER_PORT=8130
 CONTEXT_PATH=
+SKIP_BUILD_STEP_FLAG=$1
 
-echo "# clean target directories"
-rm -rf $PROJECT_DIR/target/
-rm -rf target/
-rm -rf $PROJECT_DIR/install/target*
-rm -rf $PROJECT_DIR/install/src/web-app/
+if [ "$SKIP_BUILD_STEP_FLAG" != "skipBuildStep" ]; then
+	echo "# clean target directories"
+	rm -rf $PROJECT_DIR/target/
+	rm -rf target/
+	rm -rf $PROJECT_DIR/install/target*
+	rm -rf $PROJECT_DIR/install/src/web-app/
 
-echo "# build-installers"
-grails clean
-grails -Dfrontlinesms2.build.confirmNotProd=true build-installers $@
+	echo "# build-installers"
+	grails clean
+	grails -Dfrontlinesms2.build.confirmNotProd=true build-installers $@
+else
+	echo "# Skipping build step..."
+fi
 
 echo "# uninstall old version"
 $INSTALL_DIR/uninstall -q || echo "# Could not run uninstaller in $INSTALL_DIR"
