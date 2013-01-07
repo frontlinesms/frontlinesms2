@@ -1,10 +1,13 @@
 #!/bin/bash
+# FOR AUTOMATED BUILDING OF NEW RELEASES OF FRONTLINESMS
+# Requirements: Groovy, Gradle.
 
 echo "### Building FrontlineSMS v2 release"
-
+read -sn 1 -p "## WARNING ## This script will make modifications to your working directory, and commit these changes. It will also create a tag for the newly built version. Press any key to continue or Ctrl+C to quit..."
+echo ""
 # Read Application.properties to find release version
 APP_VERSION=`sed '/^\#/d' application.properties | grep 'app.version'  | tail -n 1 | cut -d "=" -f2-`
-echo "# Read app version as $APP_VERSION"
+echo "# Read app version as ${APP_VERSION}"
 
 # Exit if app version indicates it is an RC
 echo "$APP_VERSION" | grep -qi "rc"
@@ -27,37 +30,41 @@ RETVAL=$?
 [ $RETVAL -ne 0 ] && echo "# FAILURE: Swahili translation is incomplete" && exit 1
 echo "# Swahili i18n is complete"
 
+# Run migration tests
+pushd test/migration
+gradle run
+if [ $? -eq 0 ];
+	then echo "# FAILURE: migration tests did not pass, ensure you have valid migration set up" && exit 1
+fi
+popd
+
 # Roll version numbers to non-snapshot
 echo "# Rolling version numbers to non-snapshot"
 do/remove_snapshot_from_install_resource_directories
 
-# Do builds
+# Build installers
 echo "# Building installers.."
 grails prod BuildInstallers
 
 # TODO: test build in appropriate format for machine
-#### This can reuse elements of build_uninstall_install_test
+#### This can reuse elements of build_uninstall_install_test. Should exit 1 if this fails
 
 # Commit
+echo "Committing and tagging build"
 git add -A
-git commit -m "Built $APP_VERSION using do/release script"
-#### git push
+git commit -m "Built ${APP_VERSION} using do/release script"
+git tag frontlinesms2.$APP_VERSION
 
-# TODO: tag commit
-#### git tag frontlinesms2.a.b
-#### git push
+# Roll version to new snapshot
+echo "Enter the new snapshot application version for post-build. This should end with '-SNAPSHOT'."
+read POST_BUILD_VERSION
+sed -i "s/\(app\.version=\).*\$/\1${POST_BUILD_VERSION}/" application.properties
+git commit -m "Rolled version numbers to 2.${POST_BUILD_VERSION} after 2.${APP_VERSION} release"
 
-# TODO: prompt user for new snapshot version number
-#### prompt for new snapshot number
-
-# TODO: roll version to new snapshot
-#### similar to do/remove_snapshot_from_install_resource_directories
-
-# TODO: commit with new snapshot version
-#### git commit -m "Rolled version numbers to 2.x.y snapshot after 2.a.b release"
-
-# TODO: git push --tags
 
 # TODO: upload builds
 #### CORE-1440
 
+# TODO: Push (uncomment the lines below and delete the TODO: when this script passes QA)
+# git push
+# git push --tags
