@@ -208,7 +208,6 @@ class MigrationSpec {
 			assert poll1.question == "Who will win?"
 			assert poll1.sentMessageText == "Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'"
 			assert poll1.autoreplyText == 'Thank you, ${recipient_name}, for participating in the football poll'
-			assert poll1.keywords*.value.sort() == ['']
 			assert poll1.keywords.size() == 5
 			assert poll1.keywords*.value.sort() == ['A', 'B', 'BARCELONA', 'FOOTBALL', 'MANCHESTER']
 			['A':false, 'B':false, 'BARCELONA':false, 'FOOTBALL':true, 'MANCHESTER':false].each { k, v ->
