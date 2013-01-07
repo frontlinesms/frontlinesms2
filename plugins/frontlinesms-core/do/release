@@ -10,7 +10,7 @@ fi
 echo "Checking for completeness of Kiswahili translation"
 groovy do/i18n-compare.groovy grails-app/i18n/messages.properties grails-app/i18n/messages_sw.properties
 RETVAL=$?
-[ $RETVAL -eq 0 ] && echo "FAILURE: Swahili translation is incomplete" && exit 1
+[ $RETVAL -ne 0 ] && echo "FAILURE: Swahili translation is incomplete" && exit 1
 echo "Swahili i18n is complete"
 
 # TODO: roll version numbers to non-snapshot
