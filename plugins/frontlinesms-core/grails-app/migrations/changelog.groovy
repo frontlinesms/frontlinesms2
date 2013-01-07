@@ -22,5 +22,7 @@ databaseChangeLog = {
 	include file: 'changelog-1.0-rc2.groovy'
 
 	include file: 'changelog-2.0.groovy'
+
+	include file: 'radio-1.0.changelog.groovy'
 }
 
