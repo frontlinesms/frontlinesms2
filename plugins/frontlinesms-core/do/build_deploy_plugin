@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+
+APP_NAME="frontlinesms-core"
+
+echo "# extract core version from application.properties"
+CORE_VERSION=`grep "app.version=.*" application.properties | sed -r "s/app\.version=(.*)/\1/"`
+echo "# Extracted core version as $CORE_VERSION"
+rm plugin.xml || echo "# no plugin.xml present"
+grails clean
+grails package-plugin
+NEW_PLUGIN_ZIP_NAME=$APP_NAME-$CORE_VERSION.zip
+OLD_PLUGIN_ZIP_NAME=grails-$NEW_PLUGIN_ZIP_NAME
+echo "# renaming $OLD_PLUGIN_ZIP_NAME to $NEW_PLUGIN_ZIP_NAME"
+mv $OLD_PLUGIN_ZIP_NAME $NEW_PLUGIN_ZIP_NAME
+
+IVY_CACHE_DIR=~/.grails/ivy-cache/org.grails.plugins/$APP_NAME/zips
+mkdir -p $IVY_CACHE_DIR
+IVY_CACHED_ZIP=$IVY_CACHE_DIR/$NEW_PLUGIN_ZIP_NAME
+echo "# Removing old plugin from local ivy cache at $IVY_CACHED_ZIP..."
+rm $IVY_CACHED_ZIP || echo "# Old plugin was not found in ivy cache."
+
+echo "# Deploying to local ivy cache..."
+cp $NEW_PLUGIN_ZIP_NAME $IVY_CACHED_ZIP
+
+echo "# deploy core plugin to remote plugin repo"
+echo "# TODO skip maven deploy for non-SNAPSHOT builds"
+echo "# Using maven password: $FRONTLINESMS_MAVEN_PASSWORD"
+ftp -n dev.frontlinesms.com << EOF
+user m2repo $FRONTLINESMS_MAVEN_PASSWORD
+cd org/grails/plugins/$APP_NAME
+mkdir $CORE_VERSION
+cd $CORE_VERSION
+put $NEW_PLUGIN_ZIP_NAME
+exit
+EOF
+
+echo "# Plugin built and deployed to remote maven repo."
