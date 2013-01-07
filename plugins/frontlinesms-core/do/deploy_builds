@@ -19,9 +19,13 @@ local_unix_path=`ls install/target/install4j/frontlinesms* | grep unix`
 
 r_path="http://www.frontlinesms.com/downloads/"
 
-r_windows_path=$r_path`ls install/target/install4j/ | grep windows`
-r_mac_path=$r_path`ls install/target/install4j/ | grep mac`
-r_unix_path=$r_path`ls install/target/install4j/ | grep unix`
+windows_file=`ls install/target/install4j/ | grep windows`
+mac_file=`ls install/target/install4j/ | grep mac`
+unix_file=`ls install/target/install4j/ | grep unix`
+
+r_windows_path=$r_path$windows_file
+r_mac_path=$r_mac_path$mac_file
+r_unix_path=$r_path$unix_file
 
 echo ">>>>>>>>>>> Uploading to"$remote_upload_path
 #uloading the builds
@@ -33,57 +37,54 @@ echo "#### Uploading unix build..."
 curl -v -T $local_unix_path -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_upload_path"
 
 #Cheking md5 of files
-wget $r_windows_path
 echo "Checking md5 of Windows build"
-declare local_hash=${$(md5sum `ls install/target/install4j/frontlinesms* | grep windows`)% *}
-declare remote_hash=${$(md5sum `ls install/target/install4j/ | grep windows`)% *}
+local_hash=$(md5sum `ls install/target/install4j/frontlinesms* | grep windows`)
+declare remote_hash=`curl http://frontlinesms.com/downloads/checkmd5.php?filename=$windows_file`
 
 echo "Local md5sum : $local_hash ## Remote md5sum : $remote_hash"
-if[ local_hash -eq remote_hash ]
-	then
-	echo "md5sum okay ## oh yeah !!! "
+echo "$local_hash" | grep -qi "$remote_hash"
+if $? -eq 0 ;
+	then echo "md5sum okay ## oh yeah !!! "
 else
 	echo "ooops md5sum not equal exiting script"
-	exit
+	exit 0
 fi
 
-wget $r_mac_path
 echo "Checking md5 of Mac build"
-local_hash=${$(md5sum `ls install/target/install4j/frontlinesms* | grep mac`)% *}
-remote_hash=${$(md5sum `ls install/target/install4j/ | grep mac`)% *}
+local_hash=$(md5sum `ls install/target/install4j/frontlinesms* | grep mac`)
+declare remote_hash=`curl http://frontlinesms.com/downloads/checkmd5.php?filename=$mac_file`
 
 echo "Local md5sum : $local_hash ## Remote md5sum : $remote_hash"
-if[ local_hash -eq remote_hash ]
-	then
-	echo "md5sum okay ## oh yeah !!! "
+echo "$local_hash" | grep -qi "$remote_hash"
+if $? -eq 0 ;
+	then echo "md5sum okay ## oh yeah !!! "
 else
 	echo "ooops md5sum not equal exiting script"
-	exit
+	exit 0
 fi
 
-wget $r_unix_path
-local_hash=${$(md5sum `ls install/target/install4j/frontlinesms* | grep unix`)% *}
-remote_hash=${$(md5sum `ls install/target/install4j/ | grep unix`)% *}
+local_hash=$(md5sum `ls install/target/install4j/frontlinesms* | grep unix`)
+declare remote_hash=`curl http://frontlinesms.com/downloads/checkmd5.php?filename=$unix_file`
 
 echo "Local md5sum : $local_hash ## Remote md5sum : $remote_hash"
-if[ local_hash -eq remote_hash ]
-	then
-	echo "md5sum okay ## oh yeah !!! "
+echo "$local_hash" | grep -qi "$remote_hash"
+if $? -eq 0 ;
+	then echo "md5sum okay ## oh yeah !!! "
 else
 	echo "ooops md5sum not equal exiting script"
-	exit
+	exit 0
 fi
 
 exit ##Exiting so as not to upload link file
 
-echo "#### Creating the xml file with file names"
-touch build_links.php
-echo "<?php echo "{\'windows\':\'$r_windows_path\', \'mac\':\'$r_mac_path\', \'unix\':\'$r_unix_path\'}" ?>" >> build_links.php
-echo "#### Uloading xml document with file names"
-local_json_path="build_links.json"
-curl -v -T $local_json_path -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_upload_path"
+#echo "#### Creating the xml file with file names"
+#touch build_links.php
+#echo "<?php echo "{\'windows\':\'$r_windows_path\', \'mac\':\'$r_mac_path\', \'unix\':\'$r_unix_path\'}" ?>" >> build_links.php
+#echo "#### Uloading xml document with file names"
+#local_json_path="build_links.json"
+#curl -v -T $local_json_path -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_upload_path"
 
-echo "#### Removing build_links.json... :("
-rm build_links.json
+#echo "#### Removing build_links.json... :("
+#rm build_links.json
 
 echo "Complete .... :)"
