@@ -39,12 +39,12 @@ curl -v -T $local_unix_path -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_upload_p
 #Cheking md5 of files
 echo "Checking md5 of Windows build"
 local_hash=$(md5sum `ls install/target/install4j/frontlinesms* | grep windows`)
+declare -a final_local_hash="(${local_hash[0]})";
 declare remote_hash=`curl http://frontlinesms.com/downloads/checkmd5.php?filename=$windows_file`
 
-echo "Local md5sum : $local_hash ## Remote md5sum : $remote_hash"
-echo "$local_hash" | grep -qi "$remote_hash"
-if $? -eq 0 ;
-	then echo "md5sum okay ## oh yeah !!! "
+echo "Local md5sum : $final_local_hash ## Remote md5sum : $remote_hash"
+if [ $final_local_hash = $remote_hash ]; then
+	echo "md5sum okay ## oh yeah !!! ";
 else
 	echo "ooops md5sum not equal exiting script"
 	exit 0
@@ -52,24 +52,24 @@ fi
 
 echo "Checking md5 of Mac build"
 local_hash=$(md5sum `ls install/target/install4j/frontlinesms* | grep mac`)
+declare -a final_local_hash="(${local_hash[0]})";
 declare remote_hash=`curl http://frontlinesms.com/downloads/checkmd5.php?filename=$mac_file`
 
-echo "Local md5sum : $local_hash ## Remote md5sum : $remote_hash"
-echo "$local_hash" | grep -qi "$remote_hash"
-if $? -eq 0 ;
-	then echo "md5sum okay ## oh yeah !!! "
+echo "Local md5sum : $final_local_hash ## Remote md5sum : $remote_hash"
+if [ $final_local_hash = $remote_hash ]; then
+	echo "md5sum okay ## oh yeah !!! ";
 else
 	echo "ooops md5sum not equal exiting script"
 	exit 0
 fi
 
 local_hash=$(md5sum `ls install/target/install4j/frontlinesms* | grep unix`)
+declare -a final_local_hash="(${local_hash[0]})";
 declare remote_hash=`curl http://frontlinesms.com/downloads/checkmd5.php?filename=$unix_file`
 
-echo "Local md5sum : $local_hash ## Remote md5sum : $remote_hash"
-echo "$local_hash" | grep -qi "$remote_hash"
-if $? -eq 0 ;
-	then echo "md5sum okay ## oh yeah !!! "
+echo "Local md5sum : $final_local_hash ## Remote md5sum : $remote_hash"
+if [ $final_local_hash = $remote_hash ]; then 
+	echo "md5sum okay ## oh yeah !!! "
 else
 	echo "ooops md5sum not equal exiting script"
 	exit 0
