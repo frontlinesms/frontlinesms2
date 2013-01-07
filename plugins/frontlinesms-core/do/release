@@ -1,6 +1,6 @@
 #!/bin/bash
 # FOR AUTOMATED BUILDING OF NEW RELEASES OF FRONTLINESMS
-# Requirements: Groovy, Gradle.
+# Requirements: Groovy, Gradle. Currently only works on linux.
 
 echo "### Building FrontlineSMS v2 release"
 read -sn 1 -p "## WARNING ## This script will make modifications to your working directory, and commit these changes. It will also create a tag for the newly built version. Press any key to continue or Ctrl+C to quit..."
@@ -46,8 +46,11 @@ do/remove_snapshot_from_install_resource_directories
 echo "# Building installers.."
 grails prod BuildInstallers
 
-# TODO: test build in appropriate format for machine
-#### This can reuse elements of build_uninstall_install_test. Should exit 1 if this fails
+# test build in appropriate format for machine (TODO: currently assumes linux)
+do/build_uninstall_install_test skipBuildStep
+if [ $? -ne 0 ];
+	then echo "# FAILURE: build test failed, see output to debug" && exit 1
+fi
 
 # Commit
 echo "Committing and tagging build"
