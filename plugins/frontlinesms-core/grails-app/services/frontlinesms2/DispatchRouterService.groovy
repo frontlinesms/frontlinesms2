@@ -45,7 +45,8 @@ class DispatchRouterService {
 					def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
 					println "Id of prefered route ## $latestReceivedMessage.receivedOn"
 					println "allOutRoutes ## $allOutRoutes"
-					def routeToTake = allOutRoutes.find{ it.id == "out-${latestReceivedMessage.receivedOn}" }
+					println "ALL ROUTE IDS ## ${allOutRoutes*.id}"
+					def routeToTake = allOutRoutes.find{ it.id.endsWith("-${latestReceivedMessage.receivedOn.id}") }
 					println "Chosen Route ## $routeToTake"
 					routeId = routeToTake?routeToTake.id:null
 				}
