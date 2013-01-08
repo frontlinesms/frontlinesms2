@@ -47,7 +47,7 @@ echo "# Building installers.."
 grails prod BuildInstallers
 
 # test build in appropriate format for machine (TODO: currently assumes linux)
-do/build_uninstall_install_test skipBuildStep
+do/uninstall_install_test
 if [ $? -ne 0 ];
 	then echo "# FAILURE: build test failed, see output to debug" && exit 1
 fi
