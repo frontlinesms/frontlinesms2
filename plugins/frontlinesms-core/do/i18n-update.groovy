@@ -30,9 +30,9 @@ String currentLine
 
 def existingSlaveLines = []
 def newSlaveLines = []
-slave.eachLine { line -> existingSlaveLines << line }
+slave.eachLine ("utf8") { line -> existingSlaveLines << line }
 
-master.eachLine { masterLine ->
+master.eachLine ("utf8") { masterLine ->
 	if(masterLine.isAllWhitespace() || masterLine.trim().startsWith("#")) {
 		// This is a comment or whitespace, preserve it
 		newSlaveLines << masterLine
@@ -49,7 +49,7 @@ master.eachLine { masterLine ->
 	}
 }
 
-new File(targetFile).withWriter { out -> 
+new File(targetFile).withWriter ("utf8") { out -> 
 	newSlaveLines.each { line ->
 		out.writeLine(line)
 	}
