@@ -9,6 +9,7 @@ class SmppPostProcessor implements Processor {
 		def log = { println "SmppPostProcessor.process() : $it" }
 		log 'ENTRY'
 		log "in.body:" + exchange.in.body
+		log "in.headers:" + exchange.in.headers
 		byte[] bytes = exchange.in.getBody(byte[].class);
 		log "in.body as byte[]:" + bytes
 		String text = new String(bytes, "UTF-8").trim();
