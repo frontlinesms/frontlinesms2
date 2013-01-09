@@ -7,6 +7,7 @@ class SmppPreProcessor implements Processor {
 	public void process(Exchange x) throws Exception {
 		def log = { println "SmppPreProcessor.process() : $it" }
 		log 'ENTRY'
+		log "Exchange:IN.HEADERS  ${x.in.headers}"
 		
 		// URL-encode body
 		def d = x.in.body
@@ -18,12 +19,6 @@ class SmppPreProcessor implements Processor {
 		set x, 'dst', destination
 		//Setting the destination of the message
 		x.in.setHeader("CamelSmppDestAddr", d.dst)
-		// Add auth details to header
-		log "Calculating connection ID..."
-		def connectionId = x.fconnectionId
-		log "connectionId=$connectionId"
-		def connection = SmppFconnection.get(connectionId)
-		log "connection=$connection"
 		
 		log 'EXIT'
 	}

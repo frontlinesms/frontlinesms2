@@ -23,7 +23,7 @@ class SmppPreProcessorSpec extends CamelUnitSpecification {
 			println "Smpp Exchange : $x"
 			p.process(x)
 		then:
-			1 * x.out.setBody("simple")
+			1 * x.in.setBody("simple")
 	}
 	
 	def 'out_body should be URL-encoded'() {
@@ -33,7 +33,7 @@ class SmppPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			1 * x.out.setBody("more+complex")
+			1 * x.in.setBody("more+complex")
 	}
 	
 	def 'dispatch ID should be set in header'() {
@@ -43,7 +43,7 @@ class SmppPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			x.out.headers.'frontlinesms.dispatch.id' == '45678'
+			x.in.headers.'frontlinesms.dispatch.id' == '45678'
 	}
 	
 	def 'message destination should be set and stripped of leading plus'() {
@@ -53,37 +53,7 @@ class SmppPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			x.out.headers.'clickatell.dst' == '1234567890'
-	}
-	
-	def 'clickatell auth details should be set in header'() {
-		setup:
-			buildTestConnection()
-			def x = mockExchange("simple")
-		when:
-			p.process(x)
-		then:
-			println "x.out.headers :: ${x.out.headers}"
-			x.out.headers.'clickatell.apiId' == '11111'
-			x.out.headers.'clickatell.username' == 'bob'
-			x.out.headers.'clickatell.password' == 'secret'
-			x.out.headers.'clickatell.fromNumber' == null
-		
-	}
-
-	def 'clickatell fromNumber should be set in header if sendToUsa is true'() {
-		setup:
-			buildTestConnection(true)
-			def x = mockExchange("simple")
-		when:
-			p.process(x)
-		then:
-			println "x.out.headers :: ${x.out.headers}"
-			x.out.headers.'clickatell.apiId' == '11111'
-			x.out.headers.'clickatell.username' == 'bob'
-			x.out.headers.'clickatell.password' == 'secret'
-			x.out.headers.'clickatell.fromNumber' == '%2B123321'
-		
+			x.in.headers.'smpp.dst' == '1234567890'
 	}
 
 	private SmppFconnection buildTestConnection() {

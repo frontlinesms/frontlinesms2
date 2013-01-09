@@ -21,6 +21,7 @@ class CamelUnitSpecification extends Specification {
 			dst:'+1234567890',
 			toString:{"mock body (Dispatch)"}
 		]
+		m.headers >> [:]
 		return m
 	}
 	
