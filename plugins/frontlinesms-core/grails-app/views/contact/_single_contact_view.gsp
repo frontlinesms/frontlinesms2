@@ -9,7 +9,10 @@
 	<table>
 		<tr>
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
-			<td><g:textField name="name" value="${contactInstance?.name}"/></td>
+			<td>
+				<g:textField name="name" value="${contactInstance?.name}"/>
+				<a class="remove-command not-custom-field" id="remove-name">&nbsp;</a>
+			</td>
 		</tr>
 		<tr>
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
@@ -133,6 +136,17 @@ function refreshMessageStats(data) {
 
 $(function() {
 	setInterval(refreshMessageStats, 15000);
+	var clear;
+	$( "td > input[type=text]" ).each(function( index) {
+		if( $(this).val() == ''){
+			clear = $(this).next();
+			clear.attr("style","display:none");
+		}
+		else{
+			clear = $(this).next();
+			clear.removeAttr("display:style");
+		}
+	});
 });
 </r:script>
 
