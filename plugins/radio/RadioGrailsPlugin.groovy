@@ -46,17 +46,4 @@ class RadioGrailsPlugin {
 		// TODO Implement code that is executed when the project configuration changes.
 		// The event is the same as for 'onChange'.
 	}
-
-	def doWithConfig = { config ->
-		// Here we need to tell the database migrations plugin the change log is in the frontlinesms-core plugin
-		try {
-			def pluginManager = PluginManagerHolder.pluginManager
-			def plugin = pluginManager.getGrailsPlugin('frontlinesms-core')
-			def pluginDir = org.codehaus.groovy.grails.plugins.GrailsPluginUtils.getPluginDirForName('frontlinesms-core')?.path
-			config.grails.plugin.databasemigration.changelogLocation = "$pluginDir/grails-app/migrations"
-		} catch (Exception e) {
-			println "Error in doWithConfig $e"
-		}
-
-	}
 }
