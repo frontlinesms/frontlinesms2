@@ -36,6 +36,7 @@ class BodyMenu extends geb.Module {
 		smartGroupIsDisplayed { smartGroupInstance ->
 			$("title").text().contains(smartGroupInstance.name)
 		}
+		allContactsCount { $('a[href="/frontlinesms-core/contact/show"]').text().find(/\d+/) as Integer}
 	}
 }
 
