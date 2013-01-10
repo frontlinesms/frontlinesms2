@@ -4,21 +4,22 @@ import org.apache.camel.Processor
 import org.apache.camel.Exchange
 
 class SmppTranslationService implements Processor {
-	static final String INTERNATIONAL_SYMBOL = '+'
-	static transactional = false
-
 	void process(Exchange exchange) {
-		log { t->
+		println "ENTRY"
+		def log = { t->
 			println "SmppTranslationService.process ${t}"
 		}
 		println("exchange ${exchange}")
 		def i = exchange.in
 		println("in: ${i}")
-		if(i.getHeader('CamelSmppSourceAddr')) {
+		println("in.headers: ${i.headers}")
+		println("in.getHeaders: ${i.getHeaders()}")
+		
+		if(i.headers['CamelSmppSourceAddr']) {
 			Fmessage message = new Fmessage(inbound:true)
 			def messageBody = i.body
-			def messageSource = i.getHeader('CamelSmppSourceAddr')
-			def messageDate = i.getHeader('CamelSmppDoneDate')
+			def messageSource = i.headers['CamelSmppSourceAddr']
+			def messageDate = i.headers['CamelSmppDoneDate']
 			
 			message.src = messageSource
 			message.text = messageBody
@@ -30,6 +31,8 @@ class SmppTranslationService implements Processor {
 
 
 			exchange.out.body = message
+			log "IN::BODY ${exchange.in.body}"
+			log "OUT::BODY ${exchange.out.body}"
 		} else {
 			exchange.setProperty(Exchange.ROUTE_STOP, Boolean.TRUE);
 		}
