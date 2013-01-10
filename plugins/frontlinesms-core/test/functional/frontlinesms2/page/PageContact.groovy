@@ -128,6 +128,8 @@ class SingleContactDetails extends geb.Module {
 		cancel { $('#action-buttons a.cancel', text:'Cancel') }
 		delete { $('#btn_delete') }
 		searchForMessages { $('#message-stats a.search') }
+		sentCount { $('li.sent').text()}
+		receivedCount {$('li.received').text()}
 	}
 }
 
