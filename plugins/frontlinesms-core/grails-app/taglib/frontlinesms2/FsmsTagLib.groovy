@@ -163,8 +163,9 @@ class FsmsTagLib {
 		out << '</tr>'
 	}
 
-	def activityConfirmTable = { att ->
+	def activityConfirmTable = { att, body ->
 		out << '<table id="' + att.type + '-confirm" class="activity-confirm-table">'
+		out << body()
 		def fields = getFields(att)
 		fields.each { out << activityConfirmTableRow(att + [field:it.trim()]) }
 		out << '</table>'
