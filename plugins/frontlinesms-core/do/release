@@ -65,9 +65,9 @@ sed -i "s/\(app\.version=\).*\$/\1${POST_BUILD_VERSION}/" application.properties
 git commit -m "Rolled version numbers to 2.${POST_BUILD_VERSION} after 2.${APP_VERSION} release"
 
 
-# TODO: upload builds
-#### CORE-1440
+# Upload builds
+do/deploy_builds
 
-# TODO: Push (uncomment the lines below and delete the TODO: when this script passes QA)
+# Push (uncomment the lines below and delete the TODO: when this script passes QA)
 # git push
 # git push --tags
