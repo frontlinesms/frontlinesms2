@@ -1,0 +1,1 @@
+grep -rn --color "g:render template" grails-app/views/ grails-app/controllers/
