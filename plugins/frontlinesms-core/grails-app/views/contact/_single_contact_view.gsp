@@ -137,16 +137,16 @@ function refreshMessageStats(data) {
 $(function() {
 	setInterval(refreshMessageStats, 15000);
 	var clear;
-	$( "td > input[type=text]" ).each(function( index) {
+	/*$( "td > input[type=text]" ).each(function( index) {
 		if( $(this).val() == ''){
 			clear = $(this).next();
 			clear.attr("style","display:none");
 		}
 		else{
 			clear = $(this).next();
-			clear.removeAttr("display:style");
+			clear.removeAttr("style");
 		}
-	});
+	});*/
 });
 </r:script>
 
