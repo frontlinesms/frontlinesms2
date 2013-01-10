@@ -1,15 +1,16 @@
 #!/bin/bash
 set -e
 
-APP_NAME="frontlinesms-core"
+echo "# extract app name from application.properties..."
+APP_NAME=`grep '^app.name=' application.properties | cut -d= -f2 | sed -E 's/(([^^])([A-Z]))/\2-\3/g' | tr [:upper:] [:lower:]`
 
 echo "# extract core version from application.properties"
-CORE_VERSION=`grep "app.version=.*" application.properties | sed -r "s/app\.version=(.*)/\1/"`
-echo "# Extracted core version as $CORE_VERSION"
+PLUGIN_VERSION=$(env groovy -e "`grep -E '^\s*def\s+version' *GrailsPlugin.groovy`; println version")
+echo "# Extracted plugin version as $PLUGIN_VERSION"
 rm plugin.xml || echo "# no plugin.xml present"
 grails clean
 grails package-plugin
-NEW_PLUGIN_ZIP_NAME=$APP_NAME-$CORE_VERSION.zip
+NEW_PLUGIN_ZIP_NAME=$APP_NAME-$PLUGIN_VERSION.zip
 OLD_PLUGIN_ZIP_NAME=grails-$NEW_PLUGIN_ZIP_NAME
 echo "# renaming $OLD_PLUGIN_ZIP_NAME to $NEW_PLUGIN_ZIP_NAME"
 mv $OLD_PLUGIN_ZIP_NAME $NEW_PLUGIN_ZIP_NAME
@@ -28,9 +29,12 @@ echo "# TODO skip maven deploy for non-SNAPSHOT builds"
 echo "# Using maven password: $FRONTLINESMS_MAVEN_PASSWORD"
 ftp -n dev.frontlinesms.com << EOF
 user m2repo $FRONTLINESMS_MAVEN_PASSWORD
+mkdir org
+mkdir org/grails/plugins
+mkdir org/grails/plugins/$APP_NAME
 cd org/grails/plugins/$APP_NAME
-mkdir $CORE_VERSION
-cd $CORE_VERSION
+mkdir $PLUGIN_VERSION
+cd $PLUGIN_VERSION
 put $NEW_PLUGIN_ZIP_NAME
 exit
 EOF
