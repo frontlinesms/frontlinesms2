@@ -80,26 +80,7 @@ class GroupViewSpec extends GroupBaseSpec {
 			contactList.selectContact 1
 		then:
 			waitFor { !footer.prevPage.disabled }
-	}
-
-	def "All Contacts count should be displayed, no matter which contact section is currently displayed"() {
-		given:
-			createTestGroups()
-			createManyContactsAddToGroups()
-			(111..190).each {
-				Contact.build(name:"Contact${it}", mobile:"987654321${it}", notes:'notes')
-			}
-			def friendsGroup = Group.findByName("Friends")
-		when:
-			to PageContactShow 
-		then:
-			bodyMenu.allContactsCount == 160
-		when:
-			to PageContactShow, friendsGroup 
-		then:
-			bodyMenu.allContactsCount == 160
-	}
-	
+	}	
 }
 
 
