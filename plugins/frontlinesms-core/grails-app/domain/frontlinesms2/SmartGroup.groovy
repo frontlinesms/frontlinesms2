@@ -36,7 +36,7 @@ class SmartGroup {
 	}
 
 	def countMembers() {
-		return countMembersByName(null, [:])
+		return countMembersByName(null)
 	}
 	
 	def getMembersByName(String searchString, Map pageParams) {

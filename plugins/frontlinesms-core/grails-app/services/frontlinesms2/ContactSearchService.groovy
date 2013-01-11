@@ -4,40 +4,40 @@ class ContactSearchService {
 	static transactional = true
 	
 	def contactList(params) {
+		def contactsSection = params?.groupId? Group.get(params.groupId): params.smartGroupId? SmartGroup.get(params.smartGroupId): null
 		[contactInstanceList: getContacts(params),
-				contactInstanceTotal: countContacts(params),
-				contactsSection: params?.groupId? Group.get(params.groupId): params.smartGroupId? SmartGroup.get(params.smartGroupId): null]
+				contactInstanceTotal: Contact.count(),
+				contactsSection: contactsSection,
+				contactsSectionContactTotal: countContacts(params)]
 	}
 	
 	private def getContacts(params) {
 		def searchString = getSearchString(params)
 		if(params.groupId) {
-			if (!Group.get(params.groupId)) {
-				return []
-			}
-			else {
-				GroupMembership.searchForContacts(asLong(params.groupId), searchString, params.sort,
+			if (Group.get(params.groupId)) {
+				return GroupMembership.searchForContacts(asLong(params.groupId), searchString, params.sort,
 						params.max,
 				                params.offset)
 			}
+			return []
 		} else if(params.smartGroupId) {
-			SmartGroup.getMembersByNameIlike(asLong(params.smartGroupId), searchString, [max:params.max, offset:params.offset])
-		} else Contact.findAllByNameIlikeOrMobileIlike(searchString, searchString, params)
+			return SmartGroup.getMembersByNameIlike(asLong(params.smartGroupId), searchString, [max:params.max, offset:params.offset])
+		}
+		return Contact.findAllByNameIlikeOrMobileIlike(searchString, searchString, params)
 	}
 	
 	private def countContacts(params) {
 		def searchString = getSearchString(params)
 		
 		if(params.groupId) {
-			if (!Group.get(params.groupId)) {
-				return 0
+			if (Group.get(params.groupId)) {
+				return GroupMembership.countSearchForContacts(asLong(params.groupId), searchString)
 			}
-			else {
-				GroupMembership.countSearchForContacts(asLong(params.groupId), searchString)
-			}
+			return 0
 		} else if(params.smartGroupId) {
-			SmartGroup.countMembersByNameIlike(asLong(params.smartGroupId), searchString)
-		} else Contact.countByNameIlikeOrMobileIlike(searchString, searchString)
+			return SmartGroup.countMembersByNameIlike(asLong(params.smartGroupId), searchString)
+		}
+		return Contact.countByNameIlikeOrMobileIlike(searchString, searchString)
 	}
 	
 	private def getSearchString(params) {
