@@ -198,5 +198,16 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.flash.message == 'Smart Group not found'
 	}
 
+	def "should give correct total contact count even when in a group"() {
+		given:
+			makeGroupMember()
+		when:
+			controller.params.groupId = g.id
+			def response = controller.show()
+		then:
+			response.contactInstanceTotal == 2
+			response.contactsSectionContactTotal == 1
+	}
+
 }
 
