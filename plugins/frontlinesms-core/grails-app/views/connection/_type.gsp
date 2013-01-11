@@ -1,8 +1,8 @@
 <%@ page import="frontlinesms2.*" %>
 <g:if test="${!fconnectionInstance}">
 	<div class="input">
-		<label for="pollType"><g:message code="connection.select"/></label>
-		<ul class="select">
+		<label><g:message code="connection.select"/></label>
+		<ul class="select radio">
 			<g:each in="${Fconnection.implementations}" status="i" var="it">
 				<li>
 					<label>
