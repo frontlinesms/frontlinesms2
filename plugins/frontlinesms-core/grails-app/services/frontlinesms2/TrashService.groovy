@@ -40,7 +40,7 @@ class TrashService {
 	def restore(object) {
 		Trash.findByObject(object)?.delete()
 		object.restoreFromTrash()
-		if object.save()
+		if (object.save())
 			return true
 		else
 			return false
