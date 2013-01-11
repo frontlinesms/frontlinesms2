@@ -54,7 +54,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()]
 		render view:'/contact/_single_contact_view', model:model
 	}
@@ -83,13 +82,11 @@ class ContactController extends ControllerUtils {
 			flash.message = message(code:'contact.not.found')
 			redirect(action: 'show')
 			return false
-		}
-		else if(params.groupId && !contactList.contactsSection) {
+		} else if(params.groupId && !contactList.contactsSection) {
 			flash.message = message(code:'group.not.found')
 			redirect(action: 'show')
 			return false
-		}
-		else if(params.smartGroupId && !contactList.contactsSection) {
+		} else if(params.smartGroupId && !contactList.contactsSection) {
 			flash.message = message(code:'smartgroup.not.found')
 			redirect(action: 'show')
 			return false
@@ -100,6 +97,7 @@ class ContactController extends ControllerUtils {
 				contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
 				contactsSection: contactList.contactsSection,
+				contactsSectionContactTotal: contactList.contactsSectionContactTotal,
 				contactFieldInstanceList: usedFields,
 				contactGroupInstanceList: contactGroupInstanceList,
 				contactGroupInstanceTotal: contactGroupInstanceList.size(),
@@ -107,7 +105,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()]
 	}
 	
@@ -120,7 +117,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()] << contactSearchService.contactList(params)
 	}
 

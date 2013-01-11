@@ -1,7 +1,8 @@
 package frontlinesms2.contact
 
-import frontlinesms2.popup.*
 import frontlinesms2.*
+import frontlinesms2.popup.*
+import spock.lang.*
 
 class GroupCedSpec extends GroupBaseSpec {
 	
@@ -18,7 +19,7 @@ class GroupCedSpec extends GroupBaseSpec {
 			waitFor { bodyMenu.getGroupLink "People" }
 			assert Group.count() == (initNumGroups + 1)
 	}
-	
+
 	def 'More action dropdown has option to rename the group and it works'() {
 		given:
 			createTestGroupsAndContacts()
@@ -30,13 +31,13 @@ class GroupCedSpec extends GroupBaseSpec {
 		when:
 			header.moreGroupActions.value("rename").click()
 		then:
-			waitFor{ at RenameGroupPopup }
+			waitFor { at RenameGroupPopup }
 		when:
 			groupName.value("Renamed Group")
 			ok.jquery.trigger("click")
 		then:
 			at PageContactShow
-			waitFor{ bodyMenu.getGroupLink "Renamed Group" }
+			waitFor { bodyMenu.getGroupLink "Renamed Group" }
 			header.groupHeaderTitle.text().equalsIgnoreCase('Renamed Group (2)')
 	}
 	

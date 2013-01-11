@@ -20,7 +20,7 @@
 			<g:each in="${connectionInstanceList}" status="i" var="c">
 				<li class="connection ${c == connectionInstance ? 'selected' : ''}">
 					<g:link action="show" id="${c.id}">
-						<div class="connection-header">
+						<div class="connection-header" id="connection-${c?.id}">
 							<h2>'${c.name}'</h2>
 							<p class="connection-type">(<g:message code="${c.getClass().simpleName.toLowerCase()}.label"/>)</p>
 							<!-- FIXME should not have connection-specific code in this view.  if it's necessary we sould have separate templates

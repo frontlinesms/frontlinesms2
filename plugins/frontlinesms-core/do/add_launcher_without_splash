@@ -1,0 +1,20 @@
+#!/usr/bin/env groovy
+import javax.xml.parsers.DocumentBuilderFactory
+def buildXml = new File('install', 'build.install4j')
+println buildXml.absolutePath
+def builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+def conf = builder.parse(buildXml.newInputStream()).documentElement
+def child = { node, childName -> node.childNodes.find { it.nodeName == childName } }
+
+def launcherXml = ['launchers', 'launcher'].inject(conf, child)
+
+def noSplashLauncher = launcherXml.cloneNode(true)
+child(noSplashLauncher, 'splashScreen').setAttribute('show', 'false')
+def exeNode = child(noSplashLauncher, 'executable')
+exeNode.setAttribute('name', exeNode.getAttribute('name') + '_no_splash')
+
+child(conf, 'launchers').appendChild(noSplashLauncher)
+child(conf, 'launchers').childNodes*.nodeName
+
+buildXml.text = conf as String
+
