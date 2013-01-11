@@ -83,13 +83,11 @@ class ContactController extends ControllerUtils {
 			flash.message = message(code:'contact.not.found')
 			redirect(action: 'show')
 			return false
-		}
-		else if(params.groupId && !contactList.contactsSection) {
+		} else if(params.groupId && !contactList.contactsSection) {
 			flash.message = message(code:'group.not.found')
 			redirect(action: 'show')
 			return false
-		}
-		else if(params.smartGroupId && !contactList.contactsSection) {
+		} else if(params.smartGroupId && !contactList.contactsSection) {
 			flash.message = message(code:'smartgroup.not.found')
 			redirect(action: 'show')
 			return false
