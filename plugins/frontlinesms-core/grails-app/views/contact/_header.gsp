@@ -1,6 +1,6 @@
 <div class="content ${contactsSection?.shortName?:'all'}">
 	<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
-		<h1>${contactsSection.name} (${contactGroupInstanceTotal})</h1>
+		<h1>${contactsSection.name} (${contactsSectionContactTotal})</h1>
 		<div class="header-buttons">
 			<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 				<g:select class="dropdown" name="group-actions" from="${[message(code: 'group.rename'), message(code: 'group.delete')]}"

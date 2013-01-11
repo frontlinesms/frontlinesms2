@@ -34,6 +34,10 @@ class SmartGroup {
 	def getMembers() {
 		getMembersByName(null, [:])
 	}
+
+	def countMembers() {
+		return countMembersByName(null)
+	}
 	
 	def getMembersByName(String searchString, Map pageParams) {
 		def query = getMembersByNameQuery(searchString)
