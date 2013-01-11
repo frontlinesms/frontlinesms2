@@ -97,6 +97,7 @@ class ContactController extends ControllerUtils {
 				contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
 				contactsSection: contactList.contactsSection,
+				contactsSectionContactTotal: contactList.contactsSection?.countMembers(),
 				contactFieldInstanceList: usedFields,
 				contactGroupInstanceList: contactGroupInstanceList,
 				contactGroupInstanceTotal: contactGroupInstanceList.size(),
