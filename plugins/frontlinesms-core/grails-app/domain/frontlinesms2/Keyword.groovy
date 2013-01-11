@@ -12,6 +12,7 @@ class Keyword {
 	
 	static constraints = {
 		value(blank:true, maxSize:255, validator: { val, me ->
+			println "## Checking the Keywords for ${me.activity} ##"
 			if(val.find(/\s/)) return false
 			if(val != val.toUpperCase()) return false
 			if(me.activity?.deleted || me.activity?.archived) return true
