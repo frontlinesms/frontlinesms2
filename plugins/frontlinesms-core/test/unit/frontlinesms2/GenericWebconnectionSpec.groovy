@@ -42,7 +42,7 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 			'http://127.0.0.1:8080/frontlinesms-core'     | true
 			'http://127.0.0.1'                            | true
 			'www.example.com/index.html'                  | false
-			'http://localhost:8080/frontlinesms-core'     | false
+			'http://localhost:8080/frontlinesms-core'     | false // currently fails because of http://jira.grails.org/browse/GRAILS-5509, http://jira.grails.org/browse/GRAILS-1692, https://issues.apache.org/jira/browse/VALIDATOR-248
 			'http//www.example.com/index.php'             | false
 			'https://http://home/frontlinesms'            | false
 			'http://....home.com'                         | false
