@@ -1,1 +1,2 @@
-grep -rn --color "g:render template" grails-app/views/ grails-app/controllers/
+#grep -rn --color "g:render template" grails-app/views/ grails-app/controllers/
+grep -rn --color 'render template' grails-app/views/ && egrep -rnw --color "(render|g\.render)" grails-app/controllers/
