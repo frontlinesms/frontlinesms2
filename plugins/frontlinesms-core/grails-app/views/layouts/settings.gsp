@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title><g:message code="settings.general.header"/></title>
+		<title><g:layoutTitle default="${g.message(code:'settings.general.header')}"/></title>
 		<r:require module="settings"/>
 		<fsms:render template="/includes"/>
 		<fsms:i18nBundle/>
