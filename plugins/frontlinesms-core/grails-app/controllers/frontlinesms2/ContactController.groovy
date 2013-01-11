@@ -54,7 +54,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()]
 		render view:'/contact/_single_contact_view', model:model
 	}
@@ -105,7 +104,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()]
 	}
 	
@@ -118,7 +116,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()] << contactSearchService.contactList(params)
 	}
 
