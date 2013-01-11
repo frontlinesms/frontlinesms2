@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"; import="frontlinesms2.ConnectionStatus"%>
 <html>
 	<head>
 		<meta name="layout" content="settings"/>
@@ -7,17 +7,16 @@
 			<r:script>
 				$(function() {
 					var count = 0;
-					var oldSystemNotificationCount = "${params.count}";
 					var connectionTimer = setInterval(refreshConnectionStatus, 2000);
 					function refreshConnectionStatus() {
-						$.get("${createLink(controller:'connection', action:'list', id:params?.id)}", function(data) {
-							var newSystemNotificationCount = $("div.system-notification").length;
-							if (count < 2 && oldSystemNotificationCount == newSystemNotificationCount) {
+						$.get("${createLink(controller:'connection', action:'list', id:params?.id, params:[format:'json'])}", function(connection) {
+							if (count < 2 && connection.status == i18n("connectionstatus.connecting")) {
 								count++;	
 							} else {
 								clearInterval(connectionTimer);
 								$("div.flash").hide();
-								$(".connections").replaceWith($(data).find('.connections'));
+								$("#connection-" + connection.id).find(".connection-status").text(i18n(connection.status));
+								if(!$(".controls").find("a").is(":visible")) window.location = window.location;
 							}	
 						});
 					}
