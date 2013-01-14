@@ -26,11 +26,12 @@
 				<label><g:message code="activity.${activityType == 'autoreply' ? 'autoreply' : 'generic'}.disable.sorting.description"/></label>
 			</div>
 		</li>
-		<div class="info"><label for="keywords"><g:message code="activity.generic.keywords.title"/></label></div>
-		<div class="activity-keyword">
-			<g:textField name="keywords" class="${!activityInstanceToEdit || ((activityInstanceToEdit?.keywords?.size() > 0) && (activityInstanceToEdit?.keywords[0].value != '')) ? 'required' : ''} validcommas sorting-generic-unique sorting-generic-no-spaces" value="${activityInstanceToEdit?.keywords? activityInstanceToEdit?.keywords*.value.join(',') : ''}" disabled="${activityInstanceToEdit && ((activityInstanceToEdit?.keywords?.size() == 0) || (activityInstanceToEdit?.keywords[0].value == ''))}"/>
-		</div>
 	</ul>
+	<h2><g:message code="activity.generic.keywords.subtitle"/></h2>
+	<div class="info"><label for="keywords"><g:message code="activity.generic.keywords.info"/></label></div>
+	<div class="activity-keyword">
+		<g:textField name="keywords" class="${!activityInstanceToEdit || ((activityInstanceToEdit?.keywords?.size() > 0) && (activityInstanceToEdit?.keywords[0].value != '')) ? 'required' : ''} validcommas sorting-generic-unique sorting-generic-no-spaces" value="${activityInstanceToEdit?.keywords? activityInstanceToEdit?.keywords*.value.join(',') : ''}" disabled="${activityInstanceToEdit && ((activityInstanceToEdit?.keywords?.size() == 0) || (activityInstanceToEdit?.keywords[0].value == ''))}"/>
+	</div>
 	<r:script>
 	function sortingOptionChanged() {
 		var state = $("input:radio[name=sorting]:checked").val();
