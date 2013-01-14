@@ -189,14 +189,14 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'restoring a deleted activity should fail if an activity with colliding keywords exists'(){
 		setup:
+			def trashService = new TrashService()
 			def keyword = new Keyword(value:'TEAM')
 			def autoreply = Autoreply.build(name:'Should fail restore')
 			autoreply.addToKeywords(keyword)
 			autoreply.save(failOnError:true)
 			controller.params.id = autoreply.id
-		when:
-			controller.delete()
-		then:
+			trashService.sendToTrash(autoreply)
+		expect:
 			Autoreply.findByName('Should fail restore').deleted == true
 		when:
 			def keyword2 = new Keyword(value:'TEAM')
@@ -207,7 +207,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.id = autoreply.id
 			controller.restore()
 		then:
-			Autoreply.findByName('Should fail restore').deleted == true
+			controller.flash.message == i18nUtilService.getMessage([code:"default.restore.failed", args:["Activity" ,Autoreply.findByName("Should fail restore").id]])
 	}
 }
 
