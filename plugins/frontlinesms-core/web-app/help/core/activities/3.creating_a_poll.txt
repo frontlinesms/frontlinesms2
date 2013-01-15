@@ -1,6 +1,6 @@
 # Creating a Poll 
 
-A poll is a type of activity which allows you to see a graphical representation of the responses to a question. When creating a poll you will be able to enter the question and select who to send the question to. You will also be able to set up a **keyword**. A **keyword** allows FrontlineSMS to recognise which incoming messages are for polls and which aren't. It will also help the system determine which poll the message belongs to. This gives you the option to let FrontlineSMS automatically sort incoming messages into polls and you will be notified when this has happened. There are two types of responses you can set: Yes/No or a Multiple Choice style answer. You can also set up an **automatic reply** that is sent to every message received for that poll. This makes polls useful for contexts where you want to see the response to a particular issue or question.
+A poll is a type of activity which allows you to see a graphical representation of the responses to a question. When creating a poll you will be able to enter the question and select who to send the question to. You will also be able to set up a **keyword**. A **keyword** allows FrontlineSMS to recognize which incoming messages are for polls and which aren't. It will also help the system determine which poll the message belongs to. This gives you the option to let FrontlineSMS automatically sort incoming messages into polls - you will be notified when this has happened. There are two types of responses you can set: Yes/No or a Multiple Choice style answer. You can also set up an **automatic reply** that is sent to every message received for that poll. This makes polls useful for contexts where you want to see the response to a particular issue or question.
 
 ## How to Create a Poll
 
@@ -16,13 +16,13 @@ After clicking next, you will be prompted to select a question type and enter a 
 
 #### Question Type: 
 Yes or No: Select this if your question has a Yes or No answer. For example, the question "Do you like the colour Red?", could have a Yes or No Answer.
-Multiple Choice Question: Select this if your question has a number of different answers. For example, with the question "Do you like the colour Red?", you could get more detailed responses by having a range of answers such as, "Yes", "Quite a lot", "Not a lot" or "No".  
-If you select this option you will have the opportunity to input the possible responses in the following screens.
+
+Multiple Choice Question: Select this if your question has a number of different answers. For example, with the question "Do you like the colour Red?", you could get more detailed responses by having a range of answers such as, "Yes", "Quite a lot", "Not a lot" or "No". If you select this option you will have the opportunity to input the possible responses in the following screens.
 
 #### Enter Question:
-Here you will find an area for you to enter your question. You can re-size the text entry box by clicking and dragging the bottom right hand corner of it.  
+Here you will find an area for you to enter your question. You can re-size the text entry box by clicking and dragging the bottom right-hand corner of it.  
   
-If you simply want to collect responses and not send out a question then check the "Do not send a message for this poll (Collect responses only)" box. This might be useful when you have already distributed the question, for example over the radio or at a meeting.
+If you simply want to collect responses and not send out a question then check "Do not send a message for this poll (Collect responses only)". This might be useful when you have already distributed the question, for example over the radio or at a meeting.
 
 ### Response List  
 If you selected the "Multiple Choice Question" then the next screen you see will allow you to specify the possible responses to the question. You can enter a maximum of 5 and a must enter a minimum of 2.
