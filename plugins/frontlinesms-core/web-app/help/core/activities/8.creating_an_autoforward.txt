@@ -1,6 +1,6 @@
 # Creating an Autoforward
 
-An autoforward activity allows you to automatically forward incoming SMS to selected contacts. Autoforwards can set up to be global, thereby acting on all incoming messages, or they can be set up so that only messages matching one of the configured keywords are forwarded. The message sent to the selected recipients can be configured to contain more information than just the original message content. Both incoming messages that triggered the Autoforward and the resultant outgoing messages are stored under the Autoforward activity for ease of access. When setting up an autoforward, you can select any number of individual contacts, groups or smart groups to forward to. Autoforwards can be used to enable communication between members of a group, and can form part of a opt-in information service when used together with [subscriptions][1]
+An autoforward activity allows you to automatically forward incoming SMS to selected contacts via SMS. Autoforwards can set up to be global, thereby acting on all incoming messages, or they can be set up so that only messages matching one of the configured keywords are forwarded. The message sent to the selected recipients can be configured to contain more information than just the original message content. Both incoming messages that triggered the Autoforward and the resultant outgoing messages are stored under the Autoforward activity for ease of access. When setting up an autoforward, you can select any number of individual contacts, groups or smart groups to forward to. Autoforwards can be used to enable communication between members of a group, and can form part of a opt-in information service when used together with [subscriptions][1]
 
 ### How to Create an AutoForward
 
@@ -14,10 +14,16 @@ A new window will appear and you will be presented with a number of options. Cho
 
 In the first step you can configure the message that will be sent when an incoming message triggers an Autoforward. There are various substitution expressions, available through the 'magic wand' button, which you can use to populate the message content. The default value, '${message_text}', will forward incoming messages without any changes.
 
-**Automatic Sorting**
+**Automatic Processing**
 ![Auto sorting][9]
 
-On the next tab, you can configure FrontlineSMS to automatically trigger your Autoforward on incoming messages. With the 'Sort incoming messages that match a keyword' option, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the Autoforward. Alternatively, you can select the 'Do not use a keyword' setting, which will result in all incoming messages triggering the Autoforward, provided they do not match any other activities' keywords. Only one activity at a time can have this setting. If you choose to, you can also disable automatic sorting altogether. With this setting, you can still use your Autoforward's functionality by manually moving messages into your new activity from the inbox or any other activity or folder.
+On the next tab, you can configure FrontlineSMS to automatically trigger your Autoforward on incoming messages. With the 'Process responses containing a keyword automatically' option, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the Autoforward.
+
+Alternatively, you can select the 'Do not use a keyword' setting, which will result in all incoming messages triggering the Autoforward, provided they do not match any other activities' keywords. Only one activity at a time can have this setting. 
+
+If you choose to, you can also disable automatic sorting altogether. With this setting, you can still use your Autoforward's functionality by manually moving messages into your new activity from the inbox or any other activity or folder.
+
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted._
 
 When you have finished setting up your automatic sorting options, click next.
 

@@ -1,6 +1,12 @@
 # Creating an AutoReply #
 
-An auto reply is a type of activity which allows you to set up FrontlineSMS to automatically send replies to messages a they are received. AutoReplies can be set up to work globally, on all messages that are received, or they can be set up to be triggered by messages containing [keywords][1]. Received messages that trigger an auto reply based on keyword will be moved into the autoreply activity along with a copy of the autoreply that was sent. A global autoreply will copy incoming messages from the [inbox][2] to the autoreply activity, ensuring that the original message isn't lost. Auto-replies would be useful when you may be away or unavailable for some time and need to inform everyone messaging you that you will be away, like an Out of Office reply in your e-mail. It would also be especially effective at disseminating information based on content of the message received. For example, it could be set up to provide medical information for illnesses or symptoms as they are sent in.
+An autoreply is a type of activity which allows you to set up FrontlineSMS to automatically send replies to messages as they are received. Autoreplies can be set up to work globally, on all messages that are received, or they can be set up to be triggered by messages containing [keywords][1]. 
+
+Received messages that trigger an autoreply based on a keyword will be moved into the autoreply activity along with a copy of the autoreply that was sent. 
+
+A global autoreply will copy incoming messages from the [inbox][2] to the autoreply activity, ensuring that the original message isn't lost. 
+
+Auto-replies would be useful as an Out of Office message, to provide an acknowledgement of receipt, or to disseminate information on demand. For example, they could be set up to provide medical information for illnesses or symptoms set up as keywords in the system.
 
 ### [How to Create an AutoReply][3]
 
@@ -11,13 +17,13 @@ An auto reply is a type of activity which allows you to set up FrontlineSMS to a
 ## Automatic Sorting
 ![Auto sorting][10]
 
-On the next tab, you can configure FrontlineSMS to automatically move messages into your Autoreply and trigger the HTTP request. With the 'Sort incoming messages that match a keyword' option, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the Web Connection. Alternatively, you can select the 'Do not use a keyword' setting, which will result in all incoming messages triggering the Web Connection, provided they do not match any other activities' keywords. Only one activity at a time can have this setting. If you choose to, you can also disable automatic sorting altogether. With this setting, you can still use your Web Connection's functionality by manually moving messages into your new activity from the inbox or any other activity or folder.
+On the next tab, you can configure FrontlineSMS to automatically process an autoreply message when a certain keyword is received; not to use a keyword, in which case the autoreply is only triggered when messages are manually moved into your Autoreply; or to respond to all incoming messages with an autoreply. Only one activity at a time can have this setting. 
 
-#### Note
-Likewise the multiple keywords can be used to handle spelling mistakes that user can make when testing in to FrontlineSMS.
-An autoreply can have the keywords "food,special,meal,today" as the top level keywords and these individual keywords need to be unique across all activities. Once the autoreply is saved then, another activity cannot use food,meal,special or today as part of the that activities top level keywords.
+Select your desired option. In the lower half of this dialogue, you can set the keyword, if applicable. You can enter any number of keywords separated by commas, and any incoming message that starts with one of those keywords will trigger the autoreply. This means that you can cater for spelling errors, different languages, and other reasons for differing keywords.
 
-When you have finished setting up your automatic sorting options, click next.
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted._
+
+When you have finished setting up your automatic processing options, click next.
 
 **_Enter Message_**  
 
@@ -33,7 +39,7 @@ On this screen you will find a summary of all the options you have selected, so 
 
 ![Summary][12]
 
-You will also be able to name your autoreply so that it is easily recognisable.
+You will also be able to name your autoreply so that it is easily recognizable.
 
 _**Note:** Activity names must be unique. You cannot have two activities with the same name. When an activity is deleted **and** removed from the trash, that name can then be used in any new activities._
 
