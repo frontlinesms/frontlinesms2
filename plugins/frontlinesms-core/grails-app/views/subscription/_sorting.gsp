@@ -4,11 +4,11 @@
 	<ul class="select">
 		<li>
 			<label for="sorting"><g:message code="poll.autosort.description"/></label>
-			<g:radio name="sorting" id="yesAutosort" value="true" checked="${activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: ''}"/>
+			<g:radio name="sorting" id="yesAutosort" value="true" checked="${ !activityInstanceToEdit? true : activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: ''}"/>
 		</li>
 		<li>
 			<label for="sorting"><g:message code="poll.autosort.no.description"/></label>
-			<g:radio name="sorting" id="noAutosort" value="false" checked="${activityInstanceToEdit?.keywords? '': true}"/>
+			<g:radio name="sorting" id="noAutosort" value="false" checked="${ !activityInstanceToEdit? '' : activityInstanceToEdit?.keywords? '': true}"/>
 		</li>
 	</ul>
 </div>
