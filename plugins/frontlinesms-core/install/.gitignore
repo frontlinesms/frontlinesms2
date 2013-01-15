@@ -3,7 +3,7 @@ target/
 target-custom-classes/
 
 # Exploded web-app directory used at runtime and build time
-src/web-app/
+web-app/
 
 # Java class files should never be committed
 *.class
