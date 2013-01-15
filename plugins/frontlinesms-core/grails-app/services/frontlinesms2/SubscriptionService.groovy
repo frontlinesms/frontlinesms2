@@ -36,8 +36,13 @@ class SubscriptionService {
 		return subscriptionInstance
 	}
 
-	def doJoin() {
-		
+	def doJoin(subscriptionOrJoinActionStep, message) {
+	}
+
+	def doLeave(subscriptionOrLeaveActionStep, message) {
+	}
+
+	def doToggle(subscription, message) {
 	}
 }
 
