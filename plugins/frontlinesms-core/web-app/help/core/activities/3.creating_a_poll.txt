@@ -44,18 +44,15 @@ To set the keywords, select "Sort responses automatically.' and then set the key
 
 For any keyword, including each response, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the activity. This means that you can cater for spelling errors, different languages, and other reasons for differing keywords.
 
-The Sorting tab looks as follows
+Default keywords will be pre-entered, but can be edited here. 
 
 ![Keywords][17]
 
-Each choice is followed by an area where you can enter text. You will see two aliases already entered into the text area. These are the default settings. 
-
-You can add more aliases simple by adding to the string of text already in the text area. Separate each response keyword with a comma. An example would be:
+An example would be:
 
 "Yes, A, yeah, yeh"
 
-
-Furthermore, the first entry in the text area corresponds to the text that will be used when generating a message in the "Edit Message" step. To change how each choice appears in the message that will be send out, change the first entry in the text area.
+The first response keyword will be the one used in generating a sample message in the "Edit Message" step. To change how each choice appears in the message that will be sent out, change the first entry in the text area.
 
 If the text area looks like this for example:
 
@@ -64,15 +61,6 @@ If the text area looks like this for example:
 Then "Yeah" will be used as part of the outgoing message text for the Poll.
 
 Once you have completed this section click "Next" to set up an "Automatic Reply".
-
-### Validation of Keywords (Important)
-
-All keywords, toplevel or second level keywords need to be unique within that poll. For example ,a Football poll could have "football" as a top level keyword but not as a second level keyword. Likewise keywords among the second level keywords need to be unique among themselves.
-In any poll if the top level keyword is not provided, then the second level keywords will be treated as top level.
-
-### Important:
-
-Top level keywords need to be unique across all activities. A poll and an autoreply cannot share a top level keywords. For more information regarding keywords in autoreplies see the autoreply section.
 
 **_Automatic Reply_**
 At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a keyword with your poll. Without a keyword the system cannot recognise which messages to automatically reply to.  
