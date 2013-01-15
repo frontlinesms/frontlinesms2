@@ -34,17 +34,13 @@ Boxes A-C will be immediately available to you to edit. If you need more than 3 
 Once you have entered all your choices, click next to set up Automatic Sorting.
 
 ### Automatic Sorting  
-You will be able to specify a keyword, that when included in an incoming message, will allow the system to automatically sort it into the relevant Poll.   
+First, you can choose whether or not FrontlineSMS will process incoming SMS automatically using a keyword for this activity. If you choose not to, then only messages you manually move into this activity will be processed. To sort using a keyword, select 'sort responses automatically'.
 
 ![Automatic Sorting][17]
   
-_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. 
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. In polls, top-level responses are optional. If you decide to allow respondents to text in only one word to vote, i.e. not to provide a top-level keyword, then the response keywords are treated as top-level and must be unique across all the activity top level keywords.
 
-In polls, top-level responses are optional. If you decide to allow respondents to text in only one word to vote, i.e. not to provide a top-level keyword, then the response keywords are treated as top-level and must be unique across all the activity top level keywords.
-
-To set the keywords, select "Sort responses automatically. Sort messages with the keyword (optional):" and then enter your top level keywords. The top level keywords are optional.
-
-When you set a keyword, and have selected a Multiple Choice Poll type, it will be possible for you to set "Response Keywords" in the lower section of the same tab. These "Response keywords are the keywords that matched to the responses entered in the previous tab."
+To set the keywords, select "Sort responses automatically.' and then set the keywords in the text boxes below.
 
 #### Note
 
