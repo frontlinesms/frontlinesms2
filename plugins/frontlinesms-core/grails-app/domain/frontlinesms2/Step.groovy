@@ -10,7 +10,6 @@ abstract class Step {
 	static configFields = [:]
 
 	static constraints = {
-		// the following assumes all configFields are mandatory
 		stepProperties(nullable: true)
 	}
 	
@@ -24,12 +23,13 @@ abstract class Step {
 		stepProperties?.find { it.key == key }?.value = value
 	}
 
-	// helper method to retrieve list of entities saved as StepProperties
-	def getEntityList(entityType, propertyName) {
-		entityType.getAll(StepProperty.findAllByStepAndKey(this, propertyName)*.value) - null
-	}
-
 	String getJsonConfig() {
 		return getConfig() as JSON
+	}
+	// helper method to retrieve list of entities saved as StepProperties
+	def getEntityList(entityType, propertyName) {
+		println "ALL STEP PROPERTIES::: ${stepProperties.findAll { true }.collect { it.key + ' ' + it.value }}"
+		println "entityType getall: ${entityType.getAll([1,2])}"
+		entityType.getAll(stepProperties.findAll { it.key == propertyName }*.value) - null
 	}
 }
