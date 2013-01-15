@@ -82,7 +82,7 @@ class SubscriptionServiceSpec extends Specification {
 
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
-		s = new Subscription(name:"test subscription", group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave").save()
+		Subscription.build(name:"test subscription", group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
 	}
 
 	//> HELPERS

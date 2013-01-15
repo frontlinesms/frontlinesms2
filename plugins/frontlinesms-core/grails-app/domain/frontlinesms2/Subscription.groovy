@@ -11,6 +11,7 @@ class Subscription extends Activity{
 	Action defaultAction = Action.TOGGLE
 	String joinAutoreplyText
 	String leaveAutoreplyText
+	def subscriptionService
 
 //> SERVICES
 	def messageSendService
@@ -28,40 +29,18 @@ class Subscription extends Activity{
 	}
 
 	def processJoin(Fmessage message){
-		this.addToMessages(message)
-		this.save()
-		message.ownerDetail = Action.JOIN.toString()
-		message.save(failOnError:true)
-		withEachCorrespondent(message, { phoneNumber ->
-			println "##### >>>>> ${Contact.findByMobile(phoneNumber)}"
-			def foundContact = Contact.findByMobile(phoneNumber)
-			if(!foundContact) {
-				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
-				group.addToMembers(foundContact);
-			} else {
-				if(!(foundContact.isMemberOf(group))){
-					group.addToMembers(foundContact);
-				}
-			}
-			if(joinAutoreplyText) {
-				sendAutoreplyMessage(foundContact, joinAutoreplyText)
-			}
-		})
+		println "I AM ABOUT TO CALL DO JOIN ON $subscriptionService"
+		subscriptionService.doJoin(this, message)
 	}
 
 	def processLeave(Fmessage message){
-		this.addToMessages(message)
-		this.save()
-		message.ownerDetail = Action.LEAVE.toString()
-		message.save(failOnError:true)
-		withEachCorrespondent(message, { phoneNumber ->
-			println "##### >>>>> ${Contact.findByMobile(phoneNumber)}"
-			def foundContact = Contact.findByMobile(phoneNumber)
-			foundContact?.removeFromGroup(group)
-			if(leaveAutoreplyText && foundContact) {
-				sendAutoreplyMessage(foundContact, leaveAutoreplyText)
-			}
-		})
+		println "I AM ABOUT TO CALL DO LEAVE ON $subscriptionService"
+		subscriptionService.doLeave(this, message)
+	}
+
+	def processToggle(Fmessage message){
+		println "I AM ABOUT TO CALL DO TOGGLE ON $subscriptionService"
+		subscriptionService.doToggle(this, message)
 	}
 
 	def sendAutoreplyMessage(Contact foundContact, autoreplyText) {
@@ -74,34 +53,10 @@ class Subscription extends Activity{
 		messageSendService.send(outgoingMessage)
 	}
 
-	// TODO this should just call processJoin or processLeave
-	def processToggle(Fmessage message){
-		this.addToMessages(message)
-		this.save()
-		message.ownerDetail = Action.TOGGLE.toString()
-		message.save(failOnError:true)
-		withEachCorrespondent(message, { phoneNumber ->
-			def foundContact = Contact.findByMobile(phoneNumber)
-			if(foundContact){
-				if(foundContact.isMemberOf(group)) {
-					foundContact.removeFromGroup(group)
-					if(leaveAutoreplyText)
-						sendAutoreplyMessage(foundContact, leaveAutoreplyText)
-				} else {
-					group.addToMembers(foundContact);
-					if(joinAutoreplyText)
-						sendAutoreplyMessage(foundContact, joinAutoreplyText)
-				}
-			} else {
-				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
-				group.addToMembers(foundContact);
-				if(joinAutoreplyText)
-					sendAutoreplyMessage(foundContact, joinAutoreplyText)
-			}
-		})
-	}
-
 	def processKeyword(Fmessage message, Keyword k) {
+		// TODO: Should add message to activity at this point
+		this.addToMessages(message)
+		this.save(failOnError:true)
 		def action = getAction(k)
 		if(action == Action.JOIN){
 			processJoin(message)
@@ -119,7 +74,7 @@ class Subscription extends Activity{
 			return Action.JOIN
 		} else if(actionText == Action.LEAVE.toString()){
 			return Action.LEAVE
-		}else if(actionText == null){
+		}else {
 			return defaultAction
 		}
 	}
