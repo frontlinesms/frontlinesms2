@@ -23,23 +23,23 @@ class SubscriptionSpec extends Specification {
 
 	def 'subscriptionService.doJoin is called when processJoin is called'() {
 		when:
-			m = processKeyword("KEY JOIN", TEST_CONTACT, "JOIN")
+			processKeyword("KEY JOIN", TEST_CONTACT, "JOIN")
 		then:
-			1 * subscriptionService.doJoin(s, m)
+			1 * subscriptionService.doJoin(_, _)
 	}
 
 	def 'subscriptionService.doLeave is called when processLeave is called'() {
 		when:
-			m = processKeyword("KEY LEAVE", TEST_CONTACT, "LEAVE")
+			processKeyword("KEY LEAVE", TEST_CONTACT, "LEAVE")
 		then:
-			1 * subscriptionService.doLeave(s, m)
+			1 * subscriptionService.doLeave(_, _)
 	}
 
 	def 'subscriptionService.doToggle is called when processToggle is called'() {
 		when:
-			m = processKeyword("KEY TOGGLE", TEST_CONTACT, "TOGGLE")
+			processKeyword("KEY TOGGLE", TEST_CONTACT, "TOGGLE")
 		then:
-			1 * subscriptionService.doToggle(s, m)
+			1 * subscriptionService.doToggle(_, _)
 	}
 
 	private def createTestSubscriptionAndGroup() {
