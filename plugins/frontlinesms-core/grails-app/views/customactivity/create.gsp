@@ -6,5 +6,5 @@
 		templates="/activity/generic/sorting,
 				/customactivity/config,
 				/customactivity/confirm,
-				/customactivty/save,
-				/customactivty/validate"/>
+				/customactivity/save,
+				/customactivity/validate"/>
