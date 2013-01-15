@@ -52,14 +52,15 @@ class SubscriptionService {
 					group.addToMembers(foundContact);
 				}
 			}
-			if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText) {
+
+			if(subscriptionOrActionStep.joinAutoreplyText) {
 				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
 			}
 		})
 	}
 
 	def doLeave(subscriptionOrActionStep, message) {
-		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.LEAVE.toString())
+		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.JOIN.toString())
 		message.save(failOnError:true)
 		def group = subscriptionOrActionStep.group
 		def foundContact
@@ -69,9 +70,9 @@ class SubscriptionService {
 				if((foundContact.isMemberOf(group))){
 					foundContact?.removeFromGroup(group)
 				}
-				if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.leaveAutoreplyText) {
-					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
-				}
+			}
+			if(subscriptionOrActionStep.leaveAutoreplyText) {
+				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
 			}
 		})
 	}
@@ -86,17 +87,17 @@ class SubscriptionService {
 			if(foundContact){
 				if(foundContact.isMemberOf(group)) {
 					foundContact.removeFromGroup(group)
-					if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.leaveAutoreplyText)
+					if(subscriptionOrActionStep.leaveAutoreplyText)
 						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
 				} else {
 					group.addToMembers(foundContact);
-					if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText)
+					if(subscriptionOrActionStep.joinAutoreplyText)
 						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
 				}
 			} else {
 				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
 				group.addToMembers(foundContact);
-				if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText)
+				if(subscriptionOrActionStep.joinAutoreplyText)
 					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
 			}
 		})

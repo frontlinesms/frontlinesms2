@@ -29,14 +29,17 @@ class Subscription extends Activity{
 	}
 
 	def processJoin(Fmessage message){
+		println "I AM ABOUT TO CALL DO JOIN ON $subscriptionService"
 		subscriptionService.doJoin(this, message)
 	}
 
 	def processLeave(Fmessage message){
+		println "I AM ABOUT TO CALL DO LEAVE ON $subscriptionService"
 		subscriptionService.doLeave(this, message)
 	}
 
 	def processToggle(Fmessage message){
+		println "I AM ABOUT TO CALL DO TOGGLE ON $subscriptionService"
 		subscriptionService.doToggle(this, message)
 	}
 
@@ -51,8 +54,9 @@ class Subscription extends Activity{
 	}
 
 	def processKeyword(Fmessage message, Keyword k) {
+		// TODO: Should add message to activity at this point
 		this.addToMessages(message)
-		this.save(failOnError:true, flush:true)
+		this.save(failOnError:true)
 		def action = getAction(k)
 		if(action == Action.JOIN){
 			processJoin(message)
