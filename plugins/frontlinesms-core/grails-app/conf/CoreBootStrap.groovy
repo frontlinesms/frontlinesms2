@@ -74,6 +74,7 @@ class CoreBootStrap {
 			dev_initAnnouncements()
 			dev_initSubscriptions()
 			dev_initWebconnections()
+			dev_initCustomActivities()
 			dev_initLogEntries()
 		}
 
@@ -432,6 +433,12 @@ class CoreBootStrap {
 		footballGroup.addToMembers(footyRon)
 
 		footballGroup.save(failOnError:true)
+	}
+
+	private def dev_initCustomActivities() {
+		new CustomActivity(name:'Do it all')
+			.addToKeywords(value:"CUSTOM")
+			.save(failOnError:true)
 	}
 	
 	private def dev_initLogEntries() {

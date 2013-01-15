@@ -20,4 +20,9 @@ abstract class Step {
 	String getPropertyValue(key) {
 		stepProperties?.find { it.key == key }?.value
 	}
+
+	// helper method to retrieve list of entities saved as StepProperties
+	def getEntityList(entityType, propertyName) {
+		entityType.getAll(StepProperty.findAllByStepAndKey(this, propertyName)*.value) - null
+	}
 }
