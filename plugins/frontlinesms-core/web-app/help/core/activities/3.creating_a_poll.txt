@@ -42,54 +42,7 @@ _**Note:** Top Level Keywords are **unique.** Once a top level keyword has been 
 
 To set the keywords, select "Sort responses automatically.' and then set the keywords in the text boxes below.
 
-#### Note
-
-Poll initially supported use of "Aliases". A user would setup a poll with with one keyword and the responses would be mapped to aliases. A response could have one or more aliases seperated with commas.
-
-For example, in version 2.1.3, a poll would look like this
-
-	Poll Name : Football Poll
-	Keyword : Football
-
-	Responses         |   Aliases
-	Manchester United |   Manu, Manchster
-	Arsenal           |   Arsenal, Ars
-
-With version 2.2 as a user you can create a poll with a top level keyword and the aliases are now converted to second level keywords.
-
-In version 2.2.0 Polls would look like this
-
-	Poll Name: Footbal Poll
-	TopLevel Keyword : Football, Foot, Footy
-
-	Responses         |   Second Level Keywords
-	Manchester United |   Manu, Manchster
-	Arsenal           |   Arsenal, Ars, Arnl
-
-As you can see from above the aliases have been replaced with second level keywords. The top level keyword is optional.
-If a top level keyword is provided messages will be mapped to resposes as follows
-
-	Incoming Message | Response Mapped To
-	football manu | Mancheter United
-	foot manu | Mancheter United
-	footy manu | Mancheter United
-	football arsenal | Arsenal
-	football ars | Arsenal
-	footy arsenal | Arsenal
-	foot arsl | Arsenal
-
-If the top level keyword is not provided, then the incoming messages will be mapped to responses as follows
-
-Incoming Message | Response Mapped To
-manu | Mancheter United
-manchester | Mancheter United
-arsenal | Arsenal
-ars | Arsenal
-
-The person texting in only needs to test in at least one of the second level keywords.
-
-This feature is quite usefull if you want frontlinesms to handle spelling mistakes in the incoming sms. For example, for the top level keyword one can have the keywords "football, footbal, fotball". This spelling handling also applies to second level keywords
-
+For any keyword, including each response, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the activity. This means that you can cater for spelling errors, different languages, and other reasons for differing keywords.
 
 The Sorting tab looks as follows
 
