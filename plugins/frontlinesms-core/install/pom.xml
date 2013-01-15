@@ -106,10 +106,9 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
 				<configuration>
+					<classpathScope>compile</classpathScope>
 					<executable>java</executable>
 					<arguments>
-						<argument>-classpath</argument>
-						<classpath/>
 						<argument>net.frontlinesms2.systraymonitor.Main</argument>
 					</arguments>
 					<workingDirectory>${basedir}</workingDirectory>

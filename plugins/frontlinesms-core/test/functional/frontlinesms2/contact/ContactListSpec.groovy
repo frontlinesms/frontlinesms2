@@ -173,4 +173,18 @@ class ContactListSpec extends ContactBaseSpec {
 			waitFor { at PageSearchResult }
 			messageList.messages.size() == 21
 	}
+
+	def "unchecking a contact should not result in a checking of any contact check boxs"() {
+		given:
+			createManyContacts()
+		when:
+			to PageContactShow
+			contactList.selectContact 0
+		then:
+			waitFor { contactList.selectedContact.size() == 1}
+		when:
+			contactList.selectContact 0
+		then:
+			!contactList.selectAll.checked
+	}
 }
