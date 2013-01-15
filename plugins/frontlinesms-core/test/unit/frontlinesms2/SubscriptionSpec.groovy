@@ -6,16 +6,17 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Subscription)
-@Mock([Group, GroupMembership])
+@Mock([Group, GroupMembership, SubscriptionService])
 @Build([Contact, Fmessage])
 class SubscriptionSpec extends Specification {
 
 	private static final String TEST_CONTACT = '+1111111111'
 	private static final String TEST_NON_CONTACT = '+2222222222'
 
-	def s, c, g
+	def s, c, g, subscriptionService, m
 
 	def setup() {
+		mockSubscriptionService()
 		createTestSubscriptionAndGroup()
 		createTestContact()
 		Subscription.metaClass.addToMessages  = { m -> m }
@@ -25,39 +26,42 @@ class SubscriptionSpec extends Specification {
 		given:
 			def subscriptionService = Mock(SubscriptionService)
 		when:
-			processKeyword("KEY JOIN", TEST_CONTACT, "JOIN")
+			m = processKeyword("KEY JOIN", TEST_CONTACT, "JOIN")
 		then:
-			1 * subscriptionService.doJoin(_)
+			1 * subscriptionService.doJoin(s, m)
 	}
 
 	def 'subscriptionService.doLeave is called when processLeave is called'() {
 		given:
 			def subscriptionService = Mock(SubscriptionService)
 		when:
-			processKeyword("KEY LEAVE", TEST_CONTACT, "LEAVE")
+			m = processKeyword("KEY LEAVE", TEST_CONTACT, "LEAVE")
 		then:
-			1 * subscriptionService.doLeave(_)
+			1 * subscriptionService.doLeave(s, m)
 	}
 
 	def 'subscriptionService.doToggle is called when processToggle is called'() {
 		given:
 			def subscriptionService = Mock(SubscriptionService)
 		when:
-			processKeyword("KEY TOGGLE", TEST_CONTACT, "TOGGLE")
+			m = processKeyword("KEY TOGGLE", TEST_CONTACT, "TOGGLE")
 		then:
-			1 * subscriptionService.doToggle(_)
+			1 * subscriptionService.doToggle(s, m)
 	}
 
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
 		s = new Subscription(name:"test subscription", group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
+		s.subscriptionService = subscriptionService
 	}
 
 	//> HELPERS
 	private def processKeyword(String messageText, String sourcePhoneNumber, String ownerDetail) {
 		def k = Mock(Keyword)
 		k.ownerDetail >> ownerDetail
-		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), k)
+		def m = mockMessage(messageText, sourcePhoneNumber)
+		s.processKeyword(m, k)
+		m
 	}
 
 	private def createTestContact() {
@@ -73,5 +77,12 @@ class SubscriptionSpec extends Specification {
 		m.text >> messageText
 		m.src >> src
 		return m
+	}
+
+	private def mockSubscriptionService() {
+		subscriptionService = Mock(SubscriptionService)
+		s.doJoin >> { println "JOIN CALLED" }
+		s.doLeave >> { println "Leave CALLED" }
+		s.doToggle >> { println "Toggle CALLED" }
 	}
 }

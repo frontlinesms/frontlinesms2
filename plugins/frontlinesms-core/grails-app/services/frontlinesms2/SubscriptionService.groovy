@@ -44,5 +44,44 @@ class SubscriptionService {
 
 	def doToggle(subscription, message) {
 	}
+
+	// TODO: REMOVE THESE!!!:
+
+	def processJoin(Fmessage message){
+		this.addToMessages(message)
+		this.save()
+		message.ownerDetail = Action.JOIN.toString()
+		message.save(failOnError:true)
+		withEachCorrespondent(message, { phoneNumber ->
+			println "##### >>>>> ${Contact.findByMobile(phoneNumber)}"
+			def foundContact = Contact.findByMobile(phoneNumber)
+			if(!foundContact) {
+				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
+				group.addToMembers(foundContact);
+			} else {
+				if(!(foundContact.isMemberOf(group))){
+					group.addToMembers(foundContact);
+				}
+			}
+			if(joinAutoreplyText) {
+				sendAutoreplyMessage(foundContact, joinAutoreplyText)
+			}
+		})
+	}
+
+	def processLeave(Fmessage message){
+		this.addToMessages(message)
+		this.save()
+		message.ownerDetail = Action.LEAVE.toString()
+		message.save(failOnError:true)
+		withEachCorrespondent(message, { phoneNumber ->
+			println "##### >>>>> ${Contact.findByMobile(phoneNumber)}"
+			def foundContact = Contact.findByMobile(phoneNumber)
+			foundContact?.removeFromGroup(group)
+			if(leaveAutoreplyText && foundContact) {
+				sendAutoreplyMessage(foundContact, leaveAutoreplyText)
+			}
+		})
+	}
 }
 
