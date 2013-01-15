@@ -16,15 +16,12 @@ class SubscriptionSpec extends Specification {
 	def s, c, g, subscriptionService, m
 
 	def setup() {
-		mockSubscriptionService()
 		createTestSubscriptionAndGroup()
 		createTestContact()
 		Subscription.metaClass.addToMessages  = { m -> m }
 	}
 
 	def 'subscriptionService.doJoin is called when processJoin is called'() {
-		given:
-			def subscriptionService = Mock(SubscriptionService)
 		when:
 			m = processKeyword("KEY JOIN", TEST_CONTACT, "JOIN")
 		then:
@@ -32,8 +29,6 @@ class SubscriptionSpec extends Specification {
 	}
 
 	def 'subscriptionService.doLeave is called when processLeave is called'() {
-		given:
-			def subscriptionService = Mock(SubscriptionService)
 		when:
 			m = processKeyword("KEY LEAVE", TEST_CONTACT, "LEAVE")
 		then:
@@ -41,8 +36,6 @@ class SubscriptionSpec extends Specification {
 	}
 
 	def 'subscriptionService.doToggle is called when processToggle is called'() {
-		given:
-			def subscriptionService = Mock(SubscriptionService)
 		when:
 			m = processKeyword("KEY TOGGLE", TEST_CONTACT, "TOGGLE")
 		then:
@@ -52,6 +45,7 @@ class SubscriptionSpec extends Specification {
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
 		s = new Subscription(name:"test subscription", group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
+		subscriptionService = Mock(SubscriptionService)
 		s.subscriptionService = subscriptionService
 	}
 
@@ -79,10 +73,4 @@ class SubscriptionSpec extends Specification {
 		return m
 	}
 
-	private def mockSubscriptionService() {
-		subscriptionService = Mock(SubscriptionService)
-		s.doJoin >> { println "JOIN CALLED" }
-		s.doLeave >> { println "Leave CALLED" }
-		s.doToggle >> { println "Toggle CALLED" }
-	}
 }
