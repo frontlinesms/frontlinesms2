@@ -41,8 +41,9 @@ class SubscriptionService {
 		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.JOIN.toString())
 		message.save(failOnError:true)
 		def group = subscriptionOrActionStep.group
+		def foundContact
 		withEachCorrespondent(message, { phoneNumber ->
-			def foundContact = Contact.findByMobile(phoneNumber)
+			foundContact = Contact.findByMobile(phoneNumber)
 			if(!foundContact) {
 				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
 				group.addToMembers(foundContact);
@@ -61,8 +62,9 @@ class SubscriptionService {
 		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.JOIN.toString())
 		message.save(failOnError:true)
 		def group = subscriptionOrActionStep.group
+		def foundContact
 		withEachCorrespondent(message, { phoneNumber ->
-			def foundContact = Contact.findByMobile(phoneNumber)
+			foundContact = Contact.findByMobile(phoneNumber)
 			if(foundContact) {
 				if((foundContact.isMemberOf(group))){
 					foundContact?.removeFromGroup(group)
@@ -78,8 +80,9 @@ class SubscriptionService {
 		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.TOGGLE.toString())
 		message.save(failOnError:true)
 		def group = subscriptionOrActionStep.group
-		withEachCorrespondent(message, { phoneNumber >
-			def foundContact = Contact.findByMobile(phoneNumber)
+		def foundContact
+		withEachCorrespondent(message, { phoneNumber ->
+			foundContact = Contact.findByMobile(phoneNumber)
 			if(foundContact){
 				if(foundContact.isMemberOf(group)) {
 					foundContact.removeFromGroup(group)
