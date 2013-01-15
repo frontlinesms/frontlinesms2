@@ -54,6 +54,7 @@ class Subscription extends Activity{
 	}
 
 	def processKeyword(Fmessage message, Keyword k) {
+		// TODO: Should add message to activity at this point
 		def action = getAction(k)
 		if(action == Action.JOIN){
 			processJoin(message)

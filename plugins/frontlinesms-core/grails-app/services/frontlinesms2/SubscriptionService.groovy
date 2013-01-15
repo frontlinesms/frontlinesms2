@@ -3,6 +3,7 @@ package frontlinesms2
 import frontlinesms2.*
 
 class SubscriptionService {
+	def messageSendService
 
     def saveInstance(Subscription subscriptionInstance, params) {
 		subscriptionInstance.group = Group.get(params.subscriptionGroup)
@@ -36,24 +37,11 @@ class SubscriptionService {
 		return subscriptionInstance
 	}
 
-	def doJoin(subscriptionOrJoinActionStep, message) {
-	}
-
-	def doLeave(subscriptionOrLeaveActionStep, message) {
-	}
-
-	def doToggle(subscription, message) {
-	}
-
-	// TODO: REMOVE THESE!!!:
-
-	def processJoin(Fmessage message){
-		this.addToMessages(message)
-		this.save()
-		message.ownerDetail = Action.JOIN.toString()
+	def doJoin(subscriptionOrActionStep, message) {
+		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.JOIN.toString())
 		message.save(failOnError:true)
+		def group = subscriptionOrActionStep.group
 		withEachCorrespondent(message, { phoneNumber ->
-			println "##### >>>>> ${Contact.findByMobile(phoneNumber)}"
 			def foundContact = Contact.findByMobile(phoneNumber)
 			if(!foundContact) {
 				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
@@ -63,25 +51,82 @@ class SubscriptionService {
 					group.addToMembers(foundContact);
 				}
 			}
-			if(joinAutoreplyText) {
-				sendAutoreplyMessage(foundContact, joinAutoreplyText)
+			if(subscriptionOrActionStep.joinAutoreplyText) {
+				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
 			}
 		})
 	}
 
-	def processLeave(Fmessage message){
-		this.addToMessages(message)
-		this.save()
-		message.ownerDetail = Action.LEAVE.toString()
+	def doLeave(subscriptionOrActionStep, message) {
+		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.JOIN.toString())
 		message.save(failOnError:true)
+		def group = subscriptionOrActionStep.group
 		withEachCorrespondent(message, { phoneNumber ->
-			println "##### >>>>> ${Contact.findByMobile(phoneNumber)}"
 			def foundContact = Contact.findByMobile(phoneNumber)
-			foundContact?.removeFromGroup(group)
-			if(leaveAutoreplyText && foundContact) {
-				sendAutoreplyMessage(foundContact, leaveAutoreplyText)
+			if(foundContact) {
+				if((foundContact.isMemberOf(group))){
+					foundContact?.removeFromGroup(group)
+				}
+			}
+			if(subscriptionOrActionStep.leaveAutoreplyText) {
+				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
 			}
 		})
+	}
+
+	def doToggle(subscriptionOrActionStep, message) {
+		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.TOGGLE.toString())
+		message.save(failOnError:true)
+		def group = subscriptionOrActionStep.group
+		withEachCorrespondent(message, { phoneNumber >
+			def foundContact = Contact.findByMobile(phoneNumber)
+			if(foundContact){
+				if(foundContact.isMemberOf(group)) {
+					foundContact.removeFromGroup(group)
+					if(subscriptionOrActionStep.leaveAutoreplyText)
+						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
+				} else {
+					group.addToMembers(foundContact);
+					if(subscriptionOrActionStep.joinAutoreplyText)
+						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
+				}
+			} else {
+				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
+				group.addToMembers(foundContact);
+				if(subscriptionOrActionStep.joinAutoreplyText)
+					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
+			}
+		})
+	}
+
+	def withEachCorrespondent(Fmessage message, Closure c) {
+		def phoneNumbers = []
+		if (message.inbound)
+			phoneNumbers << message.src
+		else {
+			message.dispatches.each { d->
+				phoneNumbers << d.dst
+			}
+		}
+		if (phoneNumbers.size() > 0) {
+			phoneNumbers.each { phoneNumber ->
+				c phoneNumber
+			}
+		}
+	}
+
+	def sendAutoreplyMessage(Contact foundContact, autoreplyText, addToActivity=false, subscription=null) {
+		def params = [:]
+		params.addresses = foundContact.mobile
+		params.messageText = autoreplyText
+		def outgoingMessage = messageSendService.createOutgoingMessage(params)
+		if(addToActivity) {
+			subscription.addToMessages(outgoingMessage)
+			subscription.save(failOnError:true)
+		}
+		else
+			outgoingMessage.save(failOnError:true)
+		messageSendService.send(outgoingMessage)
 	}
 }
 
