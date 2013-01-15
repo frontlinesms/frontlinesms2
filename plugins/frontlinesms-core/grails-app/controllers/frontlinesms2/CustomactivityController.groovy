@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class CustomActivityController extends ActivityController {
+class CustomactivityController extends ActivityController {
 	def customActivityService 
 
 	def save() {
