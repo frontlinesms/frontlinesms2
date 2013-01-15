@@ -28,7 +28,7 @@ modules = {
 		resource url:[dir:'js', file:"activity/poll/poll_graph.js"], disposition:'head'
 		resource url:[dir:'js', file:'button.js'], disposition:'head'
 		resource url:[dir:'js', file:'characterSMS-count.js'], disposition:'head'
-		resource url:[dir:'js', file:'check_li.js'], disposition:'head'
+		resource url:[dir:'js', file:'check_list.js'], disposition:'head'
 		resource url:[dir:'js', file:'/settings/connectionTooltips.js'], disposition:'head'
 		resource url:[dir:'js', file:"jquery.ui.selectmenu.js"], disposition:'head'
 		resource url:[dir:'js', file:"jquery.validate.min.js"], disposition:'head'
