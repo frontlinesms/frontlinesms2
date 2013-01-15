@@ -64,11 +64,13 @@ Once you have completed this section click "Next" to set up an "Automatic Reply"
 
 **_Automatic Reply_**
 At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a keyword with your poll. Without a keyword the system cannot recognise which messages to automatically reply to.  
+
 The automatic reply option will be unavailable until you create a keyword for your poll.
 
 ![Automatic Reply][12]
 
-To enable an automatic reply, check the "Send an automatic reply to poll responses" box and enter your message in the message.  
+To enable an automatic reply, check the "Send an automatic reply to poll responses" box and enter your message in the text box.
+
 This message will be sent out to everyone who sends a message with the keyword you set up in the previous step.
 
 **_Note:** This is different from the [auto-reply activity][3]._
@@ -78,21 +80,7 @@ This screen will provide you with an opportunity to view the message that will b
 
 ![Edit Message][13]
 
-The message will be compiled from the options you have selected in previous steps.
-
-If you selected "yes or no" as the question type and created a keyword the default message will look like this:  
->"[Your Question]? Reply "[Keyword] A" for yes, "[Keyword] B" for no."  
-
-If you did not create a keyword then the message will look like this:  
->"[Your Question]? Please reply 'Yes' or 'No'"
-
-If you selected "Multiple Choice Question" as question type and created a keyword, the default message will look like this:  
->"[Your Question]? Reply "[Keyword] A" for [Multiple Choice A], "[Keyword] B" for [Multiple Choice B], "[Keyword] C" for [Multiple >Choice C], "[Keyword] D" for [Multiple Choice D], "[Keyword] E" for [Multiple Choice E]."
-
-If you did not create a keyword then the message will look like this:  
->"[Your Question]? Please reply '[Multiple Choice A]' or '[Multiple Choice B]' or '[Multiple Choice C]' or '[Multiple Choice D]' or >'[Multiple Choice E]'
-
-Once you are happy with the message, please click 'Next'.
+The message will be compiled from the options you have selected in previous steps. Once you are happy with the message, please click 'Next'.
 
 **_Select Recipients_**
 On this screen you will be able to either add the numbers of the people you want to send the poll to, or select them from your contacts list. 
@@ -100,10 +88,9 @@ On this screen you will be able to either add the numbers of the people you want
 ![Select Recipients][14]
 
 If you add a number manually it will be added to the list and automatically selected. This number will only remain in the system for as long as it needs to send the message and will not be added to your contacts.  
-Selecting groups and contacts is easy, simply select the contacts or groups you want to send the poll.
 
 **_Summary Screen_**
-On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
+On this screen you will find a summary of all the options you have selected, the message you've created (if applicable) and the recipients you've chosen. 
 
 ![Summary][15]
 
