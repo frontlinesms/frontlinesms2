@@ -1,11 +1,11 @@
 package frontlinesms2
 
-class CustomActivityController {
+class CustomActivityController extends ActivityController {
 	def customActivityService 
 
 	def save() {
 		withCustomActivity { customActivity ->
-			//TODO implement create and edit of CustomActivity
+			doSave('customactivity', customActivityService, customActivity)
 		}
 	}
 
