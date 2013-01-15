@@ -1,16 +1,19 @@
 # New features in FrontlineSMS v 2.2.0
 ## New activities
 ### Subscriptions
-This activity allows users to add and remove themselves from groups by texting in certain keywords. For example, a user may text on 'join' to join a group or 'leave' to leave a group. This means that, for example, they can choose to join groups that control recipients of certain alerts or information, such as events listings; or could sign up as volunteers. 
+This activity allows users to add and remove themselves from groups by texting in certain keywords. For example, a user may text in 'join' to join a group or 'leave' to leave a group. This means that, for example, they can choose to join groups that control recipients of certain alerts or information, such as events listings; or could sign up as volunteers. 
 
 ### Web Connections
 This activity allows you to set up a connection to a web-based server or service, such as Ushahidi or Twitter. A FrontlineSMS deployment instance can upload messages to a specified url, and an incoming action, like a piece of data pushed from a database, can trigger an outbound SMS. We have included a custom integration with Ushahidi and Crowdmap, so that users can easily link their FrontlineSMS instance to the popular mapping platform.
 
 ##Improvements
-We have made a major improvement to the way keywords function, so that you can make it simpler for your users to text you.
+We have made a major improvement to the way keywords function, so that you can make it simpler for your users to text you. You can now specify multiple keywords separated by commas, so that you can cater for spelling mistakes, multiple languages, and other reasons for keyword variation.
 
 ### Multiple keywords for activities
-Auto-replies, Polls, Web Connections and Subscriptions now allow you to list more that one keyword to trigger a specific activity. This means  you can support more than one language or spelling of a word.
+Auto-replies, Polls, Web Connections and Subscriptions now allow you to list more than one keyword to trigger a specific activity. This means  you can support more than one language or spelling of a word.
 
-### Single keywords in Poll
-Similarly, Polls now optionally allows you to set only one keyword for poll responses - so answers could just be YES, NO, or whatever multiple choice answer you set. You can still set two-level keywords, for example in the poll about food, sample answers might be FOOD PIE or FOOD SODA. The new single keyword setting allows you simply to text in PIE or SODA
+### Single keywords in Polls and Subscriptions
+Similarly, Polls now optionally allows you to set only one keyword for poll responses - rather than requiring you to text a Poll keyword, then a response keyword, response keywords can now do both jobs. For example in a poll about food, sample answers might be FOOD PIE or FOOD SODA. The new single keyword setting allows you simply to text in PIE or SODA.
+
+##Basic Authentication
+Users can now set simple password authentication so that users logging into the platform across a network will be asked for a password before being able to interact with the system.
