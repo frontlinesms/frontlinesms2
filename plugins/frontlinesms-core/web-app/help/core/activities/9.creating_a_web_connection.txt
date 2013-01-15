@@ -14,7 +14,7 @@ A new window will appear and you will be presented with a number of options. Cho
 
 In the first step you will be prompted to choose between a Crowdmap/Ushahidi Web Connection, or a connection to another service. These two options work in the same way, but a simplified configuration is available if you are connecting to Crowdmap or Ushahidi. For other web services, you will have to configure the web connection according to the service's API documentation.
 
-When you have selected the appopriate connection type, click next.
+When you have selected the appropriate connection type, click next.
 
 ## Configuring Crowdmap/Ushahidi
 ![Configuring Ushahidi][7]
