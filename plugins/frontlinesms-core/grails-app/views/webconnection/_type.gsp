@@ -6,7 +6,7 @@
 			<g:each in="${Webconnection.implementations}" status="i" var="it">
 				<li>
 					<label>
-						<g:message code="webconnection.${it.type}.label"/>
+						<h3><g:message code="webconnection.${it.type}.label"/></h3>
 						<g:radio name="webconnectionType" checked="${it.type == 'generic'}"
 								value="${it.type}" onchange="setType('${it.type}')"/>
 						<p class="info"><g:message code="webconnection.${it.type}.description"/></p>

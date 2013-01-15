@@ -8,14 +8,14 @@
 	background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
 
 #tabs div.input, #tabs div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
-#tabs div.input label, #tabs h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }
-#tabs div.input label p { font-size:91%; font-weight:normal; }
-#tabs div.input label p:last-child { margin-bottom:0; }
+#tabs div.input > label, #tabs h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }
 #tabs div.input > label, #tabs div.confirm h2 { position:relative; left:-25px; }
 #tabs div.ui-tabs-panel div.confirm h2 { margin-bottom:10px; }
 
 #tabs div.input > * { display:block; }
 #tabs div.input textarea { width:98%; }
+#tabs div.input label p.info { padding-left:20px; margin:5px 0 15px 0; font-weight:normal; }
+#tabs div.input label h3 { display:inline; font-weight:bold; }
 
 #tabs div.input.optional { position:relative; }
 #tabs div.input.optional label { left:0; }
@@ -23,14 +23,16 @@
 
 #tabs div.input ul li { margin-bottom: 10px; }
 #tabs div.input ul label { margin-right: 15px; }
-#tabs div.input ul.select li { position:relative; margin-bottom:0; }
-#tabs div.input ul.select.radio li:hover { background-color:#e5eff3; }
-#tabs div.input ul.select.radio li label { display:block; padding-top:7px; padding-bottom:7px; margin-right:0; margin-bottom:4px; }
-#tabs div.input ul.select.radio li label p.info { padding-left:0; }
+#tabs div.input ul.select li { position:relative; }
 #tabs div.input ul.select li label { margin-left:20px; }
 #tabs div.input ul.select li input[type="radio"] { position:absolute; top:0; left:0; }
-#tabs div.input ul.select.radio li input[type="radio"] { position:absolute; top:7px; left:0; }
 #tabs div.input ul.select li input[type="text"] { display:block; margin-left:25px; margin-top:10px; }
+
+#modalBox.ui-dialog-content .select.radio label { margin:5px 0; position:relative; display:block; cursor:pointer; padding:10px; }
+#modalBox.ui-dialog-content .select.radio label:hover, #modalBox.ui-dialog-content .select.radio label:hover > * { background-color:#e5eff3; }
+#modalBox.ui-dialog-content .select.radio label input[type="radio"] { position:absolute; top:10px; left:10px; }
+#modalBox.ui-dialog-content .select.radio label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }
+#modalBox.ui-dialog-content .select.radio label .info { margin-left:25px; margin-bottom:0; padding-left:0; }
 
 #tabs div.input .controls { display:table; margin-top:10px; }
 #tabs div.input .controls > * { display:table-cell; vertical-align:middle; }
