@@ -34,77 +34,25 @@ Boxes A-C will be immediately available to you to edit. If you need more than 3 
 Once you have entered all your choices, click next to set up Automatic Sorting.
 
 ### Automatic Sorting  
-You will be able to specify a keyword, that when included in an incoming message, will allow the system to automatically sort it into the relevant Poll.   
+First, you can choose whether or not FrontlineSMS will process incoming SMS automatically using a keyword for this activity. If you choose not to, then only messages you manually move into this activity will be processed. To sort using a keyword, select 'sort responses automatically'.
 
 ![Automatic Sorting][17]
   
-_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. For a poll, if the top level keyword is not provided the keywords for the responses become top level keywords, and hence forth they have to be unique across all the activity top level keywords.
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. In polls, top-level responses are optional. If you decide to allow respondents to text in only one word to vote, i.e. not to provide a top-level keyword, then the response keywords are treated as top-level and must be unique across all the activity top level keywords.
 
-To set the keywords, select "Sort responses automatically. Sort messages with the keyword (optional):" and then enter your top level keywords. The top level keywords are optional.
+To set the keywords, select "Sort responses automatically.' and then set the keywords in the text boxes below.
 
-When you set a keyword, and have selected a Multiple Choice Poll type, it will be possible for you to set "Response Keywords" in the lower section of the same tab. These "Response keywords are the keywords that matched to the responses entered in the previous tab."
+For any keyword, including each response, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the activity. This means that you can cater for spelling errors, different languages, and other reasons for differing keywords.
 
-#### Note
-
-Poll initially supported use of "Aliases". A user would setup a poll with with one keyword and the responses would be mapped to aliases. A response could have one or more aliases seperated with commas.
-
-For example, in version 2.1.3, a poll would look like this
-
-	Poll Name : Football Poll
-	Keyword : Football
-
-	Responses         |   Aliases
-	Manchester United |   Manu, Manchster
-	Arsenal           |   Arsenal, Ars
-
-With version 2.2 as a user you can create a poll with a top level keyword and the aliases are now converted to second level keywords.
-
-In version 2.2.0 Polls would look like this
-
-	Poll Name: Footbal Poll
-	TopLevel Keyword : Football, Foot, Footy
-
-	Responses         |   Second Level Keywords
-	Manchester United |   Manu, Manchster
-	Arsenal           |   Arsenal, Ars, Arnl
-
-As you can see from above the aliases have been replaced with second level keywords. The top level keyword is optional.
-If a top level keyword is provided messages will be mapped to resposes as follows
-
-	Incoming Message | Response Mapped To
-	football manu | Mancheter United
-	foot manu | Mancheter United
-	footy manu | Mancheter United
-	football arsenal | Arsenal
-	football ars | Arsenal
-	footy arsenal | Arsenal
-	foot arsl | Arsenal
-
-If the top level keyword is not provided, then the incoming messages will be mapped to responses as follows
-
-Incoming Message | Response Mapped To
-manu | Mancheter United
-manchester | Mancheter United
-arsenal | Arsenal
-ars | Arsenal
-
-The person texting in only needs to test in at least one of the second level keywords.
-
-This feature is quite usefull if you want frontlinesms to handle spelling mistakes in the incoming sms. For example, for the top level keyword one can have the keywords "football, footbal, fotball". This spelling handling also applies to second level keywords
-
-
-The Sorting tab looks as follows
+Default keywords will be pre-entered, but can be edited here. 
 
 ![Keywords][17]
 
-Each choice is followed by an area where you can enter text. You will see two aliases already entered into the text area. These are the default settings. 
-
-You can add more aliases simple by adding to the string of text already in the text area. Separate each response keyword with a comma. An example would be:
+An example would be:
 
 "Yes, A, yeah, yeh"
 
-
-Furthermore, the first entry in the text area corresponds to the text that will be used when generating a message in the "Edit Message" step. To change how each choice appears in the message that will be send out, change the first entry in the text area.
+The first response keyword will be the one used in generating a sample message in the "Edit Message" step. To change how each choice appears in the message that will be sent out, change the first entry in the text area.
 
 If the text area looks like this for example:
 
@@ -114,22 +62,15 @@ Then "Yeah" will be used as part of the outgoing message text for the Poll.
 
 Once you have completed this section click "Next" to set up an "Automatic Reply".
 
-### Validation of Keywords (Important)
-
-All keywords, toplevel or second level keywords need to be unique within that poll. For example ,a Football poll could have "football" as a top level keyword but not as a second level keyword. Likewise keywords among the second level keywords need to be unique among themselves.
-In any poll if the top level keyword is not provided, then the second level keywords will be treated as top level.
-
-### Important:
-
-Top level keywords need to be unique across all activities. A poll and an autoreply cannot share a top level keywords. For more information regarding keywords in autoreplies see the autoreply section.
-
 **_Automatic Reply_**
 At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a keyword with your poll. Without a keyword the system cannot recognise which messages to automatically reply to.  
+
 The automatic reply option will be unavailable until you create a keyword for your poll.
 
 ![Automatic Reply][12]
 
-To enable an automatic reply, check the "Send an automatic reply to poll responses" box and enter your message in the message.  
+To enable an automatic reply, check the "Send an automatic reply to poll responses" box and enter your message in the text box.
+
 This message will be sent out to everyone who sends a message with the keyword you set up in the previous step.
 
 **_Note:** This is different from the [auto-reply activity][3]._
@@ -139,21 +80,7 @@ This screen will provide you with an opportunity to view the message that will b
 
 ![Edit Message][13]
 
-The message will be compiled from the options you have selected in previous steps.
-
-If you selected "yes or no" as the question type and created a keyword the default message will look like this:  
->"[Your Question]? Reply "[Keyword] A" for yes, "[Keyword] B" for no."  
-
-If you did not create a keyword then the message will look like this:  
->"[Your Question]? Please reply 'Yes' or 'No'"
-
-If you selected "Multiple Choice Question" as question type and created a keyword, the default message will look like this:  
->"[Your Question]? Reply "[Keyword] A" for [Multiple Choice A], "[Keyword] B" for [Multiple Choice B], "[Keyword] C" for [Multiple >Choice C], "[Keyword] D" for [Multiple Choice D], "[Keyword] E" for [Multiple Choice E]."
-
-If you did not create a keyword then the message will look like this:  
->"[Your Question]? Please reply '[Multiple Choice A]' or '[Multiple Choice B]' or '[Multiple Choice C]' or '[Multiple Choice D]' or >'[Multiple Choice E]'
-
-Once you are happy with the message, please click 'Next'.
+The message will be compiled from the options you have selected in previous steps. Once you are happy with the message, please click 'Next'.
 
 **_Select Recipients_**
 On this screen you will be able to either add the numbers of the people you want to send the poll to, or select them from your contacts list. 
@@ -161,10 +88,9 @@ On this screen you will be able to either add the numbers of the people you want
 ![Select Recipients][14]
 
 If you add a number manually it will be added to the list and automatically selected. This number will only remain in the system for as long as it needs to send the message and will not be added to your contacts.  
-Selecting groups and contacts is easy, simply select the contacts or groups you want to send the poll.
 
 **_Summary Screen_**
-On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
+On this screen you will find a summary of all the options you have selected, the message you've created (if applicable) and the recipients you've chosen. 
 
 ![Summary][15]
 

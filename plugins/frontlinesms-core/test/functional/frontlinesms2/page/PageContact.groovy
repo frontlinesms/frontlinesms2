@@ -75,6 +75,7 @@ class ContactList extends geb.Module {
 	    }
 
 		selectAll(required:false) { $('.contact-select', 0)}
+		selectedContact(required:false) { $('li.contact-preview.selected')}
 		selectedContacts { $(".selected li a")*.text() }
 		noContent { $('p.no-content').text() }
 	}

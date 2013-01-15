@@ -11,9 +11,9 @@ A Poll will attempt to automatically categorize incoming responses according to 
 3. From the message details, open the drop down box called "Categorize Response".
 4. From this list choose the appropriate response for the message or messages.  
 
-_**Note:** For [Yes/No Polls][2], the only categories available will be Yes or No. For [Multiple Choice Polls][2] the available categories will be the same in number and >name as the multiple choice options you entered when creating the Poll._
+_**Note:** For [Yes/No Polls][2], the only categories available will be Yes or No. For [Multiple Choice Polls][2] the available categories will be the same in number and name as the multiple choice options you entered when creating the Poll._
 
-Your message/s will be updated with new categories and the poll statistics will be updated accordingly.
+Your message(s) will be updated with new categories and the poll statistics will be updated accordingly.
 
 ### Related Actions
 [Renaming an Activity][3]  

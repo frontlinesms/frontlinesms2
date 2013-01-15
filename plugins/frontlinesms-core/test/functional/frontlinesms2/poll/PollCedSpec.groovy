@@ -57,18 +57,12 @@ class PollCedSpec extends PollBaseSpec {
 			sort.inputs[1].hasClass('error')
 	}
 
-	def "Keyword input fields should be hidden when popup first loads"() {
+	def "Keyword input fields should be displayed when popup first loads"() {
 		when:
 			launchPollPopup('yesNo','question',false)
 		then:
-			!sort.keyword.displayed
-			!sort.pollKeywordsContainer.displayed
-		when:
-			sort.sort.click()
-			sort.keyword = 'key'
-			next.click()
-		then:
-			waitFor { autoreply.displayed }
+			sort.keyword.displayed
+			sort.pollKeywordsContainer.displayed
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
