@@ -38,7 +38,9 @@ You will be able to specify a keyword, that when included in an incoming message
 
 ![Automatic Sorting][17]
   
-_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. For a poll, if the top level keyword is not provided the keywords for the responses become top level keywords, and hence forth they have to be unique across all the activity top level keywords.
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. 
+
+In polls, top-level responses are optional. If you decide to allow respondents to text in only one word to vote, i.e. not to provide a top-level keyword, then the response keywords are treated as top-level and must be unique across all the activity top level keywords.
 
 To set the keywords, select "Sort responses automatically. Sort messages with the keyword (optional):" and then enter your top level keywords. The top level keywords are optional.
 
