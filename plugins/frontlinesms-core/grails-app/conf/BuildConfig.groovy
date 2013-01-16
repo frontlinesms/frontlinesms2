@@ -90,7 +90,7 @@ grails.project.dependency.resolution = {
 		runtime ":csv:0.3.1"
 		compile ":quartz2:0.2.3-frontlinesms"
 
-		compile ':platform-core:1.0.RC2'
+		compile ':platform-core:1.0.RC3-frontlinesms'
 
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.17"
@@ -98,7 +98,7 @@ grails.project.dependency.resolution = {
 		test ":geb:$gebVersion"
 
 		test ':build-test-data:2.0.2'
-		test ':remote-control:1.2'
+		compile ':remote-control:1.3'
 		compile(':functional-test-development:0.9.3') {
 			exclude 'hibernate'
 		}

@@ -1,38 +1,42 @@
 <%@ page import="frontlinesms2.Subscription" %>
-<h2><g:message code="subscription.sorting"/></h2>
-<div class="info">
-	<p><g:message code="activity.generic.sort.description"/></p>
-</div>
+<h2><g:message code="subscription.sorting.header"/></h2>
 <div class="input">
 	<ul class="select">
 		<li>
-			<g:checkBox name="disableSorting" checked="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
-			<label for="leaveKeywords"><g:message code="subscription.sorting.disable"/></label>
+			<label for="sorting"><g:message code="poll.autosort.description"/></label>
+			<g:radio name="sorting" id="yesAutosort" value="true" checked="${ !activityInstanceToEdit? true : activityInstanceToEdit?.keywords? activityInstanceToEdit.keywords as boolean: ''}"/>
+		</li>
+		<li>
+			<label for="sorting"><g:message code="poll.autosort.no.description"/></label>
+			<g:radio name="sorting" id="noAutosort" value="false" checked="${ !activityInstanceToEdit? '' : activityInstanceToEdit?.keywords? '': true}"/>
 		</li>
 	</ul>
 </div>
-<h2><g:message code="subscription.top.keyword.header"/></h2>
+
+<h2><g:message code="subscription.keyword.header"/></h2>
 <div class="info">
 	<p><g:message code="subscription.top.keyword.description"/></p>
+	<p><g:message code="subscription.top.keyword.more.description"/></p>
 </div>
 
-<div class="input">
-	<g:textField name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
+<div>
+	<label for="topLevelKeywords"><g:message code="poll.sort.toplevel.keyword.label"/></label>
+	<g:textField placeholder="${g.message(code:'subscription.sorting.example.toplevel')}" name="topLevelKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.isTopLevel && !it.ownerDetail}?.value?.join(',') }" class="validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/>
 </div>
 
-<h2><g:message code="subscription.keywords.header"/></h2>
 <div class="info">
+	<g:message code="subscription.keywords.header"/>
 	<p><g:message code="subscription.keywords.description"/></p>
 </div>
 <div class="input">
 	<table class="subscription-aliases">
 		<tr>
 			<td><label for="joinKeywords"><g:message code="subscription.keywords.join"/></label></td>
-			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/></td>
+			<td><g:textField placeholder="${g.message(code:'subscription.sorting.example.join')}" class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="joinKeywords" id="joinKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'JOIN' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/></td>
 		</tr>
 		<tr>
 			<td><label for="leaveKeywords"><g:message code="subscription.keywords.leave"/></label></td>
-			<td><g:textField class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/></td>
+			<td><g:textField placeholder="${g.message(code:'subscription.sorting.example.leave')}" class="keywords validcommas sorting-generic-unique sorting-generic-no-spaces subscription-keyword-field" name="leaveKeywords" id="leaveKeywords" value="${activityInstanceToEdit?.keywords?.findAll { it.ownerDetail == 'LEAVE' }?.value?.join(',') }" disabled="${activityInstanceToEdit ? !activityInstanceToEdit?.keywords : false}"/></td>
 		</tr>
 	</table>
 </div>
@@ -59,8 +63,8 @@
 </div>
 <r:script>
 	$(function() {
-		$('#disableSorting').live("change", function() {
-			if($(this).is(":checked")) {
+		$('input[name=sorting]').live("change", function() {
+			if($(this).attr("value") == "false") {
 				$(".subscription-keyword-field,.subscription-default-action").attr("disabled", "disabled");
 				$(".subscription-keyword-field,.subscription-default-action").removeClass("required error");
 				$(".error").hide();

@@ -36,6 +36,7 @@ class BodyMenu extends geb.Module {
 		smartGroupIsDisplayed { smartGroupInstance ->
 			$("title").text().contains(smartGroupInstance.name)
 		}
+		allContactsCount { $('a[href="/frontlinesms-core/contact/show"]').text().find(/\d+/) as Integer}
 	}
 }
 
@@ -74,6 +75,7 @@ class ContactList extends geb.Module {
 	    }
 
 		selectAll(required:false) { $('.contact-select', 0)}
+		selectedContact(required:false) { $('li.contact-preview.selected')}
 		selectedContacts { $(".selected li a")*.text() }
 		noContent { $('p.no-content').text() }
 	}
@@ -128,6 +130,8 @@ class SingleContactDetails extends geb.Module {
 		cancel { $('#action-buttons a.cancel', text:'Cancel') }
 		delete { $('#btn_delete') }
 		searchForMessages { $('#message-stats a.search') }
+		sentCount { $('li.sent').text()}
+		receivedCount {$('li.received').text()}
 	}
 }
 

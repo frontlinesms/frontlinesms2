@@ -25,7 +25,7 @@
 
 #modalBox.help .help-content { line-height:140%; }
 #modalBox.help #help-content { padding:17px; }
-#modalBox.help #new-feature-content { padding:5px; }
+#modalBox.help #new-feature-content { padding:15px; }
 #new-feature-buttonset label { float:left; padding:12px; }
 #new-feature-buttonset label input[type=checkbox] { margin-right:10px; }
 #modalBox.help .help-content h1 { font-weight:bold; font-size:150%; margin:0 0 17px 0; }

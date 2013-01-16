@@ -27,5 +27,7 @@ TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
 popd
 echo "# Tests to run: $TESTS"
 
-run_test recipient_selecter
+for TEST in $TESTS; do
+	run_test $TEST
+done
 

@@ -81,7 +81,6 @@
 		mediumPopup.addValidation('webconnection-confirm', confirmTabValidation);
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
-			updateConfirmationMessage();
 			webconnectionDialog.updateConfirmationScreen();
 		});
 	}
@@ -114,16 +113,4 @@
 	function setPara(selecter, text) {
 		$(selecter).html("<p>" + text + "</p>");
 	}
-	
-	function updateConfirmationMessage() {
-		var keywordConfirmationText;
-		if(!(isGroupChecked("blankKeyword"))) {
-			keywordConfirmationText = $('#keywords').val().toUpperCase();
-		} else {
-			keywordConfirmationText = i18n("autoreply.blank.keyword");
-		}
-		setPara("#keyword-confirm", keywordConfirmationText);
-		setPara("#autoreply-confirm", $('#messageText').val());
-	}
-
 </r:script>

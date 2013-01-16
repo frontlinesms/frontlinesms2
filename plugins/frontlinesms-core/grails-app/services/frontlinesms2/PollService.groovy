@@ -29,7 +29,7 @@ class PollService{
 			def message = messageSendService.createOutgoingMessage(params)
 			message.save()
 			poll.addToMessages(message)
-			MessageSendJob.defer(message)
+			messageSendService.send(message)
 		}
 		poll.save(failOnError:true)
 		poll

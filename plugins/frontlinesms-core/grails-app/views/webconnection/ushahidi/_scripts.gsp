@@ -23,7 +23,15 @@
 			if(isCrowdMap) $("input[name=url]").val("https://" + $(this).val() + ".crowdmap.com" + "/frontlinesms/");
 			else $("input[name=url]").val($(this).val());
 		});
-		var keyword = $("input[name=keywords]").val() || i18n("webconnection.none.label");
+
+		var keyword = (function(){
+			if($("input[name='sorting']:checked").attr('value') == "enabled") {
+				return $("input#keywords").val();
+			} else {
+				return i18n("webconnection.none.label");
+			}
+		})();
+
 		$("#confirm-service").html('<p style="text-transform:capitalize">' + $("input[name=serviceType]:checked").val() + '</p>');
 		$("#confirm-url").html('<p>' + $("input[name=url]").val()  + '</p>');
 		$("#confirm-fsmskey").html('<p>' + fsmsApiKey + '</p>');
