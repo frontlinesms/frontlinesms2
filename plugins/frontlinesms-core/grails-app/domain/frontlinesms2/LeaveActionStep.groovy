@@ -2,7 +2,6 @@ package frontlinesms2
 
 class LeaveActionStep extends Step {
 	
-	static hasMany = [stepProperties: StepProperty]
 	static service = 'subscription'
 	static action = 'doLeave'
 	static configFields = [group: Group]
