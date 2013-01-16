@@ -25,20 +25,32 @@
 
 	}
 
+	function indexOfLastStep(){
+		return $(".step:last").attr("index") || 0;
+	}
+
 	var joinActionStepHtml = function(){
-		<% def divElement = fsms.joinActionStep() %>
-		return ${divElement} + "";
+		<%
+			def divElement = fsms.joinActionStep()
+		%>
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		return divElement;
 	};
 
 	var leaveActionStepHtml = function(){
-		<% divElement = fsms.leaveActionStep() %>
-		return ${divElement} + "";
+		<%
+			divElement = fsms.leaveActionStep()
+		%>
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		return divElement;
 	};
 	
 	var replyActionStepHTml = function(){
-		<% divElement = fsms.replyActionStep() %>
-		return ${divElement} + "";
+		<%
+			divElement = fsms.replyActionStep()
+		%>
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		return divElement;
 	};
-
 
 </r:script>
