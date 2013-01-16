@@ -438,6 +438,7 @@ class CoreBootStrap {
 	private def dev_initCustomActivities() {
 		new CustomActivity(name:'Do it all')
 			.addToKeywords(value:"CUSTOM")
+			.addToSteps()
 			.save(failOnError:true)
 	}
 	

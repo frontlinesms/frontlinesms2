@@ -1,5 +1,6 @@
 <div id="custom-activity-config-container">
-
+	<g:hiddenField name="jsonToSubmit" />
+	<fsms:savedActionSteps activityId="${activityInstanceToEdit?.id}"/>
 </div>
 <div id="custom-activity-actions-container">
 	<div class="custom-activity-action-step" id="add-join-action-step">Join</div>
