@@ -21,6 +21,10 @@ abstract class Step {
 		stepProperties?.find { it.key == key }?.value
 	}
 
+	def setPropertyValue(key, value){
+		stepProperties?.find { it.key == key }?.value = value
+	}
+
 	// helper method to retrieve list of entities saved as StepProperties
 	def getEntityList(entityType, propertyName) {
 		entityType.getAll(StepProperty.findAllByStepAndKey(this, propertyName)*.value) - null
