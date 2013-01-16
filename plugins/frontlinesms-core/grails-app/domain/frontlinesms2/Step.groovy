@@ -4,6 +4,7 @@ import grails.converters.JSON
 
 abstract class Step {
 	static belongsTo = [activity: CustomActivity]
+	
 	static hasMany = [stepProperties: StepProperty]
 	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
 	static String getShortName() { 'base' }

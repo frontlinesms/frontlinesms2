@@ -15,7 +15,7 @@ class CustomActivitySpec extends Specification {
 			customActivity.addToSteps(joinStep)
 			customActivity.save(flush:true, failOnError:true)
 		expect:
-			CustomActivity.count()
+			CustomActivity.count()			
 	}
 
 	def "a custom activity can have many steps of different kinds"() {
