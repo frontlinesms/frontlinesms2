@@ -346,7 +346,7 @@ class FsmsTagLib {
 	}
 
 	def joinActionStep = { att, body ->
-		out << "<div class='join-action-step step'>"
+		out << "<div class='join-action-step step' index='${att.step?.id?:''}'>"
 		out << "<span>Join Group</span>"
 		out << g.hiddenField(name:'stepId', value:"${att.step?.id?:''}")
 		out << g.hiddenField(name:'stepType', value:'join')
@@ -364,7 +364,7 @@ class FsmsTagLib {
 	}
 
 	def replyActionStep = { att, body ->
-		out << "<div class='reply-action-step step'>"
+		out << "<div class='reply-action-step step' index='${att.step?.id?:''}'>"
 		out << "<span>Reply</span>"
 		out << g.hiddenField(name:'stepId', value:"${att.step?.id?:''}")
 		out << g.hiddenField(name:'stepType', value:'reply')

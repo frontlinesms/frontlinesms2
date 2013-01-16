@@ -55,52 +55,42 @@
 		var jsonToSend = "";
 		var data = new Array();
 
-		$.each($(".step"), function(index, element){  // for each Step
+		$.each($(".step"), function(index, element){
 			var dataToSend = new Object();
 			var stepDiv = $(element);
-			
 			dataToSend.stepId = stepDiv.attr("index");
-			dataToSend.index = indexOfLastStep;
-
-			$.each(stepDiv.find("input"), function(index, element){ // for each input in the step
-				var inputField = $(element);
-				var key = inputField.attr("name");
-				var value = inputField.val();
-
-				var prop = new Object();
-				prop.key = key
-				prop.value = value
-				dataToSend.stepProperty = prop
-			});
-
-			$.each(stepDiv.find("select"), function(index, element){ // for each select in the step
-				var selectField = $(element);
-				var key = selectField.attr("name");
-				var value = selectField.val();
-
-				var prop = new Object();
-				prop.key = key
-				prop.value = value
-				dataToSend.stepProperty = prop
-			});
-
-			$.each(stepDiv.find("textarea"), function(index, element){ // for each textarea in the step
-				var textAreaField = $(element);
-				var key = textAreaField.attr("name");
-				var value = textAreaField.val();
-
-				var prop = new Object();
-				prop.key = key
-				prop.value = value
-				dataToSend.stepProperty = prop
-			});
+			dataToSend.stepType = stepDiv.find("#stepType").val();
+			if(stepDiv.find("input").size() > 0) {
+				dataToSend.stepProperties = getStepProperties("input", stepDiv);
+			}
+			
+			if(stepDiv.find("textarea").size() > 0) {
+				dataToSend.stepProperties = getStepProperties("textarea", stepDiv);
+			}
+			
+			if(stepDiv.find("select").size() > 0) {
+				dataToSend.stepProperties = getStepProperties("select", stepDiv);
+			}
 
 			data.push(dataToSend);
 		});
-		
-		console.log(JSON.stringify(data));
-
 		$("#jsonToSubmit").val(JSON.stringify(data));
+	}
+
+	function getStepProperties(inputType, container) {
+		var stepProperties =  new Array();
+
+		$.each(container.find(inputType), function(index, element) {
+			var inputField = $(element);
+			var key = inputField.attr("name");
+			var value = inputField.val();
+			var property = new Object();
+			property.key = key
+			property.value = value
+			stepProperties.push(property);
+		});
+
+		return stepProperties;
 	}
 
 	function updateConfirmationMessage() {
