@@ -32,7 +32,7 @@
 	var systemNotification = new SystemNotification();
 	var statusIndicator = new StatusIndicator();
 	// declare vars that are populated in JS files
-	var check_list;
+	var check_list, fconnection;
 
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
@@ -59,5 +59,4 @@
 		});
 	</fsms:ifAppSetting>
 </r:script>
-
 
