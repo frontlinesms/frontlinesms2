@@ -60,7 +60,7 @@ class SubscriptionService {
 	}
 
 	def doLeave(subscriptionOrActionStep, message) {
-		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.JOIN.toString())
+		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.LEAVE.toString())
 		message.save(failOnError:true)
 		def group = subscriptionOrActionStep.group
 		def foundContact
@@ -70,9 +70,9 @@ class SubscriptionService {
 				if((foundContact.isMemberOf(group))){
 					foundContact?.removeFromGroup(group)
 				}
-			}
-			if(subscriptionOrActionStep.leaveAutoreplyText) {
-				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
+				if(subscriptionOrActionStep.leaveAutoreplyText) {
+					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
+				}
 			}
 		})
 	}

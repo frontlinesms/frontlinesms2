@@ -6,6 +6,7 @@ import frontlinesms2.*
 
 @TestFor(CustomActivity)
 @Mock([JoinActionStep, StepProperty, ReplyActionStep, LeaveActionStep, Keyword, Fmessage])
+
 class CustomActivitySpec extends Specification {
 	def "a custom activity can have one step"() {
 		given:
@@ -15,7 +16,7 @@ class CustomActivitySpec extends Specification {
 			customActivity.addToSteps(joinStep)
 			customActivity.save(flush:true, failOnError:true)
 		expect:
-			CustomActivity.count()
+			CustomActivity.count()			
 	}
 
 	def "a custom activity can have many steps of different kinds"() {
