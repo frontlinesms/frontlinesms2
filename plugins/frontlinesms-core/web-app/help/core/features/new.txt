@@ -13,7 +13,7 @@ We have made a major improvement to the way keywords function, so that you can m
 Auto-replies, Polls, Web Connections and Subscriptions now allow you to list more than one keyword to trigger a specific activity. This means  you can support more than one language or spelling of a word.
 
 ### Single keywords in Polls and Subscriptions
-Similarly, Polls now optionally allows you to set only one keyword for poll responses - rather than requiring you to text a Poll keyword, then a response keyword, response keywords can now do both jobs. For example in a poll about food, sample answers might be FOOD PIE or FOOD SODA. The new single keyword setting allows you simply to text in PIE or SODA.
+Similarly, Polls now optionally allow you to set only one keyword for poll responses - rather than requiring you to text a Poll keyword, then a response keyword, response keywords can now do both jobs. For example in a poll about food, sample answers might be FOOD PIE or FOOD SODA. The new single keyword setting allows you simply to text in PIE or SODA.
 
 ##Basic Authentication
 Users can now set simple password authentication so that users logging into the platform across a network will be asked for a password before being able to interact with the system.
