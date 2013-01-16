@@ -2,7 +2,7 @@
 
 A subscription is a type of activity that allows users to join of leave a specified group based on the content of the message that they text in. Keywords can trigger either adding the contact to the group, removing the contact from the group or toggling the group membership of the contact.
 
-### How to Create an Subscription
+### How to Create a Subscription
 
 From the [messages tab][2] click on 'Create New Activity'.
 A new window will appear and you will be presented with a number of options. Choose "Subscription" and click next
