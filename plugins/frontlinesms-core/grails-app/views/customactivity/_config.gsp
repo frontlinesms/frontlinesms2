@@ -18,11 +18,17 @@
 		width: 100%;
 		background-color: #eeddff;
 		margin-top: 3px;
+		padding:2px;
 	}
 
 	.custom-activity-action-step {
 		background-color: #ddaaff;
 		padding: 5px;
 		display: inline-block;
+	}
+	.step {
+		padding:5px;
+		background-color: lightgray;
+		margin-bottom: 2px;
 	}
 </style>

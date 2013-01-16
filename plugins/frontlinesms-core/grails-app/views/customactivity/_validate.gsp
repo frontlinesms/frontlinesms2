@@ -13,31 +13,44 @@
 
 	function addLeaveActionStep(){
 		var container = $("#custom-activity-config-container");
-		container.append("<div>Leaving Group<div>");
+		container.append(leaveActionStepHtml);
 	}
 
 	function addReplyActionStep(){
 		var container = $("#custom-activity-config-container");
-		container.append("<div>Replying to Humans<div>");
+		container.append(replyActionStepHTml);
 	}
 
 	function updateConfirmationMessage() {
 
 	}
 
+	function indexOfLastStep(){
+		return $(".step:last").attr("index") || 0;
+	}
+
 	var joinActionStepHtml = function(){
-		var divElement = $("<div class='join-action-step'></div>");
-		divElement.append("<h2>Join Group</h2>");
 		<%
-			def groupSelect = g.select(name:"joinGroup", class:"dropdown not-empty" ,from:Group.getAll() , noSelection:"Select a group.." ,optionKey:"id",optionValue:"name")
+			def divElement = fsms.joinActionStep()
 		%>
-		divElement.append("${groupSelect}");
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
 		return divElement;
 	};
 
-	var leaveActionStepHtml = "";
+	var leaveActionStepHtml = function(){
+		<%
+			divElement = fsms.leaveActionStep()
+		%>
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		return divElement;
+	};
 	
-	var replyActionStepHTml = "";
-
+	var replyActionStepHTml = function(){
+		<%
+			divElement = fsms.replyActionStep()
+		%>
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		return divElement;
+	};
 
 </r:script>
