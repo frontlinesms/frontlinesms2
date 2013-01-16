@@ -17,16 +17,14 @@ class AutoforwardSpec extends Specification {
 			else delegate.messages = [m]
 			return delegate
 		}
+		Keyword.metaClass.validate = { -> true }
 	}
 
 	@Unroll
-	def "Test Constraints"() {
+	def "Test Constraints #{valid} #{props}"() {
 		when:
 			def autoforward = new Autoforward()
 			props.each { k, v -> autoforward[k] = v }
-			println "FORWARD.contacts=$autoforward.contacts; props=$props"
-			autoforward.validate()
-			println autoforward.errors
 		then:
 			autoforward.validate() == valid
 		where:
