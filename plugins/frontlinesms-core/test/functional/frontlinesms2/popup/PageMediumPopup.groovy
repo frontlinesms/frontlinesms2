@@ -53,7 +53,7 @@ class QuickMessageRecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 		manualContacts { $("li.manual").find("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
 		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
@@ -166,7 +166,7 @@ class RecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 	}
 }
 
@@ -551,7 +551,7 @@ class AutoforwardRecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 		manualContacts { $("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
 		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }

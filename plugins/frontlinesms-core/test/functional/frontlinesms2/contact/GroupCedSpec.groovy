@@ -38,7 +38,7 @@ class GroupCedSpec extends GroupBaseSpec {
 		then:
 			at PageContactShow
 			waitFor { bodyMenu.getGroupLink "Renamed Group" }
-			header.groupHeaderTitle.text().equalsIgnoreCase('Renamed Group (2)')
+			header.groupHeaderTitle.text()?.equalsIgnoreCase('Renamed Group (2)')
 	}
 	
 	def 'More action dropdown has option to delete the group and opens a confirmation popup'(){

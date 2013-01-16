@@ -1,8 +1,8 @@
 #!/bin/bash
-set -e
 echo "# Checking for Unsafe null dereference calls to .text() method e.g. text().toLowerCase()."
 echo "# Ignoring spread operators, e.g. x*.text()"
 grep -r "[^*]\.text()\." test/functional/
+
 if [ 0 -eq $? ]; then
 	echo "Found unsafe calls to .text()."
 	exit 1
