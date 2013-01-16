@@ -68,10 +68,10 @@ class SubscriptionService {
 			if(foundContact) {
 				if((foundContact.isMemberOf(group))){
 					foundContact?.removeFromGroup(group)
+					if(subscriptionOrActionStep.leaveAutoreplyText) {
+						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
+					}
 				}
-			}
-			if(subscriptionOrActionStep.leaveAutoreplyText) {
-				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
 			}
 		})
 	}
