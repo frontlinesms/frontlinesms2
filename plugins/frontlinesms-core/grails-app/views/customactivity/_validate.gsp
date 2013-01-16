@@ -67,7 +67,10 @@
 				var key = inputField.attr("name");
 				var value = inputField.val();
 
-				dataToSend[key] = value;
+				var prop = new Object();
+				prop.key = key
+				prop.value = value
+				dataToSend.stepProperty = prop
 			});
 
 			$.each(stepDiv.find("select"), function(index, element){ // for each select in the step
@@ -75,7 +78,10 @@
 				var key = selectField.attr("name");
 				var value = selectField.val();
 
-				dataToSend[key] = value;
+				var prop = new Object();
+				prop.key = key
+				prop.value = value
+				dataToSend.stepProperty = prop
 			});
 
 			$.each(stepDiv.find("textarea"), function(index, element){ // for each textarea in the step
@@ -83,11 +89,16 @@
 				var key = textAreaField.attr("name");
 				var value = textAreaField.val();
 
-				dataToSend[key] = value;
+				var prop = new Object();
+				prop.key = key
+				prop.value = value
+				dataToSend.stepProperty = prop
 			});
 
 			data.push(dataToSend);
 		});
+		
+		console.log(JSON.stringify(data));
 
 		$("#jsonToSubmit").val(JSON.stringify(data));
 	}

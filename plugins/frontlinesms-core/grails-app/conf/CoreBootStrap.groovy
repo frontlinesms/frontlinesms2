@@ -436,7 +436,12 @@ class CoreBootStrap {
 	}
 
 	private def dev_initCustomActivities() {
-		new CustomActivity(name:'Do it all', steps:[ new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"1")]) ])
+		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1")).save(failOnError:true,flush:true)
+		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2")).save(failOnError:true,flush:true)
+
+		new CustomActivity(name:'Do it all')
+			.addToSteps(joinStep)
+			.addToSteps(leaveStep)
 			.addToKeywords(value:"CUSTOM")
 			.save(failOnError:true, flush:true)
 	}
