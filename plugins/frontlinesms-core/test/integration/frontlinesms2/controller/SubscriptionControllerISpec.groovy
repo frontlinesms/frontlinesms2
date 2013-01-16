@@ -117,6 +117,8 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def g = createTestGroup(initiallyInGroup?c:null)
 			def s = createTestSubscription(g)
 			def m = createTestMessageFromContact("hello guys", c)
+			s.addToMessages(m)
+			s.save(failOnError:true)
 			controller.params.ownerId = s.id
 			controller.params.messageId = m.id
 		when:
