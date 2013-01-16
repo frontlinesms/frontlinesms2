@@ -1,0 +1,14 @@
+echo "# Checking views..."
+grep -rn 'g:render.*template' grails-app/views/
+VIEW_OUTPUT=$?
+
+echo ""
+echo "# Checking controllers"
+egrep -rnw "(render.*template)" grails-app/controllers/
+CONTROLLER_OUTPUT=$?
+
+if [ "$CONTROLLER_OUTPUT" -eq 0 ] && [ "$VIEW_OUTPUT" -eq 0 ]; then
+	echo "Matches were found in both searches"
+elif [ "$CONTROLLER_OUTPUT" -eq 1 ] && [ "$VIEW_OUTPUT" -eq 1 ]; then
+	echo "There are no bad render templates"
+fi
