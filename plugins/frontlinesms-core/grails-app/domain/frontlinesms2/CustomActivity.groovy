@@ -1,5 +1,7 @@
 package frontlinesms2
 
 class CustomActivity extends Activity {
-	def shortName = "customactivity"
+	static String getShortName() { 'customactivity' }
+
+	static hasMany = [steps: Step]
 }

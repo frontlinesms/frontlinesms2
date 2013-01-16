@@ -344,6 +344,27 @@ class FsmsTagLib {
 		}
 		out << '</li>'
 	}
+
+	def joinActionStep = { att, body ->
+		out << "<div class='join-action-step step'>"
+		out << "<span>Join Group</span>"
+		out << g.select(name:'joinGroup', noSelection:['null':'Select One...'], from:Group.getAll(), optionKey:"id",optionValue:"name")
+		out << "</div>"
+	}
+
+	def leaveActionStep = { att, body ->
+		out << "<div class='leave-action-step step'>"
+		out << "<span>Leave Group</span>"
+		out << g.select(name:'leaveGroup', noSelection:['null':'Select One...'], from:Group.getAll(), optionKey:"id",optionValue:"name")
+		out << "</div>"
+	}
+
+	def replyActionStep = { att, body ->
+		out << "<div class='reply-action-step step'>"
+		out << "<span>Reply</span>"
+		out << g.textArea(name:'messageText')
+		out << "</div>"
+	}
 	
 	private def getFields(att) {
 		def fields = att.remove('fields')
