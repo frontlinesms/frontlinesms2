@@ -10,7 +10,15 @@ class JoinActionStep extends Step {
 
 	static constraints = {
 	}
-	
+
+	def getGroup() {
+		Group.get(getPropertyValue("group"))	
+	}
+
+	def setGroup(Group group) {
+		setPropertyValue("group", group.id)
+	}
+
 	def process(Fmessage message) {
 
 	}

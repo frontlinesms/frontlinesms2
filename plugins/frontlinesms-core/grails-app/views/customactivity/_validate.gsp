@@ -4,6 +4,10 @@
 		$("#add-join-action-step").click(function() { addJoinActionStep(); });
 		$("#add-leave-action-step").click(function() { addLeaveActionStep(); });
 		$("#add-reply-action-step").click(function() { addReplyActionStep(); });
+		
+		$.each($('.remove-step'), function(index, element){
+			addRemoveListener(element);
+		});
 
 		//> Validation
 		var validator = $("#create_customactivity").validate({
@@ -21,7 +25,7 @@
 			 else return true;
 		};
 
-		var messageTextTabValidation = function() {
+		var messageTextValidation = function() {
 			return validator.element('#messageText');
 		};
 
@@ -31,7 +35,7 @@
 		};
 
 		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
-		mediumPopup.addValidation('customactivity-config', messageTextTabValidation);
+		mediumPopup.addValidation('customactivity-config', messageTextValidation);
 		mediumPopup.addValidation('customactivity-confirm', confirmTabValidation);
 	}
 
@@ -51,45 +55,52 @@
 		container.append(replyActionStepHTml);
 	}
 
+	function addRemoveListener(element) {
+		$(element).click(function(){
+			$(this).parent().parent().fadeOut(300, function(){ $(this).remove(); });
+		});
+	}
+
 	function setJsonToSend() {
 		var jsonToSend = "";
 		var data = new Array();
 
-		$.each($(".step"), function(index, element){  // for each Step
+		$.each($(".step"), function(index, element){
 			var dataToSend = new Object();
 			var stepDiv = $(element);
-			
 			dataToSend.stepId = stepDiv.attr("index");
-			dataToSend.index = indexOfLastStep;
-
-			$.each(stepDiv.find("input"), function(index, element){ // for each input in the step
-				var inputField = $(element);
-				var key = inputField.attr("name");
-				var value = inputField.val();
-
-				dataToSend[key] = value;
-			});
-
-			$.each(stepDiv.find("select"), function(index, element){ // for each select in the step
-				var selectField = $(element);
-				var key = selectField.attr("name");
-				var value = selectField.val();
-
-				dataToSend[key] = value;
-			});
-
-			$.each(stepDiv.find("textarea"), function(index, element){ // for each textarea in the step
-				var textAreaField = $(element);
-				var key = textAreaField.attr("name");
-				var value = textAreaField.val();
-
-				dataToSend[key] = value;
-			});
+			dataToSend.stepType = stepDiv.find("#stepType").val();
+			if(stepDiv.find("input").size() > 0) {
+				dataToSend.stepProperties = getStepProperties("input", stepDiv);
+			}
+			
+			if(stepDiv.find("textarea").size() > 0) {
+				dataToSend.stepProperties = getStepProperties("textarea", stepDiv);
+			}
+			
+			if(stepDiv.find("select").size() > 0) {
+				dataToSend.stepProperties = getStepProperties("select", stepDiv);
+			}
 
 			data.push(dataToSend);
 		});
-
 		$("#jsonToSubmit").val(JSON.stringify(data));
+	}
+
+	function getStepProperties(inputType, container) {
+		var stepProperties =  new Array();
+
+		$.each(container.find(inputType), function(index, element) {
+			var inputField = $(element);
+			var key = inputField.attr("name");
+			var value = inputField.val();
+			var property = new Object();
+			property.key = key
+			property.value = value
+			stepProperties.push(property);
+		});
+
+		return stepProperties;
 	}
 
 	function updateConfirmationMessage() {
@@ -105,6 +116,7 @@
 			def divElement = fsms.joinActionStep()
 		%>
 		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
 
@@ -113,6 +125,7 @@
 			divElement = fsms.leaveActionStep()
 		%>
 		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
 	
@@ -121,6 +134,7 @@
 			divElement = fsms.replyActionStep()
 		%>
 		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
 

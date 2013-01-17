@@ -346,28 +346,31 @@ class FsmsTagLib {
 	}
 
 	def joinActionStep = { att, body ->
-		out << "<div class='join-action-step step'>"
+		out << "<div class='join-action-step step' index='${att.step?.id?:''}'>"
+		out << "<div><a class='remove-command remove-step'></a></div>"
 		out << "<span>Join Group</span>"
 		out << g.hiddenField(name:'stepId', value:"${att.step?.id?:''}")
-		out << g.hiddenField(name:'step-type', value:'join')
-		out << g.select(name:'joinGroup', noSelection:['null':'Select One...'], from:Group.getAll(), optionKey:"id",optionValue:"name")
+		out << g.hiddenField(name:'stepType', value:'join')
+		out << g.select(name:'joinGroup', noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name")
 		out << "</div>"
 	}
 
 	def leaveActionStep = { att, body ->
 		out << "<div class='leave-action-step step' index='${att.step?.id?:''}'>"
+		out << "<div><a class='remove-command remove-step'></a></div>"
 		out << "<span>Leave Group</span>"
 		out << g.hiddenField(name:'stepId', value:"${att.step?.id?:''}")
-		out << g.hiddenField(name:'step-type', value:'leave')
+		out << g.hiddenField(name:'stepType', value:'leave')
 		out << g.select(name:'leaveGroup', noSelection:['null':'Select One...'], from:Group.getAll(), optionKey:"id",optionValue:"name")
 		out << "</div>"
 	}
 
 	def replyActionStep = { att, body ->
-		out << "<div class='reply-action-step step'>"
+		out << "<div class='reply-action-step step' index='${att.step?.id?:''}'>"
+		out << "<div><a class='remove-command remove-step'></a></div>"
 		out << "<span>Reply</span>"
 		out << g.hiddenField(name:'stepId', value:"${att.step?.id?:''}")
-		out << g.hiddenField(name:'step-type', value:'reply')
+		out << g.hiddenField(name:'stepType', value:'reply')
 		out << g.textArea(name:'messageText')
 		out << "</div>"
 	}

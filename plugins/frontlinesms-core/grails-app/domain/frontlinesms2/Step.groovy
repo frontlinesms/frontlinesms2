@@ -10,10 +10,7 @@ abstract class Step {
 
 	static constraints = {
 		// the following assumes all configFields are mandatory
-		stepProperties(nullable: true, validator: { val, obj ->
-			if (!val) return false
-			val*.key?.containsAll(obj.configFields?.collect { name, type -> name })
-		})
+		stepProperties(nullable: true)
 	}
 	
 	def process(Fmessage message) {
@@ -22,6 +19,10 @@ abstract class Step {
 
 	String getPropertyValue(key) {
 		stepProperties?.find { it.key == key }?.value
+	}
+
+	def setPropertyValue(key, value){
+		stepProperties?.find { it.key == key }?.value = value
 	}
 
 	// helper method to retrieve list of entities saved as StepProperties
