@@ -77,16 +77,22 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			next.click()
 			configure.stepButton("reply").click()
 			configure.stepButton("join").click()
-			configure.steps[0].jquery.find("#messageText").value("Sample Text")
-			configure.steps[1].jquery.find("#joinGroup").value(Group.list()[0].id)
+			configure.steps[0].jquery.find("#autoreplyText").value("Sample Text")
+			configure.steps[1].jquery.find("#group").value(Group.findByName("Camping").id)
 			next.click()
-			confirm.name.value("This is it")
+			confirm.name.value("Wewe wacha hakuna haja")
 		then:
 			confirm.stepActionsConfirm.contains("Camping")
 			confirm.stepActionsConfirm.contains("Sample Text")
 			submit.click()
-			def activity = CustomActivity.findByName("This is it")
-			activity.name == "This is it"
+			waitFor("very slow") { summary.displayed }
+			cancel.click()
+		when:
+			to PageMessageCustomActivity, CustomActivity.findByName("Wewe wacha hakuna haja")
+		then:
+			waitFor { title?.toLowerCase().contains("custom activity") }
+			def activity = CustomActivity.findByName("Wewe wacha hakuna haja")
+			activity.name == "Wewe wacha hakuna haja"
 			activity.steps.size() == 2
 	}
 
@@ -109,16 +115,22 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			configure.stepButton("reply").click()
 			configure.stepButton("join").click()
-			configure.steps[2].jquery.find("#messageText").value("Sample Text")
-			configure.steps[3].jquery.find("#joinGroup").value(Group.list()[0].id)
+			configure.steps[2].jquery.find("#autoreplyText").value("Sample Text")
+			configure.steps[3].jquery.find("#group").value(Group.findByName("Camping").id)
 			next.click()
-			confirm.name.value("This is it")
+			confirm.name.value("ni hivyo hivyo tu")
 		then:
 			confirm.stepActionsConfirm.contains("Camping")
 			confirm.stepActionsConfirm.contains("Sample Text")
 			submit.click()
-			def activity = CustomActivity.findByName("This is it")
-			activity.name == "This is it"
+			waitFor("very slow") { summary.displayed }
+			cancel.click()
+		when:
+			to PageMessageCustomActivity, CustomActivity.findByName("ni hivyo hivyo tu")
+		then:
+			waitFor { title?.toLowerCase().contains("custom activity") }
+			def activity = CustomActivity.findByName("ni hivyo hivyo tu")
+			activity.name == "ni hivyo hivyo tu"
 			activity.steps.size() == 4
 	}
 
