@@ -3,6 +3,9 @@ package frontlinesms2
 abstract class Step {
 	
 	static hasMany = [stepProperties: StepProperty]
+	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
+	static String getShortName() { 'base' }
+
 	static configFields = [:]
 
 	static constraints = {
