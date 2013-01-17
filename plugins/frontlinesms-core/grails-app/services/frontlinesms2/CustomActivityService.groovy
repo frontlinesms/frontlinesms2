@@ -15,7 +15,7 @@ class CustomActivityService {
 		customActivity.keywords?.clear()
 		println "removing existing steps if any"
 		customActivity.steps?.clear()
-		
+
 		getSteps(steps).each {
 			customActivity.addToSteps(it)
 		}
