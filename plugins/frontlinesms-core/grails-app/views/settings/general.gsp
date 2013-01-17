@@ -4,11 +4,6 @@
 		<meta name="layout" content="settings"/>
 		<title><g:message code="settings.general.header"/></title>
 		<export:resource/>
-	<r:script>
-		$(function() {
-			addBasicAuthValidator();
-		});
-	</r:script>
 	</head>
 	<body>
 		<div id="body-content-head">
@@ -17,7 +12,7 @@
 		<div id="body-content">
 			<div id="language">
 				<h2><g:message code="language.label"/></h2>
-				<p><g:message code="language.prompt"/></p>
+				<fsms:info message="language.prompt"/>
 				<g:form action="selectLocale" method="post">
 					<g:select class="dropdown" name="language"
 							from="${languageList}"
@@ -29,20 +24,13 @@
 			</div>
 			<div id="import">
 				<h2><g:message code="import.label"/></h2>
-				<p class="info">
-					<g:message code="import.backup.label"/>
-				</p>
+				<fsms:info message="import.backup.label"/>
 				<g:uploadForm name="importForm" controller="import" action="importData" method="post">
-					<label for="data"><g:message code="import.prompt.type"/></label>
-					<div class="radio-choice">
-						<input type="radio" name="data" value="contacts" checked="checked"/>
-						<g:message code="import.contacts"/>
-					</div>
-					<div class="radio-choice">
-						<input type="radio" name="data" value="messages"/>
-						<g:message code="import.messages"/>
-					</div>
-					<p class="info"><g:message code="import.version1.info"/></p>
+					<fsms:radioGroup name="data" title="import.prompt.type"
+							values="contacts,messages"
+							labelPrefix="import."
+							checked="contacts"/>
+					<fsms:info message="import.version1.info"/>
 					<input type="file" name="importCsvFile" onchange="this.form.submit();"/>
 					<label for="importCsvFile"><g:message code="import.prompt"/></label>
 				</g:uploadForm>
@@ -52,62 +40,36 @@
 				<p><g:message code="configuration.location.instructions" args="${['file://'+frontlinesms2.ResourceUtils.resourcePath, frontlinesms2.ResourceUtils.resourcePath]}"/></p>
 			</div>
 			<div id="basic-authentication">
-				<h2><g:message code="basic.authentication" /></h2>
-				<p class="info">
-					<g:message code="basic.authentication.label"/>
-				</p>
+				<h2><g:message code="auth.basic.label" /></h2>
+				<fsms:info message="auth.basic.info"/>
 				<g:form name="basic-auth" action="basicAuth" controller="settings">
-					<table>
-						<tbody>
-							<tr>
-								<td><label for="enabledAuthentication"><g:message code="basic.authentication.enable"/></label></td>
-								<td><g:checkBox name="enabledAuthentication" value="true" checked="${enabledAuthentication ? 'true':''}" onclick="basicAuthValidation.toggleFields(this)"/></td>
-							</tr>
-							<tr>
-								<td><label for="username"><g:message code="basic.authentication.username"/></label></td>
-								<td><g:textField name="username" class="required" value="${username}"/></td>
-							</tr>
-							<tr>
-								<td><label for="password"><g:message code="basic.authentication.password"/></label></td>
-								<td><g:passwordField name="password" class="required" value="${password}" /></td>
-							</tr>
-							<tr>
-								<td><label for="confirmPassword"><g:message code="basic.authentication.confirm.password"/></label></td>
-								<td><g:passwordField name="confirmPassword" class="required password" value="" /></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td><g:submitButton name="save" class="btn" onclick="basicAuthValidation.showErrors()" value="${message(code:'action.save')}"/></td>
-							</tr>
-						</tbody>
-					</table>
+					<fsms:inputs labelPrefix="auth.basic." table="true" submit="action.save"
+							fields="enabled, username, password, confirmPassword"
+							values="${[authEnabled, username, '', '']}"
+							types="${['isBoolean', null, 'password', 'password']}"/>
 				</g:form>
 			</div>
 			<div id="routing-preferences">
-				<h2><g:message code="routing.title" /></h2>
-				<p class="info">
-					<g:message code="routing.info"/>
-				</p>
+				<h2><g:message code="routing.title"/></h2>
+				<fsms:info message="routing.info"/>
 				<g:form name="routing-form" controller="settings" action="changeRoutingPreferences">
-					<div id="custom-routing">
-						<p class="info">
-							<g:message code="routing.when.sending"/>
-						</p>
-						<ul>
-							<li>
-								<g:checkBox name="uselastreceiver" value="true" checked="${appSettings['routing.uselastreceiver']}"/><g:message code="routing.use.last.received"/>
-							</li>
-						</ul>
-					</div>
-					<div id="default-routing">
-						<p class="info">
-							<g:message code="routing.otherwise"/>
-						</p>
-						<fsms:radioGroup name="otherwise" values="any,dontsend" labels="${g.message(code:'routing.use.any')}, ${g.message(code:'routing.dont.send')}" checked="${appSettings['routing.otherwise']}"/>
-					</div>
+					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending"
+							values="${[uselastreceiver:appSettings['routing.uselastreceiver']]}"/> 
+					<fsms:radioGroup name="otherwise" title="routing.rules.otherwise"
+							values="any,dontsend"
+							labels="${g.message(code:'routing.rule.useany')}, ${g.message(code:'routing.rule.dontsend')}"
+							checked="${appSettings['routing.otherwise']}"/>
 					<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}"/>
 				</g:form>
 			</div>
 		</div>
 	</body>
 </html>
+
+<r:script>
+$(function() {
+	basicAuthValidation.enable();
+	$("#basic-authentication input[name=enabled]").attr("onchange", "basicAuthValidation.toggleFields(this)");
+	$("#basic-authentication input[type=submit]").attr("onclick", "basicAuthValidation.showErrors()");
+});
+</r:script>

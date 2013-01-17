@@ -1,45 +1,45 @@
 #modalBox { overflow-y: auto; }
-#modalBox #export-form > * { margin:0 0 15px 0; }
-#modalBox #export-form > a { display:block; text-align:center; }
-#modalBox #export-form > :last-child { margin:0; }
-#modalBox #export-form input[type="radio"] { margin:5px; }
+#export-form > * { margin:0 0 15px 0; }
+#export-form > a { display:block; text-align:center; }
+#export-form > :last-child { margin:0; }
 
 #tabs div.info { padding-left:25px; margin:15px 0;
 	background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
 
-#tabs div.input, #tabs div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
-#tabs div.input > label, #tabs h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }
-#tabs div.input > label, #tabs div.confirm h2 { position:relative; left:-25px; }
-#tabs div.ui-tabs-panel div.confirm h2 { margin-bottom:10px; }
+div.input, div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
+div.input > label, #tabs h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }
+div.input > label, #tabs div.confirm h2 { position:relative; left:-25px; }
+div.ui-tabs-panel div.confirm h2 { margin-bottom:10px; }
 
-#tabs div.input > * { display:block; }
-#tabs div.input textarea { width:98%; }
-#tabs div.input label p.info { padding-left:20px; margin:5px 0 15px 0; font-weight:normal; }
-#tabs div.input label h3 { display:inline; font-weight:bold; }
+div.input > * { display:block; }
+div.input textarea { width:98%; }
+div.input label p.info { padding-left:20px; margin:5px 0 15px 0; font-weight:normal; }
+div.input label h3 { display:inline; font-weight:bold; }
 
-#tabs div.input.optional { position:relative; }
-#tabs div.input.optional label { left:0; }
-#tabs div.input.optional input[type="checkbox"] { position:absolute; top:0; left:-25px; }
+div.input.optional { position:relative; }
+div.input.optional label { left:0; }
+div.input.optional input[type="checkbox"] { position:absolute; top:0; left:-25px; }
 
-#tabs div.input ul li { margin-bottom: 10px; }
-#tabs div.input ul label { margin-right: 15px; }
-#tabs div.input ul.select li { position:relative; }
-#tabs div.input ul.select li label { margin-left:20px; }
-#tabs div.input ul.select li input[type="radio"] { position:absolute; top:0; left:0; }
-#tabs div.input ul.select li input[type="text"] { display:block; margin-left:25px; margin-top:10px; }
+div.input ul li { margin-bottom: 10px; }
+div.input ul label { margin-right: 15px; }
+div.input ul.select li { position:relative; }
+div.input ul.select li label { margin-left:20px; }
+div.input ul.select li input[type="radio"],
+div.input ul.select li input[type="checkbox"] { position:absolute; top:0; left:0; }
+div.input ul.select li input[type="text"] { display:block; margin-left:25px; margin-top:10px; }
 
-#modalBox.ui-dialog-content .select.radio label { margin:5px 0; position:relative; display:block; cursor:pointer; padding:10px; }
-#modalBox.ui-dialog-content .select.radio label:hover, #modalBox.ui-dialog-content .select.radio label:hover > * { background-color:#e5eff3; }
-#modalBox.ui-dialog-content .select.radio label input[type="radio"] { position:absolute; top:10px; left:10px; }
-#modalBox.ui-dialog-content .select.radio label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }
-#modalBox.ui-dialog-content .select.radio label .info { margin-left:25px; margin-bottom:0; padding-left:0; }
+div.input ul.select.radio label { margin:5px 0; position:relative; display:block; cursor:pointer; padding:10px; }
+div.input ul.select.radio label:hover, #modalBox.ui-dialog-content .select.radio label:hover > * { background-color:#e5eff3; }
+div.input ul.select.radio label input[type="radio"] { position:absolute; top:10px; left:10px; }
+div.input ul.select.radio label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }
+div.input ul.select.radio label .info { margin-left:25px; margin-bottom:0; padding-left:0; font-weight:normal; }
 
-#tabs div.input .controls { display:table; margin-top:10px; }
-#tabs div.input .controls > * { display:table-cell; vertical-align:middle; }
-#tabs div.input .controls > :first-child { width:100%; }
+div.input .controls { display:table; margin-top:10px; }
+div.input .controls > * { display:table-cell; vertical-align:middle; }
+div.input .controls > :first-child { width:100%; }
 #tabs thead tr { background: none;}
-#tabs div.input .controls .magicwand-container a { text-align:right; }
-#tabs div.input .controls div.magicwand-container.hidden { visibility:hidden; }
+div.input .controls .magicwand-container a { text-align:right; }
+div.input .controls div.magicwand-container.hidden { visibility:hidden; }
 #tabs div.confirm td { padding:5px; }
 #tabs div.confirm td:first-child { padding-left:0; font-weight:bold; }
 #tabs div.confirm td:last-child { padding-right:0; }
@@ -47,7 +47,7 @@
 #tabs div.summary { display:none; }
 #tabs div.summary p { line-height:150%; margin-bottom:20px; }
 
-#tabs div.input label.error { margin-right:0px; font-weight:normal; left:0px; padding-top:2px; }
+div.input label.error { margin-right:0px; font-weight:normal; left:0px; padding-top:2px; }
 
 div.subscription_input { padding: 5px 5px;}
 div.subscription_input label { }

@@ -44,7 +44,7 @@ fconnection.setType = function(connectionType) {
 		%>
 		requiredFields: [${nonNullableConfigFields}],
 		validationSubsectionFieldKeys: [${validationSubsectionFieldKeys}],
-		humanReadableName: "<g:message code="${imp.simpleName.toLowerCase()}.label"/>",
+		humanReadableName: "<g:message code="${imp.shortName}.label"/>",
 		show: function() {
 			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
 				$("#${it}-confirm").hide();
