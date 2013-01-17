@@ -78,6 +78,7 @@ class CreateActivityDialog extends MediumPopup {
 		autoforward { $('input[value="autoforward"]') }
 		webconnection(wait:true) { $('input[value="webconnection"]') }
 		subscription { $('input[value="subscription"]') }
+		customactivity { $('input[value="customactivity"]') }
 	}
 }
 
@@ -580,11 +581,11 @@ class AutoforwardSummaryTab extends geb.Module {
 
 class CustomActivityCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("custom activity") || popupTitle.contains("edit activity")
+		popupTitle.contains("customactivity") || popupTitle.contains("edit activity")
 	}
 	static content = {
-		keyword { module ConfugureCustomKeywordTab}
-		configure { module ConfugureCustomActivityTab}
+		keyword { module ConfigureCustomKeywordTab}
+		configure { module ConfigureCustomActivityTab}
 		confirm { module CustomActivityConfirmTab}
 		summary { module CustomActivitySummaryTab}
 		validationErrorText { $('label.error').text() }
@@ -594,7 +595,7 @@ class CustomActivityCreateDialog extends MediumPopup {
 	}
 }
 
-class ConfugureCustomKeywordTab extends geb.Module {
+class ConfigureCustomKeywordTab extends geb.Module {
 	static base = { $('div#tabs-1')}
 	static content = {
 		keywordText { $('#keywords') }
@@ -602,17 +603,21 @@ class ConfugureCustomKeywordTab extends geb.Module {
 	}
 }
 
-class ConfugureCustomActivityTab extends geb.Module {
+class ConfigureCustomActivityTab extends geb.Module {
 	static base = { $('div#tabs-2')}
 	static content = {
-		stepButton { buttonText-> }
-		stepsContainer {  }
+		stepButton { buttonText->
+			$("#add-${buttonText}-action-step")
+		}
+		stepsContainer { $("#custom-activity-actions-container") }
+		steps { $(".step") }
 	}
 }
 
 class CustomActivityConfirmTab extends geb.Module {
 	static base = { $("div#tabs-3") }
 	static content = {
+		name { $('input#name') }
 		keywordConfirm {$("#keyword-confirm").text()}
 	}
 }
