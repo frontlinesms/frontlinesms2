@@ -1,18 +1,20 @@
+<div class="info">
+	<p><g:message code="customactivity.config.description"/></p>
+</div>
+<div id="custom-activity-actions-container">
+	<div class="custom-activity-action-step btn" id="add-join-action-step">Join</div>
+	<div class="custom-activity-action-step btn" id="add-leave-action-step">Leave</div>
+	<div class="custom-activity-action-step btn" id="add-reply-action-step">Reply</div>
+</div>
 <div id="custom-activity-config-container">
 	<g:hiddenField name="jsonToSubmit" />
 	<fsms:savedActionSteps activityId="${activityInstanceToEdit?.id}"/>
 </div>
-<div id="custom-activity-actions-container">
-	<div class="custom-activity-action-step" id="add-join-action-step">Join</div>
-	<div class="custom-activity-action-step" id="add-leave-action-step">Leave</div>
-	<div class="custom-activity-action-step" id="add-reply-action-step">Reply</div>
-</div>
 
 <style type="text/css">
 	#custom-activity-config-container {
-		height:330px;
 		width: 100%;
-		background-color: #eeddff
+		padding:2px;
 	}
 
 	#custom-activity-actions-container {
@@ -29,7 +31,7 @@
 	}
 	.step {
 		padding:5px;
-		background-color: lightgray;
+		background-color: #eeeeee;
 		margin-bottom: 2px;
 	}
 </style>

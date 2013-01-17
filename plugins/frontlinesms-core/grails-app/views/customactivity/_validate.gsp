@@ -4,6 +4,10 @@
 		$("#add-join-action-step").click(function() { addJoinActionStep(); });
 		$("#add-leave-action-step").click(function() { addLeaveActionStep(); });
 		$("#add-reply-action-step").click(function() { addReplyActionStep(); });
+		
+		$.each($('.remove-step'), function(index, element){
+			addRemoveListener(element);
+		});
 
 		//> Validation
 		var validator = $("#create_customactivity").validate({
@@ -21,7 +25,7 @@
 			 else return true;
 		};
 
-		var messageTextTabValidation = function() {
+		var messageTextValidation = function() {
 			return validator.element('#messageText');
 		};
 
@@ -31,7 +35,7 @@
 		};
 
 		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
-		mediumPopup.addValidation('customactivity-config', messageTextTabValidation);
+		mediumPopup.addValidation('customactivity-config', messageTextValidation);
 		mediumPopup.addValidation('customactivity-confirm', confirmTabValidation);
 	}
 
@@ -49,6 +53,12 @@
 	function addReplyActionStep() {
 		var container = $("#custom-activity-config-container");
 		container.append(replyActionStepHTml);
+	}
+
+	function addRemoveListener(element) {
+		$(element).click(function(){
+			$(this).parent().parent().fadeOut(300, function(){ $(this).remove(); });
+		});
 	}
 
 	function setJsonToSend() {
@@ -106,6 +116,7 @@
 			def divElement = fsms.joinActionStep()
 		%>
 		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
 
@@ -114,6 +125,7 @@
 			divElement = fsms.leaveActionStep()
 		%>
 		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
 	
@@ -122,6 +134,7 @@
 			divElement = fsms.replyActionStep()
 		%>
 		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
 
