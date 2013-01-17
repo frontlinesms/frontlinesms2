@@ -15,13 +15,14 @@ class CustomActivityService {
 		customActivity.keywords?.clear()
 		println "removing existing steps if any"
 		customActivity.steps?.clear()
-		println "##Just about to save"
-		customActivity.save(flush:true, failOnError:true)
-		println "##Just saved round 1"
 		
 		getSteps(steps).each {
 			customActivity.addToSteps(it)
 		}
+
+		println "##Just about to save"
+		customActivity.save(flush:true, failOnError:true)
+		println "##Just saved round 1"
 
 		if(params.sorting == 'global'){
 			customActivity.addToKeywords(new Keyword(value:''))
@@ -47,12 +48,12 @@ class CustomActivityService {
 			println "step:::: $step"
 			
 			def stepInstance = Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
-			if(step.stepProperty instanceof JSONObject) {
-				stepInstance.addToStepProperties(new StepProperty(key:step.stepProperty.key, value:step.stepProperty.value))
-			} else {
-				step.stepProperty.each { stepProperty ->
-					stepInstance.addToStepProperties(new StepProperty(key:stepProperty.key, value:stepProperty.value))
-				}
+			println "step.stepProperties:::: ${step.stepProperties} size[${step.stepProperties.size()}]"
+			step.stepProperties.each { stepProperty ->
+				println "stepProperty::: $stepProperty"
+				println "stepProperty.key::: $stepProperty.key"
+				println "stepProperty.value::: $stepProperty.value"
+				stepInstance.addToStepProperties(new StepProperty(key:stepProperty.key, value:stepProperty.value))
 			}
 
 			stepInstanceList << stepInstance
