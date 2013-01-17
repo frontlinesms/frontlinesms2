@@ -577,3 +577,49 @@ class AutoforwardSummaryTab extends geb.Module {
 		message { $("div.summary") }
 	}
 }
+
+class CustomActivityCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("custom activity") || popupTitle.contains("edit activity")
+	}
+	static content = {
+		keyword { module ConfugureCustomKeywordTab}
+		configure { module ConfugureCustomActivityTab}
+		confirm { module CustomActivityConfirmTab}
+		summary { module CustomActivitySummaryTab}
+		validationErrorText { $('label.error').text() }
+		errorText { errorPanel.text()?.toLowerCase() }
+		error { errorPanel }
+		create { $('button#submit') }
+	}
+}
+
+class ConfugureCustomKeywordTab extends geb.Module {
+	static base = { $('div#tabs-1')}
+	static content = {
+		keywordText { $('#keywords') }
+		blankKeyword {$('#blankKeyword')}
+	}
+}
+
+class ConfugureCustomActivityTab extends geb.Module {
+	static base = { $('div#tabs-2')}
+	static content = {
+		stepButton { buttonText-> }
+		stepsContainer {  }
+	}
+}
+
+class CustomActivityConfirmTab extends geb.Module {
+	static base = { $("div#tabs-3") }
+	static content = {
+		keywordConfirm {$("#keyword-confirm").text()}
+	}
+}
+
+class CustomActivitySummaryTab extends geb.Module {
+	static base = { $("div#tabs-4") }
+	static content = {
+		message { $("div.summary") }
+	}
+}
