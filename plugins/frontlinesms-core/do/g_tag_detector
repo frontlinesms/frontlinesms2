@@ -1,7 +1,0 @@
-grep -rn --color 'render template' grails-app/views/ && egrep -rnw --color "(render|g\.render)" grails-app/controllers/
-OUT=$?
-if [ $OUT -eq 0 ];then
-   echo "Matches were found!"
-else
-   echo "Matches were NOT found!"
-fi
