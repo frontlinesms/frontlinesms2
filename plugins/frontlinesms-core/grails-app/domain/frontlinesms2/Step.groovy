@@ -3,6 +3,9 @@ package frontlinesms2
 abstract class Step {
 	
 	static hasMany = [stepProperties: StepProperty]
+	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
+	static String getShortName() { 'base' }
+
 	static configFields = [:]
 
 	static constraints = {
@@ -10,9 +13,7 @@ abstract class Step {
 		stepProperties(nullable: true)
 	}
 	
-	def process(Fmessage message) {
-
-	}
+	abstract def process(Fmessage message)
 
 	String getPropertyValue(key) {
 		stepProperties?.find { it.key == key }?.value
@@ -26,4 +27,5 @@ abstract class Step {
 	def getEntityList(entityType, propertyName) {
 		entityType.getAll(StepProperty.findAllByStepAndKey(this, propertyName)*.value) - null
 	}
+
 }
