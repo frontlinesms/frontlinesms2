@@ -26,6 +26,7 @@
 		};
 
 		var messageTextValidation = function() {
+			updateConfirmationMessage();
 			return validator.element('#messageText');
 		};
 
@@ -103,10 +104,6 @@
 		return stepProperties;
 	}
 
-	function updateConfirmationMessage() {
-
-	}
-
 	function indexOfLastStep() {
 		return $(".step:last").attr("index") || 0;
 	}
@@ -137,5 +134,37 @@
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
+
+	function updateConfirmationMessage() {
+		var container = $('#customactivity-confirm-action-steps');
+		container.html("");
+		$.each($(".step"), function(index, element){
+			var output = "";
+			var stepType = $(element).find('input#stepType').val();
+			if(stepType == 'join') {
+				var groupName = $(element).find('#joinGroup').find("option[selected]").text()
+				output = i18n("customactivity.group.join", groupName);
+				output = "<p>"+output+"</p>";
+			}
+			if(stepType == "leave") {
+				var groupName = $(element).find('#joinGroup').find("option[selected]").text()
+				output = i18n("customactivity.group.leave", groupName);
+				output = "<p>"+output+"</p>";
+			}
+			if(stepType == "reply") {
+				var messageText = $(element).find('#messageText').val();
+				output = i18n("customactivity.reply.messagetext", messageText);
+				output = "<p>"+output+"</p>";
+			}
+			container.append(output);
+		});
+
+		if(!(isGroupChecked("blankKeyword"))){
+			var keywords = $('#keywords').val().toUpperCase();
+			$("#keyword-confirm").html('<p>' + keywords  + '</p>');
+		} else {
+			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
+		}
+	}
 
 </r:script>
