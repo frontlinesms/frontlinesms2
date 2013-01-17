@@ -78,7 +78,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			configure.stepButton("reply").click()
 			configure.stepButton("join").click()
 			configure.steps[0].jquery.find("#messageText").value("Sample Text")
-			configure.steps[1].jquery.find("#joinGroup").value(1)
+			configure.steps[1].jquery.find("#joinGroup").value(Group.list()[0].id)
 			next.click()
 			confirm.name.value("This is it")
 		then:
@@ -89,7 +89,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			activity.name == "This is it"
 			activity.steps.size() == 2
 	}
-@spock.lang.IgnoreRest
+
 	def 'can edit an existing custom activity'() {
 		given:
 			createTestGroups()
@@ -98,7 +98,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			to PageMessageCustomActivity, CustomActivity.findByName("Do it all")
 		then:
 			waitFor { title?.toLowerCase().contains("custom activity") }
-			moreActions("edit").click()
+			moreActions.value("edit").jquery.click()
 			waitFor { at CustomActivityCreateDialog }
 			keyword.keywordText == "CUSTOM"
 		when:
@@ -109,8 +109,8 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			configure.stepButton("reply").click()
 			configure.stepButton("join").click()
-			configure.steps[0].jquery.find("#messageText").value("Sample Text")
-			configure.steps[1].jquery.find("#joinGroup").value(1)
+			configure.steps[2].jquery.find("#messageText").value("Sample Text")
+			configure.steps[3].jquery.find("#joinGroup").value(Group.list()[0].id)
 			next.click()
 			confirm.name.value("This is it")
 		then:
