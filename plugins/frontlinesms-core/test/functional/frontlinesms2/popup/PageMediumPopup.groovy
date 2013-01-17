@@ -619,6 +619,7 @@ class CustomActivityConfirmTab extends geb.Module {
 	static content = {
 		name { $('input#name') }
 		keywordConfirm {$("#keyword-confirm").text()}
+		stepActionsConfirm { $("#customactivity-confirm-action-steps").text() }
 	}
 }
 

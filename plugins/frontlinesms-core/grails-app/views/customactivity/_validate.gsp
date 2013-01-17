@@ -142,12 +142,14 @@
 			var output = "";
 			var stepType = $(element).find('input#stepType').val();
 			if(stepType == 'join') {
-				var groupName = $(element).find('#joinGroup').find("option[selected]").text()
+				var groupValue = $(element).find('#joinGroup').val();
+				var groupName = $(element).find('#joinGroup').find("option[value="+groupValue+"]").text()
 				output = i18n("customactivity.group.join", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType == "leave") {
-				var groupName = $(element).find('#joinGroup').find("option[selected]").text()
+				var groupValue = $(element).find('#leaveGroup').val();
+				var groupName = $(element).find('#leaveGroup').find("option[value="+groupValue+"]").text()
 				output = i18n("customactivity.group.leave", groupName);
 				output = "<p>"+output+"</p>";
 			}
