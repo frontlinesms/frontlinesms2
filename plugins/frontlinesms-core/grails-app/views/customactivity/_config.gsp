@@ -44,7 +44,6 @@
 	}
 	.step {
 		padding:5px;
-
 		margin: 3px 0;
 		cursor:move;
 		border-bottom: 1px solid #eeeeee;
