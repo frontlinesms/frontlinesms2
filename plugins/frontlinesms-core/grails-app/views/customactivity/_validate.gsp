@@ -53,7 +53,7 @@
 
 	function addReplyActionStep() {
 		var container = $("#custom-activity-config-container");
-		container.append(replyActionStepHTml);
+		container.append(replyActionStepHtml);
 	}
 
 	function addRemoveListener(element) {
@@ -112,7 +112,7 @@
 		<%
 			def divElement = fsms.joinActionStep()
 		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
@@ -121,16 +121,16 @@
 		<%
 			divElement = fsms.leaveActionStep()
 		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
 	
-	var replyActionStepHTml = function() {
+	var replyActionStepHtml = function() {
 		<%
 			divElement = fsms.replyActionStep()
 		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
