@@ -355,7 +355,7 @@ class FsmsTagLib {
 		}
 		out << '</li>'
 	}
-	
+
 	private def getFields(att) {
 		def fields = att.remove('fields')
 		if(!fields) fields = att.instanceClass?.configFields
