@@ -4,6 +4,8 @@ class ReplyActionStep extends Step {
 	
 	static service = 'autoreply'
 	static action = 'doReply'
+	static String getShortName() { 'reply' }
+
 	static configFields = [autoreplyText: 'textarea']
 
 	static constraints = {

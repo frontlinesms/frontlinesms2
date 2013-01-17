@@ -4,6 +4,8 @@ class JoinActionStep extends Step {
 	
 	static service = 'subscription'
 	static action = 'doJoin'
+	static String getShortName() { 'join' }
+
 	static configFields = [group: Group]
 
 	static constraints = {
