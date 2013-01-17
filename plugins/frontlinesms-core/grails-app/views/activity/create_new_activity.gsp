@@ -19,7 +19,7 @@
 		<r:layoutResources/>
 	</head>
 	<body>
-		<div class="input select">
+		<div class="input select radio">
 			<g:each var="activityType" in="${frontlinesms2.Activity.implementations*.shortName}">
 				<label>
 					<g:radio name="activity" value="${activityType}" onchange="setActivityTypeSelected()"/>

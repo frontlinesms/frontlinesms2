@@ -150,8 +150,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			basicInfo("smslib") == "Connect to USB, serial and bluetooth modems or phones"
 			basicInfo("smssync") == "Use an Android phone with the Smssync app installed to send and receive SMS with FrontlineSMS"
-			basicInfo("clickatell") == "Send an receive messages through a Clickatell account"
-			basicInfo("intellisms") == "Send an receive messages through an Intellisms account"
+			basicInfo("clickatell") == "Send and receive messages through a Clickatell account"
+			basicInfo("intellisms") == "Send and receive messages through an Intellisms account"
 	}
 
 	def 'can set up a new Smssync connection with no secret'() {

@@ -17,18 +17,10 @@ class Fconnection {
 
 	static hasMany = [messages: Fmessage]
 	
-	static def getImplementations() {
-		if(Environment.current == Environment.PRODUCTION) {
-			[SmslibFconnection,
-				ClickatellFconnection,
-				IntelliSmsFconnection]
-		} else {
-			[SmslibFconnection,
-				ClickatellFconnection,
-				IntelliSmsFconnection,
-				SmssyncFconnection]
-		}
-	}
+	static final def implementations = [SmslibFconnection,
+			ClickatellFconnection,
+			IntelliSmsFconnection,
+			SmssyncFconnection]
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
@@ -43,6 +35,10 @@ class Fconnection {
 	static mapping = {
 		sort id:'asc'
 		tablePerHierarchy false
+	}
+
+	static constraints = {
+		name blank:false
 	}
 	
 	String name

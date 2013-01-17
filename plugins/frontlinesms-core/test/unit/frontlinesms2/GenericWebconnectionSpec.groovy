@@ -29,28 +29,29 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 			null   | false
 	}
 
-	def "Test URL constraints"() {
+	@Unroll
+	def "Test URL constraints for #url (valid? #valid)"() {
 		when:
 			def extComm = new GenericWebconnection(name:"URL",url:url,httpMethod:Webconnection.HttpMethod.GET)
 		then:
 			extComm.validate() == valid
 		where:
-			url                                                   | valid
-			'http://www.cuug.com/branderr/csce.html'              | true
-			'ftp://www.sagana.com/home/smith/budget.wk1'          | true
-			'https://www.apple.com/index.html'                    | true
-			'http://127.0.0.1:8080/frontlinesms-core'             | true
-			'http://127.0.0.1'                                    | true
-			'www.apple.com/index.html'                    	      | false
-			'http://localhost:8080/frontlinesms-core'             | false
-			'http//www.apple.com/index.php'                       | false
-			'https://http://home/frontlinesms'                    | false
-			'http://....home.com'                                 | false
-			'http:/www.apple.com/index.html'                      | false
-			'http:/wwww.apple.com/index.html'                     | false
-			'htpp:/www.apple.com/index.html'                      | false
-			'htttp:/www.apple.com/index.html'                     | false
-			'htttp:/www..apple.com/index.html'                    | false
+			url                                           | valid
+			'http://www.example.com/branderr/csce.html'   | true
+			'https://www.example.com/index.html'          | true
+			'http://127.0.0.1:8080/frontlinesms-core'     | true
+			'http://127.0.0.1'                            | true
+			'www.example.com/index.html'                  | false
+			'http://localhost:8080/frontlinesms-core'     | false // currently fails because of http://jira.grails.org/browse/GRAILS-5509, http://jira.grails.org/browse/GRAILS-1692, https://issues.apache.org/jira/browse/VALIDATOR-248
+			'http//www.example.com/index.php'             | false
+			'https://http://home/frontlinesms'            | false
+			'http://....home.com'                         | false
+			'http:/www.example.com/index.html'            | false
+			'http:/wwww.example.com/index.html'           | false
+			'htpp:/www.example.com/index.html'            | false
+			'htttp:/www.example.com/index.html'           | false
+			'htttp:/www..example.com/index.html'          | false
+			'ftp://www.example.com/home/smith/budget.wk1' | false
 	}
 
 	def 'apiProcess should pass call to service'() {

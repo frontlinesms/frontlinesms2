@@ -3,7 +3,6 @@ package frontlinesms2
 class PollResponse {
 	String key
 	String value
-	boolean isUnknownResponse = false
 	static belongsTo = [poll: Poll]
 	static hasMany = [messages: Fmessage]
 	List messages = []

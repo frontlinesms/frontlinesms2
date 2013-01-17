@@ -1,14 +1,14 @@
 # Getting Around Activities
 
-You can access activities from the messages tab. When you click on an activity for the first time, you will notice that it has a slightly different layout in comparison to the [message inbox][1]. This is because an activity performs a specialised function such as [Polling][2], [Announcements][3] or an [Auto Reply][5]. More detailed information about each kind of activity can be found on the respective activities help page. The unique interface for an activity has been designed so that all the information can be accessed and managed easier.
+You can access activities from the messages tab. When you click on an activity for the first time, you will notice that it has a slightly different layout in comparison to the [message inbox][1]. This is because an activity performs a specialized function such as [Polling][2], [Announcements][3] or an [Auto Reply][5]. More detailed information about each kind of activity can be found on the respective activity's help page. The unique interface for an activity has been designed so that all the information can be accessed and managed more easily.
 
 ![activity overciew][17]
 
 ### Activity Header
 
-This large header (1) contains summary information about the Activity. Basic information such as the name of the activity, the date it was created, the settings it was created with and how many messages were sent as part of the activity.
-So, in the example of a Poll, you would also find here the question sent as part of the poll, and whether there was an Auto Reply set up. If an Auto Reply was set up, the message used in the [auto-reply][5] will also be displayed here.  
-Further, a breakdown of Poll results will be displayed here as well.
+This large header (1) contains summary information about the Activity, such as the name of the activity, the date it was created, the settings it was created with and how many messages were sent as part of the activity.
+
+So, in the example of a Poll, you would also find here the question sent as part of the poll, and whether an Auto Reply was set up. If an Auto Reply was set up, the message used in the [auto-reply][5] will also be displayed here. A breakdown of Poll results will also be displayed.
 
 The [Quick Message][6], [Archive][7], [Export][8], [Rename][9] and [Delete][10] actions can be accessed from this header as well. 
 
@@ -32,12 +32,12 @@ The message detail area (3) contains the full text of the selected message and s
 
 You can [reply][15], [move][15], [forward][15] and [delete][15] messages from here.
 
-['Categorise Response'][13] is a Poll specific function and will allow you to change the response under which the message is categorised. 
+['Categorise Response'][13] is specific to Polls and will allow you to change the response under which the message is categorized. 
 
 ### Related Actions
 [Getting Around the Inbox][16]  
 [Creating a Poll][2]  
-[Manually Categorising a Response][13]  
+[Manually Categorizing a Response][13]  
 [Creating an Announcement][3]  
 [Creating an Auto Reply][5]  
  

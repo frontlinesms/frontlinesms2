@@ -14,6 +14,8 @@
 
 #tabs div.input > * { display:block; }
 #tabs div.input textarea { width:98%; }
+#tabs div.input label p.info { padding-left:20px; margin:5px 0 15px 0; font-weight:normal; }
+#tabs div.input label h3 { display:inline; font-weight:bold; }
 
 #tabs div.input.optional { position:relative; }
 #tabs div.input.optional label { left:0; }
@@ -25,6 +27,12 @@
 #tabs div.input ul.select li label { margin-left:20px; }
 #tabs div.input ul.select li input[type="radio"] { position:absolute; top:0; left:0; }
 #tabs div.input ul.select li input[type="text"] { display:block; margin-left:25px; margin-top:10px; }
+
+#modalBox.ui-dialog-content .select.radio label { margin:5px 0; position:relative; display:block; cursor:pointer; padding:10px; }
+#modalBox.ui-dialog-content .select.radio label:hover, #modalBox.ui-dialog-content .select.radio label:hover > * { background-color:#e5eff3; }
+#modalBox.ui-dialog-content .select.radio label input[type="radio"] { position:absolute; top:10px; left:10px; }
+#modalBox.ui-dialog-content .select.radio label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }
+#modalBox.ui-dialog-content .select.radio label .info { margin-left:25px; margin-bottom:0; padding-left:0; }
 
 #tabs div.input .controls { display:table; margin-top:10px; }
 #tabs div.input .controls > * { display:table-cell; vertical-align:middle; }
@@ -46,12 +54,14 @@ div.subscription_input label { }
 div.subscription_input input { float:left; margin-right:10px; }
 form#categorize_subscription p.info { padding:5px 0px; line-height: 1.1em;}
 
+ul.sorting-options { margin-bottom:20px; }
 ul.sorting-options input[type=radio] { margin:5px; display:inline-block; }
 ul.sorting-options label.sorting-option-label { font-weight: bold; }
 div.sorting-option { padding:5px 5px 10px 25px; }
+div.activity-keyword { padding-left:25px; }
 div.sorting-option input#keywords { display: block; margin-top:5px; }
 
 #connectionForm label[for=connectionType] { font-weight: bold }
-#connectionForm td label { font-weight: bold }
+#connectionForm td label:first-child { font-weight: bold }
 #connectionForm .connection-field-info { padding-left:10px; padding-bottom:3px;}
 

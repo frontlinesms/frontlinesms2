@@ -1,10 +1,10 @@
-$(function() {
+function addBasicAuthValidator() {
 	var validatePassword = function(value, element) {
 		var confirmPassword, password, passwordField, isValid;
 		isValid = true;
 		passwordField = $("input[name=password]");
 		password = passwordField.val();
-		confirmPassword = $("input[name=confirmPassword]").val();
+		confirmPassword = $("input[name=confirmPassword].password").val();
 		if(password.length > 0) {
 			isValid = password === confirmPassword;
 			passwordField.removeClass("error");
@@ -18,7 +18,7 @@ $(function() {
 	jQuery.validator.addMethod("password", validatePassword, i18n("basic.authentication.password.mismatch"));
 	basicAuthValidation.toggleFields("#enabledAuthentication");
 	basicAuthValidation.validator("#basic-auth");
-});
+}
 
 var basicAuthValidation = {
 	validator: function(form){

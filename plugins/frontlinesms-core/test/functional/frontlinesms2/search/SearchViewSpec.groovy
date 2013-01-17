@@ -144,7 +144,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			singleMessageDetails.delete.click()
 		then:
 			waitFor("veryslow") { messageList.messages.size() == 5 }
-			notifications.flashMessage.text().contains("Message moved to trash")
+			notifications.flashMessage.text()?.contains("Message moved to trash")
 	}
 
 	def "should have the start date not set, then as the user set one the result page should contain his start date"() {
