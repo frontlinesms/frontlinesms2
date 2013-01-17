@@ -351,7 +351,7 @@ class FsmsTagLib {
 		out << "<span>Join Group</span>"
 		out << g.hiddenField(name:'stepId', value:"${att.step?.id?:''}")
 		out << g.hiddenField(name:'stepType', value:'join')
-		out << g.select(name:'joinGroup', noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name")
+		out << g.select(name:'group', noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name")
 		out << "</div>"
 	}
 
@@ -361,7 +361,7 @@ class FsmsTagLib {
 		out << "<span>Leave Group</span>"
 		out << g.hiddenField(name:'stepId', value:"${att.step?.id?:''}")
 		out << g.hiddenField(name:'stepType', value:'leave')
-		out << g.select(name:'leaveGroup', noSelection:['null':'Select One...'], from:Group.getAll(), optionKey:"id",optionValue:"name")
+		out << g.select(name:'group', noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name")
 		out << "</div>"
 	}
 
@@ -371,7 +371,7 @@ class FsmsTagLib {
 		out << "<span>Reply</span>"
 		out << g.hiddenField(name:'stepId', value:"${att.step?.id?:''}")
 		out << g.hiddenField(name:'stepType', value:'reply')
-		out << g.textArea(name:'messageText')
+		out << g.textArea(name:'autoreplyText', value:"${att.step?.autoreplyText?:''}")
 		out << "</div>"
 	}
 

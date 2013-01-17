@@ -120,7 +120,6 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			def activity = CustomActivity.findByName("This is it")
 			activity.name == "This is it"
 			activity.steps.size() == 4
-
 	}
 
 }

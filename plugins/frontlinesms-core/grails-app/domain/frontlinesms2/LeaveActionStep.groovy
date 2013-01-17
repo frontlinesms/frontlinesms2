@@ -11,6 +11,14 @@ class LeaveActionStep extends Step {
 	static constraints = {
 		stepProperties nullable: true
 	}
+
+	def getGroup() {
+		Group.get(getPropertyValue("group"))	
+	}
+
+	def setGroup(Group group) {
+		setPropertyValue("group", group.id)
+	}
 	
 	def process(Fmessage message) {
 

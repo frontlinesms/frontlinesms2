@@ -27,7 +27,7 @@
 
 		var messageTextValidation = function() {
 			updateConfirmationMessage();
-			return validator.element('#messageText');
+			return validator.element('#autoreplyText');
 		};
 
 		var confirmTabValidation = function() {
@@ -142,19 +142,19 @@
 			var output = "";
 			var stepType = $(element).find('input#stepType').val();
 			if(stepType == 'join') {
-				var groupValue = $(element).find('#joinGroup').val();
-				var groupName = $(element).find('#joinGroup').find("option[value="+groupValue+"]").text()
+				var groupValue = $(element).find('#group').val();
+				var groupName = $(element).find('#group').find("option[value="+groupValue+"]").text()
 				output = i18n("customactivity.group.join", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType == "leave") {
-				var groupValue = $(element).find('#leaveGroup').val();
-				var groupName = $(element).find('#leaveGroup').find("option[value="+groupValue+"]").text()
+				var groupValue = $(element).find('#group').val();
+				var groupName = $(element).find('#group').find("option[value="+groupValue+"]").text()
 				output = i18n("customactivity.group.leave", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType == "reply") {
-				var messageText = $(element).find('#messageText').val();
+				var messageText = $(element).find('#autoreplyText').val();
 				output = i18n("customactivity.reply.messagetext", messageText);
 				output = "<p>"+output+"</p>";
 			}

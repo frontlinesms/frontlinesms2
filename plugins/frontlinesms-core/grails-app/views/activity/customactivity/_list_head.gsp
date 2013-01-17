@@ -5,5 +5,10 @@
 	<li>
 		<g:formatDate date="${ownerInstance?.dateCreated}"/>
 	</li>
+	<li>
+		<g:each in="${ownerInstance?.steps}" var="step">
+			<p>${step.niceFormat()}</p>
+		</g:each>
+	</li>
 </ul>
 

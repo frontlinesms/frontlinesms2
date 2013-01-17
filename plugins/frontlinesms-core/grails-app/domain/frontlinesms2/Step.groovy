@@ -28,4 +28,16 @@ abstract class Step {
 		entityType.getAll(StepProperty.findAllByStepAndKey(this, propertyName)*.value) - null
 	}
 
+	def niceFormat() {
+		if(this instanceof JoinActionStep) {
+			return "Joining '${this.group?.name}' group"
+		}
+		if(this instanceof LeaveActionStep) {
+			return "Leaving '${this.group?.name}' group"
+		}
+		if(this instanceof ReplyActionStep) {
+			return "Replying with '${this.autoreplyText}'"
+		}
+	}
+
 }
