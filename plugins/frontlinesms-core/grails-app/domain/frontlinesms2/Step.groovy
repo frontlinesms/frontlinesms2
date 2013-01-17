@@ -13,9 +13,7 @@ abstract class Step {
 		stepProperties(nullable: true)
 	}
 	
-	def process(Fmessage message) {
-
-	}
+	abstract def process(Fmessage message)
 
 	String getPropertyValue(key) {
 		stepProperties?.find { it.key == key }?.value
@@ -29,4 +27,5 @@ abstract class Step {
 	def getEntityList(entityType, propertyName) {
 		entityType.getAll(StepProperty.findAllByStepAndKey(this, propertyName)*.value) - null
 	}
+
 }

@@ -68,11 +68,12 @@ class CustomActivityService {
 		stepInstanceList
 	}
 
-	def triggerSteps(activity, message) {
-		println "activity::: ${activity}"
-		println "activity steps::: ${activity.steps}"
-		activity.steps.each {
-			it.doAction(message)
+	def triggerSteps(c, message) {
+		println "c::: ${c}, message::: $message"
+		println "c steps::: ${c.steps}"
+		c.steps.each {
+			println "calling process on $it"
+			it.process(message)
 		}
 	}
 }
