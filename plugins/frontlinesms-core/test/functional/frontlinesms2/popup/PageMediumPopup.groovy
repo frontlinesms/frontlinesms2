@@ -581,11 +581,11 @@ class AutoforwardSummaryTab extends geb.Module {
 
 class CustomActivityCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("custom activity") || popupTitle.contains("edit activity")
+		popupTitle.contains("customactivity") || popupTitle.contains("edit activity")
 	}
 	static content = {
-		keyword { module ConfugureCustomKeywordTab}
-		configure { module ConfugureCustomActivityTab}
+		keyword { module ConfigureCustomKeywordTab}
+		configure { module ConfigureCustomActivityTab}
 		confirm { module CustomActivityConfirmTab}
 		summary { module CustomActivitySummaryTab}
 		validationErrorText { $('label.error').text() }
@@ -595,7 +595,7 @@ class CustomActivityCreateDialog extends MediumPopup {
 	}
 }
 
-class ConfugureCustomKeywordTab extends geb.Module {
+class ConfigureCustomKeywordTab extends geb.Module {
 	static base = { $('div#tabs-1')}
 	static content = {
 		keywordText { $('#keywords') }
