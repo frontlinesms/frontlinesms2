@@ -25,7 +25,7 @@
 		poll.initializeTabValidation(poll.createFormValidator());
 	}
 
-	function addRespectiveAliases(field) {
+	addRespectiveAliases = function(field) {
 		var yesNo = $("input[name='pollType']:checked").val() == "yesNo";
 		if(yesNo) {
 			var aliasYesTextField = $("ul#poll-aliases li input#keywordsA");

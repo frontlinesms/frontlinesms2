@@ -1,5 +1,6 @@
 var poll = (function() {
-	var addCustomValidationClasses, autoUpdate, createFormValidator, highlightNextPollResponse,
+	var addCustomValidationClasses, autoUpdate, createFormValidator, handleResponseEntered,
+			highlightNextPollResponse,
 			highlightPollResponses, initializeTabValidation,
 			setAliasValues, setPollType, updateConfirmationMessage;
 
@@ -42,6 +43,11 @@ var poll = (function() {
 		jQuery.validator.addMethod("no-space", function(value, element) {
 			return (value.trim().indexOf(" ") === -1);
 		}, i18n("validation.nospaces.error"));
+	};
+
+	handleResponseEntered = function(responseElement) {
+		addRespectiveAliases(responseElement);
+		highlightNextPollResponse(responseElement);
 	};
 
 	initializeTabValidation = function(validator) {
@@ -326,6 +332,7 @@ var poll = (function() {
 	return {
 		addCustomValidationClasses:addCustomValidationClasses,
 		createFormValidator:createFormValidator,
+		handleResponseEntered:handleResponseEntered,
 		initializeTabValidation:initializeTabValidation,
 		setAliasValues:setAliasValues,
 		setPollType:setPollType,

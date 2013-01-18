@@ -207,6 +207,7 @@ class CoreBootStrap {
 		m4.addToDispatches(dst:'+254115533', status:DispatchStatus.PENDING).save(failOnError:true)
 
 		new Fmessage(src:'+33445566', text:"modem message", inbound:true, date: new Date()).save(failOnError:true, flush:true)
+		new Fmessage(src:'+33445566', text:"<0_O> marvel at the HTML & how it works!", inbound:true, date: new Date()).save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFconnections() {
