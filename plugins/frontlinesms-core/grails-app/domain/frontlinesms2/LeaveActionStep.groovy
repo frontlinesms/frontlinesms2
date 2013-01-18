@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class LeaveActionStep extends Step {
-	
+	def subscriptionService
 	static service = 'subscription'
 	static action = 'doLeave'
 	static String getShortName() { 'leave' }
@@ -21,6 +21,6 @@ class LeaveActionStep extends Step {
 	}
 	
 	def process(Fmessage message) {
-
+		subscriptionService.doLeave(this, message)
 	}
 }

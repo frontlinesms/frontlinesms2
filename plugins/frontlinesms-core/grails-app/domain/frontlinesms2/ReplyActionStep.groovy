@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class ReplyActionStep extends Step {
-	
+	def autoreplyService
 	static service = 'autoreply'
 	static action = 'doReply'
 	static String getShortName() { 'reply' }
@@ -16,6 +16,6 @@ class ReplyActionStep extends Step {
 	}
 	
 	def process(Fmessage message) {
-
+		autoreplyService.doReply(this, message)
 	}
 }

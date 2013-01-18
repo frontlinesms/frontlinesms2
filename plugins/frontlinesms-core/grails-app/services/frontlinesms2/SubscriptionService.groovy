@@ -52,7 +52,7 @@ class SubscriptionService {
 					group.addToMembers(foundContact);
 				}
 			}
-			if(subscriptionOrActionStep.joinAutoreplyText) {
+			if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText) {
 				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
 			}
 		})
@@ -69,7 +69,7 @@ class SubscriptionService {
 				if((foundContact.isMemberOf(group))){
 					foundContact?.removeFromGroup(group)
 				}
-				if(subscriptionOrActionStep.leaveAutoreplyText) {
+				if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.leaveAutoreplyText) {
 					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
 				}
 			}
@@ -86,17 +86,17 @@ class SubscriptionService {
 			if(foundContact){
 				if(foundContact.isMemberOf(group)) {
 					foundContact.removeFromGroup(group)
-					if(subscriptionOrActionStep.leaveAutoreplyText)
+					if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.leaveAutoreplyText)
 						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
 				} else {
 					group.addToMembers(foundContact);
-					if(subscriptionOrActionStep.joinAutoreplyText)
+					if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText)
 						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
 				}
 			} else {
 				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
 				group.addToMembers(foundContact);
-				if(subscriptionOrActionStep.joinAutoreplyText)
+				if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText)
 					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
 			}
 		})
