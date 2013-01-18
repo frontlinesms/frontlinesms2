@@ -4,9 +4,8 @@
 		$("#add-join-action-step").click(function() { addJoinActionStep(); });
 		$("#add-leave-action-step").click(function() { addLeaveActionStep(); });
 		$("#add-reply-action-step").click(function() { addReplyActionStep(); });
-		
+
 		$('#custom-activity-config-container').sortable();
-		$( "#custom-activity-config-container" ).disableSelection();
 		
 		$.each($('.remove-step'), function(index, element){
 			addRemoveListener(element);
@@ -16,7 +15,7 @@
 		var validator = $("#create_customactivity").validate({
 			errorContainer: ".error-panel",
 			rules: {
-				messageText: { required:true },
+				autoreplyText: { required:true },
 				name: { required:true }
 			}
 		});
@@ -28,9 +27,13 @@
 			 else return true;
 		};
 
-		var messageTextValidation = function() {
+		var stepActionsValidation = function() {
 			updateConfirmationMessage();
-			return validator.element('#autoreplyText');
+			if( $("textarea[name='autoreplyText']").size() > 1 ) {
+				return $.makeArray($("textarea[name='autoreplyText']")).reduce(function(a,b){ return (validator.element(a) && validator.element(b)) });
+			} else {
+				return validator.element("#autoreplyText");
+			}
 		};
 
 		var confirmTabValidation = function() {
@@ -39,7 +42,7 @@
 		};
 
 		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
-		mediumPopup.addValidation('customactivity-config', messageTextValidation);
+		mediumPopup.addValidation('customactivity-config', stepActionsValidation);
 		mediumPopup.addValidation('customactivity-confirm', confirmTabValidation);
 	}
 
@@ -61,8 +64,13 @@
 
 	function addRemoveListener(element) {
 		$(element).click(function(){
-			$(this).parent().parent().fadeOut(300, function(){ $(this).remove(); });
+			var p = $(this).parent().parent();
+			p.fadeOut(300, function(){ $(this).remove(); });
 		});
+	}
+
+	function delete(element) {
+
 	}
 
 	function setJsonToSend() {
