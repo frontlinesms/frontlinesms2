@@ -64,12 +64,6 @@
 		});
 	}
 
-	function addRemoveListener(element) {
-		$(element).click(function(){
-			$(this).parent().parent().fadeOut(300, function(){ $(this).remove(); });
-		});
-	}
-
 	function setJsonToSend() {
 		var jsonToSend = "";
 		var data = new Array();
@@ -129,7 +123,7 @@
 		<%
 			divElement = fsms.leaveActionStep()
 		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
