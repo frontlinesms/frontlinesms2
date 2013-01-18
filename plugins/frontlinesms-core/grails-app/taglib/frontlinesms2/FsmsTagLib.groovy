@@ -351,7 +351,7 @@ class FsmsTagLib {
 		out << "<span>Join Group</span>"
 		out << g.hiddenField(name:'stepId', value:(att.step?.id?:''))
 		out << g.hiddenField(name:'stepType', value:'join')
-		out << g.select(name:'group', noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name")
+		out << g.select(name:'group', noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name", class:"notnull")
 		out << "</li>"
 	}
 
@@ -361,7 +361,7 @@ class FsmsTagLib {
 		out << "<span>Leave Group</span>"
 		out << g.hiddenField(name:'stepId', value:(att.step?.id?:''))
 		out << g.hiddenField(name:'stepType', value:'leave')
-		out << g.select(name:'group', noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name")
+		out << g.select(name:'group', noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name", class:"notnull")
 		out << "</li>"
 	}
 

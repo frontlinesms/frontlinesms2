@@ -80,3 +80,8 @@ function genericSortingValidation() {
 	}, i18n("validation.nospaces.error"));
 }
 
+function customValidationForGroups(){
+	jQuery.validator.addMethod("notnull", function(value, element) {
+		if($(element).val() == "null") { return false; } else { return true; }
+	}, i18n("validation.group.notnull"));
+}

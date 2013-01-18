@@ -20,6 +20,8 @@
 			}
 		});
 
+		customValidationForGroups();
+
 		var keyWordTabValidation = function() {
 			if(!isGroupChecked("blankKeyword")){
 				return validator.element('#keywords');
@@ -29,11 +31,25 @@
 
 		var stepActionsValidation = function() {
 			updateConfirmationMessage();
+			var t = true;
+			var s = true;
 			if( $("textarea[name='autoreplyText']").size() > 1 ) {
-				return $.makeArray($("textarea[name='autoreplyText']")).reduce(function(a,b){ return (validator.element(a) && validator.element(b)) });
+				t = $.makeArray($("textarea[name='autoreplyText']")).reduce(function(a,b){ return (validator.element(a) && validator.element(b)) });
+			} else if($("textarea[name='autoreplyText']").size() == 1 ){
+				t = validator.element("#autoreplyText");
 			} else {
-				return validator.element("#autoreplyText");
+				t = true;
 			}
+
+			if( $("select[name='group']").size() > 1 ) {
+				s = $.makeArray($("select[name='group']")).reduce(function(a,b){ return (validator.element(a) && validator.element(b)) });
+			} else if($("select[name='group']").size() == 1 ){
+				s = validator.element("#group");
+			} else {
+				s = true;
+			}
+
+			return t && s;
 		};
 
 		var confirmTabValidation = function() {
