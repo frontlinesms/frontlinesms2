@@ -10,6 +10,10 @@ class ReplyActionStep extends Step {
 
 	static constraints = {
 	}
+
+	def getAutoreplyText() {
+		getPropertyValue("autoreplyText")
+	}
 	
 	def process(Fmessage message) {
 
