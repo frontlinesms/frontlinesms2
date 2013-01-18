@@ -2,7 +2,7 @@ function chooseActivity() {
 	var activity, activityUrl, title;
 	activity = $("input[name='activity']:checked").val();
 	activityUrl = activity.replace(/\s/g, "") + '/create';
-	title = i18n("wizard.title.new") + activity;
+	title = i18n("default.new.label", i18n(activity + ".label"));
 	$(this).dialog('close');
 	$.ajax({
 		type:'GET',

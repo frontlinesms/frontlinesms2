@@ -4,7 +4,13 @@
 		var url = $("input[name=url]").val();
 		var httpMethod = $("input[name=httpMethod]:checked").val().toUpperCase();
 		var requestParameters = "";
-		var keyword = $("input#keywords").val() || i18n("webconnection.none.label");
+		var keyword = (function(){
+			if($("input[name='sorting']:checked").attr('value') == "enabled") {
+				return $("input#keywords").val();
+			} else {
+				return i18n("webconnection.none.label");
+			}
+		})();
 		var apiKey = ('('+ i18n('webconnection.api.disabled') +')');
 		if ($("input[name=enableApi]").is(":checked"))
 			apiKey = $("input[name=secret]").val();
@@ -18,6 +24,11 @@
 				}
 			});
 		}
+
+		if(mediumPopup.getCurrentTabIndex() === mediumPopup.getTabLength()) {
+			showTestRouteBtn();
+		}
+		
 		$("#confirm-url").html('<p>' + url  + '</p>');
 		$("#confirm-httpMethod").html('<p>' + httpMethod  + '</p>');
 		$("#confirm-keyword").html('<p>' + keyword  + '</p>');

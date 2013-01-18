@@ -50,9 +50,9 @@
 			webconnectionDialog.updateConfirmationScreen()
 		</g:if>
 		<g:else>
-			var initialScripts = <fsms:render template="/webconnection/${Webconnection.implementations[0].type}/scripts"/>;
+			var initialScripts = <fsms:render template="/webconnection/${Webconnection.implementations[1].type}/scripts"/>;
 			webconnectionDialog.setScripts(initialScripts);
-			setType('generic');
+			toggleApiTab();
 		</g:else>
 		
 		aliasCustomValidation();
@@ -80,9 +80,19 @@
 		mediumPopup.addValidation('webconnection-confirm', confirmTabValidation);
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
-			updateConfirmationMessage();
 			webconnectionDialog.updateConfirmationScreen();
 		});
+	}
+
+	function toggleApiTab() {
+		$("#webconnectionType").live('change', function() {
+				if($(this).val() === 'generic') {
+					mediumPopup.enableTab('webconnection-api');
+				}
+				else {
+					mediumPopup.disableTab('webconnection-api');
+				}
+			});
 	}
 
 	function setType(type) {
@@ -94,15 +104,8 @@
 			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
 
 			$("#webconnection-confirm").html(data.confirm);
-
 			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
 			webconnectionDialog.updateConfirmationScreen();
-			if(type == 'generic') {
-				mediumPopup.enableTab('webconnection-api');
-			}
-			else {
-				mediumPopup.disableTab('webconnection-api');
-			}
 		});
 	}
 
@@ -110,21 +113,6 @@
 		$(selecter).html("<p>" + text + "</p>");
 	}
 	
-	function updateConfirmationMessage() {
-		var keywordConfirmationText;
-
-		if(mediumPopup.getCurrentTabIndex() === mediumPopup.getTabLength()) {
-			showTestRouteBtn();
-		}
-		if(!(isGroupChecked("blankKeyword"))) {
-			keywordConfirmationText = $('#keywords').val().toUpperCase();
-		} else {
-			keywordConfirmationText = i18n("autoreply.blank.keyword");
-		}
-		setPara("#keyword-confirm", keywordConfirmationText);
-		setPara("#autoreply-confirm", $('#messageText').val());
-	}
-
 	function showTestRouteBtn() {
 		var buttonSet, testRouteBtn; 
 		buttonSet = $('.ui-dialog-buttonset');

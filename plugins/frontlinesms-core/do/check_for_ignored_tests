@@ -1,5 +1,14 @@
 #!/bin/bash
-echo "Running 'grep -irl spock.lang.ignore test'"
-echo "Matching files::"
-grep -irl spock.lang.ignore test
+echo "# Searching for ignored tests..."
+grep -Er '@(spock\.lang\.)?Ignore' test/
+FOUND_STATUS=$?
 
+if [ 1 -eq $FOUND_STATUS ]; then
+	echo "# No ignored tests were found."
+	RETURN_STATUS=0
+else
+	echo "# Ignored tests were found, or there was a problem with the search."
+	RETURN_STATUS=1
+fi
+
+exit $RETURN_STATUS

@@ -24,13 +24,13 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def model = controller.show()
 		then:
 			model.contactInstanceList*.name.sort() == ['Alfred', 'Charles']
-			model.contactInstanceTotal == 2
+			model.contactsSectionContactTotal == 2
 		when:
 			controller.params.searchString = 'ED'
 			model = controller.show()
 		then:
 			model.contactInstanceList*.name == ['Alfred']
-			model.contactInstanceTotal == 1
+			model.contactsSectionContactTotal == 1
 	}
 	
 	def 'CREATE returns a smartgroup instance'() {

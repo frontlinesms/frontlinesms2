@@ -72,7 +72,7 @@ function exportAction() {
 		data: params,
 		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("action.export"));
+			hideThinking(); launchSmallPopup(i18n("smallpopup.messages.export.title"), data, i18n("action.export"));
 			updateExportInfo(); }
 	});
 }

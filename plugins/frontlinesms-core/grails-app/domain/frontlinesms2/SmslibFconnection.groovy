@@ -9,15 +9,14 @@ import org.smslib.NotConnectedException
 class SmslibFconnection extends Fconnection {
 	static passwords = ['pin']
 	static configFields = ['name', 'manufacturer', 'model', 'port', 'baud', 'pin', 'imsi', 'serial', 'send', 'receive']
-	static defaultValues = [send:true, receive:true]
+	static defaultValues = [send:true, receive:true, baud:9600]
 	static String getShortName() { 'smslib' }
 	
 	private def camelAddress = {
 		def optional = { name, val ->
 			return val? "&$name=$val": ''
 		}
-println "alxndrsn: SmslibFconnection.camelAddress() :: manufacturer=$manufacturer; model=$model"
-		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages&manufacturer=$manufacturer&model=$model"
+		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages${optional('manufacturer', manufacturer)}${optional('model', model)}"
 	}
 
 	String manufacturer

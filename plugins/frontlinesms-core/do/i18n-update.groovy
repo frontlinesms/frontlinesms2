@@ -30,26 +30,26 @@ String currentLine
 
 def existingSlaveLines = []
 def newSlaveLines = []
-slave.eachLine { line -> existingSlaveLines << line }
+slave.eachLine ("utf8") { line -> existingSlaveLines << line }
 
-master.eachLine { masterLine ->
+master.eachLine ("utf8") { masterLine ->
 	if(masterLine.isAllWhitespace() || masterLine.trim().startsWith("#")) {
 		// This is a comment or whitespace, preserve it
 		newSlaveLines << masterLine
 	}
 	else if (masterLine.contains('=')) {
 		// This is a property. Check if the other translation has it, and if not, copy it with a TODO
-		def key = masterLine.split('=')[0]
+		def key = masterLine.split('=')[0].trim()
 		def masterValue = masterLine.split('=')[1]
 
-		newSlaveLines << (existingSlaveLines.find { it.startsWith(key+"=") && it.split("=").size() > 1 } ?: masterLine.replaceFirst("=", "=TODO:"))
+		newSlaveLines << (existingSlaveLines.find { it ==~ "^${key.replace('.', '\\.')}\\s*=.*" && it.split("=").size() > 1 } ?: masterLine.replaceFirst("=", "=TODO:"))
 	}
 	else {
 		// Something strange is going on, we should only have props, comments or whitespace!
 	}
 }
 
-new File(targetFile).withWriter { out -> 
+new File(targetFile).withWriter ("utf8") { out -> 
 	newSlaveLines.each { line ->
 		out.writeLine(line)
 	}

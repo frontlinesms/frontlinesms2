@@ -78,6 +78,18 @@ class SettingsControllerSpec extends Specification {
 			0 * appSettingsService.set(_, _)
 	}
 
+	def 'can set the routing preferences'(){
+		given:
+			params.uselastreceiver = "true"
+			params.otherwise = "any"
+		when:
+			controller.changeRoutingPreferences()
+		then:
+			1 * appSettingsService.set('routing.uselastreceiver',params.uselastreceiver)
+			1 * appSettingsService.set('routing.otherwise', params.otherwise)
+			0 * appSettingsService.set(_, _)
+	}
+
 	private def mockAppSettings(Map s) {
 		s.each { k, v ->
 			appSettingsService.get(k, _) >> { v instanceof String? v.bytes.encodeBase64().toString(): v }

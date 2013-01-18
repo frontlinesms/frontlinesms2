@@ -32,4 +32,52 @@ class AutoforwardServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			autoforward.smartGroups*.name.containsAll(['group', 'group2'])
 			!autoforward.smartGroups*.name.contains('groupSmart')
 	}
+
+	def 'deleting a contact should remove it from an autoforward'() {
+		given:
+			def c1 = new Contact(mobile:'12345', name:'').save(failOnError:true)
+			def c2 = new Contact(mobile:'67890', name:'').save(failOnError:true)
+			def autoforward = new Autoforward(name:'Excitement', sentMessageText:'This is exciting: ${messageText}')
+			.addToKeywords(value:'FORWARD')
+			.addToContacts(c1)
+			.addToContacts(c2)
+			.save(failOnError:true, flush:true)
+		when:
+			autoforwardService.handleDeletedContact(c1)
+			autoforward.refresh()
+		then:
+			!autoforward.contacts.contains(c1)
+	}
+
+	def 'deleting a group should remove it from an autoforward'() {
+		given:
+			def g1 = new Group(name:'group3').save(failOnError:true)
+			def g2 = new Group(name:'group4').save(failOnError:true)
+			def autoforward = new Autoforward(name:'Excitement', sentMessageText:'This is exciting: ${messageText}')
+			.addToKeywords(value:'FORWARD')
+			.addToGroups(g1)
+			.addToGroups(g2)
+			.save(failOnError:true, flush:true)
+		when:
+			autoforwardService.handleDeletedGroup(g1)
+			autoforward.refresh()
+		then:
+			!autoforward.groups.contains(g1)
+	}
+
+	def 'deleting a smart group should remove it from an autoforward'() {
+		given:
+			def sg1  = new SmartGroup(name:'group', mobile:'+254').save(failOnError:true)
+			def sg2 = new SmartGroup(name:'group2', mobile:'+256').save(failOnError:true)
+			def autoforward = new Autoforward(name:'Excitement', sentMessageText:'This is exciting: ${messageText}')
+			.addToKeywords(value:'FORWARD')
+			.addToSmartGroups(sg1)
+			.addToSmartGroups(sg2)
+			.save(failOnError:true, flush:true)
+		when:
+			autoforwardService.handleDeletedSmartGroup(sg1)
+			autoforward.refresh()
+		then:
+			!autoforward.smartGroups.contains(sg1)
+	}
 }
