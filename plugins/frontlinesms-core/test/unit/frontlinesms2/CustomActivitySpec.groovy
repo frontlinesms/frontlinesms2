@@ -5,7 +5,7 @@ import grails.plugin.spock.*
 import frontlinesms2.*
 
 @TestFor(CustomActivity)
-@Mock([JoinActionStep, StepProperty, ReplyActionStep, LeaveActionStep])
+@Mock([JoinActionStep, StepProperty, ReplyActionStep, LeaveActionStep, Keyword, Fmessage])
 class CustomActivitySpec extends Specification {
 	def "a custom activity can have one step"() {
 		given:
@@ -44,5 +44,21 @@ class CustomActivitySpec extends Specification {
 			customActivity.save(flush:true)
 		expect:
 			CustomActivity.list()[0].steps == [joinStep, replyStep, leaveStep]
+	}
+
+	def "processKeyword should add the message to the CustomActivity and invoke CustomActivityService.triggerSteps"() {
+		given:
+			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
+			joinStep.save(failOnError:true)
+			def customActivity = new CustomActivity(name:"Custom Activity")
+			customActivity.addToSteps(joinStep)
+			customActivity.save(flush:true, failOnError:true)
+			def customActivityService = Mock(CustomActivityService)
+			customActivity.customActivityService = customActivityService
+			def m = new Fmessage(src:"123", text:"this is a message", inbound:true).save(failOnError:true)
+		when:
+			customActivity.processKeyword(m, Mock(Keyword))
+		then:
+			1 * customActivityService.triggerSteps(_, _) 
 	}
 }
