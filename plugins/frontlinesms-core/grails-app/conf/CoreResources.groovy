@@ -28,11 +28,13 @@ modules = {
 		resource url:[dir:'js', file:'button.js'], disposition:'head'
 		resource url:[dir:'js', file:'characterSMS-count.js'], disposition:'head'
 		resource url:[dir:'js', file:'check_li.js'], disposition:'head'
+		resource url:[dir:'js', file:'/settings/connectionTooltips.js'], disposition:'head'
 		resource url:[dir:'js', file:"jquery.ui.selectmenu.js"], disposition:'head'
 		resource url:[dir:'js', file:"jquery.validate.min.js"], disposition:'head'
 		resource url:[dir:'js', file:"mediumPopup.js"], disposition:'head'
 		resource url:[dir:'js', file:"new_features.js"], disposition:'head'
 		resource url:[dir:'js', file:"pagination.js"], disposition:'head'
+		resource url:[dir:'js', file:"recipient_selecter.js"], disposition:'head'
 		resource url:[dir:'js', file:"smallPopup.js"], disposition:'head'
 		resource url:[dir:'js', file:"status_indicator.js"], disposition:'head'
 		resource url:[dir:'js', file:"system_notification.js"], disposition:'head'
@@ -98,7 +100,6 @@ modules = {
 	settings {
 		dependsOn "common"
 		resource url:[dir:'js', file:'/settings/basicAuthValidation.js']
-		resource url:[dir:'js', file:'/settings/connectionTooltips.js']
 	}
 	
 	overrides {

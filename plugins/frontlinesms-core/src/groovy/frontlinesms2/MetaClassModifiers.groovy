@@ -13,6 +13,7 @@ class MetaClassModifiers {
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
+		MetaClassModifiers.addEscapeForJavascriptToStrings()
 	}
 
 	static def addTodoConstantToSpecifications() {
@@ -111,6 +112,13 @@ println "MetaClassModifiers.addCamelMethods()"
 		   c(delegate)
 		}
 		
+	}
+
+	static def addEscapeForJavascriptToStrings() {
+		String.metaClass.escapeForJavascript = { 
+			delegate.replaceAll(/(\r\n)|[\r\n]/, '\\\\n')
+		}
+
 	}
 }
 

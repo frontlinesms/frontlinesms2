@@ -127,8 +127,9 @@ class FsmsTagLib {
 			// TODO this could likely be streamlined by using i18nUtilService.getCurrentLanguage(request)
 			['', "_${locale.language}",
 					"_${locale.language}_${locale.country}",
-					"_${locale.language}_${locale.country}_${locale.variant}"].each {
-				out << "<script type=\"text/javascript\" src=\"${request.contextPath}/i18n/${bundle}_messages${it}.js\" charset=\"UTF-8\"></script>" }
+					"_${locale.language}_${locale.country}_${locale.variant}"].each { localeSuffix ->
+				def link = g.resource plugin:bundle, dir:'i18n', file:"messages${localeSuffix}.js"
+				out << "<script type=\"text/javascript\" src=\"$link\" charset=\"UTF-8\"></script>\n" }
 		}
 	}
 	
@@ -344,6 +345,25 @@ class FsmsTagLib {
 		}
 		out << '</li>'
 	}
+
+	def select = { att, body ->
+		// add the no-selection option to the list if required
+		if(!att.hideNoSelection && att.noSelection && att.value != null) {
+			def key = (att.noSelection.keySet() as List).first()
+			def value = (att.noSelection.values() as List).first()
+			if(att.optionKey && att.optionValue) {
+				if(att.optionKey && att.optionKey instanceof Closure || att.optionValue instanceof Closure) {
+					att.from = [[key:key, value:value]] + att.from
+				} else {
+					att.from = [[(att.optionKey):key, (att.optionValue):value]] + att.from
+				}
+			} else {
+				if(att.keys) att.keys = [key] + att.keys
+				att.from = [value] + att.from
+			}
+		}
+		out << g.select(att, body)
+	}
 	
 	private def getFields(att) {
 		def fields = att.remove('fields')
@@ -424,7 +444,7 @@ class FsmsTagLib {
 	}
 
 	private def isRequired(instanceClass, field) {
-		!instanceClass.constraints[field].nullable
+		!instanceClass.constraints[field].blank
 	}
 
 	private def isInteger(instanceClass, groovyKey) {

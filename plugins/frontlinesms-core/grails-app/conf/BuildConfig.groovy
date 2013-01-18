@@ -49,9 +49,9 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
 		// runtime 'mysql:mysql-connector-java:5.1.16'
-		def seleniumVersion = '2.25.0'
+		def seleniumVersion = '2.28.0'
 		def camel = {
-			def camelVersion = "2.9.2"
+			def camelVersion = "2.9.4"
 			"org.apache.camel:camel-$it:$camelVersion"
 		}
 
@@ -66,7 +66,10 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
 
 		// COMPILE
-		compile 'net.frontlinesms.core:camel-smslib:0.0.5'
+		//compile 'net.frontlinesms.core:smslib:1.1.4'
+		compile('net.frontlinesms.core:camel-smslib:0.0.7') {
+			//excludes 'smslib'
+		}
 		['mail', 'http'].each { compile camel(it) }
 		compile 'net.frontlinesms.core:serial:1.0.1'
 		compile 'net.frontlinesms.core:at-modem-detector:0.8'
@@ -80,13 +83,15 @@ grails.project.dependency.resolution = {
 		runtime ":database-migration:1.0"
 		runtime ":jquery:1.7.1"
 		runtime ':jquery-ui:1.8.15'
-		runtime ":resources:1.1.6"
+		runtime ':resources:1.2.RC3'
 
 		runtime ":export:1.1"
 		runtime ":markdown:1.0.0.RC1"
-		runtime ':routing:1.2.2'
+		runtime ':routing:1.2.2-camel-2.9.4'
 		runtime ":csv:0.3.1"
 		compile ":quartz2:0.2.3-frontlinesms"
+
+		compile ':platform-core:1.0.RC2'
 
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.17"

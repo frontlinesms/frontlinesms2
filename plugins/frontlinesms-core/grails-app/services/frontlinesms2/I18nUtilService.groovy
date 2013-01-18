@@ -45,7 +45,7 @@ class I18nUtilService {
 		def f = new File(getRootDirectory(), filename)
 		if(f.exists()) {
 			def lang
-			try { f.eachLine { line ->
+			try { f.eachLine("utf-8") { line ->
 				if(line.startsWith("language.name=")) {
 					lang = (line - "language.name=").trim()
 					throw new EOFException()

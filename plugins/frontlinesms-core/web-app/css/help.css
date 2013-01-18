@@ -7,18 +7,19 @@
 
 #modalBox.help #help-index { padding:17px 0; }
 #modalBox.help #help-index > ul { line-height:200%; }
+#modalBox.help #help-index > ul li:nth-child(1) a { background-image:none !important; }
 #modalBox.help #help-index li a, #modalBox.help #help-index li h3 { display:block; padding:5px; }
 #modalBox.help #help-index li.selected > a { background-color:#d8e8ef; }
 #modalBox.help #help-index li a:hover { background-color:#e5eff3; }
 #modalBox.help #help-index .ui-accordion-header { background-repeat:no-repeat; background-position:center left; text-indent:17px; cursor:pointer; }
-#modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion-content { text-indent:34px; }
-#modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion-content a { text-indent:0; padding-left:34px; }
-#modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion-header { text-indent:34px; background-position:17px center; }
-#modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion-content { text-indent:51px; }
-#modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion-content a { text-indent:0; padding-left:51px; }
-#modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion .ui-accordion-header { text-indent:51px; background-position:34px center; }
-#modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion .ui-accordion-content { text-indent:68px; }
-#modalBox.help #help-index .ui-accordion .ui-accordion .ui-accordion .ui-accordion .ui-accordion-content a { text-indent:0; padding-left:68px; }
+#modalBox.help #help-index .ui-accordion li ul { text-indent:34px; }
+#modalBox.help #help-index .ui-accordion li ul a { text-indent:0; padding-left:34px; }
+#modalBox.help #help-index .ui-accordion li ul .ui-accordion-header { text-indent:34px; background-position:17px center; }
+#modalBox.help #help-index .ui-accordion li li ul { text-indent:51px; }
+#modalBox.help #help-index .ui-accordion li li ul a { text-indent:0; padding-left:51px; }
+#modalBox.help #help-index .ui-accordion li li li .ui-accordion-header { text-indent:51px; background-position:34px center; }
+#modalBox.help #help-index .ui-accordion li li li ul { text-indent:68px; }
+#modalBox.help #help-index .ui-accordion li li li ul a { text-indent:0; padding-left:68px; }
 #modalBox.help #help-index .ui-accordion-header.ui-state-active { background-image:url("../images/icons/accordion-expanded.png"); background-size:11px; background-position: 2% 50%; }
 #modalBox.help #help-index .ui-accordion-header.ui-state-default { background-image:url("../images/icons/accordion-unexpanded.png"); background-size:12px; background-position: 2% 50%; }
 

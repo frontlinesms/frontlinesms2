@@ -1,29 +1,30 @@
 # Creating a Poll 
 
-A poll is a type of activity which allows you to see a graphical representation of the responses to a question. When creating a poll you will be able to enter the question and select who to send the question to. You will also be able to set up a **keyword**. A **keyword** allows FrontlineSMS to recognise which incoming messages are for polls and which aren't. It will also help the system determine which poll the message belongs to. This gives you the option to let FrontlineSMS automatically sort incoming messages into polls and you will be notified when this has happened. There are two types of responses you can set: Yes/No or a Multiple Choice style answer. You can also set up an **automatic reply** that is sent to every message received for that poll. This makes polls useful for contexts where you want to see the response to a particular issue or question._
-### How to Create a Poll
+A poll is a type of activity which allows you to see a graphical representation of the responses to a question. When creating a poll you will be able to enter the question and select who to send the question to. You will also be able to set up a **keyword**. A **keyword** allows FrontlineSMS to recognise which incoming messages are for polls and which aren't. It will also help the system determine which poll the message belongs to. This gives you the option to let FrontlineSMS automatically sort incoming messages into polls and you will be notified when this has happened. There are two types of responses you can set: Yes/No or a Multiple Choice style answer. You can also set up an **automatic reply** that is sent to every message received for that poll. This makes polls useful for contexts where you want to see the response to a particular issue or question.
+
+## How to Create a Poll
 
 1.  From the messages tab click on 'Create New Activity'.
 2.  A new window will appear and you will be presented with a number of options. Choose "Poll" and click next
 ![Activity Select][8]
 
-**_Enter Question_**  
+### Enter Question  
 
 After clicking next, you will be prompted to select a question type and enter a question:
 
 ![Enter Question][9]
 
-**Question Type:** 
+#### Question Type: 
 Yes or No: Select this if your question has a Yes or No answer. For example, the question "Do you like the colour Red?", could have a Yes or No Answer.
 Multiple Choice Question: Select this if your question has a number of different answers. For example, with the question "Do you like the colour Red?", you could get more detailed responses by having a range of answers such as, "Yes", "Quite a lot", "Not a lot" or "No".  
 If you select this option you will have the opportunity to input the possible responses in the following screens.
 
-**Enter Question:**
+#### Enter Question:
 Here you will find an area for you to enter your question. You can re-size the text entry box by clicking and dragging the bottom right hand corner of it.  
   
 If you simply want to collect responses and not send out a question then check the "Do not send a message for this poll (Collect responses only)" box. This might be useful when you have already distributed the question, for example over the radio or at a meeting.
 
-**_Response List_**  
+### Response List  
 If you selected the "Multiple Choice Question" then the next screen you see will allow you to specify the possible responses to the question. You can enter a maximum of 5 and a must enter a minimum of 2.
 
 ![Response List][10]
@@ -32,36 +33,76 @@ Boxes A-C will be immediately available to you to edit. If you need more than 3 
 
 Once you have entered all your choices, click next to set up Automatic Sorting.
 
-**_Automatic Sorting_**  
+### Automatic Sorting  
 You will be able to specify a keyword, that when included in an incoming message, will allow the system to automatically sort it into the relevant Poll.   
 
-![Automatic Sorting][11]
+![Automatic Sorting][17]
   
-_**Note:** Keywords are **unique.** Once a keyword has been set, it cannot be used in a new activity even if the original activity has been archived. To re-use a keyword you have to delete the activity that keyword is associated with._
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. For a poll, if the top level keyword is not provided the keywords for the responses become top level keywords, and hence forth they have to be unique across all the activity top level keywords.
 
-To set a keyword, select "Sort messages automatically that have the following Keyword:" and then enter your keyword.
+To set the keywords, select "Sort responses automatically. Sort messages with the keyword (optional):" and then enter your top level keywords. The top level keywords are optional.
 
-When you set a keyword, and have selected a Multiple Choice Poll type, it will be possible for you to set "Aliases" in the next step.
+When you set a keyword, and have selected a Multiple Choice Poll type, it will be possible for you to set "Response Keywords" in the lower section of the same tab. These "Response keywords are the keywords that matched to the responses entered in the previous tab."
 
-Click 'next' to set Aliases if you have chosen a keyword, or the set up and Automatic Reply if you haven't.
+#### Note
 
-**_Aliases_**
+Poll initially supported use of "Aliases". A user would setup a poll with with one keyword and the responses would be mapped to aliases. A response could have one or more aliases seperated with commas.
 
-Aliases are alternate ways of spelling and/or writing the choices you entered in the "Response List". 
+For example, in version 2.1.3, a poll would look like this
 
-_This step is only available if you have selected a keyword in the previous step. If you have not, then please go to the next step._
+	Poll Name : Football Poll
+	Keyword : Football
 
-For example, if one of the choices was "Yes", you can enter alternative ways of spelling the word like "Yeah" or "Yeh". This could help in increasing the accuracy of your Poll results and reducing the amount of work you may have to do in correcting and manually categorising incorrectly spelt choices.
+	Responses         |   Aliases
+	Manchester United |   Manu, Manchster
+	Arsenal           |   Arsenal, Ars
 
-The alias screen looks like this:
+With version 2.2 as a user you can create a poll with a top level keyword and the aliases are now converted to second level keywords.
 
-![Aliases][17]
+In version 2.2.0 Polls would look like this
+
+	Poll Name: Footbal Poll
+	TopLevel Keyword : Football, Foot, Footy
+
+	Responses         |   Second Level Keywords
+	Manchester United |   Manu, Manchster
+	Arsenal           |   Arsenal, Ars, Arnl
+
+As you can see from above the aliases have been replaced with second level keywords. The top level keyword is optional.
+If a top level keyword is provided messages will be mapped to resposes as follows
+
+	Incoming Message | Response Mapped To
+	football manu | Mancheter United
+	foot manu | Mancheter United
+	footy manu | Mancheter United
+	football arsenal | Arsenal
+	football ars | Arsenal
+	footy arsenal | Arsenal
+	foot arsl | Arsenal
+
+If the top level keyword is not provided, then the incoming messages will be mapped to responses as follows
+
+Incoming Message | Response Mapped To
+manu | Mancheter United
+manchester | Mancheter United
+arsenal | Arsenal
+ars | Arsenal
+
+The person texting in only needs to test in at least one of the second level keywords.
+
+This feature is quite usefull if you want frontlinesms to handle spelling mistakes in the incoming sms. For example, for the top level keyword one can have the keywords "football, footbal, fotball". This spelling handling also applies to second level keywords
+
+
+The Sorting tab looks as follows
+
+![Keywords][17]
 
 Each choice is followed by an area where you can enter text. You will see two aliases already entered into the text area. These are the default settings. 
 
-You can add more aliases simple by adding to the string of text already in the text area. Separate each alias with a comma. An example would be:
+You can add more aliases simple by adding to the string of text already in the text area. Separate each response keyword with a comma. An example would be:
 
 "Yes, A, yeah, yeh"
+
 
 Furthermore, the first entry in the text area corresponds to the text that will be used when generating a message in the "Edit Message" step. To change how each choice appears in the message that will be send out, change the first entry in the text area.
 
@@ -72,6 +113,15 @@ If the text area looks like this for example:
 Then "Yeah" will be used as part of the outgoing message text for the Poll.
 
 Once you have completed this section click "Next" to set up an "Automatic Reply".
+
+### Validation of Keywords (Important)
+
+All keywords, toplevel or second level keywords need to be unique within that poll. For example ,a Football poll could have "football" as a top level keyword but not as a second level keyword. Likewise keywords among the second level keywords need to be unique among themselves.
+In any poll if the top level keyword is not provided, then the second level keywords will be treated as top level.
+
+### Important:
+
+Top level keywords need to be unique across all activities. A poll and an autoreply cannot share a top level keywords. For more information regarding keywords in autoreplies see the autoreply section.
 
 **_Automatic Reply_**
 At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a keyword with your poll. Without a keyword the system cannot recognise which messages to automatically reply to.  
@@ -143,7 +193,7 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [5]: core/contacts/4.creating_a_group
 [6]: core/contacts/5.creating_a_smart_group
 [7]: core/messages/1.getting_around_the_messages_tab
-[8]: ../images/help/poll1.png
+[8]: ../images/help/autoforward1.png
 [9]: ../images/help/poll2.png
 [10]: ../images/help/poll3.png
 [11]: ../images/help/poll4.png
@@ -152,4 +202,4 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [14]: ../images/help/poll7.png
 [15]: ../images/help/poll8.png
 [16]: ../images/help/poll9.png
-[17]: ../images/help/aliases.png
+[17]: ../images/help/pollkeywords.png

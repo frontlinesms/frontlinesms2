@@ -3,3 +3,6 @@ web-app/WEB-INF/grails-app/
 
 # Auto-generated JS i18n bundles.
 web-app/i18n/
+
+# node.js modules
+node_modules/

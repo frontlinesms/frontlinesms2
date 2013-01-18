@@ -1,4 +1,3 @@
-<%@ page import="frontlinesms2.api.FrontlineApi1Utils" %>
 <ul class="info">
 	<h1>
 		<g:message code="webconnection.title" args="${[ownerInstance.name]}"/>
