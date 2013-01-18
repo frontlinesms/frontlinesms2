@@ -33,21 +33,13 @@
 			updateConfirmationMessage();
 			var t = true;
 			var s = true;
-			if( $("textarea[name='autoreplyText']").size() > 1 ) {
-				t = $.makeArray($("textarea[name='autoreplyText']")).reduce(function(a,b){ return (validator.element(a) && validator.element(b)) });
-			} else if($("textarea[name='autoreplyText']").size() == 1 ){
-				t = validator.element("#autoreplyText");
-			} else {
-				t = true;
-			}
 
-			if( $("select[name='group']").size() > 1 ) {
-				s = $.makeArray($("select[name='group']")).reduce(function(a,b){ return (validator.element(a) && validator.element(b)) });
-			} else if($("select[name='group']").size() == 1 ){
-				s = validator.element("#group");
-			} else {
-				s = true;
-			}
+			$.each($("textarea[name='autoreplyText']"), function(index, element){
+				t = (validator.element($(element)) && t);
+			});
+			$.each($("select[name='group']"), function(index, element){
+				s = (validator.element($(element)) && s);
+			});
 
 			return t && s;
 		};
@@ -169,19 +161,19 @@
 			var output = "";
 			var stepType = $(element).find('input#stepType').val();
 			if(stepType == 'join') {
-				var groupValue = $(element).find('#group').val();
-				var groupName = $(element).find('#group').find("option[value="+groupValue+"]").text()
+				var groupValue = $(element).find('select[name=group]').val();
+				var groupName = $(element).find('select[name=group]').find("option[value="+groupValue+"]").text()
 				output = i18n("customactivity.group.join", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType == "leave") {
-				var groupValue = $(element).find('#group').val();
-				var groupName = $(element).find('#group').find("option[value="+groupValue+"]").text()
+				var groupValue = $(element).find('select[name=group]').val();
+				var groupName = $(element).find('select[name=group]').find("option[value="+groupValue+"]").text()
 				output = i18n("customactivity.group.leave", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType == "reply") {
-				var messageText = $(element).find('#autoreplyText').val();
+				var messageText = $(element).find('textarea[name=autoreplyText]').val();
 				output = i18n("customactivity.reply.messagetext", messageText);
 				output = "<p>"+output+"</p>";
 			}
