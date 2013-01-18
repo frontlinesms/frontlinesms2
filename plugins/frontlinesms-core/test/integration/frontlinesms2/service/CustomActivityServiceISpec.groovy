@@ -56,6 +56,7 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 	private def addJoinActionStep() {
 		join = new JoinActionStep()
 		join.addToStepProperties(new StepProperty(key:"group", value:group.id))
+		join.save(failOnError:true)
 		customActivity.addToSteps(join)
 		customActivity.save(failOnError:true)
 	}
@@ -63,6 +64,7 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 	private def addLeaveActionStep() {
 		leave = new LeaveActionStep()
 		leave.addToStepProperties(new StepProperty(key:"group", value:group.id))
+		leave.save(failOnError:true)
 		customActivity.addToSteps(leave)
 		customActivity.save(failOnError:true)
 	}
@@ -70,6 +72,7 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 	private def addReplyActionStep() {
 		reply = new ReplyActionStep()
 		reply.addToStepProperties(new StepProperty(key:"autoreplyText", value:"autoreply seems to work"))
+		reply.save(failOnError:true)
 		customActivity.addToSteps(reply)
 		customActivity.save(failOnError:true)
 	}

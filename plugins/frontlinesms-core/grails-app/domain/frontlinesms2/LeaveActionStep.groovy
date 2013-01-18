@@ -12,19 +12,9 @@ class LeaveActionStep extends Step {
 		stepProperties nullable: true
 	}
 
-<<<<<<< HEAD
 	Map getConfig() {
 		[stepId:id, groupId:getGroupId()]
-=======
-	def getGroup() {
-		Group.get(getPropertyValue("group"))	
-	}
 
-	def setGroup(Group group) {
-		setPropertyValue("group", group.id)
->>>>>>> 6a97f05... Merge branch 'CORE-1104' of github.com:frontlinesms/frontlinesms2 into CORE-1104
-	}
-	
 	def getGroup() {
 		Group.get(getPropertyValue("group"))	
 	}

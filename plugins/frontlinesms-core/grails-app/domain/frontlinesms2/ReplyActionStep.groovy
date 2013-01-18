@@ -11,13 +11,10 @@ class ReplyActionStep extends Step {
 	static constraints = {
 	}
 
-<<<<<<< HEAD
 	Map getConfig() {
 		[stepId:id, autoreplyText:autoreplyText]
 	}
 
-=======
->>>>>>> 6a97f05... Merge branch 'CORE-1104' of github.com:frontlinesms/frontlinesms2 into CORE-1104
 	def getAutoreplyText() {
 		getPropertyValue("autoreplyText")
 	}
