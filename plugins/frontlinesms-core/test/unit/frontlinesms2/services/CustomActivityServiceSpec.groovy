@@ -18,9 +18,9 @@ class CustomActivityServiceSpec extends Specification {
 		when:
 			service.triggerSteps(c, m)
 		then:
-			1 * joinStep.doAction(_) >> { m -> assert true; return true }
-			1 * leaveStep.doAction(_) >> { m -> assert true; return true }
-			1 * replyStep.doAction(_) >> { m -> assert true; return true }
+			1 * joinStep.doAction(_)
+			1 * leaveStep.doAction(_)
+			1 * replyStep.doAction(_)
 	}
 
 	private def createTestCustomActivity() {
@@ -28,9 +28,6 @@ class CustomActivityServiceSpec extends Specification {
 		joinStep = Mock(JoinActionStep)
 		leaveStep = Mock(LeaveActionStep)
 		replyStep = Mock(ReplyActionStep)
-		joinStep.doAction >> { m -> println "I was called with $m"}
-		leaveStep.doAction >> { m -> println "I was called with $m"}
-		replyStep.doAction >> { m -> println "I was called with $m"}
 		c = CustomActivity.build()
 		[joinStep, leaveStep, replyStep].each { c.addToSteps(it) }
 		println "c is $c and its steps are ${c.steps}"
