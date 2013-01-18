@@ -137,7 +137,7 @@ function refreshMessageStats(data) {
 $(function() {
 	setInterval(refreshMessageStats, 15000);
 	var clear;
-	/*$( "td > input[type=text]" ).each(function( index) {
+	$( "td > input[type=text]" ).each(function( index) {
 		if( $(this).val() == ''){
 			clear = $(this).next();
 			clear.attr("style","display:none");
@@ -146,7 +146,15 @@ $(function() {
 			clear = $(this).next();
 			clear.removeAttr("style");
 		}
-	});*/
+	});
+
+	$( "td > input[type=text]" ).keypress(function() {
+	 	if( $(this).val() == ''){
+			clear = $(this).next();
+			clear.removeAttr("style");
+			$(".send-message").removeAttr("style");
+		}
+	});
 });
 </r:script>
 
