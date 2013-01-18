@@ -6,7 +6,6 @@ import frontlinesms2.*
 
 @TestFor(CustomActivity)
 @Mock([JoinActionStep, StepProperty, ReplyActionStep, LeaveActionStep, Keyword, Fmessage])
-
 class CustomActivitySpec extends Specification {
 	def "a custom activity can have one step"() {
 		given:
