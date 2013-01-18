@@ -307,7 +307,11 @@ var mediumPopup = (function() {
 		launchHelpWizard:launchHelpWizard,
 		messageResponseClick:messageResponseClick, // TODO move this somewhere more suitable
 		selectSubscriptionGroup:selectSubscriptionGroup, // TODO move this somewhere more suitable
-		submit:submit
+		submit:submit,
+		tabValidates:tabValidates,
+		getCurrentTab:getCurrentTab,
+		getCurrentTabIndex:getCurrentTabIndex,
+		getTabLength:getTabLength
 	};
 }());
 

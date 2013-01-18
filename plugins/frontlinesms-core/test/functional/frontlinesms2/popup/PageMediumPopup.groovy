@@ -293,6 +293,7 @@ class WebconnectionWizard extends MediumPopup {
 		option(wait:true, cache:false) { shortName -> $('input', name:'webconnectionType', value:shortName) }
 		getTitle { shortName -> option(shortName).previous('label').text() }
 		getDescription { shortName -> option(shortName).previous('p').text() }
+		testConnectionButton(required:false) { $("#testRoute")}
 	}
 }
 

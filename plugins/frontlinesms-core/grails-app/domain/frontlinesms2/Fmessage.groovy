@@ -5,6 +5,7 @@ import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
 	static final int MAX_TEXT_LENGTH = 1600
+	static final String TEST_MESSAGE_TEXT = "Test Message"
 
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'receivedOn']

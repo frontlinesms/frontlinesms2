@@ -6,10 +6,10 @@
 			<g:each in="${Fconnection.implementations}" status="i" var="it">
 				<li>
 					<label>
-						<h3><g:message code="${it.simpleName.toLowerCase()}.label"/></h3>
+						<h3><g:message code="${it.shortName}.label"/></h3>
 						<g:radio name="connectionType" checked="${i == 0}"
 								value="${it.shortName}" onclick="fconnection.setType('${it.shortName}')"/>
-						<p class="info ${it.shortName}"><g:message code="${it.shortName}fconnection.description"/></p>
+						<fsms:info class="${it.shortName}" message="${it.shortName}.description"/>
 					</label>
 				</li>
 			</g:each>

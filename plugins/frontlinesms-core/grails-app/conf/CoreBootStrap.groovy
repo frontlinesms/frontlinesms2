@@ -44,6 +44,10 @@ class CoreBootStrap {
 			dev_disableSecurityFilter()
 			// never show new popup during tests
 			appSettingsService['newfeatures.popup.show.immediately'] = false
+			//default routing in tests is to use any available connections
+			appSettingsService.set('routing.uselastreceiver', false)
+			appSettingsService.set('routing.otherwise', 'any')
+			appSettingsService.set('routing.preferences.edited', true)
 		}
 
 		if(Environment.current == Environment.DEVELOPMENT) {
@@ -59,6 +63,7 @@ class CoreBootStrap {
 			//camelContext.tracing = true
 			dev_disableSecurityFilter()
 			updateFeaturePropertyFileValues()
+			setDefaultMessageRoutingPreferences()
 		}
 
 		if(bootstrapData) {
@@ -80,6 +85,7 @@ class CoreBootStrap {
 		if(Environment.current == Environment.PRODUCTION) {
 			createWelcomeNote()
 			updateFeaturePropertyFileValues()
+			setDefaultMessageRoutingPreferences()
 		}
 
 		setCustomJSONRenderers()
@@ -627,6 +633,14 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 			returnArray['name'] = it.name
 			returnArray['sentMessageText'] = it.sentMessageText
 			return returnArray
+		}
+	}
+	private setDefaultMessageRoutingPreferences(){
+		if(!appSettingsService.get('routing.preferences.edited') || (appSettingsService.get('routing.preferences.edited') == false)){
+			println "### Changing Routing preferences ###"
+			appSettingsService.set('routing.uselastreceiver', false)
+			appSettingsService.set('routing.otherwise', 'any')
+			appSettingsService.set('routing.preferences.edited', true)
 		}
 	}
 }
