@@ -29,7 +29,7 @@
 
 		var messageTextValidation = function() {
 			updateConfirmationMessage();
-			return validator.element('#messageText');
+			return validator.element('#autoreplyText');
 		};
 
 		var confirmTabValidation = function() {
@@ -55,7 +55,7 @@
 
 	function addReplyActionStep() {
 		var container = $("#custom-activity-config-container");
-		container.append(replyActionStepHTml);
+		container.append(replyActionStepHtml);
 	}
 
 	function addRemoveListener(element) {
@@ -114,7 +114,7 @@
 		<%
 			def divElement = fsms.joinActionStep()
 		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
@@ -123,16 +123,16 @@
 		<%
 			divElement = fsms.leaveActionStep()
 		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
 	
-	var replyActionStepHTml = function() {
+	var replyActionStepHtml = function() {
 		<%
 			divElement = fsms.replyActionStep()
 		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
@@ -144,17 +144,19 @@
 			var output = "";
 			var stepType = $(element).find('input#stepType').val();
 			if(stepType == 'join') {
-				var groupName = $(element).find('#joinGroup').find("option[selected]").text()
+				var groupValue = $(element).find('#group').val();
+				var groupName = $(element).find('#group').find("option[value="+groupValue+"]").text()
 				output = i18n("customactivity.group.join", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType == "leave") {
-				var groupName = $(element).find('#joinGroup').find("option[selected]").text()
+				var groupValue = $(element).find('#group').val();
+				var groupName = $(element).find('#group').find("option[value="+groupValue+"]").text()
 				output = i18n("customactivity.group.leave", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType == "reply") {
-				var messageText = $(element).find('#messageText').val();
+				var messageText = $(element).find('#autoreplyText').val();
 				output = i18n("customactivity.reply.messagetext", messageText);
 				output = "<p>"+output+"</p>";
 			}

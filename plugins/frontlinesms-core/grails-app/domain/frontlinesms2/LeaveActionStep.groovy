@@ -15,6 +15,7 @@ class LeaveActionStep extends Step {
 	Map getConfig() {
 		[stepId:id, groupId:getGroupId()]
 	}
+	
 	def getGroup() {
 		Group.get(getPropertyValue("group"))	
 	}
