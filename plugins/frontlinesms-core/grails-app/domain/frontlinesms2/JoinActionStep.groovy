@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class JoinActionStep extends Step {
-	
+	def subscriptionService
 	static service = 'subscription'
 	static action = 'doJoin'
 	static String getShortName() { 'join' }
@@ -20,6 +20,6 @@ class JoinActionStep extends Step {
 	}
 
 	def process(Fmessage message) {
-
+		subscriptionService.doJoin(this, message)
 	}
 }
