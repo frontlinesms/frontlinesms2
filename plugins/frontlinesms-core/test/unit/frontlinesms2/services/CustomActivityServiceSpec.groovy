@@ -18,9 +18,9 @@ class CustomActivityServiceSpec extends Specification {
 		when:
 			service.triggerSteps(c, m)
 		then:
-			1 * joinStep.doAction(_)
-			1 * leaveStep.doAction(_)
-			1 * replyStep.doAction(_)
+			1 * joinStep.process(_)
+			1 * leaveStep.process(_)
+			1 * replyStep.process(_)
 	}
 
 	private def createTestCustomActivity() {
