@@ -12,7 +12,7 @@ class PageArchiveSent extends PageArchive {
 		def restOfPath = ""
 		if (args[0] instanceof Fmessage)
 			restOfPath += "/inbox/show/"+(args[0] as Fmessage).id
-	    else if (args[0] instanceof Number)
+		else if (args[0] instanceof Number)
 			restOfPath += "/inbox/show/"+args[0]
 		else
 			restOfPath += "/activity/"+Activity.findByName(args[0])?.id+"?messageSection=activity&viewingMessages=true"

@@ -6,18 +6,16 @@
 		<g:if test="${params.createRoute}">
 			<r:script>
 				$(function() {
-					var count = 0;
 					var connectionTimer = setInterval(refreshConnectionStatus, 2000);
 					function refreshConnectionStatus() {
 						$.get("${createLink(controller:'connection', action:'list', id:params?.id, params:[format:'json'])}", function(connection) {
-							if (count < 2 && connection.status == i18n("connectionstatus.connecting")) {
-								count++;	
-							} else {
+							var status;
+							status = connection.status.substring(17).toUpperCase();
+							if(status !== "CONNECTING") {
 								clearInterval(connectionTimer);
 								$("div.flash").hide();
-								$("#connection-" + connection.id).find(".connection-status").text(i18n(connection.status));
-								if(!$(".controls").find("a").is(":visible")) window.location = window.location;
-							}	
+								fconnection_show.update(status, connection.id);
+							}
 						});
 					}
 				});

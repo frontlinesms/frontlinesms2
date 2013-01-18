@@ -20,32 +20,28 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'There is a Not Connected label shown for inactive connection'() {
 		when:
-			createTestEmailConnection()
-			to PageConnection
+			to PageConnection, createTestEmailConnection()
 		then:
 			connectionList.status == "Not connected"
 	}
 
 	def 'there is a DELETE button shown for inactive connection'() {
 		when:
-			createTestEmailConnection()
-			to PageConnection
+			to PageConnection, createTestEmailConnection()
 		then:
 			connectionList.btnDelete.displayed
 	}
 	
 	def 'should show "create route" button for inactive connection'() {
 		when:
-			createTestEmailConnection()
-			to PageConnection
+			to PageConnection, createTestEmailConnection()
 		then:
 			connectionList.btnCreateRoute.displayed
 	}
 
 	def 'DELETE button should remove selected fconnection from the list'() {
 		given:
-			createTestEmailConnection()
-			to PageConnection
+			to PageConnection, createTestEmailConnection()
 		when:
 			connectionList.btnDelete.click()
 		then:
@@ -58,8 +54,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			def testConnection = createTestSmsConnection()
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
-			to PageConnection
-			waitFor{ connectionList.btnCreateRoute.displayed }
+			to PageConnection, testConnection
+			waitFor { connectionList.btnCreateRoute.displayed }
 		then:
 			!connectionList.btnTestRoute.displayed
 		when:
@@ -71,9 +67,9 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 
 	def 'delete button is not displayed for a connected Fconnection'() {
 		given:
-			createTestEmailConnection()
+			def c = createTestEmailConnection()
 		when:
-			to PageConnection
+			to PageConnection, c
 			connectionList.btnCreateRoute.click()
 		then:
 			waitFor('very slow') { connectionList.status == "Connected" }
@@ -82,8 +78,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'The first connection in the connection list page is selected'() {
 		when: 
-			createTestEmailConnection()
-			to PageConnection
+			to PageConnection, createTestEmailConnection()
 		then:
 			connectionList.selectedConnection.size() == 1
 	}
@@ -195,8 +190,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 
 	def 'clicking Send test message displays a popup with a default message and empty address field'() {
 		given:
-			createTestEmailConnection()
-			to PageConnection
+			to PageConnection, createTestEmailConnection()
 		when:
 			connectionList.btnCreateRoute.click()
 		then:
