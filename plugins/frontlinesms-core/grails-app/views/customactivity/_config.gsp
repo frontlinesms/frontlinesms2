@@ -6,10 +6,10 @@
 	<div class="custom-activity-action-step btn" id="add-leave-action-step">Leave</div>
 	<div class="custom-activity-action-step btn" id="add-reply-action-step">Reply</div>
 </div>
-<div id="custom-activity-config-container">
-	<g:hiddenField name="jsonToSubmit" />
+<g:hiddenField name="jsonToSubmit" />
+<ul id="custom-activity-config-container">
 	<fsms:savedActionSteps activityId="${activityInstanceToEdit?.id}"/>
-</div>
+</ul>
 
 <style type="text/css">
 	#custom-activity-config-container {
@@ -33,5 +33,6 @@
 		padding:5px;
 		background-color: #eeeeee;
 		margin-bottom: 2px;
+		cursor:move;
 	}
 </style>

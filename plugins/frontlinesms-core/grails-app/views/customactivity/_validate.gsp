@@ -5,6 +5,9 @@
 		$("#add-leave-action-step").click(function() { addLeaveActionStep(); });
 		$("#add-reply-action-step").click(function() { addReplyActionStep(); });
 		
+		$('#custom-activity-config-container').sortable();
+		$( "#custom-activity-config-container" ).disableSelection();
+		
 		$.each($('.remove-step'), function(index, element){
 			addRemoveListener(element);
 		});
@@ -112,7 +115,7 @@
 		<%
 			def divElement = fsms.joinActionStep()
 		%>
-		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
@@ -121,7 +124,7 @@
 		<%
 			divElement = fsms.leaveActionStep()
 		%>
-		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
@@ -130,7 +133,7 @@
 		<%
 			divElement = fsms.replyActionStep()
 		%>
-		var divElement = $(${divElement}).attr("index", (parseInt(indexOfLastStep()) + 1));
+		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
 		addRemoveListener(divElement.find('.remove-step'));
 		return divElement;
 	};
