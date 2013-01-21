@@ -8,7 +8,7 @@ class CustomActivity extends Activity {
 
 	def processKeyword(Fmessage message, Keyword matchedKeyword) {
 		addToMessages(message)
+		save(flush:true)
 		customActivityService.triggerSteps(this, message)
-		save()
 	}
 }
