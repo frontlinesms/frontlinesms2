@@ -8,7 +8,7 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 	def expressionProcessorService
 
 	@Unroll
-	def 'process should return message content with no expressions in it'() {
+	def 'process should return message content with no expressions in it, unless some expressions are not recognised'() {
 		setup:
 			def contact =new Contact(name:'Gedi', mobile:"10983").save(failOnError:true, flush:true)
 			def m = new Fmessage(src: '10983', inbound: false, archived: false, hasSent: false, date: new Date())
@@ -18,10 +18,13 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 		expect:
 			processedMessageText == expectedMessageText
 		where:
-			messageText                                                 | expectedMessageText
-			'message text sample'                                       | 'message text sample'
-			'please call us on ${recipient_number}'                     | 'please call us on 10983'
-			'sender name ${recipient_name}, number ${recipient_number}' | 'sender name Gedi, number 10983'
+			messageText                                                                                                                | expectedMessageText
+			'message text sample'                                                                                                      | 'message text sample'
+			'please call us on ${recipient_number}'                                                                                    | 'please call us on 10983'
+			'sender name ${recipient_name}, number ${recipient_number}'                                                                | 'sender name Gedi, number 10983'
+			'the expression ${message_text_with_keyword} cannot work here'                                                             | 'the expression ${message_text_with_keyword} cannot work here'
+			'the expression ${that_i_just_made_up} is not recognised'                                                                  | 'the expression ${that_i_just_made_up} is not recognised'
+			'${recipient_number} - ${message_text_with_keyword} - ${that_i_just_made_up} - ${recipient_number} - ${recipient_name} .'  | '10983 - ${message_text_with_keyword} - ${that_i_just_made_up} - 10983 - Gedi .'
 	}
 
 	@Unroll
