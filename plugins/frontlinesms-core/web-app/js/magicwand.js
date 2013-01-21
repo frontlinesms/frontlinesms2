@@ -24,7 +24,8 @@ var magicwand = {
 	isSupported: function() {
 		if(selectmenuTools.isSupported() && !jQuery.browser.msie) {
 			return true;
-		} else { return false; } 
+		}
+		return false;
 	},
 
 	init: function(list) {
