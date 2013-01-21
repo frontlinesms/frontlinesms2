@@ -18,20 +18,11 @@ class ExpressionProcessorService {
 		fields.findAll { controllerName in it.value }.keySet()
 	}
 
-	String replaceExpressions(Dispatch dispatch) {
-		def messageBody = dispatch.message.text
-		matches = messageBody.findAll(regex)
-		matches.each {
-			messageBody = messageBody.replaceFirst(regex, getReplacement(it, dispatch))
-		}
-		messageBody
-	}
-
 	String process(Dispatch dispatch) {
 		def messageBody = dispatch.message.text
 		def matches = getExpressions(messageBody)
-		matches.each {
-			messageBody = messageBody.replaceFirst(regex, getReplacement(it, dispatch))
+		matches.unique().each { match ->
+			messageBody = messageBody.replace(match, getReplacement(match, dispatch))
 		}
 		messageBody
 	}
@@ -73,10 +64,10 @@ class ExpressionProcessorService {
 				def keyword = incomingMessage.messageOwner?.keywords?.find{ incomingMessage.text.toUpperCase().startsWith(it.value) }?.value
 				return keyword
 			}
-			return expression.replace('$', '\\$')
+			return expression.replace('$', '\$')
 		}
 		catch (Exception e) {
-			return expression.replace('$', '\\$')
+			return expression.replace('$', '\$')
 		}
 	}
 

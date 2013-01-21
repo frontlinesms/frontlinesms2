@@ -18,12 +18,13 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 		expect:
 			processedMessageText == expectedMessageText
 		where:
-			messageText                                                    | expectedMessageText
-			'message text sample'                                          | 'message text sample'
-			'please call us on ${recipient_number}'                        | 'please call us on 10983'
-			'sender name ${recipient_name}, number ${recipient_number}'    | 'sender name Gedi, number 10983'
-			'the expression ${message_text_with_keyword} cannot work here' | 'the expression ${message_text_with_keyword} cannot work here'
-			'the expression ${that_i_just_made_up} is not recognised'      | 'the expression ${that_i_just_made_up} is not recognised'
+			messageText                                                                                          | expectedMessageText
+			'message text sample'                                                                                | 'message text sample'
+			'please call us on ${recipient_number}'                                                              | 'please call us on 10983'
+			'sender name ${recipient_name}, number ${recipient_number}'                                          | 'sender name Gedi, number 10983'
+			'the expression ${message_text_with_keyword} cannot work here'                                       | 'the expression ${message_text_with_keyword} cannot work here'
+			'the expression ${that_i_just_made_up} is not recognised'                                            | 'the expression ${that_i_just_made_up} is not recognised'
+			'${recipient_number} - ${message_text_with_keyword} - ${that_i_just_made_up} - ${recipient_name} .'  | '10983 - ${message_text_with_keyword} - ${that_i_just_made_up} - Gedi .'
 	}
 
 	@Unroll
