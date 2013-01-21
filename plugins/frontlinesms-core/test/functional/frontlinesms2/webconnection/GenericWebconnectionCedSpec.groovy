@@ -183,8 +183,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.name = 'random webconnection'
 			submit.click()
 		then:
-			waitFor { summary.displayed }
-			def c = Webconnection.findByName('random webconnection')
+			def c = waitFor { Webconnection.findByName('random webconnection') }
 			c.apiEnabled
 			c.secret == 'spray-on-shoes'
 	}
@@ -198,7 +197,6 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 
 		nextTab(apiTab)
 		if(tabName == 'api') return;
-
 
 		nextTab(keywordTab)
 		if(tabName == 'keyword') return;
