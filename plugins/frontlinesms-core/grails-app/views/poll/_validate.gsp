@@ -236,7 +236,7 @@
 			var aliases = "";
 			var rawKey = $(field).attr('id').trim();
 			var rawVal = $(field).val().trim();
-			var value = rawVal.split(' ')[0]
+			var value = rawVal.split(/[\s,]+/)[0]
 			var key = rawKey.substring(rawKey.length-1);
 			var aliasTextFieldLabel = $("ul#poll-aliases li label[for='keywords" + value + "']");
 			var aliasTextField = $("ul#poll-aliases li input#keywords" + key);
