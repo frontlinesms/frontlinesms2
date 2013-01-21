@@ -7,6 +7,7 @@ import org.apache.camel.Exchange
 import frontlinesms2.api.*
 
 class SmssyncService {
+	def i18nUtilService
 	def processSend(Exchange x) {
 		println "SmssyncService.processSend() :: ENTRY"
 		println "SmssyncService.processSend() :: x=$x"
@@ -16,6 +17,10 @@ class SmssyncService {
 		connection.addToQueuedDispatches(x.in.body)
 		connection.save(failOnError:true)
 		println "SmssyncService.processSend() :: EXIT"
+	}
+
+	def reportTimeout(connection) {
+		new SystemNotification(text:i18nUtilService.getMessage(code:'smssync.timeout', args:[connection.name, connection.timeout])).save(failOnError:true)
 	}
 
 	def apiProcess(connection, controller) {

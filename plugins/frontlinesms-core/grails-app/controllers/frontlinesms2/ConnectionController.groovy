@@ -118,6 +118,15 @@ class ConnectionController extends ControllerUtils {
 		CreateRouteJob.triggerNow([connectionId:params.id])
 		params.createRoute = true
 		flash.message = message(code: 'connection.route.connecting')
+		def connectionInstance = Fconnection.get(params.id)
+		if (connectionInstance instanceof SmssyncFconnection && connectionInstance?.timeout > 0) {
+			def sendTime = new Date()
+			use(groovy.time.TimeCategory) {
+				sendTime = sendTime + (connectionInstance.timeout).minutes
+				println "I will send the job at $sendTime"
+			}
+			ReportSmssyncTimeoutJob.schedule(sendTime, [connectionId:params.id])
+		}
 		redirect(action:'list', params:params)
 	}
   
