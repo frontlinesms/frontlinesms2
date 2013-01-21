@@ -27,6 +27,7 @@ class Autoreply extends Activity {
 		params.messageText = autoreplyText
 		addToMessages(message)
 		def outgoingMessage = messageSendService.createOutgoingMessage(params)
+		outgoingMessage.ownerDetail = message.id
 		addToMessages(outgoingMessage)
 		messageSendService.send(outgoingMessage)
 		save()
