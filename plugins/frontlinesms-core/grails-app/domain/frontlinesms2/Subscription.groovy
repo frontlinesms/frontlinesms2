@@ -29,20 +29,14 @@ class Subscription extends Activity{
 	}
 
 	def processJoin(Fmessage message){
-		this.addToMessages(message)
-		this.save(failOnError:true)
 		subscriptionService.doJoin(this, message)
 	}
 
 	def processLeave(Fmessage message){
-		this.addToMessages(message)
-		this.save(failOnError:true)
 		subscriptionService.doLeave(this, message)
 	}
 
 	def processToggle(Fmessage message){
-		this.addToMessages(message)
-		this.save(failOnError:true)
 		subscriptionService.doToggle(this, message)
 	}
 
@@ -58,7 +52,7 @@ class Subscription extends Activity{
 
 	def processKeyword(Fmessage message, Keyword k) {
 		this.addToMessages(message)
-		this.save(failOnError:true)
+		this.save(failOnError:true, flush:true)
 		def action = getAction(k)
 		if(action == Action.JOIN){
 			processJoin(message)
