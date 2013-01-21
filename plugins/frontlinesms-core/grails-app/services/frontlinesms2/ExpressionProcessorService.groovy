@@ -41,33 +41,34 @@ class ExpressionProcessorService {
 
 	private getReplacement(expression, dispatch) {
 		try {
+			// TODO could replace this manual mapping wth...a Map!  e.g. [sender_number:{incomingMessage.src}]
 			def incomingMessage = Fmessage.get(dispatch.message.ownerDetail)
-			if (expression == "\${message_text}"){
-				def keyword = incomingMessage.messageOwner?.keywords?.find{ incomingMessage.text.toUpperCase().startsWith(it.value) }?.value
+			def getKeyword = { incomingMessage.messageOwner?.keywords?.find { incomingMessage.text.toUpperCase().startsWith(it.value) }?.value }
+			if (expression == '${message_text}') {
+				def keyword = getKeyword()
 				def text = incomingMessage.text
 				if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
 					text = text.substring(keyword.size()).trim()
 				}
 				return text
 			}
-			if (expression == "\${message_text_with_keyword}")
+			if (expression == '${message_text_with_keyword}')
 				return incomingMessage.text
-			if (expression == "\${sender_number}")
+			if (expression == '${sender_number}')
 				return incomingMessage.src
-			if (expression == "\${sender_name}")
-				return Contact.findByMobileLike(incomingMessage.src)? Contact.findByMobileLike(incomingMessage.src).name : incomingMessage.src
-			if (expression == "\${recipient_number}")
+			if (expression == '${sender_name}')
+				return incomingMessage.inboundContactName?: incomingMessage.src
+			if (expression == '${recipient_number}')
 				return dispatch.dst
-			if (expression == "\${recipient_name}")
-				return Contact.findByMobileLike(dispatch.dst)? Contact.findByMobileLike(dispatch.dst).name : dispatch.dst
-			if (expression == "\${keyword}"){
-				def keyword = incomingMessage.messageOwner?.keywords?.find{ incomingMessage.text.toUpperCase().startsWith(it.value) }?.value
-				return keyword
+			if (expression == '${recipient_name}') {
+				def recipient = Contact.findByMobileLike(dispatch.dst)
+				return recipient? recipient.name: dispatch.dst
 			}
-			return expression.replace('$', '\$')
-		}
-		catch (Exception e) {
-			return expression.replace('$', '\$')
+			if (expression == '${keyword}')
+				return getKeyword()
+			return expression
+		} catch (Exception e) {
+			return expression
 		}
 	}
 
