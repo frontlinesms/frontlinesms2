@@ -22,7 +22,7 @@ var magicwand = {
 	},
 
 	isSupported: function() {
-		if(selectmenuTools.isSupported() && !jQuery.browser.msie) {
+		if(selectmenuTools.isSupported() && !(jQuery.browser.msie && (jQuery.browser.version <= 9))) {
 			return true;
 		}
 		return false;
