@@ -51,7 +51,7 @@ class SettingsControllerSpec extends Specification {
 
 	def "can enable application authentication from settings if details validate"() {
 		given:
-			params.enabledAuthentication = 'true'
+			params.enabled = 'true'
 			params.username = "test"
 			params.password = "pass"
 			params.confirmPassword = "pass"
@@ -66,10 +66,10 @@ class SettingsControllerSpec extends Specification {
 
 	def "should not enable application authentication from settings if details don't validate"() {
 		given:
-			mockAppSettings(enabledAuthentication: false,
+			mockAppSettings('auth.basic.enabled': false,
 					username:'', password:'')
 		when:
-			params.enabledAuthentication = "true"
+			params.enabled = "true"
 			params.username = "test"
 			params.password = "pass"
 			params.confirmPassword = "me"
