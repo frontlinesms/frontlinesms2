@@ -8,7 +8,7 @@
 </div>
 <g:hiddenField name="jsonToSubmit" />
 <ul id="custom-activity-config-container">
-	<fsms:savedActionSteps activityId="${activityInstanceToEdit?.id}"/>
+	
 </ul>
 
 <style type="text/css">

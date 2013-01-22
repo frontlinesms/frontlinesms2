@@ -344,23 +344,6 @@ class FsmsTagLib {
 		}
 		out << '</li>'
 	}
-
-	def savedActionSteps = {att, body ->
-		def activity = CustomActivity.get(att.activityId)
-		if(activity) {
-			activity.steps?.each { step->
-				if(step.action == "doJoin"){
-					out << fsms.joinActionStep(step:step)
-				}
-				if(step.action == "doLeave"){
-					out << fsms.leaveActionStep(step:step)
-				}
-				if(step.action == "doReply"){
-					out << fsms.replyActionStep(step:step)
-				}
-			}
-		}
-	}
 	
 	private def getFields(att) {
 		def fields = att.remove('fields')
