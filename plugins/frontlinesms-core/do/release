@@ -5,6 +5,7 @@
 echo "### Building FrontlineSMS v2 release"
 read -sn 1 -p "## WARNING ## This script will make modifications to your working directory, and commit these changes. It will also create a tag for the newly built version. Press any key to continue or Ctrl+C to quit..."
 echo ""
+
 # Read Application.properties to find release version
 APP_VERSION=`sed '/^\#/d' application.properties | grep 'app.version'  | tail -n 1 | cut -d "=" -f2-`
 echo "# Read current app version as ${APP_VERSION}"
@@ -23,9 +24,6 @@ echo "after dropping -SNAPSHOT, app version is now ${APP_VERSION}"
 echo "$app_version" | grep -qi "rc"
 RC_FLAG=$?
 
-# Roll version to new snapshot TODO
-exit 1 # placeholder
-
 # Ensure git repo is clean
 echo "# Checking for clean repository..."
 if test -n "$(git status --porcelain)"
@@ -33,6 +31,10 @@ then
 	echo "# FAILURE: Your repository is not clean. This script can only build from a clean repo"
 	exit 1
 fi
+
+# Prompt for post-build version
+echo "Please enter the name of the version as it should be after build (e.g. 2.4.3-SNAPSHOT)"
+read POST_BUILD_VERSION
 
 # Assert that Kiswahili translation is complete
 echo "# Checking for completeness of Kiswahili translation"
@@ -72,7 +74,8 @@ git add -A
 git commit -m "Built ${APP_VERSION} (committed using do/release script)"
 git tag frontlinesms2.$APP_VERSION
 
-
+# Roll application.properties to post-build version
+sed -i "s/\(app\.version=\).*\$/\1${POST_BUILD_VERSION}/" application.properties
 git add -A
 git commit -m "2.${POST_BUILD_VERSION} ready for dev after 2.${APP_VERSION} release (committed using do/release script)"
 
