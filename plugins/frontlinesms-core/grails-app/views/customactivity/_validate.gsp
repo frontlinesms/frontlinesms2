@@ -1,7 +1,3 @@
-<fsms:render template="/customactivity/steps/joinstep"/>
-<fsms:render template="/customactivity/steps/leavestep"/>
-<fsms:render template="/customactivity/steps/replystep"/>
-
 <r:script>
 	function initializePopup() {
 		custom_activity.steps = ["join", "leave", "reply"];
@@ -100,7 +96,7 @@
 
 	function updateConfirmationMessage() {
 		var container, keywords;
-		container = $('#customactivity-confirm-action-steps');
+		container = $('#customactivity-confirm-steps');
 		container.html("");
 		$.each($(".step"), function(index, element) {
 			var groupName, groupValue, messageText, output, stepType;

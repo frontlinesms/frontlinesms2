@@ -11,8 +11,16 @@ class JoinActionStep extends Step {
 	static constraints = {
 	}
 
+	Map getConfig() {
+		[stepId:id, groupId:getGroupId()]
+	}
+
 	def getGroup() {
-		Group.get(getPropertyValue("group"))	
+		Group.get(getGroupId())
+	}
+
+	def getGroupId() {
+		getPropertyValue("group")
 	}
 
 	def setGroup(Group group) {
@@ -22,4 +30,9 @@ class JoinActionStep extends Step {
 	def process(Fmessage message) {
 		subscriptionService.doJoin(this, message)
 	}
+
+	def niceFormat() {
+		"Joining '${this.group?.name}' group"
+	}
 }
+

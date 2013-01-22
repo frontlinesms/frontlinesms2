@@ -1,10 +1,10 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 abstract class Step {
-	
 	static hasMany = [stepProperties: StepProperty]
 	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
-	static String getShortName() { 'base' }
 
 	static configFields = [:]
 
@@ -28,10 +28,12 @@ abstract class Step {
 		entityType.getAll(StepProperty.findAllByStepAndKey(this, propertyName)*.value) - null
 	}
 
+	String getJsonConfig() {
+		return getConfig() as JSON
+	}
+
 	def niceFormat() {
-		if(this instanceof JoinActionStep) {
-			return "Joining '${this.group?.name}' group"
-		}
+// TODO move this into steps themselves
 		if(this instanceof LeaveActionStep) {
 			return "Leaving '${this.group?.name}' group"
 		}

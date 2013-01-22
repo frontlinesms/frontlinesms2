@@ -93,11 +93,22 @@ class FsmsTagLib {
 	def render = { att ->
 		boolean rendered = false
 		def plugins = grailsApplication.config.frontlinesms.plugins
+		def templateId = att.remove 'id'
+		def type = att.remove 'type'
+		if(type == 'sanchez') {
+			def runtimeVars = att.remove('runtimeVars')?.split(",")*.trim()
+			if(runtimeVars) {
+				if(!att.model) att.model = [:]
+				runtimeVars.each { att.model[it] = "{{$it}}" }
+			}
+		}
 		([null] + plugins).each { plugin ->
 			if(!rendered) {
 				try {
 					att.plugin = plugin
+					if(type == 'sanchez') out << '<script id="' + templateId + '" type="text/x-sanchez-template">'
 					out << g.render(att)
+					if(type == 'sanchez') out << '</script>'
 					rendered = true
 				} catch(GrailsTagException ex) {
 					if(ex.message.startsWith("Template not found")) {

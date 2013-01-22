@@ -436,17 +436,22 @@ class CoreBootStrap {
 	}
 
 	private def dev_initCustomActivities() {
+		if(!bootstrapData) return
+
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1")).save(failOnError:true,flush:true)
 		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2")).save(failOnError:true,flush:true)
 
 		new CustomActivity(name:'Do it all')
-			.addToSteps(joinStep)
-			.addToSteps(leaveStep)
-			.addToKeywords(value:"CUSTOM")
-			.save(failOnError:true, flush:true)
+				.addToSteps(joinStep)
+				.addToSteps(leaveStep)
+				.addToKeywords(value:"CUSTOM")
+				.save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initLogEntries() {
+		if(!bootstrapData) return
+
+		// FIXME uncomment this
 		// if(!bootstrapData) return
 		// def now = new Date()
 		// [new LogEntry(date:now, content: "entry1"),

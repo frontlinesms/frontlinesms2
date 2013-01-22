@@ -12,3 +12,4 @@ class CustomActivity extends Activity {
 		customActivityService.triggerSteps(this, message)
 	}
 }
+
