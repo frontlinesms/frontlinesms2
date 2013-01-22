@@ -10,6 +10,9 @@ CONTROLLER_OUTPUT=$?
 
 if [ "$CONTROLLER_OUTPUT" -eq 1 ] && [ "$VIEW_OUTPUT" -eq 1 ]; then
 	echo "Violations NOT detected"
+	exit 0
+else
+	echo "The violations above were detected"
 	exit 1
 fi
 
