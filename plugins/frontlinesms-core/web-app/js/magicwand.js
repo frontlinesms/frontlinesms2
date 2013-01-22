@@ -22,10 +22,8 @@ var magicwand = {
 	},
 
 	isSupported: function() {
-		if(selectmenuTools.isSupported() && !(jQuery.browser.msie && (jQuery.browser.version <= 9))) {
-			return true;
-		}
-		return false;
+		return selectmenuTools.isSupported() &&
+				!(jQuery.browser.msie && jQuery.browser.version <= 8);
 	},
 
 	init: function(list) {
