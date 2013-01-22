@@ -23,6 +23,7 @@ modules = {
 		resource url:[dir:'css', file:'help.css']
 
 		resource url:[dir:'js', file:"frontlinesms_core.js"], disposition:'head'
+		resource url:[dir:'js', file:"activity/custom_activity.js"], disposition:'head'
 		resource url:[dir:'js', file:"activity/popups.js"], disposition:'head'
 		resource url:[dir:'js', file:"activity/poll/poll_graph.js"], disposition:'head'
 		resource url:[dir:'js', file:'button.js'], disposition:'head'
@@ -33,6 +34,7 @@ modules = {
 		resource url:[dir:'js', file:"mediumPopup.js"], disposition:'head'
 		resource url:[dir:'js', file:"new_features.js"], disposition:'head'
 		resource url:[dir:'js', file:"pagination.js"], disposition:'head'
+		resource url:[dir:'js', file:"sanchez.min.js"], disposition:'head'
 		resource url:[dir:'js', file:"smallPopup.js"], disposition:'head'
 		resource url:[dir:'js', file:"status_indicator.js"], disposition:'head'
 		resource url:[dir:'js', file:"system_notification.js"], disposition:'head'
