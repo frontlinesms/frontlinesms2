@@ -1,21 +1,11 @@
-<%@ page import="frontlinesms2.Group" %>
-
-<script id="step-join" type="text/x-sanchez-template">
-	<li class='join-action-step step' index='{{stepId}}'>
-		<div><a class='remove-command remove-step'></a></div>
-		<span>Join Group</span>
-		<g:hiddenField name='stepId' value="{{stepId}}"/>
-		<g:hiddenField name='stepType' value='join'/>
-		<g:select name='group' id="" noSelection="${['null':'Select One...']}" from="${Group.getAll()}" value="{{groupId}}" optionKey="id" optionValue="name" class="notnull"/>
-	</li>
-</script>
+<fsms:render template="/customactivity/steps/joinstep"/>
+<fsms:render template="/customactivity/steps/leavestep"/>
+<fsms:render template="/customactivity/steps/replystep"/>
 
 <r:script>
 	function initializePopup() {
-		custom_activity.steps = ["join"];
+		custom_activity.steps = ["join", "leave", "reply"];
 		custom_activity.init();
-		$("#add-leave-action-step").click(function() { addLeaveActionStep(); });
-		$("#add-reply-action-step").click(function() { addReplyActionStep(); });
 
 		$('#custom-activity-config-container').sortable();
 
@@ -60,21 +50,6 @@
 		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
 		mediumPopup.addValidation('customactivity-config', stepActionsValidation);
 		mediumPopup.addValidation('customactivity-confirm', confirmTabValidation);
-	}
-
-	//>Adding steps
-	function addLeaveActionStep() {
-		var container = $("#custom-activity-config-container");
-		container.append(leaveActionStepHtml);
-	}
-
-	function addReplyActionStep() {
-		var container = $("#custom-activity-config-container");
-		container.append(replyActionStepHtml);
-	}
-
-	function delete(element) {
-
 	}
 
 	function setJsonToSend() {
@@ -122,24 +97,6 @@
 	function indexOfLastStep() {
 		return $(".step:last").attr("index") || 0;
 	}
-
-	var leaveActionStepHtml = function() {
-		<%
-			divElement = fsms.leaveActionStep()
-		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
-		addRemoveListener(divElement.find('.remove-step'));
-		return divElement;
-	};
-	
-	var replyActionStepHtml = function() {
-		<%
-			divElement = fsms.replyActionStep()
-		%>
-		var divElement = $(${divElement} + "").attr("index", (parseInt(indexOfLastStep()) + 1));
-		addRemoveListener(divElement.find('.remove-step'));
-		return divElement;
-	};
 
 	function updateConfirmationMessage() {
 		var container, keywords;

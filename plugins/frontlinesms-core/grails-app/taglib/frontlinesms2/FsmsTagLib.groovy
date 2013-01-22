@@ -345,28 +345,6 @@ class FsmsTagLib {
 		out << '</li>'
 	}
 
-	def leaveActionStep = { att, body ->
-		return
-		out << "<li class='leave-action-step step' index='${att.step?.id?:''}'>"
-		out << "<div><a class='remove-command remove-step'></a></div>"
-		out << "<span>Leave Group</span>"
-		out << g.hiddenField(name:'stepId', value:(att.step?.id?:''))
-		out << g.hiddenField(name:'stepType', value:'leave')
-		out << g.select(name:'group', id:"", noSelection:['null':'Select One...'], from:Group.getAll(), value:(att?.step?.group?.id?:''), optionKey:"id",optionValue:"name", class:"notnull")
-		out << "</li>"
-	}
-
-	def replyActionStep = { att, body ->
-		return
-		out << "<li class='reply-action-step step' index='${att.step?.id?:''}'>"
-		out << "<div><a class='remove-command remove-step'></a></div>"
-		out << "<span>Reply</span>"
-		out << g.hiddenField(name:'stepId', value:(att.step?.id?:''))
-		out << g.hiddenField(name:'stepType', value:'reply')
-		out << g.textArea(name:'autoreplyText', value:(att.step?.autoreplyText?:''))
-		out << "</li>"
-	}
-
 	def savedActionSteps = {att, body ->
 		def activity = CustomActivity.get(att.activityId)
 		if(activity) {

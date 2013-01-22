@@ -1,7 +1,7 @@
 var custom_activity = (function() {
 	var
 	addStep = function(stepName) {
-		sanchez.append("#custom-activity-config-container", "step-" + stepName, { stepId:'', groupId:'' });
+		sanchez.append("#custom-activity-config-container", "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'' });
 	},
 	removeStep = function() {
 		var p = $(this).parent().parent();
