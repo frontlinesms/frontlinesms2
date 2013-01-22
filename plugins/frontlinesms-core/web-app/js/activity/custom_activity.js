@@ -14,7 +14,7 @@ var custom_activity = (function() {
 			});
 	},
 	init = function() {
-		var i, steps = custom_activity.steps,
+		var i, steps = custom_activity.steps;
 		for(i=steps.length-1; i>=0; --i) {
 			initAddStepButton(steps[i]);
 		}
