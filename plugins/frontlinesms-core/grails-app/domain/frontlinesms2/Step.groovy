@@ -31,15 +31,4 @@ abstract class Step {
 	String getJsonConfig() {
 		return getConfig() as JSON
 	}
-
-	def niceFormat() {
-// TODO move this into steps themselves
-		if(this instanceof LeaveActionStep) {
-			return "Leaving '${this.group?.name}' group"
-		}
-		if(this instanceof ReplyActionStep) {
-			return "Replying with '${this.autoreplyText}'"
-		}
-	}
-
 }

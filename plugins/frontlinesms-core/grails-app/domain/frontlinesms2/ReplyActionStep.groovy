@@ -11,6 +11,10 @@ class ReplyActionStep extends Step {
 	static constraints = {
 	}
 
+	Map getConfig() {
+                [stepId:id, autoreplyText:autoreplyText]
+        }
+
 	def getAutoreplyText() {
 		getPropertyValue("autoreplyText")
 	}
@@ -18,4 +22,9 @@ class ReplyActionStep extends Step {
 	def process(Fmessage message) {
 		autoreplyService.doReply(this, message)
 	}
+
+        def niceFormat() {
+		return "Replying with '${this.autoreplyText}'"
+	}
+
 }

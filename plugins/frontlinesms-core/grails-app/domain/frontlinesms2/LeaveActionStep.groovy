@@ -12,9 +12,17 @@ class LeaveActionStep extends Step {
 		stepProperties nullable: true
 	}
 
+	Map getConfig() {
+		[stepId:id, groupId:getGroupId()]
+	}
+
 	def getGroup() {
 		Group.get(getPropertyValue("group"))	
 	}
+
+        def getGroupId() {
+                getPropertyValue("group")
+        }
 
 	def setGroup(Group group) {
 		setPropertyValue("group", group.id)
@@ -23,4 +31,9 @@ class LeaveActionStep extends Step {
 	def process(Fmessage message) {
 		subscriptionService.doLeave(this, message)
 	}
+
+	def niceFormat() {
+		return "Leaving '${this.group?.name}' group"
+        }
+
 }
