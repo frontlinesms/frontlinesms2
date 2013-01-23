@@ -96,7 +96,7 @@
 
 	function updateConfirmationMessage() {
 		var container, keywords;
-		container = $('#customactivity-confirm-steps');
+		container = $('#customactivity-confirm-action-steps');
 		container.html("");
 		$.each($(".step"), function(index, element) {
 			var groupName, groupValue, messageText, output, stepType;
