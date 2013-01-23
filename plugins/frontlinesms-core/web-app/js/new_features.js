@@ -22,8 +22,7 @@ var newFeatures = (function() {
 			success:_doPopupDisplay });
 	};
 	_handlePopupClose = function(data) {
-		var modalBox = $("#modalBox");
-		modalBox.parent().remove();
+		$("#modalBox").remove();
 	};
 	closePopup = function() {
 		var showAgain = $("#enableNewFeaturesPopup").is(":checked");
@@ -35,8 +34,7 @@ var newFeatures = (function() {
 		});
 	};
 	return {
-		showPopup:showPopup,
-		closePopup:closePopup
+		showPopup:showPopup
 	};
 }());
 
