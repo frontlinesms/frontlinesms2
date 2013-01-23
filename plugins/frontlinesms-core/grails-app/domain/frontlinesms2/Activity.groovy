@@ -73,6 +73,11 @@ abstract class Activity extends MessageOwner {
 
 	def deactivate() {}
 
+	def move(messageInstance) {
+		messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
+		this.processKeyword(messageInstance, null)
+	}
+
 	private def logFail(c, ex) {
 		ex.printStackTrace()
 		log.warn("Error creating routes of webconnection with id $c?.id", ex)
