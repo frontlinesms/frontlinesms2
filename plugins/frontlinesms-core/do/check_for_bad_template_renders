@@ -1,11 +1,11 @@
 #!/bin/bash
 echo "# Checking views..."
-grep -rn 'g:render.*template' grails-app/views/
+grep -rn "render.*template" grails-app/views/ | grep -rv "fsms.render"
 VIEW_OUTPUT=$?
 
 echo ""
 echo "# Checking controllers"
-grep -rn "render.*template" grails-app/controllers/
+grep -rn "render.*template" grails-app/controllers/ | grep -rv "fsms.render"
 CONTROLLER_OUTPUT=$?
 
 if [ "$CONTROLLER_OUTPUT" -eq 1 ] && [ "$VIEW_OUTPUT" -eq 1 ]; then
@@ -15,4 +15,3 @@ else
 	echo "The violations above were detected"
 	exit 1
 fi
-
