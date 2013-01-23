@@ -121,15 +121,9 @@
 			testRouteBtn = $('<input/>', {
 								id: "testRoute",
 								type:"submit",
-								style:"margin:.5em .6em .5em 0; height:26px;",
 								value: i18n('webconnection.testroute.label'),
 								click: testRouteStatus
 							});
-			/*testRouteBtn.button({
-				id: "testRoute",
-				value: i18n('webconnection.testroute.label'),
-				click: testRouteStatus
-			});*/
 		} else {
 			testRouteBtn.show();
 		}
