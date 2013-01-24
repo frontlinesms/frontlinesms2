@@ -1,11 +1,11 @@
 #!/bin/bash
 echo "# Checking views..."
-grep -rn "render.*template" grails-app/views/ | grep -rv "fsms.render"
+grep -rn "render.*template" grails-app/views/ | grep -v "fsms:render"
 VIEW_OUTPUT=$?
 
 echo ""
 echo "# Checking controllers"
-grep -rn "render.*template" grails-app/controllers/ | grep -rv "fsms.render"
+grep -rn "render.*template" grails-app/controllers/ | grep -v "fsms\.render"
 CONTROLLER_OUTPUT=$?
 
 if [ "$CONTROLLER_OUTPUT" -eq 1 ] && [ "$VIEW_OUTPUT" -eq 1 ]; then
