@@ -86,14 +86,6 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			confirm.stepActionsConfirm.contains("Sample Text")
 			submit.click()
 			waitFor("very slow") { summary.displayed }
-			cancel.click()
-		when:
-			to PageMessageCustomActivity, CustomActivity.findByName("Wewe wacha hakuna haja")
-		then:
-			waitFor { title?.toLowerCase().contains("custom activity") }
-			def activity = CustomActivity.findByName("Wewe wacha hakuna haja")
-			activity.name == "Wewe wacha hakuna haja"
-			activity.steps.size() == 2
 	}
 
 	def 'can edit an existing custom activity'() {
@@ -124,14 +116,6 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			confirm.stepActionsConfirm.contains("Sample Text")
 			submit.click()
 			waitFor("very slow") { summary.displayed }
-			cancel.click()
-		when:
-			to PageMessageCustomActivity, CustomActivity.findByName("ni hivyo hivyo tu")
-		then:
-			waitFor { title?.toLowerCase().contains("custom activity") }
-			def activity = CustomActivity.findByName("ni hivyo hivyo tu")
-			activity.name == "ni hivyo hivyo tu"
-			activity.steps.size() == 4
 	}
 
 }
