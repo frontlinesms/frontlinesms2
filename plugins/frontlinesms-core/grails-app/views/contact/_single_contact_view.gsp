@@ -138,21 +138,29 @@ $(function() {
 	setInterval(refreshMessageStats, 15000);
 	var clear;
 	$( "td > input[type=text]" ).each(function( index) {
+		clear = $(this).next();
 		if( $(this).val() == ''){
-			clear = $(this).next();
-			clear.attr("style","display:none");
+			clear.addClass('hidden');
 		}
 		else{
-			clear = $(this).next();
-			clear.removeAttr("style");
+			clear.removeClass("hidden");
 		}
 	});
 
-	$( "td > input[type=text]" ).keypress(function() {
-	 	if( $(this).val() == ''){
-			clear = $(this).next();
-			clear.removeAttr("style");
-			$(".send-message").removeAttr("style");
+	$( "td > input[type=text]" ).keyup(function() {
+		clear = $(this).next();
+	 	if( $(this).val() != ''){
+			clear.removeClass("hidden");
+			if($(this).attr('name') == 'mobile') {
+				$(".send-message").removeClass('hidden');
+			}
+		}
+		else {
+			clear.addClass('hidden');
+			if($(this).attr('name') == 'mobile') {
+				$(".send-message").addClass('hidden');
+			}
+
 		}
 	});
 });
