@@ -63,7 +63,11 @@ abstract class Activity extends MessageOwner {
 		this.messages*.isDeleted = false
 	}
 
-	def processKeyword(Fmessage message, Keyword match) {}
+	def processKeyword(Fmessage message, Keyword match) {
+		message.ownerDetail = null
+		this.addToMessages(message)
+		this.save(failOnError:true)
+	}
 
 	/**
 	 * Activcate this activity.  If it is already activated, this method should
