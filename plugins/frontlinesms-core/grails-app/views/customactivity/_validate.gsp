@@ -11,6 +11,9 @@
 			rules: {
 				autoreplyText: { required:true },
 				name: { required:true }
+			},
+			errorPlacement: function(error, element){
+				$(".error-panel").html(error);
 			}
 		});
 
