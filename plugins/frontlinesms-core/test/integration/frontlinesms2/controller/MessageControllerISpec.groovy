@@ -236,8 +236,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			message.messageOwner.id == announcement.id
 			message.ownerDetail != 'ownerdetail-pending'
 	}
-@spock.lang.IgnoreRest
-@spock.lang.Unroll
+
 	def 'moving messages to different activities and sections should work'() {
 		given:
 			def message = Fmessage.build(inbound:true)
