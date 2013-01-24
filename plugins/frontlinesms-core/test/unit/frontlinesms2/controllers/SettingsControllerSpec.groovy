@@ -7,7 +7,7 @@ import grails.test.mixin.*
 import org.codehaus.groovy.grails.orm.hibernate.cfg.*
 
 @TestFor(SettingsController)
-@Mock([LogEntry, AppSettingsService])
+@Mock([LogEntry, AppSettingsService, Fconnection, SmslibFconnection])
 class SettingsControllerSpec extends Specification {
 	def TEST_DATE = new Date()
 
@@ -87,7 +87,47 @@ class SettingsControllerSpec extends Specification {
 		then:
 			1 * appSettingsService.set('routing.uselastreceiver',params.uselastreceiver)
 			1 * appSettingsService.set('routing.otherwise', params.otherwise)
+			1 * appSettingsService.set('routing.rules','uselastreceiver')
 			0 * appSettingsService.set(_, _)
+	}
+
+	def "can set routing rules available connections"() {
+		given:
+			params.uselastreceiver = "true"
+			params."fconnection-1" = "true"
+			params."fconnection-3" = "true"
+			params."fconnection-5" = "true"
+			params.otherwise = "any"
+		when:
+			controller.changeRoutingPreferences()
+		then:
+			1 * appSettingsService.set('routing.uselastreceiver',params.uselastreceiver)
+			1 * appSettingsService.set('routing.rules','uselastreceiver,fconnection-1,fconnection-3,fconnection-5')
+			1 * appSettingsService.set('routing.otherwise', params.otherwise)
+	}
+
+	def "can retrieve routing rules defined for connections"() {
+		given:
+			def conn1 = new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+			def conn2 = new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
+			def conn3 = new SmslibFconnection(name:"COM5", port:'COM5', baud:9600).save(failOnError:true)
+			controller.appSettingsService = ['routing.rules':"uselastreceiver,fconnection-${conn2.id},fconnection-${conn1.id}"]
+		when:
+			def model = controller.general()
+		then:
+			model.routingRulesMap.getAllKeys()*.toString() == ['uselastreceiver',conn2,conn1,conn3]*.toString()
+			model.routingRulesMap.getAllValues()*.toString() == [true,true,true,false]*.toString()
+	}
+
+	def "should not display routing rules for devices that have been deleted from the system"() {
+		given:
+			def conn1 = new SmslibFconnection(name:"Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+			def conn2 = new SmslibFconnection(name:"COM5", port:'COM4', baud:9600).save(failOnError:true)
+			controller.appSettingsService = ['routing.rules':"uselastreceiver,fconnection-${conn2.id},fconnection-3,fconnection-${conn1.id}"]
+		when:
+			def model = controller.general()
+		then:
+			model.routingRulesMap.getAllKeys()*.toString() == ['uselastreceiver',conn2,conn1]*.toString()
 	}
 
 	private def mockAppSettings(Map s) {

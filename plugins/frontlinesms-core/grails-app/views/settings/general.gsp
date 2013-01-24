@@ -53,8 +53,26 @@
 				<h2><g:message code="routing.title"/></h2>
 				<fsms:info message="routing.info"/>
 				<g:form name="routing-form" controller="settings" action="changeRoutingPreferences">
-					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending"
-							values="${[uselastreceiver:appSettings['routing.uselastreceiver']]}"/> 
+					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" id="sortable"> 
+						<g:each in="${routingRulesMap}">
+							<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
+								<li>
+									<label>
+										<g:message code="routing.rule.${it.key}"/>
+									</label>
+									<g:checkBox name="${it.key}" values="${it.key}" checked="${it.value}"/>
+								</li>
+							</g:if>
+							<g:else>
+								<li>
+									<label>
+										<g:message code="routing.rules.device" args="[it.key.name]" />
+									</label>
+									<g:checkBox name="fconnection-${it.key.id}" values="it.key.id" checked="${it.value}"/>
+								</li>
+							</g:else>
+						</g:each>
+					</fsms:checkboxGroup>
 					<fsms:radioGroup name="otherwise" title="routing.rules.otherwise"
 							values="any,dontsend"
 							labels="${g.message(code:'routing.rule.useany')}, ${g.message(code:'routing.rule.dontsend')}"

@@ -1,3 +1,8 @@
+
+$(function(){
+	$("#sortable").sortable();
+});
+
 var basicAuthValidation = {
 	enable: function() {
 			var validatePassword = function(value, element) {

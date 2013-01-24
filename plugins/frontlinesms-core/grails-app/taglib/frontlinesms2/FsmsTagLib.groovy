@@ -75,11 +75,11 @@ class FsmsTagLib {
 		out << '</li>'
 	}
 
-	def checkboxGroup = { att ->
+	def checkboxGroup = { att,body ->
 		out << "<div class='input'>"
 		if(att.title) out << "<h3>${g.message(code:att.title)}</h3>"
 		if(att.info) out << info([message:att.info])
-		out << '<ul class="select">'
+		out << "<ul class='select' id='${att.id ?: ''}'>"
 		att.values.each { key, checked ->
 			def label = g.message(code:att.label + '.' + key)
 			def itemAttributes = [checked:checked, name:key, value:true]
@@ -88,6 +88,7 @@ class FsmsTagLib {
 			out << checkbox(itemAttributes)
 			out << '</label></li>'
 		}
+		out << body()
 		out << '</ul></div>'
 	}
 

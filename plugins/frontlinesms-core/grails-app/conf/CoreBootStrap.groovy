@@ -46,6 +46,7 @@ class CoreBootStrap {
 			appSettingsService['newfeatures.popup.show.immediately'] = false
 			//default routing in tests is to use any available connections
 			appSettingsService.set('routing.uselastreceiver', false)
+			appSettingsService.set('routing.rules', 'uselastreceiver')
 			appSettingsService.set('routing.otherwise', 'any')
 			appSettingsService.set('routing.preferences.edited', true)
 		}
