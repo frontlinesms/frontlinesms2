@@ -39,6 +39,9 @@ class AutoreplyService {
 		if (activityOrStep instanceof Activity) {
 			activityOrStep.addToMessages(outgoingMessage)
 		}
+		else {
+			activityOrStep.activity.addToMessages(outgoingMessage)
+		}
 		messageSendService.send(outgoingMessage)
 		activityOrStep.save()
 	}

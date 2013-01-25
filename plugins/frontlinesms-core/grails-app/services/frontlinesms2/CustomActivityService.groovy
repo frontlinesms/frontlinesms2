@@ -48,7 +48,6 @@ class CustomActivityService {
 			println "step:::: $step"
 			
 			def stepInstance = Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
-			stepInstance.save()
 			step.stepProperties.each { stepProperty ->
 				def stepProp = new StepProperty(stepProperty)
 				println "$stepProp::: ${stepProp.key}: ${stepProp.value}"
@@ -56,7 +55,6 @@ class CustomActivityService {
 				println "$stepInstance::: ${stepInstance.stepProperties}"
 
 			}
-			stepInstance.save(flush:true, failOnError:true)
 			stepInstanceList << stepInstance
 		}
 		stepInstanceList.each {
