@@ -267,3 +267,4 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			at PageMessageWebconnection
 	}
 }
+

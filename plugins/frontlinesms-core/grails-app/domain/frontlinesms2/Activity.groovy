@@ -42,6 +42,8 @@ abstract class Activity extends MessageOwner {
 		m ? m.size() : 0
 	}
 
+	def getMoreActions() { [] }
+
 //> ACTIONS
 	def archive() {
 		this.archived = true
