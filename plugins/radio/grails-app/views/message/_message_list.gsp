@@ -52,7 +52,7 @@
 							</td>
 							<td class="message-text-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
 								<g:link controller="${params.controller}" action="${messageSection == 'radioShow' && params.controller == 'archive' ? 'activity' : messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-									${m.displayText?.truncate(50)}
+									${m.messageOwner? m.messageOwner.getDisplayText(m).truncate(50) : m.text.truncate(50) }
 								</g:link>
 							</td>
 							<td class="message-date-cell">

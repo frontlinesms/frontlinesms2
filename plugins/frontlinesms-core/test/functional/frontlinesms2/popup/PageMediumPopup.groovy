@@ -53,7 +53,7 @@ class QuickMessageRecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 		manualContacts { $("li.manual").find("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
 		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
@@ -166,7 +166,7 @@ class RecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 	}
 }
 
@@ -291,8 +291,9 @@ class WebconnectionWizard extends MediumPopup {
 		configureUshahidi(required:false) { module ConfigureUshahidiWebconnectionTab }
 
 		option(wait:true, cache:false) { shortName -> $('input', name:'webconnectionType', value:shortName) }
-		getTitle { shortName -> option(shortName).previous('label').text() }
-		getDescription { shortName -> option(shortName).previous('p').text() }
+		getTitle { shortName -> option(shortName).previous('h3').text() }
+		getDescription { shortName -> option(shortName).next('p.info').text() }
+		testConnectionButton(required:false) { $("#testRoute")}
 	}
 }
 
@@ -551,7 +552,7 @@ class AutoforwardRecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 		manualContacts { $("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
 		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }

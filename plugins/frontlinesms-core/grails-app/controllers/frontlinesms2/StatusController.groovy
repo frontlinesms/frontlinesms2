@@ -26,7 +26,7 @@ class StatusController extends ControllerUtils {
 	}
 	
 	def listDetected() {
-		render template:'device_detection', model:[detectedDevices:deviceDetectionService.detected]
+		fsms.render template:'device_detection', model:[detectedDevices:deviceDetectionService.detected]
 	}
 	
 	def resetDetection() {

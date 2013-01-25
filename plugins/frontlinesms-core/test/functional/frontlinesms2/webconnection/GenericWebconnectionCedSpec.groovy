@@ -146,6 +146,18 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			// N.B. there is no text displayed for this error
 	}
 
+	def "Test Webconnection button is displayed on the confirm tab"() {
+		given:
+			startAtTab('keyword')
+		when:
+			keywordTab.keyword = ""
+			keywordTab.useKeyword('disabled').click() // to disable
+			next.click()
+		then:
+			waitFor { confirmTab.displayed }
+			testConnectionButton.displayed
+	}
+
 	def 'secret is enabled when API is exposed'() {
 		when:
 			startAtTab('api')
@@ -171,8 +183,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.name = 'random webconnection'
 			submit.click()
 		then:
-			waitFor { summary.displayed }
-			def c = Webconnection.findByName('random webconnection')
+			def c = waitFor { Webconnection.findByName('random webconnection') }
 			c.apiEnabled
 			c.secret == 'spray-on-shoes'
 	}
@@ -186,7 +197,6 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 
 		nextTab(apiTab)
 		if(tabName == 'api') return;
-
 
 		nextTab(keywordTab)
 		if(tabName == 'keyword') return;

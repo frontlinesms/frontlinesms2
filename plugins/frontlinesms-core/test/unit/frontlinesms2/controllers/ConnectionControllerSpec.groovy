@@ -5,7 +5,7 @@ import frontlinesms2.*
 import spock.lang.*
 
 @TestFor(ConnectionController)
-@Mock([Fconnection, FconnectionService])
+@Mock([Fconnection, FconnectionService, SystemNotification])
 class ConnectionControllerSpec extends Specification {
 	def "test that createRoute actually calls FconnectionService"() {
 		setup:

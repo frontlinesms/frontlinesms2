@@ -5,6 +5,7 @@ import org.apache.camel.Header
 
 /** This is a Dynamic Router */
 class DispatchRouterService {
+	def appSettingsService
 	def camelContext
 
 	int counter = -1
@@ -21,7 +22,7 @@ class DispatchRouterService {
 		log "Routing exchange $exchange with previous endpoint $previous and target fconnection $requestedFconnectionId"
 		log "x.in=$exchange?.in"
 		log "x.in.headers=$exchange?.in?.headers"
-		
+
 		if(previous) {
 			// We only want to pass this message to a single endpoint, so if there
 			// is a previous one set, we should exit the slip.
@@ -31,7 +32,35 @@ class DispatchRouterService {
 			log "Target is set, so forwarding exchange to fconnection $requestedFconnectionId"
 			return "seda:out-$requestedFconnectionId"
 		} else {
-			def routeId = getDispatchRouteId()
+			def routeId
+			log "appSettingsService.['routing.uselastreceiver'] is ${appSettingsService.get('routing.uselastreceiver')}"
+			if(appSettingsService.get('routing.uselastreceiver') == 'true'){
+				log "Dispatch is ${exchange.in.getBody()}"
+				def d = exchange.in.getBody()
+				log "dispatch to send # $d ### d.dst # $d?.dst"
+				def latestReceivedMessage = Fmessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
+				log "## latestReceivedMessage ## is $latestReceivedMessage"
+				if(latestReceivedMessage?.receivedOn) {
+					log "## Sending message with receivedOn Connection ##"
+					def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
+					println "Id of prefered route ## $latestReceivedMessage.receivedOn"
+					println "allOutRoutes ## $allOutRoutes"
+					println "ALL ROUTE IDS ## ${allOutRoutes*.id}"
+					def routeToTake = allOutRoutes.find { it.id.endsWith("-${latestReceivedMessage.receivedOn.id}") }
+					println "Chosen Route ## $routeToTake"
+					routeId = routeToTake? routeToTake.id: null
+				}
+			}
+
+			if(!routeId) { // if uselastreceiver did not set the routeId
+				if(appSettingsService.get('routing.otherwise') == 'any') {
+					log "## Sending to any available connection ##"
+					routeId = getDispatchRouteId()
+				} else {
+					log "## Not sending message at all ##"
+				}
+			}
+
 			if(routeId) {
 				log "Sending with route: $routeId"
 				def fconnectionId = (routeId =~ /.*-(\d+)$/)[0][1]

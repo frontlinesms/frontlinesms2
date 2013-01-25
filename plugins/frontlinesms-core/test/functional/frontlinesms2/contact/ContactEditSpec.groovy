@@ -4,6 +4,7 @@ import frontlinesms2.*
 
 import geb.Browser
 import grails.plugin.geb.GebSpec
+import frontlinesms2.message.*
 
 class ContactEditSpec extends ContactBaseSpec {
 	def setup() {
@@ -87,5 +88,19 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.save.click()
 		then:
 			!footer.prevPage.disabled
+	}
+
+	def "should display a count of messages recieved and sent for a contact"(){
+		given: 'A contact has received and sent messages'
+			def sent1 = new Fmessage(inbound:false, text:"outbound 1")
+			def sent2 = new Fmessage(inbound:false, text:"outbound 2")
+			sent1.addToDispatches(dst:'2541234567', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+			sent2.addToDispatches(dst:'2541234567', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+			new Fmessage(src:'2541234567', text:"inbound 1", date: new Date(), inbound:true).save(failOnError:true, flush:true)
+		when:
+			to PageContactShow, Contact.findByName('Alice')
+		then:
+			singleContactDetails.sentCount == "2 messages sent"
+			singleContactDetails.receivedCount == "1 messages received"
 	}
 }

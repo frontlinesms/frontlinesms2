@@ -390,6 +390,15 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			message.receivedOn == null
 	}
+
+	def 'doing a Fmessage.findBySrc should give me youngest message'() {
+		when:
+			Fmessage.build(src:'111', text:'oldest')
+			Fmessage.build(src:'111', text:'old')
+			Fmessage.build(src:'111', text:'youngest')
+		then:
+			Fmessage.findBySrc('111', [sort: 'dateCreated', order:'desc']).text == 'youngest'
+	}
 	
 	private Folder getTestFolder(params=[]) {
 		new Folder(name:params.name?:'test',

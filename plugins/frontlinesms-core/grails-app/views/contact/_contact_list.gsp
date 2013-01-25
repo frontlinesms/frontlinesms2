@@ -3,7 +3,7 @@
 		<ul id="main-list">
 			<g:if test="${contactInstanceTotal}">
 				<li>
-					<fsms:checkBox name="contact-select" class="contact-select" id="contact-select-all" value="0" checked="false" onclick="checkAll('contact')" />
+					<fsms:checkBox name="contact-select" class="contact-select" id="contact-select-all" value="0" checked="false" onclick="check_list.checkAll('contact')" />
 					<label for="contact-select" class="contact-name"><g:message code="contact.name.label"/></label>
 				</li>
 			</g:if>
@@ -16,7 +16,7 @@
 			<g:each in="${contactInstanceList}" status="i" var="c">
 				<li class="${c.id==contactInstance?.id? 'selected': ''} contact-preview" id="contact-${c.id}">
 					<g:checkBox name="contact-select" class="contact-select contact-select-checkbox" id="contact-select-${c.id}"
-							checked="${params.checkedId==c.id}" value="${c.id}" onclick="itemCheckChanged('contact', ${c.id})"/>
+							checked="${params.checkedId==c.id}" value="${c.id}" onclick="check_list.itemCheckChanged('contact', ${c.id})"/>
 					<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 						<g:set var="contactLinkParams" value="[groupId:contactsSection.id]"/>
 					</g:if>

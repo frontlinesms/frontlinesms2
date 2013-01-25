@@ -41,3 +41,7 @@ langName = other.get("language.name")
 double perc = ((master.size() - missingKeys.size()) / master.size()) * 100
 println("Redundant entries: ${redundantKeys.size()}, MissingEntries: ${missingKeys.size()}")
 println "${langName? langName + ' translation' : args[1]} is ${perc.round(2)}% complete"
+if (perc == 100)
+	System.exit 0
+else
+	System.exit 1

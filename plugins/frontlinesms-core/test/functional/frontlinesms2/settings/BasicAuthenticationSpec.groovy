@@ -13,33 +13,26 @@ class BasicAuthenticationSpec extends grails.plugin.geb.GebSpec {
 			setupAuthentication()
 		then:
 			at PageGeneralSettings
-			basicAuthentication.enabledAuthentication
-			basicAuthentication.username == "test"
-			basicAuthentication.password == "pass"
+			basicAuthentication.enabled
+			basicAuthentication.username == 'test'
+			basicAuthentication.password == '' // password should not be passed in HTML, even if set
 		cleanup:
-			go url
-			basicAuthentication.enabledAuthentication.click()
+			basicAuthentication.enabled = false
 			basicAuthentication.save.click()
-			
 	}
 
 	def 'can disable basic application authentication from the settings screen'() {
-		when:
+		given:
 			setupAuthentication()
-		then:
-			at PageGeneralSettings
-			basicAuthentication.enabledAuthentication
-			basicAuthentication.username == "test"
-			basicAuthentication.password == "pass"
 		when:
 			go url
-			basicAuthentication.enabledAuthentication.click()
+			basicAuthentication.enabled = false
 			basicAuthentication.save.click()
 		then:
 			at PageGeneralSettings
-			!basicAuthentication.enabledAuthentication.value()
-			basicAuthentication.username.disabled
-			basicAuthentication.password.disabled
+			waitFor { !basicAuthentication.enabled }
+			basicAuthentication.username().disabled
+			basicAuthentication.password().disabled
 			
 	}
 
@@ -47,29 +40,30 @@ class BasicAuthenticationSpec extends grails.plugin.geb.GebSpec {
 		when:
 			go url
 			at PageGeneralSettings
-			basicAuthentication.enabledAuthentication.click()
+			basicAuthentication.enabled = true
 			basicAuthentication.username = "john"
 			basicAuthentication.password = "doe"
-			basicAuthentication.save.jquery.trigger("click")
+			basicAuthentication.save.click()
 		then:
-			errors.displayed
+			waitFor { errors.displayed }
 		when:
 			basicAuthentication.username = "john"
 			basicAuthentication.password = "doe"
 			basicAuthentication.confirmPassword = "daa"
-			basicAuthentication.save.jquery.trigger("click")
+			basicAuthentication.save.click()
 		then:
-			errors.displayed
+			waitFor { errors.displayed }
 	}
 
 	def setupAuthentication() {
 		go url
 		at PageGeneralSettings
-		if(!basicAuthentication.enabledAuthentication.value()) basicAuthentication.enabledAuthentication.click()
+		basicAuthentication.enabled = true
 		basicAuthentication.username = "test"
 		basicAuthentication.password = "pass"
 		basicAuthentication.confirmPassword = "pass"
 		basicAuthentication.save.click()
+		at PageGeneralSettings
 	}
 }
 

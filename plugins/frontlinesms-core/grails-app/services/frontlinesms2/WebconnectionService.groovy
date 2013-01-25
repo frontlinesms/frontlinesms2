@@ -9,6 +9,8 @@ import frontlinesms2.api.*
 
 
 class WebconnectionService {
+	def camelContext
+	def i18nUtilService
 	def messageSendService
 
 	def preProcess(Exchange x) {
@@ -39,10 +41,14 @@ class WebconnectionService {
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
-	def handleFailed(Exchange x) {
-	}
-
-	def handleCompleted(Exchange x) {
+	def createStatusNotification(Exchange x) {
+		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		def text = i18nUtilService.getMessage(code:"webconnection.${message.ownerDetail}.label", args:[webConn.name])
+		println "######## StatusNotification::: $text #########"
+		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+		notification.read = false
+		notification.save(failOnError:true, flush:true)
 	}
 
 	def send(Fmessage message) {
@@ -71,6 +77,30 @@ class WebconnectionService {
 			keywords.collect { new Keyword(value:it.trim(), isTopLevel:true) }.each { webconnectionInstance.addToKeywords(it) }
 		}
 		webconnectionInstance.save(failOnError:true, flush:true)
+	}
+
+	def testRoute(Webconnection webconnectionInstance) {
+		def message = Fmessage.findByMessageOwnerAndText(webconnectionInstance, Fmessage.TEST_MESSAGE_TEXT)
+		println "testRoute::: $message"
+		if(!message) {
+			message = createTestMessage()
+			webconnectionInstance.addToMessages(message)
+			webconnectionInstance.save(failOnError:true)
+		}
+		webconnectionInstance.createRoute(webconnectionInstance.testRouteDefinitions)
+		if(getStatusOf(webconnectionInstance) == ConnectionStatus.CONNECTED) {
+			def headers = [:]
+			headers.'fmessage-id' = message.id
+			headers.'webconnection-id'= webconnectionInstance.id
+			sendMessageAndHeaders("seda:activity-webconnection-${webconnectionInstance.id}", message, headers)
+			changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_PENDING)
+		} else {
+			changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_FAILED)
+		}
+	}
+
+	def getStatusOf(Webconnection w) {
+		camelContext.routes.any { it.id ==~ /.*activity-webconnection-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
 	}
 
 	private changeMessageOwnerDetail(Fmessage message, String s) {
@@ -155,5 +185,9 @@ class WebconnectionService {
 		webcon.save(failOnError: true)
 		"message successfully queued to send to ${m.dispatches.size()} recipient(s)"
 	}
-}
 
+	private Fmessage createTestMessage() {
+		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)
+		fm.save(failOnError:true, flush:true)
+	}
+}

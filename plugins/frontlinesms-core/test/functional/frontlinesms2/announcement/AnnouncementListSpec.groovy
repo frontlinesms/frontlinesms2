@@ -140,7 +140,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			ok.click()
 		then:
 			at PageMessageInbox
-			!bodyMenu.activityList.text().contains('New Office')
+			!bodyMenu.activityList.text()?.contains('New Office')
 	}
 }
 
