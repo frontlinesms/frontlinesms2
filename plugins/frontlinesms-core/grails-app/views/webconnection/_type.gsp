@@ -9,7 +9,7 @@
 						<h3><g:message code="webconnection.${it.type}.label"/></h3>
 						<g:radio name="webconnectionType" checked="${it.type == 'generic'}"
 								value="${it.type}" onchange="setType('${it.type}')"/>
-						<p class="info"><g:message code="webconnection.${it.type}.description"/></p>
+						<fsms:info message="webconnection.${it.type}.description"/>
 					</label>
 				</li>
 			</g:each>

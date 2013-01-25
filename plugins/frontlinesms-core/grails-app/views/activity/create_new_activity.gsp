@@ -24,9 +24,9 @@
 				<g:each var="activityType" in="${frontlinesms2.Activity.implementations*.shortName}">
 					<li>
 						<label>
-							<g:radio name="activity" value="${activityType}" onchange="setActivityTypeSelected()"/>
 							<h3><g:message code="${activityType.toLowerCase()}.label"/></h3>
-							<div class="info"><g:message code="${activityType.toLowerCase()}.description"/></div>
+							<g:radio name="activity" value="${activityType}" onchange="setActivityTypeSelected()"/>
+							<fsms:info message="${activityType.toLowerCase()}.description"/>
 						</label>
 					</li>
 				</g:each>
