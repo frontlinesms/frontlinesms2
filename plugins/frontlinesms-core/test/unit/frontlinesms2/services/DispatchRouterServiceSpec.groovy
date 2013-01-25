@@ -10,12 +10,14 @@ import org.apache.camel.Exchange
 import org.apache.camel.Message
 
 @TestFor(DispatchRouterService)
-@Mock([Dispatch, Fmessage])
+@Mock([Dispatch, Fmessage, Fconnection, SmslibFconnection])
 class DispatchRouterServiceSpec extends Specification {
 	def setup() {
 		Fmessage.metaClass.static.findBySrc = { src, map->
 			def m = Mock(Fmessage)
-			m.receivedOn >> '2'
+			def f = Mock(Fconnection)
+			f.id >> 2
+			m.receivedOn >> f
 			return m
 		}
 
@@ -72,6 +74,23 @@ class DispatchRouterServiceSpec extends Specification {
 			def routedTo = service.slip(mockExchange(), null, null)
 		then:
 			routedTo == "seda:out-2"
+	}
+
+	@Unroll
+	def 'slip should use the defined rules to determine fconnection to use'(){
+		given:
+			mockAppSettingsService(settings)
+			def fconnection1 = new SmslibFconnection(name:"test 1", port:"/dev/ttyUSB0").save(flush:true)
+			def fconnection2 = new SmslibFconnection(name:"test 2", port:"/dev/ttyUSB0").save(flush:true)
+			def fconnection3 = new SmslibFconnection(name:"test 3", port:"/dev/ttyUSB0").save(flush:true)
+			mockRoutes(fconnection1.id.toInteger(), fconnection2.id.toInteger(), fconnection3.id.toInteger())
+			def routedTo = service.slip(mockExchange(), null, null)
+		expect:
+			routedTo == route
+		where:
+			settings                                                        | route
+			['true','any', 'fconnection-4, fconnection-1, fconnection-2']   | "seda:out-1"
+			['true','any', 'uselastreceiver, fconnection-3, fconnection-1'] | "seda:out-2"
 	}
 
 	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'(){
@@ -136,6 +155,7 @@ class DispatchRouterServiceSpec extends Specification {
 	private mockExchangeMessage(headers, body){
 		def m = Mock(Message)
 		body.id >> 1
+
 		m.body >> body
 		m.headers >> headers
 		return m
@@ -152,9 +172,10 @@ class DispatchRouterServiceSpec extends Specification {
 		service.camelContext = c
 	}
 
-	private mockAppSettingsService($userLastReceived, $otherwise){
+	private mockAppSettingsService($userLastReceived, $otherwise, $rules = null){
 		AppSettingsService appSettingsService = Mock()
 		appSettingsService.get("routing.uselastreceiver") >> $userLastReceived
+		appSettingsService.get("routing.rules") >> $rules
 		appSettingsService.get("routing.otherwise") >> $otherwise
 		service.appSettingsService = appSettingsService
 	}

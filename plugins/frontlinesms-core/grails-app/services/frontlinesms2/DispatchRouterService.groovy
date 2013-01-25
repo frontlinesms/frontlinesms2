@@ -5,6 +5,7 @@ import org.apache.camel.Header
 
 /** This is a Dynamic Router */
 class DispatchRouterService {
+	static final String RULE_PREFIX = "fconnection-"
 	def appSettingsService
 	def camelContext
 
@@ -33,23 +34,25 @@ class DispatchRouterService {
 			return "seda:out-$requestedFconnectionId"
 		} else {
 			def routeId
+			log "appSettingsService.['routing.rules'] is ${appSettingsService.get('routing.rules')}"
 			log "appSettingsService.['routing.uselastreceiver'] is ${appSettingsService.get('routing.uselastreceiver')}"
-			if(appSettingsService.get('routing.uselastreceiver') == 'true'){
-				log "Dispatch is ${exchange.in.getBody()}"
-				def d = exchange.in.getBody()
-				log "dispatch to send # $d ### d.dst # $d?.dst"
-				def latestReceivedMessage = Fmessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
-				log "## latestReceivedMessage ## is $latestReceivedMessage"
-				if(latestReceivedMessage?.receivedOn) {
-					log "## Sending message with receivedOn Connection ##"
-					def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
-					println "Id of prefered route ## $latestReceivedMessage.receivedOn"
-					println "allOutRoutes ## $allOutRoutes"
-					println "ALL ROUTE IDS ## ${allOutRoutes*.id}"
-					def routeToTake = allOutRoutes.find{ it.id.endsWith("-${latestReceivedMessage.receivedOn.id}") }
-					println "Chosen Route ## $routeToTake"
-					routeId = routeToTake?routeToTake.id:null
+
+			if(appSettingsService.get('routing.rules')) {
+				def fconnectionRoutingList = appSettingsService.get('routing.rules')?.tokenize(",")?.flatten()
+				
+				fconnectionRoutingList = fconnectionRoutingList.collect { route ->
+					if(route.contains(RULE_PREFIX))  ((route - RULE_PREFIX) as Integer)
+					else route
 				}
+				println "fconnectionRoutingList::: $fconnectionRoutingList"
+				for(route in fconnectionRoutingList) {
+					if(route instanceof String && route == "uselastreceiver") {	routeId = getLastReceiverId(exchange)}
+					else { routeId = getCamelRouteId(Fconnection.get(route)) }
+					log "Route Id selected: $routeId"
+					if(routeId) break
+				}
+			} else if(appSettingsService.get('routing.uselastreceiver') == 'true'){
+				routeId = getLastReceiverId(exchange)
 			}
 
 			if(!routeId){ // if uselastreceiver did not set the routeId
@@ -122,5 +125,26 @@ class DispatchRouterService {
 				log.error("Could not save dispatch $d with message $d.message", ex)
 			}
 		} else log.info("No dispatch found for id: $id")
+	}
+
+	private getLastReceiverId(exchange) {
+		def log = { println "DispatchRouterService.slip() : $it" }
+		log "Dispatch is ${exchange.in.getBody()}"
+		def d = exchange.in.getBody()
+		log "dispatch to send # $d ### d.dst # $d?.dst"
+		def latestReceivedMessage = Fmessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
+		log "## latestReceivedMessage ## is $latestReceivedMessage"
+		latestReceivedMessage?.receivedOn ? getCamelRouteId(latestReceivedMessage.receivedOn) : null
+	}
+
+	private getCamelRouteId(connection) {
+		if(!connection) return null
+		println "## Sending message with Connection with $connection ##"
+		def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
+		println "allOutRoutes ## $allOutRoutes"
+		println "ALL ROUTE IDS ## ${allOutRoutes*.id}"
+		def routeToTake = allOutRoutes.find{ it.id.endsWith("-${connection.id}") }
+		println "Chosen Route ## $routeToTake"
+		routeToTake?routeToTake.id:null
 	}
 }
