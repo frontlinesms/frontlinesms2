@@ -20,7 +20,7 @@ class WebconnectionController extends ActivityController {
 	def config() {
 		withWebconnection { activityInstanceToEdit ->
 			def responseMap = ['config', 'scripts', 'confirm'].collectEntries {
-				[it, g.render(template:"/webconnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
+				[it, fsms.render(template:"/webconnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
 			}
 			render responseMap as JSON
 		}
@@ -34,25 +34,24 @@ class WebconnectionController extends ActivityController {
 		}
 	}
 
-	private def renderJsonErrors(webconnectionInstance) {
-		def errorMessages = webconnectionInstance.errors.allErrors.collect { message(error:it) }.join("\n")
-		withFormat {
-			json {
-				render([ok:false, text:errorMessages] as JSON)
-			}
+	def testRoute() {
+		withWebconnection { webconnectionInstance ->
+			doSave('webconnection', webconnectionService, webconnectionInstance, false)
+			if(webconnectionService) TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
 		}
 	}
 
-	private def withWebconnection(Closure c) {
-		Class<Webconnection> clazz = WEB_CONNECTION_TYPE_MAP[params.webconnectionType?:params.imp]?: Webconnection
-		def webconnectionInstance
-		if(params.ownerId) {
-			webconnectionInstance = clazz.get(params.ownerId)
-		} else {
-			webconnectionInstance = clazz.newInstance()
+	def checkRouteStatus() {
+		def webconnectionInstance = Webconnection.get(params.ownerId)
+		def response = [ownerId:params.ownerId, ok:true]
+		if(webconnectionInstance) {
+			def message = Fmessage.findByMessageOwnerAndText(webconnectionInstance, Fmessage.TEST_MESSAGE_TEXT)
+			response.status = message?.ownerDetail
 		}
-		if(!webconnectionInstance) handleNotFoundFailure()
-		else c.call(webconnectionInstance)
+
+		render response as JSON
 	}
+
+	private def withWebconnection = withDomainObject({ WEB_CONNECTION_TYPE_MAP[params.webconnectionType?:params.imp]?: Webconnection }, { params.ownerId })
 }
 

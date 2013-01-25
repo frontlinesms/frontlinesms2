@@ -44,6 +44,10 @@ class CoreBootStrap {
 			dev_disableSecurityFilter()
 			// never show new popup during tests
 			appSettingsService['newfeatures.popup.show.immediately'] = false
+			//default routing in tests is to use any available connections
+			appSettingsService.set('routing.uselastreceiver', false)
+			appSettingsService.set('routing.otherwise', 'any')
+			appSettingsService.set('routing.preferences.edited', true)
 		}
 
 		if(Environment.current == Environment.DEVELOPMENT) {
@@ -59,6 +63,7 @@ class CoreBootStrap {
 			//camelContext.tracing = true
 			dev_disableSecurityFilter()
 			updateFeaturePropertyFileValues()
+			setDefaultMessageRoutingPreferences()
 		}
 
 		if(bootstrapData) {
@@ -80,6 +85,7 @@ class CoreBootStrap {
 		if(Environment.current == Environment.PRODUCTION) {
 			createWelcomeNote()
 			updateFeaturePropertyFileValues()
+			setDefaultMessageRoutingPreferences()
 		}
 
 		setCustomJSONRenderers()
@@ -201,6 +207,7 @@ class CoreBootStrap {
 		m4.addToDispatches(dst:'+254115533', status:DispatchStatus.PENDING).save(failOnError:true)
 
 		new Fmessage(src:'+33445566', text:"modem message", inbound:true, date: new Date()).save(failOnError:true, flush:true)
+		new Fmessage(src:'+33445566', text:"<0_O> marvel at the HTML & how it works!", inbound:true, date: new Date()).save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFconnections() {
@@ -461,11 +468,18 @@ class CoreBootStrap {
 		else
 			initialiseRealSerial()
 
-		println "PORTS:"
-		serial.CommPortIdentifier.portIdentifiers.each {
-			println "> Port identifier: ${it}"
+		def ports = serial.CommPortIdentifier.portIdentifiers
+		if(ports) {
+			println "PORTS:"
+			ports.each {
+				println "> Port identifier: ${it}"
+			}
+			println "END OF PORTS LIST"
+		} else {
+			println '''NO SERIAL PORTS DETECTED.  IF YOU ARE RUNNING *NIX, PLEASE CHECK THAT YOU
+ARE A MEMBER OF THE APPROPRIATE GROUP (e.g. "dialout").  OTHERWISE MAKE SURE THAT
+YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		}
-		println "END OF PORTS LIST"
 	}
 	
 	private def initialiseRealSerial() {
@@ -595,7 +609,7 @@ class CoreBootStrap {
 	}
 
 	private Date createDate(String dateAsString) {
-		DateFormat format = createDateFormat();
+		DateFormat format = createDateFormat()
 		return format.parse(dateAsString)
 	}
 
@@ -605,8 +619,7 @@ class CoreBootStrap {
 
 	private def ensureResourceDirExists() {
 		def dir = new File(ResourceUtils.getResourcePath())
-		if (!dir.exists())
-		{
+		if (!dir.exists()) {
 			dir.mkdirs()
 			log.info "creating resource directory at {$dir.absolutePath}"
 		}
@@ -614,12 +627,21 @@ class CoreBootStrap {
 
 	private def setCustomJSONRenderers() {
 		JSON.registerObjectMarshaller(Announcement) {
-            def returnArray = [:]
-            returnArray['id'] = it.id
-            returnArray['dateCreated'] = it.dateCreated
-            returnArray['name'] = it.name
-            returnArray['sentMessageText'] = it.sentMessageText
-            return returnArray
-        }
+			def returnArray = [:]
+			returnArray['id'] = it.id
+			returnArray['dateCreated'] = it.dateCreated
+			returnArray['name'] = it.name
+			returnArray['sentMessageText'] = it.sentMessageText
+			return returnArray
+		}
+	}
+	private setDefaultMessageRoutingPreferences(){
+		if(!appSettingsService.get('routing.preferences.edited') || (appSettingsService.get('routing.preferences.edited') == false)){
+			println "### Changing Routing preferences ###"
+			appSettingsService.set('routing.uselastreceiver', false)
+			appSettingsService.set('routing.otherwise', 'any')
+			appSettingsService.set('routing.preferences.edited', true)
+		}
 	}
 }
+

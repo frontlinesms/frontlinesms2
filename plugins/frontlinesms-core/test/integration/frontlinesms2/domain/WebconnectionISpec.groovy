@@ -2,6 +2,7 @@ package frontlinesms2.domain
 
 import frontlinesms2.*
 import spock.lang.*
+import org.apache.camel.*
 
 class WebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def webCService = Mock(WebconnectionService)

@@ -1,4 +1,3 @@
-<%@ page import="frontlinesms2.api.FrontlineApi1Utils" %>
 <g:hiddenField name="activityType" value="webconnection"/>
 <ul class="info">
 	<h1>

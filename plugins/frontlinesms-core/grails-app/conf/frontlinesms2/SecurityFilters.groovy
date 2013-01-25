@@ -8,12 +8,9 @@ class SecurityFilters {
 			before = {
 				def enabledAuthentication = appSettingsService.get("auth.basic.enabled")
 				if(enabledAuthentication) {
-					def basicAuthRequired = { credentialsProvided ->
-						if(credentialsProvided) response.status = 403
-						else {
-								response.status = 401
-								response.addHeader('WWW-Authenticate', 'Basic realm="FrontlineSMS"')
-						}
+					def basicAuthRequired = {
+						response.status = 401
+						response.addHeader('WWW-Authenticate', 'Basic realm="FrontlineSMS"')
 						return false
 					}
 					def username = new String(appSettingsService.get("auth.basic.username").decodeBase64())
@@ -30,3 +27,4 @@ class SecurityFilters {
 		}
 	}
 }
+

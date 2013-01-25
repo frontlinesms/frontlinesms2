@@ -158,7 +158,7 @@ class FolderListSpec extends FolderBaseSpec {
 				ok.jquery.trigger("click")
 			then:
 				at CreateFolderPopup
-				waitFor { errorPanel.text().toLowerCase() == "used folder name" }
+				waitFor { errorPanel.text()?.toLowerCase() == "used folder name" }
 	}
 
 	def "display error when renaming a folder with a blank name"() {
@@ -173,7 +173,7 @@ class FolderListSpec extends FolderBaseSpec {
 			folderName.value("")
 			ok.jquery.trigger("click")
 		then:
-			waitFor { errorPanel.text().toLowerCase() == "folder name cannot be blank" }
+			waitFor { errorPanel.text()?.toLowerCase() == "folder name cannot be blank" }
 	}
 
 	def "can delete a folder"() {

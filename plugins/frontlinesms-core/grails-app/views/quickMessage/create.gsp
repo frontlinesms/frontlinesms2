@@ -36,21 +36,23 @@
 	function initializePopup() {
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				updateRecipientCount();
+				recipientSelecter.updateRecipientCount();
 				return true;
 			}
 		});
 		
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				addAddressHandler();
+				recipientSelecter.addAddressHandler();
 				return ($("#recipient-count").html() > 0);
 			}
 		});
 	}
 
+	// TODO should have a js class dedicated to managing flash messages
 	function addFlashMessage(data) {
 		$("#notifications .flash").remove();
 		$("#notifications").prepend("<div class='flash message'>" + data + "<a class='hider hide-flash'>x</a></div>");
 	}
 </r:script>
+

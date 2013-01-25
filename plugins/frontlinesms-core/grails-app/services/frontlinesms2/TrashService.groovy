@@ -15,10 +15,11 @@ class TrashService {
     	}
     
 	def sendToTrash(object) {
+		println "Deleting ${object}"
 		if (object instanceof frontlinesms2.Fmessage) {
 			object.isDeleted = true
 			new Trash(displayName:object.displayName,
-					displayText:object.text,
+					displayText:object.text.truncate(Trash.MAXIMUM_DISPLAY_TEXT_SIZE),
 					objectClass:object.class.name,
 					objectId:object.id).save()
 			object.save(failOnError:true, flush:true)
@@ -39,9 +40,12 @@ class TrashService {
 
 	def restore(object) {
 		Trash.findByObject(object)?.delete()
+		println "Restoring ${object}"
 		object.restoreFromTrash()
-		object.save()
-		return true
+		if (object.save())
+			return true
+		else
+			return false
 	}
 }
 

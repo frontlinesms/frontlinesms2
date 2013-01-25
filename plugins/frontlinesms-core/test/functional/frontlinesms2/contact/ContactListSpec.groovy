@@ -174,3 +174,4 @@ class ContactListSpec extends ContactBaseSpec {
 			messageList.messages.size() == 21
 	}
 }
+

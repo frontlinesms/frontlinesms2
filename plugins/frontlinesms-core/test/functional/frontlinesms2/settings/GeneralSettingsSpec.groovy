@@ -12,4 +12,19 @@ class GeneralSettingsSpec extends grails.plugin.geb.GebSpec {
 			databaseBackup.title == 'configuration location'
 			databaseBackup.instruction.contains('database')
 	}
+
+	def 'Saving routing preferences persists the changes'(){
+		when:
+			to PageGeneralSettings
+		then:
+			routing.useLastReceivedConnection.click()
+			routing.useAnyAvailableConnection.click()
+		when:
+			routing.save.click()
+		then:
+			waitFor { at PageGeneralSettings }
+			routing.useLastReceivedConnection.@checked
+			routing.useAnyAvailableConnection.@checked
+			!routing.dontSend.@checked
+	}
 }

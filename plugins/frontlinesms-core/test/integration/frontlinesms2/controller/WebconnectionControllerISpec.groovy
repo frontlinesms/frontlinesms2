@@ -10,6 +10,10 @@ import grails.converters.JSON
 class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def trashService
+	def i18nUtilService
+	def withUshahidiWebconnection = { c -> c.call(UshahidiWebconnection.get(controller.params.ownerId) ?: UshahidiWebconnection.newInstance()) }
+	def withGenericWebconnection = { c -> c.call(GenericWebconnection.get(controller.params.ownerId) ?: GenericWebconnection.newInstance()) }
+
 //TODO Asserts need refractoring
 	def setup() {
 		controller = new WebconnectionController()
@@ -23,10 +27,12 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.keywords = "keyword"
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.key = '12345678'
+			controller.withWebconnection = withUshahidiWebconnection
 		when:
 			controller.save()
 		then:
 			Webconnection.findByName("Test Webconnection").name == controller.params.name
+			controller.flash.message == i18nUtilService.getMessage([code:"webconnection.save.success", args:[Webconnection.findByName("Test Webconnection").name]])
 			Webconnection.findByName("Test Webconnection").url == "http://www.ushahidi.com"
 			RequestParameter.findByName('key').value == '12345678'
 			RequestParameter.findByName('m').value == '${message_body}'
@@ -42,6 +48,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = 'username'
 			controller.params.'param-value' = 'bob'
+			controller.withWebconnection = withGenericWebconnection
 		when:
 			controller.save()
 		then:
@@ -64,6 +71,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = ['username', 'password'] as String[]
 			controller.params.'param-value' = ['bob','secret'] as String[]
+			controller.withWebconnection = withGenericWebconnection
 		when:
 			controller.save()
 			webconnection.refresh()
@@ -91,6 +99,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-name' = "username"
 			controller.params.'param-value' = "geoffrey"
+			controller.withWebconnection = withGenericWebconnection
 		when:
 			controller.save()
 		then:
@@ -103,21 +112,22 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "should not save requestParameters without a name value"() {
 		setup:
 			def keyword = new Keyword(value:'AWESOME')
-			def webconnection = new GenericWebconnection(name:"Ushahidi", url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
+			def webconnection = new GenericWebconnection(name:"Generic", url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword)
 			webconnection.addToRequestParameters(new RequestParameter(name:"name", value:'${name}'))
 			webconnection.addToRequestParameters(new RequestParameter(name:"age", value:'${age}'))
 			webconnection.save(failOnError:true)
 			controller.params.ownerId = webconnection.id
-			controller.params.name = "Ushahidi Connection"
+			controller.params.name = "Generic Connection"
 			controller.params.keywords = "Test"
 			controller.params.httpMethod = "post"
 			controller.params.'param-name' = ""
 			controller.params.webconnectionType = "generic"
 			controller.params.'param-value' = "geoffrey"
+			controller.withWebconnection = withGenericWebconnection
 		when:
 			controller.save()
 		then:
-			webconnection.name == "Ushahidi Connection"
+			webconnection.name == "Generic Connection"
 			!webconnection.requestParameters
 	}
 
@@ -133,6 +143,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.httpMethod = "get"
 			controller.params.key = "get"
+			controller.withWebconnection = withUshahidiWebconnection
 		when:
 			controller.save()
 		then:
@@ -156,6 +167,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.httpMethod = "get"
 			controller.params.key = "get"
+			controller.withWebconnection = withUshahidiWebconnection
 		when:
 			controller.save()
 		then:
@@ -176,6 +188,7 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.webconnectionType = "ushahidi"
 			controller.params.httpMethod = "get"
 			controller.params.key = "get"
+			controller.withWebconnection = withUshahidiWebconnection
 		when:
 			controller.params.sorting = sorting
 			controller.save()
@@ -215,6 +228,26 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.findAllBySrcInList(["+12340", "+12342", "+12344"])*.ownerDetail == [Webconnection.OWNERDETAIL_SUCCESS] * 3
 		and: "Failed webconnections should be retried"
 			Fmessage.findAllBySrcInList(["+12341", "+12343", "+12345"])*.ownerDetail == [Webconnection.OWNERDETAIL_PENDING] * 3
+	}
+
+	def 'can edit an existing ushahidi web connection'(){
+		given:
+			def keyword = new Keyword(value:'USHAHIDI')
+			def webConnectionInstance = new UshahidiWebconnection(name:"Trial", url:"https://trial.crowdmap.com", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword).save(failOnError:true)			
+			controller.params.ownerId = webConnectionInstance.id
+			controller.params.webconnectionType = 'ushahidi'
+			controller.params.name = 'Trial'
+			controller.params.url = 'https://frontlineCrowd.crowdmap.com'
+			controller.params.key = '2343asdasd'
+			controller.params.keyword = 'Repo'
+			controller.withWebconnection = withUshahidiWebconnection
+		when:
+			controller.save()
+		then:
+			def connection = UshahidiWebconnection.findByName('Trial')
+			connection.name == "Trial"
+			connection.url == "https://frontlineCrowd.crowdmap.com"
+			connection.requestParameters*.value.containsAll(["2343asdasd"])
 	}
 }
 

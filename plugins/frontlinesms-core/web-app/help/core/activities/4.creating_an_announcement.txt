@@ -62,14 +62,14 @@ Your Announcement will appear under the activities sub-heading.
 [Creating a Group][8]  
 [Creating a Smart Group][5]  
 
-[1]: activities/4.creating_an_announcement
-[2]: activities/4.creating_an_announcement
-[3]: messages/1.getting_around_the_messages_tab
-[4]: contacts/1.getting_around_the_contacts_tab
-[5]: contacts/5.creating_a_smart_group
-[6]: activities/1.getting_around_activities
-[7]: activities/3.creating_a_poll
-[8]: contacts/4.creating_a_group
+[1]: core/activities/4.creating_an_announcement
+[2]: core/activities/4.creating_an_announcement
+[3]: core/messages/1.getting_around_the_messages_tab
+[4]: core/contacts/1.getting_around_the_contacts_tab
+[5]: core/contacts/5.creating_a_smart_group
+[6]: core/activities/1.getting_around_activities
+[7]: core/activities/3.creating_a_poll
+[8]: core/contacts/4.creating_a_group
 [9]: ../images/help/poll1.png
 [10]: ../images/help/announcement1.png
 [11]: ../images/help/announcement2.png

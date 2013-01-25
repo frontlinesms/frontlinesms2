@@ -14,7 +14,8 @@ Please have your Clickatell account details to hand. You will need your Clickate
 ![Add New Connection][8]
   
 3.  Select "Clickatell Account" and click "Next"
-4.  On this screen, please enter the required information.  
+4.  On this screen, please enter the required information.
+5.  If you are sending messages to USA then you may consider filling in the fields 'Send To USA' and 'From Number'
 
 ![Clickatell Screen][9]
 
@@ -34,11 +35,11 @@ If the connection fails then you may have entered information incorrectly. To ma
 [Editing a Connection][3]  
 [Setting up a Connection to an IntelliSMS Account][6]
 
-[2]: settings/1.getting_around_the_settings_menu
-[3]: settings/6.edit_delete_connection
-[4]: http://frontlinesms.ning.com/
-[5]: settings/5.manually_adding_device
-[6]: settings/4a.intellisms
+[2]: core/settings/1.getting_around_the_settings_menu
+[3]: core/settings/6.edit_delete_connection
+[4]: core/http://frontlinesms.ning.com/
+[5]: core/settings/5.manually_adding_device
+[6]: core/settings/4a.intellisms
 [7]: ../images/help/settings_connections.png
 [8]: ../images/help/add_new_connection.png
 [9]: ../images/help/clickatell.png

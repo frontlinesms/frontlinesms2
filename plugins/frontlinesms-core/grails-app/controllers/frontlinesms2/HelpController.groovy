@@ -23,13 +23,14 @@ class HelpController extends ControllerUtils {
 		render text:helpText.markdownToHtml()
 	}
 	def updateShowNewFeatures() {
-		appSettingsService['newfeatures.popup.show.immediately'] = false
 		appSettingsService['newfeatures.popup.show.infuture'] = params.enableNewFeaturesPopup?: false
 		appSettingsService.persist()
 		render text:[] as JSON
 	}
 
 	def newfeatures() {
+		appSettingsService['newfeatures.popup.show.immediately'] = false
+		appSettingsService.persist()
 		params.helpSection = 'core/features/new'
 		section()
 	}
