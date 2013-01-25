@@ -118,12 +118,11 @@
 		buttonSet = $('.ui-dialog-buttonset');
 		testRouteBtn = buttonSet.find("#testRoute");
 		if(testRouteBtn.length === 0) {
-			testRouteBtn = $('<input/>', {
-								id: "testRoute",
-								type:"submit",
-								value: i18n('webconnection.testroute.label'),
-								click: testRouteStatus
-							});
+			testRouteBtn = mediumPopup.appendButton("testRoute", "submit", i18n('webconnection.testroute.label'));
+			testRouteBtn.bind({
+				click: testRouteStatus
+			});
+
 		} else {
 			testRouteBtn.show();
 		}
@@ -162,7 +161,8 @@
 
 	function checkRouteStatus(response) {
 		if(response.ok) {
-			$("#testRoute").attr("value", i18n('webconnection.testing.label'));
+			$("#testRoute").children().remove();
+			$("#testRoute").append("<span>"+i18n('webconnection.testing.label')+"</span>")
 			$.ajaxSetup({
 				type: 'post',
 				data: {ownerId:response.ownerId},
