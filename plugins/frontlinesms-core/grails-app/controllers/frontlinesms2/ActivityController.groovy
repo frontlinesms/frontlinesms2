@@ -29,6 +29,11 @@ class ActivityController extends ControllerUtils {
 		}
 	}
 
+	def show() {
+		flash.message = flash.message
+		redirect controller:'message', action:'activity', params:params
+	}
+
 	def rename() {}
 	
 	def update() {
