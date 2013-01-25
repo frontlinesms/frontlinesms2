@@ -92,19 +92,36 @@ class FsmsTagLib {
 	}
 
 	def radioGroup = { att ->
-		def values = att.values.tokenize(',')*.trim()
-		def labels = att.labels? att.labels.tokenize(',')*.trim(): null
+		def values = att.remove('values')
+		values = values instanceof String? values.tokenize(',')*.trim(): values
+		def labels = att.labels? att.remove('labels').tokenize(',')*.trim(): null
 		def isChecked = { v -> v == att.checked }
-		out << "<div class='input'>"
-		if(att.title) out << "<h3>${g.message(code:att.title)}</h3>"
+		if(att.title) {
+			def hTag = att.solo == 'true'? 'h2': 'h3'
+			out << "<$hTag>${g.message(code:att.title)}</$hTag>"
+		}
 		if(att.info) out << info([message:att.info])
-		out << '<ul class="select">'
+		def labelPrefix = att.remove('labelPrefix')?: ''
+		def labelSuffix = att.remove('labelSuffix')?: ''
+		def descriptionPrefix = att.remove('descriptionPrefix')?: ''
+		def descriptionSuffix = att.remove('descriptionSuffix')?: ''
+		def hasDescription = descriptionPrefix || descriptionSuffix
+		def cssClasses = ['select', 'radio']
+		if(!hasDescription) cssClasses << 'no-description'
+		out << "<div class='input'>"
+		out << "<ul class=\"${cssClasses.join(' ')}\">"
 		values.eachWithIndex { value, i ->
-			def label = labels? labels[i]: g.message(code:att.labelPrefix + value)
+			def labelCode = labels? labels[i]: g.message(code:labelPrefix + value + labelSuffix)
+			def label = g.message(code:labelCode)
 			def id = att.name + '-' + i
 			def itemAttributes = att + [value:value, checked:isChecked(value), id:id]
 			out << '<li><label>'
-			out << g.message(code:label)
+			if(hasDescription) {
+				out << "<h3>$label</h3>"
+				out << info(message:descriptionPrefix + value + descriptionSuffix)
+			} else {
+				out << label
+			}
 			out << g.radio(itemAttributes)
 			out << '</label></li>'
 		}

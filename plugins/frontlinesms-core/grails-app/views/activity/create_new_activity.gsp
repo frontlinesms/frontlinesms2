@@ -19,19 +19,12 @@
 		<r:layoutResources/>
 	</head>
 	<body>
-		<div class="input">
-			<ul class="select radio">
-				<g:each var="activityType" in="${frontlinesms2.Activity.implementations*.shortName}">
-					<li>
-						<label>
-							<h3><g:message code="${activityType.toLowerCase()}.label"/></h3>
-							<g:radio name="activity" value="${activityType}" onchange="setActivityTypeSelected()"/>
-							<fsms:info message="${activityType.toLowerCase()}.description"/>
-						</label>
-					</li>
-				</g:each>
-			</ul>
-		</div>
+		<fsms:radioGroup
+				name="activity"
+				values="${frontlinesms2.Activity.implementations*.shortName}"
+				labelSuffix=".label" descriptionSuffix=".description"
+				onchange="setActivityTypeSelected()"/>
 		<r:layoutResources/>
 	</body>
 </html>
+
