@@ -11,6 +11,12 @@ import frontlinesms2.api.*
 class WebconnectionService {
 	def messageSendService
 
+	def retryFailed(Webconnection c) {
+		Fmessage.findAllByMessageOwnerAndOwnerDetail(c, Webconnection.OWNERDETAIL_FAILED).each {
+			send(it)
+		}
+	}
+
 	def preProcess(Exchange x) {
 		println "x: ${x}"
 		println "x.in: ${x.in}"

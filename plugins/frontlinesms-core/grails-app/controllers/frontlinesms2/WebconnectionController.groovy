@@ -12,24 +12,24 @@ class WebconnectionController extends ActivityController {
 	def create() {}
 
 	def save() {
-		def webconnectionInstance
-		Class<Webconnection> clazz = WebconnectionController.WEB_CONNECTION_TYPE_MAP[params.webconnectionType]
-		if(params.ownerId) {
-			webconnectionInstance = clazz.get(params.ownerId)
-		} else {
-			webconnectionInstance = clazz.newInstance()
+		withWebconnection { webconnectionInstance ->
+			doSave('webconnection', webconnectionService, webconnectionInstance)
 		}
-		doSave('webconnection', webconnectionService, webconnectionInstance)
 	}
 
 	def config() {
-		def activityInstanceToEdit
-		if(params.ownerId) activityInstanceToEdit = WEB_CONNECTION_TYPE_MAP[params.imp].get(params.ownerId) 
-		else activityInstanceToEdit = WEB_CONNECTION_TYPE_MAP[params.imp].newInstance()
-		def responseMap = ['config', 'scripts', 'confirm'].collectEntries {
-			[it, g.render(template:"/webconnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
+		withWebconnection { activityInstanceToEdit ->
+			def responseMap = ['config', 'scripts', 'confirm'].collectEntries {
+				[it, g.render(template:"/webconnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
+			}
+			render responseMap as JSON
 		}
-		render responseMap as JSON
+	}
+
+	def retryFailed() {
+		withWebconnection { c ->
+			webconnectionService.retryFailed(c)
+		}
 	}
 
 	private def renderJsonErrors(webconnectionInstance) {
@@ -41,6 +41,16 @@ class WebconnectionController extends ActivityController {
 		}
 	}
 
-	private def withWebconnection = withDomainObject Webconnection
+	private def withWebconnection(Closure c) {
+		Class<Webconnection> clazz = WEB_CONNECTION_TYPE_MAP[params.webconnectionType?:params.imp]?: Webconnection
+		def webconnectionInstance
+		if(params.ownerId) {
+			webconnectionInstance = clazz.get(params.ownerId)
+		} else {
+			webconnectionInstance = clazz.newInstance()
+		}
+		if(!webconnectionInstance) handleNotFoundFailure()
+		else c.call(webconnectionInstance)
+	}
 }
 
