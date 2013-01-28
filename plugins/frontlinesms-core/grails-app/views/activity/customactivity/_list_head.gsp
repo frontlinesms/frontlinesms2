@@ -6,12 +6,18 @@
 		<g:formatDate date="${ownerInstance?.dateCreated}"/>
 	</li>
 	<li>
-		<g:each in="${ownerInstance?.steps}" var="step">
-			<p>${step.niceFormat()}</p>
-		</g:each>
-	</li>
 	<g:if test="${ownerInstance?.keywords}">
-		<li id="web_connection_keywords"><g:message code="poll.keywords"/> : ${ownerInstance?.keywords*.value.join(',')}</li>
+		<h2 id="web_connection_keywords"><g:message code="poll.keywords"/> : ${ownerInstance?.keywords*.value.join(',')}</h2>
 	</g:if>
+	</li>
+	<li>
+		<g:select name="toggleStep" noSelection="${['null': 'Overview']}"
+			from="${ownerInstance?.steps}"
+			optionKey="id" optionValue="niceFormat">
+		</g:select>
+	</li>
 </ul>
 
+<div>
+	<fsms:render template="/activity/customactivity/step_summary" model="${[steps:ownerInstance?.steps]}"/>
+</div>

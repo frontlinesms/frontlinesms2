@@ -32,8 +32,8 @@ class LeaveActionStep extends Step {
 		subscriptionService.doLeave(this, message)
 	}
 
-	def niceFormat() {
-		return "Leaving '${this.group?.name}' group"
+	def getNiceFormat() {
+		"Leaving '${this?.group?.name}' group"
         }
 
 }

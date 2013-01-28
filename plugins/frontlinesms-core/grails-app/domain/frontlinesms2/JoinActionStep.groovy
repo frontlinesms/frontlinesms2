@@ -31,8 +31,8 @@ class JoinActionStep extends Step {
 		subscriptionService.doJoin(this, message)
 	}
 
-	def niceFormat() {
-		"Joining '${this.group?.name}' group"
+	def getNiceFormat() {
+		"Joining '${this?.group?.name}' group"
 	}
 }
 

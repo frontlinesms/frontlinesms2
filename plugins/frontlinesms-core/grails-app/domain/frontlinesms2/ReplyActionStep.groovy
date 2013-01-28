@@ -23,8 +23,8 @@ class ReplyActionStep extends Step {
 		autoreplyService.doReply(this, message)
 	}
 
-        def niceFormat() {
-		return "Replying with '${this.autoreplyText}'"
+        def getNiceFormat() {
+		"Replying with '${this.autoreplyText}'"
 	}
 
 }
