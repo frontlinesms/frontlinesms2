@@ -85,14 +85,13 @@
 	}
 
 	function toggleApiTab() {
-		$("#webconnectionType").live('change', function() {
-				if($(this).val() === 'generic') {
-					mediumPopup.enableTab('webconnection-api');
-				}
-				else {
-					mediumPopup.disableTab('webconnection-api');
-				}
-			});
+		$("input[name=webconnectionType]").live('change', function() {
+			if($(this).val() === 'generic') {
+				mediumPopup.enableTab('webconnection-api');
+			} else {
+				mediumPopup.disableTab('webconnection-api');
+			}
+		});
 	}
 
 	function setType(type) {
@@ -193,3 +192,4 @@
 	}
 		
 </r:script>
+
