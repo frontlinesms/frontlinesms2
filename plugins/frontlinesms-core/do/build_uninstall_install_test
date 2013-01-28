@@ -13,7 +13,6 @@ echo "#############################################"
 PROJECT_DIR=../frontlinesms-core
 
 echo "# clean target directories"
-rm -rf target/
 rm -rf $PROJECT_DIR/target/
 rm -rf $PROJECT_DIR/install/target*
 rm -rf $PROJECT_DIR/install/src/web-app/
