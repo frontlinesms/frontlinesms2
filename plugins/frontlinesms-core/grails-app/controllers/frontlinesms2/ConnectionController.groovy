@@ -1,8 +1,6 @@
 package frontlinesms2
 
 import grails.converters.JSON
-
-
 class ConnectionController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete:'GET']
 
@@ -119,14 +117,7 @@ class ConnectionController extends ControllerUtils {
 		params.createRoute = true
 		flash.message = message(code: 'connection.route.connecting')
 		def connectionInstance = Fconnection.get(params.id)
-		if (connectionInstance instanceof SmssyncFconnection && connectionInstance?.timeout > 0) {
-			def sendTime = new Date()
-			use(groovy.time.TimeCategory) {
-				sendTime = sendTime + (connectionInstance.timeout).minutes
-				println "I will send the job at $sendTime"
-			}
-			ReportSmssyncTimeoutJob.schedule(sendTime, [connectionId:params.id])
-		}
+		smssyncService.startTimeoutCounter(connectionInstance)
 		redirect(action:'list', params:params)
 	}
   

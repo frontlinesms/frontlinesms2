@@ -1,9 +1,9 @@
 package frontlinesms2
 
 import grails.converters.JSON
-
+import org.quartz.JobKey
+import grails.plugin.quartz2.TriggerHelper
 import org.apache.camel.Exchange
-
 import frontlinesms2.api.*
 
 class SmssyncService {
@@ -38,6 +38,19 @@ class SmssyncService {
 // FIXME should send a non-200 status code here
 			return failure(ex)
 		}
+	}
+
+	def startTimeoutCounter(connection) {
+		if (connectionInstance instanceof SmssyncFconnection && connectionInstance?.timeout > 0) {
+			def sendTime = new Date()
+			use(groovy.time.TimeCategory) {
+				sendTime = sendTime + (connectionInstance.timeout).minutes
+				println "I will send the job at $sendTime"
+			}
+			def trigger = TriggerHelper.simpleTrigger(new JobKey("test", "test"), sendTime, 0, 1, [connectionId:params.id])
+			ReportSmssyncTimeoutJob.schedule(trigger)
+		}
+
 	}
 
 	private def handleIncoming(connection, params) {
