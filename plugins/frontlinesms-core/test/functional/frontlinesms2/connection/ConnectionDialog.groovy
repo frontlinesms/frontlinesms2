@@ -7,7 +7,7 @@ class ConnectionDialog extends MediumPopup {
 		popupTitle.contains('connection')
 	}
 	static content = {
-		connectionType { $("#connectionType") }
+		connectionType { $("input[name=connectionType]") }
 		connectionForm { $('#connectionForm') }
 		confirmName { $("#confirm-name") }
 		confirmType { $("#confirm-type") }
