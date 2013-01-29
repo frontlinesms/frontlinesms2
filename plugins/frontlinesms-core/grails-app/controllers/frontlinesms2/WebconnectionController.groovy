@@ -18,13 +18,20 @@ class WebconnectionController extends ActivityController {
 	}
 
 	def config() {
-		def activityInstanceToEdit
-		if(params.ownerId) activityInstanceToEdit = WEB_CONNECTION_TYPE_MAP[params.imp].get(params.ownerId) 
-		else activityInstanceToEdit = WEB_CONNECTION_TYPE_MAP[params.imp].newInstance()
-		def responseMap = ['config', 'scripts', 'confirm'].collectEntries {
-			[it, fsms.render(template:"/webconnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
+		withWebconnection { activityInstanceToEdit ->
+			def responseMap = ['config', 'scripts', 'confirm'].collectEntries {
+				[it, fsms.render(template:"/webconnection/$params.imp/$it", model:[activityInstanceToEdit:activityInstanceToEdit])]
+			}
+			render responseMap as JSON
 		}
-		render responseMap as JSON
+	}
+
+	def retryFailed() {
+		withWebconnection { c ->
+			webconnectionService.retryFailed(c)
+			flash.message = g.message(code: 'webconnection.failed.retried')
+			redirect action:'show', params:[ownerId:c.id]
+		}
 	}
 
 	def testRoute() {
@@ -45,6 +52,6 @@ class WebconnectionController extends ActivityController {
 		render response as JSON
 	}
 
-	private def withWebconnection = withDomainObject WebconnectionController.WEB_CONNECTION_TYPE_MAP[params.webconnectionType], { params.ownerId }
+	private def withWebconnection = withDomainObject({ WEB_CONNECTION_TYPE_MAP[params.webconnectionType?:params.imp]?: Webconnection }, { params.ownerId })
 }
 

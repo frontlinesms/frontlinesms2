@@ -254,4 +254,17 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor { messageList.displayed }
 			messageList.messages*.any { it.hasStatus("sent")}
 	}
+
+	def "retry failed uploads option should be present in more actions dropdown, and should redirect to same view"() {
+		when:
+			to PageMessageWebconnection, Webconnection.findByName("Sync")
+		then:
+			waitFor { header.displayed }
+		when:
+			header.moreActions.value('retryFailed')
+		then:
+			waitFor { notifications.flashMessageText.contains('Failed web connections have been scheduled for resending') }
+			at PageMessageWebconnection
+	}
 }
+

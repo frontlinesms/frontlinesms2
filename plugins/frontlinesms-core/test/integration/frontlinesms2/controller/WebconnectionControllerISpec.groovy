@@ -202,6 +202,33 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			"disabled"|null
 	}
 
+	def 'retry failed action should result in all failed uploads being reattempted'() {
+		given:
+			def keyword = new Keyword(value:'TEST')
+			def webconnection = new GenericWebconnection(name:"Webconnection with failures", url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
+			webconnection.addToKeywords(keyword)
+			// adding 3 successful uploads, two failed ones, and one pending
+			5.times { it ->
+				webconnection.addToMessages(new Fmessage(
+						text:"test",
+						inbound:true,
+						src:"+1234$it",
+						ownerDetail: ((it % 2) ? Webconnection.OWNERDETAIL_FAILED : Webconnection.OWNERDETAIL_SUCCESS )))
+			}
+			webconnection.addToMessages(new Fmessage(
+					text:"test",
+					inbound:true,
+					src:"+12345",
+					ownerDetail:Webconnection.OWNERDETAIL_PENDING))
+			webconnection.save(failOnError:true, flush:true)
+			controller.params.ownerId = webconnection.id
+		when:
+			controller.retryFailed()
+		then: "Successful webconnections should not be changed"
+			Fmessage.findAllBySrcInList(["+12340", "+12342", "+12344"])*.ownerDetail == [Webconnection.OWNERDETAIL_SUCCESS] * 3
+		and: "Failed webconnections should be retried"
+			Fmessage.findAllBySrcInList(["+12341", "+12343", "+12345"])*.ownerDetail == [Webconnection.OWNERDETAIL_PENDING] * 3
+	}
 
 	def 'can edit an existing ushahidi web connection'(){
 		given:
@@ -223,3 +250,4 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			connection.requestParameters*.value.containsAll(["2343asdasd"])
 	}
 }
+
