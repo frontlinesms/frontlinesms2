@@ -56,7 +56,6 @@ class CustomActivityService {
 				println "$stepInstance::: ${stepInstance.stepProperties}"
 
 			}
-			stepInstance.save(flush:true, failOnError:true)
 			stepInstanceList << stepInstance
 		}
 		stepInstanceList.each {
