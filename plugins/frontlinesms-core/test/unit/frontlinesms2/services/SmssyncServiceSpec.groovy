@@ -13,6 +13,7 @@ class SmssyncServiceSpec extends Specification {
 	def controller
 	def camelSentMessage
 	def rendered
+	def unscheduleInvokationCount
 
 	def setup() {
 		controller = [params:[:], render:{ rendered = (it as String) }]
@@ -28,6 +29,11 @@ class SmssyncServiceSpec extends Specification {
 			}
 		}
 		Dispatch.metaClass.save = { Map params -> }
+		unscheduleInvokationCount = 0
+		ReportSmssyncTimeoutJob.metaClass.static.unschedule = { String name, String group ->
+			println "unscheduling $name, $group"	
+			unscheduleInvokationCount ++
+		}
 	}
 
 	def setupDefaultConnection(boolean sendEnabled=true) {
@@ -120,7 +126,7 @@ class SmssyncServiceSpec extends Specification {
 			true     | false          | true        | 0
 	}
 
-	def 'generateApiResponse for incoming message should forward new Fmessage to storage route'() {
+	def 'generateApiResponse for incoming message should forward new Fmessage to storage route and unschedule the timeout counter job'() {
 		given:
 			setupDefaultConnection(false)
 			controller.params.from = '12345'
@@ -138,6 +144,7 @@ class SmssyncServiceSpec extends Specification {
 				storageQueue[0].inbound &&
 				storageQueue[0].src == '12345' &&
 				storageQueue[0].text == 'hi there boris'
+			unscheduleInvokationCount == 1
 	}
 
 	@Unroll
