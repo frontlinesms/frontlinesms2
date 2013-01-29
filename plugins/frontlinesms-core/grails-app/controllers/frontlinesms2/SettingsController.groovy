@@ -34,7 +34,6 @@ class SettingsController extends ControllerUtils {
 		
 		//TODO Filter out only connections with send enabled
 
-		appSettings['routing.uselastreceiver'] = appSettingsService.get("routing.uselastreceiver")
 		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
 		appSettings['routing.use'] = appSettingsService.get("routing.use")
 
@@ -72,7 +71,6 @@ class SettingsController extends ControllerUtils {
 	def changeRoutingPreferences() {
 		println "params:: $params"
 
-		appSettingsService.set('routing.uselastreceiver', params.uselastreceiver? 'true': 'false')
 		appSettingsService.set('routing.use', params.routingUseOrder)
 		appSettingsService.set('routing.otherwise', params.otherwise)
 		redirect action:'general'

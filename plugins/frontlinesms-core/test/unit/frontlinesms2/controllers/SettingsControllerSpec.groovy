@@ -80,7 +80,7 @@ class SettingsControllerSpec extends Specification {
 
 	def 'can set the routing preferences'(){
 		given:
-			params.uselastreceiver = "true"
+			params.routingUseOrder = "uselastreceiver"
 			params.otherwise = "any"
 		when:
 			controller.changeRoutingPreferences()
@@ -92,10 +92,7 @@ class SettingsControllerSpec extends Specification {
 
 	def "can set routing rules available connections"() {
 		given:
-			params.uselastreceiver = "true"
-			params."fconnection-1" = "true"
-			params."fconnection-3" = "true"
-			params."fconnection-5" = "true"
+			params.routingUseOrder = "uselastreceiver,fconnection-1,fconnection-3,fconnection-5"
 			params.otherwise = "any"
 		when:
 			controller.changeRoutingPreferences()
@@ -113,8 +110,8 @@ class SettingsControllerSpec extends Specification {
 		when:
 			def model = controller.general()
 		then:
-			model.routingRulesMap.getAllKeys()*.toString() == ['uselastreceiver',conn2,conn1,conn3]*.toString()
-			model.routingRulesMap.getAllValues()*.toString() == [true,true,true,false]*.toString()
+			model.fconnectionRoutingMap*.key*.toString() == ["uselastreceiver", conn2, conn1, conn3]*.toString()
+			model.fconnectionRoutingMap*.value == [true,true,true,false]
 	}
 
 	def "should not display routing rules for devices that have been deleted from the system"() {
@@ -125,7 +122,7 @@ class SettingsControllerSpec extends Specification {
 		when:
 			def model = controller.general()
 		then:
-			model.routingRulesMap.getAllKeys()*.toString() == ['uselastreceiver',conn2,conn1]*.toString()
+			model.fconnectionRoutingMap*.key*.toString() == ['uselastreceiver', conn2, conn1]*.toString()
 	}
 
 	private def mockAppSettings(Map s) {
