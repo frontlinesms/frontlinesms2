@@ -179,14 +179,14 @@
 									if(response.status === "${Webconnection.OWNERDETAIL_SUCCESS}") {
 										loadSummaryTab(response, i18n('webconnection.label'));
 									} else {
-										$("#testRoute").attr("value", i18n('webconnection.testroute.label'));
+										$("#testRoute").children().remove();
+										$("#testRoute").append("<span>"+i18n('webconnection.testroute.label')+"</span>");
 									}
 									clearInterval(pollInterval);
 								}
 							}
 				});	
 			}, 3000);
-
 		} else {
 			displayErrors(response)
 		}
