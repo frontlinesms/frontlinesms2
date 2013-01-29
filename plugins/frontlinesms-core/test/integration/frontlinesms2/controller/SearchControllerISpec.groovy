@@ -35,7 +35,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes', date:TEST_DATE-7)
 				.save(failOnError:true, flush:true)
 		Fmessage.build(src:'+666666666', text:'finally i stay in bed', date:TEST_DATE)
-				.save(failOnError:true, flush:true)
+				.save(failOnError:true, flush:true, starred:true)
 				
 		[new CustomField(name:'city', value:'Paris', contact: firstContact),
 				new CustomField(name:'like', value:'cake', contact: secondContact),
@@ -83,6 +83,18 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def model = controller.result()
 		then:
 			model.messageInstanceList.size() == 9
+	}
+
+	def "can search for starred messages only"() {
+		when:
+			def search = new Search(name: "toSave", searchString: "")
+			search.save(failOnError: true, flush: true)
+			controller.params.search = search
+			controller.params.inArchive = true
+			controller.params.starred = true
+			def model = controller.result()
+		then:
+			model.messageInstanceList.size() == 1
 	}
 
 	def "message searches can be restricted to a poll"() {
