@@ -42,8 +42,8 @@ class SmssyncService {
 	}
 
 	def startTimeoutCounter(connection) {
-		ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
 		if (connection instanceof SmssyncFconnection && connection?.timeout > 0) {
+			ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
 			def sendTime = new Date()
 			use(groovy.time.TimeCategory) {
 				sendTime = sendTime + (connection.timeout).minutes

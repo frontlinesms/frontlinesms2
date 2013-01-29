@@ -1,5 +1,6 @@
 package frontlinesms2.services
 
+import org.quartz.Trigger
 import frontlinesms2.*
 import spock.lang.*
 
@@ -14,6 +15,7 @@ class SmssyncServiceSpec extends Specification {
 	def camelSentMessage
 	def rendered
 	def unscheduleInvokationCount
+	def scheduleInvokationCount
 
 	def setup() {
 		controller = [params:[:], render:{ rendered = (it as String) }]
@@ -30,9 +32,14 @@ class SmssyncServiceSpec extends Specification {
 		}
 		Dispatch.metaClass.save = { Map params -> }
 		unscheduleInvokationCount = 0
+		scheduleInvokationCount = 0
 		ReportSmssyncTimeoutJob.metaClass.static.unschedule = { String name, String group ->
 			println "unscheduling $name, $group"	
 			unscheduleInvokationCount ++
+		}
+		ReportSmssyncTimeoutJob.metaClass.static.schedule = { Trigger trigger ->
+			println "scheduling $trigger"
+			scheduleInvokationCount ++
 		}
 	}
 
@@ -126,8 +133,9 @@ class SmssyncServiceSpec extends Specification {
 			true     | false          | true        | 0
 	}
 
-	def 'generateApiResponse for incoming message should forward new Fmessage to storage route and unschedule the timeout counter job'() {
+	def 'generateApiResponse for incoming message should forward new Fmessage to storage route and reschedule the timeout counter job'() {
 		given:
+			connection.timeout >> 1
 			setupDefaultConnection(false)
 			controller.params.from = '12345'
 			controller.params.message = 'hi there boris'
@@ -145,6 +153,7 @@ class SmssyncServiceSpec extends Specification {
 				storageQueue[0].src == '12345' &&
 				storageQueue[0].text == 'hi there boris'
 			unscheduleInvokationCount == 1
+			scheduleInvokationCount == 1
 	}
 
 	@Unroll
