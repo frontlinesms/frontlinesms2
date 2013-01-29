@@ -145,11 +145,9 @@ $(function() {
 		else{
 			clear.removeClass("hidden");
 		}
-	});
-
-	$( "td > input[type=text]" ).keyup(function() {
+	}).keyup(function() {
 		clear = $(this).next();
-	 	if( $(this).val() != ''){
+		if( $(this).val() != ''){
 			clear.removeClass("hidden");
 			if($(this).attr('name') == 'mobile') {
 				$(".send-message").removeClass('hidden');
@@ -160,7 +158,6 @@ $(function() {
 			if($(this).attr('name') == 'mobile') {
 				$(".send-message").addClass('hidden');
 			}
-
 		}
 	});
 });
