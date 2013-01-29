@@ -6,6 +6,7 @@ class ConnectionController extends ControllerUtils {
 
 	def fconnectionService
 	def messageSendService
+	def smssyncService
 
 	def index() {
 		redirect action:'list'

@@ -20,7 +20,7 @@ class SmssyncService {
 	}
 
 	def reportTimeout(connection) {
-		new SystemNotification(text:i18nUtilService.getMessage(code:'smssync.timeout', args:[connection.name, connection.timeout])).save(failOnError:true)
+		new SystemNotification(text:i18nUtilService.getMessage(code:'smssync.timeout', args:[connection.name, connection.timeout, connection.id])).save(failOnError:true)
 	}
 
 	def apiProcess(connection, controller) {
@@ -32,6 +32,7 @@ class SmssyncService {
 
 		try {
 			def payload = controller.params.task=='send'? handlePollForOutgoing(connection): handleIncoming(connection, controller.params)
+			startTimeoutCounter(connection)
 			if(connection.secret) payload = [secret:connection.secret] + payload
 			return [payload:payload]
 		} catch(FrontlineApiException ex) {
@@ -41,13 +42,15 @@ class SmssyncService {
 	}
 
 	def startTimeoutCounter(connection) {
-		if (connectionInstance instanceof SmssyncFconnection && connectionInstance?.timeout > 0) {
+		ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
+		if (connection instanceof SmssyncFconnection && connection?.timeout > 0) {
 			def sendTime = new Date()
 			use(groovy.time.TimeCategory) {
-				sendTime = sendTime + (connectionInstance.timeout).minutes
-				println "I will send the job at $sendTime"
+				sendTime = sendTime + (connection.timeout).minutes
 			}
-			def trigger = TriggerHelper.simpleTrigger(new JobKey("test", "test"), sendTime, 0, 1, [connectionId:params.id])
+			def trigger = TriggerHelper.simpleTrigger(new JobKey("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs"), sendTime, 0, 1, [connectionId:connection.id])
+			trigger.name = "SmssyncFconnection-${connection.id}" 
+			trigger.group = "SmssyncFconnectionTimeoutJobs"
 			ReportSmssyncTimeoutJob.schedule(trigger)
 		}
 
@@ -77,6 +80,10 @@ class SmssyncService {
 		if(!connection.sendEnabled) throw new FrontlineApiException("Send not enabled for this connection")
 
 		return success(generateOutgoingResponse(connection, true))
+	}
+
+	private def handleRouteDestroyed(connection) {
+		ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
 	}
 
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {
