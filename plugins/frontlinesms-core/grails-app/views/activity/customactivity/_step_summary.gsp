@@ -2,34 +2,25 @@
 <%@ page import="frontlinesms2.LeaveActionStep" %>
 <%@ page import="frontlinesms2.ReplyActionStep" %>
 
-<g:each var="step" in="${steps}">
-	<g:if test="${step.shortName == 'join'}">
-		<div class='step-summary hidden' id="step-${step.id}">
-			<p>${step.group.name}</p>
-			<p>${step.group.members.size()} members</p>
-		</div>
-	</g:if>
-	<g:if test="${step.shortName == 'leave'}">
-		<div class='step-summary hidden' id="step-${step.id}">
-			<p>${step.group.name}</p>
-			<p>${step.group.members.size()} members</p>
-		</div>
-	</g:if>
-	<g:if test="${step.shortName == 'reply'}">
-		<div class='step-summary hidden' id="step-${step.id}">
-			<p>${step.getProperty('autoreplyText')}</p>
-		</div>
-	</g:if>
-</g:each>
-<style>
-	.hidden{
-		display: none;
-	}
-</style>
+<g:if test="${stepInstance?.shortName == 'join'}">
+	<div class='step-summary ' id="step-${stepInstance?.id}">
+		<p>${stepInstance?.group.name}</p>
+		<p>${stepInstance?.group.members.size()} members</p>
+	</div>
+</g:if>
+<g:if test="${stepInstance?.shortName == 'leave'}">
+	<div class='step-summary ' id="step-${stepInstance?.id}">
+		<p>${stepInstance?.group.name}</p>
+		<p>${step.groupInstance?.members.size()} members</p>
+	</div>
+</g:if>
+<g:if test="${stepInstance?.shortName == 'reply'}">
+	<div class='step-summary ' id="step-${stepInstance?.id}">
+		<p>${stepInstance?.getProperty('autoreplyText')}</p>
+	</div>
+</g:if>
 <r:script>
 	$("#toggleStep").on("change", function(){
-		var stepID = $(this).val();
-		$(".step-summary").addClass("hidden");
-		$("#step-"+stepID).removeClass("hidden");
+		window.location = url_root+"message/activity/${ownerInstance.id}/step/"+$(this).val();
 	});
 </r:script>

@@ -390,6 +390,25 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			message.receivedOn == null
 	}
+@spock.lang.IgnoreRest
+	def "Fmessage.getOwnerDetail should return the value set by setOwnerDetail in CustomActivity" (){
+		when:
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1")).save(failOnError:true,flush:true)
+			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"i will send this.")).save(failOnError:true,flush:true)
+
+			def customActivity = new CustomActivity(name:'Do it all')
+				.addToSteps(joinStep)
+				.addToSteps(replyStep)
+				.addToKeywords(value:"CUSTOM")
+				.save(failOnError:true, flush:true)
+ 
+			def incomingMessage = Fmessage.build(text:"incoming message", messageOwner: customActivity)
+			def outgoingMessage = new Fmessage(text:'sending this message', inbound:false, date:new Date(), messageOwner:customActivity)
+							.addToDispatches(new Dispatch(dst:'234', status:DispatchStatus.PENDING)).save(failOnError:true)
+			outgoingMessage.setOwnerDetail(replyStep, incomingMessage.id)
+		then:
+			outgoingMessage.ownerDetail == incomingMessage.id.toString()
+	}
 	
 	private Folder getTestFolder(params=[]) {
 		new Folder(name:params.name?:'test',

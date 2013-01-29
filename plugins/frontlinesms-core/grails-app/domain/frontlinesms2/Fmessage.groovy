@@ -324,15 +324,20 @@ class Fmessage {
 	}
 
 	def getMessageDetailValue(owner) {
-		def ownerType = getOwnerType(owner)	
+		def ownerType = getOwnerType(owner)
 		if (ownerType) {
-			return this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }?.value
+			if(owner instanceof CustomActivity) {
+				def stepId = this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }?.value
+				return this.details.find { (it.ownerType == MessageDetail.OwnerType.STEP) && (it.ownerId == stepId as Long) }?.value
+			} else {
+				return this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }?.value
+			}
 		}
-		else
-			return null
+		return null
 	}
 
 	def setMessageDetailValue(owner, value) {
+		println "# Setting the Detail for ${owner} #"
 		def ownerType = getOwnerType(owner)
 		if (!ownerType)
 			return
@@ -342,6 +347,7 @@ class Fmessage {
 			this.addToDetails(messageDetailInstance)
 		}
 		messageDetailInstance.value = value
+		this.save(failOnError:true)
 		messageDetailInstance.save(failOnError:true)
 	}
 
@@ -350,8 +356,14 @@ class Fmessage {
 		getMessageDetailValue(this.messageOwner)
 	}
 
-	def setOwnerDetail(val) {
-		setMessageDetailValue(this.messageOwner, val)
+	def setOwnerDetail(activityOrStep=null, val) {	
+		if (activityOrStep instanceof Activity) {
+			activityOrStep.addToMessages(this)
+			this.setMessageDetailValue(activityOrStep, val)
+		} else {
+			this.setMessageDetailValue(this.messageOwner, activityOrStep.id)
+			this.setMessageDetailValue(activityOrStep, val)
+		}
 	}
 
 	private def getOwnerType(owner) {

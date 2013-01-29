@@ -19,6 +19,7 @@ class CoreUrlMappings {
 		"/message/trash/show/$id"(controller:'message', action: 'trash') {}
 
 		"/message/activity/$ownerId"(controller:'message', action:'activity') {}
+		"/message/activity/$ownerId/step/$stepId"(controller:'message', action:'activity') {}
 		"/message/activity/$ownerId/show/$messageId"(controller:'message', action:'activity') {}
 
 		"/message/folder/$ownerId"(controller:'message', action:'folder') {}

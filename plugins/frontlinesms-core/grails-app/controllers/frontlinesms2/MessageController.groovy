@@ -42,7 +42,7 @@ class MessageController extends ControllerUtils {
 		} else if(section == 'activity') {
 			def getSent = null
 			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
-			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred, getSent)?.count()
+			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred, getSent)?.size()
 		} else if(section == 'folder') {
 			def getSent = null
 			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
@@ -125,7 +125,8 @@ class MessageController extends ControllerUtils {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
-			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent)
+			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
+			println messageInstanceList
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
 			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
@@ -133,9 +134,10 @@ class MessageController extends ControllerUtils {
 				sentMessageCount++
 			}
 			render view:"/activity/${activityInstance.shortName}/show",
-				model:[messageInstanceList: messageInstanceList?.list(params),
+				model:[messageInstanceList: messageInstanceList,
 						messageSection: params.messageSection?:'activity',
-						messageInstanceTotal: messageInstanceList?.count(),
+						messageInstanceTotal: messageInstanceList?.size(),
+						stepInstance:Step.get(params.stepId),
 						ownerInstance: activityInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null,
 						pollResponse: activityInstance instanceof Poll ? activityInstance.responseStats as JSON : null,
