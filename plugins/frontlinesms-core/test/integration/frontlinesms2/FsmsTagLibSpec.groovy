@@ -63,7 +63,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:input field="sendEnabled" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
-			output.contains 'input type="checkbox" name="intellismssend"'
+			output.contains 'input type="checkbox" name="intellismssendEnabled"'
 	}
 	
 	def "INPUTS generates subsections for a field Map"() {
