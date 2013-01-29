@@ -51,7 +51,7 @@ class SettingsControllerSpec extends Specification {
 
 	def "can enable application authentication from settings if details validate"() {
 		given:
-			params.enabledAuthentication = 'true'
+			params.enabled = 'true'
 			params.username = "test"
 			params.password = "pass"
 			params.confirmPassword = "pass"
@@ -66,10 +66,10 @@ class SettingsControllerSpec extends Specification {
 
 	def "should not enable application authentication from settings if details don't validate"() {
 		given:
-			mockAppSettings(enabledAuthentication: false,
+			mockAppSettings('auth.basic.enabled': false,
 					username:'', password:'')
 		when:
-			params.enabledAuthentication = "true"
+			params.enabled = "true"
 			params.username = "test"
 			params.password = "pass"
 			params.confirmPassword = "me"
@@ -85,9 +85,8 @@ class SettingsControllerSpec extends Specification {
 		when:
 			controller.changeRoutingPreferences()
 		then:
-			1 * appSettingsService.set('routing.uselastreceiver',params.uselastreceiver)
 			1 * appSettingsService.set('routing.otherwise', params.otherwise)
-			1 * appSettingsService.set('routing.rules','uselastreceiver')
+			1 * appSettingsService.set('routing.use','uselastreceiver')
 			0 * appSettingsService.set(_, _)
 	}
 
@@ -101,8 +100,7 @@ class SettingsControllerSpec extends Specification {
 		when:
 			controller.changeRoutingPreferences()
 		then:
-			1 * appSettingsService.set('routing.uselastreceiver',params.uselastreceiver)
-			1 * appSettingsService.set('routing.rules','uselastreceiver,fconnection-1,fconnection-3,fconnection-5')
+			1 * appSettingsService.set('routing.use','uselastreceiver,fconnection-1,fconnection-3,fconnection-5')
 			1 * appSettingsService.set('routing.otherwise', params.otherwise)
 	}
 
@@ -111,7 +109,7 @@ class SettingsControllerSpec extends Specification {
 			def conn1 = new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 			def conn2 = new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 			def conn3 = new SmslibFconnection(name:"COM5", port:'COM5', baud:9600).save(failOnError:true)
-			controller.appSettingsService = ['routing.rules':"uselastreceiver,fconnection-${conn2.id},fconnection-${conn1.id}"]
+			controller.appSettingsService = ['routing.use':"uselastreceiver,fconnection-${conn2.id},fconnection-${conn1.id}"]
 		when:
 			def model = controller.general()
 		then:
@@ -123,7 +121,7 @@ class SettingsControllerSpec extends Specification {
 		given:
 			def conn1 = new SmslibFconnection(name:"Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 			def conn2 = new SmslibFconnection(name:"COM5", port:'COM4', baud:9600).save(failOnError:true)
-			controller.appSettingsService = ['routing.rules':"uselastreceiver,fconnection-${conn2.id},fconnection-3,fconnection-${conn1.id}"]
+			controller.appSettingsService = ['routing.use':"uselastreceiver,fconnection-${conn2.id},fconnection-3,fconnection-${conn1.id}"]
 		when:
 			def model = controller.general()
 		then:

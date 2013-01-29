@@ -32,6 +32,10 @@
 			}
 		})();
 
+		if(mediumPopup.getCurrentTabIndex() === mediumPopup.getTabLength()) {
+			showTestRouteBtn();
+		}
+		
 		$("#confirm-service").html('<p style="text-transform:capitalize">' + $("input[name=serviceType]:checked").val() + '</p>');
 		$("#confirm-url").html('<p>' + $("input[name=url]").val()  + '</p>');
 		$("#confirm-fsmskey").html('<p>' + fsmsApiKey + '</p>');

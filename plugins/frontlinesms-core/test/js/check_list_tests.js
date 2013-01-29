@@ -1,3 +1,5 @@
+QUnit.module("check_list");
+
 function setup() {
 	dom_trix.initDomFromFile("test/js/check_list/standard.html");
 

@@ -24,6 +24,11 @@
 				}
 			});
 		}
+
+		if(mediumPopup.getCurrentTabIndex() === mediumPopup.getTabLength()) {
+			showTestRouteBtn();
+		}
+		
 		$("#confirm-url").html('<p>' + url  + '</p>');
 		$("#confirm-httpMethod").html('<p>' + httpMethod  + '</p>');
 		$("#confirm-keyword").html('<p>' + keyword  + '</p>');

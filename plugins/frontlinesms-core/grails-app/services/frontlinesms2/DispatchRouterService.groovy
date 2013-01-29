@@ -34,32 +34,32 @@ class DispatchRouterService {
 			return "seda:out-$requestedFconnectionId"
 		} else {
 			def routeId
-			log "appSettingsService.['routing.rules'] is ${appSettingsService.get('routing.rules')}"
-			log "appSettingsService.['routing.uselastreceiver'] is ${appSettingsService.get('routing.uselastreceiver')}"
+			log "appSettingsService.['routing.use'] is ${appSettingsService.get('routing.use')}"
 
-			if(appSettingsService.get('routing.rules')) {
-				def fconnectionRoutingList = appSettingsService.get('routing.rules')?.tokenize(",")?.flatten()
+			if(appSettingsService.get('routing.use')) {
+println "USE :: ${appSettingsService.get('routing.use')}"
+				def fconnectionRoutingList = appSettingsService.get('routing.use').split(/\s*,\s*/)
 				
 				fconnectionRoutingList = fconnectionRoutingList.collect { route ->
-					if(route.contains(RULE_PREFIX))  ((route - RULE_PREFIX) as Integer)
-					else route
+					route.startsWith(RULE_PREFIX)? route.substring(RULE_PREFIX.size()): route
 				}
 				println "fconnectionRoutingList::: $fconnectionRoutingList"
 				for(route in fconnectionRoutingList) {
-					if(route instanceof String && route == "uselastreceiver") {	routeId = getLastReceiverId(exchange)}
-					else { routeId = getCamelRouteId(Fconnection.get(route)) }
+					if(route == 'uselastreceiver') {
+						routeId = getLastReceiverId(exchange)
+					} else {
+						routeId = getCamelRouteId(Fconnection.get(route))
+					}
 					log "Route Id selected: $routeId"
 					if(routeId) break
 				}
-			} else if(appSettingsService.get('routing.uselastreceiver') == 'true'){
-				routeId = getLastReceiverId(exchange)
 			}
 
-			if(!routeId){ // if uselastreceiver did not set the routeId
+			if(!routeId) {
 				if(appSettingsService.get('routing.otherwise') == 'any') {
 					log "## Sending to any available connection ##"
-					routeId = getDispatchRouteId()
-				}else{
+					routeId = getRouteIdByRoundRobin()
+				} else {
 					log "## Not sending message at all ##"
 				}
 			}
@@ -72,12 +72,13 @@ class DispatchRouterService {
 				return queueName
 			} else {
 				// TODO may want to queue for retry here, after incrementing retry-count header
+				// TODO CORE-1694 create a system notification here
 				throw new RuntimeException("No outbound route available for dispatch.")
 			}
 		}
 	}
 	
-	def getDispatchRouteId() {
+	def getRouteIdByRoundRobin() {
 		def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
 		if(allOutRoutes.size > 0) {
 			// check for internet routes and prioritise them over modems
@@ -85,8 +86,8 @@ class DispatchRouterService {
 			if(!filteredRouteList) filteredRouteList = allOutRoutes.findAll { it.id.contains('-modem-') }
 			if(!filteredRouteList) filteredRouteList = allOutRoutes
 			
-			println "DispatchRouterService.getDispatchConnectionId() : Routes available: ${filteredRouteList*.id}"
-			println "DispatchRouterService.getDispatchConnectionId() : Counter has counted up to $counter"
+			println "DispatchRouterService.getRouteIdByRoundRobin() : Routes available: ${filteredRouteList*.id}"
+			println "DispatchRouterService.getRouteIdByRoundRobin() : Counter has counted up to $counter"
 			return filteredRouteList[++counter % filteredRouteList.size]?.id
 		}
 	}
@@ -145,6 +146,7 @@ class DispatchRouterService {
 		println "ALL ROUTE IDS ## ${allOutRoutes*.id}"
 		def routeToTake = allOutRoutes.find{ it.id.endsWith("-${connection.id}") }
 		println "Chosen Route ## $routeToTake"
-		routeToTake?routeToTake.id:null
+		routeToTake? routeToTake.id: null
 	}
 }
+

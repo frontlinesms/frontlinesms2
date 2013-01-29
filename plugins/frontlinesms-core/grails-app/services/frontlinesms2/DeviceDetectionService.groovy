@@ -67,3 +67,4 @@ class DeviceDetectionService {
 		return (detectorThread != null && threadState != Thread.State.TERMINATED)
 	}
 }
+

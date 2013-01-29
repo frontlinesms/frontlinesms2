@@ -66,9 +66,9 @@ class DispatchRouterServiceSpec extends Specification {
 			id << [1, 10, 100]
 	}
 
-	def 'slip should assign message to the last received route if route preference set to last received route'(){
+	def 'slip should assign message to the last received route if route preference set to last received route'() {
 		given:
-			mockAppSettingsService('true','any')
+			mockAppSettingsService(true, 'any')
 			mockRoutes(1, 2, 3)
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
@@ -89,13 +89,13 @@ class DispatchRouterServiceSpec extends Specification {
 			routedTo == route
 		where:
 			settings                                                        | route
-			['true','any', 'fconnection-4, fconnection-1, fconnection-2']   | "seda:out-1"
-			['true','any', 'uselastreceiver, fconnection-3, fconnection-1'] | "seda:out-2"
+			[true, 'any', 'fconnection-4, fconnection-1, fconnection-2']   | "seda:out-1"
+			[true, 'any', 'uselastreceiver, fconnection-3, fconnection-1'] | "seda:out-2"
 	}
 
 	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'(){
 		given:
-			mockAppSettingsService('false','dontsend')
+			mockAppSettingsService(false, 'dontsend')
 			mockRoutes(1, 2, 3)
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
@@ -106,7 +106,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should not assign messages to any route if routing preference is not to send messages when routes are not avalilable'(){
 		given:
-			mockAppSettingsService('false','dontsend')
+			mockAppSettingsService(false, 'dontsend')
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
 		then:
@@ -116,8 +116,8 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should fall back to the -otherwise- if received connection is set as prefered route and it is not avalilable'(){
 		given://'route 2 is the receivedOn route and it is not available'
-			mockAppSettingsService(true,'any')
-			mockRoutes(1,3)
+			mockAppSettingsService(true, 'any')
+			mockRoutes(1, 3)
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
 		then: 'message routed to available message'
@@ -126,7 +126,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should assign messages to round robin if routing preference is set to use avalilable routes'() {
 		given:
-			mockAppSettingsService('false','any')
+			mockAppSettingsService(false, 'any')
 			mockRoutes(1, 2, 3)
 		when:
 			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
@@ -136,7 +136,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should prioritise internet services over modems if routing preference is set to use avalilable routes'() {
 		given:
-			mockAppSettingsService('false','any')
+			mockAppSettingsService(false, 'any')
 			mockRoutes(1:'internet', 2:'modem', 3:'internet', 4:'modem')
 		when:
 			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
@@ -160,7 +160,7 @@ class DispatchRouterServiceSpec extends Specification {
 		m.headers >> headers
 		return m
 	}
-	private def mockRoutes(int...ids) {
+	private def mockRoutes(int... ids) {
 		CamelContext c = Mock()
 		c.routes >> ids.collect { [[id:"in-$it"], [id:"out-$it"]] }.flatten()
 		service.camelContext = c
@@ -172,11 +172,12 @@ class DispatchRouterServiceSpec extends Specification {
 		service.camelContext = c
 	}
 
-	private mockAppSettingsService($userLastReceived, $otherwise, $rules = null){
+	private mockAppSettingsService(useLastReceiver, otherwise, use = null) {
 		AppSettingsService appSettingsService = Mock()
-		appSettingsService.get("routing.uselastreceiver") >> $userLastReceived
-		appSettingsService.get("routing.rules") >> $rules
-		appSettingsService.get("routing.otherwise") >> $otherwise
+		if(useLastReceiver) use = use? "$use,uselastreceiver": 'uselastreceiver'
+		appSettingsService.get("routing.use") >> use
+		appSettingsService.get("routing.otherwise") >> otherwise
 		service.appSettingsService = appSettingsService
 	}
 }
+

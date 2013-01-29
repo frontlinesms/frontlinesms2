@@ -36,9 +36,9 @@ class SettingsController extends ControllerUtils {
 
 		appSettings['routing.uselastreceiver'] = appSettingsService.get("routing.uselastreceiver")
 		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
-		appSettings['routing.rules'] = appSettingsService.get("routing.rules")
+		appSettings['routing.use'] = appSettingsService.get("routing.use")
 
-		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.rules'])
+		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
 
 		[currentLanguage:i18nUtilService.getCurrentLanguage(request),
 				authEnabled:authEnabled,
@@ -73,15 +73,9 @@ class SettingsController extends ControllerUtils {
 		println "params:: $params"
 
 		appSettingsService.set('routing.uselastreceiver', params.uselastreceiver? 'true': 'false')
-		appSettingsService.set('routing.rules', "${processConnectionRules(params)}")
+		appSettingsService.set('routing.use', params.routingUseOrder)
 		appSettingsService.set('routing.otherwise', params.otherwise)
 		redirect action:'general'
-	}
-
-	private def processConnectionRules(params) {
-		def routingRules = params.findAll{ it.key ==~ /routeRule-\d/}
-		println "processConnectionRules::: ${routingRules}"
-		routingRules*.value?.join(",")
 	}
 
 	private getRoutingRules(routingRules) {
@@ -90,24 +84,24 @@ class SettingsController extends ControllerUtils {
 		def connectionInstanceList = Fconnection.findAllBySendEnabled(true)
 
 		if(routingRules) {
-			fconnectionRoutingList = routingRules?.tokenize(",")?.flatten()
+			fconnectionRoutingList = routingRules.split(/\s*,\s*/)
 			println "Routing Rules before refinement:::: $routingRules"
 
 			// Replacing fconnection rules with fconnection instances
 			fconnectionRoutingList = fconnectionRoutingList.collect { rule ->
-				if(rule.contains(RULE_PREFIX))  connectionInstanceList.find {
+				if(rule.startsWith(RULE_PREFIX)) {
+					connectionInstanceList.find {
 						println "Comparing rule:: $rule with id:: $it ::  ${it.id == ((rule - RULE_PREFIX) as Integer)}"
 						it.id == ((rule - RULE_PREFIX) as Integer)
 					}
-				else rule
+				} else rule
 			}
 
 			if(fconnectionRoutingList) {
 				def length = fconnectionRoutingList.size()
 				if(!fconnectionRoutingList.contains("uselastreceiver")) fconnectionRoutingList << "uselastreceiver"
-				((fconnectionRoutingList += connectionInstanceList) - null as Set).eachWithIndex {it, index -> 
-					if(index < length) fconnectionRoutingMap[it] = true
-					else fconnectionRoutingMap[it] = false
+				((fconnectionRoutingList += connectionInstanceList) - null as Set).eachWithIndex { it, index ->
+					fconnectionRoutingMap[it] = index < length
 				}
 			}
 

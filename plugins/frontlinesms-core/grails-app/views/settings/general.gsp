@@ -53,24 +53,21 @@
 				<h2><g:message code="routing.title"/></h2>
 				<fsms:info message="routing.info"/>
 				<g:form name="routing-form" url="[controller:'settings', action:'changeRoutingPreferences']">
-					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" id="sortable"> 
+					<g:hiddenField name="routingUseOrder" value=""/>
+					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable">
 						<g:each in="${fconnectionRoutingMap}" status="i" var="it">
-							<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
-								<li>
-									<label>
+							<li>
+								<label>
+									<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
 										<g:message code="routing.rule.${it.key}"/>
 										<g:checkBox name="routeRule-${i}" value="${it.key}" checked="${it.value}"/>
-									</label>
-								</li>
-							</g:if>
-							<g:else>
-								<li>
-									<label>
+									</g:if>
+									<g:else>
 										<g:message code="routing.rules.device" args="[it.key.name]" />
 										<g:checkBox name="routeRule-${i}" value="fconnection-${it.key.id}" checked="${it.value}"/>
-									</label>
-								</li>
-							</g:else>
+									</g:else>
+								</label>
+							</li>
 						</g:each>
 					</fsms:checkboxGroup>
 					<fsms:radioGroup name="otherwise" title="routing.rules.otherwise"
