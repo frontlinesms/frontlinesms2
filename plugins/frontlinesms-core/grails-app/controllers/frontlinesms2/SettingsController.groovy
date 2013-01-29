@@ -1,6 +1,5 @@
 package frontlinesms2
 
-
 class SettingsController extends ControllerUtils {
 	static final String RULE_PREFIX = "fconnection-"
 	
@@ -56,7 +55,6 @@ class SettingsController extends ControllerUtils {
 	}
 
 	def basicAuth() {
-		println "params:: $params"
 		if(appSettingsService.get("auth.basic.enabled") && appSettingsService.get("auth.basic.username") && appSettingsService.get("auth.basic.password")) {
 			appSettingsService.set('auth.basic.enabled', params.enabled)
 		}
@@ -73,6 +71,7 @@ class SettingsController extends ControllerUtils {
 
 	def changeRoutingPreferences() {
 		println "params:: $params"
+
 		appSettingsService.set('routing.uselastreceiver', params.uselastreceiver? 'true': 'false')
 		appSettingsService.set('routing.rules', "${processConnectionRules(params)}")
 		appSettingsService.set('routing.otherwise', params.otherwise)
@@ -80,15 +79,15 @@ class SettingsController extends ControllerUtils {
 	}
 
 	private def processConnectionRules(params) {
-		def routingRules
-		routingRules = params.findAll {it.key == "uselastreceiver" || it.key ==~ /fconnection-\d/}
-		routingRules.getAllKeys().join(",")
+		def routingRules = params.findAll{ it.key ==~ /routeRule-\d/}
+		println "processConnectionRules::: ${routingRules}"
+		routingRules*.value?.join(",")
 	}
 
 	private getRoutingRules(routingRules) {
 		def fconnectionRoutingList = []
 		def fconnectionRoutingMap = [:]
-		def connectionInstanceList = Fconnection.findAll()
+		def connectionInstanceList = Fconnection.findAllBySendEnabled(true)
 
 		if(routingRules) {
 			fconnectionRoutingList = routingRules?.tokenize(",")?.flatten()

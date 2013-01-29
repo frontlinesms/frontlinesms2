@@ -52,23 +52,23 @@
 			<div id="routing-preferences">
 				<h2><g:message code="routing.title"/></h2>
 				<fsms:info message="routing.info"/>
-				<g:form name="routing-form" controller="settings" action="changeRoutingPreferences">
+				<g:form name="routing-form" url="[controller:'settings', action:'changeRoutingPreferences']">
 					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" id="sortable"> 
-						<g:each in="${routingRulesMap}">
+						<g:each in="${fconnectionRoutingMap}" status="i" var="it">
 							<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
 								<li>
 									<label>
 										<g:message code="routing.rule.${it.key}"/>
+										<g:checkBox name="routeRule-${i}" value="${it.key}" checked="${it.value}"/>
 									</label>
-									<g:checkBox name="${it.key}" values="${it.key}" checked="${it.value}"/>
 								</li>
 							</g:if>
 							<g:else>
 								<li>
 									<label>
 										<g:message code="routing.rules.device" args="[it.key.name]" />
+										<g:checkBox name="routeRule-${i}" value="fconnection-${it.key.id}" checked="${it.value}"/>
 									</label>
-									<g:checkBox name="fconnection-${it.key.id}" values="it.key.id" checked="${it.value}"/>
 								</li>
 							</g:else>
 						</g:each>
@@ -77,7 +77,7 @@
 							values="any,dontsend"
 							labels="${g.message(code:'routing.rule.useany')}, ${g.message(code:'routing.rule.dontsend')}"
 							checked="${appSettings['routing.otherwise']}"/>
-					<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}"/>
+					<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}" />
 				</g:form>
 			</div>
 		</div>
