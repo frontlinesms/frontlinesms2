@@ -1,6 +1,6 @@
 
 $(function(){
-	$("ul.sortable").sortable();
+	$("ul.sortable.checklist").sortable();
 	$("#routing-form").submit(function() {
 		var form = $(this),
 		routingUseOrder = [];

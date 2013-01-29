@@ -54,10 +54,10 @@
 				<fsms:info message="routing.info"/>
 				<g:form name="routing-form" url="[controller:'settings', action:'changeRoutingPreferences']">
 					<g:hiddenField name="routingUseOrder" value=""/>
-					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable">
+					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable checklist no-description">
 						<g:each in="${fconnectionRoutingMap}" status="i" var="it">
 							<li>
-								<label>
+								<label for="routeRule-${i}">
 									<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
 										<g:message code="routing.rule.${it.key}"/>
 										<g:checkBox name="routeRule-${i}" value="${it.key}" checked="${it.value}"/>

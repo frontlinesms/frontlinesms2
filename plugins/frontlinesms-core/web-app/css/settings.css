@@ -14,7 +14,7 @@
 #body.settings #body-content > div > * { margin:5px 0 10px 0; }
 #body.settings #body-content #language form > * { display:inline-block; }
 #body.settings #body-content #import label[for='data'] { font-weight:bold; padding:3px; margin-bottom:5px; }
-#body.settings #body-content div.input h3 { font-weight:bold; margin-bottom:5px; margin-top:5px; }
+#body.settings #body-content h3 { font-weight:bold; margin-bottom:5px; margin-top:5px; margin-left:15px; }
 #body.settings #body-content #import .radio-choice { margin:5px; }
 #body.settings #body-content #import input[type='file'] { margin-top:10px; }
 #body.settings #body-content #import label[for='importCsvFile'] { font-style:italic; }

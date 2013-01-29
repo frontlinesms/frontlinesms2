@@ -76,8 +76,8 @@ class FsmsTagLib {
 	}
 
 	def checkboxGroup = { att,body ->
-		out << "<div class='input'>"
 		if(att.title) out << "<h3>${g.message(code:att.title)}</h3>"
+		out << "<div class='input'>"
 		if(att.info) out << info([message:att.info])
 		out << "<ul class='select ${att.listClass?:''}'>"
 		att.values.each { key, checked ->
