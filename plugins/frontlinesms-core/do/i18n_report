@@ -1,4 +1,12 @@
 #!/bin/bash
-echo "Generating report on completeness of translations in grails-app/i18n/ ..."
-for f in grails-app/i18n/messages_*.properties; do echo "Processing $f file.."; groovy do/i18n-compare.groovy grails-app/i18n/messages.properties $f; echo "----"; done >> i18nreport.txt
-echo "Report generated in i18nreport.txt"
+REPORT_DIR=target
+mkdir -p $REPORT_DIR
+REPORT_FILE=$REPORT_DIR/i18nreport.txt
+echo "# Generating report on completeness of translations in grails-app/i18n/ ..."
+for f in grails-app/i18n/messages_*.properties; do
+	echo "# Processing $f file.."
+	groovy do/i18n-compare.groovy grails-app/i18n/messages.properties $f
+	echo "# ----"
+done > >(tee -a $REPORT_FILE)
+echo "# Report generated in $REPORT_FILE"
+
