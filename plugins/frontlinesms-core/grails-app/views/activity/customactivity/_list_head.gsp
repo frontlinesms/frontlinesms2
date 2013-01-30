@@ -12,7 +12,7 @@
 	</li>
 	<li>
 		<g:select name="toggleStep" noSelection="${['null': 'Overview']}"
-			from="${ownerInstance?.steps}" value="${stepInstance.id}"
+			from="${ownerInstance?.steps}" value="${stepInstance?.id}"
 			optionKey="id" optionValue="niceFormat">
 		</g:select>
 	</li>
