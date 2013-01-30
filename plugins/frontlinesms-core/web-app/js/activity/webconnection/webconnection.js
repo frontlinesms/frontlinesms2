@@ -10,16 +10,65 @@ var webconnectionDialog = (function() {
 		buttonSet = $('.ui-dialog-buttonset');
 		testRouteBtn = buttonSet.find("#testRoute");
 		if(testRouteBtn.length === 0) {
-			testRouteBtn = $('<button/>', {
-								id: "testRoute",
-								type:"submit",
-								value: i18n('webconnection.testroute.label'),
-								click: testRouteStatus
-							});
+			testRouteBtn = mediumPopup.appendButton("testRoute", "submit", i18n('webconnection.testroute.label'));
+			testRouteBtn.bind({
+				click: webconnectionDialog.testRouteStatus
+			});
 		} else {
 			testRouteBtn.show();
 		}
 		buttonSet.append(testRouteBtn);
+	};
+	function _testRouteStatus() {
+		var params = {};
+		if(mediumPopup.tabValidates(mediumPopup.getCurrentTab())) {
+			params.ownerId = $("#activityId").val();
+			params.format = "json";
+			$.ajax({
+				type: 'post',
+				data: $("#new-webconnection-form").serialize() + "&" + $.param(params),
+				url: url_root + "webconnection/testRoute",
+				success: function(data, textStatus) {  	webconnectionDialog.checkRouteStatus(data)}
+			});	
+		} else {
+			$('.error-panel').show();
+		}
+		return false;
+	};
+	var pollInterval;
+	function _checkRouteStatus(response) {
+		if(response.ok) {
+			$("#testRoute").children().remove();
+			$("#testRoute").append("<span>"+i18n('webconnection.testing.label')+"</span>");
+			$("#activityId").val(response.ownerId);
+			$.ajaxSetup({
+				type: 'post',
+				data: {ownerId:response.ownerId},
+				url: url_root + "webconnection/checkRouteStatus"
+			});
+			toggleWizardButtons();
+			pollInterval = setInterval( function() {
+				$.ajax({
+					success: function(response) {
+								if(response.status === "success" || response.status === "failed") {
+									$(".error-panel").text(i18n('webconnection.popup.'+ response.status + '.label'));
+									$(".error-panel").show();
+									toggleWizardButtons();
+									if(response.status === "success") {
+										loadSummaryTab(response, i18n('webconnection.label'));
+									} else {
+										$("#testRoute").children().remove();
+										$("#testRoute").append("<span>"+i18n('webconnection.testroute.label')+"</span>");
+									}
+									clearInterval(pollInterval);
+								}
+							}
+				});	
+			}, 3000);
+
+		} else {
+			displayErrors(response)
+		}
 	};
 	var _handlers = {}
 	var generateMessages = function(fieldsAndRules) {
@@ -49,42 +98,6 @@ var webconnectionDialog = (function() {
 			$("#submit").attr('disabled', "disabled");
 			$("#cancel").attr('disabled', "disabled");
 			$("#prevPage").attr('disabled', "disabled");
-		}
-	};
-
-	var pollInterval;
-
-	function _checkRouteStatus(response) {
-		if(response.ok) {
-			$("#testRoute").children().remove();
-			$("#testRoute").append("<span>"+i18n('webconnection.testing.label')+"</span>");
-			$.ajaxSetup({
-				type: 'post',
-				data: {ownerId:response.ownerId},
-				url: url_root + "webconnection/checkRouteStatus"
-			});
-			toggleWizardButtons();
-			pollInterval = setInterval( function() {
-				$.ajax({
-					success: function(response) {
-								if(response.status === "success" || response.status === "failed") {
-									$(".error-panel").text(i18n('webconnection.popup.'+ response.status + '.label'));
-									$(".error-panel").show();
-									toggleWizardButtons();
-									if(response.status === "success") {
-										loadSummaryTab(response, i18n('webconnection.label'));
-									} else {
-										$("#testRoute").children().remove();
-										$("#testRoute").append("<span>"+i18n('webconnection.testroute.label')+"</span>");
-									}
-									clearInterval(pollInterval);
-								}
-							}
-				});	
-			}, 3000);
-
-		} else {
-			displayErrors(response)
 		}
 	};
 
@@ -130,6 +143,7 @@ var webconnectionDialog = (function() {
 		handlers:_handlers,
 		showTestRouteBtn:_showTestRouteBtn,
 		checkRouteStatus:_checkRouteStatus,
+		testRouteStatus:_testRouteStatus,
 		___end___:null
 	};
 })();

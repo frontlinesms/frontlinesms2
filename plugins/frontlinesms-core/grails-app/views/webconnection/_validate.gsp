@@ -19,20 +19,6 @@
 			webconnectionDialog.updateConfirmationScreen();
 		});
 	}
-	
-	function testRouteStatus() {
-		if(mediumPopup.tabValidates(mediumPopup.getCurrentTab())) {
-			$.ajax({
-				type: 'post',
-				data: $("#new-webconnection-form").serialize(),
-				url: "${g.createLink(controller:'webconnection', action:'testRoute', params:['ownerId': activityInstanceToEdit?.id, 'format':'json'])}",
-				success: function(data, textStatus) {  	webconnectionDialog.checkRouteStatus(data)}
-			});	
-		} else {
-			$('.error-panel').show();
-		}
-		return false;
-	}
 
 	function setType(type) {
 		$.getJSON(url_root + "webconnection/" + type + "/config", function(data) {
