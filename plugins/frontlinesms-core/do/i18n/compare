@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 /* Script to compare grails internationalisation property files (or any property files in general) */
 if(args.size() < 2) {
 	println("# compares i18n file to master message.properties")
