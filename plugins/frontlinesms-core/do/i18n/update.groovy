@@ -41,8 +41,8 @@ master.eachLine ("utf8") { masterLine ->
 		// This is a property. Check if the other translation has it, and if not, copy it with a TODO
 		def key = masterLine.split('=')[0].trim()
 		def masterValue = masterLine.split('=')[1]
-
-		newSlaveLines << (existingSlaveLines.find { it ==~ "^${key.replace('.', '\\.')}\\s*=.*" && it.split("=").size() > 1 } ?: masterLine.replaceFirst("=", "=TODO:"))
+		if(!(masterValue ==~ /\s*\{[0-9]\}\s*$/ ))
+			newSlaveLines << (existingSlaveLines.find { it ==~ "^${key.replace('.', '\\.')}\\s*=.*" && it.split("=").size() > 1 } ?: masterLine.replaceFirst("=", "=TODO:"))
 	}
 	else {
 		// Something strange is going on, we should only have props, comments or whitespace!

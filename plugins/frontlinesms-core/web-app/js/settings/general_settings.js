@@ -13,13 +13,14 @@ $(function(){
 });
 
 var basicAuthValidation = {
+	find: function(selecter) { return $("#basic-auth").find(selecter); },
 	enable: function() {
 			var validatePassword = function(value, element) {
 				var confirmPassword, password, passwordField, isValid;
 				isValid = true;
-				passwordField = $("input[name=password]");
+				passwordField = basicAuthValidation.find("input[name=password]");
 				password = passwordField.val();
-				confirmPassword = $("input[name=confirmPassword]").val();
+				confirmPassword = basicAuthValidation.find("input[name=confirmPassword]").val();
 				if(password.length > 0) {
 					isValid = password === confirmPassword;
 					passwordField.removeClass("error");
@@ -42,21 +43,22 @@ var basicAuthValidation = {
 		},
 	showErrors: function(form) {
 			var isValid = false;
-			if($("input[type=text]:not(:disabled), input[type=password]:not(:disabled)").length === 0) {
+			if(basicAuthValidation.find("input[type=text]:not(:disabled), input[type=password]:not(:disabled)").length === 0) {
 				return true;
 			}
-			$("input:not(:disabled)").each(function() {
+			basicAuthValidation.find("input:not(:disabled)").each(function() {
 				isValid = isValid && basicAuthValidation.validator(form).element($(this));
 			});
 			return isValid;
 		},
 	toggleFields: function(selector) {
+			var inputFields = basicAuthValidation.find("input[type=text], input[type=password]");
 			if($(selector).is(":checked")) {
-				$("input[type=text], input[type=password]").attr("disabled", false);
+				inputFields.attr("disabled", false);
 			} else {
-				$("input[type=text], input[type=password]").attr("disabled", "disabled");
-				$("input[type=text], input[type=password]").removeClass("error");
-				$("label[generated=true]").hide();
+				inputFields.attr("disabled", "disabled");
+				inputFields.removeClass("error");
+				basicAuthValidation.find("label[generated=true]").hide();
 			}
 		}
 };

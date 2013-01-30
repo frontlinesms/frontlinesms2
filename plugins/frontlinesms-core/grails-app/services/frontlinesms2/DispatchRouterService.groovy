@@ -37,9 +37,7 @@ class DispatchRouterService {
 			log "appSettingsService.['routing.use'] is ${appSettingsService.get('routing.use')}"
 
 			if(appSettingsService.get('routing.use')) {
-println "USE :: ${appSettingsService.get('routing.use')}"
 				def fconnectionRoutingList = appSettingsService.get('routing.use').split(/\s*,\s*/)
-				
 				fconnectionRoutingList = fconnectionRoutingList.collect { route ->
 					route.startsWith(RULE_PREFIX)? route.substring(RULE_PREFIX.size()): route
 				}
