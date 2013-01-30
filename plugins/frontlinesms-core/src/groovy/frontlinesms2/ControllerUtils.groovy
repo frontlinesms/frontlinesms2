@@ -9,13 +9,17 @@ class ControllerUtils {
 			def o = objectId? domainClass.get(objectId): domainClass.newInstance()
 			if(o) c.call(o)
 			else {
-				def failureText = message('default.not.found.message', args:[message(code:domainClass.shortName+'.label'), objectId])
-				if(onFail) {
-					flash.message = failureText
-					onFail.call()
-				} else render(text:failureText)
+				handleNotFoundFailure()
 			}
 		}
+	}
+
+	def handleNotFoundFailure() {
+		def failureText = message('default.not.found.message', args:[message(code:domainClass.shortName+'.label'), objectId])
+		if(onFail) {
+			flash.message = failureText
+			onFail.call()
+		} else render(text:failureText)
 	}
 }
 

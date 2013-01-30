@@ -29,6 +29,8 @@ div.input ul.select li input[type="checkbox"] { position:absolute; top:0; left:0
 div.input ul.select li input[type="text"] { display:block; margin-left:25px; margin-top:10px; }
 
 div.input ul.select.radio label { margin:5px 0; position:relative; display:block; cursor:pointer; padding:10px; }
+div.input ul.select.radio.no-description li { margin:0; }
+div.input ul.select.radio.no-description label { text-indent:20px; margin:0; }
 div.input ul.select.radio label:hover, #modalBox.ui-dialog-content .select.radio label:hover > * { background-color:#e5eff3; }
 div.input ul.select.radio label input[type="radio"] { position:absolute; top:10px; left:10px; }
 div.input ul.select.radio label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }

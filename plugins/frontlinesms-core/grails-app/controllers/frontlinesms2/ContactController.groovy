@@ -169,7 +169,7 @@ class ContactController extends ControllerUtils {
 	}
 
 	def search() {
-		render template:'search_results', model:contactSearchService.contactList(params)
+		fsms.render template:'search_results', model:contactSearchService.contactList(params)
 	}
 	
 	def checkForDuplicates() {

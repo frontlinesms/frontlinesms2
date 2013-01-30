@@ -11,15 +11,9 @@ echo "## 5. check that the server is working!    ##"
 echo "#############################################"
 
 PROJECT_DIR=../frontlinesms-core
-INSTALL_DIR=~/frontlinesms2
-ALL_USER_INSTALL_DIR=/opt/frontlinesms2
-SETTINGS_DIR=~/.frontlinesms2
-SERVER_PORT=8130
-CONTEXT_PATH=
 
 echo "# clean target directories"
 rm -rf $PROJECT_DIR/target/
-rm -rf target/
 rm -rf $PROJECT_DIR/install/target*
 rm -rf $PROJECT_DIR/install/src/web-app/
 

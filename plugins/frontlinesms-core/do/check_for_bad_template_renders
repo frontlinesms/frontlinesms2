@@ -1,18 +1,18 @@
 #!/bin/bash
+echo "# Checking for bad calls to template renderer..."
 echo "# Checking views..."
-grep -rn 'g:render.*template' grails-app/views/
+grep -rn "render.*template" grails-app/views/ | grep -v "fsms:render"
 VIEW_OUTPUT=$?
 
-echo ""
 echo "# Checking controllers"
-grep -rn "render.*template" grails-app/controllers/
+grep -rn "render.*template" grails-app/controllers/ | grep -v "fsms\.render"
 CONTROLLER_OUTPUT=$?
 
 if [ "$CONTROLLER_OUTPUT" -eq 1 ] && [ "$VIEW_OUTPUT" -eq 1 ]; then
-	echo "Violations NOT detected"
+	echo "# No bad template renders detected"
 	exit 0
 else
-	echo "The violations above were detected"
+	echo "# Bad template renders detected"
 	exit 1
 fi
 
