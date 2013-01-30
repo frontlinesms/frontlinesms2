@@ -22,7 +22,7 @@ def missingKeys = []
 def redundantKeys = []
 
 master.keySet().each {
-	if(!other.get(it) || other.get(it).length() == 0)
+	if((!other.get(it) || other.get(it).length() == 0) && !(master.get(it) ==~ /\s*\{[0-9]\}\s*$/ ))
 	{
 		missingKeys << it
 	}

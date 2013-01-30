@@ -14,7 +14,9 @@ suites.iterator().eachWithIndex { suite, i ->
 toRemove.each { suites.remove(it) }
 
 Node root = new Node(null, 'testsuites')
-suites.each { root.append it.children() }
+suites.each {
+	root.append it.children()
+}
 
 def writer = new StringWriter()
 new XmlNodePrinter(new PrintWriter(writer)).print(root)

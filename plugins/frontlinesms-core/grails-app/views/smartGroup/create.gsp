@@ -25,16 +25,16 @@
 						<g:set var="isFirst" value="i==0"/>
 						<g:if test="${field == 'customFields'}">
 							<g:each in="${currentRules.customFields}" var="customField">
-								<g:render template="rule" model="[key:customField.name, value:customField.value, isFirst:isFirst]"/>
+								<fsms:render template="rule" model="[key:customField.name, value:customField.value, isFirst:isFirst]"/>
 							</g:each>
 						</g:if>
 						<g:else>
-							<g:render template="rule" model="[key:field, value:currentRules[field], isFirst:isFirst]"/>
+							<fsms:render template="rule" model="[key:field, value:currentRules[field], isFirst:isFirst]"/>
 						</g:else>
 					</g:each>
 				</g:if>
 				<g:else>
-					<g:render template="rule" model="[isFirst:true, key:'mobile']"/>
+					<fsms:render template="rule" model="[isFirst:true, key:'mobile']"/>
 				</g:else>
 			</tbody>
 		</table>

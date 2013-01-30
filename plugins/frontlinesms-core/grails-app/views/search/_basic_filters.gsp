@@ -15,8 +15,10 @@
 			value="${search?.status}"
 			noSelection="${['':g.message(code:'search.filter.messages.all')]}"/>
 	<div class="input">
-		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" disabled="${search?.activityId ? true : false}"/>
-		<label for="inArchive"><g:message code="search.filter.archive"/></label>
+		<label for="inArchive">
+			<g:message code="search.filter.archive"/>
+			<g:checkBox name="inArchive" value="${search?.inArchive?:true}" disabled="${search?.activityId}"/>
+		</label>
 	</div>
 </g:if>
 <div id="datePicker" class="input">

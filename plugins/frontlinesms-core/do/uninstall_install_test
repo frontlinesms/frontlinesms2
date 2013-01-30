@@ -3,11 +3,10 @@ set -e
 
 echo "#############################################"
 echo "## This script aims to test new installers ##"
-echo "## 1. Build installer                      ##"
-echo "## 2. uninstall old installation           ##"
-echo "## 3. install new version                  ##"
-echo "## 4. run new version                      ##"
-echo "## 5. check that the server is working!    ##"
+echo "## 1. uninstall old installation           ##"
+echo "## 2. install new version                  ##"
+echo "## 3. run new version                      ##"
+echo "## 4. check that the server is working!    ##"
 echo "#############################################"
 
 PROJECT_DIR=../frontlinesms-core
