@@ -7,38 +7,29 @@ if(args.size() < 2) {
 	return
 }
 
+def loadProps(filename) {
+	def props = new Properties()
+	new File(filename).withInputStream { stream -> props.load(stream); }
+	return props
+}
+
 def compare(fileA, fileB) {
 	println "# Reporting on differences betweer $fileA and $fileB..."
 	// read files into props
-	master = new Properties()
-	new File(fileA).withInputStream { stream -> master.load(stream); }
-	other = new Properties()
-	new File(fileB).withInputStream { stream -> other.load(stream); }
+	master = loadProps(fileA)
+	other = loadProps(fileB)
 
 	// init lists
-	def missingKeys = []
-	def redundantKeys = []
+	def missingKeys = (master.keySet().findAll {
+		(!other[it] || other[it].length() == 0) &&
+				!(master[it] ==~ /\s*\{[0-9]\}\s*$/ )
+	}).size()
+	def redundantKeys = (other.keySet() - master.keySet()).size()
+	def langName = other["language.name"]
 
-	master.keySet().each {
-		if((!other.get(it) || other.get(it).length() == 0) && !(master.get(it) ==~ /\s*\{[0-9]\}\s*$/ ))
-		{
-			missingKeys << it
-		}
-	}
-	redundantKeys = other.keySet() - master.keySet()
-
-	redundantKeys.each {
-		other.remove(it)
-	}
-	missingKeys.each {
-		other.put(it, "TODO:"+master.get(it))
-	}
-
-	langName = other.get("language.name")
-
-	double perc = ((master.size() - missingKeys.size()) / master.size()) * 100
-	println "# Redundant entries: ${redundantKeys.size()}, MissingEntries: ${missingKeys.size()}"
-	println "# ${langName? langName + ' translation' : args[1]} is ${perc.round(2)}% complete"
+	double perc = ((master.size() - missingKeys) / master.size()) * 100
+	println "# Redundant entries: $redundantKeys, MissingEntries: $missingKeys"
+	println "# ${langName? langName + ' translation' : fileB} is ${perc.round(2)}% complete"
 
 	return perc == 100
 }
