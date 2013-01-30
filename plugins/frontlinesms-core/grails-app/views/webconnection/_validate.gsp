@@ -19,20 +19,6 @@
 			webconnectionDialog.updateConfirmationScreen();
 		});
 	}
-
-	function setType(type) {
-		$.getJSON(url_root + "webconnection/" + type + "/config", function(data) {
-			var configTab = $("#webconnection-config");
-			var confirmTab = $("#webconnection-confirm");
-			configTab.html(data.config);
-			confirmTab.html(data.confirm);
-			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
-
-			$("#webconnection-confirm").html(data.confirm);
-			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
-			webconnectionDialog.updateConfirmationScreen();
-		});
-	}
 		
 </r:script>
 
