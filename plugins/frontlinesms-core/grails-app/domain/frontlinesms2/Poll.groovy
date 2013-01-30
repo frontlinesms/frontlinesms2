@@ -163,7 +163,6 @@ class Poll extends Activity {
 		def response = getPollResponse(message, keyword)
 		response?.addToMessages(message)
 		response?.save()
-		this.addToMessages(message)
 		if(this.autoreplyText) {
 			def params = [:]
 			params.addresses = message.src
