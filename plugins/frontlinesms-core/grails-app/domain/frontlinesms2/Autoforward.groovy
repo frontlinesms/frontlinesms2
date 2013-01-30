@@ -11,7 +11,7 @@ class Autoforward extends Activity {
 	}
 
 //> SERVICES
-	def messageSendService
+	def autoforwardService
 
 //> PROPERTIES
 	static hasMany = [contacts:Contact, groups:Group, smartGroups:SmartGroup]
@@ -34,12 +34,7 @@ class Autoforward extends Activity {
 
 //> PROCESS METHODS
 	def processKeyword(Fmessage message, Keyword matchedKeyword) {
-		def m = messageSendService.createOutgoingMessage([contacts:contacts, groups:groups?:[] + smartGroups?:[], messageText:sentMessageText])
-		this.addToMessages(m)
-		m.ownerDetail = message.id
-		this.addToMessages(message)
-		m.save(failOnError:true)
-		messageSendService.send(m)
+		autoforwardService.doForward(this, message)
 		this.save(failOnError:true)
 	}
 }
