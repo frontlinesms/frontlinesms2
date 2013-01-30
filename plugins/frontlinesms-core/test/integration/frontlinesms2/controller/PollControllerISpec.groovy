@@ -50,12 +50,12 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll?.keywords*.value.containsAll(['HELLO','A','AA','B','BB','MAYBE','IDONTKNOW'])
 			poll.keywords.size() == 7
 			poll.keywords[0].ownerDetail == null
-			poll.keywords[1].ownerDetail == poll.responses[0].key
-			poll.keywords[2].ownerDetail == poll.responses[0].key
-			poll.keywords[3].ownerDetail == poll.responses[1].key
-			poll.keywords[4].ownerDetail == poll.responses[1].key
-			poll.keywords[5].ownerDetail == poll.responses[2].key
-			poll.keywords[6].ownerDetail == poll.responses[2].key
+			poll.keywords[1].ownerDetail == 'A'
+			poll.keywords[2].ownerDetail == 'A'
+			poll.keywords[3].ownerDetail == 'B'
+			poll.keywords[4].ownerDetail == 'B'
+			poll.keywords[5].ownerDetail == 'C'
+			poll.keywords[6].ownerDetail == 'C'
 	}
 
 	def "saving new poll with keyword disabled does should not save the keyword"() {
@@ -236,10 +236,10 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.keywords.size() == 5
 			Keyword.findAll().size() == 5
 			(poll.keywords[0].value == 'HELLO')&&(poll.keywords[0].ownerDetail == null)
-			(poll.keywords[1].value == 'MANCHESTER')&&(poll.keywords[1].ownerDetail == poll.responses[0].key)
-			(poll.keywords[2].value == 'BARCELONA')&&(poll.keywords[2].ownerDetail == poll.responses[1].key)
-			(poll.keywords[3].value == 'HARAMBEE')&&(poll.keywords[3].ownerDetail == poll.responses[2].key)
-			(poll.keywords[4].value == 'TEAM')&&(poll.keywords[4].ownerDetail == poll.responses[2].key)
+			(poll.keywords[1].value == 'MANCHESTER')&&(poll.keywords[1].ownerDetail in poll.responses*.key)
+			(poll.keywords[2].value == 'BARCELONA')&&(poll.keywords[2].ownerDetail in poll.responses*.key)
+			(poll.keywords[3].value == 'HARAMBEE')&&(poll.keywords[3].ownerDetail in poll.responses*.key)
+			(poll.keywords[4].value == 'TEAM')&&(poll.keywords[4].ownerDetail in poll.responses*.key)
 	}
 
 	def "editing a poll and removing the top level keyword should set responses as top level"() {

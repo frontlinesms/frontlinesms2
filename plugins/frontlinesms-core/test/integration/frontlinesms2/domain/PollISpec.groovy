@@ -42,7 +42,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			]
 		when:
 			def outbound1 = new Fmessage(inbound:false, text:'who is badder in your opinion?')
-			outbound1.addToDispatches(new Dispatch(dst:"123", status:DispatchStatus.SENT, dateSent:new Date()))
+			outbound1.addToDispatches(dst:"123", status:DispatchStatus.SENT, dateSent:new Date())
 			p.addToMessages(outbound1)
 			p.save(failOnError:true, flush:true)
 		then:
@@ -72,7 +72,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			]
 		when:
 			def outbound = new Fmessage(inbound:false, text:'thanks for your response')
-			outbound.addToDispatches(new Dispatch(dst:"123", status:DispatchStatus.SENT, dateSent:new Date()))
+			outbound.addToDispatches(dst:"123", status:DispatchStatus.SENT, dateSent:new Date())
 			p.addToMessages(outbound)
 			p.save(failOnError:true, flush:true)
 		then:
@@ -143,21 +143,22 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue("two").addToMessages(m3)
 			poll.save(flush:true)
 			poll.refresh()
+			def liveCount = { poll.responses.sort { ['A', 'B', 'C', 'D', Poll.KEY_UNKNOWN].indexOf(it.key) }*.liveMessageCount }
 		then:
-			poll.responses*.liveMessageCount == [2, 1, 0]
+			liveCount() == [2, 1, 0]
 		when:
 			poll.editResponses(choiceC: "three", choiceD:"four")
 			poll = Poll.get(poll.id)
 		then:
 			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
-			poll.responses*.liveMessageCount == [2, 1, 0, 0, 0]
+			liveCount() == [2, 1, 0, 0, 0]
 		when:
 			m1 = Fmessage.build(src: "src1", inbound: true, date: new Date() - 10)
 			PollResponse.findByValue("one").addToMessages(m1)
 			PollResponse.findByValue("three").addToMessages(Fmessage.build(src: "src4", inbound: true, date: new Date() - 10))
 			poll.save(flush:true)
 		then:
-			poll.responses*.liveMessageCount == [3, 1, 0, 1, 0]
+			liveCount() == [3, 1, 1, 0, 0]
 		when:
 			poll.editResponses(choiceA: "five")
 			poll.save(flush:true)
@@ -167,7 +168,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			println "poll responses ${poll.responses*.value}"
 			poll.responses*.every {
 				(it.key=='Unknown' && it.liveMessageCount == 3) ||
-						(it.key == 'choiceA' && it.liveMessageCount == 0)
+						(it.key == 'A' && it.liveMessageCount == 0)
 			}
 	}
 	
@@ -245,8 +246,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToResponses(key:'B' , value:'TessstB')
 					.addToResponses(PollResponse.createUnknown())
 					.addToMessages(m)
-			responseA.addToMessages(m)
 			previousOwner.save(flush:true, failOnError:true)
+			responseA.addToMessages(m)
 
 			assert responseA.refresh().messages.contains(m)
 			

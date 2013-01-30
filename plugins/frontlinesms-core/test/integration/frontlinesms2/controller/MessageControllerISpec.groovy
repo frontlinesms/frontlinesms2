@@ -183,6 +183,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToResponses(new PollResponse(key:'B' , value:'TessstB'))
 					.addToResponses(PollResponse.createUnknown())
 					.addToMessages(m)
+			previousOwner.save(failOnError:true)
 			responseA.addToMessages(m)
 			previousOwner.save(failOnError:true)
 

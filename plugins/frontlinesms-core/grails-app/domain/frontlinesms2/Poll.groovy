@@ -13,7 +13,6 @@ class Poll extends Activity {
 	String autoreplyText
 	String question
 	boolean yesNo
-	List responses
 	static hasMany = [responses: PollResponse]
 
 //> SETTINGS
@@ -65,7 +64,7 @@ class Poll extends Activity {
 			this.responses.each {
 				it.removeFromMessages(message)
 			}
-			this.unknown.messages.add(message)
+			this.unknown.addToMessages(message)
 		}
 		this
 	}
@@ -82,8 +81,8 @@ class Poll extends Activity {
 	}
 	
 	def getResponseStats() {
-		def totalMessageCount = this.messages.findAll { it.inbound && !it.isDeleted }.size()
-		responses.sort {it.key?.toLowerCase()}.collect {
+		def totalMessageCount = messages?.count { it.inbound && !it.isDeleted && (it.archived == this.archived) }?: 0
+		responses.sort { it.key?.toLowerCase() }.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,
@@ -152,7 +151,7 @@ class Poll extends Activity {
 
 	def deleteResponse(PollResponse response) {
 		response.messages.findAll { message ->
-			this.unknown.messages.add(message)
+			this.unknown.addToMessages(message)
 		}
 		this.removeFromResponses(response)
 		response.delete()

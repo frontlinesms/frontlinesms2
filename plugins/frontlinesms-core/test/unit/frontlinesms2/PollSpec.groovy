@@ -83,6 +83,7 @@ class PollSpec extends Specification {
 			def sendService = Mock(MessageSendService)
 			poll.messageSendService = sendService
 			poll.autoreplyText = "some reply text"
+			poll.save(failOnError:true, flush:true)
 
 			def replyMessage = Fmessage.build(text:"woteva")
 			sendService.createOutgoingMessage({ params ->
@@ -143,6 +144,7 @@ class PollSpec extends Specification {
 			responses[key] = r
 			p.addToResponses(r)
 		}
+		p.save(failOnError:true, flush:true)
 		return [poll:p, responses:responses]
 	}
 }
