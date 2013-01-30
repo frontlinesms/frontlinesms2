@@ -351,12 +351,11 @@ class FsmsTagLib {
 	def datePicker = { att ->
 		def name = att.name
 		def clazz = att.remove('class')
+		clazz = clazz? "date-picker $clazz": 'date-picker'
 		att.value = att.value ?: 'none'
 		att.precision = "day"
 		att.noSelection = ['none':'']
-		out << '<div'
-		if(clazz) out << " class=\"$clazz\""
-		out << '>'
+		out << "<div class=\"$clazz\">"
 		out << g.datePicker(att)
 		out << "<input type='hidden' class='datepicker' name='$name-datepicker'/>"
 		out << '</div>'
