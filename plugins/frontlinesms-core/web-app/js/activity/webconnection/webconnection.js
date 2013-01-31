@@ -1,11 +1,30 @@
-var webconnectionDialog = (function() {
-	var _updateConfirmationScreen = function() {};
-	var validationMessageGenerator = function(fieldName, ruleName) {
-		var i18nKey = "webconnection." + fieldName + ".validation.error";
-		var i18nString = i18n(i18nKey);
-		return i18nKey == i18nString? "": i18nString;
+var webconnectionDialog = (function () {
+	var pollInterval, _updateConfirmationScreen, validationMessageGenerator, _showTestRouteBtn, 
+			_setType, _handlers, _testRouteStatus, _checkRouteStatus, generateMessages;
+	_updateConfirmationScreen = function () {};
+	_setType = function(type) {
+		$.getJSON(url_root + "webconnection/" + type + "/config", function(data) {
+			var configTab, confirmTab; 
+			configTab = $("#webconnection-config");
+			confirmTab = $("#webconnection-confirm");
+			configTab.html(data.config);
+			confirmTab.html(data.confirm);
+			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
+
+			$("#webconnection-confirm").html(data.confirm);
+			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
+			webconnectionDialog.updateConfirmationScreen();
+		});
 	};
-	var _showTestRouteBtn = function() {
+
+	_handlers = {};
+	validationMessageGenerator = function(fieldName, ruleName) {
+		var i18nKey, i18nString;
+		i18nKey = "webconnection." + fieldName + ".validation.error";
+		i18nString = i18n(i18nKey);
+		return i18nKey === i18nString? "": i18nString;
+	};
+	_showTestRouteBtn = function() {
 		var buttonSet, testRouteBtn; 
 		buttonSet = $('.ui-dialog-buttonset');
 		testRouteBtn = buttonSet.find("#testRoute");
@@ -19,7 +38,8 @@ var webconnectionDialog = (function() {
 		}
 		buttonSet.append(testRouteBtn);
 	};
-	function _testRouteStatus() {
+
+	_testRouteStatus = function() {
 		var params = {};
 		if(mediumPopup.tabValidates(mediumPopup.getCurrentTab())) {
 			params.ownerId = $("#activityId").val();
@@ -28,15 +48,29 @@ var webconnectionDialog = (function() {
 				type: 'post',
 				data: $("#new-webconnection-form").serialize() + "&" + $.param(params),
 				url: url_root + "webconnection/testRoute",
-				success: function(data, textStatus) {  	webconnectionDialog.checkRouteStatus(data)}
-			});	
+				success: function(data, textStatus) {webconnectionDialog.checkRouteStatus(data);}
+			});
 		} else {
 			$('.error-panel').show();
 		}
 		return false;
 	};
-	var pollInterval;
-	function _checkRouteStatus(response) {
+
+	function toggleWizardButtons() {
+		if($("#submit").is(":disabled")) {
+			$("#testRoute").attr('disabled', false);
+			$("#submit").attr('disabled', false);
+			$("#cancel").attr('disabled', false);
+			$("#prevPage").attr('disabled', false);
+		} else {
+			$("#testRoute").attr('disabled', "disabled");
+			$("#submit").attr('disabled', "disabled");
+			$("#cancel").attr('disabled', "disabled");
+			$("#prevPage").attr('disabled', "disabled");
+		}
+	}
+	
+	_checkRouteStatus = function(response) {
 		if(response.ok) {
 			$("#testRoute").children().remove();
 			$("#testRoute").append("<span>"+i18n('webconnection.testing.label')+"</span>");
@@ -63,31 +97,18 @@ var webconnectionDialog = (function() {
 									clearInterval(pollInterval);
 								}
 							}
-				});	
+				});
 			}, 3000);
 
 		} else {
-			displayErrors(response)
+			displayErrors(response);
 		}
 	};
-	var _setType = function(type) {
-		$.getJSON(url_root + "webconnection/" + type + "/config", function(data) {
-			var configTab = $("#webconnection-config");
-			var confirmTab = $("#webconnection-confirm");
-			configTab.html(data.config);
-			confirmTab.html(data.confirm);
-			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
-
-			$("#webconnection-confirm").html(data.confirm);
-			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
-			webconnectionDialog.updateConfirmationScreen();
-		});
-	};
-	var _handlers = {}
-	var generateMessages = function(fieldsAndRules) {
-		var messageMap = {};
+	
+	generateMessages = function(fieldsAndRules) {
+		var i, rules, field, messageMap = {};
 		for(field in fieldsAndRules) {
-			var i, rules = fieldsAndRules[field];
+			rules = fieldsAndRules[field];
 			messageMap[field] = {};
 			if(typeof(rules) === "string") {
 				messageMap[field][rules] = validationMessageGenerator(field, rules);
@@ -100,20 +121,6 @@ var webconnectionDialog = (function() {
 		return messageMap;
 	};
 
-	function toggleWizardButtons() {
-		if($("#submit").is(":disabled")) {
-			$("#testRoute").attr('disabled', false);
-			$("#submit").attr('disabled', false);
-			$("#cancel").attr('disabled', false);
-			$("#prevPage").attr('disabled', false);
-		} else {
-			$("#testRoute").attr('disabled', "disabled");
-			$("#submit").attr('disabled', "disabled");
-			$("#cancel").attr('disabled', "disabled");
-			$("#prevPage").attr('disabled', "disabled");
-		}
-	};
-
 	return {
 		resetValidator: function(messageRules) {
 			$("#new-webconnection-form").data("validator", null);
@@ -123,25 +130,27 @@ var webconnectionDialog = (function() {
 			});
 		},
 		addValidationRules: function() {
+			var keyWordTabValidation, configureTabValidation, confirmTabValidation;
+
 			aliasCustomValidation();
 			genericSortingValidation();
 
-			var keyWordTabValidation = function() {
-				 if(!isGroupChecked("blankKeyword")) return validator.element('#keywords');
-				 else return true;
-			};
+			keyWordTabValidation = function() {
+				 if(!isGroupChecked("blankKeyword")) {return validator.element('#keywords');}
+				 else {return true;}
+			}
 
-			var configureTabValidation = function() {
+			configureTabValidation = function() {
 				var isValid = true;
 				$('#webconnection-config input:visible').each(function() {
 					isValid = isValid && validator.element(this);
 				});
 				return isValid;
-			};
+			}
 
-			var confirmTabValidation = function() {
+			confirmTabValidation = function() {
 				return validator.element('input[name=name]');
-			};
+			}
 
 			mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
 			mediumPopup.addValidation('webconnection-configure', configureTabValidation);
@@ -150,7 +159,7 @@ var webconnectionDialog = (function() {
 		setScripts: function(scripts) {
 			webconnectionDialog.resetValidator(scripts.validation);
 			webconnectionDialog.updateConfirmationScreen = scripts.updateConfirmationScreen;
-			webconnectionDialog.handlers = scripts.handlers
+			webconnectionDialog.handlers = scripts.handlers;
 		},
 		updateConfirmationScreen:_updateConfirmationScreen,
 		handlers:_handlers,
