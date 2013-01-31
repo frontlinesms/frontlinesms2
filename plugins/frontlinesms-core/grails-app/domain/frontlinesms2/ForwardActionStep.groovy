@@ -11,8 +11,6 @@ class ForwardActionStep extends Step {
 	static configFields = [sentMessageText: 'textarea', recipients: '']
 
 	private static def RECIPIENT_VALIDATOR = { val, obj ->
-		println "ForwardActionStep validate # $obj.sentMessageText # has recipient # ${obj.stepProperties.find { it.key == "recipient" }?.value}"
-		println "##" + (obj.sentMessageText && obj.stepProperties.find { it.key == "recipient" }?.value)
 		obj.sentMessageText && obj.stepProperties.find { it.key == "recipient" }?.value
 	}
 
