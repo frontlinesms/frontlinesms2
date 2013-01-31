@@ -74,14 +74,14 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor("veryslow") { searchsidebar.activityId.jquery.val() == "folder-$a.id" }
 	}
-	
+
 	def "can search in archive or not, is enabled by default"() {
 		when:
 			to PageNewSearch
 		then:
 			searchsidebar.inArchive == "on"
 		when:
-			searchsidebar.archive.click()
+			searchsidebar.archive.value(false)
 			searchsidebar.searchBtn.click()
 		then:
 			!searchsidebar.inArchive
