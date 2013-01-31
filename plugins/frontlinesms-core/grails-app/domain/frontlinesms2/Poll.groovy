@@ -24,15 +24,8 @@ class Poll extends Activity {
 	}
 
 	def getDisplayText(Fmessage msg) {
-		def p = PollResponse.withCriteria {
-			messages {
-				eq('isDeleted', false)
-				eq('archived', false)
-				eq('id', msg.id)
-			}
-		}
-
-		p?.size() ? "${p[0].value} (\"${msg.text}\")" : msg.text
+		def p = responses.find { "$it.id" == msg.ownerDetail }
+		p? "${p.value} (\"${msg.text}\")": msg.text
 	}
 			
 	static constraints = {
