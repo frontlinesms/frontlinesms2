@@ -17,7 +17,7 @@
 	<div class="input">
 		<label for="inArchive">
 			<g:message code="search.filter.archive"/>
-			<g:checkBox name="inArchive" value="${search?.inArchive?:true}" disabled="${search?.activityId}"/>
+			<g:checkBox name="inArchive" value="${search?.inArchive!=null?search.inArchive:true}" disabled="${search?.activityId}"/>
 		</label>
 	</div>
 </g:if>

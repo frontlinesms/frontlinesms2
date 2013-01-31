@@ -26,7 +26,7 @@
 		}
 
 		if(mediumPopup.getCurrentTabIndex() === mediumPopup.getTabLength()) {
-			showTestRouteBtn();
+			webconnectionDialog.showTestRouteBtn();
 		}
 		
 		$("#confirm-url").html('<p>' + url  + '</p>');
