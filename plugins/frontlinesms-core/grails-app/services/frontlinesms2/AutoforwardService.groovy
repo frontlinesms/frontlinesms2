@@ -67,4 +67,17 @@ class AutoforwardService {
 		}
 		autoforward
 	}
+
+	def doForward(autoforwardOrStep, message) {
+		def m = messageSendService.createOutgoingMessage([contacts:autoforwardOrStep.contacts, groups:autoforwardOrStep.groups?:[] + autoforwardOrStep.smartGroups?:[], messageText:autoforwardOrStep.sentMessageText])
+		if(autoforwardOrStep instanceof Activity) {
+			autoforwardOrStep.addToMessages(m)
+			autoforwardOrStep.addToMessages(message)
+		}
+		m.setOwnerDetail(autoforwardOrStep, message.id)
+		m.save(failOnError:true)
+		messageSendService.send(m)
+		
+		autoforwardOrStep.save(failOnError:true)
+	}
 }

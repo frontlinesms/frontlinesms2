@@ -44,13 +44,15 @@ class AutoforwardSpec extends Specification {
 		given:
 			def autoforward = Autoforward.build(contacts:[Contact.build(mobile:TEST_NUMBER)], sentMessageText:'some forward text')
 			def sendService = Mock(MessageSendService)
-			autoforward.messageSendService = sendService
-
-			def forwardMessage = mockFmessage("message text")
 			sendService.createOutgoingMessage({ params ->
 				params.contacts*.mobile==[TEST_NUMBER] && params.messageText=='some forward text'
 			}) >> forwardMessage
 
+			def forwardService =  Mock(AutoforwardService)
+			forwardService.messageSendService = sendService
+			autoforward.autoforwardService = forwardService
+
+			def forwardMessage = mockFmessage("message text")
 			def inMessage = mockFmessage("message text", '+123457890')
 		when:
 			autoforward.processKeyword(inMessage, Mock(Keyword))
