@@ -75,7 +75,9 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.core:at-modem-detector:0.8'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
-		compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'
+		compile('org.codehaus.groovy.modules.http-builder:http-builder:0.6') {
+			excludes "commons-logging", "xml-apis", "groovy"
+		}
 	}
 
 	plugins {

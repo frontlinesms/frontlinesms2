@@ -135,7 +135,8 @@ class Poll extends Activity {
 			println "###### V :: ${v}"
 			println attrs["keywords${k}"]
 			attrs["keywords${k}"]?.replaceAll(/\s/, "").split(",").each{
-				this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${k}", isTopLevel:!(attrs.topLevelKeyword?.trim().length() > 0)))//adds the keyword without setting the ownerDetail as pollResponse.id
+				if(it.size() > 0)
+					this.addToKeywords(new Keyword(value:"${it.toUpperCase()}", ownerDetail:"${k}", isTopLevel:!(attrs.topLevelKeyword?.trim().length() > 0)))//adds the keyword without setting the ownerDetail as pollResponse.id
 			}
 		}
 	}

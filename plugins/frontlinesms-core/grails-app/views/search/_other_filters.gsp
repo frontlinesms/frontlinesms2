@@ -19,11 +19,9 @@
 	</a>
 </h3>
 <ul class="sub-list" id="extra-options-list">
-	<div class="input">
-		<a class="extra-option-link" id="contactString-add" onclick="toggleExtraSearchOption('contactString')">
-			<g:message code="search.contact.name"/>
-		</a>
-	</div>
+	<a class="extra-option-link" id="contactString-add" onclick="toggleExtraSearchOption('contactString')">
+		<g:message code="search.contact.name"/>
+	</a>
 	<g:each in="${customFieldList}" status="i" var="f" >
 		<li class='field'>
 			<a class="extra-option-link" id="${f}-add" onclick="toggleExtraSearchOption('${f}')">${f}</a>

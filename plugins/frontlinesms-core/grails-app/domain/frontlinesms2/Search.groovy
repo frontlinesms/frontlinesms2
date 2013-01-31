@@ -14,6 +14,7 @@ class Search {
 	Date endDate
 	Map customFields
 	boolean inArchive
+	boolean starredOnly
 	
 	static constraints = {
 		name(blank: false, nullable: false, maxSize: 255)
@@ -27,5 +28,6 @@ class Search {
 		endDate(nullable: true)
 		customFields(nullable: true)
 		inArchive(nullable: true)
+		starredOnly(nullable: true)
 	}
 }

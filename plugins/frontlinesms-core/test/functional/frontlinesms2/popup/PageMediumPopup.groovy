@@ -291,8 +291,8 @@ class WebconnectionWizard extends MediumPopup {
 		configureUshahidi(required:false) { module ConfigureUshahidiWebconnectionTab }
 
 		option(wait:true, cache:false) { shortName -> $('input', name:'webconnectionType', value:shortName) }
-		getTitle { shortName -> option(shortName).previous('label').text() }
-		getDescription { shortName -> option(shortName).previous('p').text() }
+		getTitle { shortName -> option(shortName).previous('h3').text() }
+		getDescription { shortName -> option(shortName).previous('p.info').text() }
 		testConnectionButton(required:false) { $("#testRoute")}
 	}
 }

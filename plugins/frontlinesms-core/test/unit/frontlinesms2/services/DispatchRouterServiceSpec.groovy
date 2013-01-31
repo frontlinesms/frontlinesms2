@@ -15,7 +15,7 @@ class DispatchRouterServiceSpec extends Specification {
 	def setup() {
 		Fmessage.metaClass.static.findBySrc = { src, map->
 			def m = Mock(Fmessage)
-			m.receivedOn >> '2'
+			m.receivedOn >> [id:'2']
 			return m
 		}
 
@@ -64,9 +64,9 @@ class DispatchRouterServiceSpec extends Specification {
 			id << [1, 10, 100]
 	}
 
-	def 'slip should assign message to the last received route if route preference set to last received route'(){
+	def 'slip should assign message to the last received route if route preference set to last received route'() {
 		given:
-			mockAppSettingsService('true','any')
+			mockAppSettingsService('true', 'any')
 			mockRoutes(1, 2, 3)
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
@@ -97,7 +97,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should fall back to the -otherwise- if received connection is set as prefered route and it is not avalilable'(){
 		given://'route 2 is the receivedOn route and it is not available'
-			mockAppSettingsService(true,'any')
+			mockAppSettingsService(true, 'any')
 			mockRoutes(1,3)
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
@@ -140,7 +140,7 @@ class DispatchRouterServiceSpec extends Specification {
 		m.headers >> headers
 		return m
 	}
-	private def mockRoutes(int...ids) {
+	private def mockRoutes(int... ids) {
 		CamelContext c = Mock()
 		c.routes >> ids.collect { [[id:"in-$it"], [id:"out-$it"]] }.flatten()
 		service.camelContext = c

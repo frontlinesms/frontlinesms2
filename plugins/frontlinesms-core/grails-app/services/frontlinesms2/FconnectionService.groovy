@@ -10,6 +10,7 @@ class FconnectionService {
 	def deviceDetectionService
 	def i18nUtilService
 	def smssyncService
+	def connectingIds = [].asSynchronized()
 	
 	def createRoutes(Fconnection c) {
 		println "FconnectionService.createRoutes() :: ENTRY :: $c"
@@ -24,6 +25,7 @@ class FconnectionService {
 		}
 		println "creating route for fconnection $c"
 		try {
+			connectingIds << c.id
 			def routes = c.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
 			createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
@@ -33,6 +35,8 @@ class FconnectionService {
 		} catch(Exception ex) {
 			logFail(c, ex)
 			destroyRoutes(c.id as long)
+		} finally {
+			connectingIds -= c.id
 		}
 		println "FconnectionService.createRoutes() :: EXIT :: $c"
 	}
@@ -65,10 +69,19 @@ class FconnectionService {
 	}
 	
 	def getConnectionStatus(Fconnection c) {
-		if (c instanceof SmslibFconnection)
-			return camelContext.routes.any { it.id ==~ /.*-$c.id$/ } ? ConnectionStatus.CONNECTED : deviceDetectionService.isConnecting((c as SmslibFconnection).port) ? ConnectionStatus.CONNECTING : ConnectionStatus.NOT_CONNECTED
-		else
-			return camelContext.routes.any { it.id ==~ /.*-$c.id$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
+		if(c.id in connectingIds) {
+			return ConnectionStatus.CONNECTING
+		}
+		if (c instanceof SmslibFconnection) {
+			return camelContext.routes.any { it.id ==~ /.*-$c.id$/ }?
+					ConnectionStatus.CONNECTED:
+					deviceDetectionService.isConnecting((c as SmslibFconnection).port)?
+							ConnectionStatus.CONNECTING:
+							ConnectionStatus.NOT_CONNECTED
+		}
+		return camelContext.routes.any { it.id ==~ /.*-$c.id$/ }?
+				ConnectionStatus.CONNECTED:
+				ConnectionStatus.NOT_CONNECTED
 	}
 	
 	// TODO rename 'handleNotConnectedException'

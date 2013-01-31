@@ -46,17 +46,17 @@ class DispatchRouterService {
 					println "Id of prefered route ## $latestReceivedMessage.receivedOn"
 					println "allOutRoutes ## $allOutRoutes"
 					println "ALL ROUTE IDS ## ${allOutRoutes*.id}"
-					def routeToTake = allOutRoutes.find{ it.id.endsWith("-${latestReceivedMessage.receivedOn.id}") }
+					def routeToTake = allOutRoutes.find { it.id.endsWith("-${latestReceivedMessage.receivedOn.id}") }
 					println "Chosen Route ## $routeToTake"
-					routeId = routeToTake?routeToTake.id:null
+					routeId = routeToTake? routeToTake.id: null
 				}
 			}
 
-			if(!routeId){ // if uselastreceiver did not set the routeId
+			if(!routeId) { // if uselastreceiver did not set the routeId
 				if(appSettingsService.get('routing.otherwise') == 'any') {
 					log "## Sending to any available connection ##"
 					routeId = getDispatchRouteId()
-				}else{
+				} else {
 					log "## Not sending message at all ##"
 				}
 			}
