@@ -390,7 +390,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			message.receivedOn == null
 	}
-@spock.lang.IgnoreRest
+
 	def 'doing a Fmessage.findBySrc should give me youngest message'() {
 		when:
 			Fmessage.build(src:'111', text:'oldest')
