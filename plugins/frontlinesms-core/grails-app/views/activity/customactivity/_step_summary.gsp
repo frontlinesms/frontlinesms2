@@ -25,6 +25,11 @@
 		<p>${stepInstance?.getProperty('autoreplyText')}</p>
 	</div>
 </g:if>
+<g:if test="${stepInstance?.shortName == 'forward'}">
+	<div class='step-summary ' id="step-${stepInstance?.id}">
+		<p>${stepInstance?.getProperty('sentMessageText')}</p>
+	</div>
+</g:if>
 <r:script>
 	$("#toggleStep").on("change", function(){
 		window.location = url_root+"message/activity/${ownerInstance.id}/step/"+$(this).val();
