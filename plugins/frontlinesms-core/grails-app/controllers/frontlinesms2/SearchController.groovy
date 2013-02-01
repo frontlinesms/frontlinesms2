@@ -66,16 +66,6 @@ class SearchController extends MessageController {
 		render(contentType: 'text/json') { contactSearchService.lookup(params.term) }
 	}
 
-	def contactSearchResults(params) {
-		def values = params.contactsearch
-		def groups = smartgroups = contacts = addresses = []
-		values.split(",").each { recipient ->
-			def typeAndValue = recipient.split("-", 2)
-			def type = typeAndValue[0]
-			def value = typeAndValue[1]
-		}
-	}
-
 	private def getSearchDescription(search) {
 		String searchDescriptor = message(code: 'searchdescriptor.searching')
 		if(search.searchString) {

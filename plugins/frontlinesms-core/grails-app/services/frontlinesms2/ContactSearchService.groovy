@@ -10,15 +10,25 @@ class ContactSearchService {
 				contactsSection: params?.groupId? Group.get(params.groupId): params.smartGroupId? SmartGroup.get(params.smartGroupId): null]
 	}
 
+	def contactSearchResults(params) {
+		def values = params.contactsearch
+		def groups = smartgroups = contacts = addresses = []
+		values.split(",").each { recipient ->
+			def typeAndValue = recipient.split("-", 2)
+			def type = typeAndValue[0]
+			def value = typeAndValue[1]
+		}
+	}
+
 	def lookup(queryString) {
 		queryString = "%${queryString.toLowerCase()}%"
 		def results = []
 		def contactResults = []
-		getContacts([searchString:queryString]).each{ contactResults << [value: it.mobile, text: it.name] }
+		getContacts([searchString:queryString]).each{ contactResults << [value: "contact-${it.id}", text: it.name] }
 		def groupResults = []
-		Group.findAllByNameIlike(queryString).each { groupResults << [value: it.id, text: it.name] } 
+		Group.findAllByNameIlike(queryString).each { groupResults << [value: "group-${it.id}", text: it.name] } 
 		def smartgroupResults = []
-		SmartGroup.findAllByNameIlike(queryString).each { smartgroupResults << [value: it.id, text: it.name] } 
+		SmartGroup.findAllByNameIlike(queryString).each { smartgroupResults << [value: "smartgroup-${it.id}", text: it.name] } 
 		[(i18nUtilService.getMessage([code:"contact.search.groups"])) :groupResults, (i18nUtilService.getMessage([code:"contact.search.smartgroups"])) :smartgroupResults, (i18nUtilService.getMessage([code:"contact.search.contacts"])) :contactResults].each {
 			if(it.value)
 				results << [group: true, text:(it.key), items: it.value]

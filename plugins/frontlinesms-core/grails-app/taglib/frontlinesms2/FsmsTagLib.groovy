@@ -275,7 +275,7 @@ class FsmsTagLib {
 	}
 
 	def ajaxContactSelector = { att ->
-		out << '<select id="contactsearch" style="width:320px;" data-placeholder="Pick some devs" multiple class="chzn-select">'
+		out << '<select name="recipients" id="contactsearch" style="width:320px;" data-placeholder="Pick some devs" multiple class="chzn-select">'
 		out << '<option></option>'
 		out << '</select>'
 	}
