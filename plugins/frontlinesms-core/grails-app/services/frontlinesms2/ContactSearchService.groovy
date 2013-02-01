@@ -2,11 +2,28 @@ package frontlinesms2
 
 class ContactSearchService {
 	static transactional = true
+	def i18nUtilService
 	
 	def contactList(params) {
 		[contactInstanceList: getContacts(params),
 				contactInstanceTotal: countContacts(params),
 				contactsSection: params?.groupId? Group.get(params.groupId): params.smartGroupId? SmartGroup.get(params.smartGroupId): null]
+	}
+
+	def lookup(queryString) {
+		queryString = "%${queryString.toLowerCase()}%"
+		def results = []
+		def contactResults = []
+		getContacts([searchString:queryString]).each{ contactResults << [value: it.mobile, text: it.name] }
+		def groupResults = []
+		Group.findAllByNameIlike(queryString).each { groupResults << [value: it.id, text: it.name] } 
+		def smartgroupResults = []
+		SmartGroup.findAllByNameIlike(queryString).each { smartgroupResults << [value: it.id, text: it.name] } 
+		[(i18nUtilService.getMessage([code:"contact.search.groups"])) :groupResults, (i18nUtilService.getMessage([code:"contact.search.smartgroups"])) :smartgroupResults, (i18nUtilService.getMessage([code:"contact.search.contacts"])) :contactResults].each {
+			if(it.value)
+				results << [group: true, text:(it.key), items: it.value]
+		}
+		return results
 	}
 	
 	private def getContacts(params) {

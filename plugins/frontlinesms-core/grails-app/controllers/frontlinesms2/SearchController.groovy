@@ -4,6 +4,7 @@ package frontlinesms2
 import grails.util.GrailsConfig
 
 class SearchController extends MessageController {
+	def contactSearchService
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
@@ -61,6 +62,20 @@ class SearchController extends MessageController {
 		[messageInstance: messageInstance]
 	}
 		
+	def contactSearch() {
+		render(contentType: 'text/json') { contactSearchService.lookup(params.term) }
+	}
+
+	def contactSearchResults(params) {
+		def values = params.contactsearch
+		def groups = smartgroups = contacts = addresses = []
+		values.split(",").each { recipient ->
+			def typeAndValue = recipient.split("-", 2)
+			def type = typeAndValue[0]
+			def value = typeAndValue[1]
+		}
+	}
+
 	private def getSearchDescription(search) {
 		String searchDescriptor = message(code: 'searchdescriptor.searching')
 		if(search.searchString) {

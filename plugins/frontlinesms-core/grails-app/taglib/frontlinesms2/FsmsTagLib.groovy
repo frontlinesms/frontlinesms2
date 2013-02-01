@@ -274,6 +274,12 @@ class FsmsTagLib {
 		out << '</div>'
 	}
 
+	def ajaxContactSelector = { att ->
+		out << '<select id="contactsearch" style="width:320px;" data-placeholder="Pick some devs" multiple class="chzn-select">'
+		out << '<option></option>'
+		out << '</select>'
+	}
+
 	def unsubstitutedMessageText = { att ->
 		out << expressionProcessorService.getUnsubstitutedDisplayText(att.messageText)
 	}
