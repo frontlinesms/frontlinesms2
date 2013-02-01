@@ -8,6 +8,7 @@ class DispatchRouterService {
 	static final String RULE_PREFIX = "fconnection-"
 	def appSettingsService
 	def camelContext
+	def systemNotificationService
 
 	int counter = -1
 
@@ -71,7 +72,10 @@ class DispatchRouterService {
 			} else {
 				// TODO may want to queue for retry here, after incrementing retry-count header
 				// TODO CORE-1694 create a system notification here
-				throw new RuntimeException("No outbound route available for dispatch.")
+				println "notification is created here"
+				def routeException = new RuntimeException("No outbound route available for dispatch.")
+				//throw routeException
+				systemNotificationService.create(null, null, routeException)
 			}
 		}
 	}
