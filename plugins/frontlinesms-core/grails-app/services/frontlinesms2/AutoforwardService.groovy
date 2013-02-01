@@ -3,6 +3,7 @@ package frontlinesms2
 import frontlinesms2.*
 
 class AutoforwardService {
+	def messageSendService
 
     def saveInstance(Autoforward autoforward, params) {
     	println "##### Saving Autoforward in Service"
@@ -69,10 +70,13 @@ class AutoforwardService {
 	}
 
 	def doForward(autoforwardOrStep, message) {
-		def m = messageSendService.createOutgoingMessage([contacts:autoforwardOrStep.contacts, groups:autoforwardOrStep.groups?:[] + autoforwardOrStep.smartGroups?:[], messageText:autoforwardOrStep.sentMessageText])
+		def m
 		if(autoforwardOrStep instanceof Activity) {
+			m = messageSendService.createOutgoingMessage([contacts:autoforwardOrStep.contacts, groups:autoforwardOrStep.groups?:[] + autoforwardOrStep.smartGroups?:[], messageText:autoforwardOrStep.sentMessageText])
 			autoforwardOrStep.addToMessages(m)
 			autoforwardOrStep.addToMessages(message)
+		} else {
+			m = messageSendService.createOutgoingMessage([addresses:autoforwardOrStep.recipients , messageText:autoforwardOrStep.sentMessageText])
 		}
 		m.setOwnerDetail(autoforwardOrStep, message.id)
 		m.save(failOnError:true)
