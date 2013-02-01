@@ -26,20 +26,6 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	static final def retryAttempts = 3 // how many times to retry before giving up
 	static final def initialRetryDelay = 10000 // delay before first retry, in milliseconds
 	static final def delayMultiplier = 3 // multiplier applied to delay after each failed attempt
-
-	// Substitution variables
-	static subFields = ['message_body' : { msg ->
-			def keyword = msg.messageOwner?.keywords?.find{ msg.text.toUpperCase().startsWith(it.value) }?.value
-			def text = msg.text
-			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
-				text = text.substring(keyword.size()).trim()
-			}
-			text
-		},
-		'message_body_with_keyword' : { msg -> msg.text },
-		'message_src_number' : { msg -> msg.src },
-		'message_src_name' : { msg -> Contact.findByMobile(msg.src)?.name ?: msg.src },
-		'message_timestamp' : { msg -> msg.dateCreated }]
 	
 	/// Variables
 	String url
@@ -69,7 +55,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	def processKeyword(Fmessage message, Keyword k) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
-		webconnectionService.send(message)
+		webconnectionService.doUpload(this, message)
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {
@@ -95,31 +81,11 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	}
 
 	def activate() {
-		try {
-			deactivate()
-		} catch(Exception ex) {
-			log.info("Exception thrown while deactivating webconnection '$name'", ex)
-		}
-
-		println "*** ACTIVATING ACTIVITY ***"
-		try {
-			def routes = this.routeDefinitions
-			camelContext.addRouteDefinitions(routes)
-			println "################# Activating Webconnection :: ${this}"
-			LogEntry.log("Created Webconnection routes: ${routes*.id}")
-		} catch(FailedToCreateProducerException ex) {
-			println ex
-		} catch(Exception ex) {
-			println ex
-			camelContext.stopRoute("activity-webconnection-${this.id}")
-			camelContext.removeRoute("activity-webconnection-${this.id}")
-		}
+		webconnectionService.activate(this)
 	}
 
 	def deactivate() {
-		println "################ Deactivating Webconnection :: ${this}"
-		camelContext.stopRoute("activity-webconnection-${this.id}")
-		camelContext.removeRoute("activity-webconnection-${this.id}")
+		webconnectionService.deactivate(this)
 	}
 
 	abstract def initialize(params)
@@ -131,7 +97,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		println "x.in.headers: ${x.in.headers}"
 		def fmessage = Fmessage.get(x.in.headers.'fmessage-id')
 		def encodedParameters = this.requestParameters.collect {
-			urlEncode(it.name) + '=' + urlEncode(it.getProcessedValue(fmessage))
+			urlEncode(it.name) + '=' + urlEncode(webconnectionService.getProcessedValue(it, fmessage))
 		}.join('&')
 		println "PARAMS:::$encodedParameters"
 		x.in.headers[Exchange.HTTP_PATH] = this.url

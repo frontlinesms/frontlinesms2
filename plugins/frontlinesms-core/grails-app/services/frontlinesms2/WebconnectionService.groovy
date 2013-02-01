@@ -9,7 +9,44 @@ import frontlinesms2.api.*
 
 
 class WebconnectionService {
+	static def regex = /[$][{]*[a-z_]*[}]/
+	// Substitution variables
+
 	def messageSendService
+
+	private def subFields = ['message_body' : { msg ->
+			def keyword = msg.messageOwner?.keywords?.find{ msg.text.toUpperCase().startsWith(it.value) }?.value
+			def text = msg.text
+			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
+				text = text.substring(keyword.size()).trim()
+			}
+			text
+		},
+		'message_body_with_keyword' : { msg -> msg.text },
+		'message_src_number' : { msg -> msg.src },
+		'message_src_name' : { msg -> Contact.findByMobile(msg.src)?.name ?: msg.src },
+		'message_timestamp' : { msg -> msg.dateCreated }]
+
+	private String getReplacement(String arg, Fmessage msg) {
+		arg = (arg - '${') - '}'
+		def c = subFields[arg]
+		return c(msg)
+	}
+
+	private changeMessageOwnerDetail(Fmessage message, String s) {
+		message.setOwnerDetail(message.messageOwner, s)
+		message.save(failOnError:true, flush:true)
+		println "Changing Status ${message.ownerDetail}"
+	}
+
+	String getProcessedValue(RequestParameter requestParameter, Fmessage msg) {
+		def val = requestParameter.value
+		def matches = val.findAll(regex)
+		matches.each { match ->
+			val = val.replaceFirst(regex, getReplacement(match, msg))
+		}
+		return val
+	}
 
 	def preProcess(Exchange x) {
 		println "x: ${x}"
@@ -45,8 +82,8 @@ class WebconnectionService {
 	def handleCompleted(Exchange x) {
 	}
 
-	def send(Fmessage message) {
-		println "## Webconnection.send() ## sending message # ${message}"
+	def doUpload(Fmessage message) {
+		println "## Webconnection.doUpload() ## uploading message # ${message}"
 		def headers = [:]
 		headers.'fmessage-id' = message.id
 		headers.'webconnection-id' = message.messageOwner.id
@@ -73,14 +110,36 @@ class WebconnectionService {
 		webconnectionInstance.save(failOnError:true, flush:true)
 	}
 
-	private changeMessageOwnerDetail(Fmessage message, String s) {
-		message.ownerDetail = s
-		message.save(failOnError:true, flush:true)
-		println "Changing Status ${message.ownerDetail}"
-	}
-
 	def apiProcess(webcon, controller) {
 		controller.render(generateApiResponse(webcon, controller))
+	}
+
+	def activate(activityOrStep) {
+		try {
+			deactivate(activityOrStep)
+		} catch(Exception ex) {
+			log.info("Exception thrown while deactivating webconnection '$name'", ex)
+		}
+
+		println "*** ACTIVATING ACTIVITY ***"
+		try {
+			def routes = activityOrStep.routeDefinitions
+			camelContext.addRouteDefinitions(routes)
+			println "################# Activating Webconnection :: ${activityOrStep}"
+			LogEntry.log("Created Webconnection routes: ${routes*.id}")
+		} catch(FailedToCreateProducerException ex) {
+			println ex
+		} catch(Exception ex) {
+			println ex
+			camelContext.stopRoute("activity-webconnection-${activityOrStep.id}")
+			camelContext.removeRoute("activity-webconnection-${activityOrStep.id}")
+		}
+	}
+
+	def deactivate(activityOrStep) {
+		println "################ Deactivating Webconnection :: ${activityOrStep}"
+		camelContext.stopRoute("activity-webconnection-${activityOrStep.id}")
+		camelContext.removeRoute("activity-webconnection-${activityOrStep.id}")
 	}
 
 	def generateApiResponse(webcon, controller) {
@@ -155,5 +214,6 @@ class WebconnectionService {
 		webcon.save(failOnError: true)
 		"message successfully queued to send to ${m.dispatches.size()} recipient(s)"
 	}
+
 }
 

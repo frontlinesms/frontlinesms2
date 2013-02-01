@@ -35,7 +35,8 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'postprocess call is handed back to the relevant domain object'() {
 		given:
-			def m = Fmessage.build()
+			service.metaClass.private.changeMessageOwnerDetail = {Fmessage a, String b -> b}
+			def m = Fmessage.build(text:"testing", src:"23423")
 			def x = mockExchange(null, ['webconnection-id':'123','fmessage-id':m.id])
 		when:
 			service.postProcess(x)
