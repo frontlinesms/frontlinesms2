@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class PollResponse {
+class PollResponse implements Comparable {
 	String key
 	String value
 	static belongsTo = [poll: Poll]
@@ -11,9 +11,11 @@ class PollResponse {
 	}
 	
 	static constraints = {
-		value(blank:false, nullable:false, maxSize:255)
-		poll(nullable:false)
-		key(nullable:true)
+		value(blank:false, maxSize:255)
+	}
+
+	int compareTo(that) {
+		key.compareTo(that.key)
 	}
 
 	List getMessages() {

@@ -14,6 +14,7 @@ class Poll extends Activity {
 	String question
 	boolean yesNo
 	static hasMany = [responses: PollResponse]
+	SortedSet responses
 
 //> SETTINGS
 	static transients = ['unknown']
@@ -75,7 +76,7 @@ class Poll extends Activity {
 	
 	def getResponseStats() {
 		def totalMessageCount = messages?.count { it.inbound && !it.isDeleted && (it.archived == this.archived) }?: 0
-		responses.sort { it.key?.toLowerCase() }.collect {
+		responses.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,
@@ -168,10 +169,10 @@ class Poll extends Activity {
 	}
 	
 	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
-		if(keyword.isTopLevel && !keyword.ownerDetail){
+		if(keyword.isTopLevel && !keyword.ownerDetail) {
 			return this.unknown
 		} else {
-			return this.responses.find{ keyword.ownerDetail == it.key }
+			return this.responses.find { keyword.ownerDetail == it.key }
 		}
 	}
 }
