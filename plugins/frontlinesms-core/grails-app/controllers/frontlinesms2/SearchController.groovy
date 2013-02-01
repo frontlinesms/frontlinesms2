@@ -4,6 +4,7 @@ package frontlinesms2
 import grails.util.GrailsConfig
 
 class SearchController extends MessageController {
+	def recipientLookupService
 	def contactSearchService
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
@@ -63,7 +64,7 @@ class SearchController extends MessageController {
 	}
 		
 	def contactSearch() {
-		render(contentType: 'text/json') { contactSearchService.lookup(params.term) }
+		render(contentType: 'text/json') { recipientLookupService.lookup(params.term) }
 	}
 
 	private def getSearchDescription(search) {

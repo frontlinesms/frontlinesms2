@@ -11,6 +11,7 @@ class MessageController extends ControllerUtils {
 	def messageSendService
 	def fmessageInfoService
 	def trashService
+	def recipientLookupService
 	def fmessageService
 
 //> INTERCEPTORS
@@ -167,6 +168,7 @@ class MessageController extends ControllerUtils {
 
 	def send() {
 		def fmessage = messageSendService.createOutgoingMessage(params)
+		def contacts = recipientLookupService.contactSearchResults(params)
 		messageSendService.send(fmessage)
 		flash.message = dispatchMessage 'queued', fmessage
 		render(text: flash.message)
