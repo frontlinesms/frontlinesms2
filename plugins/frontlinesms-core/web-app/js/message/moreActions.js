@@ -87,7 +87,6 @@ var more_actions = (function() {
 			}
 			selectmenuTools.snapback($('#more-actions'));
 		});
-
 		$("#export").click(exportAction);
 	};
 	return { init:init };
@@ -96,4 +95,3 @@ var more_actions = (function() {
 $(document).ready(function() {
 	more_actions.init();
 });
-

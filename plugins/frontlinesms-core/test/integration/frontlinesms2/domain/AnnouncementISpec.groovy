@@ -6,40 +6,6 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
-	def controller
-	def setup() {
-		controller = new AnnouncementController()
-	}
-
-	def "can save new announcement"() {
-		setup:
-			controller.params.name = "announcement"
-			controller.params.addresses = "1234567890"
-			controller.params.messageText = "sending this"
-		when:
-			controller.save()
-			def announcement = Announcement.findByName("announcement")
-		then:
-			announcement.name == 'announcement'
-			announcement.sentMessageText.contains('sending this')
-			announcement
-	}
-
-	def "can edit an announcement"() {
-		setup:
-			def message = Fmessage.build()
-			def announcement = new Announcement(name: 'Test', addresses: "12345")
-			announcement.addToMessages(message)
-			announcement.save(failOnError:true, flush:true)
-			controller.params.ownerId = announcement.id
-			controller.params.name = "renamed announcement"
-		when:
-			controller.save()
-			def editedAnnouncement = Announcement.get(announcement.id)
-		then:
-			!Announcement.findByName('name')
-			editedAnnouncement.name == "renamed announcement"
-	}
 
 	def "A announcement can be archived"() {
 		when:
@@ -78,15 +44,6 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 			a.archived
 			m.archived
 	}
-	
-	def "list of smart groups should be included in the group list"() {
-		given:
-			def s = new SmartGroup(name:'English numbers', mobile:'+44').save(flush:true)
-		when:
-			def model = controller.create()
-		then:
-			model.groupList["smartgroup-$s.id"]?.name == 'English numbers'
-			model.groupList["smartgroup-$s.id"]?.addresses == []
-	}
+
 }
 

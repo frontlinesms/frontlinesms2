@@ -28,6 +28,10 @@ class Group {
 		Contact.findAll("FROM Contact c, GroupMembership m WHERE m.group=? AND m.contact=c ORDER BY c.name", [this]).collect{ it[0] }
 	}
 
+	def countMembers() {
+		Group.executeQuery("SELECT COUNT(*) From GroupMembership m WHERE m.group=?", [this])[0]
+	}
+
 	def addToMembers(Contact c) {
 		GroupMembership.create(c, this)
 	}

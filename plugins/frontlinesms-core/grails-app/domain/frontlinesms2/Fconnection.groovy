@@ -8,15 +8,16 @@ import org.apache.camel.model.RouteDefinition
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
+
+	def fconnectionService
+	
 	static final String HEADER_FCONNECTION_ID = 'fconnection-id'
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
 
 	static hasMany = [messages: Fmessage]
-
-	def fconnectionService
 	
-	static def implementations = [SmslibFconnection,
+	static final def implementations = [SmslibFconnection,
 			ClickatellFconnection,
 			IntelliSmsFconnection,
 			SmssyncFconnection]
@@ -35,8 +36,14 @@ class Fconnection {
 		sort id:'asc'
 		tablePerHierarchy false
 	}
+
+	static constraints = {
+		name blank:false
+	}
 	
 	String name
+	boolean sendEnabled = true
+	boolean receiveEnabled = true
 	
 	static namedQueries = {
 		findByMessages { messageInstance ->

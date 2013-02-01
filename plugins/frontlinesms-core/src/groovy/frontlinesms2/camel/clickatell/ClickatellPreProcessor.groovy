@@ -24,6 +24,8 @@ class ClickatellPreProcessor implements Processor {
 		def connection = ClickatellFconnection.get(connectionId)
 		log "connection=$connection"
 		['apiId', 'username', 'password'].each { set x, it, connection."$it" }
+		if(connection.sendToUsa)
+			set x, 'fromNumber', connection.'fromNumber'
 
 		log 'EXIT'
 	}

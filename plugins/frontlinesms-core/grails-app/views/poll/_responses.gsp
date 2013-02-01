@@ -10,19 +10,19 @@
 						def mode = pollResponse?"edit":"create"
 					%>
 					<g:if test="${(option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 2)))}">
-						<g:textField class='choices ${mode}' name="choice${option}" value="${pollResponse?.value}" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
+						<g:textField class='choices ${mode}' name="choice${option}" value="${pollResponse?.value}" onkeyup="poll.handleResponseEntered(this)"/>
 					</g:if>
 					<g:else>
-						<g:textField class='choices create' name="choice${option}" value="${pollResponse?.value}" disabled="true" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
+						<g:textField class='choices create' name="choice${option}" value="${pollResponse?.value}" disabled="true" onkeyup="poll.handleResponseEntered(this)"/>
 					</g:else>
 				</g:if>
 				<g:else>
 					<label for='choice${option}' class="${option == 'A' || option == 'B' ? 'field-enabled': ''}">${option}</label>
 					<g:if test="${(option == 'A' || option == 'B')}">
-						<g:textField class='choices create required' name="choice${option}" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
+						<g:textField class='choices create required' name="choice${option}" onkeyup="poll.handleResponseEntered(this)"/>
 					</g:if>
 					<g:else>
-						<g:textField class='choices create' name="choice${option}" disabled="true"  onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>	
+						<g:textField class='choices create' name="choice${option}" disabled="true"  onkeyup="poll.handleResponseEntered(this)"/>	
 					</g:else>
 				</g:else>
 			</li>

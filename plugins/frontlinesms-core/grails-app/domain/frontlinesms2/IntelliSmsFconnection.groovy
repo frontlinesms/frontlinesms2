@@ -10,18 +10,16 @@ import frontlinesms2.camel.exception.*
 class IntelliSmsFconnection extends Fconnection {
 	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway/sendmsg.aspx?'
 	static configFields = [name:null,
-				send: ['username', 'password'], 
-				receive: ['receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
+				sendEnabled: ['username', 'password'], 
+				receiveEnabled: ['receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
 	static passwords = ['password', 'emailPassword']
 	static defaultValues = []
 	static String getShortName() { 'intellisms' }
 	
 	String username
 	String password // FIXME maybe encode this rather than storing plaintext
-	// TODO rename sendEnabled
-	boolean send
-	// TODO rename receiveEnabled
-	boolean receive
+	boolean sendEnabled
+	boolean receiveEnabled
 	
 	//Http forwarding configuration
 	EmailReceiveProtocol receiveProtocol
@@ -35,15 +33,15 @@ class IntelliSmsFconnection extends Fconnection {
 	}
 
 	static constraints = {
-		send(validator: { val, obj ->
+		sendEnabled(validator: { val, obj ->
 			if(val) {
 				return obj.username && obj.password
 			}
-			else return obj.receive
+			else return obj.receiveEnabled
 		})
-		receive(validator: { val, obj ->
+		receiveEnabled(validator: { val, obj ->
 				 if(val) return obj.receiveProtocol && obj.serverName && obj.emailUserName && obj.emailUserName
-				 else return obj.send
+				 else return obj.sendEnabled
 		})
 		username(nullable:true, blank:false)
 		password(nullable:true, blank:false)
@@ -66,7 +64,7 @@ class IntelliSmsFconnection extends Fconnection {
 			@Override void configure() {}
 			List getRouteDefinitions() {
 				def definitions = []
-				if(isSend()) {
+				if(isSendEnabled()) {
 					definitions << from("seda:out-${IntelliSmsFconnection.this.id}")
 							.onException(AuthenticationException)
 									.handled(true)
@@ -83,7 +81,7 @@ class IntelliSmsFconnection extends Fconnection {
 							.process(new IntelliSmsPostProcessor())
 							.routeId("out-internet-${IntelliSmsFconnection.this.id}")
 				}
-				if(isReceive()) {
+				if(isReceiveEnabled()) {
 					definitions << from(camelProducerAddress())
 							.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(IntelliSmsFconnection.this.id.toString()))
 							.beanRef('intelliSmsTranslationService', 'process')

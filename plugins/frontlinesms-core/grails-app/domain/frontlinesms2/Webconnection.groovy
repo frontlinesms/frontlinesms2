@@ -12,7 +12,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	static final String OWNERDETAIL_SUCCESS = 'success'
 	static final String OWNERDETAIL_PENDING = 'pending'
 	static final String OWNERDETAIL_FAILED = 'failed'
-
+	
 	def camelContext
 	def webconnectionService
 	def appSettingsService
@@ -57,9 +57,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			return true
 			})
 		secret(nullable:true)
-		url(nullable:false, validator: { val, obj ->
-			return val.startsWith("http://") || val.startsWith("https://")
-		})
+		url nullable:false, url:true, validator:{ val, obj -> val ==~ 'http(s?)://.*' }
 	}
 	static mapping = {
 		requestParameters cascade: "all-delete-orphan"
@@ -70,6 +68,27 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		webconnectionService.send(message)
+	}
+
+	List<RouteDefinition> getTestRouteDefinitions() {
+		return new RouteBuilder() {
+			@Override void configure() {}
+			List getRouteDefinitions() {
+				return [from("seda:activity-webconnection-${Webconnection.this.id}")
+						.beanRef('webconnectionService', 'preProcess')
+						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
+						.onException(Exception)
+									.redeliveryDelay(0)
+									.handled(true)
+									.beanRef('webconnectionService', 'handleException')
+									.beanRef('webconnectionService', 'createStatusNotification')
+									.end()
+						.to(Webconnection.this.url)
+						.beanRef('webconnectionService', 'postProcess')
+						.beanRef('webconnectionService', 'createStatusNotification')
+						.routeId("activity-webconnection-${Webconnection.this.id}")]
+			}
+		}.routeDefinitions
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {
@@ -95,15 +114,13 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	}
 
 	def activate() {
+		println "*** ACTIVATING ACTIVITY ***"
+		createRoute(this.routeDefinitions)
+	}
+
+	def createRoute(routes) {
 		try {
 			deactivate()
-		} catch(Exception ex) {
-			log.info("Exception thrown while deactivating webconnection '$name'", ex)
-		}
-
-		println "*** ACTIVATING ACTIVITY ***"
-		try {
-			def routes = this.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
 			println "################# Activating Webconnection :: ${this}"
 			LogEntry.log("Created Webconnection routes: ${routes*.id}")
@@ -111,8 +128,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			println ex
 		} catch(Exception ex) {
 			println ex
-			camelContext.stopRoute("activity-webconnection-${this.id}")
-			camelContext.removeRoute("activity-webconnection-${this.id}")
+			deactivate()
 		}
 	}
 
@@ -154,6 +170,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		println "###### Webconnection.postProcess() with Exchange # ${x}"
 		println "Web Connection Response::\n ${x.in.body}"
 		log.info "Web Connection Response::\n ${x.in.body}"
+		x
 	}
 
 	private String urlEncode(String s) throws UnsupportedEncodingException {
@@ -167,8 +184,10 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		webconnectionService.apiProcess(this, controller)
 	}
 
+	def getMoreActions() { ['retryFailed'] }
+
 	String getFullApiUrl() {
-		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
+		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/${Webconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()}/$id/" : ""
 	}
 }
 	

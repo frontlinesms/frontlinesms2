@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+do/deploy_webapp
+do/mvn clean compile exec:java
+

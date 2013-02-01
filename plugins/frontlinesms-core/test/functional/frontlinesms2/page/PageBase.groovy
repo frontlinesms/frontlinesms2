@@ -25,7 +25,7 @@ class TabsModule extends Module {
 			- $('#main-nav li.current a #inbox-indicator').text()).trim().toLowerCase()
 		}
 		unreadcount {
-			$('#inbox-indicator').text().toInteger()
+			$('#inbox-indicator').text()?.toInteger()
 		}
 		status {
 			$('#inbox-indicator').classes().find { it in ['red', 'green', 'orange'] }

@@ -1,0 +1,63 @@
+#!/bin/bash
+set -e
+
+function TODO {
+	echo "Not yet implemented: $@"
+	echo "Exiting script."
+	exit 1;
+}
+
+function show_usage {
+	cat << EOF
+$0 <pluginName> <pluginVersion>
+EOF
+}
+
+function to_camel_case {
+	echo $@ | sed -r "s/[-\.](\w)/\U\1/g"
+}
+
+function capitalise {
+	echo $@ | sed -r "s/(^|\s)(\w)/\1\U\2\E/g"
+}
+
+PLUGIN_PACKAGE=org.grails.plugins
+PLUGIN_NAME=`grep app.name application.properties | cut -d= -f2`
+PLUGIN_NAME_CAMELCASE=`capitalise $(to_camel_case $PLUGIN_NAME)`
+echo "# Got plugin camelcase name as: $PLUGIN_NAME_CAMELCASE"
+PLUGIN_CLASS_FILE=${PLUGIN_NAME_CAMELCASE}GrailsPlugin.groovy
+echo "# Plugin class file: $PLUGIN_CLASS_FILE"
+PLUGIN_VERSION=`grep -E "def\s+version\s+=" $PLUGIN_CLASS_FILE | cut -d= -f2 | sed -E "s:[' ]::g"`
+FTP_ADDRESS=dev.frontlinesms.com
+FTP_PATH=`echo $PLUGIN_PACKAGE | sed -E "s:\.:/:g"`
+FTP_USERNAME=$FRONTLINESMS_MAVEN_USERNAME
+FTP_PASSWORD=$FRONTLINESMS_MAVEN_PASSWORD
+ZIP_NAME_NEW="$PLUGIN_NAME-$PLUGIN_VERSION.zip"
+ZIP_NAME_OLD="grails-$ZIP_NAME_NEW"
+
+echo "# Uploading plugin $PLUGIN_PACKAGE:$PLUGIN_NAME:$PLUGIN_VERSION to site $FTP_ADDRESS/$FTP_PATH..."
+
+echo "# Copying zip from $ZIP_NAME_OLD to $ZIP_NAME_NEW..."
+cp $ZIP_NAME_OLD $ZIP_NAME_NEW
+echo "# Zip copied."
+
+if [ -z "$PLUGIN_NAME" ]; then
+	show_usage
+	exit 1
+fi
+if [ -z "$PLUGIN_VERSION" ]; then
+	show_usage
+	exit 1
+fi
+
+echo "# Using ftp credentials: $FTP_USERNAME:$FTP_PASSWORD"
+ftp -n $FTP_ADDRESS << EOF
+user $FTP_USERNAME $FTP_PASSWORD
+cd org/grails/plugins/$PLUGIN_NAME
+mkdir $PLUGIN_VERSION
+cd $PLUGIN_VERSION
+put $ZIP_NAME_NEW
+exit
+EOF
+
+echo "# Plugin uploaded"

@@ -14,8 +14,3 @@
 		<fsms:radioGroup name="format" values="csv, pdf" labels="export.csv, export.pdf" checked="csv"/>
 	</g:form>
 </div>
-<r:script>
-function updateExportInfo() {
-	$(".ui-dialog-title").html("Export Messages: ${reportName}");
-}
-</r:script>

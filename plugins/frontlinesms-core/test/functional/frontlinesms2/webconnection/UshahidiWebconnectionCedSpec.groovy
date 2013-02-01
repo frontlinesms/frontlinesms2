@@ -29,6 +29,13 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			$('.info p')[1].text() == 'The API key for either Crowdmap or Ushahidi can be found in the Settings on the Crowdmap or Ushahidi web site.'
 	}
 
+	def 'Api tab disabled when using ushahidi/crowdmap connection type'() {
+		when:
+			launchWizard('ushahidi')
+		then:
+			tabByName('webconnection-api').hasClass('disabled-tab')
+	}
+
 	def 'when configuring for crowdmap, deploy address has suffix specified'() {
 		given:
 			launchWizard('ushahidi')
@@ -62,7 +69,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		and:
 			next.click()
 		then:
-			(valid && apiTab.secret.displayed ) || (!valid && errorPanel.displayed)
+			(valid && keywordTab.keyword.displayed ) || (!valid && errorPanel.displayed)
 		where:
 			deployAddress     | apiKey       | valid
 			'www.example.com' | 'ABCDE12345' | true
@@ -95,10 +102,6 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.crowdmapApiKey.jquery.trigger('keyup')
 		when:
 			next.click()
-		then:
-			apiTab.secret.displayed
-		when:
-			next.click()
 			keywordTab.useKeyword('global').click()
 			next.click()
 		then:
@@ -120,7 +123,6 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.crowdmapDeployAddress.jquery.trigger('keyup')
 			configureUshahidi.crowdmapApiKey.value("2343asdasd")
 			next.click()
-			next.click() // skip api tab
 		and:
 			keywordTab.keyword = "Repo"
 			next.click()
@@ -140,12 +142,21 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			header['url'] == 'https://frontlinecrowd.crowdmap.com/frontlinesms/'
 	}
 
+	def '"Test Connection" button is displayed on confirm screen'() {
+		given:
+			launchWizard('ushahidi')
+		and:
+			fillValidConfig()
+		when: 'skip past sorting page'
+			next.click()
+		then:
+			testConnectionButton.displayed
+	}
+
 	private def fillValidConfig() {
 		configureUshahidi.subType('crowdmap').click()
 		configureUshahidi.crowdmapDeployAddress = 'default'
 		configureUshahidi.crowdmapApiKey = 'aaa111bbb222'
-		next.click()
-		waitFor { apiTab.secret.displayed }
 		next.click()
 		keywordTab.useKeyword('global').click()
 	}

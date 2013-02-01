@@ -30,25 +30,12 @@
 			mediumPopup.disableTab("poll-edit-message");
 			mediumPopup.disableTab("poll-recipients");
 			//update confirm screen
-			updateConfirmationMessage();
+			poll.updateConfirmationMessage();
 		} else {
 			mediumPopup.enableTab("poll-edit-message");
 			mediumPopup.enableTab("poll-recipients");
 		}
 	});
 
-	var setPollType = function() {
-		if ($("input[name='pollType']:checked").val() == "yesNo") {
-			mediumPopup.disableTab("poll-response");
-			resetResponses();
-			addRespectiveAliases();
-		} else {
-			mediumPopup.enableTab("poll-response");
-			resetResponses();
-		}
-		autoUpdate = true;
-		updateConfirmationMessage();
-	}
-
-	$("input[name='pollType']").live("change", setPollType);
+	$("input[name='pollType']").live("change", poll.setPollType);
 </r:script>

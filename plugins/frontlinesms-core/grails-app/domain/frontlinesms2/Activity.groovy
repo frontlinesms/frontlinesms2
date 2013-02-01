@@ -30,6 +30,9 @@ abstract class Activity extends MessageOwner {
 
 	static constraints = {
 		sentMessageText(nullable:true)
+		keywords(validator: { val, obj ->
+			!val || val?.every { it.validate() }
+		})
 	}
 
 //> ACCESSORS
