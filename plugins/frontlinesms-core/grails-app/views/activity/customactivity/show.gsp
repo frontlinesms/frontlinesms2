@@ -1,1 +1,1 @@
-<g:render template="/activity/generic/show"/>
+<fsms:render template="/activity/generic/show"/>
