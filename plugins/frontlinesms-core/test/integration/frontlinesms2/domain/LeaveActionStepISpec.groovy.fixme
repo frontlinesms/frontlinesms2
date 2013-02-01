@@ -7,7 +7,7 @@ class LeaveActionStepISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "Test dynamic constraints"() {
 		when:
-			def step = new LeaveActionStep(type: 'leaveAction')
+			def step = new LeaveActionStep()
 			if(addStepProperty)
 				step.addToStepProperties(new StepProperty(key:stepPropertyKey, value:"invaluable"))
 		then:

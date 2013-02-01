@@ -7,7 +7,7 @@ class JoinActionStepISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "Test dynamic constraints"() {
 		when:
-			def step = new JoinActionStep(type: 'joinAction')
+			def step = new JoinActionStep()
 			if(addStepProperty)
 				step.addToStepProperties(new StepProperty(key:stepPropertyKey, value:"invaluable"))
 		then:

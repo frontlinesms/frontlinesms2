@@ -5,7 +5,7 @@ import grails.converters.JSON
 abstract class Step {
 	static belongsTo = [activity: CustomActivity]
 	static hasMany = [stepProperties: StepProperty]
-	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
+	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep, WebconnectionActionStep]
 
 	static configFields = [:]
 
