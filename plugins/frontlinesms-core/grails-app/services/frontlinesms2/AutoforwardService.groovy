@@ -82,6 +82,7 @@ class AutoforwardService {
 		messageSendService.send(m)
 		
 		autoforwardOrStep.save(failOnError:true)
+	}
 
 	@Listener(topic='beforeDelete', namespace='gorm')
 	def handleDeletedContact(Contact contact) {
