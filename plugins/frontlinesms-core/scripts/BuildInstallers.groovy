@@ -74,6 +74,13 @@ target(main: 'Build installers for various platforms.') {
 		println 'Changing resource paths for installed app to SNAPSHOT options...'
 		doScript 'add_snapshot_to_install_resource_directories'
 	}
+	if(isReleaseBuild() || getValueAsBoolean('db.migrations', true)) {
+		println 'Enabling database migrations...'
+		doScript 'installer_dbmigration_enable'
+	} else {
+		println 'Disabling database migrations...'
+		doScript 'installer_dbmigration_disable'
+	}
 	def appName = metadata.'app.name'
 	def appVersion = metadata.'app.version'
 	println "Building $appName, v$appVersion"

@@ -6,7 +6,8 @@ import spock.lang.*
 
 class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
-	
+	def i18nUtilService
+
 	def setup() {
 		controller = new AutoreplyController()
 	}
@@ -22,6 +23,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 		then:
 			def autoreply = Autoreply.findByName(name)
+			controller.flash.message == i18nUtilService.getMessage([code:"autoreply.save.success", args:[autoreply.name]])
 			autoreply.autoreplyText == autoreplyText
 			autoreply.keywords?.size() == 1
 			autoreply.keywords[0].value == keyword
@@ -183,6 +185,29 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def autoreply = Autoreply.findByName("Fruit")
 			autoreply.autoreplyText == 'Some Text'
 			autoreply.keywords == null
+	}
+
+	def 'restoring a deleted activity should fail if an activity with colliding keywords exists'(){
+		setup:
+			def trashService = new TrashService()
+			def keyword = new Keyword(value:'TEAM')
+			def autoreply = Autoreply.build(name:'Should fail restore')
+			autoreply.addToKeywords(keyword)
+			autoreply.save(failOnError:true)
+			controller.params.id = autoreply.id
+			trashService.sendToTrash(autoreply)
+		expect:
+			Autoreply.findByName('Should fail restore').deleted == true
+		when:
+			def keyword2 = new Keyword(value:'TEAM')
+			def autoreply2 = Autoreply.build(name:'Keyword thief')
+			autoreply2.addToKeywords(keyword2)
+			autoreply2.save(failOnError:true)
+
+			controller.params.id = autoreply.id
+			controller.restore()
+		then:
+			controller.flash.message == i18nUtilService.getMessage([code:"default.restore.failed", args:["Activity" ,Autoreply.findByName("Should fail restore").id]])
 	}
 }
 

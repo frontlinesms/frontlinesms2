@@ -166,6 +166,30 @@ class WebconnectionServiceSpec extends Specification {
 	}
 
 	@Unroll
+	def 'apiProcess should not expect secret if none is configured in the activity'() {
+		given:
+			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 
+				save: { println "save called with args $it" }, secret:""]
+			def renderedArgs
+			def testContacts = [Contact.build(name:'a', mobile:'12'), Contact.build(name:'b', mobile:'23')]
+			def controller = [request:[:], render: { renderedArgs = it }]
+			controller.request = [JSON:requestBody]
+			def messageSendService = Mock(MessageSendService)
+			def m = Mock(Fmessage)
+			m.dispatches >> ['1', '2', '3']
+			messageSendService.createOutgoingMessage(_) >> m
+			service.messageSendService = messageSendService
+		when:
+			service.apiProcess(webcon, controller)
+		then:
+			1 * messageSendService.createOutgoingMessage(_) >> { Map req -> assert req.addresses == testContacts*.mobile; return m }
+			1 * messageSendService.send(m)
+		where:
+			requestBody << [[secret:"", message:"test", recipients: [[type:'contact', id:1], [type:'contact', id:2]]],
+					[message:"test", recipients: [[type:'contact', name:'A'], [type:'contact', name:'B']]]]
+	}
+
+	@Unroll
 	def 'apiProcess should trigger messages to explicitly listed addresses'() {
 		given:
 			def webcon = [addToMessages: { println "addToMessages called with args $it" }, 

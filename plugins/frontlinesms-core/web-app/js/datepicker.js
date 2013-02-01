@@ -11,6 +11,7 @@ $(function(){
 			$(selects.get(1)).val(date.getMonth()+1);
 			$(selects.get(2)).val(date.getFullYear());
 			$(selects.trigger("change"));
+			selectmenuTools.refresh(selects);
 		}
 	});	
 });

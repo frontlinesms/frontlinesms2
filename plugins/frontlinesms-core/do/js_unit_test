@@ -1,0 +1,38 @@
+#!/bin/bash
+function err {
+	1>&2 echo "$@"
+}
+
+function check_npm_module_available {
+	MODULE_NAME=$1
+	err "# Checking for NPM module: $MODULE_NAME..."
+	INSTALL_COUNT=`(npm list; npm -g list) | grep -c "^[├└]─[─┬] $MODULE_NAME\@"`
+	if [ 0 -eq $INSTALL_COUNT ]; then
+		err "# NPM module missing: $MODULE_NAME.  To install globally, please run 'sudo npm i -g $MODULE_NAME'"
+		err "# Installing module locally..."
+		npm install $MODULE_NAME
+	fi
+	err "# NPM Module found: $MODULE_NAME"
+}
+check_npm_module_available fs
+check_npm_module_available jquery
+check_npm_module_available jsdom
+check_npm_module_available qunit
+
+set -e
+
+function run_test() {
+	TARGET=$1
+	echo "# Running tests for $TARGET..."
+	qunit -c "web-app/js/${TARGET}.js" -d `ls test/js/lib/*.js` -t "test/js/${TARGET}_tests.js"
+}
+
+pushd test/js
+TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
+popd
+echo "# Tests to run: $TESTS"
+
+for TEST in $TESTS; do
+	run_test $TEST
+done
+

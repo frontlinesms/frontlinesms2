@@ -1,0 +1,33 @@
+#!/bin/bash
+# Take input of unit test XML and split into separate files
+
+TARGET_DIRECTORY=target/test-reports
+
+OUTPUT_FILE="discard.me"
+function output {
+	echo "Output -> $OUTPUT_FILE: $@"
+	echo "$@" >> $TARGET_DIRECTORY/$OUTPUT_FILE
+}
+
+DEFAULT_OUTPUT_FILE_COUNT=0
+while IFS="" read -r LINE; do
+	# check if line is the start of a new file, and change OUTPUT_FILE if appropriate
+	if echo $LINE | grep -q '^<testsuite '; then
+		OUTPUT_FILE=`echo $LINE | sed -E -e 's/^\s*<testsuite.* name="([^"]*).*$/\1/'`
+		if [[ "default" == "$OUTPUT_FILE" ]]; then
+			let DEFAULT_OUTPUT_FILE_COUNT++
+			OUTPUT_FILE="default-$DEFAULT_OUTPUT_FILE_COUNT"
+		fi
+		OUTPUT_FILE="TEST-javascript_unit-$OUTPUT_FILE.xml"
+		output '<?xml version="1.0" encoding="UTF-8"?>'
+	fi
+
+	# check if line is metadata not required in output file, and discard as appropriate
+	if [[ "discard.me" == "$OUTPUT_FILE" ]] || echo "$LINE" | grep -q '</testsuites>'; then
+		continue
+	fi
+
+	# output useful output to the specific file
+	output "$LINE"
+done
+

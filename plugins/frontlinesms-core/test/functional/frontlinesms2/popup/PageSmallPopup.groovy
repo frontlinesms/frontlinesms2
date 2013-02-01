@@ -59,7 +59,7 @@ class DeleteGroupPopup extends SmallPopup {
 		popupTitle.contains("delete group")
 	}
 	static content = {
-		warningMessage { $('#modalBox div.dialog p').text().toLowerCase() }
+		warningMessage { $('#modalBox div.dialog p').text()?.toLowerCase() }
 	}
 }
 

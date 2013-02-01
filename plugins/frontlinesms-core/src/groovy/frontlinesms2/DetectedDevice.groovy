@@ -4,6 +4,8 @@ import net.frontlinesms.messaging.ATDeviceDetector
 
 class DetectedDevice {
 	String port
+	String manufacturer
+	String model
 	String description
 	DetectionStatus status
 	String lockType
@@ -11,7 +13,10 @@ class DetectedDevice {
 	boolean smsReceiveSupported
 	
 	static DetectedDevice create(ATDeviceDetector d) {
+println "alxndrsn: DetectedDevice.create() :: manufacturer=$d.manufacturer; model=$d.model"
 		new DetectedDevice(port:d.portName,
+			manufacturer:d.manufacturer,
+			model:d.model,
 			description:getDescription(d),
 			status:getStatus(d),
 			lockType:d.lockType,

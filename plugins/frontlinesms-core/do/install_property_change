@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+PROPERTY_SUFFIX=$1
+PROPERTY_ROOT=$2
+PROPERTY_ROOT_ESCAPED=`echo "$PROPERTY_ROOT" | sed "s:\.:\\\.:g"`
+PROPERTY_FILE=install/frontlinesms-core.install.properties
+
+echo "# Changing $PROPERTY_ROOT to $PROPERTY_ROOT.$PROPERTY_SUFFIX's value in $PROPERTY_FILE..."
+
+sed -i -e    "/^$PROPERTY_ROOT_ESCAPED=.*$/d" \
+       -e "s/^\($PROPERTY_ROOT_ESCAPED\.$PROPERTY_SUFFIX\)=\(.*\)$/\1=\2\n$PROPERTY_ROOT=\2/" \
+		$PROPERTY_FILE
+
+echo "# $PROPERTY_FILE changed for $PROPERTY_ROOT."
+

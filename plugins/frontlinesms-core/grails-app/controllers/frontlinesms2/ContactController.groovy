@@ -54,7 +54,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()]
 		render view:'/contact/_single_contact_view', model:model
 	}
@@ -65,8 +64,8 @@ class ContactController extends ControllerUtils {
 		}
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
-		def contactInstanceTotal = contactList.contactInstanceTotal
-		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
+		def contactInstanceTotal = Contact.count()
+		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList ? contactInstanceList[0] : null))
 		def usedFields = contactInstance?.customFields ?: []
 		def usedFieldNames = []
 		usedFields.each() { field ->
@@ -79,11 +78,26 @@ class ContactController extends ControllerUtils {
 				unusedFields.add(it)
 		}
 		def contactGroupInstanceList = contactInstance?.groups ?: []
+		if(params.contactId && !contactInstance) {
+			flash.message = message(code:'contact.not.found')
+			redirect(action: 'show')
+			return false
+		} else if(params.groupId && !contactList.contactsSection) {
+			flash.message = message(code:'group.not.found')
+			redirect(action: 'show')
+			return false
+		} else if(params.smartGroupId && !contactList.contactsSection) {
+			flash.message = message(code:'smartgroup.not.found')
+			redirect(action: 'show')
+			return false
+		}
+
 		[contactInstance: contactInstance,
 				checkedContactList: ',',
 				contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
 				contactsSection: contactList.contactsSection,
+				contactsSectionContactTotal: contactList.contactsSectionContactTotal,
 				contactFieldInstanceList: usedFields,
 				contactGroupInstanceList: contactGroupInstanceList,
 				contactGroupInstanceTotal: contactGroupInstanceList.size(),
@@ -91,7 +105,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()]
 	}
 	
@@ -104,7 +117,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()] << contactSearchService.contactList(params)
 	}
 
@@ -157,7 +169,7 @@ class ContactController extends ControllerUtils {
 	}
 
 	def search() {
-		render template:'search_results', model:contactSearchService.contactList(params)
+		fsms.render template:'search_results', model:contactSearchService.contactList(params)
 	}
 	
 	def checkForDuplicates() {

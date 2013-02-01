@@ -17,22 +17,20 @@ class AutoforwardSpec extends Specification {
 			else delegate.messages = [m]
 			return delegate
 		}
+		Keyword.metaClass.validate = { -> true }
 	}
 
 	@Unroll
-	def "Test Constraints"() {
+	def "Test Constraints #{valid} #{props}"() {
 		when:
 			def autoforward = new Autoforward()
 			props.each { k, v -> autoforward[k] = v }
-			println "FORWARD.contacts=$autoforward.contacts; props=$props"
-			autoforward.validate()
-			println autoforward.errors
 		then:
 			autoforward.validate() == valid
 		where:
 			valid | props
-			false | [name:"name"]
-			false | [name:"name", keywords:[new Keyword(value:"keyword")]]
+			true  | [name:"name"]
+			true  | [name:"name", keywords:[new Keyword(value:"keyword")]]
 			true  | [name:"name", contacts:[new Contact(name:"name")]]
 			true  | [name:"name", contacts:[new Contact(name:"name")], keywords:[new Keyword(value:"keyword")]]
 			true  | [name:"name", smartGroups:[new SmartGroup(name:"SmartGroup", contactName:"contactName")], keywords:[new Keyword(value:"keyword")]]
@@ -64,7 +62,7 @@ class AutoforwardSpec extends Specification {
 	def 'getRecipientCount() should count group members and contacts'() {
 		given:
 			def a = new Autoforward(name:'recipient counter')
-			if(contacts) a.contacts = (1..contacts).collect { Contact.build() }
+			if(contacts) a.contacts = (1..contacts).collect { Contact.build(mobile:"+123${Contact.count()}") }
 			if(groups) a.groups = (1..groups).collect { mockGroup(groupMembers) }
 			def sg = []
 			if(smartGroups) sg = (1..smartGroups).collect { def smrt = mockSmartGroup(smartGroupMembers); println "smrt.members=$smrt.members"; return smrt }
@@ -104,7 +102,7 @@ class AutoforwardSpec extends Specification {
 	private def mockMembers(gClass, memberCount) {
 		def g = Mock(gClass)
 		if(memberCount) {
-			def members = (1..memberCount).collect { Contact.build() }
+			def members = (1..memberCount).collect { Contact.build(mobile:"+123${Contact.count()}") }
 			println "mockMembers() :: members=$members"
 			g.members >> { members }
 			println "mockMembers() :: g.members=$g.members"

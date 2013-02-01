@@ -61,14 +61,9 @@ grails.exceptionresolver.params.exclude = ['password']
 grails.hibernate.cache.queries = true
 
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
-grails.plugin.databasemigration.updateOnStart = true
-// allow migration override in dev
-environments { development {
-        def runMigrations = System.properties.'db.migrations'
-	if(runMigrations != null) {
-		grails.plugin.databasemigration.updateOnStart = runMigrations != 'false'
-	}
-} }
+// Allow disabling of migrations via system property
+println "MIGRATIONS: System.properties.'db.migrations' = ${System.properties['db.migrations']}"
+grails.plugin.databasemigration.updateOnStart = System.properties['db.migrations'] != 'false'
 
 // set per-environment settings
 environments {
@@ -101,7 +96,7 @@ log4j = {
 					threshold:org.apache.log4j.Level.WARN
 		}
 		development { console name:'dev', threshold:org.apache.log4j.Level.INFO }
-		test { console name:'test', threshold:org.apache.log4j.Level.INFO }
+		test { console name:'test', threshold:org.apache.log4j.Level.WARN }
 	}
 
 	root {

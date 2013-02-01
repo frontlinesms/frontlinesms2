@@ -20,7 +20,7 @@ abstract class PageContact extends frontlinesms2.page.PageBase {
 class BodyMenu extends geb.Module {
 	static base = { $('#body-menu') }
 	static content = {
-		selectedMenuItem { $('.selected a').text().toLowerCase() }
+		selectedMenuItem { $('.selected a').text()?.toLowerCase() }
 		groupSubmenuLinks { $('li.groups ul.submenu li a')*.text() }
 		getGroupLink { groupName ->
 			$('li.groups ul.submenu li a', text:groupName ) 
@@ -34,16 +34,17 @@ class BodyMenu extends geb.Module {
 			$('li.smartgroups ul.submenu li a', text:groupName)
 		}
 		smartGroupIsDisplayed { smartGroupInstance ->
-			$("title").text().contains(smartGroupInstance.name)
+			$("title").text()?.contains(smartGroupInstance.name)
 		}
+		allContactsCount { $('a[href="/frontlinesms-core/contact/show"]').text()?.find(/\d+/) as Integer}
 	}
 }
 
 class ContentHeader extends geb.Module {
 	static base = { $('#main-list-head') }
 	static content = {
-		title { $('h1').text().toLowerCase() }
-		contactCount { $('h1').text().find(/\d+/) as Integer}
+		title { $('h1').text()?.toLowerCase() }
+		contactCount { $('h1').text()?.find(/\d+/) as Integer}
 		button { $('a.btn, input[type="button"], button') }
 		groupHeaderSection { $('div.group') }
 		groupHeaderTitle { $('div.group h1') }
@@ -56,7 +57,7 @@ class ContentFooter extends geb.Module {
 	static content = {
 		search { $('a')[0] }
 		searchContact { $('#contact-search')}
-		searchDetailsText { $('#contact-search').text().toLowerCase() }
+		searchDetailsText { $('#contact-search').text()?.toLowerCase() }
 		nextPage { $('#paging a.nextLink') }
 		prevPage { $('#paging a.prevLink') }
 		currentStep { $('#paging currentStep') }
@@ -74,6 +75,7 @@ class ContactList extends geb.Module {
 	    }
 
 		selectAll(required:false) { $('.contact-select', 0)}
+		selectedContact(required:false) { $('li.contact-preview.selected')}
 		selectedContacts { $(".selected li a")*.text() }
 		noContent { $('p.no-content').text() }
 	}
@@ -128,6 +130,8 @@ class SingleContactDetails extends geb.Module {
 		cancel { $('#action-buttons a.cancel', text:'Cancel') }
 		delete { $('#btn_delete') }
 		searchForMessages { $('#message-stats a.search') }
+		sentCount { $('li.sent').text()}
+		receivedCount {$('li.received').text()}
 	}
 }
 
@@ -147,7 +151,7 @@ class MultipleContactDetails extends geb.Module {
 		}
 		update { $('#action-buttons #update-all') }
 		delete { $('#action-buttons #btn_delete_all') }
-		checkedContactCount(required:false) { $("h2#checked-contact-count").text().split(" ")[0].toInteger() }
+		checkedContactCount(required:false) { $("h2#checked-contact-count").text()?.split(" ")[0].toInteger() }
 		deleteAllButton(required:false) { $('#btn_delete_all') }
 
 	}

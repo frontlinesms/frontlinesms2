@@ -6,7 +6,11 @@ import frontlinesms2.popup.MediumPopup
 import geb.Module
 
 class PageConnection extends PageBase {
-	static url = 'connection/list'
+	String convertToPath(Object[] args) {
+		if(!args) 'connection/list'
+		else if(args[0] instanceof Number) 'connection/show/' + args[0]
+		else 'connection/show/' + args[0].id
+	}
 
 	static content = {
 		connectionList { module ConnectionList }
