@@ -2,13 +2,14 @@ package frontlinesms2
 
 class ContactSearchService {
 	static transactional = true
+	def i18nUtilService
 	
 	def contactList(params) {
 		[contactInstanceList: getContacts(params),
 				contactInstanceTotal: countContacts(params),
 				contactsSection: params?.groupId? Group.get(params.groupId): params.smartGroupId? SmartGroup.get(params.smartGroupId): null]
 	}
-	
+
 	private def getContacts(params) {
 		def searchString = getSearchString(params)
 		if(params.groupId) {

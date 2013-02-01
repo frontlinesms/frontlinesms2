@@ -15,6 +15,7 @@ modules = {
 		resource url:[dir:'css', file:'settings.css']
 		resource url:[dir:'css', file:'status.css']
 		resource url:[dir:'css', file:'wizard.css']
+		resource url:[dir:'css', file:'chosen.css']
 
 
 		resource url:[dir:'js/layout', file:'resizer.js'], disposition:'head'
@@ -39,6 +40,9 @@ modules = {
 		resource url:[dir:'js', file:"status_indicator.js"], disposition:'head'
 		resource url:[dir:'js', file:"system_notification.js"], disposition:'head'
 		resource url:[dir:'js', file:'magicwand.js'], disposition:'head'
+		resource url:[dir:'js', file:'contactsearch.js'], disposition:'head'
+		resource url:[dir:'js', file:'chosen.jquery.js'], disposition:'head'
+		resource url:[dir:'js', file:'ajax-chosen.js'], disposition:'head'
 		resource url:[dir:'js', file:'selectmenuTools.js'], disposition:'head'
 		resource url:[dir:'js', file:"activity/popupCustomValidation.js"], disposition:'head'
 		
