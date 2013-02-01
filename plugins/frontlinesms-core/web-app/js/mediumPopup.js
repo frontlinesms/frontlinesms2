@@ -110,6 +110,14 @@ var mediumPopup = (function() {
 		$(".ui-dialog").addClass("help");
 		initializePopup();
 	};
+	appendButton = function(id, type, value){
+		var button = $('<button></button>', {
+								id: id,
+								type:type
+							});
+		button.append("<span>"+value+"</span>")
+		return button
+	};
 	submitWithoutClose = function() {
 		$("#submit").attr('disabled', 'disabled');
 		if(tabValidates(getCurrentTab())) {
@@ -298,6 +306,7 @@ var mediumPopup = (function() {
 
 	return {
 		addValidation:addValidation,
+		appendButton:appendButton,
 		disableTab:disableTab,
 		editConnection:editConnection, // TODO move this somewhere more suitable
 		enableTab:enableTab,
