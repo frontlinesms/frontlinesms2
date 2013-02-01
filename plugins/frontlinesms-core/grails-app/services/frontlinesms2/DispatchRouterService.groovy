@@ -2,6 +2,7 @@ package frontlinesms2
 
 import org.apache.camel.Exchange
 import org.apache.camel.Header
+import frontlinesms2.camel.exception.InvalidRoutingRulesException
 
 /** This is a Dynamic Router */
 class DispatchRouterService {
@@ -70,12 +71,8 @@ class DispatchRouterService {
 				log "Routing to $queueName"
 				return queueName
 			} else {
-				// TODO may want to queue for retry here, after incrementing retry-count header
-				// TODO CORE-1694 create a system notification here
-				println "notification is created here"
-				def routeException = new RuntimeException("No outbound route available for dispatch.")
-				//throw routeException
-				systemNotificationService.create(null, null, routeException)
+				systemNotificationService.create("connection.error.frontlinesms2.camel.exception.invalidroutingrulesexception", [], null)
+				return null
 			}
 		}
 	}

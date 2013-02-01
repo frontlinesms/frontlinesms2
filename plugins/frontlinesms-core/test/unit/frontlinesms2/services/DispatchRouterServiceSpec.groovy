@@ -10,7 +10,7 @@ import org.apache.camel.Exchange
 import org.apache.camel.Message
 
 @TestFor(DispatchRouterService)
-@Mock([Dispatch, Fmessage, Fconnection, SmslibFconnection])
+@Mock([Dispatch, Fmessage, Fconnection, SmslibFconnection, SystemNotificationService])
 class DispatchRouterServiceSpec extends Specification {
 	def setup() {
 		Fmessage.metaClass.static.findBySrc = { src, map->
@@ -45,7 +45,7 @@ class DispatchRouterServiceSpec extends Specification {
 		then:
 			RuntimeException ex = thrown()
 	}
-	
+
 	@Unroll
 	def 'slip should return null if previous is set'() {
 		given:
@@ -75,22 +75,26 @@ class DispatchRouterServiceSpec extends Specification {
 		then:
 			routedTo == "seda:out-2"
 	}
-
 	@Unroll
 	def 'slip should use the defined rules to determine fconnection to use'(){
 		given:
+			def invokationCount = 0
 			mockAppSettingsService(settings)
 			def fconnection1 = new SmslibFconnection(name:"test 1", port:"/dev/ttyUSB0").save(flush:true)
 			def fconnection2 = new SmslibFconnection(name:"test 2", port:"/dev/ttyUSB0").save(flush:true)
 			def fconnection3 = new SmslibFconnection(name:"test 3", port:"/dev/ttyUSB0").save(flush:true)
 			mockRoutes(fconnection1.id.toInteger(), fconnection2.id.toInteger(), fconnection3.id.toInteger())
-			def routedTo = service.slip(mockExchange(), null, null)
+			def notificationService = Mock(SystemNotificationService)
+			notificationService.create(_, _, _) >> { a,b,c -> println "I was called" ; invokationCount++ }
+			service.systemNotificationService = notificationService
 		expect:
-			routedTo == route
+			service.slip(mockExchange(), null, null) == route
+			invokationCount == (expectNotification? 1 : 0)
 		where:
-			settings                                                        | route
-			[true, 'any', 'fconnection-4, fconnection-1, fconnection-2']   | "seda:out-1"
-			[true, 'any', 'uselastreceiver, fconnection-3, fconnection-1'] | "seda:out-2"
+			settings                                                            | route         | expectNotification
+			[true, 'any', 'fconnection-4, fconnection-1, fconnection-2']        | "seda:out-1"  | false
+			[true, 'any', 'uselastreceiver, fconnection-3, fconnection-1']      | "seda:out-2"  | false
+			[false, 'dontsend']                                                 | null          | true
 	}
 
 	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'(){
