@@ -79,7 +79,8 @@ class AutoforwardService {
 			m = messageSendService.createOutgoingMessage([addresses:autoforwardOrStep.recipients , messageText:autoforwardOrStep.sentMessageText])
 		}
 		m.setOwnerDetail(autoforwardOrStep, message.id)
-		m.save(failOnError:true)
+		message.messageOwner.addToMessages(m)
+		message.messageOwner.save(failOnError:true)
 		messageSendService.send(m)
 		
 		autoforwardOrStep.save(failOnError:true)

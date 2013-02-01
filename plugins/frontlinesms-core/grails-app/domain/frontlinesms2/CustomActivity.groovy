@@ -9,7 +9,7 @@ class CustomActivity extends Activity {
 	def getActivityMessages(getOnlyStarred=false, getSent=null, stepId=null, params=null) {
 		if(stepId) {
 			def outgoingMessagesByStep = []
-			if(Step.get(stepId) instanceof ReplyActionStep) {
+			if((Step.get(stepId) instanceof ReplyActionStep) || (Step.get(stepId) instanceof ForwardActionStep)) {
 				outgoingMessagesByStep = MessageDetail.findAllByOwnerTypeAndOwnerId(MessageDetail.OwnerType.STEP, stepId).collect{ it.message }
 			}
 			return (outgoingMessagesByStep + Fmessage.owned(this, getOnlyStarred, true)?.list(params?:[:])).flatten()
