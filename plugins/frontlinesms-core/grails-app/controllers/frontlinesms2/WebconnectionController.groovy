@@ -12,6 +12,7 @@ class WebconnectionController extends ActivityController {
 	def create() {}
 
 	def save() {
+		if(params.activityId) params.ownerId = params.activityId
 		withWebconnection { webconnectionInstance ->
 			doSave('webconnection', webconnectionService, webconnectionInstance)
 		}
