@@ -98,6 +98,16 @@ class FconnectionService {
 		}
 	}
 
+	def enableFconnection(Fconnection c) {
+		try{
+			c.enabled = true
+			c.save()
+			createRoutes(c)
+		} catch(Exception ex) {
+			logFail(c, ex)
+		}
+	}
+
 	private def logFail(c, ex) {
 		ex.printStackTrace()
 		log.warn("Error creating routes to fconnection with id $c?.id", ex)
