@@ -1,6 +1,5 @@
 var contactsearch = {
 	init: function(list) {
-		console.log("destruction!");
 		$("#contactsearch").ajaxChosen({
 			type: 'POST',
 			url: '../search/contactSearch',
@@ -9,7 +8,6 @@ var contactsearch = {
 		{
 			var results = [];
 			$.each(data, function (i, val) {
-				console.log(val.text);
 				var group = { // here's a group object:
 					group: true,
 					text: val.text, // label for the group
@@ -20,7 +18,6 @@ var contactsearch = {
 				});
 				results.push(group);
 			});
-			console.log (results);
 			return results;
 		});
 	}

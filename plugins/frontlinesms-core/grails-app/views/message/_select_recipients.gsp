@@ -1,6 +1,5 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
-	<fsms:ajaxContactSelector/> 
 	<g:hiddenField name="mobileNumbers" value="${nonContactRecipients?.join(',')}"/>
 	<div id="manual-address">
 		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label" /></label>
