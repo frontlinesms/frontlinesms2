@@ -1,11 +1,9 @@
 package frontlinesms2
 
-class PollResponse {
+class PollResponse implements Comparable {
 	String key
 	String value
 	static belongsTo = [poll: Poll]
-	static hasMany = [messages: Fmessage]
-	List messages = []
 	static transients = ['liveMessageCount']
 
 	static mapping = {
@@ -13,33 +11,46 @@ class PollResponse {
 	}
 	
 	static constraints = {
-		value(blank:false, nullable:false, maxSize:255)
-		poll(nullable:false)
-		messages(nullable:true)
-		key(nullable:true)
+		value(blank:false, maxSize:255)
+	}
+
+	int compareTo(that) {
+		key.compareTo(that.key)
+	}
+
+	List getMessages() {
+		if(poll.messages == null) return []
+		if(isUnknown()) {
+			return poll.messages.findAll { !it.ownerDetail }.asList()
+		}
+		return poll.messages.findAll { it.ownerDetail == "$id" }.asList()
+	}
+
+	def removeFromMessages(m) {
+		if(m.ownerDetail == "$id") m.ownerDetail = null
+	}
+
+	boolean isUnknown() {
+		return key == Poll.KEY_UNKNOWN
 	}
 	
 	void addToMessages(Fmessage message) {
-		if(message.inbound) {
-			this.poll.responses?.each {
-				it.removeFromMessages(message)
-			}
-			this.messages.add(message)
-			if (this.poll.messages == null)
-				this.poll.messages = []
-			this.poll.messages << message
-			message.messageOwner = this.poll
-			message.save()
+		if(!message.inbound) return
+		if (this.poll.messages == null)
+			this.poll.messages = []
+		this.poll.messages << message
+		message.messageOwner = this.poll
+		if(isUnknown()) {
+			message.ownerDetail = null
+		} else {
+			if(!id) throw new IllegalStateException('Cannot add a message to an unsaved PollResponse.')
+			message.ownerDetail = "$id"
 		}
+		message.save()
 	}
 	
 	def getLiveMessageCount() {
-		def m = 0
-		this.messages.each {
-			if(!it.isDeleted)
-				m++
-		}
-		m
+		messages.count { it.inbound && !it.isDeleted && (it.archived == poll.archived) }
 	}
 
 //> FACTORY METHODS

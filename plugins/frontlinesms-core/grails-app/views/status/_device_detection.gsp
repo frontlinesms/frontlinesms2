@@ -11,7 +11,7 @@
 		</thead>
 		<tbody>
 			<g:if test="${detectedDevices.size() == 0}">
-				<tr><td colspan="3" class="no-content"><g:message code="status.modems.none"/></td></tr>
+				<tr class="no-content"><td colspan="3"><g:message code="status.modems.none"/></td></tr>
 			</g:if>
 			<g:else>
 				<g:each in="${detectedDevices}" var="d">

@@ -39,24 +39,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			it.save(failOnError:true, flush:true)
 		}
 
-		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken', date:TEST_DATE)
-				.save(failOnError:true, flush:true)
-		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver', date:TEST_DATE)
-				.save(failOnError:true, flush:true)
-		def liverMessage2 = Fmessage.build(src:'+254333222', text:'liver for lunch?', date:TEST_DATE)
-				.save(failOnError:true, flush:true)
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		def unknownResponse = new PollResponse(value:'unknown')
-		def poll = new Poll(name:'Miauow Mix')
-				.addToResponses(unknownResponse)
-				.addToResponses(chickenResponse)
-				.addToResponses(liverResponse)
-				.save(failOnError:true, flush:true)
-		liverResponse.addToMessages(liverMessage)
-		liverResponse.addToMessages(liverMessage2)
-		chickenResponse.addToMessages(chickenMessage)
-		poll.save(failOnError:true, flush:true)
+		TestData.createMiaowMixPoll(TEST_DATE, 2)
 	}
 	
 	private def makeGroupMember() {
