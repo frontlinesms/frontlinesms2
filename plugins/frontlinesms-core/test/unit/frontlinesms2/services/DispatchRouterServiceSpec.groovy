@@ -78,18 +78,18 @@ class DispatchRouterServiceSpec extends Specification {
 	@Unroll
 	def 'slip should use the defined rules to determine fconnection to use'(){
 		given:
-			def invokationCount = 0
+			def invocationCount = 0
 			mockAppSettingsService(settings)
 			def fconnection1 = new SmslibFconnection(name:"test 1", port:"/dev/ttyUSB0").save(flush:true)
 			def fconnection2 = new SmslibFconnection(name:"test 2", port:"/dev/ttyUSB0").save(flush:true)
 			def fconnection3 = new SmslibFconnection(name:"test 3", port:"/dev/ttyUSB0").save(flush:true)
 			mockRoutes(fconnection1.id.toInteger(), fconnection2.id.toInteger(), fconnection3.id.toInteger())
 			def notificationService = Mock(SystemNotificationService)
-			notificationService.create(_, _, _) >> { a,b,c -> println "I was called" ; invokationCount++ }
+			notificationService.create(_, _, _) >> { a,b,c -> println "I was called" ; invocationCount++ }
 			service.systemNotificationService = notificationService
 		expect:
 			service.slip(mockExchange(), null, null) == route
-			invokationCount == (expectNotification? 1 : 0)
+			invocationCount == (expectNotification? 1 : 0)
 		where:
 			settings                                                            | route         | expectNotification
 			[true, 'any', 'fconnection-4, fconnection-1, fconnection-2']        | "seda:out-1"  | false
