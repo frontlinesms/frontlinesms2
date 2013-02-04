@@ -3,12 +3,14 @@ package frontlinesms2
 import org.apache.camel.Exchange
 import org.apache.camel.Header
 
+import frontlinesms2.camel.exception.NoRouteAvailableException
+
 /** This is a Dynamic Router */
 class DispatchRouterService {
 	static final String RULE_PREFIX = "fconnection-"
 	def appSettingsService
 	def camelContext
-	def systemNotificationService
+	def i18nUtilService
 
 	int counter = -1
 
@@ -69,10 +71,10 @@ class DispatchRouterService {
 				def queueName = "seda:out-$fconnectionId"
 				log "Routing to $queueName"
 				return queueName
-			} else {
-				systemNotificationService.create("connection.error.frontlinesms2.camel.exception.invalidroutingrulesexception", [], null)
-				return null
 			}
+
+			createSystemNotification('no-available-route')
+			return null
 		}
 	}
 	
@@ -100,6 +102,13 @@ class DispatchRouterService {
 		println "DispatchRouterService.handleFailed() : ENTRY"
 		updateDispatch(x, DispatchStatus.FAILED)
 		println "DispatchRouterService.handleFailed() : EXIT"
+	}
+
+	private def createSystemNotification(def code) {
+		def text = i18nUtilService.getMessage(code:"routing.notification.$code")
+		def notification = SystemNotification.findOrCreateWhere(text:text)
+		notification.read = false
+		notification.save(failOnError:true, flush:true)
 	}
 	
 	private Dispatch updateDispatch(Exchange x, s) {

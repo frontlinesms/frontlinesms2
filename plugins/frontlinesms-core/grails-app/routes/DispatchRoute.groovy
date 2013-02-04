@@ -12,3 +12,4 @@ class DispatchRoute extends RouteBuilder {
 				.routeId('dispatch-route')
 	}
 }
+

@@ -10,7 +10,7 @@ import org.apache.camel.Exchange
 import org.apache.camel.Message
 
 @TestFor(DispatchRouterService)
-@Mock([Dispatch, Fmessage, Fconnection, SmslibFconnection, SystemNotificationService])
+@Mock([Dispatch, Fmessage, Fconnection, SmslibFconnection, SystemNotification])
 class DispatchRouterServiceSpec extends Specification {
 	def setup() {
 		Fmessage.metaClass.static.findBySrc = { src, map->
@@ -28,7 +28,11 @@ class DispatchRouterServiceSpec extends Specification {
 			println " mocked dispatch $d"
 			return d
 		}
+
+		service.i18nUtilService = Mock(I18nUtilService)
+		service.i18nUtilService.getMessage(_) >> 'blah blah blah'
 	}
+
 	def "should update the dispatch when no route is found"() {
 		setup:
 			def exchange = Mock(Exchange)
@@ -75,21 +79,18 @@ class DispatchRouterServiceSpec extends Specification {
 		then:
 			routedTo == "seda:out-2"
 	}
+
 	@Unroll
 	def 'slip should use the defined rules to determine fconnection to use'(){
 		given:
-			def invocationCount = 0
 			mockAppSettingsService(settings)
 			def fconnection1 = new SmslibFconnection(name:"test 1", port:"/dev/ttyUSB0").save(flush:true)
 			def fconnection2 = new SmslibFconnection(name:"test 2", port:"/dev/ttyUSB0").save(flush:true)
 			def fconnection3 = new SmslibFconnection(name:"test 3", port:"/dev/ttyUSB0").save(flush:true)
 			mockRoutes(fconnection1.id.toInteger(), fconnection2.id.toInteger(), fconnection3.id.toInteger())
-			def notificationService = Mock(SystemNotificationService)
-			notificationService.create(_, _, _) >> { a,b,c -> println "I was called" ; invocationCount++ }
-			service.systemNotificationService = notificationService
 		expect:
 			service.slip(mockExchange(), null, null) == route
-			invocationCount == (expectNotification? 1 : 0)
+			!expectNotification ^ SystemNotification.count()
 		where:
 			settings                                                            | route         | expectNotification
 			[true, 'any', 'fconnection-4, fconnection-1, fconnection-2']        | "seda:out-1"  | false
@@ -97,7 +98,7 @@ class DispatchRouterServiceSpec extends Specification {
 			[false, 'dontsend']                                                 | null          | true
 	}
 
-	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'(){
+	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'() {
 		given:
 			mockAppSettingsService(false, 'dontsend')
 			mockRoutes(1, 2, 3)
@@ -108,7 +109,7 @@ class DispatchRouterServiceSpec extends Specification {
 			routedTo == null
 	}
 
-	def 'slip should not assign messages to any route if routing preference is not to send messages when routes are not avalilable'(){
+	def 'slip should not assign messages to any route if routing preference is not to send messages when routes are not avalilable'() {
 		given:
 			mockAppSettingsService(false, 'dontsend')
 		when:
@@ -118,7 +119,7 @@ class DispatchRouterServiceSpec extends Specification {
 			routedTo == null
 	}
 
-	def 'slip should fall back to the -otherwise- if received connection is set as prefered route and it is not avalilable'(){
+	def 'slip should fall back to the -otherwise- if received connection is set as prefered route and it is not avalilable'() {
 		given://'route 2 is the receivedOn route and it is not available'
 			mockAppSettingsService(true, 'any')
 			mockRoutes(1, 3)
