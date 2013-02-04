@@ -63,7 +63,7 @@ class FconnectionService {
 			}
 		}
 		def connection = Fconnection.get(id)
-		if (connection instanceof SmssyncFconnection)
+		if (connection.shortname == 'smssync')
 			smssyncService.handleRouteDestroyed(connection)
 		println "fconnectionService.destroyRoutes : EXIT"
 	}
