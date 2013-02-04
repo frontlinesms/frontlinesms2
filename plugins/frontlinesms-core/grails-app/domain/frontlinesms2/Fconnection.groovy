@@ -53,6 +53,14 @@ class Fconnection {
 					eq 'id', messageInstance.id
 				}
 		}
+		enabledNonSmslib { connectionInstance ->
+			and {
+				eq("enabled", true)
+				not {
+					eq(getShortName(), "smslib") 
+				}
+			}
+		}
 	}
 
 	def getStatus() {
