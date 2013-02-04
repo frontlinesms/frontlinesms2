@@ -41,23 +41,16 @@ class WebconnectionService {
 		println "Changing Status ${message.ownerDetail}"
 	}
 
-	private changeMessageOwnerDetail(Fmessage message, String s) {
-		message.ownerDetail = s
-		message.save(failOnError:true, flush:true)
-		println "Changing Status ${message.ownerDetail}"
-	}
-
-	private def createRoute(routes) {
+	private def createRoute(webconnectionInstance, routes) {
 		try {
-			deactivate()
+			deactivate(webconnectionInstance)
 			camelContext.addRouteDefinitions(routes)
-			println "################# Activating Webconnection :: ${this}"
 			LogEntry.log("Created Webconnection routes: ${routes*.id}")
 		} catch(FailedToCreateProducerException ex) {
 			println ex
 		} catch(Exception ex) {
 			println ex
-			deactivate()
+			deactivate(webconnectionInstance)
 		}
 	}
 
@@ -65,6 +58,7 @@ class WebconnectionService {
 		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)
 		fm.save(failOnError:true, flush:true)
 	}
+
 
 	String getProcessedValue(RequestParameter requestParameter, Fmessage msg) {
 		def val = requestParameter.value
@@ -124,7 +118,8 @@ class WebconnectionService {
 
 	def retryFailed(Webconnection c) {
 		Fmessage.findAllByMessageOwnerAndOwnerDetail(c, Webconnection.OWNERDETAIL_FAILED).each {
-		send(it)
+			send(it)
+		}
 	}
 
 	def saveInstance(Webconnection webconnectionInstance, params) {
@@ -154,7 +149,7 @@ class WebconnectionService {
 			webconnectionInstance.addToMessages(message)
 			webconnectionInstance.save(failOnError:true)
 		}
-		createRoute(webconnectionInstance.testRouteDefinitions)
+		createRoute(webconnectionInstance, webconnectionInstance.testRouteDefinitions)
 		if(getStatusOf(webconnectionInstance) == ConnectionStatus.CONNECTED) {
 			def headers = [:]
 			headers.'fmessage-id' = message.id
@@ -175,7 +170,7 @@ class WebconnectionService {
 	}
 
 	def activate(activityOrStep) {
-		createRoute(activityOrStep.routeDefinitions)
+		createRoute(activityOrStep, activityOrStep.routeDefinitions)
 	}
 
 	def deactivate(activityOrStep) {
