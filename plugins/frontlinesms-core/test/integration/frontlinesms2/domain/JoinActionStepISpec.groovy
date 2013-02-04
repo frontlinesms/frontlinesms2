@@ -4,19 +4,6 @@ import frontlinesms2.*
 import spock.lang.*
 
 class JoinActionStepISpec extends grails.plugin.spock.IntegrationSpec {
-	@Unroll
-	def "Test dynamic constraints"() {
-		when:
-			def step = new JoinActionStep(type: 'joinAction')
-			if(addStepProperty)
-				step.addToStepProperties(new StepProperty(key:stepPropertyKey, value:"invaluable"))
-		then:
-			step.validate() == expectedOutcome
-		where:
-			addStepProperty | stepPropertyKey | expectedOutcome
-			true            | 'group'         | true
-	}
-
 	def "Can retrieve Contacts stored as StepProperties"() {
 			given:
 				def contactList = []
