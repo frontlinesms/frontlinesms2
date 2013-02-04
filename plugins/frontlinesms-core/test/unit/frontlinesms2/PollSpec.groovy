@@ -10,7 +10,7 @@ import grails.buildtestdata.mixin.Build
 @Build(Fmessage)
 class PollSpec extends Specification {
 	/** some responses that should pass validation */
-	def OK_RESPONSES = [new PollResponse(value: "one"), new PollResponse(value: "two")]
+	def OK_RESPONSES = [new PollResponse(value:'one', key:'A'), new PollResponse(value:'two', key:'B')]
 	private static final String TEST_NUMBER = "+2345678"
 	
 	def setup() {
@@ -25,7 +25,7 @@ class PollSpec extends Specification {
 	def 'poll must have at least three responses'() {
 		given:
 			def p = new Poll(name:'test poll')
-			p.responses = []
+			p.responses = [] as SortedSet
 			responseCount.times { p.responses << new PollResponse(value:"r-$it", key:"$it") }
 		expect:
 			p.validate() == valid

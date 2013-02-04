@@ -141,12 +141,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'move action should work for activities'() {
 		given:
-			def poll = new Poll(name: 'This is a poll', yesNo:false)
-			poll.addToResponses(new PollResponse(value:"Manchester"))
-			poll.addToResponses(new PollResponse(value:"Barcelona"))
-			poll.addToResponses(new PollResponse(value:"Harambee Stars"))
-			poll.addToResponses(PollResponse.createUnknown())
-			poll.save(failOnError:true)
+			def poll = TestData.createFootballPoll()
 			def message = Fmessage.build()
 		when:
 			controller.params.messageId = message.id

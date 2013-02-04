@@ -6,9 +6,9 @@ class PollResponseISpec extends grails.plugin.spock.IntegrationSpec {
 	def "Adding a message to a PollResponse will set the message_messageOwner tp the poll"() {
 		given:
 			def p = new Poll(name:'new')
-			def r = new PollResponse(value:'yes')
+			def r = new PollResponse(value:'yes', key:'yes')
 			p.addToResponses(PollResponse.createUnknown())
-			p.addToResponses(new PollResponse(value: 'No', key: 'No'))
+			p.addToResponses(value:'No', key:'No')
 			p.addToResponses(r)
 			p.save(flush:true, failOnError:true)
 			def m = Fmessage.build()
@@ -22,3 +22,4 @@ class PollResponseISpec extends grails.plugin.spock.IntegrationSpec {
 			m.messageOwner == p
 	}
 }
+

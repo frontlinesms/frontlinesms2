@@ -195,9 +195,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	private def setUpPollAndResponses() {		
 		def poll = new Poll(name: 'question')
 		poll.addToResponses(PollResponse.createUnknown())
-		poll.addToResponses(new PollResponse(value:"response 1"))
-		poll.addToResponses(new PollResponse(value:"response 2"))
-		poll.addToResponses(new PollResponse(value:"response 3"))
+		poll.addToResponses(value:"response 1", key:'A')
+		poll.addToResponses(value:"response 2", key:'B')
+		poll.addToResponses(value:"response 3", key:'C')
 		poll.save(flush: true, failOnError:true)
 		return poll
 	}
@@ -267,55 +267,28 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "Message should be sorted into the correct PollResponse for  Poll with top level and second level keywords"() {
 		when:
-			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
-			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
-			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
-			p.addToResponses(PollResponse.createUnknown())
-			p.save(failOnError:true)
-			def k1 = new Keyword(value: "FOOTBALL", activity: p)
-			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:false)
-			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"C", isTopLevel:false)
-			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"B", isTopLevel:false)
-			p.addToKeywords(k1)
-			p.addToKeywords(k2)
-			p.addToKeywords(k3)
-			p.addToKeywords(k4)
-			p.save(failOnError:true, flush:true)
+			def p = TestData.createFootballPollWithKeywords()
 		then:
 			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), Keyword.findByValue(keywordValue)).value == pollResponseValue
 		where:
-			keywordValue|pollResponseValue
-			"FOOTBALL"|"Unknown"
-			"MANCHESTER"|"Manchester"	
-			"BARCELONA"|"Barcelona"
-			"HARAMBEE"|"Harambee Stars"
+			keywordValue | pollResponseValue
+			"FOOTBALL"   | "Unknown"
+			"MANCHESTER" | "Manchester"	
+			"BARCELONA"  | "Barcelona"
+			"HARAMBEE"   | "Harambee Stars"
 	}
 
 	@Unroll
 	def "Message should be sorted into the correct PollResponse for  Poll with only top level keywords"() {
 		when:
-			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
-			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
-			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
-			p.addToResponses(PollResponse.createUnknown())
-			p.save(failOnError:true)
-			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:true)
-			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"C", isTopLevel:true)
-			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"B", isTopLevel:true)
-			p.addToKeywords(k2)
-			p.addToKeywords(k3)
-			p.addToKeywords(k4)
-			p.save(failOnError:true, flush:true)
-			println "##### ${p.keywords*.value}"
+			def p = TestData.createFootballPollWithKeywords()
 		then:
 			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), p.keywords.find{ it.value == keywordValue }).value == pollResponseValue
 		where:
-			keywordValue|pollResponseValue
-			"MANCHESTER"|"Manchester"
-			"BARCELONA"|"Barcelona"
-			"HARAMBEE"|"Harambee Stars"
+			keywordValue | pollResponseValue
+			"MANCHESTER" | "Manchester"
+			"BARCELONA"  | "Barcelona"
+			"HARAMBEE"   | "Harambee Stars"
 	}
 
 	def "saving a poll with a response value empty should fail"(){
