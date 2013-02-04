@@ -11,9 +11,12 @@ class AutoforwardServiceSpec extends Specification {
 		setup:
 			def forwardStep = Mock(ForwardActionStep)
 			def sendService = Mock(MessageSendService)
-
+			def owner = Mock(CustomActivity)
+			
 			def message = Mock(Fmessage)
 			message.id >> 1
+			owner.addToMessages { ms-> return "adding message to messageOwner"}
+			message.messageOwner >> owner
 			
 			def outgoingMessage = Mock(Fmessage)
 			outgoingMessage.setOwnerDetail(_,_) >> "setting the owner detail"

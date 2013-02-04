@@ -9,7 +9,6 @@ class LeaveActionStep extends Step {
 	static configFields = [group: Group]
 
 	static constraints = {
-		stepProperties nullable: true
 	}
 
 	Map getConfig() {

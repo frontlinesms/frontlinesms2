@@ -10,7 +10,6 @@ class CustomActivitySpec extends Specification {
 	def "a custom activity can have one step"() {
 		given:
 			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
-			joinStep.save(failOnError:true)
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
 			customActivity.save(flush:true, failOnError:true)
@@ -43,13 +42,12 @@ class CustomActivitySpec extends Specification {
 			customActivity.addToSteps(leaveStep)
 			customActivity.save(flush:true)
 		expect:
-			CustomActivity.list()[0].steps == [joinStep, replyStep, leaveStep]
+			customActivity.steps.containsAll([joinStep, replyStep, leaveStep])
 	}
 
 	def "processKeyword should add the message to the CustomActivity and invoke CustomActivityService.triggerSteps"() {
 		given:
 			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
-			joinStep.save(failOnError:true)
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
 			customActivity.save(flush:true, failOnError:true)

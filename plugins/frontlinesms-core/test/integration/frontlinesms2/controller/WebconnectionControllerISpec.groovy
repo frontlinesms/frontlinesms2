@@ -207,19 +207,19 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def keyword = new Keyword(value:'TEST')
 			def webconnection = new GenericWebconnection(name:"Webconnection with failures", url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
 			webconnection.addToKeywords(keyword)
+			webconnection.save(failOnError:true)
 			// adding 3 successful uploads, two failed ones, and one pending
+			def m
 			5.times { it ->
-				webconnection.addToMessages(new Fmessage(
-						text:"test",
-						inbound:true,
-						src:"+1234$it",
-						ownerDetail: ((it % 2) ? Webconnection.OWNERDETAIL_FAILED : Webconnection.OWNERDETAIL_SUCCESS )))
+				m = new Fmessage(text:"test", inbound:true, src:"+1234$it").save(failOnError:true)
+				m.setOwnerDetail(webconnection, ((it % 2) ? Webconnection.OWNERDETAIL_FAILED : Webconnection.OWNERDETAIL_SUCCESS ))
+				webconnection.addToMessages(m)
 			}
-			webconnection.addToMessages(new Fmessage(
-					text:"test",
-					inbound:true,
-					src:"+12345",
-					ownerDetail:Webconnection.OWNERDETAIL_PENDING))
+
+			m = new Fmessage(text:"test", inbound:true, src:"+12345").save(failOnError:true)
+			m.setOwnerDetail(webconnection, Webconnection.OWNERDETAIL_PENDING)
+			webconnection.addToMessages(m)
+
 			webconnection.save(failOnError:true, flush:true)
 			controller.params.ownerId = webconnection.id
 		when:
