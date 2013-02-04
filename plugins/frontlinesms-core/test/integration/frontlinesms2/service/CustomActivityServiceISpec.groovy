@@ -31,6 +31,9 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			createTestGroup(contact)
 			addLeaveActionStep()
 			addReplyActionStep()
+			customActivity.steps.each {
+				println "### steps ${it.shortName}"
+			}
 		when:
 			customActivityService.triggerSteps(customActivity, message)
 		then:
@@ -41,7 +44,8 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 	private def createCustomActivity() {
 		customActivity = new CustomActivity(name:"Custom")
 		customActivity.addToKeywords(new Keyword(isTopLevel: true, value: "CUSTOM"))
-		customActivity.save(failOnError:true)
+		customActivity.addToMessages(message)
+		customActivity.save(failOnError:true, flush:true)
 	}
 
 	private def createTestGroup(contact) {
@@ -58,6 +62,7 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		join.addToStepProperties(new StepProperty(key:"group", value:group.id))
 		customActivity.addToSteps(join)
 		customActivity.save(failOnError:true)
+		join.save(failOnError:true)
 	}
 
 	private def addLeaveActionStep() {
@@ -65,6 +70,7 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		leave.addToStepProperties(new StepProperty(key:"group", value:group.id))
 		customActivity.addToSteps(leave)
 		customActivity.save(failOnError:true)
+		leave.save(failOnError:true)
 	}
 
 	private def addReplyActionStep() {
@@ -72,5 +78,6 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		reply.addToStepProperties(new StepProperty(key:"autoreplyText", value:"autoreply seems to work"))
 		customActivity.addToSteps(reply)
 		customActivity.save(failOnError:true)
+		reply.save(failOnError:true)
 	}
 }
