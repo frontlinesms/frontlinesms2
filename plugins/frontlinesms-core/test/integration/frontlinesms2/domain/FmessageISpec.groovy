@@ -393,8 +393,8 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "Fmessage.getOwnerDetail should return the value set by setOwnerDetail in CustomActivity" (){
 		when:
-			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1")).save(failOnError:true,flush:true)
-			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"i will send this.")).save(failOnError:true,flush:true)
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
+			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"i will send this."))
 
 			def customActivity = new CustomActivity(name:'Do it all')
 				.addToSteps(joinStep)
