@@ -19,6 +19,7 @@ class FconnectionServiceSpec extends Specification {
 		def i18nUtilService = Mock(I18nUtilService)
 		i18nUtilService.getMessage(_) >> { args -> args.code[0] }
 		service.i18nUtilService = i18nUtilService
+		Fconnection.metaClass.static.get = { Serializable id -> println "overrided 'get()' called"; return [] } 
 	}
 
 	def 'Unconnected Fconnection gives a status of NOT_CONNECTED'() {
