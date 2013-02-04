@@ -6,11 +6,14 @@ import spock.lang.*
 class JoinActionStepISpec extends grails.plugin.spock.IntegrationSpec {
 	def "Can retrieve Contacts stored as StepProperties"() {
 			given:
+				def customActivity = CustomActivity.build()
+				def step = new JoinActionStep(type: 'joinAction')
+				customActivity.addToSteps(step)
+				customActivity.save(failOnError:true)
 				def contactList = []
 				(1..20).each {
 					contactList << new Contact(name:"test-${it}", mobile:"number-${it}").save(failOnError:true)
 				}
-				def step = new JoinActionStep(type: 'joinAction')
 				// to make it pass validation
 				step.addToStepProperties(new StepProperty(key:"group", value:"invaluable")).save(failOnError:true)
 				contactList.each {
