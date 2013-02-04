@@ -1,3 +1,5 @@
+QUnit.module("recipient_selecter");
+
 function setup() {
 	dom_trix.initDomFromFile("test/js/recipient_selecter/standard.html");
 

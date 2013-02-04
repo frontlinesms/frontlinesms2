@@ -172,7 +172,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'can set up a new IntelliSMS account'() {
 		when:
 			launchCreateWizard('intellisms')
-			connectionForm.intellismssend = true
+			connectionForm.intellismssendEnabled = true
 			connectionForm.intellismsname = "New IntelliSMS Connection"
 			connectionForm.intellismsusername = "test"
 			connectionForm.intellismspassword = "1234"

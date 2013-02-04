@@ -1,7 +1,8 @@
 package frontlinesms2
 
-
 class SettingsController extends ControllerUtils {
+	static final String RULE_PREFIX = "fconnection-"
+	
 	def i18nUtilService
 	def appSettingsService
 
@@ -30,14 +31,20 @@ class SettingsController extends ControllerUtils {
 		def username = new String(appSettingsService.get("auth.basic.username").decodeBase64())
 		def password = new String(appSettingsService.get("auth.basic.password").decodeBase64())
 		def appSettings = [:] 
-		appSettings['routing.uselastreceiver'] = appSettingsService.get("routing.uselastreceiver")
+		
+		//TODO Filter out only connections with send enabled
+
 		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
+		appSettings['routing.use'] = appSettingsService.get("routing.use")
+
+		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
 
 		[currentLanguage:i18nUtilService.getCurrentLanguage(request),
 				authEnabled:authEnabled,
 				username:username,
 				password:password,
 				languageList:i18nUtilService.allTranslations,
+				fconnectionRoutingMap:fconnectionRoutingMap,
 				appSettings:appSettings]
 	}
 
@@ -62,9 +69,46 @@ class SettingsController extends ControllerUtils {
 	}
 
 	def changeRoutingPreferences() {
-		appSettingsService.set('routing.uselastreceiver', params.uselastreceiver? 'true': 'false')
+		println "params:: $params"
+
+		appSettingsService.set('routing.use', params.routingUseOrder)
 		appSettingsService.set('routing.otherwise', params.otherwise)
 		redirect action:'general'
+	}
+
+	private getRoutingRules(routingRules) {
+		def fconnectionRoutingList = []
+		def fconnectionRoutingMap = [:]
+		def connectionInstanceList = Fconnection.findAllBySendEnabled(true)
+
+		if(routingRules) {
+			fconnectionRoutingList = routingRules.split(/\s*,\s*/)
+			println "Routing Rules before refinement:::: $routingRules"
+
+			// Replacing fconnection rules with fconnection instances
+			fconnectionRoutingList = fconnectionRoutingList.collect { rule ->
+				if(rule.startsWith(RULE_PREFIX)) {
+					connectionInstanceList.find {
+						println "Comparing rule:: $rule with id:: $it ::  ${it.id == ((rule - RULE_PREFIX) as Integer)}"
+						it.id == ((rule - RULE_PREFIX) as Integer)
+					}
+				} else rule
+			}
+
+			if(fconnectionRoutingList) {
+				def length = fconnectionRoutingList.size()
+				if(!fconnectionRoutingList.contains("uselastreceiver")) fconnectionRoutingList << "uselastreceiver"
+				((fconnectionRoutingList += connectionInstanceList) - null as Set).eachWithIndex { it, index ->
+					fconnectionRoutingMap[it] = index < length
+				}
+			}
+
+		 } else {
+		 	fconnectionRoutingList << "uselastreceiver"
+			((fconnectionRoutingList + connectionInstanceList) as Set).findAll{ fconnectionRoutingMap[it] = false }
+		}
+
+		fconnectionRoutingMap
 	}
 
 	private def withFconnection = withDomainObject Fconnection, { params.id }, { render(view:'show_connections', model: [fconnectionInstanceTotal: 0]) }

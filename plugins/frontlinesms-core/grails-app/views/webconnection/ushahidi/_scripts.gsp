@@ -33,7 +33,7 @@
 		})();
 
 		if(mediumPopup.getCurrentTabIndex() === mediumPopup.getTabLength()) {
-			showTestRouteBtn();
+			webconnectionDialog.showTestRouteBtn();
 		}
 		
 		$("#confirm-service").html('<p style="text-transform:capitalize">' + $("input[name=serviceType]:checked").val() + '</p>');

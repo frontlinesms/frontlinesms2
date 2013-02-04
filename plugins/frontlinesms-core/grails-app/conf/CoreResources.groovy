@@ -26,6 +26,7 @@ modules = {
 		resource url:[dir:'js', file:"frontlinesms_core.js"], disposition:'head'
 		resource url:[dir:'js', file:"activity/popups.js"], disposition:'head'
 		resource url:[dir:'js', file:"activity/poll/poll.js"], disposition:'head'
+		resource url:[dir:'js', file:"activity/webconnection/webconnection.js"], disposition:'head'
 		resource url:[dir:'js', file:"activity/poll/poll_graph.js"], disposition:'head'
 		resource url:[dir:'js', file:'button.js'], disposition:'head'
 		resource url:[dir:'js', file:'characterSMS-count.js'], disposition:'head'
@@ -104,7 +105,7 @@ modules = {
 	
 	settings {
 		dependsOn "common"
-		resource url:[dir:'js', file:'/settings/basicAuthValidation.js']
+		resource url:[dir:'js', file:'/settings/general_settings.js']
 	}
 	
 	overrides {

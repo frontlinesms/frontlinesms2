@@ -184,6 +184,8 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		webconnectionService.apiProcess(this, controller)
 	}
 
+	def getMoreActions() { ['retryFailed'] }
+
 	String getFullApiUrl() {
 		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/${Webconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()}/$id/" : ""
 	}

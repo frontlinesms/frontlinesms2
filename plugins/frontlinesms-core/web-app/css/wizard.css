@@ -28,11 +28,22 @@ div.input ul.select li input[type="radio"],
 div.input ul.select li input[type="checkbox"] { position:absolute; top:0; left:0; }
 div.input ul.select li input[type="text"] { display:block; margin-left:25px; margin-top:10px; }
 
-div.input ul.select.radio label { margin:5px 0; position:relative; display:block; cursor:pointer; padding:10px; }
-div.input ul.select.radio label:hover, #modalBox.ui-dialog-content .select.radio label:hover > * { background-color:#e5eff3; }
-div.input ul.select.radio label input[type="radio"] { position:absolute; top:10px; left:10px; }
-div.input ul.select.radio label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }
-div.input ul.select.radio label .info { margin-left:25px; margin-bottom:0; padding-left:0; font-weight:normal; }
+div.input ul.select.radio label,
+		div.input ul.select.checklist label { margin:5px 0; position:relative; display:block; padding:10px; }
+div.input ul.select.radio label { cursor:pointer; }
+div.input ul.select.checklist label { cursor:move; }
+div.input ul.select.radio.no-description li,
+		div.input ul.select.checklist.no-description li { margin:0; }
+div.input ul.select.radio.no-description label,
+		div.input ul.select.checklist.no-description label { text-indent:20px; margin:0; }
+div.input ul.select.radio label:hover, #modalBox.ui-dialog-content .select.radio label:hover > *,
+		div.input ul.select.checklist label:hover, #modalBox.ui-dialog-content .select.checklist label:hover > * { background-color:#e5eff3; }
+div.input ul.select.radio label input[type="radio"],
+		div.input ul.select.checklist label input[type="checkbox"] { position:absolute; top:10px; left:10px; }
+div.input ul.select.radio label h3,
+		div.input ul.select.checklist label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }
+div.input ul.select.radio label .info,
+		div.input ul.select.checklist label .info { margin-left:25px; margin-bottom:0; padding-left:0; font-weight:normal; }
 
 div.input .controls { display:table; margin-top:10px; }
 div.input .controls > * { display:table-cell; vertical-align:middle; }
@@ -64,4 +75,3 @@ div.sorting-option input#keywords { display: block; margin-top:5px; }
 #connectionForm label[for=connectionType] { font-weight: bold }
 #connectionForm td label:first-child { font-weight: bold }
 #connectionForm .connection-field-info { padding-left:10px; padding-bottom:3px;}
-

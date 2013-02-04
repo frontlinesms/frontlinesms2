@@ -14,9 +14,27 @@ suites.iterator().eachWithIndex { suite, i ->
 toRemove.each { suites.remove(it) }
 
 Node root = new Node(null, 'testsuites')
-suites.each { root.append it.children() }
+suites.each { testsuites ->
+	testsuites.children().each { testsuite ->
+		def expectedChildren = ['properties', 'system-out', 'system-err']
+		def classname = testsuite.attributes().name
+		testsuite.children().each { testcase ->
+			expectedChildren.remove(testcase.name())
+			if(testcase.name() == 'testcase') {
+				def att = testcase.attributes()
+				['total', 'failed'].each { att.remove(it) }
+				att.classname = classname
+			}
+		}
+		expectedChildren.each { name ->
+			testsuite.appendNode(name)
+		}
+		root.append testsuite
+	}
+}
 
 def writer = new StringWriter()
 new XmlNodePrinter(new PrintWriter(writer)).print(root)
 println '<?xml version="1.0" encoding="UTF-8"?>'
 println writer.toString()
+

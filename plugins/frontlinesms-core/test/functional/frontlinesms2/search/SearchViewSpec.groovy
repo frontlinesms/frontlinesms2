@@ -19,6 +19,23 @@ class SearchViewSpec extends SearchBaseSpec {
 			waitFor("veryslow") { messageList.messages.size() == 3 }
 	}
 	
+	def "can toggle between viewing all results and viewing only starred"() {
+		when:
+			to PageNewSearch
+			waitFor("veryslow") { searchsidebar.searchBtn.displayed }
+			searchsidebar.searchBtn.click()
+		then:
+			waitFor("veryslow") { messageList.messages.size() == 3 }
+		when:
+			footer.showStarred.click()
+		then:
+			waitFor("veryslow") { messageList.messages.size() == 1 }
+		when:
+			footer.showAll.click()
+		then:
+			waitFor("veryslow") { messageList.messages.size() == 3 }
+	}
+
 	def "group list and activity lists are displayed when they exist"() {
 		when:
 			to PageNewSearch
@@ -57,14 +74,14 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor("veryslow") { searchsidebar.activityId.jquery.val() == "folder-$a.id" }
 	}
-	
+
 	def "can search in archive or not, is enabled by default"() {
 		when:
 			to PageNewSearch
 		then:
 			searchsidebar.inArchive == "on"
 		when:
-			searchsidebar.archive.click()
+			searchsidebar.archive.value(false)
 			searchsidebar.searchBtn.click()
 		then:
 			!searchsidebar.inArchive

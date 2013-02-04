@@ -2,4 +2,6 @@
 set -e
 REPORT_DIR=target/test-reports
 mkdir -p $REPORT_DIR
-do/js_unit_test 2>/dev/null | sgrep '("<?xml".."</testsuites>")' | sed -e 's:<?xml version="1.0" encoding="UTF-8"?>::' | do/js_unit_test_xml_filter.groovy > $REPORT_DIR/javascript-TestSuites.xml
+
+do/js_unit_test | sgrep '("<?xml".."</testsuites>")' | sed -e 's:<?xml version="1.0" encoding="UTF-8"?>::' | do/js_unit_test_lib/xml_filter.groovy | tee $REPORT_DIR/TESTS-javascript-TestSuites.xml | do/js_unit_test_lib/xml_split
+
