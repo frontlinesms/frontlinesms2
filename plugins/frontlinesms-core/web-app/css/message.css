@@ -46,9 +46,6 @@
 
 #body.messages #main-list tr.selected { background-color:#d8e8ef; }
 #body.messages #main-list tr:hover { background-color:#e5eff3; }
-#body.messages #main-list tr.no-content{ font-size: 100%; }
-#body.messages #main-list tr.no-content td{ color: #ddd; }
-#body.messages #main-list tr.no-content:hover { background-color:transparent; font-size: 100%;}
 #body.messages #main-list #new-message-notification { background-color:rgba(192,50,131,0.3); }
 #body.messages #main-list #new-message-notification a { text-align:center; font-weight:bold; padding:3px 0; cursor:pointer; }
 

@@ -66,25 +66,21 @@
 			</g:else>
 		</g:if>
 		<g:else>
-			<g:if test="${messageSection=='result'}">
-				<tr>
-					<td colspan="5" class="no-content">
+			<tr class="no-content">
+				<td colspan="5">
+					<g:if test="${messageSection=='result'}">
 						<g:if test="${searchDescription}">
 							<g:message code="fmessage.search.none"/>
 						</g:if>
 						<g:else>
 							<g:message code="fmessage.search.description"/>
 						</g:else>
-					</td>
-				</tr>
-			</g:if>
-			<g:else>
-				<tr class="no-content">
-					<td colspan="5" class="no-content">
+					</g:if>
+					<g:else>
 						<g:message code="fmessage.messages.none"/>
-					</td>
-				</tr>
-			</g:else>
+					</g:else>
+				</td>
+			</tr>
 		</g:else>
 	</tbody>
 </table>
