@@ -45,6 +45,7 @@ class Fconnection {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	boolean enabled = true
+	boolean lastAttemptSucceeded = true
 	
 	static namedQueries = {
 		findByMessages { messageInstance ->
