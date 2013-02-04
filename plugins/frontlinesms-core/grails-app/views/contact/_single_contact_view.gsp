@@ -126,7 +126,7 @@
 <r:script>
 function refreshMessageStats(data) {
 	var url, numSent, numRecieved;
-	url = 'contact/messageStats';
+	url = "contact/messageStats";
 	numSent = $('#num-sent');
 	numRecieved = $('#num-recieved');
 	$.getJSON(url_root + url, { id: "${contactInstance?.id}" }, function(data) {
@@ -137,25 +137,24 @@ function refreshMessageStats(data) {
 
 $(function() {
 	setInterval(refreshMessageStats, 15000);
-	var clear;
 	$("td > input[type=text]").each(function(index) {
-		clear = $(this).next();
-		if($(this).val() === '') {
-			clear.addClass('hidden');
+		var clear = $(this).next();
+		if($(this).val() === "") {
+			clear.addClass("hidden");
 		} else {
 			clear.removeClass("hidden");
 		}
 	}).keyup(function() {
-		clear = $(this).next();
-		if($(this).val() !== '') {
+		var clear = $(this).next();
+		if($(this).val() !== "") {
 			clear.removeClass("hidden");
-			if($(this).attr('name') === 'mobile') {
-				$(".send-message").removeClass('hidden');
+			if($(this).attr("name") === "mobile") {
+				$(".send-message").removeClass("hidden");
 			}
 		} else {
-			clear.addClass('hidden');
-			if($(this).attr('name') === 'mobile') {
-				$(".send-message").addClass('hidden');
+			clear.addClass("hidden");
+			if($(this).attr("name") === "mobile") {
+				$(".send-message").addClass("hidden");
 			}
 		}
 	});
