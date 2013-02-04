@@ -30,3 +30,4 @@ abstract class SmartGroupBaseSpec extends grails.plugin.geb.GebSpec {
 		waitFor { rules.size() == ruleCount+1 }
 	}
 }
+

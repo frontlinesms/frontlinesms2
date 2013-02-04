@@ -12,11 +12,11 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "message can be moved to a different poll response"() {
 		setup:
-			def r2 = new PollResponse(value:'unknown unknown')
+			def r2 = new PollResponse(value:'unknown unknown', key:'A')
 			def poll = new Poll(name: 'Who is badder?')
 					.addToResponses(r2)
 					.addToResponses(PollResponse.createUnknown())
-					.addToResponses(value:'known unknown')
+					.addToResponses(value:'known unknown', key:'B')
 					.save(failOnError:true, flush:true)
 			def message = Fmessage.build(src:'Bob', text:'I like manchester')
 			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob'))
