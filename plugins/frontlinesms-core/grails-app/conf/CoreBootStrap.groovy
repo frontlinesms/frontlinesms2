@@ -463,10 +463,12 @@ class CoreBootStrap {
 	
 	private def initialiseSerial() {
 		if(Environment.current == Environment.TEST
-				|| Boolean.parseBoolean(System.properties['serial.mock']))
+				|| Boolean.parseBoolean(System.properties['serial.mock'])) {
 			initialiseMockSerial()
-		else
+		} else {
 			initialiseRealSerial()
+			initialiseNonSmslibFconnections()
+		}
 
 		def ports = serial.CommPortIdentifier.portIdentifiers
 		if(ports) {
@@ -522,6 +524,12 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		log.info "Adding $jniPath/$os/$architecture to library paths..."
 		addJavaLibraryPath "$jniPath/$os/$architecture"
 		serial.SerialClassFactory.init(serial.SerialClassFactory.PACKAGE_RXTX) // TODO hoepfully this step of specifying the package is unnecessary
+	}
+
+	private def initialiseNonSmslibFconnections() {
+		Fconnection.enabledNonSmslib().list().each { connection ->
+			grailsApplication.mainContext.fconnectionService.createRoutes(connection)
+		}
 	}
 
 	private def activateActivities() {
