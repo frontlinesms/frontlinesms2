@@ -1,21 +1,23 @@
-package frontlinesms2.domain
+package frontlinesms2
 
-import frontlinesms2.*
 import spock.lang.*
+import grails.plugin.spock.*
+import frontlinesms2.*
 
-class LeaveActionStepISpec extends grails.plugin.spock.IntegrationSpec {
+@TestFor(JoinActionStep)
+@Mock([CustomActivity])
+class JoinActionStepSpec extends Specification {
 	@Unroll
 	def "Test dynamic constraints"() {
 		when:
-			def step = new LeaveActionStep(type: 'leaveAction')
+			def step = new JoinActionStep(type: 'joinAction')
+			step.activity = Mock(CustomActivity)
 			if(addStepProperty)
 				step.addToStepProperties(new StepProperty(key:stepPropertyKey, value:"invaluable"))
 		then:
 			step.validate() == expectedOutcome
 		where:
 			addStepProperty | stepPropertyKey | expectedOutcome
-			false           | null            | false
-			true            | 'woteva'        | false
 			true            | 'group'         | true
 	}
 }
