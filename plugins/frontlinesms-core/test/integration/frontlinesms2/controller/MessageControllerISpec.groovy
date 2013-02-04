@@ -224,7 +224,8 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			def webConnection =  GenericWebconnection.build()
 			def announcement = Announcement.build()
-			def message = Fmessage.build(ownerDetail:'ownerdetail-pending')
+			def message = Fmessage.build()
+			message.setOwnerDetail(webConnection, "ownerdetail-pending")
 			webConnection.addToMessages(message)
 			webConnection.save(failOnError:true, flush:true)
 		when:
