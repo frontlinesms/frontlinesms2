@@ -22,6 +22,9 @@ th.sortable.asc a, th.sortable.desc a { padding-left:15px; }
 th.sortable.asc a { background-image:url("../images/icons/down_arrow.png"); }
 th.sortable.desc a { background-image:url("../images/icons/up_arrow.png"); }
 
+ul.sortable li, ul.sortable label { cursor:move; }
+ul.sortable input[type=checkbox] { cursor:default; }
+
 a.prevLink, a.nextLink { display:inline-block; width:25px; height:25px; background-position:left center; background-repeat:no-repeat; }
 a.prevLink { background-image:url("../images/pagination/left.png"); }
 a.prevLink:hover { background-image:url("../images/pagination/left_hover.png"); }

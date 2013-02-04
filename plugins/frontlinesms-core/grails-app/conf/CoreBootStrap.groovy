@@ -45,7 +45,7 @@ class CoreBootStrap {
 			// never show new popup during tests
 			appSettingsService['newfeatures.popup.show.immediately'] = false
 			//default routing in tests is to use any available connections
-			appSettingsService.set('routing.uselastreceiver', false)
+			appSettingsService.set('routing.use', 'uselastreceiver')
 			appSettingsService.set('routing.otherwise', 'any')
 			appSettingsService.set('routing.preferences.edited', true)
 		}
@@ -215,7 +215,7 @@ class CoreBootStrap {
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
-		new IntelliSmsFconnection(name:"IntelliSms Mock connection", send:true, username:"johnmark", password:"pass_word").save(failOnError:true)
+		new IntelliSmsFconnection(name:"IntelliSms Mock connection", sendEnabled:true, username:"johnmark", password:"pass_word").save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {

@@ -13,10 +13,10 @@ testDataConfig {
 			messages = []
 		}
 		'frontlinesms2.IntelliSmsFconnection' {
-			send = true
+			sendEnabled = true
 			username = 'uname'
 			password = 'secret'
-			receive = true
+			receiveEnabled = true
 			receiveProtocol = frontlinesms2.EmailReceiveProtocol.POP3
 			serverName = 'example.com'
 			serverPort = 1234

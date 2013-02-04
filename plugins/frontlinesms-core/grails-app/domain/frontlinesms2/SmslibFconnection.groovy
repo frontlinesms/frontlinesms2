@@ -8,8 +8,8 @@ import org.smslib.NotConnectedException
 
 class SmslibFconnection extends Fconnection {
 	static passwords = ['pin']
-	static configFields = ['name', 'manufacturer', 'model', 'port', 'baud', 'pin', 'imsi', 'serial', 'send', 'receive']
-	static defaultValues = [send:true, receive:true, baud:9600]
+	static configFields = ['name', 'manufacturer', 'model', 'port', 'baud', 'pin', 'imsi', 'serial', 'sendEnabled', 'receiveEnabled']
+	static defaultValues = [sendEnabled:true, receiveEnabled:true, baud:9600]
 	static String getShortName() { 'smslib' }
 	
 	private def camelAddress = {
@@ -28,9 +28,9 @@ class SmslibFconnection extends Fconnection {
 	String pin // FIXME maybe encode this rather than storing plaintext(?)
 	boolean allMessages = true
 	// TODO rename sendEnabled
-	boolean send = true
+	boolean sendEnabled = true
 	// TODO rename receiveEnabled
-	boolean receive = true
+	boolean receiveEnabled = true
 
 	static constraints = {
 		manufacturer nullable:true
@@ -39,14 +39,14 @@ class SmslibFconnection extends Fconnection {
 		imsi nullable:true
 		pin nullable:true
 		serial nullable:true
-		send(nullable:true, validator: { val, obj ->
+		sendEnabled(nullable:true, validator: { val, obj ->
 			if(!val) {
-				return obj.receive
+				return obj.receiveEnabled
 			}
 		})
-		receive(nullable:true, validator: { val, obj ->
+		receiveEnabled(nullable:true, validator: { val, obj ->
 			if(!val) {
-				return obj.send
+				return obj.sendEnabled
 			}
 		})
 	}
@@ -77,7 +77,7 @@ class SmslibFconnection extends Fconnection {
 			@Override void configure() {}
 			List getRouteDefinitions() {
 				def definitions = []
-				if(isSend()) {
+				if(isSendEnabled()) {
 					definitions << from("seda:out-${SmslibFconnection.this.id}")
 							.onException(NotConnectedException)
 									.handled(true)
@@ -88,7 +88,7 @@ class SmslibFconnection extends Fconnection {
 							.to(camelAddress())
 							.routeId("out-modem-${SmslibFconnection.this.id}")
 				}
-				if(isReceive()) {
+				if(isReceiveEnabled()) {
 					definitions << from(camelAddress())
 							.onException(NotConnectedException)
 									.handled(true)

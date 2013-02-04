@@ -27,7 +27,7 @@ class SmslibFconnectionSpec extends Specification {
 		then:
 			conn.validate()
 		when:
-			conn = new SmslibFconnection(name:"testConnection", baud:"9600", port:"/dev/ttyUSB0", send:false, receive:false)
+			conn = new SmslibFconnection(name:"testConnection", baud:"9600", port:"/dev/ttyUSB0", sendEnabled:false, receiveEnabled:false)
 		then:
 			!conn.validate()
 	}
