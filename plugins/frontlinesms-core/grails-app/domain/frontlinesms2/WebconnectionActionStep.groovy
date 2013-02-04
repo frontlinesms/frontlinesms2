@@ -12,21 +12,21 @@ class WebconnectionActionStep extends Step {
 	static action = 'doUpload'
 	static String getShortName() { 'webconnection' }
 
-	static configFields = [method: [Webconnection.HttpMethod.GET, Webconnection.HttpMethod.POST], url:'url', params:[:]]
+	static configFields = [httpMethod: [Webconnection.HttpMethod.GET, Webconnection.HttpMethod.POST], url:'url', params:[:]]
 
 	static constraints = {
 	}
 
 	Map getConfig() {
-		[stepId:id, method:method, urlEncode:url, params:params]
+		[stepId:id, method:httpMethod, urlEncode:url, params:params]
 	}
 
-	def getMethod() {
-		getPropertyValue("method")
+	def getHttpMethod() {
+		getPropertyValue("httpMethod")
 	}
 
-	def setMethod(String method) {
-		setPropertyValue("method", method)
+	def setHttpMethod(String method) {
+		setPropertyValue("httpMethod", method)
 	}
 
 	def getUrl() {
@@ -36,15 +36,6 @@ class WebconnectionActionStep extends Step {
 
 	def setUrl(String url) {
 		setPropertyValue("url", url)
-	}
-
-	def getParams() {
-		getPropertyValue("params")
-	}
-
-
-	def setParams(params) {
-		setPropertyValue("params", params)
 	}
 	
 	def process(Fmessage message) {
@@ -90,8 +81,8 @@ class WebconnectionActionStep extends Step {
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
 		def fmessage = Fmessage.get(x.in.headers.'fmessage-id')
-		def encodedParameters = this.stepProperties.collect {
-			urlEncode(it.name) + '=' + urlEncode(it.getProcessedValue(fmessage))
+		def encodedParameters = this.stepProperties?.collect {
+			urlEncode(it.key) + '=' + urlEncode(webconnectionService.getProcessedValue(it, fmessage))
 		}.join('&')
 		println "PARAMS:::$encodedParameters"
 		x.in.headers[Exchange.HTTP_PATH] = this.url
@@ -108,17 +99,20 @@ class WebconnectionActionStep extends Step {
 		println "# Exchange after adding other headers in the Webconnection.preProcess()"
 		println "x.in.headers = $x.in.headers"
 		println "x.in.body = $x.in.body"
+		x
 	}
 
 	def postProcess(Exchange x) {
 		println "###### WebconnectionActionStep.postProcess() with Exchange # ${x}"
 		println "Web Connection ActionStep Response::\n ${x.in.body}"
 		log.info "Web Connection ActionStep Response::\n ${x.in.body}"
+		x
 	}
 
-	// private String urlEncode(String s) throws UnsupportedEncodingException {
-	// 	println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
-	// 	return URLEncoder.encode(s, "UTF-8");
-	// }webco
+	private String urlEncode(String s) throws UnsupportedEncodingException {
+		println "PreProcessor.urlEncode : s is $s"
+		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
+		return URLEncoder.encode(s, "UTF-8");
+	}
 
 }

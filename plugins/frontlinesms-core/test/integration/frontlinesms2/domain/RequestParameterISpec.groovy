@@ -3,6 +3,7 @@ package frontlinesms2.domain
 import frontlinesms2.*
 
 class RequestParameterISpec extends grails.plugin.spock.IntegrationSpec {
+	def webconnectionService
 	@spock.lang.Unroll
 	def "parameter in a message should be replaced with actual values"(){
 		when:
@@ -17,7 +18,7 @@ class RequestParameterISpec extends grails.plugin.spock.IntegrationSpec {
 			p.value = "\${"+paramText+"}"
 			p.save(failOnError:true)
 		then:
-			returnval == parameter.getProcessedValue(message)
+			returnval == webconnectionService.getProcessedValue(parameter, message)
 		where:
 			returnval					|paramText
 			'Sample text to send out'	|"message_body"

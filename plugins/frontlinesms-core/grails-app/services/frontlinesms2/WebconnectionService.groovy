@@ -60,8 +60,8 @@ class WebconnectionService {
 	}
 
 
-	String getProcessedValue(RequestParameter requestParameter, Fmessage msg) {
-		def val = requestParameter.value
+	String getProcessedValue(prop, msg) {
+		def val = prop.value
 		def matches = val.findAll(regex)
 		matches.each { match ->
 			val = val.replaceFirst(regex, getReplacement(match, msg))
