@@ -5,7 +5,7 @@ import spock.lang.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Autoforward)
-@Mock([Keyword, SmartGroup, Group, Contact, Fmessage, MessageSendService, AutoforwardService])
+@Mock([Keyword, SmartGroup, Group, Contact, Fmessage, MessageSendService, AutoforwardService, CustomActivity])
 @Build([Contact, Autoforward])
 class AutoforwardSpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
@@ -119,6 +119,9 @@ class AutoforwardSpec extends Specification {
 		m.text >> messageText
 		m.src >> src
 		m.setOwnerDetail >> ownerDetail
+		def owner = Mock(CustomActivity)
+		owner.addToMessages { ms -> println "### Adding message to mocked Owner ###" }
+		m.messageOwner >> owner
 		return m
 	}
 }
