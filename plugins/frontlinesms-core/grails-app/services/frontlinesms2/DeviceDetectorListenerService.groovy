@@ -64,7 +64,9 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 			} else {
 				def name = i18nUtilService.getMessage(code:'connection.name.autoconfigured', args:[
 						detector.manufacturer, detector.model, detector.portName])
-				connectionToStart = new SmslibFconnection(name:name, port:detector.portName, baud:detector.maxBaudRate,
+				connectionToStart = new SmslibFconnection(name:name,
+								manufacturer:detector.manufacturer, model:detector.model,
+								port:detector.portName, baud:detector.maxBaudRate,
 								serial:detector.serial, imsi:detector.imsi)
 						.save(flush:true, failOnError:true)
 				log "Created new SmslibFconnection: $name"

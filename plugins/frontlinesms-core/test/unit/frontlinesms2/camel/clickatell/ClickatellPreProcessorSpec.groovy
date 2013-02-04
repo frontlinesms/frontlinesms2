@@ -12,12 +12,12 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 	ClickatellPreProcessor p
 	
 	def setup() {
-		def c = ClickatellFconnection.build(apiId:'11111', username:'bob', password:'secret')
 		p = new ClickatellPreProcessor()
 	}
 	
 	def 'out_body should be set to message text'() {
-		given:
+		setup:
+			buildTestConnection()
 			def x = mockExchange("simple")
 		when:
 			p.process(x)
@@ -26,7 +26,8 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 	}
 	
 	def 'out_body should be URL-encoded'() {
-		given:
+		setup:
+			buildTestConnection()
 			def x = mockExchange("more complex")
 		when:
 			p.process(x)
@@ -35,7 +36,8 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 	}
 	
 	def 'dispatch ID should be set in header'() {
-		given:
+		setup:
+			buildTestConnection()
 			def x = mockExchange("simple")
 		when:
 			p.process(x)
@@ -44,7 +46,8 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 	}
 	
 	def 'message destination should be set and stripped of leading plus'() {
-		given:
+		setup:
+			buildTestConnection()
 			def x = mockExchange("simple")
 		when:
 			p.process(x)
@@ -53,14 +56,39 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 	}
 	
 	def 'clickatell auth details should be set in header'() {
-		given:
+		setup:
+			buildTestConnection()
 			def x = mockExchange("simple")
 		when:
 			p.process(x)
 		then:
+			println "x.out.headers :: ${x.out.headers}"
 			x.out.headers.'clickatell.apiId' == '11111'
 			x.out.headers.'clickatell.username' == 'bob'
 			x.out.headers.'clickatell.password' == 'secret'
+			x.out.headers.'clickatell.fromNumber' == null
 		
+	}
+
+	def 'clickatell fromNumber should be set in header if sendToUsa is true'() {
+		setup:
+			buildTestConnection(true)
+			def x = mockExchange("simple")
+		when:
+			p.process(x)
+		then:
+			println "x.out.headers :: ${x.out.headers}"
+			x.out.headers.'clickatell.apiId' == '11111'
+			x.out.headers.'clickatell.username' == 'bob'
+			x.out.headers.'clickatell.password' == 'secret'
+			x.out.headers.'clickatell.fromNumber' == '%2B123321'
+		
+	}
+
+	private ClickatellFconnection buildTestConnection(sendToUsa=false) {
+		if (sendToUsa)
+			ClickatellFconnection.build(apiId:'11111', username:'bob', password:'secret', sendToUsa: true, fromNumber: "+123321")
+		else
+			ClickatellFconnection.build(apiId:'11111', username:'bob', password:'secret')
 	}
 }

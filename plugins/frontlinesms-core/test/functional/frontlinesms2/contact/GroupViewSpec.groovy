@@ -80,8 +80,7 @@ class GroupViewSpec extends GroupBaseSpec {
 			contactList.selectContact 1
 		then:
 			waitFor { !footer.prevPage.disabled }
-	}
-	
+	}	
 }
 
 

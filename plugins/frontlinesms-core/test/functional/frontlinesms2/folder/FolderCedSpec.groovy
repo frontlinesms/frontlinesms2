@@ -30,7 +30,7 @@ class FolderCedSpec extends FolderBaseSpec {
 			when:
 				ok.jquery.trigger("click")
 			then:
-				waitFor { errorPanel.text().toLowerCase() == "folder name cannot be blank" }
+				waitFor { errorPanel.text()?.toLowerCase() == "folder name cannot be blank" }
 	}
 
 }

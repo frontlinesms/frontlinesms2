@@ -34,6 +34,7 @@ class RadioTagLib {
 		att.optionValue = "name"
 		att.value = att.radioShowInstance?.id
 		["activityInstance", "radioShowInstance", 'showLabel', "wrapInFormTag"].each { att.remove(it) }
+		att.onchange = '$("#radioShow-confirm").text($(this).find(":selected").text())'
 		out << g.select(att)
 	}
 

@@ -3,7 +3,7 @@
 # TODO load predefs from web-app/js global vars
 
 TEMP_JS=target/temp.js
-do/extract_js_from_gsps
+do/extract_js_from_gsps $@
 
 echo "# Linting..."
 do/jslint $TEMP_JS

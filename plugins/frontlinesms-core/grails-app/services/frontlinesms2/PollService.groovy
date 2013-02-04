@@ -18,7 +18,7 @@ class PollService{
 		println "#### Round 1 Save!!"
 		if(params.enableKeyword == "true"){
 			poll.editKeywords(params)
-		}else{
+		} else {
 			poll.noKeyword()
 		}
 		poll.save(failOnError:true)
@@ -29,7 +29,7 @@ class PollService{
 			def message = messageSendService.createOutgoingMessage(params)
 			message.save()
 			poll.addToMessages(message)
-			MessageSendJob.defer(message)
+			messageSendService.send(message)
 		}
 		poll.save(failOnError:true)
 		poll

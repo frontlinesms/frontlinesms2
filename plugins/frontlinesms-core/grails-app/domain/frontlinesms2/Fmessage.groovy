@@ -5,6 +5,7 @@ import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
 	static final int MAX_TEXT_LENGTH = 1600
+	static final String TEST_MESSAGE_TEXT = "Test Message"
 
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'receivedOn']
@@ -171,22 +172,25 @@ class Fmessage {
 					'in'("messageOwner", search.owners)
 				}
 				if(search.startDate && search.endDate) {
-					between("date", search.startDate, search.endDate)
+					between('date', search.startDate, search.endDate)
 				} else if (search.startDate) {
-					ge("date", search.startDate)
+					ge('date', search.startDate)
 				} else if (search.endDate) {
-					le("date", search.endDate)
+					le('date', search.endDate)
 				}
 				if(search.customFields.any { it.value }) {
 					// provide empty list otherwise hibernate fails to search 'in' empty list
 					def matchingContactsNumbers = Contact.findByCustomFields(search.customFields)*.mobile?: ['']
 					or {
-						'in'("src", matchingContactsNumbers)
+						'in'('src', matchingContactsNumbers)
 						'in'('disp.dst', matchingContactsNumbers)
 					}
 				}
 				if(!search.inArchive) {
 					eq('archived', false)
+				}
+				if(search.starredOnly) {
+					eq('starred', true)
 				}
 				eq('isDeleted', false)
 				// order('date', 'desc') removed due to http://jira.grails.org/browse/GRAILS-8162; please reinstate when possible

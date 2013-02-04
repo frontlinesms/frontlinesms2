@@ -1,18 +1,11 @@
 <%@ page import="frontlinesms2.*" %>
 <g:if test="${!fconnectionInstance}">
-	<div class="input">
-		<label for="pollType"><g:message code="connection.select"/></label>
-		<ul class="select">
-			<g:each in="${Fconnection.implementations}" status="i" var="it">
-				<li>
-					<label for="connectionType"><g:message code="${it.simpleName.toLowerCase()}.label"/></label>
-					<g:radio name="connectionType" checked="${i == 0}"
-							value="${it.shortName}" onclick="fconnection.setType('${it.shortName}')"/>
-					<p class="info ${it.shortName}"><g:message code="${it.shortName}fconnection.description"/></p>
-				</li>
-			</g:each>
-		</ul>
-	</div>
+	<fsms:radioGroup solo="true" title="connection.select"
+			name="connectionType" checked="smslib"
+			values="${Fconnection.implementations*.shortName}"
+			labelSuffix=".label"
+			descriptionSuffix=".description"
+			onclick="fconnection.setType(this.value)"/>
 </g:if>
 <g:else>
 	<g:hiddenField name="connectionType" value="${fconnectionInstance?.shortName}"/>

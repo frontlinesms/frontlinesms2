@@ -390,7 +390,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			message.receivedOn == null
 	}
-@spock.lang.IgnoreRest
+
 	def "Fmessage.getOwnerDetail should return the value set by setOwnerDetail in CustomActivity" (){
 		when:
 			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1")).save(failOnError:true,flush:true)
@@ -408,6 +408,15 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			outgoingMessage.setOwnerDetail(replyStep, incomingMessage.id)
 		then:
 			outgoingMessage.ownerDetail == incomingMessage.id.toString()
+	}
+
+	def 'doing a Fmessage.findBySrc should give me youngest message'() {
+		when:
+			Fmessage.build(src:'111', text:'oldest')
+			Fmessage.build(src:'111', text:'old')
+			Fmessage.build(src:'111', text:'youngest')
+		then:
+			Fmessage.findBySrc('111', [sort: 'dateCreated', order:'desc']).text == 'youngest'
 	}
 	
 	private Folder getTestFolder(params=[]) {

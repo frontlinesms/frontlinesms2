@@ -12,7 +12,7 @@
 				}
 			},
 			messages: {
-					addresses: {
+				addresses: {
 					required: i18n("poll.recipients.validation.error")
 				}
 			},
@@ -29,32 +29,12 @@
 			return validator.element('#messageText');
 		};
 
-		var recepientTabValidation = function() {
-			var valid = true;
-			addAddressHandler();
-			valid = $('input[name=addresses]:checked').length > 0;
-			var addressListener = function() {
-				if($('input[name=addresses]:checked').length > 0) {
-					validator.element($('#contacts').find("input[name=addresses]"));
-					$('#recipients-list').removeClass("error");
-				} else {
-					$('#recipients-list').addClass("error");
-					validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
-				}
-			};
-			if (!valid) {
-				$('input[name=addresses]').change(addressListener);
-				$('input[name=addresses]').trigger("change");
-			}
-			return valid;
-		};
-
 		var confirmTabValidation = function() {
 			return validator.element('input[name=name]');
 		};
 
 		mediumPopup.addValidation('announcement-create-message', messageTextTabValidation);
-		mediumPopup.addValidation('announcement-select-recipients', recepientTabValidation);
+		mediumPopup.addValidation('announcement-select-recipients', recipientSelecter.validateImmediate);
 		mediumPopup.addValidation('announcement-confirm', confirmTabValidation);
 		
 		$("#tabs").bind("tabsshow", function(event, ui) {

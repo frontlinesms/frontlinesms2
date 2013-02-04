@@ -202,7 +202,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			setRuleValue(0, '+44')
 			submit.click()
 		then:
-			waitFor { flashMessage.text().contains('English Contacts') }
+			waitFor { flashMessage.text()?.contains('English Contacts') }
 	}
 
 	def 'successfully creating a smart group should add it to the smart groups menu'() {

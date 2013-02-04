@@ -1,5 +1,11 @@
 package frontlinesms2
 
+import org.apache.camel.*
+import org.apache.camel.Exchange
+import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.model.RouteDefinition
+import frontlinesms2.camel.exception.*
+
 class WebconnectionActionStep extends Step {
 	def webconnectionService
 	static service = 'webconnection'
@@ -53,7 +59,7 @@ class WebconnectionActionStep extends Step {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				return [from("seda:activity-webconnection-${Webconnection.this.id}")
+				return [from("seda:activity-webconnection-${WebconnectionActionStep.this.id}")
 						.beanRef('webconnectionService', 'preProcess')
 						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
 						.onException(Exception)
@@ -64,7 +70,7 @@ class WebconnectionActionStep extends Step {
 									.handled(true)
 									.beanRef('webconnectionService', 'handleException')
 									.end()
-						.to(Webconnection.this.url)
+						.to(WebconnectionActionStep.this.url)
 						.beanRef('webconnectionService', 'postProcess')
 						.routeId("activity-webconnection-${WebconnectionActionStep.this.id}")]
 			}

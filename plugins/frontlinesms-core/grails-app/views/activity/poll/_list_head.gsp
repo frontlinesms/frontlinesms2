@@ -21,3 +21,4 @@
 	</table>
 	<a id='poll-graph-btn' class='btn show-arrow'><g:message code="fmessage.showpolldetails"/></a>
 </div>
+

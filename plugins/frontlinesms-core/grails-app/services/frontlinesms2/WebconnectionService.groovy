@@ -12,6 +12,8 @@ class WebconnectionService {
 	static def regex = /[$][{]*[a-z_]*[}]/
 	// Substitution variables
 
+	def camelContext
+	def i18nUtilService
 	def messageSendService
 
 	private def subFields = ['message_body' : { msg ->
@@ -37,6 +39,31 @@ class WebconnectionService {
 		message.setOwnerDetail(message.messageOwner, s)
 		message.save(failOnError:true, flush:true)
 		println "Changing Status ${message.ownerDetail}"
+	}
+
+	private changeMessageOwnerDetail(Fmessage message, String s) {
+		message.ownerDetail = s
+		message.save(failOnError:true, flush:true)
+		println "Changing Status ${message.ownerDetail}"
+	}
+
+	private def createRoute(routes) {
+		try {
+			deactivate()
+			camelContext.addRouteDefinitions(routes)
+			println "################# Activating Webconnection :: ${this}"
+			LogEntry.log("Created Webconnection routes: ${routes*.id}")
+		} catch(FailedToCreateProducerException ex) {
+			println ex
+		} catch(Exception ex) {
+			println ex
+			deactivate()
+		}
+	}
+
+	private Fmessage createTestMessage() {
+		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)
+		fm.save(failOnError:true, flush:true)
 	}
 
 	String getProcessedValue(RequestParameter requestParameter, Fmessage msg) {
@@ -76,10 +103,14 @@ class WebconnectionService {
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
-	def handleFailed(Exchange x) {
-	}
-
-	def handleCompleted(Exchange x) {
+	def createStatusNotification(Exchange x) {
+		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		def text = i18nUtilService.getMessage(code:"webconnection.${message.ownerDetail}.label", args:[webConn.name])
+		println "######## StatusNotification::: $text #########"
+		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+		notification.read = false
+		notification.save(failOnError:true, flush:true)
 	}
 
 	def doUpload(Fmessage message) {
@@ -89,6 +120,11 @@ class WebconnectionService {
 		headers.'webconnection-id' = message.messageOwner.id
 		changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_PENDING)
 		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
+	}
+
+	def retryFailed(Webconnection c) {
+		Fmessage.findAllByMessageOwnerAndOwnerDetail(c, Webconnection.OWNERDETAIL_FAILED).each {
+		send(it)
 	}
 
 	def saveInstance(Webconnection webconnectionInstance, params) {
@@ -110,30 +146,36 @@ class WebconnectionService {
 		webconnectionInstance.save(failOnError:true, flush:true)
 	}
 
+	def testRoute(Webconnection webconnectionInstance) {
+		def message = Fmessage.findByMessageOwnerAndText(webconnectionInstance, Fmessage.TEST_MESSAGE_TEXT)
+		println "testRoute::: $message"
+		if(!message) {
+			message = createTestMessage()
+			webconnectionInstance.addToMessages(message)
+			webconnectionInstance.save(failOnError:true)
+		}
+		createRoute(webconnectionInstance.testRouteDefinitions)
+		if(getStatusOf(webconnectionInstance) == ConnectionStatus.CONNECTED) {
+			def headers = [:]
+			headers.'fmessage-id' = message.id
+			headers.'webconnection-id'= webconnectionInstance.id
+			sendMessageAndHeaders("seda:activity-webconnection-${webconnectionInstance.id}", message, headers)
+			changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_PENDING)
+		} else {
+			changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_FAILED)
+		}
+	}
+
+	def getStatusOf(Webconnection w) {
+		camelContext.routes.any { it.id ==~ /.*activity-webconnection-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
+	}
+
 	def apiProcess(webcon, controller) {
 		controller.render(generateApiResponse(webcon, controller))
 	}
 
 	def activate(activityOrStep) {
-		try {
-			deactivate(activityOrStep)
-		} catch(Exception ex) {
-			log.info("Exception thrown while deactivating webconnection '$name'", ex)
-		}
-
-		println "*** ACTIVATING ACTIVITY ***"
-		try {
-			def routes = activityOrStep.routeDefinitions
-			camelContext.addRouteDefinitions(routes)
-			println "################# Activating Webconnection :: ${activityOrStep}"
-			LogEntry.log("Created Webconnection routes: ${routes*.id}")
-		} catch(FailedToCreateProducerException ex) {
-			println ex
-		} catch(Exception ex) {
-			println ex
-			camelContext.stopRoute("activity-webconnection-${activityOrStep.id}")
-			camelContext.removeRoute("activity-webconnection-${activityOrStep.id}")
-		}
+		createRoute(activityOrStep.routeDefinitions)
 	}
 
 	def deactivate(activityOrStep) {
@@ -152,9 +194,9 @@ class WebconnectionService {
 		println "RECIPIENTS IS ${controller.request.JSON?.recipients}"
 
 		//> Detect and return 401 (authentication) error conditions
-		if(!secret)
+		if(webcon.secret && !secret)
 			return [status:401, text:"no secret provided"]
-		if(secret != webcon.secret)
+		if(webcon.secret && secret != webcon.secret)
 			return [status:401, text:"invalid secret"]
 
 		//> Detect and return 400 (invalid request) error conditions
@@ -214,6 +256,4 @@ class WebconnectionService {
 		webcon.save(failOnError: true)
 		"message successfully queued to send to ${m.dispatches.size()} recipient(s)"
 	}
-
 }
-

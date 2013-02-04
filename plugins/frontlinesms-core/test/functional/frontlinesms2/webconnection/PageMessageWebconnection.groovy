@@ -22,6 +22,6 @@ class WebconnectionHeaderModule extends ContentHeader {
 		url { $("span#web_connection_url").text()?.toLowerCase() }
 		sendMethod { $("span#web_connection_method").text()?.toLowerCase() - ')' -'('}
 		archive { buttons.filter(text: iContains('Archive')) }
-		moreActions { $('div.header-buttons select#more-actions') }
 	}
 }
+

@@ -17,7 +17,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	static createTestMessages2() {
 		Fmessage.build(src:'Doe', text:'meeting at 11.00', date:new Date()-1)
-		Fmessage.build(src:'Alex', text:'hi alex', date:new Date()-1)
+		Fmessage.build(src:'Alex', text:'hi alex', date:new Date()-1, starred:true)
 	}
 	
 	static createTestPollsAndFolders() {

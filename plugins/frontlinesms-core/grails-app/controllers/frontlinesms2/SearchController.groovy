@@ -34,6 +34,7 @@ class SearchController extends MessageController {
 			searchInstance.startDate = params.startDate ?: null
 			searchInstance.endDate = params.endDate ?: null
 			searchInstance.customFields = [:]
+			searchInstance.starredOnly = params.starred?: false
 			CustomField.getAllUniquelyNamed().each { customFieldName ->
 				if(params[customFieldName])
 					searchInstance.customFields[customFieldName] = params[customFieldName]
@@ -117,6 +118,7 @@ class SearchController extends MessageController {
 			search.customFields.each() { customFieldName, val ->
 				params[customFieldName] = val
 			}
+			params.starred = search.starredOnly
 		} else {
 			search = new Search(name: 'TempSearchObject')
 		}

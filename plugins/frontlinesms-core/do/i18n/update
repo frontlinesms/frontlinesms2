@@ -1,0 +1,54 @@
+#!/usr/bin/env groovy
+
+/* Script to compare grails internationalisation property files (or any property files in general)
+ * and automatically update an incomplete file with missing keys from the master file (with TODOs).
+ *
+*/
+if(args.size() < 2) {
+	println("updates a translation file with missing entries present in message.properties (or other 'master' file)")
+	println("usage: groovy i18n-update.groovy MASTER OTHER [NEW-FILE]")
+	println("   MASTER: The main property file, assumed to be complete")
+	println("   OTHER : The file to be updated")
+	println("   NEW-FILE (optional): filename to write output to. (if not supplied, changes will be applied to OTHER)")
+	return
+}
+
+File master = new File(args[0])
+File slave = new File(args[1])
+def targetFile = args.size() >= 3 ? args[2] : args[1]
+println "Applying changes to $targetFile"
+
+if (targetFile == args[1]) {
+	def s = "*  WARNING: This will overwrite the existing file $targetFile. Press ENTER to continue, or Ctrl+C to terminate  *"
+	println('*' * s.size())
+	println s
+	println('*' * s.size())
+	def input = System.in.withReader { it.readLine() }
+}
+
+def existingSlaveLines = []
+def newSlaveLines = []
+slave.eachLine("utf8") { line -> existingSlaveLines << line }
+
+master.eachLine("utf8") { masterLine ->
+	if(masterLine.isAllWhitespace() || masterLine.trim().startsWith("#")) {
+		// This is a comment or whitespace, preserve it
+		newSlaveLines << masterLine
+	} else if (masterLine.contains('=')) {
+		// This is a property. Check if the other translation has it, and if not, copy it with a TODO
+		def lineParts = masterLine.split('=', 2)
+		def key = lineParts[0].trim()
+		def masterValue = lineParts[1]
+		if(!(masterValue ==~ /\s*\{[0-9]\}\s*$/ ))
+			newSlaveLines << (existingSlaveLines.find {
+						it ==~ "^${key.replace('.', '\\.')}\\s*=.*" && it.split("=").size() > 1
+					} ?: "$key=TODO:$masterValue")
+	} else throw new RuntimeException('Something strange is going on, we should only have props, comments or whitespace!')
+}
+
+new File(targetFile).withWriter("utf8") { out -> 
+	newSlaveLines.each { line ->
+		out.writeLine(line)
+	}
+}
+

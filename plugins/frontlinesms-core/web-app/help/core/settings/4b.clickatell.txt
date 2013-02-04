@@ -14,7 +14,8 @@ Please have your Clickatell account details to hand. You will need your Clickate
 ![Add New Connection][8]
   
 3.  Select "Clickatell Account" and click "Next"
-4.  On this screen, please enter the required information.  
+4.  On this screen, please enter the required information.
+5.  If you are sending messages to USA then you may consider filling in the fields 'Send To USA' and 'From Number'
 
 ![Clickatell Screen][9]
 

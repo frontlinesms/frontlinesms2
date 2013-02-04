@@ -5,13 +5,14 @@ import frontlinesms2.*
 class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def trashService
+	def i18nUtilService
 
 	def setup() {
 		controller = new PollController()
 		controller.trashService = trashService
 		controller.params.addresses = '123'
 	}
-
+	
 	def "can save new poll"() {
 		setup:
 			controller.params.name = "poll"
@@ -25,6 +26,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = Poll.findByName("poll")
 		then:
 			poll
+			controller.flash.message == i18nUtilService.getMessage([code:"poll.save.success", args:[poll.name]])
 			poll.autoreplyText == "automatic reply text"
 			(poll.responses*.value).containsAll(['yes', 'no', 'maybe'])
 	}
@@ -238,5 +240,50 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			(poll.keywords[2].value == 'BARCELONA')&&(poll.keywords[2].ownerDetail == poll.responses[1].key)
 			(poll.keywords[3].value == 'HARAMBEE')&&(poll.keywords[3].ownerDetail == poll.responses[2].key)
 			(poll.keywords[4].value == 'TEAM')&&(poll.keywords[4].ownerDetail == poll.responses[2].key)
+	}
+
+	def "editing a poll and removing the top level keyword should set responses as top level"() {
+		setup:
+			def p = new Poll(name: 'This is a poll', yesNo:false)
+			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
+			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
+			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
+			p.addToResponses(PollResponse.createUnknown())
+			p.save(failOnError:true)
+			def k1 = new Keyword(value: "FOOTBALL", activity: p)
+			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:false)
+			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"B", isTopLevel:false)
+			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"C", isTopLevel:false)
+			p.addToKeywords(k1)
+			p.addToKeywords(k2)
+			p.addToKeywords(k3)
+			p.addToKeywords(k4)
+			p.save(failOnError:true, flush:true)
+		and:
+			controller.params.ownerId=Poll.findByName('This is a poll').id
+			controller.params.name = 'test-poll-1'
+			controller.params.choiceA = "yes"
+			controller.params.choiceB = "no"
+			controller.params.choiceC = "maybe"
+			controller.params.autoreplyText = "automatic reply text"
+			controller.params.enableKeyword = "true"
+			controller.params.topLevelKeyword = ""
+			controller.params.keywordsA = "Manchester"
+			controller.params.keywordsB = "Barcelona"
+			controller.params.keywordsC = "Harambee,Team"
+			controller.params.dontSendMessage=true
+		when:
+			controller.save()
+		then:
+			def poll = Poll.findByName("test-poll-1")
+			poll.keywords[0].value == 'MANCHESTER'
+			poll.keywords[1].value == 'BARCELONA'
+			poll.keywords[2].value == 'HARAMBEE'
+			poll.keywords[3].value == 'TEAM'
+
+			poll.keywords[0].isTopLevel
+			poll.keywords[1].isTopLevel
+			poll.keywords[2].isTopLevel
+			poll.keywords[3].isTopLevel
 	}
 }

@@ -1,8 +1,11 @@
 package frontlinesms2
 
 import frontlinesms2.*
+import grails.events.Listener
+import groovy.sql.Sql
 
 class AutoforwardService {
+	def dataSource
 
     def saveInstance(Autoforward autoforward, params) {
     	println "##### Saving Autoforward in Service"
@@ -79,5 +82,26 @@ class AutoforwardService {
 		messageSendService.send(m)
 		
 		autoforwardOrStep.save(failOnError:true)
+	}
+
+	@Listener(topic='beforeDelete', namespace='gorm')
+	def handleDeletedContact(Contact contact) {
+		println "### Removing Contact $contact from Autoforward ##"
+	    new Sql(dataSource).execute('DELETE FROM autoforward_contact WHERE contact_id=?', [contact.id])
+	    return true
+	}
+
+	@Listener(topic='beforeDelete', namespace='gorm')
+	def handleDeletedGroup(Group group) {
+		println "## Removing Group $group From Autoforward"
+	    new Sql(dataSource).execute('DELETE FROM autoforward_grup WHERE group_id=?', [group.id])
+	    return true
+	}
+
+	@Listener(topic='beforeDelete', namespace='gorm')
+	def handleDeletedSmartGroup(SmartGroup smartGroup) {
+		println "## Removing SmartGroup $smartGroup From Autoforward"
+	    new Sql(dataSource).execute('DELETE FROM autoforward_smart_group WHERE smart_group_id=?', [smartGroup.id])
+	    return true
 	}
 }

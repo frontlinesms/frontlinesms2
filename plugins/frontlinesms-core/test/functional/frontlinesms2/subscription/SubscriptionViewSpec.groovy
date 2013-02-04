@@ -160,7 +160,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
 			messageList.messages.each { messageRow ->
 				if (messageRow.source == "prudence") {
-					assert messageRow.text().contains("join")
+					assert messageRow.text()?.contains("join")
 				}
 			}
 		when:
@@ -207,7 +207,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
 			messageList.messages.each { messageRow ->
 				if (messageRow.source == "prudence") {
-					assert messageRow.text().contains("leave")
+					assert messageRow.text()?.contains("leave")
 				}
 			}
 		when:
@@ -255,7 +255,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
 			messageList.messages.each { messageRow ->
 				if (messageRow.source == "prudence") {
-					assert messageRow.text().contains("toggle")
+					assert messageRow.text()?.contains("toggle")
 				}
 			}
 		when:
@@ -292,7 +292,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { at PageMessageSubscription }
 			["join", "prudence", "wilburforce"].each {
-				assert messageList.messages[0].text().contains(it)
+				assert messageList.messages[0].text()?.contains(it)
 			}
 		when:
 			header.groupLink.click()
