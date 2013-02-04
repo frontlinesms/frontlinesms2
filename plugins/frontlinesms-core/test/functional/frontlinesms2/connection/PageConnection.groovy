@@ -26,7 +26,8 @@ class ConnectionList extends Module {
 	static content = {
 		connection(required:false) { $("li.connection") }
 		selectedConnection(required:false) { $("li.connection.selected") }
-		btnCreateRoute(wait:true) {  $(".btn", text:'Create route') }
+		btnCreateRoute(wait:true) {  $(".btn", text:'Enable') }
+		btnDisableRoute(wait:true) {  $(".btn", text:'Disable') }
 		btnDelete(required:false) { $('.btn', text:'Delete Connection') }
 		btnTestRoute(required:false) {  $('.btn', text:'Send test message') }
 		status { $('p.connection-status').text() }

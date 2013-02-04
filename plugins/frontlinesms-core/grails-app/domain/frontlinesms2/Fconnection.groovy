@@ -44,6 +44,7 @@ class Fconnection {
 	String name
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
+	boolean enabled = true
 	
 	static namedQueries = {
 		findByMessages { messageInstance ->
