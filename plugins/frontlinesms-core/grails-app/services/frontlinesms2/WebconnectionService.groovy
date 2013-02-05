@@ -128,7 +128,8 @@ class WebconnectionService {
 		if(activityOrStep instanceof Webconnection) (headers.'webconnection-id' = activityOrStep.id) 
 		else (headers.'webconnectionStep-id' = activityOrStep.id)
 		changeMessageOwnerDetail(activityOrStep, message, Webconnection.OWNERDETAIL_PENDING)
-		sendMessageAndHeaders("seda:activity-${activityOrStep.shortName}-${message.messageOwner.id}", message, headers)
+		println ">>>>>>seda:activity-${activityOrStep.shortName}-${activityOrStep.id}"
+		sendMessageAndHeaders("seda:activity-${activityOrStep.shortName}-${activityOrStep.id}", message, headers)
 	}
 
 	def retryFailed(Webconnection c) {
