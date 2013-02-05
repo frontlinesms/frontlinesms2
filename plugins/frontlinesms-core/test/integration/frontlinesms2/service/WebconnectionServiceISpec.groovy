@@ -83,7 +83,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webconnection.addToMessages(Fmessage.build(text:"simple"))
 			webconnection.save(flush:true)
 		when:
-			webconnectionService.doUpload(Fmessage.findByText("simple"))
+			webconnectionService.doUpload(webconnection, Fmessage.findByText("simple"))
 		then:
 			Fmessage.findByText("simple").ownerDetail == "pending"
 	}

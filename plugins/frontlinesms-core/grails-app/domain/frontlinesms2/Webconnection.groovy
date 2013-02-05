@@ -53,7 +53,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	def processKeyword(Fmessage message, Keyword k) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
-		webconnectionService.doUpload(message)
+		webconnectionService.doUpload(this, message)
 	}
 
 	List<RouteDefinition> getTestRouteDefinitions() {

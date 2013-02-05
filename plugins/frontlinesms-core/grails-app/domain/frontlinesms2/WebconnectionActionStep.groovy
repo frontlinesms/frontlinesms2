@@ -39,7 +39,7 @@ class WebconnectionActionStep extends Step {
 	}
 	
 	def process(Fmessage message) {
-		webconnectionService.doUpload(message)
+		webconnectionService.doUpload(this, message)
 	}
 
 	def getNiceFormat() {

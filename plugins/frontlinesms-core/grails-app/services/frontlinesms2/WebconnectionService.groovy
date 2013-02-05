@@ -11,7 +11,6 @@ import frontlinesms2.api.*
 class WebconnectionService {
 	static def regex = /[$][{]*[a-z_]*[}]/
 	// Substitution variables
-
 	def camelContext
 	def i18nUtilService
 	def messageSendService
@@ -35,8 +34,8 @@ class WebconnectionService {
 		return c(msg)
 	}
 
-	private changeMessageOwnerDetail(Fmessage message, String s) {
-		message.setOwnerDetail(message.messageOwner, s)
+	private changeMessageOwnerDetail(activityOrStep, message, s) {
+		message.setOwnerDetail(activityOrStep, s)
 		message.save(failOnError:true, flush:true)
 		println "Changing Status ${message.ownerDetail}"
 	}
@@ -73,7 +72,12 @@ class WebconnectionService {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		def webConn
+		if(x.in.headers.'webconnection-id') {
+			webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		} else if(x.in.headers.'webconnectionStep-id') {
+			webConn = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
+		}
 		webConn.preProcess(x)
 	}
 
@@ -83,22 +87,32 @@ class WebconnectionService {
 		println "x.in.headers: ${x.in.headers}"
 		println "### WebconnectionService.postProcess() ## headers ## ${x.in.headers}"
 		println "#### Completed postProcess #### ${x.in.headers.'fmessage-id'}"
-		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		def webConn
+		if(x.in.headers.'webconnection-id') {
+			webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		} else if(x.in.headers.'webconnectionStep-id') {
+			webConn = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
+		}
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
-		changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_SUCCESS)
+		changeMessageOwnerDetail(webConn, message, Webconnection.OWNERDETAIL_SUCCESS)
 		webConn.postProcess(x)
 	}
 
 	def handleException(Exchange x) {
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
-		changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_FAILED)
+		changeMessageOwnerDetail(activityOrStep, message, Webconnection.OWNERDETAIL_FAILED)
 		println "### WebconnectionService.handleException() ## headers ## ${x.in.headers}"
 		println "Web Connection request failed with exception: ${x.in.body}"
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
 	def createStatusNotification(Exchange x) {
-		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		def webConn
+		if(x.in.headers.'webconnection-id') {
+			webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		} else if(x.in.headers.'webconnectionStep-id') {
+			webConn = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
+		}
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
 		def text = i18nUtilService.getMessage(code:"webconnection.${message.ownerDetail}.label", args:[webConn.name])
 		println "######## StatusNotification::: $text #########"
@@ -107,13 +121,14 @@ class WebconnectionService {
 		notification.save(failOnError:true, flush:true)
 	}
 
-	def doUpload(Fmessage message) {
+	def doUpload(activityOrStep, message) {
 		println "## Webconnection.doUpload() ## uploading message # ${message}"
 		def headers = [:]
 		headers.'fmessage-id' = message.id
-		headers.'webconnection-id' = message.messageOwner.id
-		changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_PENDING)
-		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
+		if(activityOrStep instanceof Webconnection) (headers.'webconnection-id' = activityOrStep.id) 
+		else (headers.'webconnectionStep-id' = activityOrStep.id)
+		changeMessageOwnerDetail(activityOrStep, message, Webconnection.OWNERDETAIL_PENDING)
+		sendMessageAndHeaders("seda:activity-${activityOrStep.shortName}-${message.messageOwner.id}", message, headers)
 	}
 
 	def retryFailed(Webconnection c) {
@@ -153,11 +168,12 @@ class WebconnectionService {
 		if(getStatusOf(webconnectionInstance) == ConnectionStatus.CONNECTED) {
 			def headers = [:]
 			headers.'fmessage-id' = message.id
-			headers.'webconnection-id'= webconnectionInstance.id
-			sendMessageAndHeaders("seda:activity-webconnection-${webconnectionInstance.id}", message, headers)
-			changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_PENDING)
+			headers.'activity-type'= webconnectionInstance.shortName
+			headers.'activity-id'= webconnectionInstance.id
+			sendMessageAndHeaders("seda:activity-${webconnectionInstance.shortName}-${webconnectionInstance.id}", message, headers)
+			changeMessageOwnerDetail(webconnectionInstance, message, Webconnection.OWNERDETAIL_PENDING)
 		} else {
-			changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_FAILED)
+			changeMessageOwnerDetail(webconnectionInstance, message, Webconnection.OWNERDETAIL_FAILED)
 		}
 	}
 
