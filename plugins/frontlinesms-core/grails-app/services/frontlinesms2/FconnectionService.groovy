@@ -80,7 +80,7 @@ class FconnectionService {
 					ConnectionStatus.CONNECTED:
 					deviceDetectionService.isConnecting((c as SmslibFconnection).port)?
 							ConnectionStatus.CONNECTING:
-							ConnectionStatus.NOT_CONNECTED
+							ConnectionStatus.FAILED
 		}
 		return camelContext.routes.any { it.id ==~ /.*-$c.id$/ }?
 				ConnectionStatus.CONNECTED:
