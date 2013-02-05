@@ -221,7 +221,7 @@ class CoreBootStrap {
 	
 	private def dev_initRealSmslibFconnections() {
 		if(!bootstrapData) return
-		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234', enabled:false).save(failOnError:true)
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
 		new SmslibFconnection(name:"MobiGater Modem", port:'/dev/ttyACM0', baud:9600, pin:'1149').save(failOnError:true)
