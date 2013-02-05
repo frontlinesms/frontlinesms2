@@ -123,7 +123,7 @@ class ConnectionController extends ControllerUtils {
   
 	def destroyRoute() {
 		withFconnection { c ->
-			fconnectionService.destroyRoutes(c)
+			fconnectionService.disableFconnection(c)
 			flash.message = message(code: 'connection.route.disconnecting')
 			redirect(action:'list', id:c.id)
 		}
