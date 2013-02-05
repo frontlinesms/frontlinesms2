@@ -162,7 +162,7 @@ class WebconnectionService {
 	}
 
 	def getStatusOf(Webconnection w) {
-		camelContext.routes.any { it.id ==~ /.*activity-webconnection-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
+		camelContext.routes.any { it.id ==~ /.*activity-${w.shortName}-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
 	}
 
 	def apiProcess(webcon, controller) {
@@ -175,8 +175,8 @@ class WebconnectionService {
 
 	def deactivate(activityOrStep) {
 		println "################ Deactivating Webconnection :: ${activityOrStep}"
-		camelContext.stopRoute("activity-webconnection-${activityOrStep.id}")
-		camelContext.removeRoute("activity-webconnection-${activityOrStep.id}")
+		camelContext.stopRoute("activity-${activityOrStep.shortName}-${activityOrStep.id}")
+		camelContext.removeRoute("activity-${activityOrStep.shortName}-${activityOrStep.id}")
 	}
 
 	def generateApiResponse(webcon, controller) {

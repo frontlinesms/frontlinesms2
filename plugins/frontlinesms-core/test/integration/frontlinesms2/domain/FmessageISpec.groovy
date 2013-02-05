@@ -393,8 +393,8 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "Fmessage.getOwnerDetail should return the value set by setOwnerDetail in CustomActivity" (){
 		when:
-			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1")).save(failOnError:true,flush:true)
-			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"i will send this.")).save(failOnError:true,flush:true)
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
+			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"i will send this."))
 
 			def customActivity = new CustomActivity(name:'Do it all')
 				.addToSteps(joinStep)
@@ -408,6 +408,25 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			outgoingMessage.setOwnerDetail(replyStep, incomingMessage.id)
 		then:
 			outgoingMessage.ownerDetail == incomingMessage.id.toString()
+	}
+
+	def "Setting the owner detail for webconnection" (){
+		when:
+			def uploadStep = new WebconnectionActionStep().addToStepProperties(new StepProperty(key:"url", value:"http://192.168.0.200"))
+				.addToStepProperties(new StepProperty(key:"httpMethod", value:"GET"))
+				.addToStepProperties(new StepProperty(key:"message", value:"I will upload you"))
+				.addToStepProperties(new StepProperty(key:"source", value:"123123"))
+			def customActivity = new CustomActivity(name:'Do it all')
+				.addToSteps(uploadStep)
+				.addToKeywords(value:"CUSTOM")
+				.save(failOnError:true, flush:true)
+ 
+			def incomingMessage = Fmessage.build(text:"incoming message", messageOwner: customActivity)
+			incomingMessage.setOwnerDetail(uploadStep, 'success')
+			incomingMessage.save(failOnError:true)
+			incomingMessage.refresh()
+		then:
+			incomingMessage.getOwnerDetail() == "success"
 	}
 
 	def 'doing a Fmessage.findBySrc should give me youngest message'() {

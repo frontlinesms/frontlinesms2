@@ -60,7 +60,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				return [from("seda:activity-webconnection-${Webconnection.this.id}")
+				return [from("seda:activity-${Webconnection.shortName}-${Webconnection.this.id}")
 						.beanRef('webconnectionService', 'preProcess')
 						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
 						.onException(Exception)
@@ -72,7 +72,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 						.to(Webconnection.this.url)
 						.beanRef('webconnectionService', 'postProcess')
 						.beanRef('webconnectionService', 'createStatusNotification')
-						.routeId("activity-webconnection-${Webconnection.this.id}")]
+						.routeId("activity-${Webconnection.shortName}-${Webconnection.this.id}")]
 			}
 		}.routeDefinitions
 	}
@@ -81,7 +81,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				return [from("seda:activity-webconnection-${Webconnection.this.id}")
+				return [from("seda:activity-${Webconnection.shortName}-${Webconnection.this.id}")
 						.beanRef('webconnectionService', 'preProcess')
 						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
 						.onException(Exception)
@@ -94,7 +94,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 									.end()
 						.to(Webconnection.this.url)
 						.beanRef('webconnectionService', 'postProcess')
-						.routeId("activity-webconnection-${Webconnection.this.id}")]
+						.routeId("activity-${Webconnection.shortName}-${Webconnection.this.id}")]
 			}
 		}.routeDefinitions
 	}

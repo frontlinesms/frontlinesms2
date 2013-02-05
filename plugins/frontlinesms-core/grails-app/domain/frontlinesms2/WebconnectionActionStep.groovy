@@ -10,7 +10,7 @@ class WebconnectionActionStep extends Step {
 	def webconnectionService
 	static service = 'webconnection'
 	static action = 'doUpload'
-	static String getShortName() { 'webconnection' }
+	static String getShortName() { 'webconnectionStep' }
 
 	static configFields = [httpMethod: [Webconnection.HttpMethod.GET, Webconnection.HttpMethod.POST], url:'url', params:[:]]
 
@@ -50,7 +50,7 @@ class WebconnectionActionStep extends Step {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				return [from("seda:activity-webconnection-${WebconnectionActionStep.this.id}")
+				return [from("seda:activity-${WebconnectionActionStep.shortName}-${WebconnectionActionStep.this.id}")
 						.beanRef('webconnectionService', 'preProcess')
 						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
 						.onException(Exception)
@@ -63,7 +63,7 @@ class WebconnectionActionStep extends Step {
 									.end()
 						.to(WebconnectionActionStep.this.url)
 						.beanRef('webconnectionService', 'postProcess')
-						.routeId("activity-webconnection-${WebconnectionActionStep.this.id}")]
+						.routeId("activity-${WebconnectionActionStep.shortName}-${WebconnectionActionStep.this.id}")]
 			}
 		}.routeDefinitions
 	}
