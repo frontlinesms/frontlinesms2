@@ -65,6 +65,7 @@ class FconnectionService {
 	}
 	
 	def getConnectionStatus(Fconnection c) {
+		if(!c.enabled) return ConnectionStatus.DISABLED
 		if(c.id in connectingIds) {
 			return ConnectionStatus.CONNECTING
 		}
