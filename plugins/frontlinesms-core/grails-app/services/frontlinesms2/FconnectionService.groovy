@@ -100,10 +100,20 @@ class FconnectionService {
 	}
 
 	def enableFconnection(Fconnection c) {
-		try{
+		try {
 			c.enabled = true
 			c.save()
 			createRoutes(c)
+		} catch(Exception ex) {
+			logFail(c, ex)
+		}
+	}
+
+	def disableFconnection(Fconnection c) {
+		try {
+			destroyRoutes(c)
+			c.enabled = false	
+			c.save()
 		} catch(Exception ex) {
 			logFail(c, ex)
 		}
