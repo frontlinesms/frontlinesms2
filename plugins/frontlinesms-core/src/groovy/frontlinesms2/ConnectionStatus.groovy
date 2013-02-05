@@ -1,7 +1,6 @@
 package frontlinesms2
 
 enum ConnectionStatus {
-	NOT_CONNECTED,
 	CONNECTING,
 	CONNECTED,
 	DISABLED,
