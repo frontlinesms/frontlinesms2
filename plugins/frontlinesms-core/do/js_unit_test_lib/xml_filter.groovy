@@ -17,7 +17,8 @@ Node root = new Node(null, 'testsuites')
 suites.each { testsuites ->
 	testsuites.children().each { testsuite ->
 		def expectedChildren = ['properties', 'system-out', 'system-err']
-		def classname = testsuite.attributes().name
+		def classname = 'js.' + testsuite.attributes().name
+		testsuite.attributes().name = classname
 		testsuite.children().each { testcase ->
 			expectedChildren.remove(testcase.name())
 			if(testcase.name() == 'testcase') {
