@@ -32,9 +32,13 @@ class FconnectionService {
 			LogEntry.log("Created routes: ${routes*.id}")
 		} catch(FailedToCreateProducerException ex) {
 			logFail(c, ex.cause)
+			c.lastAttemptSucceeded=false
+			c.save()
 		} catch(Exception ex) {
 			logFail(c, ex)
 			destroyRoutes(c.id as long)
+			c.lastAttemptSucceeded=false
+			c.save()
 		} finally {
 			connectingIds -= c.id
 		}
@@ -67,6 +71,7 @@ class FconnectionService {
 	
 	def getConnectionStatus(Fconnection c) {
 		if(!c.enabled) return ConnectionStatus.DISABLED
+		if(!c.lastAttemptSucceeded) return ConnectionStatus.FAILED
 		if(c.id in connectingIds) {
 			return ConnectionStatus.CONNECTING
 		}
