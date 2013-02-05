@@ -93,6 +93,7 @@ class CoreBootStrap {
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
 		activateActivities()
+		initialiseNonSmslibFconnections()
 		println '\\o/ FrontlineSMS started.'
 	}
 
@@ -467,7 +468,6 @@ class CoreBootStrap {
 			initialiseMockSerial()
 		} else {
 			initialiseRealSerial()
-			initialiseNonSmslibFconnections()
 		}
 
 		def ports = serial.CommPortIdentifier.portIdentifiers
@@ -527,8 +527,11 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 	}
 
 	private def initialiseNonSmslibFconnections() {
-		Fconnection.enabledNonSmslib().list().each { connection ->
-			grailsApplication.mainContext.fconnectionService.createRoutes(connection)
+		Fconnection.findAllByEnabled(true).each { connection ->
+			if (connection.shortName != "smslib") {
+				println "### Creating Routes::-> ${connection.shortName} routes have been created. ###"
+				grailsApplication.mainContext.fconnectionService.createRoutes(connection)
+			}
 		}
 	}
 
