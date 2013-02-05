@@ -13,6 +13,7 @@ class FconnectionService {
 	
 	def createRoutes(Fconnection c) {
 		println "FconnectionService.createRoutes() :: ENTRY :: $c"
+		if(!c.enabled) return
 		if(c instanceof SmslibFconnection) {
 			deviceDetectionService.stopFor(c.port)
 			// work-around for CORE-736 - NoSuchPortException can be thrown
