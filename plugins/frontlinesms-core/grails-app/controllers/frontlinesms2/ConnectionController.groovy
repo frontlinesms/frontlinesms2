@@ -115,7 +115,7 @@ class ConnectionController extends ControllerUtils {
 	}
 	
 	def createRoute() {
-		CreateRouteJob.triggerNow([connectionId:params.id])
+		EnableFconnectionJob.triggerNow([connectionId:params.id])
 		params.createRoute = true
 		flash.message = message(code: 'connection.route.connecting')
 		redirect(action:'list', params:params)
