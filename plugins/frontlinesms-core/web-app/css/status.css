@@ -120,6 +120,7 @@
 	background-image:url('../images/icons/status_green.png'); background-repeat:no-repeat; background-position:17px center; }
 #connection-status #stored-connections .name.NOT_CONNECTED { background-image: url('../images/icons/status_red.png'); }
 #connection-status #stored-connections .name.CONNECTING { background-image: url('../images/icons/status_orange.gif'); }
+#connection-status #stored-connections .name.DISABLED{ background-image: url('../images/icons/status_grey.png'); }
 #connection-status #stored-connections .value { white-space:nowrap; padding-right:17px; }
 
 #body.status #update-status{
