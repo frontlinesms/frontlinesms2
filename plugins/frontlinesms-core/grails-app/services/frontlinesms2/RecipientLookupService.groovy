@@ -24,20 +24,13 @@ class RecipientLookupService {
 		clazz.getAll(values(selectedList, clazz.shortName)*.toLong())
 	}
 
-	def lookup(queryString) {
-		def searchServiceQueryString = "%${queryString.toLowerCase()}%"
-		def results = []
-		def contactResults = []
-		contactSearchService.getContacts([searchString:searchServiceQueryString]).each{ contactResults << [value: "contact-${it.id}", text: it.name] }
-		def groupResults = []
-		Group.findAllByNameIlike(searchServiceQueryString).each { groupResults << [value: "group-${it.id}", text: it.name] } 
-		def smartgroupResults = []
-		SmartGroup.findAllByNameIlike(searchServiceQueryString).each { smartgroupResults << [value: "smartgroup-${it.id}", text: it.name] } 
-		[(i18nUtilService.getMessage([code:"contact.search.groups"])) :groupResults, (i18nUtilService.getMessage([code:"contact.search.smartgroups"])) :smartgroupResults, (i18nUtilService.getMessage([code:"contact.search.contacts"])) :contactResults].each {
-			if(it.value)
-				results << [group: true, text:(it.key), items: it.value]
-		}
-		def strippedNumber = stripNumber(queryString)
+	def lookup(originalQuery) {
+		def query = "%${originalQuery.toLowerCase()}%"
+		def results = [contacts:lookupContacts(query),
+				groups:lookupGroups(query),
+				smartgroups:lookupSmartgroups(query)].collect { k, v ->
+			if(v) [group:true, text:i18nUtilService.getMessage(code:"contact.search.$k"), items:v] } - null
+		def strippedNumber = stripNumber(originalQuery)
 		if (strippedNumber)
 			results << [group:true, text: i18nUtilService.getMessage([code:"contact.search.address"]), items: [[value: "address-$strippedNumber", text: "\"$strippedNumber\""]]]
 		return results
@@ -48,4 +41,20 @@ class RecipientLookupService {
 		if(mobile && mobile[0] == '+') n = '+' + n
 		n
 	}
+
+	private def lookupContacts(query) {
+		contactSearchService.getContacts([searchString:query]).collect {
+			[value: "contact-${it.id}", text: it.name] }
+	}
+
+	private def lookupGroups(query) {
+		Group.findAllByNameIlike(query).collect {
+			[value: "group-${it.id}", text: it.name] }
+	}
+
+	private def lookupSmartgroups(query) {
+		SmartGroup.findAllByNameIlike(query).collect {
+			[value: "smartgroup-${it.id}", text: it.name] }
+	}
 }
+
