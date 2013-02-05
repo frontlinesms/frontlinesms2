@@ -118,7 +118,7 @@ class ConnectionController extends ControllerUtils {
 		params.createRoute = true
 		flash.message = message(code: 'connection.route.connecting')
 		def connectionInstance = Fconnection.get(params.id)
-		if(connectionInstance?.shortname == 'smssync')
+		if(connectionInstance?.shortName == 'smssync')
 			smssyncService.startTimeoutCounter(connectionInstance)
 		redirect(action:'list', params:params)
 	}
