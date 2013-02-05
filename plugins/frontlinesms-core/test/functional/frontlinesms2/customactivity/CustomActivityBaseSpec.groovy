@@ -4,8 +4,8 @@ import frontlinesms2.*
 
 class CustomActivityBaseSpec extends grails.plugin.geb.GebSpec {
 	def createTestCustomActivities() {
-		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:Group.list()[0].id)).save(failOnError:true,flush:true)
-		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:Group.list()[1].id)).save(failOnError:true,flush:true)
+		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:Group.list()[0].id))
+		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:Group.list()[1].id))
 
 		new CustomActivity(name:'Do it all')
 			.addToSteps(joinStep)
