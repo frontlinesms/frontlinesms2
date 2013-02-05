@@ -166,5 +166,15 @@ class Poll extends Activity {
 			return this.responses.find { keyword.ownerDetail == it.key }
 		}
 	}
+
+	def deleteResponse(PollResponse response) {
+		response.messages.findAll { message ->
+			this.unknown.addToMessages(message)
+		}
+		this.removeFromResponses(response)
+		response.delete()
+		this
+	}
+
 }
 
