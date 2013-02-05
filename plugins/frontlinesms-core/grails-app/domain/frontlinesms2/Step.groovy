@@ -32,4 +32,7 @@ abstract class Step {
 	String getJsonConfig() {
 		return getConfig() as JSON
 	}
+
+	def activate() {}
+	def deactivate() {}
 }

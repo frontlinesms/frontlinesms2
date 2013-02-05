@@ -61,4 +61,28 @@ class CustomActivitySpec extends Specification {
 		then:
 			1 * customActivityService.triggerSteps(_, _) 
 	}
+
+	def "activate should call the activate method of step objects"() {
+		given:
+			def joinStep = Mock(JoinActionStep)
+			def customActivity = new CustomActivity(name:"Custom Activity")
+			customActivity.addToSteps(joinStep)
+			customActivity.save(flush:true)
+		when:
+			customActivity.activate()
+		then:
+			1 * joinStep.activate()
+	}
+
+	def "deactivate should call the activate method of step objects"() {
+		given:
+			def joinStep = Mock(JoinActionStep)
+			def customActivity = new CustomActivity(name:"Custom Activity")
+			customActivity.addToSteps(joinStep)
+			customActivity.save(flush:true)
+		when:
+			customActivity.deactivate()
+		then:
+			1 * joinStep.deactivate()
+	}
 }
