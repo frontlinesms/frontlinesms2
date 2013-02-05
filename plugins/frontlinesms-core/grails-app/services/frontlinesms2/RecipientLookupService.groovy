@@ -6,12 +6,22 @@ class RecipientLookupService {
 	def i18nUtilService
 	
 	def contactSearchResults(params) {
-		def values = params.recipients
-		def contacts = Contact.getAll(values.findAll { it.startsWith("contact-") }.collect { it.split("-", 2)[1].toLong() } )
-		def groups = Group.getAll(values.findAll { it.startsWith("group-") }.collect { it.split("-", 2)[1].toLong() })
-		def smartgroups = SmartGroup.getAll(values.findAll { it.startsWith("smartgroup-") }.collect { it.split("-", 2)[1].toLong() })
-		def addresses = values.findAll { it.startsWith("address-") }.collect { it.split("-", 2)[1] }
+		def selectedList = params.recipients
+		def contacts = objects(selectedList, Contact)
+		def groups = objects(selectedList, Group)
+		def smartgroups = objects(selectedList, SmartGroup)
+		def addresses = values(selectedList, 'address')
 		return [contacts:contacts, groups:groups, smartgroups:smartgroups, addresses:addresses]
+	}
+
+	private def values(selectedList, shortName) {
+		selectedList.findAll { it.startsWith "$shortName-" }.collect {
+			it.split('-', 2)[1]
+		}
+	}
+
+	private def objects(selectedList, clazz) {
+		clazz.getAll(values(selectedList, clazz.shortName)*.toLong())
 	}
 
 	def lookup(queryString) {
