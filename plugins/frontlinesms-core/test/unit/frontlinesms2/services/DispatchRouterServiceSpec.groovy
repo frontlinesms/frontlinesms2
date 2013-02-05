@@ -1,6 +1,7 @@
 package frontlinesms2.services
 
 import frontlinesms2.*
+import frontlinesms2.camel.exception.NoRouteAvailableException
 
 import spock.lang.*
 import grails.test.mixin.*
@@ -12,6 +13,8 @@ import org.apache.camel.Message
 @TestFor(DispatchRouterService)
 @Mock([Dispatch, Fmessage, Fconnection, SmslibFconnection, SystemNotification])
 class DispatchRouterServiceSpec extends Specification {
+	def appSettingsService
+
 	def setup() {
 		Fmessage.metaClass.static.findBySrc = { src, map->
 			def m = Mock(Fmessage)
@@ -31,13 +34,16 @@ class DispatchRouterServiceSpec extends Specification {
 
 		service.i18nUtilService = Mock(I18nUtilService)
 		service.i18nUtilService.getMessage(_) >> 'blah blah blah'
+
+		appSettingsService = Mock(AppSettingsService)
+		service.appSettingsService = appSettingsService
 	}
 
 	def "should update the dispatch when no route is found"() {
 		setup:
 			def exchange = Mock(Exchange)
 			def camelContext = Mock(CamelContext)
-			camelContext.getRoutes()>> []
+			camelContext.getRoutes() >> []
 
 			def camelMessage = Mock(org.apache.camel.Message)
 			exchange.getIn() >> camelMessage
@@ -47,7 +53,7 @@ class DispatchRouterServiceSpec extends Specification {
 		when:
 			service.slip(exchange, null, null)
 		then:
-			RuntimeException ex = thrown()
+			thrown NoRouteAvailableException
 	}
 
 	@Unroll
@@ -81,7 +87,7 @@ class DispatchRouterServiceSpec extends Specification {
 	}
 
 	@Unroll
-	def 'slip should use the defined rules to determine fconnection to use'(){
+	def 'slip should use the defined rules to determine fconnection to use'() {
 		given:
 			mockAppSettingsService(settings)
 			def fconnection1 = new SmslibFconnection(name:"test 1", port:"/dev/ttyUSB0").save(flush:true)
@@ -90,12 +96,10 @@ class DispatchRouterServiceSpec extends Specification {
 			mockRoutes(fconnection1.id.toInteger(), fconnection2.id.toInteger(), fconnection3.id.toInteger())
 		expect:
 			service.slip(mockExchange(), null, null) == route
-			!expectNotification ^ SystemNotification.count()
 		where:
-			settings                                                            | route         | expectNotification
-			[true, 'any', 'fconnection-4, fconnection-1, fconnection-2']        | "seda:out-1"  | false
-			[true, 'any', 'uselastreceiver, fconnection-3, fconnection-1']      | "seda:out-2"  | false
-			[false, 'dontsend']                                                 | null          | true
+			settings                                                       | route 
+			[true, 'any', 'fconnection-4, fconnection-1, fconnection-2']   | "seda:out-1"
+			[true, 'any', 'uselastreceiver, fconnection-3, fconnection-1'] | "seda:out-2"
 	}
 
 	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'() {
@@ -105,8 +109,7 @@ class DispatchRouterServiceSpec extends Specification {
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
 		then:
-			thrown java.lang.RuntimeException
-			routedTo == null
+			thrown NoRouteAvailableException
 	}
 
 	def 'slip should not assign messages to any route if routing preference is not to send messages when routes are not avalilable'() {
@@ -115,8 +118,7 @@ class DispatchRouterServiceSpec extends Specification {
 		when:
 			def routedTo = service.slip(mockExchange(), null, null)
 		then:
-			thrown java.lang.RuntimeException
-			routedTo == null
+			thrown NoRouteAvailableException
 	}
 
 	def 'slip should fall back to the -otherwise- if received connection is set as prefered route and it is not avalilable'() {
@@ -178,7 +180,6 @@ class DispatchRouterServiceSpec extends Specification {
 	}
 
 	private mockAppSettingsService(useLastReceiver, otherwise, use = null) {
-		AppSettingsService appSettingsService = Mock()
 		if(useLastReceiver) use = use? "$use,uselastreceiver": 'uselastreceiver'
 		appSettingsService.get("routing.use") >> use
 		appSettingsService.get("routing.otherwise") >> otherwise
