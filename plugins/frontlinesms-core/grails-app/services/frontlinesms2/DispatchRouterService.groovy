@@ -3,8 +3,6 @@ package frontlinesms2
 import org.apache.camel.Exchange
 import org.apache.camel.Header
 
-import frontlinesms2.camel.exception.NoRouteAvailableException
-
 /** This is a Dynamic Router */
 class DispatchRouterService {
 	static final String RULE_PREFIX = "fconnection-"
