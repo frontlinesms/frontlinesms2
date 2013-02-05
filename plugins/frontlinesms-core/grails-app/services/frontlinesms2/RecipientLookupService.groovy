@@ -1,7 +1,6 @@
 package frontlinesms2
 
 class RecipientLookupService {
-	static transactional = true
 	def contactSearchService
 	def i18nUtilService
 	
