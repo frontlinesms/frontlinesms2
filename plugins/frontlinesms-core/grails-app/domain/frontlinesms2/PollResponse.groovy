@@ -18,14 +18,6 @@ class PollResponse implements Comparable {
 		key.compareTo(that.key)
 	}
 
-	List getMessages() {
-		if(poll.messages == null) return []
-		if(isUnknown()) {
-			return poll.messages.findAll { !it.ownerDetail }.asList()
-		}
-		return poll.messages.findAll { it.ownerDetail == "$id" }.asList()
-	}
-
 	def removeFromMessages(m) {
 		if(m.ownerDetail == "$id") m.ownerDetail = null
 	}

@@ -143,15 +143,6 @@ class Poll extends Activity {
 		if(raw) raw.toUpperCase().replaceAll(/\s/, "").split(",").findAll { it }.join(", ")
 	}
 
-	def deleteResponse(PollResponse response) {
-		response.messages.findAll { message ->
-			this.unknown.addToMessages(message)
-		}
-		this.removeFromResponses(response)
-		response.delete()
-		this
-	}
-
 	def processKeyword(Fmessage message, Keyword keyword) {
 		def response = getPollResponse(message, keyword)
 		response.addToMessages(message)
