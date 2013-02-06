@@ -122,18 +122,18 @@ var customActivityDialog = (function(){
 			if(stepType === 'join') {
 				groupValue = $(element).find('select[name=group]').val();
 				groupName = $(element).find('select[name=group]').find("option[value="+groupValue+"]").text();
-				output = i18n("customactivity.group.join", groupName);
+				output = i18n("customactivity.join.description", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType === "leave") {
 				groupValue = $(element).find('select[name=group]').val();
 				groupName = $(element).find('select[name=group]').find("option[value="+groupValue+"]").text();
-				output = i18n("customactivity.group.leave", groupName);
+				output = i18n("customactivity.leave.description", groupName);
 				output = "<p>"+output+"</p>";
 			}
 			if(stepType === "reply") {
 				messageText = $(element).find('textarea[name=autoreplyText]').val();
-				output = i18n("customactivity.reply.messagetext", messageText);
+				output = i18n("customactivity.reply.description", messageText);
 				output = "<p>"+output+"</p>";
 			}
 			container.append(output);
