@@ -21,27 +21,34 @@ class FconnectionServiceSpec extends Specification {
 		service.i18nUtilService = i18nUtilService
 	}
 
-	def 'Unconnected Fconnection gives a status of NOT_CONNECTED'() {
+	def 'Unconnected enabled Fconnection gives a status of FAILED'() {
 		given:
 			context.routes >> []
-			def notConnected = Mock(Fconnection)
+			def failed = mockFconnection(1, true, false)
 		when:
-			def status = service.getConnectionStatus(notConnected)
+			def status = service.getConnectionStatus(failed)
 		then:
-			status == ConnectionStatus.NOT_CONNECTED
+			status == ConnectionStatus.FAILED
+	}
+
+	def 'Disabled Fconnection gives a status of DISABLED'() {
+		given:
+			def disabledConnection = mockFconnection(2, false)
+		when:
+			true
+		then:
+			service.getConnectionStatus(disabledConnection) == ConnectionStatus.DISABLED
 	}
 	
 	def 'Connected Fconnection gives a status of CONNECTED'() {
 		given:
 			def connected = mockFconnection(1)
-			def notConnected = mockFconnection(2)
 			def alsoConnected = mockFconnection(3)
 			context.routes >> ["in-1", "out-3"].collect { [id:it] }
 		when:
 			true
 		then:
 			service.getConnectionStatus(connected) == ConnectionStatus.CONNECTED
-			service.getConnectionStatus(notConnected) == ConnectionStatus.NOT_CONNECTED
 			service.getConnectionStatus(alsoConnected) == ConnectionStatus.CONNECTED
 	}
 	
@@ -49,20 +56,19 @@ class FconnectionServiceSpec extends Specification {
 	def 'test route statuses'() {
 		given:
 			context.routes >> routeNames.collect { [id:it] }
-			def c = mockFconnection(id)
+			def c = mockFconnection(id, enabled, lastAttemptSucceeded)
 		expect:
 			service.getConnectionStatus(c) == expectedStatus
 		where:
-			id | routeNames                 | expectedStatus
-			1  | []                         | ConnectionStatus.NOT_CONNECTED
-			1  | ['in-2', 'out-3']          | ConnectionStatus.NOT_CONNECTED
-			1  | ['in-1']                   | ConnectionStatus.CONNECTED
-			1  | ['out-1']                  | ConnectionStatus.CONNECTED
-			1  | ['in-1', 'out-1']          | ConnectionStatus.CONNECTED
-			1  | ['in-1', 'out-internet-1'] | ConnectionStatus.CONNECTED
-			1  | ['in-1', 'out-modem-1']    | ConnectionStatus.CONNECTED
-			1  | ['out-internet-1']         | ConnectionStatus.CONNECTED
-			1  | ['out-modem-1']            | ConnectionStatus.CONNECTED
+			id | routeNames                 | enabled	| lastAttemptSucceeded	| expectedStatus
+			1  | []                         | false		| false					| ConnectionStatus.DISABLED
+			1  | []                         | false		| true					| ConnectionStatus.DISABLED
+			1  | ['in-2', 'out-modem-3']    | true		| false					| ConnectionStatus.FAILED
+			1  | ['in-1']                   | true		| true					| ConnectionStatus.CONNECTED
+			1  | ['in-1', 'out-internet-1'] | true		| true					| ConnectionStatus.CONNECTED
+			1  | ['in-1', 'out-modem-1']    | true		| true					| ConnectionStatus.CONNECTED
+			1  | ['out-internet-1']         | true		| true					| ConnectionStatus.CONNECTED
+			1  | ['out-modem-1']            | true		| true					| ConnectionStatus.CONNECTED
 	}
 
 	def 'creating a SMSLib route should stop detection on the corresponding port'() {
@@ -92,11 +98,13 @@ class FconnectionServiceSpec extends Specification {
 	def 'Routes supplied by the Fconnection are added to the camel context'() {
 		given:
 			def c = Mock(Fconnection)
-			c.routeDefinitions >> [[id:'in-mock'], [id:'out-mock']]
+			c.routeDefinitions >> [[id:'in-1'], [id:'out-modem-1']]
+			c.enabled >> true
+			c.lastAttemptSucceeded >> true
 		when:
 			service.createRoutes(c)
 		then:
-			1 * context.addRouteDefinitions { it*.id.sort() == ['in-mock', 'out-mock'] }
+			1 * context.addRouteDefinitions { it*.id.sort() == ['in-1', 'out-modem-1'] }
 	}
 	
 	@Unroll
@@ -141,9 +149,11 @@ class FconnectionServiceSpec extends Specification {
 			['out-internet-1'] | ['in-2', 'out-internet-3']
 	}
 
-	private def mockFconnection(int id) {
+	private def mockFconnection(int id, boolean enabled=true, boolean lastAttemptSucceeded=true) {
 		Fconnection c = Mock()
 		c.id >> id
+		c.enabled >> enabled
+		c.lastAttemptSucceeded >> lastAttemptSucceeded
 		return c
 	}
 }
