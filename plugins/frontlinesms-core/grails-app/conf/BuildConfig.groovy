@@ -87,6 +87,8 @@ grails.project.dependency.resolution = {
 		runtime ":csv:0.3.1"
 		compile ":quartz2:2.1.6.2"
 
+		compile ':platform-core:1.0.RC3-frontlinesms'
+
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.17"
 		test ":spock:0.6"

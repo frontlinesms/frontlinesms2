@@ -41,10 +41,9 @@ class DispatchRouterService {
 				def queueName = "seda:out-$fconnectionId"
 				log "Routing to $queueName"
 				return queueName
-			} else {
-				// TODO may want to queue for retry here, after incrementing retry-count header
-				throw new NoRouteAvailableException()
 			}
+
+			throw new NoRouteAvailableException()
 		}
 	}
 	
