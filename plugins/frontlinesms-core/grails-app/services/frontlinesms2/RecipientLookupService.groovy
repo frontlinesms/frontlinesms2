@@ -1,9 +1,12 @@
 package frontlinesms2
 
 class RecipientLookupService {
+	private static final int MAX_PER_SECTION = 3
+
 	def contactSearchService
 	def i18nUtilService
 	
+	// TODO rename this method
 	def contactSearchResults(params) {
 		def selectedList = params.recipients
 		def contacts = objects(selectedList, Contact)
@@ -19,20 +22,34 @@ class RecipientLookupService {
 		}
 	}
 
-	private def objects(selectedList, clazz) {
-		clazz.getAll(values(selectedList, clazz.shortName)*.toLong())
+	private def ids(selectedList, clazz) {
+		values(selectedList, clazz.shortName)*.toLong()?: [0L]
 	}
 
-	def lookup(originalQuery) {
-		def query = "%${originalQuery.toLowerCase()}%"
-		def results = [contacts:lookupContacts(query),
-				groups:lookupGroups(query),
-				smartgroups:lookupSmartgroups(query)].collect { k, v ->
+	private def objects(selectedList, clazz) {
+		clazz.getAll(ids(selectedList, clazz.shortName)) - null
+	}
+
+	def lookup(params) {
+		def query = "%${params.term.toLowerCase()}%"
+		def selectedSoFar = getSelectedSoFar(params)
+		def results = [contacts:lookupContacts(query, ids(selectedSoFar, Contact)),
+				groups:lookupGroups(query, ids(selectedSoFar, Group)),
+				smartgroups:lookupSmartgroups(query, ids(selectedSoFar, SmartGroup))].collect { k, v ->
 			if(v) [group:true, text:i18nUtilService.getMessage(code:"contact.search.$k"), items:v] } - null
-		def strippedNumber = stripNumber(originalQuery)
+		def strippedNumber = stripNumber(params.term)
 		if (strippedNumber)
 			results << [group:true, text: i18nUtilService.getMessage([code:"contact.search.address"]), items: [[value: "address-$strippedNumber", text: "\"$strippedNumber\""]]]
 		return results
+	}
+
+	private def getSelectedSoFar(params) {
+		def s = params.'selectedSoFar[]'
+		if(s) {
+			return s instanceof String? [s]: s
+		}
+		s = params.selectedSoFar
+		return s && s!='null'? s: ''
 	}
 
 	private def stripNumber(mobile) {
@@ -41,18 +58,18 @@ class RecipientLookupService {
 		n
 	}
 
-	private def lookupContacts(query) {
-		contactSearchService.getContacts([searchString:query]).collect {
+	private def lookupContacts(query, alreadySelected=[]) {
+		contactSearchService.getContacts([searchString:query, max:MAX_PER_SECTION]).collect {
 			[value: "contact-${it.id}", text: it.name] }
 	}
 
-	private def lookupGroups(query) {
-		Group.findAllByNameIlike(query).collect {
+	private def lookupGroups(query, alreadySelected=[]) {
+		Group.findAllByNameIlikeAndIdNotInList(query, alreadySelected, [max:MAX_PER_SECTION]).collect {
 			[value: "group-${it.id}", text: it.name] }
 	}
 
-	private def lookupSmartgroups(query) {
-		SmartGroup.findAllByNameIlike(query).collect {
+	private def lookupSmartgroups(query, alreadySelected=[]) {
+		SmartGroup.findAllByNameIlikeAndIdNotInList(query, alreadySelected, [max:MAX_PER_SECTION]).collect {
 			[value: "smartgroup-${it.id}", text: it.name] }
 	}
 }

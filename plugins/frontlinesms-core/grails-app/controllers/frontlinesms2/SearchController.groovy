@@ -65,7 +65,7 @@ class SearchController extends MessageController {
 	}
 		
 	def contactSearch() {
-		render(contentType: 'text/json') { recipientLookupService.lookup(params.term) }
+		render(contentType: 'text/json') { recipientLookupService.lookup(params) }
 	}
 
 	private def getSearchDescription(search) {

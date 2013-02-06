@@ -36,6 +36,9 @@
         field = $(this);
         options.data = options.data || {};
         options.data[options.jsonTermKey] = val;
+        if (options.sendSelectedSoFarOnEachLookup) {
+          options.data.selectedSoFar = select.val();
+        }
         if (options.dataCallback) {
           options.data = options.dataCallback(options.data);
         }
