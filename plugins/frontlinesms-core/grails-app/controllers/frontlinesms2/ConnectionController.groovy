@@ -1,13 +1,12 @@
 package frontlinesms2
 
 import grails.converters.JSON
-
-
 class ConnectionController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete:'GET']
 
 	def fconnectionService
 	def messageSendService
+	def smssyncService
 
 	def index() {
 		redirect action:'list'
@@ -118,6 +117,9 @@ class ConnectionController extends ControllerUtils {
 		CreateRouteJob.triggerNow([connectionId:params.id])
 		params.createRoute = true
 		flash.message = message(code: 'connection.route.connecting')
+		def connectionInstance = Fconnection.get(params.id)
+		if(connectionInstance?.shortName == 'smssync')
+			smssyncService.startTimeoutCounter(connectionInstance)
 		redirect(action:'list', params:params)
 	}
   
