@@ -9,7 +9,10 @@ class FailPendingMessagesService {
 				it.status = DispatchStatus.FAILED
 				it.save()
 			}
-			new SystemNotification(text:"${pendingDispatchList.size()} pending message(s) failed. Go to pending messages section to view.").save(failOnError:true)
+			def text = "${pendingDispatchList.size()} pending message(s) failed. Go to pending messages section to view."
+			def sn = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+			sn.read = false
+			sn.save(failOnError:true)
 		}
 		
 	}
