@@ -5,7 +5,7 @@
 	<div class="custom-activity-step btn" id="add-join-action-step">Join</div>
 	<div class="custom-activity-step btn" id="add-leave-action-step">Leave</div>
 	<div class="custom-activity-step btn" id="add-reply-action-step">Reply</div>
-	<div class="custom-activity-step btn" id="add-webconnection-action-step">Reply</div>
+	<div class="custom-activity-step btn" id="add-webconnection-action-step">Upload</div>
 </div>
 
 <fsms:render template="/customactivity/steps/join" type="sanchez" id="step-join" runtimeVars="stepId"/>

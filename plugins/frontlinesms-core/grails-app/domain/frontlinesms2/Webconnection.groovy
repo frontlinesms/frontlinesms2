@@ -13,6 +13,19 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	static final String OWNERDETAIL_PENDING = 'pending'
 	static final String OWNERDETAIL_FAILED = 'failed'
 	
+	static subFields = ['message_body' : { msg ->
+			def keyword = msg.messageOwner?.keywords?.find{ msg.text.toUpperCase().startsWith(it.value) }?.value
+			def text = msg.text
+			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
+				text = text.substring(keyword.size()).trim()
+			}
+			text
+		},
+		'message_body_with_keyword' : { msg -> msg.text },
+		'message_src_number' : { msg -> msg.src },
+		'message_src_name' : { msg -> Contact.findByMobile(msg.src)?.name ?: msg.src },
+		'message_timestamp' : { msg -> msg.dateCreated }]
+		
 	def camelContext
 	def webconnectionService
 	def appSettingsService

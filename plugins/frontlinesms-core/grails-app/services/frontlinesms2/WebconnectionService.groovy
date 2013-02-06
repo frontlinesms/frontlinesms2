@@ -15,22 +15,9 @@ class WebconnectionService {
 	def i18nUtilService
 	def messageSendService
 
-	private def subFields = ['message_body' : { msg ->
-			def keyword = msg.messageOwner?.keywords?.find{ msg.text.toUpperCase().startsWith(it.value) }?.value
-			def text = msg.text
-			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
-				text = text.substring(keyword.size()).trim()
-			}
-			text
-		},
-		'message_body_with_keyword' : { msg -> msg.text },
-		'message_src_number' : { msg -> msg.src },
-		'message_src_name' : { msg -> Contact.findByMobile(msg.src)?.name ?: msg.src },
-		'message_timestamp' : { msg -> msg.dateCreated }]
-
 	private String getReplacement(String arg, Fmessage msg) {
 		arg = (arg - '${') - '}'
-		def c = subFields[arg]
+		def c = Webconnection.subFields[arg]
 		return c(msg)
 	}
 

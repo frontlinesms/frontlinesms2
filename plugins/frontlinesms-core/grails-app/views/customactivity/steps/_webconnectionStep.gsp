@@ -1,22 +1,22 @@
 <li class='webconnection-action-step step' index='${stepId}'>
 	<div><a class='remove-command remove-step'></a></div>
-	<span>Upload Message to Url</span>
+	
 	<g:hiddenField name='stepId' value="${stepId}"/>
 	<g:hiddenField name='stepType' value='webconnectionStep'/>
 	<br>
-	<g:textField name="url" />
-
-	<ul class="select">
+	<div>
+		<label for="url"><g:message code="webconnection.url.label"/></label>
+		<g:textField name="url" />
+	</div>
+	<div>
 		<g:set var="httpMethod" value="${httpMethod}"/>
-		<li>
-			<label for="httpMethod"><g:message code="webconnection.httpMethod.get"/></label>
-			<g:radio name="httpMethod" value="GET" checked="" />
-		</li>
-		<li>
-			<label for="httpMethod"><g:message code="webconnection.httpMethod.post"/></label>
-			<g:radio name="httpMethod" value="POST" checked="" />
-		</li>
-	</ul>
+		
+		<label for="httpMethod"><g:message code="webconnection.httpMethod.get"/></label>
+		<g:radio name="httpMethod" value="GET" checked="" />
+
+		<label for="httpMethod"><g:message code="webconnection.httpMethod.post"/></label>
+		<g:radio name="httpMethod" value="POST" checked="" />
+	</div>
 
 	<h2><g:message code="webconnection.parameters"/></h2>
 	<table id="web-connection-param-table">
