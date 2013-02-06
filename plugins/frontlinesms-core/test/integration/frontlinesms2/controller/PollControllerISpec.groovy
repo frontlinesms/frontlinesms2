@@ -50,12 +50,12 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll?.keywords*.value.containsAll(['HELLO','A','AA','B','BB','MAYBE','IDONTKNOW'])
 			poll.keywords.size() == 7
 			poll.keywords[0].ownerDetail == null
-			poll.keywords[1].ownerDetail == poll.responses[0].key
-			poll.keywords[2].ownerDetail == poll.responses[0].key
-			poll.keywords[3].ownerDetail == poll.responses[1].key
-			poll.keywords[4].ownerDetail == poll.responses[1].key
-			poll.keywords[5].ownerDetail == poll.responses[2].key
-			poll.keywords[6].ownerDetail == poll.responses[2].key
+			poll.keywords[1].ownerDetail == 'A'
+			poll.keywords[2].ownerDetail == 'A'
+			poll.keywords[3].ownerDetail == 'B'
+			poll.keywords[4].ownerDetail == 'B'
+			poll.keywords[5].ownerDetail == 'C'
+			poll.keywords[6].ownerDetail == 'C'
 	}
 
 	def "saving new poll with keyword disabled does should not save the keyword"() {
@@ -76,11 +76,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can archive a poll"() {
 		setup:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
-			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
-			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(PollResponse.createUnknown())
-			poll.save(failOnError:true, flush:true)
+			def poll = TestData.createBadnessPoll()
 		when:
 			assert Poll.findAllByArchived(false) == [poll]
 			poll.archived = true;
@@ -91,11 +87,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def  "can edit a given poll object"() {
 		setup:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
-			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(PollResponse.createUnknown())
-			poll.save(failOnError:true, flush:true)
+			def poll = TestData.createBadnessPoll()
 			controller.params.ownerId = poll.id
 			controller.params.enableAutoreply = "true"
 			controller.params.name = "renamed poll name"
@@ -111,11 +103,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can delete a poll to send it to the trash"() {
 		setup:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
-			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
-			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(PollResponse.createUnknown())
-			poll.save(failOnError:true, flush:true)
+			def poll = TestData.createBadnessPoll()
 		when:
 			assert Poll.findAllByDeleted(false) == [poll]
 			controller.params.id  = poll.id
@@ -127,10 +115,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can restore a poll to move out of the trash"() {
 		setup:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
-			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
-			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(PollResponse.createUnknown())
+			def poll = TestData.createBadnessPoll()
 			poll.deleted = true
 			poll.save(failOnError:true, flush:true)
 		when:
@@ -153,11 +138,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "edit action modifies the properties of an existing poll"() {
 		setup:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
-			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(PollResponse.createUnknown())
-			poll.save(failOnError:true, flush:true)
+			def poll = TestData.createBadnessPoll()
 			controller.params.ownerId = poll.id
 			controller.params.choiceC = "Arnold Vandam"
 			controller.params.messageText = "question"
@@ -198,21 +179,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "editing a poll persists keyword changes"() {
 		setup:
-			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
-			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
-			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
-			p.addToResponses(PollResponse.createUnknown())
-			p.save(failOnError:true)
-			def k1 = new Keyword(value: "FOOTBALL", activity: p)
-			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:false)
-			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"B", isTopLevel:false)
-			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"C", isTopLevel:false)
-			p.addToKeywords(k1)
-			p.addToKeywords(k2)
-			p.addToKeywords(k3)
-			p.addToKeywords(k4)
-			p.save(failOnError:true, flush:true)
+			TestData.createFootballPollWithKeywords()
 		and:
 			controller.params.ownerId=Poll.findByName('This is a poll').id
 			controller.params.name = 'test-poll-1'
@@ -236,29 +203,15 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.keywords.size() == 5
 			Keyword.findAll().size() == 5
 			(poll.keywords[0].value == 'HELLO')&&(poll.keywords[0].ownerDetail == null)
-			(poll.keywords[1].value == 'MANCHESTER')&&(poll.keywords[1].ownerDetail == poll.responses[0].key)
-			(poll.keywords[2].value == 'BARCELONA')&&(poll.keywords[2].ownerDetail == poll.responses[1].key)
-			(poll.keywords[3].value == 'HARAMBEE')&&(poll.keywords[3].ownerDetail == poll.responses[2].key)
-			(poll.keywords[4].value == 'TEAM')&&(poll.keywords[4].ownerDetail == poll.responses[2].key)
+			(poll.keywords[1].value == 'MANCHESTER')&&(poll.keywords[1].ownerDetail in poll.responses*.key)
+			(poll.keywords[2].value == 'BARCELONA')&&(poll.keywords[2].ownerDetail in poll.responses*.key)
+			(poll.keywords[3].value == 'HARAMBEE')&&(poll.keywords[3].ownerDetail in poll.responses*.key)
+			(poll.keywords[4].value == 'TEAM')&&(poll.keywords[4].ownerDetail in poll.responses*.key)
 	}
 
 	def "editing a poll and removing the top level keyword should set responses as top level"() {
 		setup:
-			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
-			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
-			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
-			p.addToResponses(PollResponse.createUnknown())
-			p.save(failOnError:true)
-			def k1 = new Keyword(value: "FOOTBALL", activity: p)
-			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:false)
-			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"B", isTopLevel:false)
-			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"C", isTopLevel:false)
-			p.addToKeywords(k1)
-			p.addToKeywords(k2)
-			p.addToKeywords(k3)
-			p.addToKeywords(k4)
-			p.save(failOnError:true, flush:true)
+			def p = TestData.createFootballPollWithKeywords()
 		and:
 			controller.params.ownerId=Poll.findByName('This is a poll').id
 			controller.params.name = 'test-poll-1'
@@ -287,3 +240,4 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.keywords[3].isTopLevel
 	}
 }
+
