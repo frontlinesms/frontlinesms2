@@ -344,7 +344,7 @@ class FsmsTagLib {
 		out << '</div>'
 	}
 
-	def ajaxContactSelector = { att ->
+	def recipientSelector = { att ->
 		out << '<select name="recipients" id="contactsearch" style="width:320px;" data-placeholder="' + i18nUtilService.getMessage([code:'contact.search.placeholder']) + '" multiple class="chzn-select">'
 		out << '<option></option>'
 		out << '</select>'
@@ -554,3 +554,4 @@ class FsmsTagLib {
 		cssClasses
 	}
 }
+
