@@ -18,7 +18,7 @@ class WebconnectionActionStep extends Step {
 	}
 
 	Map getConfig() {
-		[stepId:id, method:httpMethod, urlEncode:url, params:params]
+		[stepId:id, httpMethod:httpMethod, urlEncode:url, params:params]
 	}
 
 	def getHttpMethod() {
@@ -70,7 +70,7 @@ class WebconnectionActionStep extends Step {
 									.handled(true)
 									.beanRef('webconnectionService', 'handleException')
 									.end()
-						.to(WebconnectionActionStep.this.url)
+						.to("${WebconnectionActionStep.this.url}")
 						.beanRef('webconnectionService', 'postProcess')
 						.routeId("activity-${WebconnectionActionStep.shortName}-${WebconnectionActionStep.this.id}")]
 			}
@@ -90,7 +90,8 @@ class WebconnectionActionStep extends Step {
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
 		def fmessage = Fmessage.get(x.in.headers.'fmessage-id')
-		def encodedParameters = this.stepProperties?.collect {
+		def stepProperties = this.stepProperties.collect { if(!(it.key ==~ /httpMethod|url/)) it} - null
+		def encodedParameters = stepProperties?.collect {
 			urlEncode(it.key) + '=' + urlEncode(webconnectionService.getProcessedValue(it, fmessage))
 		}.join('&')
 		println "PARAMS:::$encodedParameters"

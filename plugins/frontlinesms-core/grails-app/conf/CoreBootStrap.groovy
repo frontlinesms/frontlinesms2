@@ -447,7 +447,7 @@ class CoreBootStrap {
 
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
 		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
-		def uploadStep = new WebconnectionActionStep().addToStepProperties(new StepProperty(key:"url", value:"http://192.168.0.200"))
+		def uploadStep = new WebconnectionActionStep().addToStepProperties(new StepProperty(key:"url", value:"http://192.168.0.200:9091/webservice-0.1/message/get"))
 			.addToStepProperties(new StepProperty(key:"httpMethod", value:"GET"))
 			.addToStepProperties(new StepProperty(key:"message", value:"I will upload you"))
 			.addToStepProperties(new StepProperty(key:"source", value:"123123"))
