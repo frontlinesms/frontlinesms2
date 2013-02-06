@@ -9,6 +9,8 @@ class FconnectionService {
 	def camelContext
 	def deviceDetectionService
 	def i18nUtilService
+	def smssyncService
+	def connectingIds = [].asSynchronized()
 	
 	def createRoutes(Fconnection c) {
 		println "FconnectionService.createRoutes() :: ENTRY :: $c"
@@ -57,6 +59,9 @@ class FconnectionService {
 				ex.printStackTrace()
 			}
 		}
+		def connection = Fconnection.get(id)
+		if (connection.shortName == 'smssync')
+			smssyncService.handleRouteDestroyed(connection)
 		println "fconnectionService.destroyRoutes : EXIT"
 	}
 	

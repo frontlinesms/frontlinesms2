@@ -19,16 +19,22 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'Doe', text:'meeting at 11.00', date:new Date()-1)
 		Fmessage.build(src:'Alex', text:'hi alex', date:new Date()-1)
 	}
-	
-	static createTestPollsAndFolders() {
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		def unknownResponse = new PollResponse(value:'Unknown')
 
+	private static createMiaouwMixPoll() {
 		Poll p = new Poll(name:'Miauow Mix')
-		[chickenResponse, liverResponse, unknownResponse].each { p.addToResponses(it) }
+
+		def chickenResponse = new PollResponse(key:'A', value:'chicken')
+		p.addToResponses(chickenResponse)
+		p.addToResponses(key:'B', value:'liver')
+		p.addToResponses(PollResponse.createUnknown())
+		p.save(failOnError:true, flush:true)
+
 		chickenResponse.addToMessages(Fmessage.build(src:'Joe', text:'eat more cow'))
 		p.save(failOnError:true, flush:true)
+	}
+
+	static createTestPollsAndFolders() {
+		createMiaouwMixPoll()
 
 		Folder.build(name:"Work")
 	}
@@ -52,16 +58,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-2)
 		Fmessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
 
-		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
-		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
-
-		def poll = new Poll(name:'Miauow Mix')
-		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->
-			PollResponse r = new PollResponse(value:value)
-			poll.addToResponses(r)
-			if(m) r.addToMessages(m)
-		}
-		poll.save(flush:true, failOnError:true)
+		frontlinesms2.message.MessageBaseSpec.createMiaouwMixPoll()
 	}
 	
 	static createSearchTestMessages() {
@@ -69,18 +66,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-1)
 		Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes')
 
-		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
-		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		def unknownResponse = new PollResponse(value:'Unknown')
-
-		Poll p = new Poll(name:'Miauow Mix')
-		[chickenResponse, liverResponse, unknownResponse].each { p.addToResponses(it) }
-		p.save(failOnError:true, flush:true)
-
-		liverResponse.addToMessages(liverMessage)
-		chickenResponse.addToMessages(chickenMessage)
+		frontlinesms2.message.MessageBaseSpec.createMiaouwMixPoll()
 	}
 	
 	static createTestContacts() {

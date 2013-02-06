@@ -3,9 +3,12 @@ package frontlinesms2
 import org.apache.camel.Exchange
 import org.apache.camel.Header
 
+import frontlinesms2.camel.exception.NoRouteAvailableException
+
 /** This is a Dynamic Router */
 class DispatchRouterService {
 	def camelContext
+	def i18nUtilService
 
 	int counter = -1
 
@@ -40,7 +43,7 @@ class DispatchRouterService {
 				return queueName
 			} else {
 				// TODO may want to queue for retry here, after incrementing retry-count header
-				throw new RuntimeException("No outbound route available for dispatch.")
+				throw new NoRouteAvailableException()
 			}
 		}
 	}
@@ -69,6 +72,23 @@ class DispatchRouterService {
 		println "DispatchRouterService.handleFailed() : ENTRY"
 		updateDispatch(x, DispatchStatus.FAILED)
 		println "DispatchRouterService.handleFailed() : EXIT"
+	}
+
+	def handleNoRoutes(Exchange x) {
+		println "DispatchRouterService.handleNoRoutes() : NoRouteAvailableException handling..."
+		createSystemNotification('no-available-route')
+		def id = x.in.getHeader('frontlinesms.dispatch.id')
+		def body = x.in.body
+		x.out.body = x.in.body
+		x.out.headers = x.in.headers
+		println "DispatchRouterService.handleNoRoutes() : EXIT"
+	}
+
+	private def createSystemNotification(def code) {
+		def text = i18nUtilService.getMessage(code:"routing.notification.$code")
+		def notification = SystemNotification.findOrCreateWhere(text:text)
+		notification.read = false
+		notification.save()
 	}
 	
 	private Dispatch updateDispatch(Exchange x, s) {

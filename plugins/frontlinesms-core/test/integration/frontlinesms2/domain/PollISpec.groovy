@@ -41,6 +41,17 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:"Unknown", count:0, percent:0]
 			]
 		when:
+			def outbound1 = new Fmessage(inbound:false, text:'who is badder in your opinion?')
+			outbound1.addToDispatches(dst:"123", status:DispatchStatus.SENT, dateSent:new Date())
+			p.addToMessages(outbound1)
+			p.save(failOnError:true, flush:true)
+		then:
+			p.responseStats == [
+				[id:mjId, value:"Michael-Jackson", count:0, percent:0],
+				[id:cnId, value:"Chuck-Norris", count:0, percent:0],
+				[id:ukId, value:"Unknown", count:0, percent:0]
+			]
+		when:
 			PollResponse.findByValue('Michael-Jackson').addToMessages(new Fmessage(text:'MJ', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
 			PollResponse.findByValue('Chuck-Norris').addToMessages(new Fmessage(text:'big charlie', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
 		then:
@@ -52,6 +63,17 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			Fmessage.findByText('MJ').isDeleted = true
 			Fmessage.findByText('MJ').save(flush:true)
+		then:
+			p.responseStats == [
+				[id:mjId, value:'Michael-Jackson', count:0, percent:0],
+				[id:cnId, value:'Chuck-Norris', count:1, percent:100],
+				[id:ukId, value:'Unknown', count:0, percent:0]
+			]
+		when:
+			def outbound = new Fmessage(inbound:false, text:'thanks for your response')
+			outbound.addToDispatches(dst:"123", status:DispatchStatus.SENT, dateSent:new Date())
+			p.addToMessages(outbound)
+			p.save(failOnError:true, flush:true)
 		then:
 			p.responseStats == [
 				[id:mjId, value:'Michael-Jackson', count:0, percent:0],
@@ -120,21 +142,22 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue("two").addToMessages(m3)
 			poll.save(flush:true)
 			poll.refresh()
+			def liveCount = { poll.responses.sort { ['A', 'B', 'C', 'D', Poll.KEY_UNKNOWN].indexOf(it.key) }*.liveMessageCount }
 		then:
-			poll.responses*.liveMessageCount == [2, 1, 0]
+			liveCount() == [2, 1, 0]
 		when:
 			poll.editResponses(choiceC: "three", choiceD:"four")
 			poll = Poll.get(poll.id)
 		then:
 			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
-			poll.responses*.liveMessageCount == [2, 1, 0, 0, 0]
+			liveCount() == [2, 1, 0, 0, 0]
 		when:
 			m1 = Fmessage.build(src: "src1", inbound: true, date: new Date() - 10)
 			PollResponse.findByValue("one").addToMessages(m1)
 			PollResponse.findByValue("three").addToMessages(Fmessage.build(src: "src4", inbound: true, date: new Date() - 10))
 			poll.save(flush:true)
 		then:
-			poll.responses*.liveMessageCount == [3, 1, 0, 1, 0]
+			liveCount() == [3, 1, 1, 0, 0]
 		when:
 			poll.editResponses(choiceA: "five")
 			poll.save(flush:true)
@@ -144,7 +167,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			println "poll responses ${poll.responses*.value}"
 			poll.responses*.every {
 				(it.key=='Unknown' && it.liveMessageCount == 3) ||
-						(it.key == 'choiceA' && it.liveMessageCount == 0)
+						(it.key == 'A' && it.liveMessageCount == 0)
 			}
 	}
 	
@@ -171,9 +194,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	private def setUpPollAndResponses() {		
 		def poll = new Poll(name: 'question')
 		poll.addToResponses(PollResponse.createUnknown())
-		poll.addToResponses(new PollResponse(value:"response 1"))
-		poll.addToResponses(new PollResponse(value:"response 2"))
-		poll.addToResponses(new PollResponse(value:"response 3"))
+		poll.addToResponses(value:"response 1", key:'A')
+		poll.addToResponses(value:"response 2", key:'B')
+		poll.addToResponses(value:"response 3", key:'C')
 		poll.save(flush: true, failOnError:true)
 		return poll
 	}
@@ -222,8 +245,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToResponses(key:'B' , value:'TessstB')
 					.addToResponses(PollResponse.createUnknown())
 					.addToMessages(m)
-			responseA.addToMessages(m)
 			previousOwner.save(flush:true, failOnError:true)
+			responseA.addToMessages(m)
 
 			assert responseA.refresh().messages.contains(m)
 			
@@ -243,55 +266,28 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "Message should be sorted into the correct PollResponse for  Poll with top level and second level keywords"() {
 		when:
-			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
-			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
-			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
-			p.addToResponses(PollResponse.createUnknown())
-			p.save(failOnError:true)
-			def k1 = new Keyword(value: "FOOTBALL", activity: p)
-			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:false)
-			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"C", isTopLevel:false)
-			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"B", isTopLevel:false)
-			p.addToKeywords(k1)
-			p.addToKeywords(k2)
-			p.addToKeywords(k3)
-			p.addToKeywords(k4)
-			p.save(failOnError:true, flush:true)
+			def p = TestData.createFootballPollWithKeywords()
 		then:
 			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), Keyword.findByValue(keywordValue)).value == pollResponseValue
 		where:
-			keywordValue|pollResponseValue
-			"FOOTBALL"|"Unknown"
-			"MANCHESTER"|"Manchester"	
-			"BARCELONA"|"Barcelona"
-			"HARAMBEE"|"Harambee Stars"
+			keywordValue | pollResponseValue
+			"FOOTBALL"   | "Unknown"
+			"MANCHESTER" | "Manchester"	
+			"BARCELONA"  | "Barcelona"
+			"HARAMBEE"   | "Harambee Stars"
 	}
 
 	@Unroll
 	def "Message should be sorted into the correct PollResponse for  Poll with only top level keywords"() {
 		when:
-			def p = new Poll(name: 'This is a poll', yesNo:false)
-			p.addToResponses(new PollResponse(key:'A', value:"Manchester"))
-			p.addToResponses(new PollResponse(key:'B', value:"Barcelona"))
-			p.addToResponses(new PollResponse(key:'C', value:"Harambee Stars"))
-			p.addToResponses(PollResponse.createUnknown())
-			p.save(failOnError:true)
-			def k2 = new Keyword(value: "MANCHESTER", activity: p, ownerDetail:"A", isTopLevel:true)
-			def k3 = new Keyword(value: "HARAMBEE", activity: p, ownerDetail:"C", isTopLevel:true)
-			def k4 = new Keyword(value: "BARCELONA", activity: p, ownerDetail:"B", isTopLevel:true)
-			p.addToKeywords(k2)
-			p.addToKeywords(k3)
-			p.addToKeywords(k4)
-			p.save(failOnError:true, flush:true)
-			println "##### ${p.keywords*.value}"
+			def p = TestData.createFootballPollWithKeywords()
 		then:
 			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), p.keywords.find{ it.value == keywordValue }).value == pollResponseValue
 		where:
-			keywordValue|pollResponseValue
-			"MANCHESTER"|"Manchester"
-			"BARCELONA"|"Barcelona"
-			"HARAMBEE"|"Harambee Stars"
+			keywordValue | pollResponseValue
+			"MANCHESTER" | "Manchester"
+			"BARCELONA"  | "Barcelona"
+			"HARAMBEE"   | "Harambee Stars"
 	}
 
 	def "saving a poll with a response value empty should fail"(){

@@ -247,7 +247,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, Fmessage.findByText('hello').id
 			singleMessageDetails.moveTo(Folder.findByName('my-folder').id)
 		then:
-			waitFor("veryslow") { messageList.noContent.text() == "No messages here!" }
+			waitFor("veryslow") { messageList.noContent.text() == "No messages here, yet." }
 			bodyMenu.selected == "inbox"
 	}
 

@@ -13,8 +13,8 @@ class Poll extends Activity {
 	String autoreplyText
 	String question
 	boolean yesNo
-	List responses
 	static hasMany = [responses: PollResponse]
+	SortedSet responses
 
 //> SETTINGS
 	static transients = ['unknown']
@@ -25,15 +25,8 @@ class Poll extends Activity {
 	}
 
 	def getDisplayText(Fmessage msg) {
-		def p = PollResponse.withCriteria {
-			messages {
-				eq('isDeleted', false)
-				eq('archived', false)
-				eq('id', msg.id)
-			}
-		}
-
-		p?.size() ? "${p[0].value} (\"${msg.text}\")" : msg.text
+		def p = responses.find { "$it.id" == msg.ownerDetail }
+		p? "${p.value} (\"${msg.text}\")": msg.text
 	}
 			
 	static constraints = {
@@ -65,7 +58,7 @@ class Poll extends Activity {
 			this.responses.each {
 				it.removeFromMessages(message)
 			}
-			this.unknown.messages.add(message)
+			this.unknown.addToMessages(message)
 		}
 		this
 	}
@@ -82,8 +75,8 @@ class Poll extends Activity {
 	}
 	
 	def getResponseStats() {
-		def totalMessageCount = getActivityMessages().count()
-		responses.sort {it.key?.toLowerCase()}.collect {
+		def totalMessageCount = messages?.count { it.inbound && !it.isDeleted && (it.archived == this.archived) }?: 0
+		responses.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,
@@ -146,15 +139,6 @@ class Poll extends Activity {
 		if(raw) raw.toUpperCase().replaceAll(/\s/, "").split(",").findAll { it }.join(", ")
 	}
 
-	def deleteResponse(PollResponse response) {
-		response.messages.findAll { message ->
-			this.unknown.messages.add(message)
-		}
-		this.removeFromResponses(response)
-		response.delete()
-		this
-	}
-
 	def processKeyword(Fmessage message, Keyword keyword) {
 		def response = getPollResponse(message, keyword)
 		response.addToMessages(message)
@@ -172,11 +156,21 @@ class Poll extends Activity {
 	}
 	
 	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
-		if(keyword.isTopLevel && !keyword.ownerDetail){
+		if(keyword.isTopLevel && !keyword.ownerDetail) {
 			return this.unknown
 		} else {
-			return this.responses.find{ keyword.ownerDetail == it.key }
+			return this.responses.find { keyword.ownerDetail == it.key }
 		}
 	}
+
+	def deleteResponse(PollResponse response) {
+		response.messages.findAll { message ->
+			this.unknown.addToMessages(message)
+		}
+		this.removeFromResponses(response)
+		response.delete()
+		this
+	}
+
 }
 
