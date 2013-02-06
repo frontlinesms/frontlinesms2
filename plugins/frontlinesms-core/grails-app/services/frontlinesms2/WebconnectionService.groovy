@@ -35,6 +35,7 @@ class WebconnectionService {
 	}
 
 	private changeMessageOwnerDetail(activityOrStep, message, s) {
+		println "Status to set to $message is $s"
 		message.setOwnerDetail(activityOrStep, s)
 		message.save(failOnError:true, flush:true)
 		println "Changing Status ${message.ownerDetail}"
@@ -58,6 +59,16 @@ class WebconnectionService {
 		fm.save(failOnError:true, flush:true)
 	}
 
+	private def getWebConnection(Exchange x) {
+		def webConnection
+		if(x.in.headers.'webconnection-id') {
+			webConnection = Webconnection.get(x.in.headers.'webconnection-id')
+		} else if(x.in.headers.'webconnectionStep-id') {
+			webConnection = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
+		}
+		webConnection
+	}
+
 
 	String getProcessedValue(prop, msg) {
 		def val = prop.value
@@ -72,12 +83,7 @@ class WebconnectionService {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def webConn
-		if(x.in.headers.'webconnection-id') {
-			webConn = Webconnection.get(x.in.headers.'webconnection-id')
-		} else if(x.in.headers.'webconnectionStep-id') {
-			webConn = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
-		}
+		def webConn = getWebConnection(x)
 		webConn.preProcess(x)
 	}
 
@@ -87,12 +93,7 @@ class WebconnectionService {
 		println "x.in.headers: ${x.in.headers}"
 		println "### WebconnectionService.postProcess() ## headers ## ${x.in.headers}"
 		println "#### Completed postProcess #### ${x.in.headers.'fmessage-id'}"
-		def webConn
-		if(x.in.headers.'webconnection-id') {
-			webConn = Webconnection.get(x.in.headers.'webconnection-id')
-		} else if(x.in.headers.'webconnectionStep-id') {
-			webConn = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
-		}
+		def webConn = getWebConnection(x)
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
 		changeMessageOwnerDetail(webConn, message, Webconnection.OWNERDETAIL_SUCCESS)
 		webConn.postProcess(x)
@@ -100,7 +101,7 @@ class WebconnectionService {
 
 	def handleException(Exchange x) {
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
-		changeMessageOwnerDetail(activityOrStep, message, Webconnection.OWNERDETAIL_FAILED)
+		changeMessageOwnerDetail(getWebConnection(x), message, Webconnection.OWNERDETAIL_FAILED)
 		println "### WebconnectionService.handleException() ## headers ## ${x.in.headers}"
 		println "Web Connection request failed with exception: ${x.in.body}"
 		log.info "Web Connection request failed with exception: ${x.in.body}"
@@ -128,7 +129,6 @@ class WebconnectionService {
 		if(activityOrStep instanceof Webconnection) (headers.'webconnection-id' = activityOrStep.id) 
 		else (headers.'webconnectionStep-id' = activityOrStep.id)
 		changeMessageOwnerDetail(activityOrStep, message, Webconnection.OWNERDETAIL_PENDING)
-		println ">>>>>>seda:activity-${activityOrStep.shortName}-${activityOrStep.id}"
 		sendMessageAndHeaders("seda:activity-${activityOrStep.shortName}-${activityOrStep.id}", message, headers)
 	}
 
