@@ -239,7 +239,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'moving messages to different activities and sections should work'() {
 		given:
-			def message = Fmessage.build(inbound:true)
+			def message = Fmessage.build(inbound:true, text:'the message')
 			def autoforward = Autoforward.build(name:'autoforward')
 			def autoreply = Autoreply.build(name:'autoreply')
 			def webconnection = GenericWebconnection.build(name:'webconnection')

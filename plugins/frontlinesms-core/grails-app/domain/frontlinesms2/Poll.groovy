@@ -176,7 +176,7 @@ class Poll extends Activity {
 	}
 	
 	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
-		if(keyword?.isTopLevel && !keyword?.ownerDetail){
+		if(!keyword || (keyword?.isTopLevel && !keyword?.ownerDetail)){
 			return this.unknown
 		} else {
 			return this.responses.find{ keyword?.ownerDetail == it.key }
