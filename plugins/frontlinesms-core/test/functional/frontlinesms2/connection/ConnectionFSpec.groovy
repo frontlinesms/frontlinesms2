@@ -18,11 +18,18 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.text()?.contains('You have no connections configured.')
 	}
 	
-	def 'There is a Not Connected label shown for inactive connection'() {
+	def 'There is a Failed label shown for failed connection'() {
 		when:
 			to PageConnection, createTestEmailConnection()
 		then:
-			connectionList.status == "Not connected"
+			connectionList.status == "Failed"
+	}
+	
+	def 'There is a Disabled label shown for disabled connection'() {
+		when:
+			to PageConnection, createTestEmailConnection()
+		then:
+			connectionList.status == "Disabled"
 	}
 
 	def 'there is a DELETE button shown for inactive connection'() {
@@ -52,7 +59,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'Send test message button for particular connection displayed on a successfully created route'() {
 		given:
 			def testConnection = createTestSmsConnection()
-			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
+			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200, enabled:true)
 		when:
 			to PageConnection, testConnection
 			waitFor { connectionList.btnCreateRoute.displayed }
