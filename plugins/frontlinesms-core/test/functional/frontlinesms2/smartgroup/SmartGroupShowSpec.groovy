@@ -66,3 +66,4 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 			waitFor {englishContacts.mobile == "+44"}
 	}
 }
+

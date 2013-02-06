@@ -54,7 +54,9 @@ input,textarea { background:white; }
 	text-transform:uppercase; font-weight:bold; }
 
 #body #main-list { background-color:white; }
-#body #main-list .no-content, #body-content .no-content { font-weight:bold; font-size:180%; text-align:center; padding:17px; }
+#body .no-content { font-size:150%; }
+#body .no-content, #body .no-content * { font-weight:bold !important; color:#aaa !important; text-align:center !important; padding:17px !important; }
+#body .no-content:hover, #body .no-content * { background-color:transparent !important; }
 
 #body #main-list-foot { background-color:#f0f0f0; border-top:solid #9e9e9e 1px; padding:10px 17px; font-size:95%; }
 #body #main-list-foot .controls { display:table; width:100%; }
