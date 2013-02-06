@@ -5,11 +5,13 @@
 	<div class="custom-activity-step btn" id="add-join-action-step">Join</div>
 	<div class="custom-activity-step btn" id="add-leave-action-step">Leave</div>
 	<div class="custom-activity-step btn" id="add-reply-action-step">Reply</div>
+	<div class="custom-activity-step btn" id="add-webconnection-action-step">Reply</div>
 </div>
 
 <fsms:render template="/customactivity/steps/join" type="sanchez" id="step-join" runtimeVars="stepId"/>
 <fsms:render template="/customactivity/steps/leave" type="sanchez" id="step-leave"/>
 <fsms:render template="/customactivity/steps/reply" type="sanchez" id="step-reply"/>
+<fsms:render template="/customactivity/steps/webconnectionStep" type="sanchez" id="step-webconnectionStep"/>
 
 <g:hiddenField name="jsonToSubmit" />
 <ul id="custom-activity-config-container">
