@@ -100,7 +100,6 @@ class FconnectionServiceSpec extends Specification {
 			def c = Mock(Fconnection)
 			c.routeDefinitions >> [[id:'in-1'], [id:'out-modem-1']]
 			c.enabled >> true
-			c.lastAttemptSucceeded >> true
 		when:
 			service.createRoutes(c)
 		then:
@@ -123,7 +122,7 @@ class FconnectionServiceSpec extends Specification {
 			jobRouteId == connectionId
 		where:
 			routeId          | connectionId
-			"out-1"          | 1
+			"out-modem-1"          | 1
 			"out-internet-2" | 2
 			"out-modem-3"    | 3
 			"in-4"           | 4
