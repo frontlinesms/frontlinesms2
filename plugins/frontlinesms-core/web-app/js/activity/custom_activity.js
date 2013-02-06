@@ -73,7 +73,7 @@ var customActivityDialog = (function(){
 	_setJsonToSend = function() {
 		var jsonToSend = "", data = [];
 
-		$.each($(".step"), function(index, element){
+		$.each($("li.step"), function(index, element){
 			var dataToSend = {}, 
 				stepDiv = $(element);
 			dataToSend.stepId = stepDiv.attr("index");
