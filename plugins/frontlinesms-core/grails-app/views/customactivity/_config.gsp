@@ -15,7 +15,7 @@
 <ul id="custom-activity-config-container">
 	<g:if test="${activityInstanceToEdit}">
 		<g:each var="step" in="${activityInstanceToEdit.steps}">
-			<fsms:render template="steps/${step.shortName}" model="${step.config}"/>
+			<fsms:render template="/customactivity/steps/${step.shortName}" model="${step.config}"/>
 		</g:each>
 	</g:if>
 </ul>

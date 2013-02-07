@@ -455,7 +455,6 @@ class CoreBootStrap {
 		new CustomActivity(name:'Do it all')
 				.addToSteps(joinStep)
 				.addToSteps(leaveStep)
-				.addToSteps(uploadStep)
 				.addToKeywords(value:"CUSTOM")
 				.save(failOnError:true, flush:true)
 	}

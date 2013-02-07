@@ -92,7 +92,7 @@ var more_actions = (function() {
 		});
 		$("#export").click(exportAction);
 	};
-	return { init:init };
+	return { init:init, getOwnerId:getOwnerId };
 }());
 
 $(document).ready(function() {
