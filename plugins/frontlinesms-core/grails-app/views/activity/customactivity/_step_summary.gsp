@@ -25,8 +25,3 @@
 		<p>${stepInstance?.getProperty('autoreplyText')}</p>
 	</div>
 </g:if>
-<r:script>
-	function refreshPageWithStepMessages(c) {
-		window.location = url_root + "message/activity/${ownerInstance.id}/step/"+$(c).val();
-	}
-</r:script>

@@ -153,4 +153,10 @@ var customActivityDialog = (function(){
 	};
 }());
 
-
+function refreshPageWithStepMessages(c) {
+	if($(c).val() === 'na') {
+		window.location = url_root + "message/activity/" + more_actions.getOwnerId();
+	} else {
+		window.location = url_root + "message/activity/" + more_actions.getOwnerId() +"/step/"+$(c).val();
+	}
+}
