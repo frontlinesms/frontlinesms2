@@ -1,8 +1,4 @@
 #!/bin/bash
-<<<<<<< HEAD
-echo "Building new release"
-echo "Checking for clean repository..."
-=======
 # FOR AUTOMATED BUILDING OF NEW RELEASES OF FRONTLINESMS
 # Requirements: Groovy, Gradle. Currently only works on linux.
 
@@ -30,18 +26,12 @@ RC_FLAG=$?
 
 # Ensure git repo is clean
 echo "# Checking for clean repository..."
->>>>>>> 290008c... resolved merged conflict of master into CORE-1104
 if test -n "$(git status --porcelain)"
 then
-	echo "FAILURE: Your repository is not clean. This script can only build from a clean repo"
+	echo "# FAILURE: Your repository is not clean. This script can only build from a clean repo"
 	exit 1
 fi
-# TODO: i18n
 
-<<<<<<< HEAD
-# TODO: roll version numbers to non-snapshot
-echo "Rolling version numbers to non-snapshot"
-=======
 # Prompt for post-build version
 echo "Please enter the name of the version as it should be after build (e.g. 2.4.3-SNAPSHOT)"
 read POST_BUILD_VERSION
@@ -66,34 +56,18 @@ popd
 
 # Roll version numbers to non-snapshot
 echo "# Rolling version numbers to non-snapshot"
->>>>>>> 290008c... resolved merged conflict of master into CORE-1104
 do/remove_snapshot_from_install_resource_directories
 
-# TODO: do builds
-echo "Building installers.."
+# Build installers
+echo "# Building installers.."
 grails prod BuildInstallers
 
-# TODO: test build in appropriate format for machine
-#### This can reuse elements of build_uninstall_install_test
+# test build in appropriate format for machine (TODO: currently assumes linux)
+do/uninstall_install_test
+if [ $? -ne 0 ];
+	then echo "# FAILURE: build test failed, see output to debug" && exit 1
+fi
 
-# TODO: commit
-#### git commit -m "Build for 2.a.b"
-#### git push
-
-# TODO: tag commit
-#### git tag frontlinesms2.a.b
-#### git push
-
-# TODO: prompt user for new snapshot version number
-#### prompt for new snapshot number
-
-<<<<<<< HEAD
-# TODO: roll version to new snapshot
-#### similar to do/remove_snapshot_from_install_resource_directories
-
-# TODO: commit with new snapshot version
-#### git commit -m "Rolled version numbers to 2.x.y snapshot after 2.a.b release"
-=======
 # Commit
 echo "Committing and tagging build"
 git add -A
@@ -104,10 +78,11 @@ git tag frontlinesms2.$APP_VERSION
 sed -i "s/\(app\.version=\).*\$/\1${POST_BUILD_VERSION}/" application.properties
 git add -A
 git commit -m "2.${POST_BUILD_VERSION} ready for dev after 2.${APP_VERSION} release (committed using do/release script)"
->>>>>>> 290008c... resolved merged conflict of master into CORE-1104
 
-# TODO: git push --tags
 
-# TODO: upload builds
-#### CORE-1440
+# Upload builds
+do/deploy_builds
 
+# Push (uncomment the lines below and delete the TODO: when this script passes QA)
+# git push
+# git push --tags
