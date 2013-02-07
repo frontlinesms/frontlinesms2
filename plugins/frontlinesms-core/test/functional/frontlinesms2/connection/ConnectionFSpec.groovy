@@ -20,7 +20,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'There is a Failed label shown for failed connection'() {
 		when:
-			to PageConnection, createTestEmailConnection()
+			to PageConnection, createSecondTestEmailConnection()
 		then:
 			connectionList.status == "Failed"
 	}
@@ -62,11 +62,11 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to PageConnection, testConnection
-			waitFor { connectionList.btnCreateRoute.displayed }
+			waitFor { connectionList.btnRetryConnection.displayed }
 		then:
 			!connectionList.btnTestRoute.displayed
 		when:
-			connectionList.btnCreateRoute.click()
+			connectionList.btnRetryConnection.click()
 		then:
 			waitFor('very slow') { connectionList.status == "Connected" }
 			waitFor { connectionList.btnTestRoute.displayed }
@@ -241,8 +241,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	private def startBadConnection() {
 		def connectionId = SmslibFconnection.findByName('Bad Port').id
 		to PageConnection, connectionId
-		waitFor { connectionList.btnCreateRoute.displayed }
-		connectionList.btnCreateRoute.click()
+		waitFor { connectionList.btnRetryConnection.displayed }
+		connectionList.btnRetryConnection.click()
 	}
 
 	private def launchCreateWizard(def type=null) {
@@ -269,11 +269,20 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 				username:'mr.testy@zoho.com', password:'mter',
 				enabled:false)
 	}
+
+	def createSecondTestEmailConnection() {
+		EmailFconnection.build(name:'test email connection',
+				receiveProtocol:EmailReceiveProtocol.IMAPS,
+				serverName:'imap.zoho.com', serverPort:993,
+				username:'mr.testy@zoho.com', password:'mter',
+				enabled:true,lastAttemptSucceeded:false)
+	}
 	
 	def createTestSmsConnection() {
 		MockModemUtils.initialiseMockSerial([
 				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
-		SmslibFconnection.build(name:'MTN Dongle', port:'COM99')
+		SmslibFconnection.build(name:'MTN Dongle', port:'COM99',enabled:true,lastAttemptSucceeded:true)
 	}
+
 }
 

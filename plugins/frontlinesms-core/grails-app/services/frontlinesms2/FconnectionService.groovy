@@ -84,7 +84,7 @@ class FconnectionService {
 		}
 		return camelContext.routes.any { it.id ==~ /.*-$c.id$/ }?
 				ConnectionStatus.CONNECTED:
-				ConnectionStatus.NOT_CONNECTED
+				ConnectionStatus.FAILED
 	}
 	
 	// TODO rename 'handleNotConnectedException'
