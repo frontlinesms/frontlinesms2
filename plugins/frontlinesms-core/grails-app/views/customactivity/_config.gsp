@@ -2,10 +2,10 @@
 	<p><g:message code="customactivity.config.description"/></p>
 </div>
 
-<div id="custom-activity-actions-container">
+<div id="custom-activity-actions-container" class="button-bar">
 	<g:each var="type" in="${['join', 'leave', 'reply']}">
-		<fsms:render template="/customactivity/steps/${type}" type="sanchez" id="step-${type}" runtimeVars="stepId"/>
 		<a class="btn" onclick="custom_activity.addStep('${type}')"><g:message code="customactivity.step.${type}.add"/></a>
+		<fsms:render template="/customactivity/steps/${type}" type="sanchez" id="step-${type}" runtimeVars="stepId"/>
 	</g:each>
 </div>
 
@@ -19,7 +19,9 @@
 </ul>
 
 <style type="text/css">
-	#custom-activity-actions-container .btn { margin-left:-5px; }
+	#custom-activity-actions-container { width:100%; }
+	#custom-activity-actions-container .btn:first-child { margin-left:-1px; }
+	#custom-activity-actions-container .btn:not(:first-child) { margin-left:-5px; border-left:solid 1px #bbb; border-right:solid 1px #bbb; }
 	#custom-activity-config-container { padding:2px; }
 	#custom-activity-config-container .step { padding:5px; margin:3px 0; cursor:move; border-bottom:1px solid #eeeeee; }
 	#custom-activity-config-container .step:last-child { border-bottom:none; }

@@ -36,10 +36,10 @@ a.nextLink:active { background-image:url("../images/pagination/right_active.png"
 a.nextLink.disabled { background-image:url("../images/pagination/right_disabled.png"); }
 
 input,textarea { background:white; }
-.btn, .ui-selectmenu, button, input[type="submit"] { display:inline-block;
+.btn, .ui-selectmenu, button, input[type="submit"] { display:inline-block; padding:6px 10px; text-align:center; }
+.btn, .ui-selectmenu, button, input[type="submit"], .button-bar { color:black; cursor:pointer;
 	background-repeat:repeat-x; background-image:url("../images/button/standard.png"); background-size:contain;
-	border-left:solid #6b6b6b 1px; border-right:solid #6b6b6b 1px; padding:6px 10px;
-	color:black; cursor:pointer; text-align:center; }
+	border-left:solid #6b6b6b 1px; border-right:solid #6b6b6b 1px; }
 .btn:hover, .ui-selectmenu:hover, button:hover, input[type="submit"]:hover { background-image:url("../images/button/hover.png"); }
 .btn:active, .ui-selectmenu:active, button:active, input[type="submit"]:active { background-image:url("../images/button/active.png"); }
 .btn.disabled, button:disabled, .ui-button-disabled, input[type="submit"]:disabled { background-image:url("../images/button/disabled.png"); cursor:default; color:#777777; }
