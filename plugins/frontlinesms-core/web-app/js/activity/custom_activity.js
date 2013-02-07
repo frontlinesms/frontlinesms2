@@ -10,8 +10,16 @@ var custom_activity = (function() {
 		p.hide(300, function() { $(this).remove(); });
 	},
 	initSteps = function() {
-		$(CONFIG_CONTAINER + " .remove-step").click(removeStep);
+		var titles, widths, maxWidth;
+		$(CONFIG_CONTAINER + " .step .remove-command").click(removeStep);
 		selectmenuTools.initAll(CONFIG_CONTAINER + " select");
+
+		// calculate the length of the longest title here
+		// and force other steps to conform to that...
+		titles = $(CONFIG_CONTAINER + " .step:not(.reply) h4")
+		widths = titles.map(function() { return $(this).width(); });
+		maxWidth = Math.max.apply(null, widths.get());
+		titles.map(function() { $(this).width(maxWidth); });
 	},
 	init = function() {
 		$(CONFIG_CONTAINER).sortable();

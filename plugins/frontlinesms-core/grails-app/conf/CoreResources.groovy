@@ -10,6 +10,7 @@ modules = {
 		resource url:[dir:'css', file:'contact.css']
 		resource url:[dir:'css', file:'archive.css']
 		resource url:[dir:'css', file:'activity.css']
+		resource url:[dir:'css', file:"activity/customactivity.css"]
 		resource url:[dir:'css', file:"activity/webconnection.css"]
 		resource url:[dir:'css', file:'search.css']
 		resource url:[dir:'css', file:'settings.css']

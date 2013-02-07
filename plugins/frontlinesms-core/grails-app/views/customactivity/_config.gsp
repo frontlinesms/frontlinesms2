@@ -18,16 +18,3 @@
 	</g:if>
 </ul>
 
-<style type="text/css">
-	#custom-activity-actions-container { width:100%; }
-	#custom-activity-actions-container .btn:first-child { margin-left:-1px; }
-	#custom-activity-actions-container .btn:not(:first-child) { margin-left:-5px; border-left:solid 1px #bbb; border-right:solid 1px #bbb; }
-	#custom-activity-config-container { padding:2px; }
-	#custom-activity-config-container .step { padding:5px; margin:3px 0; cursor:move; border-bottom:1px solid #eeeeee; }
-	#custom-activity-config-container .step:last-child { border-bottom:none; }
-	#custom-activity-config-container .step .remove-command { float:right; padding:5px 0; }
-	#custom-activity-config-container .step textarea { display:block; width:98%; }
-	#custom-activity-config-container .step-title { width:150px; display:inline-block; padding-left:2px;}
-	#custom-activity-config-container .reply-action-step .step-title { width:250px; }
-</style>
-
