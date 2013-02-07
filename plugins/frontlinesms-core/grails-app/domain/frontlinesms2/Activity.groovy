@@ -63,7 +63,11 @@ abstract class Activity extends MessageOwner {
 		this.messages*.isDeleted = false
 	}
 
-	def processKeyword(Fmessage message, Keyword match) {}
+	def processKeyword(Fmessage message, Keyword match) {
+		message.ownerDetail = null
+		this.addToMessages(message)
+		this.save(failOnError:true)
+	}
 
 	/**
 	 * Activcate this activity.  If it is already activated, this method should
@@ -72,6 +76,11 @@ abstract class Activity extends MessageOwner {
 	def activate() {}
 
 	def deactivate() {}
+
+	def move(messageInstance) {
+		messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
+		this.processKeyword(messageInstance, null)
+	}
 
 	private def logFail(c, ex) {
 		ex.printStackTrace()
