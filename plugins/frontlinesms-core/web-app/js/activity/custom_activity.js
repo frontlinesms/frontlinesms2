@@ -1,7 +1,9 @@
 var custom_activity = (function() {
 	var
 	addStep = function(stepName) {
-		sanchez.append("#custom-activity-config-container", "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'' });
+		var container = "#custom-activity-config-container";
+		sanchez.append(container, "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'' });
+		selectmenuTools.initAll(container + " select");
 	},
 	removeStep = function() {
 		var p = $(this).parent().parent();
