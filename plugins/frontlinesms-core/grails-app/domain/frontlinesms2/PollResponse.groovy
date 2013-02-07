@@ -41,10 +41,10 @@ class PollResponse implements Comparable {
 		this.poll.messages << message
 		message.messageOwner = this.poll
 		if(isUnknown()) {
-			message.ownerDetail = null
+			message.setMessageDetail(this, null)
 		} else {
 			if(!id) throw new IllegalStateException('Cannot add a message to an unsaved PollResponse.')
-			message.ownerDetail = "$id"
+			message.setMessageDetail(this, "$id")
 		}
 		message.save()
 	}
@@ -58,3 +58,4 @@ class PollResponse implements Comparable {
 		new PollResponse(value:'Unknown', key:Poll.KEY_UNKNOWN)
 	}
 }
+
