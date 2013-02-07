@@ -2,13 +2,9 @@
 	<p><g:message code="customactivity.config.description"/></p>
 </div>
 <div id="custom-activity-actions-container">
-	<div class="custom-activity-action-step btn" id="add-join-action-step">Join</div>
-	<div class="custom-activity-action-step btn" id="add-leave-action-step">Leave</div>
-	<div class="custom-activity-action-step btn" id="add-reply-action-step">Reply</div>
-</div>
-<div id="custom-activity-config-container">
-	<g:hiddenField name="jsonToSubmit" />
-	<fsms:savedActionSteps activityId="${activityInstanceToEdit?.id}"/>
+	<div class="custom-activity-step btn" id="add-join-action-step">Add sender to group</div>
+	<div class="custom-activity-step btn" id="add-leave-action-step">Remove sender from group</div>
+	<div class="custom-activity-step btn" id="add-reply-action-step">Autoreply</div>
 </div>
 
 <fsms:render template="/customactivity/steps/join" type="sanchez" id="step-join" runtimeVars="stepId"/>
@@ -26,8 +22,8 @@
 
 <style type="text/css">
 	#custom-activity-config-container {
-		width: 100%;
 		padding:2px;
+		clear: left;
 	}
 	#custom-activity-config-container > :last-child { border-bottom:none; }
 
@@ -48,8 +44,10 @@
 	}
 	.step {
 		padding:5px;
-		background-color: #eeeeee;
-		margin-bottom: 2px;
+
+		margin: 3px 0;
+		cursor:move;
+		border-bottom: 1px solid #eeeeee;
 	}
 	.step .remove-command { float: right; padding: 5px 0; }
 	.step textarea { display: block; width: 98%; }
