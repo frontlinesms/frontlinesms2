@@ -2,9 +2,9 @@
 	<p><g:message code="customactivity.config.description"/></p>
 </div>
 <div id="custom-activity-actions-container">
-	<div class="custom-activity-step btn" id="add-join-action-step">Join</div>
-	<div class="custom-activity-step btn" id="add-leave-action-step">Leave</div>
-	<div class="custom-activity-step btn" id="add-reply-action-step">Reply</div>
+	<div class="custom-activity-step btn" id="add-join-action-step">Add sender to group</div>
+	<div class="custom-activity-step btn" id="add-leave-action-step">Remove sender from group</div>
+	<div class="custom-activity-step btn" id="add-reply-action-step">Autoreply</div>
 </div>
 
 <fsms:render template="/customactivity/steps/join" type="sanchez" id="step-join" runtimeVars="stepId"/>
@@ -22,26 +22,32 @@
 
 <style type="text/css">
 	#custom-activity-config-container {
-		width: 100%;
 		padding:2px;
+		clear: left;
 	}
 
 	#custom-activity-actions-container {
+		background-image: url("/frontlinesms-core/static/images/button/standard.png");
+		background-repeat: repeat-x;
+		border: none;
+		border: solid #6b6b6b 1px;
+		border-top: none;
 		width: 100%;
-		background-color: #eeddff;
-		margin-top: 3px;
-		padding:2px;
+		height: 23px;
 	}
 
 	.custom-activity-step {
-		background-color: #ddaaff;
-		padding: 5px;
-		display: inline-block;
+		float: left;
+		border:none;
+		border-right: 1px solid #bbb; 
 	}
 	.step {
 		padding:5px;
-		background-color: #eeeeee;
-		margin-bottom: 2px;
+		margin: 3px 0;
 		cursor:move;
+		border-bottom: 1px solid #eeeeee;
 	}
+	.step .remove-command { float: right; padding: 5px 0; }
+	.step textarea { display: block; width: 98%; }
+	.step-title { width: 150px; display: inline-block; padding-left: 2px;}
 </style>
