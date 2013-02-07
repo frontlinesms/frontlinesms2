@@ -11,6 +11,21 @@ class RequestParameter {
 
 	static belongsTo = [connection:Webconnection]
 
-	
+	String getProcessedValue(Fmessage msg) {
+		def val = this.value
+		def matches = val.findAll(regex)
+		matches.each { match ->
+			val = val.replaceFirst(regex, getReplacement(match, msg))
+		}
+		return val
+	}
 
+	String getReplacement(String arg, Fmessage msg) {
+		arg = (arg - '${') - '}'
+		def c = Webconnection.subFields[arg]
+		if (c)
+			return c(msg)
+		else
+			return arg
+	}
 }
