@@ -6,7 +6,7 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Poll)
-@Mock(PollResponse)
+@Mock([PollResponse, MessageDetail])
 @Build(Fmessage)
 class PollSpec extends Specification {
 	/** some responses that should pass validation */
