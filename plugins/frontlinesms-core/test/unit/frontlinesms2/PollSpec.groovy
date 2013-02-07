@@ -90,6 +90,7 @@ class PollSpec extends Specification {
 				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
 			}) >> replyMessage
 
+
 			def inMessage = Fmessage.build(text:"message text", src:TEST_NUMBER)
 		when:
 			poll.processKeyword(inMessage, new Keyword(value:'test', isTopLevel:true, ownerDetail:null))

@@ -145,22 +145,22 @@ class Poll extends Activity {
 
 	def processKeyword(Fmessage message, Keyword keyword) {
 		def response = getPollResponse(message, keyword)
-		response.addToMessages(message)
-		response.save()
-		def poll = this
-		if(poll.autoreplyText) {
+		response?.addToMessages(message)
+		response?.save()
+		if(this.autoreplyText) {
 			def params = [:]
 			params.addresses = message.src
-			params.messageText = poll.autoreplyText
+			params.messageText = this.autoreplyText
 			def outgoingMessage = messageSendService.createOutgoingMessage(params)
-			poll.addToMessages(outgoingMessage)
+			this.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
-			poll.save(failOnError:true)
+			this.save(failOnError:true)
 		}
+		this.save(failOnError:true)
 	}
 	
 	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
-		if(keyword.isTopLevel && !keyword.ownerDetail) {
+		if(!keyword || (keyword?.isTopLevel && !keyword?.ownerDetail)){
 			return this.unknown
 		} else {
 			return this.responses.find { keyword.ownerDetail == it.key }
