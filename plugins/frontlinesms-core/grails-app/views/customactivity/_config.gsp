@@ -25,6 +25,7 @@
 		padding:2px;
 		clear: left;
 	}
+	#custom-activity-config-container > :last-child { border-bottom:none; }
 
 	#custom-activity-actions-container {
 		background-image: url("/frontlinesms-core/static/images/button/standard.png");
