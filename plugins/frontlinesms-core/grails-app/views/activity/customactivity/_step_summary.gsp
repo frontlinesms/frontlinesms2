@@ -26,7 +26,7 @@
 	</div>
 </g:if>
 <r:script>
-	$("#toggleStep").on("change", function(){
-		window.location = url_root+"message/activity/${ownerInstance.id}/step/"+$(this).val();
-	});
+	function refreshPageWithStepMessages(c) {
+		window.location = url_root + "message/activity/${ownerInstance.id}/step/"+$(c).val();
+	}
 </r:script>
