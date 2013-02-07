@@ -59,7 +59,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'Send test message button for particular connection displayed on a successfully created route'() {
 		given:
 			def testConnection = createTestSmsConnection()
-			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200, enabled:true)
+			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to PageConnection, testConnection
 			waitFor { connectionList.btnCreateRoute.displayed }
@@ -266,7 +266,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		EmailFconnection.build(name:'test email connection',
 				receiveProtocol:EmailReceiveProtocol.IMAPS,
 				serverName:'imap.zoho.com', serverPort:993,
-				username:'mr.testy@zoho.com', password:'mter')
+				username:'mr.testy@zoho.com', password:'mter',
+				enabled:false)
 	}
 	
 	def createTestSmsConnection() {
