@@ -43,6 +43,9 @@ input,textarea { background:white; }
 .btn:hover, .ui-selectmenu:hover, button:hover, input[type="submit"]:hover { background-image:url("../images/button/hover.png"); }
 .btn:active, .ui-selectmenu:active, button:active, input[type="submit"]:active { background-image:url("../images/button/active.png"); }
 .btn.disabled, button:disabled, .ui-button-disabled, input[type="submit"]:disabled { background-image:url("../images/button/disabled.png"); cursor:default; color:#777777; }
+.button-bar .btn:first-child { margin-left:-1px; }
+.button-bar .btn:not(:first-child) { margin-left:-5px; border-left:solid 1px #bbb; border-right:solid 1px #bbb; }
+
 .ui-selectmenu { display:block; text-align:left; padding:0; }
 .ui-selectmenu-status { width:100%; padding:6px 0; text-indent:10px; }
 .ui-selectmenu-menu-dropdown li:hover { background-color:#e5eff3; }
@@ -89,4 +92,8 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 #thinking { background-color:transparent; z-index:99;
 	display:none; background-image:url('../images/thinking.gif'); background-position:center; background-repeat:no-repeat; }
 
+.remove-command { background-image:url('../images/icons/remove.png'); background-repeat:no-repeat;
+	display:inline-block; height:14px; text-indent:-999999px; display:ltr; width:14px; margin-left:3px; }
+.remove-command:hover { background-image:url('../images/icons/remove_hover.png'); }
+.remove-command.hidden { display:none; }
 

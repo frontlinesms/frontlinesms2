@@ -19,37 +19,3 @@
 		</g:each>
 	</g:if>
 </ul>
-
-<style type="text/css">
-	#custom-activity-config-container {
-		padding:2px;
-		clear: left;
-	}
-	#custom-activity-config-container > :last-child { border-bottom:none; }
-
-	#custom-activity-actions-container {
-		background-image: url("/frontlinesms-core/static/images/button/standard.png");
-		background-repeat: repeat-x;
-		border: none;
-		border: solid #6b6b6b 1px;
-		border-top: none;
-		width: 100%;
-		height: 23px;
-	}
-
-	.custom-activity-step {
-		float: left;
-		border:none;
-		border-right: 1px solid #bbb; 
-	}
-	.step {
-		padding:5px;
-		margin: 3px 0;
-		cursor:move;
-		border-bottom: 1px solid #eeeeee;
-	}
-	.step .remove-command { float: right; padding: 5px 0; }
-	.step textarea { display: block; width: 98%; }
-	.step-title { width: 150px; display: inline-block; padding-left: 2px;}
-	.reply-action-step .step-title { width: 250px; }
-</style>

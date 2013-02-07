@@ -7,11 +7,17 @@ var custom_activity = (function() {
 		var p = $(this).parent().parent();
 		p.fadeOut(300, function() { $(this).remove(); });
 	},
-	initAddStepButton = function(stepName) {
-		$("#add-" + stepName + "-action-step").click(
-			function() {
-				addStep(stepName);
-			});
+	initSteps = function() {
+		var titles, widths, maxWidth;
+		$(CONFIG_CONTAINER + " .step .remove-command").click(removeStep);
+		selectmenuTools.initAll(CONFIG_CONTAINER + " select");
+
+		// calculate the length of the longest title here
+		// and force other steps to conform to that...
+		titles = $(CONFIG_CONTAINER + " .step:not(.reply) h4")
+		widths = titles.map(function() { return $(this).width(); });
+		maxWidth = Math.max.apply(null, widths.get());
+		titles.map(function() { $(this).width(maxWidth); });
 	},
 	init = function() {
 		var i, steps = custom_activity.steps;
