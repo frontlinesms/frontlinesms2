@@ -22,8 +22,8 @@
 
 <style type="text/css">
 	#custom-activity-config-container {
-		width: 100%;
 		padding:2px;
+		clear: left;
 	}
 	#custom-activity-config-container > :last-child { border-bottom:none; }
 
@@ -47,8 +47,6 @@
 		margin: 3px 0;
 		cursor:move;
 		border-bottom: 1px solid #eeeeee;
-		background-color: #eeeeee;
-		margin-bottom: 2px;
 	}
 	.step .remove-command { float: right; padding: 5px 0; }
 	.step textarea { display: block; width: 98%; }
