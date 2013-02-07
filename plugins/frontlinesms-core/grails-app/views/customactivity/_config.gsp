@@ -25,6 +25,7 @@
 		padding:2px;
 		clear: left;
 	}
+	#custom-activity-config-container > :last-child { border-bottom:none; }
 
 	#custom-activity-actions-container {
 		background-image: url("/frontlinesms-core/static/images/button/standard.png");
@@ -50,4 +51,5 @@
 	.step .remove-command { float: right; padding: 5px 0; }
 	.step textarea { display: block; width: 98%; }
 	.step-title { width: 150px; display: inline-block; padding-left: 2px;}
+	.reply-action-step .step-title { width: 250px; }
 </style>
