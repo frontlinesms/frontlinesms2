@@ -136,9 +136,11 @@ var webconnectionDialog = (function () {
 			genericSortingValidation();
 
 			keyWordTabValidation = function() {
-				 if(!isGroupChecked("blankKeyword")) {return validator.element('#keywords');}
-				 else {return true;}
-			}
+				var valid;
+				if(!isGroupChecked("blankKeyword")) { valid = validator.element('#keywords'); }
+				else { valid = true; }
+				return valid;
+			};
 
 			configureTabValidation = function() {
 				var isValid = true;
@@ -146,11 +148,11 @@ var webconnectionDialog = (function () {
 					isValid = isValid && validator.element(this);
 				});
 				return isValid;
-			}
+			};
 
 			confirmTabValidation = function() {
 				return validator.element('input[name=name]');
-			}
+			};
 
 			mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
 			mediumPopup.addValidation('webconnection-configure', configureTabValidation);
@@ -169,7 +171,7 @@ var webconnectionDialog = (function () {
 		testRouteStatus:_testRouteStatus,
 		___end___:null
 	};
-})();
+}());
 
 function setPara(selecter, text) {
 	$(selecter).html("<p>" + text + "</p>");
