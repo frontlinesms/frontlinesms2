@@ -115,7 +115,6 @@ log4j = {
 		'org.springframework',
 		'org.hibernate',
 		'net.sf.ehcache.hibernate'
-	info 'org.apache.camel'
 }
 
 
