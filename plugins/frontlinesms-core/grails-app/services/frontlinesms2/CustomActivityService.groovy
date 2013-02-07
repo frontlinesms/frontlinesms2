@@ -4,9 +4,12 @@ import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class CustomActivityService {
-	static transactional = true
-
-
+	/* TODO if you do insist on committing printlns, please make sure they are neat and make sense when
+	   reading them on the console.  E.g. include the class and method name at the start, make them precise.
+	   Things like the following are not helpful:
+			println "<<<>>>"
+			println "$it"
+	 */
 	def saveInstance(customActivity, params) {
 		println "customActivity Params ::${params}"
 		def steps = new JSONArray(params.jsonToSubmit)
@@ -21,6 +24,7 @@ class CustomActivityService {
 		}
 
 		println "##Just about to save"
+		// FIXME why are there multiple saves here?
 		customActivity.save(flush:true, failOnError:true)
 		println "##Just saved round 1"
 
@@ -37,7 +41,8 @@ class CustomActivityService {
 		}
 
 		println "# 2 ######### Saving Round 2 # $customActivity.errors.allErrors"
-		customActivity.save(failOnError:true,flush:true)
+		// FIXME why are there multiple saves here?
+		customActivity.save(failOnError:true, flush:true)
 	}
 
 	private getSteps(steps) {
