@@ -36,7 +36,7 @@ class WebconnectionService {
 
 	private changeMessageOwnerDetail(activityOrStep, message, s) {
 		println "Status to set to $message is $s"
-		message.setOwnerDetail(activityOrStep, s)
+		message.setMessageDetail(activityOrStep, s)
 		message.save(failOnError:true, flush:true)
 		println "Changing Status ${message.ownerDetail}"
 	}
