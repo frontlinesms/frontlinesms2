@@ -95,5 +95,5 @@
 			$("#recipients-list input[value='smartgroup-${g.id}']").trigger("click");
 		</g:each>
 	}
-
 </r:script>
+

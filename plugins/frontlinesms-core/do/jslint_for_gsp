@@ -7,4 +7,8 @@ do/extract_js_from_gsps
 
 echo "# Linting..."
 do/jslint $TEMP_JS
+if [ -z "$@" ]; then
+	# special case - these scripts are in GSPs but aren't enclosed in <r:script> tags.
+	do/jslint grails-app/views/webconnection/*/_scripts.gsp
+fi
 echo "# Lint complete."
