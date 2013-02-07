@@ -2,9 +2,9 @@
 	<p><g:message code="customactivity.config.description"/></p>
 </div>
 <div id="custom-activity-actions-container">
-	<div class="custom-activity-step btn" id="add-join-action-step">Add sender to group</div>
-	<div class="custom-activity-step btn" id="add-leave-action-step">Remove sender from group</div>
-	<div class="custom-activity-step btn" id="add-reply-action-step">Autoreply</div>
+	<a class="btn" id="add-join-action-step">Add sender to group</a>
+	<a class="btn" id="add-leave-action-step">Remove sender from group</a>
+	<a class="btn" id="add-reply-action-step">Autoreply</a>
 </div>
 
 <fsms:render template="/customactivity/steps/join" type="sanchez" id="step-join" runtimeVars="stepId"/>
@@ -21,35 +21,13 @@
 </ul>
 
 <style type="text/css">
-	#custom-activity-config-container {
-		padding:2px;
-		clear: left;
-	}
-	#custom-activity-config-container > :last-child { border-bottom:none; }
-
-	#custom-activity-actions-container {
-		background-image: url("/frontlinesms-core/static/images/button/standard.png");
-		background-repeat: repeat-x;
-		border: none;
-		border: solid #6b6b6b 1px;
-		border-top: none;
-		width: 100%;
-		height: 23px;
-	}
-
-	.custom-activity-step {
-		float: left;
-		border:none;
-		border-right: 1px solid #bbb; 
-	}
-	.step {
-		padding:5px;
-		margin: 3px 0;
-		cursor:move;
-		border-bottom: 1px solid #eeeeee;
-	}
-	.step .remove-command { float: right; padding: 5px 0; }
-	.step textarea { display: block; width: 98%; }
-	.step-title { width: 150px; display: inline-block; padding-left: 2px;}
-	.reply-action-step .step-title { width: 250px; }
+	#custom-activity-actions-container .btn { margin-left:-5px; }
+	#custom-activity-config-container { padding:2px; }
+	#custom-activity-config-container .step { padding:5px; margin:3px 0; cursor:move; border-bottom:1px solid #eeeeee; }
+	#custom-activity-config-container .step:last-child { border-bottom:none; }
+	#custom-activity-config-container .step .remove-command { float:right; padding:5px 0; }
+	#custom-activity-config-container .step textarea { display:block; width:98%; }
+	#custom-activity-config-container .step-title { width:150px; display:inline-block; padding-left:2px;}
+	#custom-activity-config-container .reply-action-step .step-title { width:250px; }
 </style>
+
