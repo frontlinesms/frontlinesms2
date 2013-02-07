@@ -3,8 +3,9 @@
 #export-form > a { display:block; text-align:center; }
 #export-form > :last-child { margin:0; }
 
-#tabs div.info { padding-left:25px; margin:15px 0;
-	background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
+#tabs div.info { padding: 8px; padding-left:26px; margin:15px 0;
+	background-position:5px 5px; background-repeat:no-repeat; background-image:url("../images/icons/help.png");
+	background-color: #e5eff3; border-radius: 2px; }
 
 div.input, div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
 div.input > label, #tabs h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }
