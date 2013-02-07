@@ -58,7 +58,7 @@ class ConnectionController extends ControllerUtils {
 
 	def delete() {
 		def connection = Fconnection.get(params.id)
-		if(connection.status == ConnectionStatus.FAILED) {
+		if(connection.status == ConnectionStatus.DISABLED) {
 			connection.delete()
 			flash.message = message code:'connection.deleted', args:[connection.name]
 			redirect action:'list'
