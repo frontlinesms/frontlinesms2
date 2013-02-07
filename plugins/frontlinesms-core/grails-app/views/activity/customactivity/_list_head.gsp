@@ -11,10 +11,10 @@
 	</g:if>
 	</li>
 	<li>
-		<g:select name="toggleStep" noSelection="${['null': 'Overview']}"
-			from="${ownerInstance?.steps}" value="${stepInstance.id}"
-			optionKey="id" optionValue="niceFormat">
-		</g:select>
+		<fsms:select name="toggleStep" class="dropdown" onchange="refreshPageWithStepMessages(this);"
+			noSelection="${['na': g.message(code:'customactivity.overview')]}"
+			from="${ownerInstance?.steps}" value="${stepInstance?.id}"
+			optionKey="id" optionValue="description"/>
 	</li>
 </ul>
 
