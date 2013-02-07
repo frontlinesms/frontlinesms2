@@ -15,7 +15,7 @@ class CustomActivityBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def createTestGroups() {
-		new Group(name:"Camping").save(failOnError:true)
-		new Group(name:"Eating").save(failOnError:true)
+		new Group(name:"Camping").save(failOnError:true, flush:true)
+		new Group(name:"Eating").save(failOnError:true, flush:true)
 	}
 }
