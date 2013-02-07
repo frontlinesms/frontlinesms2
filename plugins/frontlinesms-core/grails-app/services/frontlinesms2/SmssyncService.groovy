@@ -1,12 +1,13 @@
 package frontlinesms2
 
 import grails.converters.JSON
-
+import org.quartz.JobKey
+import grails.plugin.quartz2.TriggerHelper
 import org.apache.camel.Exchange
-
 import frontlinesms2.api.*
 
 class SmssyncService {
+	def i18nUtilService
 	def processSend(Exchange x) {
 		println "SmssyncService.processSend() :: ENTRY"
 		println "SmssyncService.processSend() :: x=$x"
@@ -18,6 +19,10 @@ class SmssyncService {
 		println "SmssyncService.processSend() :: EXIT"
 	}
 
+	def reportTimeout(connection) {
+		new SystemNotification(text:i18nUtilService.getMessage(code:'smssync.timeout', args:[connection.name, connection.timeout, connection.id])).save(failOnError:true)
+	}
+
 	def apiProcess(connection, controller) {
 		controller.render(generateApiResponse(connection, controller) as JSON)
 	}
@@ -27,12 +32,28 @@ class SmssyncService {
 
 		try {
 			def payload = controller.params.task=='send'? handlePollForOutgoing(connection): handleIncoming(connection, controller.params)
+			startTimeoutCounter(connection)
 			if(connection.secret) payload = [secret:connection.secret] + payload
 			return [payload:payload]
 		} catch(FrontlineApiException ex) {
 // FIXME should send a non-200 status code here
 			return failure(ex)
 		}
+	}
+
+	def startTimeoutCounter(connection) {
+		if (connection instanceof SmssyncFconnection && connection?.timeout > 0) {
+			ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
+			def sendTime = new Date()
+			use(groovy.time.TimeCategory) {
+				sendTime = sendTime + (connection.timeout).minutes
+			}
+			def trigger = TriggerHelper.simpleTrigger(new JobKey("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs"), sendTime, 0, 1, [connectionId:connection.id])
+			trigger.name = "SmssyncFconnection-${connection.id}" 
+			trigger.group = "SmssyncFconnectionTimeoutJobs"
+			ReportSmssyncTimeoutJob.schedule(trigger)
+		}
+
 	}
 
 	private def handleIncoming(connection, params) {
@@ -59,6 +80,10 @@ class SmssyncService {
 		if(!connection.sendEnabled) throw new FrontlineApiException("Send not enabled for this connection")
 
 		return success(generateOutgoingResponse(connection, true))
+	}
+
+	private def handleRouteDestroyed(connection) {
+		ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
 	}
 
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {

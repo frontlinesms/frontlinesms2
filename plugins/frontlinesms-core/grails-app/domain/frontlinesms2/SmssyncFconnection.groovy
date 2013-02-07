@@ -8,7 +8,7 @@ import frontlinesms2.api.*
 @FrontlineApiAnnotations(apiUrl="smssync")
 class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	static String getShortName() { 'smssync' }
-	static final configFields = ['name', 'receiveEnabled', 'sendEnabled', 'secret']
+	static final configFields = ['name', 'receiveEnabled', 'sendEnabled', 'secret', 'timeout']
 	static final passwords = ['secret']
 	static final defaultValues = [sendEnabled:true, receiveEnabled:true]
 
@@ -18,6 +18,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	String secret
+	int timeout = 360 // 3 hour default
 
 	static constraints = {
 		secret nullable:true

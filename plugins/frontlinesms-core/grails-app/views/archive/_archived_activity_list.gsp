@@ -37,8 +37,8 @@
 			</g:each>
 		</g:if>
 		<g:else>
-			<tr>
-				<td colspan="4" class="no-content">
+			<tr class="no-content">
+				<td colspan="4">
 					<g:message code="archive.activity.list.none"/>
 				</td>
 			</tr>

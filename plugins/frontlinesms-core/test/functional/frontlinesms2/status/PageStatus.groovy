@@ -14,7 +14,7 @@ class PageStatus extends PageBase {
 		detectedDevicesSection { $('div#device-detection') }
 		noConnections { $("div#connection-status p.no-content") }
 		connectionByName { connName -> $("#connection-${SmslibFconnection.findByName(connName).id}") }
-		noDevicesDetectedNotification(required:false) { detectedDevicesSection.find('td.no-content') }
+		noDevicesDetectedNotification(required:false) { detectedDevicesSection.find('tr.no-content') }
 		detectedDevicesTable(required:false) { detectedDevicesSection.find('table') }
 		detectedDevicesRows { detectedDevicesTable.find('tbody tr') }
 		trafficForm { $("#trafficForm")}
