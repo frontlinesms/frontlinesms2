@@ -25,3 +25,8 @@
 		<p>${stepInstance?.getProperty('autoreplyText')}</p>
 	</div>
 </g:if>
+<g:if test="${stepInstance?.shortName == 'forward'}">
+	<div class='step-summary ' id="step-${stepInstance?.id}">
+		<p>${stepInstance?.getProperty('sentMessageText')}</p>
+	</div>
+</g:if>

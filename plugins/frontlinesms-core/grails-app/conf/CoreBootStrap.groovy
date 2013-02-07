@@ -446,22 +446,17 @@ class CoreBootStrap {
 		if(!bootstrapData) return
 
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
-		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
-		def uploadStep = new WebconnectionActionStep().addToStepProperties(new StepProperty(key:"url", value:"http://192.168.0.200:9091/webservice-0.1/message/get"))
-			.addToStepProperties(new StepProperty(key:"httpMethod", value:"GET"))
-			.addToStepProperties(new StepProperty(key:"message", value:"I will upload you"))
-			.addToStepProperties(new StepProperty(key:"source", value:"123123"))
-
+		def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
+		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:'autoreplyText', value:'reply to you all'))
 		new CustomActivity(name:'Do it all')
 				.addToSteps(joinStep)
 				.addToSteps(leaveStep)
+				.addToSteps(replyStep)
 				.addToKeywords(value:"CUSTOM")
 				.save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initLogEntries() {
-		if(!bootstrapData) return
-
 		if(!bootstrapData) return
 		def now = new Date()
 		[new LogEntry(date:now, content: "entry1"),

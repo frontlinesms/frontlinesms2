@@ -42,7 +42,7 @@ class CustomActivitySpec extends Specification {
 			customActivity.addToSteps(leaveStep)
 			customActivity.save(flush:true)
 		expect:
-			CustomActivity.list()[0].steps == [joinStep, replyStep, leaveStep]
+			customActivity.steps.containsAll([joinStep, replyStep, leaveStep])
 	}
 
 	def "processKeyword should add the message to the CustomActivity and invoke CustomActivityService.triggerSteps"() {

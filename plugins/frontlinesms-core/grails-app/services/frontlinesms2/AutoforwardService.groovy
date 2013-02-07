@@ -5,6 +5,7 @@ import grails.events.Listener
 import groovy.sql.Sql
 
 class AutoforwardService {
+	def messageSendService
 	def dataSource
 
     def saveInstance(Autoforward autoforward, params) {
@@ -72,13 +73,17 @@ class AutoforwardService {
 	}
 
 	def doForward(autoforwardOrStep, message) {
-		def m = messageSendService.createOutgoingMessage([contacts:autoforwardOrStep.contacts, groups:autoforwardOrStep.groups?:[] + autoforwardOrStep.smartGroups?:[], messageText:autoforwardOrStep.sentMessageText])
+		def m
 		if(autoforwardOrStep instanceof Activity) {
+			m = messageSendService.createOutgoingMessage([contacts:autoforwardOrStep.contacts, groups:autoforwardOrStep.groups?:[] + autoforwardOrStep.smartGroups?:[], messageText:autoforwardOrStep.sentMessageText])
 			autoforwardOrStep.addToMessages(m)
 			autoforwardOrStep.addToMessages(message)
+		} else {
+			m = messageSendService.createOutgoingMessage([addresses:autoforwardOrStep.recipients , messageText:autoforwardOrStep.sentMessageText])
 		}
 		m.setOwnerDetail(autoforwardOrStep, message.id)
-		m.save(failOnError:true)
+		message.messageOwner.addToMessages(m)
+		message.messageOwner.save(failOnError:true)
 		messageSendService.send(m)
 		
 		autoforwardOrStep.save(failOnError:true)
