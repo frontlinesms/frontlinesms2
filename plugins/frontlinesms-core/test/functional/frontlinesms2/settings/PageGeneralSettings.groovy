@@ -40,11 +40,11 @@ class BasicAuthentication extends geb.Module {
 }
 
 class RoutingConnections extends geb.Module {
-	static basr = { $('#routing-preferences') }
+	static base = { $('#routing-preferences') }
 
 	static content = {
 		routingForm { $('form#routing-form') }
-		useLastReceivedConnection { $('#uselastreceiver') }
+		useLastReceivedConnection { $('input[type=checkbox]', value:'uselastreceiver') }
 		useAnyAvailableConnection { $('input[name=otherwise]', value:'any') }
 		dontSend { $('input[name=otherwise]', value:'dontsend') }
 		save { $("input#saveRoutingDetails") }

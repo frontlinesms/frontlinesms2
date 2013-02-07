@@ -18,6 +18,8 @@ class ClickatellFconnection extends Fconnection {
 	String password // FIXME maybe encode this rather than storing plaintext
 	boolean sendToUsa
 	String fromNumber
+	boolean sendEnabled = true
+	boolean receiveEnabled = false
 	
 	static constraints = {
 		apiId blank:false

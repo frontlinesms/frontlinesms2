@@ -4,8 +4,6 @@
 		<r:script library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
 		<r:script>
-			url_root = "${request.contextPath}/";
-			
 			function initializePopup() {
 				$("#submit").attr('disabled', 'disabled');
 			}
