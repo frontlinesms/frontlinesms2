@@ -72,3 +72,4 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'announce')
 	}
 }
+

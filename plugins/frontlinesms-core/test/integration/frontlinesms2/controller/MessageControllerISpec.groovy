@@ -141,12 +141,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'move action should work for activities'() {
 		given:
-			def poll = new Poll(name: 'This is a poll', yesNo:false)
-			poll.addToResponses(new PollResponse(value:"Manchester"))
-			poll.addToResponses(new PollResponse(value:"Barcelona"))
-			poll.addToResponses(new PollResponse(value:"Harambee Stars"))
-			poll.addToResponses(PollResponse.createUnknown())
-			poll.save(failOnError:true)
+			def poll = TestData.createFootballPoll()
 			def message = Fmessage.build()
 		when:
 			controller.params.messageId = message.id
@@ -183,6 +178,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToResponses(new PollResponse(key:'B' , value:'TessstB'))
 					.addToResponses(PollResponse.createUnknown())
 					.addToMessages(m)
+			previousOwner.save(failOnError:true)
 			responseA.addToMessages(m)
 			previousOwner.save(failOnError:true)
 
@@ -236,6 +232,46 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			message.messageOwner.id == announcement.id
 			message.ownerDetail != 'ownerdetail-pending'
 	}
+
+	def 'moving messages to different activities and sections should work'() {
+		given:
+			def message = Fmessage.build(inbound:true, text:'the message')
+			def autoforward = Autoforward.build(name:'autoforward')
+			def autoreply = Autoreply.build(name:'autoreply')
+			def webconnection = GenericWebconnection.build(name:'webconnection')
+			def subscription = Subscription.build(name:'subscription')
+			def poll = new Poll(name: 'This is a poll')
+			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.save(failOnError:true, flush:true)
+
+			controller.params.messageId = message.id
+			controller.params.ownerId = poll.id
+			controller.params.messageSection = 'activity'
+		when:
+			controller.move()
+		then:
+			message.messageOwner.id == poll.id
+		when:
+			controller.params.ownerId = autoforward.id
+			controller.move()
+		then:
+			message.messageOwner.id == autoforward.id
+		when:
+			controller.params.ownerId = autoreply.id
+			controller.move()
+		then:
+			message.messageOwner.id == autoreply.id
+		when:
+			controller.params.ownerId = webconnection.id
+			controller.move()
+		then:
+			message.messageOwner.id == webconnection.id
+		when:
+			controller.params.ownerId = subscription.id
+			controller.move()
+		then:
+			message.messageOwner.id == subscription.id
+		}
 
 	private Date createDate(String dateAsString) {
 		new SimpleDateFormat("yyyy/MM/dd").parse(dateAsString)

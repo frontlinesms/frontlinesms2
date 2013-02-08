@@ -24,7 +24,7 @@ class UniqueResponsesISpec extends grails.plugin.spock.IntegrationSpec {
 		[Test:['one', 'other', 'Unknown'],
 				Second:['one', 'two', 'three', 'Unknown']].each { name, responses ->
 			def p = new Poll(name: name)
-			responses.each { r -> p.addToResponses(value:r) }
+			responses.eachWithIndex { r, i -> p.addToResponses(value:r, key:"$i") }
 			p.save(flush:true, failOnError:true)
 		}
 	}

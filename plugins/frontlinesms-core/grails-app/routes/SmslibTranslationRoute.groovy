@@ -8,3 +8,4 @@ class SmslibTranslationRoute extends RouteBuilder {
 				.routeId('smslib-translation')
 	}
 }
+

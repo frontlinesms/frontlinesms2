@@ -25,7 +25,10 @@ class RequestParameter {
 	String getReplacement(String arg, Fmessage msg) {
 		arg = (arg - '${') - '}'
 		def c = Webconnection.subFields[arg]
-		return c(msg)
+		if (c)
+			return c(msg)
+		else
+			return arg
 	}
 
 }
