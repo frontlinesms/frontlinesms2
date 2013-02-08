@@ -1,27 +1,38 @@
 var custom_activity = (function() {
 	var
+	CONFIG_CONTAINER = "#custom-activity-config-container",
 	addStep = function(stepName) {
-		sanchez.append("#custom-activity-config-container", "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'' });
+		sanchez.append(CONFIG_CONTAINER, "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'' });
+		initSteps();
 	},
 	removeStep = function() {
-		var p = $(this).parent().parent();
-		p.fadeOut(300, function() { $(this).remove(); });
+		var p = $(this).closest(".step");
+		p.hide(300, function() { $(this).remove(); });
 	},
-	initAddStepButton = function(stepName) {
-		$("#add-" + stepName + "-action-step").click(
-			function() {
-				addStep(stepName);
-			});
+	initSteps = function() {
+		var titles, widths, maxWidth;
+		$(CONFIG_CONTAINER + " .step .remove-command").click(removeStep);
+		selectmenuTools.initAll(CONFIG_CONTAINER + " select");
+
+		// calculate the length of the longest title here
+		// and force other steps to conform to that...
+		titles = $(CONFIG_CONTAINER + " .step:not(.reply) h4")
+		widths = titles.map(function() { return $(this).width(); });
+		maxWidth = Math.max.apply(null, widths.get());
+		titles.map(function() { $(this).width(maxWidth); });
 	},
 	init = function() {
-		var i, steps = custom_activity.steps;
-		$('#custom-activity-config-container').sortable();
-		for(i=steps.length-1; i>=0; --i) {
-			initAddStepButton(steps[i]);
-		}
-		$('.remove-step').live("click", removeStep);
+		$(CONFIG_CONTAINER).sortable();
+		// Defer creation of selectmenus and magic wand widgets until
+		// they're actually visible...
+		$("#tabs").bind("tabsshow", function(event, ui) {
+			if(ui.index === 1) {
+				initSteps();
+			}
+		});
 	};
 	return {
+		addStep:addStep,
 		init:init
 	};
 }());

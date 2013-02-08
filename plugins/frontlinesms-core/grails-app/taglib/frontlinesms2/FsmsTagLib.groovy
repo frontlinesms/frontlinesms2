@@ -449,6 +449,10 @@ class FsmsTagLib {
 		}
 		out << g.select(att, body)
 	}
+
+	def step = { att, body ->
+		out << render(template:'/customactivity/step', model:[stepId:att.stepId, type:att.type, body:body])
+	}
 	
 	private def getFields(att) {
 		def fields = att.remove('fields')
