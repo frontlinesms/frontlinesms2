@@ -17,12 +17,12 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		then:
-			p.getActivityMessages().count() == 2
+			p.getActivityMessages().size() == 2
 		when:
 			message1.isDeleted = true
 			message1.save(flush:true, failOnError:true)
 		then:
-			p.getActivityMessages().count() == 1
+			p.getActivityMessages().size() == 1
 	}
 
 	def 'Response stats are calculated correctly, even when messages are deleted and there are outbound messages'() {
@@ -96,10 +96,10 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByName('question').getActivityMessages()
+			def results = Poll.findByName('question').getActivityMessages(false, null, null, [sort:'date', order:'desc'])
 		then:
-			results.list(sort:'date', order:'desc')*.src == ["src2", "src3", "src1"]
-			results.list().every {it.archived == false}
+			results*.src == ["src2", "src3", "src1"]
+			results.every {it.archived == false}
     }
 
 	def "should fetch starred poll messages"() {
@@ -108,15 +108,15 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def results = Poll.findByName("question").getActivityMessages(true)
 		then:
-			results.list()*.src == ["src3"]
-			results.list().every {it.archived == false}
+			results*.src == ["src3"]
+			results.every {it.archived == false}
 	}
 
 	def "should check for offset and limit while fetching poll messages"() {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByName("question").getActivityMessages().list(max:1, offset:0)
+			def results = Poll.findByName("question").getActivityMessages(false, null, null, [max:1, offset:0])
 		then:
 			results*.src == ["src2"]
 	}
@@ -125,7 +125,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByName("question").getActivityMessages().count()
+			def results = Poll.findByName("question").getActivityMessages().size()
 		then:
 			results == 3
 	}
@@ -189,7 +189,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.refresh()
 		then:
 			poll.liveMessageCount == 2
-			poll.activityMessages.list().every { it.archived }
+			poll.activityMessages.every { it.archived }
 	}
 	
 	private def setUpPollAndResponses() {		
