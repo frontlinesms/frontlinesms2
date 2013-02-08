@@ -1,8 +1,12 @@
 package frontlinesms2
 
 import frontlinesms2.*
+import grails.events.Listener
+import groovy.sql.Sql
 
 class AutoforwardService {
+	def messageSendService
+	def dataSource
 
     def saveInstance(Autoforward autoforward, params) {
     	println "##### Saving Autoforward in Service"
