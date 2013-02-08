@@ -3,15 +3,18 @@ package frontlinesms2
 import grails.converters.JSON
 
 abstract class Step {
-	static belongsTo = [activity: CustomActivity]
-	
-	static hasMany = [stepProperties: StepProperty]
-	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
-	static String getShortName() { 'base' }
 
+	def i18nUtilService
+	
+	static belongsTo = [activity: CustomActivity]
+	static hasMany = [stepProperties: StepProperty]
+	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep, WebconnectionActionStep]
+
+	static transients = ['i18nUtilService']
 	static configFields = [:]
 
 	static constraints = {
+		// the following assumes all configFields are mandatory
 		stepProperties(nullable: true)
 	}
 	
@@ -25,11 +28,15 @@ abstract class Step {
 		stepProperties?.find { it.key == key }?.value = value
 	}
 
-	String getJsonConfig() {
-		return getConfig() as JSON
-	}
 	// helper method to retrieve list of entities saved as StepProperties
 	def getEntityList(entityType, propertyName) {
 		entityType.getAll(StepProperty.findAllByStepAndKey(this, propertyName)*.value) - null
 	}
+
+	String getJsonConfig() {
+		return getConfig() as JSON
+	}
+
+	def activate() {}
+	def deactivate() {}
 }

@@ -23,8 +23,8 @@ class ReplyActionStep extends Step {
 		autoreplyService.doReply(this, message)
 	}
 
-		def getNiceFormat() {
-		"Replying with '${this.autoreplyText}'"
+	def getDescription() {
+		i18nUtilService.getMessage(code:"customactivity.${this.shortName}.description", args:[this.autoreplyText])
 	}
 
 }

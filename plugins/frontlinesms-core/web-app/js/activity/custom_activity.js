@@ -1,11 +1,13 @@
 var custom_activity = (function() {
 	var
+	CONFIG_CONTAINER = "#custom-activity-config-container",
 	addStep = function(stepName) {
-		sanchez.append("#custom-activity-config-container", "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'' });
+		sanchez.append(CONFIG_CONTAINER, "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'' });
+		initSteps();
 	},
 	removeStep = function() {
-		var p = $(this).parent().parent();
-		p.fadeOut(300, function() { $(this).remove(); });
+		var p = $(this).closest(".step");
+		p.hide(300, function() { $(this).remove(); });
 	},
 	initSteps = function() {
 		var titles, widths, maxWidth;
@@ -20,13 +22,17 @@ var custom_activity = (function() {
 		titles.map(function() { $(this).width(maxWidth); });
 	},
 	init = function() {
-		var i, steps = custom_activity.steps;
-		for(i=steps.length-1; i>=0; --i) {
-			initAddStepButton(steps[i]);
-		}
-		$('.remove-step').live("click", removeStep);
+		$(CONFIG_CONTAINER).sortable();
+		// Defer creation of selectmenus and magic wand widgets until
+		// they're actually visible...
+		$("#tabs").bind("tabsshow", function(event, ui) {
+			if(ui.index === 1) {
+				initSteps();
+			}
+		});
 	};
 	return {
+		addStep:addStep,
 		init:init
 	};
 }());

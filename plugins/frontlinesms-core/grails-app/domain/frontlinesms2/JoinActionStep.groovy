@@ -2,6 +2,7 @@ package frontlinesms2
 
 class JoinActionStep extends Step {
 	def subscriptionService
+
 	static service = 'subscription'
 	static action = 'doJoin'
 	static String getShortName() { 'join' }
@@ -31,8 +32,8 @@ class JoinActionStep extends Step {
 		subscriptionService.doJoin(this, message)
 	}
 
-	def getNiceFormat() {
-		"Joining '${this?.group?.name}' group"
+	def getDescription() {
+		i18nUtilService.getMessage(code:"customactivity.${this.shortName}.description", args:[this?.group?.name])
 	}
 }
 
