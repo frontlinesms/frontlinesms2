@@ -24,6 +24,7 @@ class CoreBootStrap {
 	def grailsApplication
 	def deviceDetectionService
 	def failPendingMessagesService
+	def fconnectionService
 	def localeResolver
 	def camelContext
 	def messageSource
@@ -131,7 +132,6 @@ class CoreBootStrap {
 
 		(1..101).each {
 			new Contact(name:"test-${it}", mobile:"number-${it}").save(failOnError:true)
-			if (it % 1000 == 0) println "${it}"
 		}
 		
 		[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
@@ -529,8 +529,8 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 	private def initialiseNonSmslibFconnections() {
 		Fconnection.findAllByEnabled(true).each { connection ->
 			if (connection.shortName != "smslib") {
-				println "### Creating Routes::-> ${connection.shortName} routes have been created. ###"
-				grailsApplication.mainContext.fconnectionService.createRoutes(connection)
+				println "CoreBootStrap.initialiseNonSmslibFconnections() :: creating routes for $connection.shortName:$connection.id"
+				fconnectionService.createRoutes(connection)
 			}
 		}
 	}
@@ -648,8 +648,7 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 	}
 	private setDefaultMessageRoutingPreferences(){
 		if(!appSettingsService.get('routing.preferences.edited') || (appSettingsService.get('routing.preferences.edited') == false)){
-			println "### Changing Routing preferences ###"
-			appSettingsService.set('routing.uselastreceiver', false)
+			println "CoreBootStrap.setDefaultMessageRoutingPreferences() :: setting default preferences."
 			appSettingsService.set('routing.otherwise', 'any')
 			appSettingsService.set('routing.preferences.edited', true)
 		}
