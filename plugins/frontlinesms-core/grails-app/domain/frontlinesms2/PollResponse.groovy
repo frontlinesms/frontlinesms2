@@ -19,7 +19,7 @@ class PollResponse implements Comparable {
 	}
 
 	def removeFromMessages(m) {
-		if(m.ownerDetail == "$id") m.ownerDetail = null
+		if(m.ownerDetail == "$id") m.setMessageDetail(this.poll, "")
 	}
 
 	boolean isUnknown() {
@@ -40,6 +40,7 @@ class PollResponse implements Comparable {
 			this.poll.messages = []
 		this.poll.messages << message
 		message.messageOwner = this.poll
+		// TODO do we really need different handling for the unknown repsonse here?
 		if(isUnknown()) {
 			message.setMessageDetail(this.poll, Poll.KEY_UNKNOWN)
 		} else {
