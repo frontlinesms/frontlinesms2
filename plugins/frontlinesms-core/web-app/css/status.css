@@ -1,8 +1,8 @@
 #body.status #content { background-color:#eee; position:fixed; top:80px; bottom:0; left:0; right:0; }
 #body.status h3 { padding:17px 25px; text-transform:uppercase; font-weight:bold; border-bottom:1px solid #eee; }
 #body.status #left-column { position:fixed; top:83px; bottom:0; width:47%; margin:0 25px; overflow-x:hidden; overflow-y:auto; }
-#body.status #traffic-status{ background:white; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; }
-#body.status #right-column{ position:fixed; right:0; top:83px; bottom:0; width:47%; float:right; margin:0 25px;
+#body.status #traffic-status { background:white; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; }
+#body.status #right-column { position:fixed; right:0; top:83px; bottom:0; width:47%; float:right; margin:0 25px;
 	overflow-x:hidden; overflow-y:auto; }
 #body.status #connection-status, #body.status #device-detection { background:white; margin-left:25px; margin-bottom:25px;
 	-moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; }
@@ -116,10 +116,10 @@
 	height: 50px;
 }
 #connection-status #stored-connections .name { width:100%; padding-left:47px;
-	background-image:url('../images/icons/status_green.png'); background-repeat:no-repeat; background-position:17px center; }
-#connection-status #stored-connections .name.FAILED{ background-image: url('../images/icons/status_red.png'); }
-#connection-status #stored-connections .name.CONNECTING { background-image: url('../images/icons/status_orange.gif'); }
-#connection-status #stored-connections .name.DISABLED{ background-image: url('../images/icons/status_grey.png'); }
+	background-image:url('../images/status/green.png'); background-repeat:no-repeat; background-position:17px center; }
+#connection-status #stored-connections .name.FAILED { background-image: url('../images/status/red.png'); }
+#connection-status #stored-connections .name.CONNECTING { background-image: url('../images/status/orange.png'); }
+#connection-status #stored-connections .name.DISABLED { background-image: url('../images/status/grey.png'); }
 #connection-status #stored-connections .value { white-space:nowrap; padding-right:17px; }
 
 #body.status #update-status{
@@ -154,10 +154,10 @@
 }
 
 .connection-status-overview h4.okay{
-   	background-image: url('../images/icons/status_green.png');
+	background-image: url('../images/status/green.png');
 }
 .connection-status-overview h4.attention{
-   	background-image: url('../images/icons/status_orange.png');
+	background-image: url('../images/status/orange.png');
 }
 .connection-status-detail{
 	padding-top: 8px;
