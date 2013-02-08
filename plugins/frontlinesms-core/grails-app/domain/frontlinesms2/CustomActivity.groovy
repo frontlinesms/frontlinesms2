@@ -8,8 +8,11 @@ class CustomActivity extends Activity {
 
 	def getActivityMessages(getOnlyStarred=false, getSent=null, stepId=null, params=null) {
 		if(stepId) {
-			def outgoingMessagesByStep = MessageDetail.findAllByOwnerTypeAndOwnerId(MessageDetail.OwnerType.STEP, stepId).collect{ it.message }
-			return (outgoingMessagesByStep + Fmessage.owned(this, getOnlyStarred, true).list(params?:[:])).flatten()
+			def outgoingMessagesByStep = []
+			if(Step.get(stepId) instanceof ReplyActionStep) {
+				outgoingMessagesByStep = MessageDetail.findAllByOwnerTypeAndOwnerId(MessageDetail.OwnerType.STEP, stepId).collect{ it.message }
+			}
+			return (outgoingMessagesByStep + Fmessage.owned(this, getOnlyStarred, true)?.list(params?:[:])).flatten()
 		} else {
 			Fmessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
 		}
