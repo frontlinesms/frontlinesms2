@@ -13,7 +13,7 @@ else
 		git checkout -b $1
 		git push -u origin $1
 		wget "http://192.168.0.200/exec_script.php?user=jenkins&cmd=clone_jenkins_job&args=frontlinesms2-core-master%20$1%20frontlinesms2-$1"
-		git clean -f
+		git checkout -- exec_script.php?user=jenkins&cmd=clone_jenkins_job&args=frontlinesms2-core-master $1 frontlinesms2-$1
 		exit 0
 	fi
 fi
