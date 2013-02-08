@@ -8,7 +8,7 @@ abstract class Step {
 	
 	static belongsTo = [activity: CustomActivity]
 	static hasMany = [stepProperties: StepProperty]
-	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep, WebconnectionActionStep]
+	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
 
 	static transients = ['i18nUtilService']
 	static configFields = [:]
