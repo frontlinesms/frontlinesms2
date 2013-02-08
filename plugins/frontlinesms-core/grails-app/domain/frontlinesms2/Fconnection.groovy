@@ -8,7 +8,6 @@ import org.apache.camel.model.RouteDefinition
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
-
 	def fconnectionService
 	
 	static final String HEADER_FCONNECTION_ID = 'fconnection-id'
@@ -45,7 +44,6 @@ class Fconnection {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	boolean enabled = true
-	boolean lastAttemptSucceeded = true
 	
 	static namedQueries = {
 		findByMessages { messageInstance ->
@@ -79,3 +77,4 @@ class Fconnection {
 		}.routeDefinitions
 	}
 }
+

@@ -17,14 +17,14 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.displayed
 			connectionList.text()?.contains('You have no connections configured.')
 	}
-	
+
 	def 'There is a Failed label shown for failed connection'() {
 		when:
 			to PageConnection, createSecondTestEmailConnection()
 		then:
 			connectionList.status == "Failed"
 	}
-	
+
 	def 'There is a Disabled label shown for disabled connection'() {
 		when:
 			to PageConnection, createTestEmailConnection()
@@ -38,7 +38,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			connectionList.btnDelete.displayed
 	}
-	
+
 	def 'should show "create route" button for inactive connection'() {
 		when:
 			to PageConnection, createTestEmailConnection()
@@ -82,7 +82,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			waitFor('very slow') { connectionList.status == "Connected" }
 			!connectionList.btnDelete.displayed
 	}
-	
+
 	def 'The first connection in the connection list page is selected'() {
 		when: 
 			to PageConnection, createTestEmailConnection()
@@ -261,7 +261,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		createTestEmailConnection()
 		createTestSmsConnection()
 	}
-	
+
 	def createTestEmailConnection() {
 		EmailFconnection.build(name:'test email connection',
 				receiveProtocol:EmailReceiveProtocol.IMAPS,
@@ -274,14 +274,13 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		EmailFconnection.build(name:'test email connection',
 				receiveProtocol:EmailReceiveProtocol.IMAPS,
 				serverName:'imap.zoho.com', serverPort:993,
-				username:'mr.testy@zoho.com', password:'mter',
-				enabled:true,lastAttemptSucceeded:false)
+				username:'mr.testy@zoho.com', password:'mter')
 	}
-	
+
 	def createTestSmsConnection() {
 		MockModemUtils.initialiseMockSerial([
 				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
-		SmslibFconnection.build(name:'MTN Dongle', port:'COM99',enabled:true,lastAttemptSucceeded:true)
+		SmslibFconnection.build(name:'MTN Dongle', port:'COM99', enabled:true)
 	}
 
 }

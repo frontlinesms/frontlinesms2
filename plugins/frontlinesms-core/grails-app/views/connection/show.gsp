@@ -3,7 +3,7 @@
 	<head>
 		<meta name="layout" content="settings"/>
 		<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
-		<g:if test="${params.createRoute}">
+		<g:if test="${params.connecting}">
 			<r:script>
 				$(function() {
 					var connectionTimer = setInterval(refreshConnectionStatus, 2000);

@@ -11,10 +11,10 @@ class FconnectionService {
 	def i18nUtilService
 	def smssyncService
 	def connectingIds = [].asSynchronized()
-	
+
 	def createRoutes(Fconnection c) {
 		println "FconnectionService.createRoutes() :: ENTRY :: $c"
-		if(!c.enabled) return
+		assert c.enabled
 		if(c instanceof SmslibFconnection) {
 			deviceDetectionService.stopFor(c.port)
 			// work-around for CORE-736 - NoSuchPortException can be thrown
@@ -33,24 +33,20 @@ class FconnectionService {
 			LogEntry.log("Created routes: ${routes*.id}")
 		} catch(FailedToCreateProducerException ex) {
 			logFail(c, ex.cause)
-			c.lastAttemptSucceeded=false
-			c.save()
 		} catch(Exception ex) {
 			logFail(c, ex)
 			destroyRoutes(c.id as long)
-			c.lastAttemptSucceeded=false
-			c.save()
 		} finally {
 			connectingIds -= c.id
 		}
 		println "FconnectionService.createRoutes() :: EXIT :: $c"
 	}
-	
+
 	def destroyRoutes(Fconnection c) {
 		destroyRoutes(c.id as long)
 		createSystemNotification('connection.route.destroyNotification', [c?.name?: c?.id])
 	}
-	
+
 	def destroyRoutes(long id) {
 		println "fconnectionService.destroyRoutes : ENTRY"
 		println "fconnectionService.destroyRoutes : id=$id"
@@ -72,25 +68,27 @@ class FconnectionService {
 			smssyncService.handleRouteDestroyed(connection)
 		println "fconnectionService.destroyRoutes : EXIT"
 	}
-	
+
 	def getConnectionStatus(Fconnection c) {
 		if(!c.enabled) return ConnectionStatus.DISABLED
-		if(!c.lastAttemptSucceeded) return ConnectionStatus.FAILED
 		if(c.id in connectingIds) {
 			return ConnectionStatus.CONNECTING
 		}
-		if (c instanceof SmslibFconnection) {
-			return camelContext.routes.any { it.id ==~ /.*-$c.id$/ }?
-					ConnectionStatus.CONNECTED:
-					deviceDetectionService.isConnecting((c as SmslibFconnection).port)?
-							ConnectionStatus.CONNECTING:
-							ConnectionStatus.FAILED
+		if(camelContext.routes.any { it.id ==~ /.*-$c.id$/ }) {
+			return ConnectionStatus.CONNECTED
 		}
-		return camelContext.routes.any { it.id ==~ /.*-$c.id$/ }?
-				ConnectionStatus.CONNECTED:
-				ConnectionStatus.FAILED
+		if (c instanceof SmslibFconnection) {
+			if(deviceDetectionService.isConnecting(((SmslibFconnection) c).port)) {
+				return ConnectionStatus.CONNECTING
+			}
+			if(isFailed(c)) {
+				return ConnectionStatus.FAILED
+			}
+			return ConnectionStatus.NOT_CONNECTED
+		}
+		return ConnectionStatus.FAILED
 	}
-	
+
 	// TODO rename 'handleNotConnectedException'
 	def handleDisconnection(Exchange ex) {
 		try {
@@ -110,23 +108,15 @@ class FconnectionService {
 	}
 
 	def enableFconnection(Fconnection c) {
-		try {
-			c.enabled = true
-			c.save()
-			createRoutes(c)
-		} catch(Exception ex) {
-			logFail(c, ex)
-		}
+		c.enabled = true
+		c.save(failOnError:true)
+		createRoutes(c)
 	}
 
 	def disableFconnection(Fconnection c) {
-		try {
-			destroyRoutes(c)
-			c.enabled = false	
-			c.save()
-		} catch(Exception ex) {
-			logFail(c, ex)
-		}
+		destroyRoutes(c)
+		c.enabled = false
+		c.save(failOnError:true)
 	}
 
 	private def logFail(c, ex) {
@@ -142,6 +132,10 @@ class FconnectionService {
 		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
 		notification.read = false
 		notification.save(failOnError:true, flush:true)
+	}
+
+	private def isFailed(Fconnection c) {
+		false
 	}
 }
 

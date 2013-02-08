@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class EnableFconnectionJob {
+	// TODO can't we just inject the service we want here?
 	def grailsApplication
 
 	def execute(context) {
@@ -8,3 +9,4 @@ class EnableFconnectionJob {
 		grailsApplication.mainContext.fconnectionService.enableFconnection(connection)
 	}
 }
+
