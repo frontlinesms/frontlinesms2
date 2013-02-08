@@ -1,8 +1,9 @@
 var custom_activity = (function() {
 	var
 	CONFIG_CONTAINER = "#custom-activity-config-container",
+	random = function() { return Math.floor(Math.random() * 9007199254740992) },
 	addStep = function(stepName) {
-		sanchez.append(CONFIG_CONTAINER, "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'' });
+		sanchez.append(CONFIG_CONTAINER, "step-" + stepName, { stepId:'', groupId:'', autoreplyText:'', random:random() });
 		initSteps();
 	},
 	removeStep = function() {
@@ -13,6 +14,7 @@ var custom_activity = (function() {
 		var titles, widths, maxWidth;
 		$(CONFIG_CONTAINER + " .step .remove-command").click(removeStep);
 		selectmenuTools.initAll(CONFIG_CONTAINER + " select");
+		magicwand.init($(CONFIG_CONTAINER + " select[id^='magicwand-select']"));
 
 		// calculate the length of the longest title here
 		// and force other steps to conform to that...
@@ -134,19 +136,18 @@ var customActivityDialog = (function(){
 				groupValue = $(element).find('select[name=group]').val();
 				groupName = $(element).find('select[name=group]').find("option[value="+groupValue+"]").text();
 				output = i18n("customactivity.join.description", groupName);
-				output = "<p>"+output+"</p>";
 			}
 			if(stepType === "leave") {
 				groupValue = $(element).find('select[name=group]').val();
 				groupName = $(element).find('select[name=group]').find("option[value="+groupValue+"]").text();
 				output = i18n("customactivity.leave.description", groupName);
-				output = "<p>"+output+"</p>";
 			}
 			if(stepType === "reply") {
 				messageText = $(element).find('textarea[name=autoreplyText]').val();
+				console.log(messageText);
 				output = i18n("customactivity.reply.description", messageText);
-				output = "<p>"+output+"</p>";
 			}
+			output = "<p>"+output+"</p>";
 			container.append(output);
 		});
 
