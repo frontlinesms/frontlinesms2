@@ -9,7 +9,7 @@ if [ -z $1 ]; then
 	exit 1
 fi
 git checkout master
-git pull	
+git pull
 git checkout -b $1
 git push -u origin $1
 wget -O /dev/null "http://192.168.0.200/exec_script.php?user=jenkins&cmd=clone_jenkins_job&args=frontlinesms2-core-master%20$1%20frontlinesms2-$1"
