@@ -2,9 +2,12 @@
 <html>
 	<head>
 		<meta name="layout" content="status_layout"/>
-	</head>
+		<title><g:message code="status.header"/></title>
+		</head>
 	<body>
-		<fsms:render template="traffic"/>
+		<div id="left-column">
+			<fsms:render template="traffic"/>
+		</div>
 		<div id="right-column">
 			<fsms:render template="connection_list"/>
 			<fsms:render template="device_detection"/>

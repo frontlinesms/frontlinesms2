@@ -37,3 +37,4 @@
 		 <p class="no-content"><g:message code="contact.list.no.contact"/></p>
 	</div>
 </g:else>
+

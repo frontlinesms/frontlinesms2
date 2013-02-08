@@ -15,4 +15,7 @@ abstract class MessageOwner {
 	def getDisplayText(Fmessage msg) {
 		msg.text
 	}
+
+	def getMoreActions() { [] }
 }
+

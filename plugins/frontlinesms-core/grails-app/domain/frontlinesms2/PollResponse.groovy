@@ -3,7 +3,6 @@ package frontlinesms2
 class PollResponse implements Comparable {
 	String key
 	String value
-	boolean isUnknownResponse = false
 	static belongsTo = [poll: Poll]
 	static transients = ['liveMessageCount']
 

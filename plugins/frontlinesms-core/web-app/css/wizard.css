@@ -50,8 +50,8 @@ div.input .controls { display:table; margin-top:10px; }
 div.input .controls > * { display:table-cell; vertical-align:middle; }
 div.input .controls > :first-child { width:100%; }
 #tabs thead tr { background: none;}
-#tabs div.input .controls .magicwand-container a { text-align:right; }
-#tabs div.input .controls div.magicwand-container.hidden { visibility:hidden; }
+div.input .controls .magicwand-container a { text-align:right; }
+div.input .controls div.magicwand-container.hidden { visibility:hidden; }
 #tabs div.confirm td { padding:5px; }
 #tabs div.confirm td:first-child { padding-left:0; font-weight:bold; }
 #tabs div.confirm td:last-child { padding-right:0; }
@@ -59,19 +59,20 @@ div.input .controls > :first-child { width:100%; }
 #tabs div.summary { display:none; }
 #tabs div.summary p { line-height:150%; margin-bottom:20px; }
 
-#tabs div.input label.error { margin-right:0px; font-weight:normal; left:0px; padding-top:2px; }
+div.input label.error { margin-right:0px; font-weight:normal; left:0px; padding-top:2px; }
 
 div.subscription_input { padding: 5px 5px;}
 div.subscription_input label { }
 div.subscription_input input { float:left; margin-right:10px; }
 form#categorize_subscription p.info { padding:5px 0px; line-height: 1.1em;}
 
+ul.sorting-options { margin-bottom:20px; }
 ul.sorting-options input[type=radio] { margin:5px; display:inline-block; }
 ul.sorting-options label.sorting-option-label { font-weight: bold; }
 div.sorting-option { padding:5px 5px 10px 25px; }
+div.activity-keyword { padding-left:25px; }
 div.sorting-option input#keywords { display: block; margin-top:5px; }
 
 #connectionForm label[for=connectionType] { font-weight: bold }
-#connectionForm td label { font-weight: bold }
+#connectionForm td label:first-child { font-weight: bold }
 #connectionForm .connection-field-info { padding-left:10px; padding-bottom:3px;}
-

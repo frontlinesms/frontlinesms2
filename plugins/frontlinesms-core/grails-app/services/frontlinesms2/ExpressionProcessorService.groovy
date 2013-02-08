@@ -10,6 +10,7 @@ class ExpressionProcessorService {
 		'recipient_name' : ['quickMessage', 'announcement', 'poll', 'autoreply', 'subscription', 'autoforward'],
 		'sender_number' : ['autoforward'],
 		'sender_name' : ['autoforward'],
+		'keyword' : ['autoforward'],
 		'message_text' : ['poll', 'autoreply', 'subscription','autoforward'],
 		'message_text_with_keyword' : ['quickMessage','poll', 'autoreply', 'subscription','autoforward']]
 
@@ -17,20 +18,11 @@ class ExpressionProcessorService {
 		fields.findAll { controllerName in it.value }.keySet()
 	}
 
-	String replaceExpressions(Dispatch dispatch) {
-		def messageBody = dispatch.message.text
-		matches = messageBody.findAll(regex)
-		matches.each {
-			messageBody = messageBody.replaceFirst(regex, getReplacement(it, dispatch))
-		}
-		messageBody
-	}
-
 	String process(Dispatch dispatch) {
 		def messageBody = dispatch.message.text
 		def matches = getExpressions(messageBody)
-		matches.each {
-			messageBody = messageBody.replaceFirst(regex, getReplacement(it, dispatch))
+		matches.unique().each { match ->
+			messageBody = messageBody.replace(match, getReplacement(match, dispatch))
 		}
 		messageBody
 	}
@@ -48,26 +40,36 @@ class ExpressionProcessorService {
 	}
 
 	private getReplacement(expression, dispatch) {
-		def incomingMessage = Fmessage.get(dispatch.message.ownerDetail)
-		if (expression == "\${message_text}"){
-			def keyword = incomingMessage.messageOwner?.keywords?.find{ incomingMessage.text.toUpperCase().startsWith(it.value) }?.value
-			def text = incomingMessage.text
-			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
-				text = text.substring(keyword.size()).trim()
+		try {
+			// TODO could replace this manual mapping wth...a Map!  e.g. [sender_number:{incomingMessage.src}]
+			def incomingMessage = Fmessage.get(dispatch.message.ownerDetail)
+			def getKeyword = { incomingMessage.messageOwner?.keywords?.find { incomingMessage.text.toUpperCase().startsWith(it.value) }?.value }
+			if (expression == '${message_text}') {
+				def keyword = getKeyword()
+				def text = incomingMessage.text
+				if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
+					text = text.substring(keyword.size()).trim()
+				}
+				return text
 			}
-			return text
+			if (expression == '${message_text_with_keyword}')
+				return incomingMessage.text
+			if (expression == '${sender_number}')
+				return incomingMessage.src
+			if (expression == '${sender_name}')
+				return incomingMessage.inboundContactName?: incomingMessage.src
+			if (expression == '${recipient_number}')
+				return dispatch.dst
+			if (expression == '${recipient_name}') {
+				def recipient = Contact.findByMobileLike(dispatch.dst)
+				return recipient? recipient.name: dispatch.dst
+			}
+			if (expression == '${keyword}')
+				return getKeyword()
+			return expression
+		} catch (Exception e) {
+			return expression
 		}
-		if (expression == "\${message_text_with_keyword}")
-			return incomingMessage.text
-		if (expression == "\${sender_number}")
-			return incomingMessage.src
-		if (expression == "\${sender_name}")
-			return Contact.findByMobileLike(incomingMessage.src)? Contact.findByMobileLike(incomingMessage.src).name : incomingMessage.src
-		if (expression == "\${recipient_number}")
-			return dispatch.dst
-		if (expression == "\${recipient_name}")
-			return Contact.findByMobileLike(dispatch.dst)? Contact.findByMobileLike(dispatch.dst).name : dispatch.dst
-		return ""
 	}
 
 }

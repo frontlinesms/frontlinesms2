@@ -25,7 +25,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p.getActivityMessages().count() == 1
 	}
 
-	def 'Response stats are calculated correctly, even when messages are deleted'() {
+	def 'Response stats are calculated correctly, even when messages are deleted and there are outbound messages'() {
 		given:
 			def p = new Poll(name: 'Who is badder?')
 			p.editResponses(choiceA:'Michael-Jackson', choiceB:'Chuck-Norris')
@@ -54,6 +54,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			PollResponse.findByValue('Michael-Jackson').addToMessages(new Fmessage(text:'MJ', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
 			PollResponse.findByValue('Chuck-Norris').addToMessages(new Fmessage(text:'big charlie', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
+			println "POLL MESSAGE COUNT: ${p.messages.size()}"
 		then:
 			p.responseStats == [
 				[id:mjId, value:'Michael-Jackson', count:1, percent:50],

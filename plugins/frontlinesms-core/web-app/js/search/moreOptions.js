@@ -8,11 +8,14 @@ $(function() {
 	});
 	
 	$("#extra-options-list").hide();
-	$("#toggle-extra-options").find("#minus").hide();
 	$("#toggle-extra-options").live("click", function() {
+		var extraOpts = $("#toggle-extra-options");
+		if(extraOpts.hasClass("expanded")) {
+			extraOpts.removeClass("expanded");
+		} else {
+			extraOpts.addClass("expanded");
+		}
 		$("#extra-options-list").toggle();
-		$("#toggle-extra-options").find("#minus").toggle();
-		$("#toggle-extra-options").find("#plus").toggle();
 	});
 });
 

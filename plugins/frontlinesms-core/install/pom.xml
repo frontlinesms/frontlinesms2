@@ -96,6 +96,7 @@
 						<property><name>unix.installDir</name><value>${install4j.unix.installDir}</value></property>
 						<property><name>splash.image</name><value>${install4j.splash.image}</value></property>
 						<property><name>installer.icons.path</name><value>${install4j.installer.icons.path}</value></property>
+						<property><name>db.migrations</name><value>${install4j.db.migrations}</value></property>
 					</compilerVariables>
 					<verbose>true</verbose>
 				</configuration>
@@ -105,10 +106,9 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
 				<configuration>
+					<classpathScope>compile</classpathScope>
 					<executable>java</executable>
 					<arguments>
-						<argument>-classpath</argument>
-						<classpath/>
 						<argument>net.frontlinesms2.systraymonitor.Main</argument>
 					</arguments>
 					<workingDirectory>${basedir}</workingDirectory>

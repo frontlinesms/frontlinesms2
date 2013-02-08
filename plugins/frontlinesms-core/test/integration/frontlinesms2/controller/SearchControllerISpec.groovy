@@ -25,17 +25,11 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		futureDate.hours = futureDate.hours + 1
 		
 		Fmessage.build(src:'+254987654', text:'work at 11.00', archived:true, date:TEST_DATE)
-				.save(failOnError:true, flush:true)
 		Fmessage.build(src:'+254987654', text:'finaly i stay in bed', date:TEST_DATE)
-				.save(failOnError:true, flush:true)
 		Fmessage.build(src:'+254111222', text:'work is awesome', date:futureDate)
-				.save(failOnError:true, flush:true)
 		Fmessage.build(src:'Bob', text:'hi Bob', date:TEST_DATE-5)
-				.save(failOnError:true, flush:true)
 		Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes', date:TEST_DATE-7)
-				.save(failOnError:true, flush:true)
-		Fmessage.build(src:'+666666666', text:'finally i stay in bed', date:TEST_DATE)
-				.save(failOnError:true, flush:true)
+		Fmessage.build(src:'+666666666', text:'finally i stay in bed', date:TEST_DATE, starred:true)
 				
 		[new CustomField(name:'city', value:'Paris', contact: firstContact),
 				new CustomField(name:'like', value:'cake', contact: secondContact),
@@ -66,6 +60,19 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def model = controller.result()
 		then:
 			model.messageInstanceList.size() == 9
+	}
+
+	def "can search for starred messages only"() {
+		when:
+			def search = new Search(name: "toSave", searchString: "")
+			search.save(failOnError: true, flush: true)
+			controller.params.search = search
+			controller.params.inArchive = true
+			controller.params.starred = true
+			def model = controller.result()
+		then:
+			model.messageInstanceList.size() == 1
+			model.messageInstanceList*.starred.every() { it }
 	}
 
 	def "message searches can be restricted to a poll"() {

@@ -18,16 +18,23 @@ class ConnectionController extends ControllerUtils {
 
 		def model = [connectionInstanceList:fconnectionInstanceList,
 				fconnectionInstanceTotal:fconnectionInstanceTotal]
-		if(!params.id) params.id = fconnectionInstanceList[0]?.id
-		if(params.id) model << show()
-		render view:'show', model:model
+		if(params?.id) {
+			model << show()
+			def connectionInstance = model.connectionInstance
+			withFormat {
+				html { render view:'show', model:model }
+				json {
+					render( [id: connectionInstance.id , status: connectionInstance.status.i18n] as JSON)
+				}
+			}
+		} else {
+			params.id = fconnectionInstanceList[0]?.id
+			render view:'show', model:model
+		}
 	}
 	
 	def show() {
 		withFconnection {
-			if(params.createRoute) {
-				it.metaClass.getStatus = { ConnectionStatus.CONNECTING }
-			}
 			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
 					fconnectionInstanceTotal: Fconnection.list(params)]
 		}
@@ -147,6 +154,7 @@ class ConnectionController extends ControllerUtils {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
 		fconnectionInstance.validate()
+		println fconnectionInstance.errors.allErrors
 		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
 		if (fconnectionInstance.save()) {
 			withFormat {
@@ -165,7 +173,7 @@ class ConnectionController extends ControllerUtils {
 					redirect(controller:'connection', action:"list")
 				}
 				json {
-					render([ok:false, text:connectionErrors.join(", ").toString()] as JSON)
+					render([ok:false, text:connectionErrors.unique().join(", ").toString()] as JSON)
 				}
 			}
 		}

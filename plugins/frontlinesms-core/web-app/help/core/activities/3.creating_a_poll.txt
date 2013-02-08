@@ -1,29 +1,30 @@
 # Creating a Poll 
 
-A poll is a type of activity which allows you to see a graphical representation of the responses to a question. When creating a poll you will be able to enter the question and select who to send the question to. You will also be able to set up a **keyword**. A **keyword** allows FrontlineSMS to recognise which incoming messages are for polls and which aren't. It will also help the system determine which poll the message belongs to. This gives you the option to let FrontlineSMS automatically sort incoming messages into polls and you will be notified when this has happened. There are two types of responses you can set: Yes/No or a Multiple Choice style answer. You can also set up an **automatic reply** that is sent to every message received for that poll. This makes polls useful for contexts where you want to see the response to a particular issue or question._
-### How to Create a Poll
+A poll is a type of activity which allows you to see a graphical representation of the responses to a question. When creating a poll you will be able to enter the question and select who to send the question to. You will also be able to set up a **keyword**. A **keyword** allows FrontlineSMS to recognize which incoming messages are for polls and which aren't. It will also help the system determine which poll the message belongs to. This gives you the option to let FrontlineSMS automatically sort incoming messages into polls - you will be notified when this has happened. There are two types of responses you can set: Yes/No or a Multiple Choice style answer. You can also set up an **automatic reply** that is sent to every message received for that poll. This makes polls useful for contexts where you want to see the response to a particular issue or question.
+
+## How to Create a Poll
 
 1.  From the messages tab click on 'Create New Activity'.
 2.  A new window will appear and you will be presented with a number of options. Choose "Poll" and click next
 ![Activity Select][8]
 
-**_Enter Question_**  
+### Enter Question  
 
 After clicking next, you will be prompted to select a question type and enter a question:
 
 ![Enter Question][9]
 
-**Question Type:** 
+#### Question Type: 
 Yes or No: Select this if your question has a Yes or No answer. For example, the question "Do you like the colour Red?", could have a Yes or No Answer.
-Multiple Choice Question: Select this if your question has a number of different answers. For example, with the question "Do you like the colour Red?", you could get more detailed responses by having a range of answers such as, "Yes", "Quite a lot", "Not a lot" or "No".  
-If you select this option you will have the opportunity to input the possible responses in the following screens.
 
-**Enter Question:**
-Here you will find an area for you to enter your question. You can re-size the text entry box by clicking and dragging the bottom right hand corner of it.  
+Multiple Choice Question: Select this if your question has a number of different answers. For example, with the question "Do you like the colour Red?", you could get more detailed responses by having a range of answers such as, "Yes", "Quite a lot", "Not a lot" or "No". If you select this option you will have the opportunity to input the possible responses in the following screens.
+
+#### Enter Question:
+Here you will find an area for you to enter your question. You can re-size the text entry box by clicking and dragging the bottom right-hand corner of it.  
   
-If you simply want to collect responses and not send out a question then check the "Do not send a message for this poll (Collect responses only)" box. This might be useful when you have already distributed the question, for example over the radio or at a meeting.
+If you simply want to collect responses and not send out a question then check "Do not send a message for this poll (Collect responses only)". This might be useful when you have already distributed the question, for example over the radio or at a meeting.
 
-**_Response List_**  
+### Response List  
 If you selected the "Multiple Choice Question" then the next screen you see will allow you to specify the possible responses to the question. You can enter a maximum of 5 and a must enter a minimum of 2.
 
 ![Response List][10]
@@ -32,38 +33,26 @@ Boxes A-C will be immediately available to you to edit. If you need more than 3 
 
 Once you have entered all your choices, click next to set up Automatic Sorting.
 
-**_Automatic Sorting_**  
-You will be able to specify a keyword, that when included in an incoming message, will allow the system to automatically sort it into the relevant Poll.   
+### Automatic Sorting  
+First, you can choose whether or not FrontlineSMS will process incoming SMS automatically using a keyword for this activity. If you choose not to, then only messages you manually move into this activity will be processed. To sort using a keyword, select 'sort responses automatically'.
 
-![Automatic Sorting][11]
+![Automatic Sorting][17]
   
-_**Note:** Keywords are **unique.** Once a keyword has been set, it cannot be used in a new activity even if the original activity has been archived. To re-use a keyword you have to delete the activity that keyword is associated with._
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. In polls, top-level responses are optional. If you decide to allow respondents to text in only one word to vote, i.e. not to provide a top-level keyword, then the response keywords are treated as top-level and must be unique across all the activity top level keywords.
 
-To set a keyword, select "Sort messages automatically that have the following Keyword:" and then enter your keyword.
+To set the keywords, select "Sort responses automatically.' and then set the keywords in the text boxes below.
 
-When you set a keyword, and have selected a Multiple Choice Poll type, it will be possible for you to set "Aliases" in the next step.
+For any keyword, including each response, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the activity. This means that you can cater for spelling errors, different languages, and other reasons for differing keywords.
 
-Click 'next' to set Aliases if you have chosen a keyword, or the set up and Automatic Reply if you haven't.
+Default keywords will be pre-entered, but can be edited here. 
 
-**_Aliases_**
+![Keywords][17]
 
-Aliases are alternate ways of spelling and/or writing the choices you entered in the "Response List". 
-
-_This step is only available if you have selected a keyword in the previous step. If you have not, then please go to the next step._
-
-For example, if one of the choices was "Yes", you can enter alternative ways of spelling the word like "Yeah" or "Yeh". This could help in increasing the accuracy of your Poll results and reducing the amount of work you may have to do in correcting and manually categorising incorrectly spelt choices.
-
-The alias screen looks like this:
-
-![Aliases][17]
-
-Each choice is followed by an area where you can enter text. You will see two aliases already entered into the text area. These are the default settings. 
-
-You can add more aliases simple by adding to the string of text already in the text area. Separate each alias with a comma. An example would be:
+An example would be:
 
 "Yes, A, yeah, yeh"
 
-Furthermore, the first entry in the text area corresponds to the text that will be used when generating a message in the "Edit Message" step. To change how each choice appears in the message that will be send out, change the first entry in the text area.
+The first response keyword will be the one used in generating a sample message in the "Edit Message" step. To change how each choice appears in the message that will be sent out, change the first entry in the text area.
 
 If the text area looks like this for example:
 
@@ -75,11 +64,13 @@ Once you have completed this section click "Next" to set up an "Automatic Reply"
 
 **_Automatic Reply_**
 At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a keyword with your poll. Without a keyword the system cannot recognise which messages to automatically reply to.  
+
 The automatic reply option will be unavailable until you create a keyword for your poll.
 
 ![Automatic Reply][12]
 
-To enable an automatic reply, check the "Send an automatic reply to poll responses" box and enter your message in the message.  
+To enable an automatic reply, check the "Send an automatic reply to poll responses" box and enter your message in the text box.
+
 This message will be sent out to everyone who sends a message with the keyword you set up in the previous step.
 
 **_Note:** This is different from the [auto-reply activity][3]._
@@ -89,21 +80,7 @@ This screen will provide you with an opportunity to view the message that will b
 
 ![Edit Message][13]
 
-The message will be compiled from the options you have selected in previous steps.
-
-If you selected "yes or no" as the question type and created a keyword the default message will look like this:  
->"[Your Question]? Reply "[Keyword] A" for yes, "[Keyword] B" for no."  
-
-If you did not create a keyword then the message will look like this:  
->"[Your Question]? Please reply 'Yes' or 'No'"
-
-If you selected "Multiple Choice Question" as question type and created a keyword, the default message will look like this:  
->"[Your Question]? Reply "[Keyword] A" for [Multiple Choice A], "[Keyword] B" for [Multiple Choice B], "[Keyword] C" for [Multiple >Choice C], "[Keyword] D" for [Multiple Choice D], "[Keyword] E" for [Multiple Choice E]."
-
-If you did not create a keyword then the message will look like this:  
->"[Your Question]? Please reply '[Multiple Choice A]' or '[Multiple Choice B]' or '[Multiple Choice C]' or '[Multiple Choice D]' or >'[Multiple Choice E]'
-
-Once you are happy with the message, please click 'Next'.
+The message will be compiled from the options you have selected in previous steps. Once you are happy with the message, please click 'Next'.
 
 **_Select Recipients_**
 On this screen you will be able to either add the numbers of the people you want to send the poll to, or select them from your contacts list. 
@@ -111,10 +88,9 @@ On this screen you will be able to either add the numbers of the people you want
 ![Select Recipients][14]
 
 If you add a number manually it will be added to the list and automatically selected. This number will only remain in the system for as long as it needs to send the message and will not be added to your contacts.  
-Selecting groups and contacts is easy, simply select the contacts or groups you want to send the poll.
 
 **_Summary Screen_**
-On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
+On this screen you will find a summary of all the options you have selected, the message you've created (if applicable) and the recipients you've chosen. 
 
 ![Summary][15]
 
@@ -143,7 +119,7 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [5]: core/contacts/4.creating_a_group
 [6]: core/contacts/5.creating_a_smart_group
 [7]: core/messages/1.getting_around_the_messages_tab
-[8]: ../images/help/poll1.png
+[8]: ../images/help/autoforward1.png
 [9]: ../images/help/poll2.png
 [10]: ../images/help/poll3.png
 [11]: ../images/help/poll4.png
@@ -152,4 +128,4 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [14]: ../images/help/poll7.png
 [15]: ../images/help/poll8.png
 [16]: ../images/help/poll9.png
-[17]: ../images/help/aliases.png
+[17]: ../images/help/pollkeywords.png

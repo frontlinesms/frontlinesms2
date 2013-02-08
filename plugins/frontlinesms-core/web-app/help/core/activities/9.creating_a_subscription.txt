@@ -1,0 +1,94 @@
+# Creating a Subscription #
+
+A subscription is a type of activity that allows users to join of leave a specified group based on the content of the message that they text in. Keywords can trigger either adding the contact to the group, removing the contact from the group or toggling the group membership of the contact.
+
+### How to Create a Subscription
+
+From the [messages tab][2] click on 'Create New Activity'.
+A new window will appear and you will be presented with a number of options. Choose "Subscription" and click next
+
+![Select Activity][7]
+
+#### Select a Group
+You can select the group that contacts will join or leave.
+
+![Select A Group][8]
+
+When you have selected the desired group click next.
+
+#### Automatic Processing
+![Automatic Sorting][9]
+
+On the next tab, you can configure FrontlineSMS to automatically trigger your Subscription activity for incoming messages. With the 'Sort responses automatically' option, you can enter keywords to trigger join, leave or toggle actions.
+
+Alternatively, you can select the 'Don't sort messages automatically' setting. If you choose this option, then only messages you manually move into this activity will be processed. To sort using a keyword, select 'sort responses automatically'.
+
+With automatic sorting enabled, you will be able to set keywords to trigger the activity.
+  
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted. In Subscriptions, top-level responses are optional. If you decide to allow respondents to text in only one word to join or leave a group, i.e. not to provide a top-level keyword, then the response keywords are treated as top-level and must be unique across all the activity top level keywords._
+
+For any keyword, including each response, you can enter any number of keywords separated by commas. With this setting, any incoming message that starts with one of those keywords will trigger the activity. This means that you can cater for spelling errors, different languages, and other reasons for differing keywords.
+
+A subscription needs keywords that will match to the join action (Contact will join the group) and keywords that will match the leave action (Contact will leave the group). The keywords for subscription actions are not optional and need to filled in. The keywords in a subscription, inclucing top level and subscription action keywords, need to be unique within that subscription.
+
+Subscriptions allow a default action to be triggered if a message matched a top level keyword and did not match at least one subscription action keyword.
+
+![Select Default Action][10]
+
+Take for example a subscription where sorting is enabled and keywords look as follows.
+
+	Top level keywords : 'team, tim, tom'
+	Join Keywords : 'join, in, inthere'
+	Leave Keywords : 'leave, out, outthere'
+	Default Action : Add Contact to the Group
+
+The incoming message will be mapped to actions as illustrated below
+
+
+	Incoming Message 	| Action Triggered
+	team join 		| Joined Group
+	team in 		| Joined Group
+	team inthere 		| Joined Group
+	tim join 		| Joined Group
+	tim in 			| Joined Group
+	tim inthere 		| Joined Group
+	team leave 		| Joined Group
+	team out 		| Joined Group
+	team outhere 		| Joined Group
+	team 			| Default Action
+	tim 			| Default Action
+	tom 			| Default Action
+
+
+#### Send Autoreplies
+![Autoreplies][11]
+
+On this tab you can setup the autoreplies that will be sent to the contact after they have joined or left a group.
+You can set up seperate messages, one that is sent when a contact joins the group and one that is sent when a contact leaves the group.
+
+Setting up this messages is optional.
+
+#### Confirm Screen
+![Confirm Screen][12]
+
+On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send.
+
+On this screen you can edit the name of the subscription. The name needs to be unique among other subscriptions. Two subscriptions cannot share the same name.
+
+### Related Actions
+[Creating a Poll][4]
+[Creating a Group][5]
+[Creating a Smart Group][6]
+
+[1]: core/activities/9.creating_a_subscription
+[2]: core/messages/1.getting_around_the_messages_tab
+[3]: core/activities/1.getting_around_activities
+[4]: core/activities/3.creating_a_poll
+[5]: core/contacts/4.creating_a_group
+[6]: core/contacts/5.creating_a_smart_group
+[7]: ../images/help/autoforward1.png
+[8]: ../images/help/subscription1.png
+[9]: ../images/help/subscription2.png
+[10]: ../images/help/subscription3.png
+[11]: ../images/help/subscription4.png
+[12]: ../images/help/subscription5.png

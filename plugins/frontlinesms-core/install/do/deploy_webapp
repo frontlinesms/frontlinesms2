@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+echo "# Building WAR..."
+pushd ..
+
+function app_prop {
+	PROP_NAME=$1
+	VAR_NAME=$2
+	PROP_VALUE=`grep $PROP_NAME application.properties | cut -d= -f2`
+	eval "$VAR_NAME=$PROP_VALUE"
+}
+app_prop app.name APP_NAME
+app_prop app.version APP_VERSION
+echo "# App: $APP_NAME v$APP_VERSION"
+
+grails war
+popd
+
+WEBAPP_DIR=web-app
+echo "# Removing old web-app dir..."
+rm -rf $WEBAPP_DIR
+echo "# Unzipping war to new web-app dir..."
+unzip ../target/$APP_NAME-$APP_VERSION.war -d $WEBAPP_DIR
+
+echo "# web-app deploy completed."
+

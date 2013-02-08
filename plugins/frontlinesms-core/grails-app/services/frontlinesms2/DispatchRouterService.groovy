@@ -7,6 +7,8 @@ import frontlinesms2.camel.exception.NoRouteAvailableException
 
 /** This is a Dynamic Router */
 class DispatchRouterService {
+	static final String RULE_PREFIX = "fconnection-"
+	def appSettingsService
 	def camelContext
 	def i18nUtilService
 
@@ -24,7 +26,7 @@ class DispatchRouterService {
 		log "Routing exchange $exchange with previous endpoint $previous and target fconnection $requestedFconnectionId"
 		log "x.in=$exchange?.in"
 		log "x.in.headers=$exchange?.in?.headers"
-		
+
 		if(previous) {
 			// We only want to pass this message to a single endpoint, so if there
 			// is a previous one set, we should exit the slip.
@@ -34,7 +36,35 @@ class DispatchRouterService {
 			log "Target is set, so forwarding exchange to fconnection $requestedFconnectionId"
 			return "seda:out-$requestedFconnectionId"
 		} else {
-			def routeId = getDispatchRouteId()
+			def routeId
+			log "appSettingsService.['routing.use'] is ${appSettingsService.get('routing.use')}"
+
+			if(appSettingsService.get('routing.use')) {
+				def fconnectionRoutingList = appSettingsService.get('routing.use').split(/\s*,\s*/)
+				fconnectionRoutingList = fconnectionRoutingList.collect { route ->
+					route.startsWith(RULE_PREFIX)? route.substring(RULE_PREFIX.size()): route
+				}
+				println "fconnectionRoutingList::: $fconnectionRoutingList"
+				for(route in fconnectionRoutingList) {
+					if(route == 'uselastreceiver') {
+						routeId = getLastReceiverId(exchange)
+					} else {
+						routeId = getCamelRouteId(Fconnection.get(route))
+					}
+					log "Route Id selected: $routeId"
+					if(routeId) break
+				}
+			}
+
+			if(!routeId) {
+				if(appSettingsService.get('routing.otherwise') == 'any') {
+					log "## Sending to any available connection ##"
+					routeId = getRouteIdByRoundRobin()
+				} else {
+					log "## Not sending message at all ##"
+				}
+			}
+
 			if(routeId) {
 				log "Sending with route: $routeId"
 				def fconnectionId = (routeId =~ /.*-(\d+)$/)[0][1]
@@ -47,7 +77,7 @@ class DispatchRouterService {
 		}
 	}
 	
-	def getDispatchRouteId() {
+	def getRouteIdByRoundRobin() {
 		def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
 		if(allOutRoutes.size > 0) {
 			// check for internet routes and prioritise them over modems
@@ -55,8 +85,8 @@ class DispatchRouterService {
 			if(!filteredRouteList) filteredRouteList = allOutRoutes.findAll { it.id.contains('-modem-') }
 			if(!filteredRouteList) filteredRouteList = allOutRoutes
 			
-			println "DispatchRouterService.getDispatchConnectionId() : Routes available: ${filteredRouteList*.id}"
-			println "DispatchRouterService.getDispatchConnectionId() : Counter has counted up to $counter"
+			println "DispatchRouterService.getRouteIdByRoundRobin() : Routes available: ${filteredRouteList*.id}"
+			println "DispatchRouterService.getRouteIdByRoundRobin() : Counter has counted up to $counter"
 			return filteredRouteList[++counter % filteredRouteList.size]?.id
 		}
 	}
@@ -113,4 +143,26 @@ class DispatchRouterService {
 			}
 		} else log.info("No dispatch found for id: $id")
 	}
+
+	private getLastReceiverId(exchange) {
+		def log = { println "DispatchRouterService.slip() : $it" }
+		log "Dispatch is ${exchange.in.getBody()}"
+		def d = exchange.in.getBody()
+		log "dispatch to send # $d ### d.dst # $d?.dst"
+		def latestReceivedMessage = Fmessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
+		log "## latestReceivedMessage ## is $latestReceivedMessage"
+		latestReceivedMessage?.receivedOn ? getCamelRouteId(latestReceivedMessage.receivedOn) : null
+	}
+
+	private getCamelRouteId(connection) {
+		if(!connection) return null
+		println "## Sending message with Connection with $connection ##"
+		def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
+		println "allOutRoutes ## $allOutRoutes"
+		println "ALL ROUTE IDS ## ${allOutRoutes*.id}"
+		def routeToTake = allOutRoutes.find{ it.id.endsWith("-${connection.id}") }
+		println "Chosen Route ## $routeToTake"
+		routeToTake? routeToTake.id: null
+	}
 }
+

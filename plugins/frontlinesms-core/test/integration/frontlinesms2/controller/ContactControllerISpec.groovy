@@ -1,6 +1,7 @@
 package frontlinesms2.controller
 
 import frontlinesms2.*
+import spock.lang.*
 import grails.converters.JSON
 
 class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
@@ -172,5 +173,43 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			stats.inboundMessagesCount == 1
 			stats.outboundMessagesCount == 0
 	}
+
+	def "attempting to view a missing contact should forward to index"() {
+		when:
+			controller.params.contactId = 12345
+			controller.show()
+		then:
+			controller.flash.message == 'Contact not found'
+	}
+	
+	def "attempting to view a missing group should forward to index"() {
+		when:
+			controller.params.groupId = 12345
+			controller.show()
+		then:
+			controller.flash.message == 'Group not found'
+	}
+	
+	def "attempting to view a missing smart group should forward to index"() {
+		when:
+			controller.params.smartGroupId = 12345
+			controller.show()
+		then:
+			controller.flash.message == 'Smart Group not found'
+	}
+
+	def "should give correct total contact count even when in a group"() {
+		given:
+			new Contact(name:'Gaetano').save(failOnError:true)
+			makeGroupMember()
+		when:
+			controller.params.groupId = g.id
+			controller.beforeInterceptor()
+			def response = controller.show()
+		then:
+			response.contactInstanceTotal == 2
+			response.contactsSectionContactTotal == 1
+	}
+
 }
 

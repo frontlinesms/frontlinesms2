@@ -7,14 +7,14 @@ class ConnectionDialog extends MediumPopup {
 		popupTitle.contains('connection')
 	}
 	static content = {
-		connectionType { $("#connectionType") }
+		connectionType { $("input[name=connectionType]") }
 		connectionForm { $('#connectionForm') }
 		confirmName { $("#confirm-name") }
 		confirmType { $("#confirm-type") }
 		confirmPort { $("#confirm-port") }
 
 		basicInfo { connectionType ->
-			$("p.info.$connectionType").text()
+			$("input", name:'connectionType', value:connectionType).parent().find('p.info').text()
 		}
 
 		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name") }

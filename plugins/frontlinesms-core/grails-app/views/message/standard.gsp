@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}"/>
-		<title>${pageTitle?:params.action.capitalize()}</title>
+		<title> <g:message code="message.header.${pageTitle?:params.action}" /></title>
 	</head>
 	<body>
 	</body>

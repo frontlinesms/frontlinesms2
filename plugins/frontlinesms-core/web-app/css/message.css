@@ -54,6 +54,7 @@
 #tabs div.input .controls div.stats{ display:block; margin:3px;}
 
 #body.messages #detail { background-color:#d8e8ef; border-left:solid #9e9e9e 1px; padding:17px; }
+#body.messages #detail #message-detail #message-info > p { margin-bottom:5px; }
 #body.messages #detail #message-detail-content { background-color:white; border:1px solid #B5C6CD; margin:17px 0; }
 #body.messages #detail #message-detail-content p { padding:17px; }
 #body.messages #detail #message-detail-content #no-message { text-align:center; }

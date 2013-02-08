@@ -96,4 +96,3 @@ var more_actions = (function() {
 $(document).ready(function() {
 	more_actions.init();
 });
-

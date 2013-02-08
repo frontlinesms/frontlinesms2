@@ -133,31 +133,41 @@ class DispatchRouterServiceSpec extends Specification {
 
 	def 'slip should assign messages to round robin if routing preference is set to use avalilable routes'() {
 		given:
+			mockAppSettingsService(false, 'any')
 			mockRoutes(1, 2, 3)
 		when:
 			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
 		then:
 			routedTo == [1, 2, 3, 1, 2].collect { "seda:out-$it" }
 	}
-	
-	def 'slip should prioritise internet services over modems'() {
+
+	def 'slip should prioritise internet services over modems if routing preference is set to use avalilable routes'() {
 		given:
+			mockAppSettingsService(false, 'any')
 			mockRoutes(1:'internet', 2:'modem', 3:'internet', 4:'modem')
 		when:
 			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
 		then:
 			routedTo == [1, 3, 1, 3, 1].collect { "seda:out-$it" }
 	}
-	
+
 	private def mockExchange() {
-		def x = Mock(Exchange)
-		def out = Mock(Message)
-		out.headers >> [:]
-		x.out >> out
-		return x
+		def exchange = Mock(Exchange)
+		exchange.in >> mockExchangeMessage(['frontlinesms.dispatch.id':'1'], Mock(Dispatch))
+		exchange.out >> mockExchangeMessage([:], null)
+		println "x.in.headers ######### $exchange.in.headers"
+		return exchange
 	}
 	
-	private def mockRoutes(int...ids) {
+	private mockExchangeMessage(headers, body){
+		def m = Mock(Message)
+		body.id >> 1
+
+		m.body >> body
+		m.headers >> headers
+		return m
+	}
+	private def mockRoutes(int... ids) {
 		CamelContext c = Mock()
 		c.routes >> ids.collect { [[id:"in-$it"], [id:"out-$it"]] }.flatten()
 		service.camelContext = c
@@ -176,3 +186,4 @@ class DispatchRouterServiceSpec extends Specification {
 		service.appSettingsService = appSettingsService
 	}
 }
+

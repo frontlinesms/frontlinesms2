@@ -2,7 +2,6 @@ package frontlinesms2
 
 import grails.converters.JSON
 
-
 class ActivityController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -16,7 +15,7 @@ class ActivityController extends ControllerUtils {
 	def create() {
 		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 		[contactList: Contact.list(),
-				groupList:groupList]
+				groupList:groupList, activityType: params.controller]
 	}
 	
 	def edit() {
@@ -26,8 +25,13 @@ class ActivityController extends ControllerUtils {
 			def activityType = activityInstance.shortName
 			render view:"../$activityType/create", model:[contactList: Contact.list(),
 				groupList:groupList,
-				activityInstanceToEdit: activityInstance]
+				activityInstanceToEdit: activityInstance, activityType: activityType]
 		}
+	}
+
+	def show() {
+		flash.message = flash.message
+		redirect controller:'message', action:'activity', params:params
 	}
 
 	def rename() {}
@@ -111,25 +115,25 @@ class ActivityController extends ControllerUtils {
 	
 	def create_new_activity() {}
 
-	def getCollidingKeywords(topLevelKeywords) {
+	private def getCollidingKeywords(topLevelKeywords, instance) {
 		if (topLevelKeywords == null)
 			return [:]
 		def collidingKeywords = [:]
 		def currentKeyword
 		topLevelKeywords.toUpperCase().split(",").collect { it.trim() }.each { 
 			currentKeyword = Keyword.getFirstLevelMatch(it)
-			if(currentKeyword)
+			if(currentKeyword && (currentKeyword.activity.id != instance.id))
 				collidingKeywords << [(currentKeyword.value):"'${currentKeyword.activity.name}'"]
 		}
 		println "colliding keywords:: $collidingKeywords"
 		return collidingKeywords
 	}
 
-	protected void doSave(classShortname, service, instance) {
+	protected void doSave(classShortname, service, instance, activate=true) {
 		try {
 			service.saveInstance(instance, params)
-			instance.activate()
-			flash.message = message(code:classShortname + '.saved')
+			if(activate) instance.activate()
+			flash.message = message([code:"${instance.class.shortName}.save.success", args:[instance.name]])
 			params.activityId = instance.id
 			withFormat {
 				json { render([ok:true, ownerId:instance.id] as JSON) }
@@ -137,27 +141,29 @@ class ActivityController extends ControllerUtils {
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace()
-			def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords)
-			def errors
-			if (collidingKeywords) {
-				errors = collidingKeywords.collect {
-					if(it.key == '') {
-						message(code:'activity.generic.global.keyword.in.use', args:[it.value])
-					} else {
-						message(code:'activity.generic.keyword.in.use', args:[it.key, it.value])
-					}
-				}.join('\n')
-			} else {
-				errors = instance.errors.allErrors.collect {
-					message(code:it.codes[0], args:it.arguments.flatten(), defaultMessage:it.defaultMessage)
-				}.join('\n')
-			}
-			withFormat {
-				json { render([ok:false, text:errors] as JSON) }
-			}
+			generateErrorMessages(instance)
 		}
 	}
 	
+	private def generateErrorMessages(instance) {
+		def collidingKeywords = getCollidingKeywords(params.sorting == 'global'? '' : params.keywords, instance)
+		def errors
+		if (collidingKeywords) {
+			errors = collidingKeywords.collect {
+				if(it.key == '') {
+					message(code:'activity.generic.global.keyword.in.use', args:[it.value])
+				} else {
+					message(code:'activity.generic.keyword.in.use', args:[it.key, it.value])
+				}
+			}.join('\n')
+		} else {
+			errors = instance.errors.allErrors.collect { message(error:it) }.join('\n')
+		}
+		withFormat {
+			json { render([ok:false, text:errors] as JSON) }
+		}
+	}
+
 	private def withActivity = withDomainObject Activity
 
 	private def defaultMessage(String code, args=[]) {

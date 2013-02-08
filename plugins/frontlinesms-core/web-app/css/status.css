@@ -1,10 +1,10 @@
 #body.status #content { background-color:#eee; position:fixed; top:80px; bottom:0; left:0; right:0; }
 #body.status h3 { padding:17px 25px; text-transform:uppercase; font-weight:bold; border-bottom:1px solid #eee; }
-#body.status #traffic-status{ position:fixed; top:83px; width:47%; background:white; margin:0 25px;
-	-moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; overflow-x:hide; overflow-y:auto; }
-#body.status #right-column{ position:fixed; right:0; top:83px; bottom:17px; width:47%; float:right; margin:0 25px;
-	overflow-x:hide; overflow-y:auto; }
-#body.status #connection-status, #body.status #device-detection { background:white; margin: 0 25px 25px 25px;
+#body.status #left-column { position:fixed; top:83px; bottom:0; width:47%; margin:0 25px; overflow-x:hidden; overflow-y:auto; }
+#body.status #traffic-status{ background:white; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; }
+#body.status #right-column{ position:fixed; right:0; top:83px; bottom:0; width:47%; float:right; margin:0 25px;
+	overflow-x:hidden; overflow-y:auto; }
+#body.status #connection-status, #body.status #device-detection { background:white; margin-left:25px; margin-bottom:25px;
 	-moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; }
 #body.status #device-detection { padding-bottom: 17px; }
 #body.status #device-detection h3 { float:left; display:inline-block; border:none; }
