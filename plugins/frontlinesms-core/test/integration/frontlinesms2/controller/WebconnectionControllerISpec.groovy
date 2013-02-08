@@ -212,12 +212,12 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def m
 			5.times { it ->
 				m = new Fmessage(text:"test", inbound:true, src:"+1234$it").save(failOnError:true)
-				m.setOwnerDetail(webconnection, ((it % 2) ? Webconnection.OWNERDETAIL_FAILED : Webconnection.OWNERDETAIL_SUCCESS ))
+				m.setMessageDetail(webconnection, ((it % 2) ? Webconnection.OWNERDETAIL_FAILED : Webconnection.OWNERDETAIL_SUCCESS ))
 				webconnection.addToMessages(m)
 			}
 
 			m = new Fmessage(text:"test", inbound:true, src:"+12345").save(failOnError:true)
-			m.setOwnerDetail(webconnection, Webconnection.OWNERDETAIL_PENDING)
+			m.setMessageDetail(webconnection, Webconnection.OWNERDETAIL_PENDING)
 			webconnection.addToMessages(m)
 
 			webconnection.save(failOnError:true, flush:true)

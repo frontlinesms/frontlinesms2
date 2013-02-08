@@ -344,7 +344,6 @@ class Fmessage {
 
 	def setMessageDetail(activityOrStep, val) {
 		if (activityOrStep instanceof Activity) {
-			activityOrStep.addToMessages(this)
 			this.setMessageDetailValue(activityOrStep, val)
 		} else {
 			this.setMessageDetailValue(this.messageOwner, activityOrStep.id)
