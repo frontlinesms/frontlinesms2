@@ -63,7 +63,7 @@
 			<plugin>
 				<groupId>com.google.code.maven-install4j</groupId>
 				<artifactId>maven-install4j-plugin</artifactId>
-				<version>0.1.1</version>
+				<version>0.2-frontlinesms-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
