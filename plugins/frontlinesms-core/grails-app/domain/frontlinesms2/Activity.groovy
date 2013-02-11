@@ -64,7 +64,7 @@ abstract class Activity extends MessageOwner {
 	}
 
 	def processKeyword(Fmessage message, Keyword match) {
-		message.ownerDetail = null
+		message.setMessageDetail(this, "")
 		this.addToMessages(message)
 		this.save(failOnError:true)
 	}
