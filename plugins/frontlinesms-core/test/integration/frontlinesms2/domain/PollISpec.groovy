@@ -245,8 +245,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToResponses(responseA)
 					.addToResponses(key:'B' , value:'TessstB')
 					.addToResponses(PollResponse.createUnknown())
-					.addToMessages(m)
 			previousOwner.save(flush:true, failOnError:true)
+			previousOwner.addToMessages(m).save(failOnError:true)
 			responseA.addToMessages(m)
 
 			assert responseA.refresh().messages.contains(m)
