@@ -1,16 +1,13 @@
-package frontlinesms2
+package frontlinesms2.domain
 
 import spock.lang.*
 import grails.plugin.spock.*
 import frontlinesms2.*
 
-@TestFor(CustomActivity)
-@Mock([JoinActionStep, StepProperty, ReplyActionStep, LeaveActionStep, Keyword, Fmessage])
-class CustomActivitySpec extends Specification {
+class CustomActivityISpec extends IntegrationSpec {
 	def "a custom activity can have one step"() {
 		given:
-			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
-			joinStep.save(failOnError:true)
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"football"))
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
 			customActivity.save(flush:true, failOnError:true)
@@ -20,8 +17,8 @@ class CustomActivitySpec extends Specification {
 
 	def "a custom activity can have many steps of different kinds"() {
 		given:
-			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
-			def replyStep = new ReplyActionStep(stepProperties: [new StepProperty(key:"autoreplyText", value:"autoreply :)")])
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"football"))
+			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"autoreply :)"))
 
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
@@ -33,9 +30,9 @@ class CustomActivitySpec extends Specification {
 
 	def "custom activity steps should be ordered according to the order of addition"() {
 		given:
-			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
-			def replyStep = new ReplyActionStep(stepProperties: [new StepProperty(key:"autoreplyText", value:"autoreply :)")])
-			def leaveStep = new LeaveActionStep(stepProperties: [new StepProperty(key:"group", value:"Friends")])
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"football"))
+			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"autoreply :)"))
+			def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"Friends"))
 
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
@@ -48,8 +45,7 @@ class CustomActivitySpec extends Specification {
 
 	def "processKeyword should add the message to the CustomActivity and invoke CustomActivityService.triggerSteps"() {
 		given:
-			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
-			joinStep.save(failOnError:true)
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"football"))
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
 			customActivity.save(flush:true, failOnError:true)
