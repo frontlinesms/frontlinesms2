@@ -50,12 +50,12 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			keyword.keywordText.value("test")
 			next.click()
-			configure.stepButton("reply").click()
-			configure.stepButton("join").click()
+			configure.replyButton.click()
+			configure.joinButton.click()
 		then:
 			configure.steps.size() == 2
 		when:
-			configure.steps[0].jquery.find(".remove-step").click()
+			configure.steps[0].jquery.find(".remove-command").click()
 		then:
 			waitFor { configure.steps.size() == 1 }
 	}
@@ -75,8 +75,8 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			keyword.keywordText.value("test")
 			next.click()
-			configure.stepButton("reply").click()
-			configure.stepButton("join").click()
+			configure.replyButton.click()
+			configure.joinButton.click()
 			configure.steps[0].jquery.find("#autoreplyText").value("Sample Text")
 			configure.steps[1].jquery.find("#group").value(Group.findByName("Camping").id)
 			next.click()
@@ -105,8 +105,8 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		then:
 			configure.steps.size() == 2
 		when:
-			configure.stepButton("reply").click()
-			configure.stepButton("join").click()
+			configure.replyButton.click()
+			configure.joinButton.click()
 			configure.steps[2].jquery.find("#autoreplyText").value("Sample Text")
 			configure.steps[3].jquery.find("#group").value(Group.findByName("Camping").id)
 			next.click()
