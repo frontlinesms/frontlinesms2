@@ -156,8 +156,7 @@ class WebconnectionService {
 		if(getStatusOf(webconnectionInstance) == ConnectionStatus.CONNECTED) {
 			def headers = [:]
 			headers.'fmessage-id' = message.id
-			headers.'activity-type'= webconnectionInstance.shortName
-			headers.'activity-id'= webconnectionInstance.id
+			headers.'webconnection-id'= webconnectionInstance.id
 			sendMessageAndHeaders("seda:activity-${webconnectionInstance.shortName}-${webconnectionInstance.id}", message, headers)
 			changeMessageOwnerDetail(webconnectionInstance, message, Webconnection.OWNERDETAIL_PENDING)
 		} else {
