@@ -65,7 +65,7 @@ class DeleteGroupPopup extends SmallPopup {
 
 class DeleteActivity extends SmallPopup {
 	static at = {
-		popupTitle.contains("delete activity")
+		popupTitle.contains("delete")
 	}
 	static content = {
 		text { $('#confirmDelete h2') }
@@ -94,7 +94,7 @@ class RenameFolderDialog extends SmallPopup {
 
 class RenameActivityDialog extends SmallPopup {
 	static at = {
-		popupTitle.contains("activity")
+		popupTitle.contains("rename")
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
