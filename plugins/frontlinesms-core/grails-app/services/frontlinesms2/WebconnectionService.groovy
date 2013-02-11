@@ -14,8 +14,9 @@ class WebconnectionService {
 	def messageSendService
 
 	def retryFailed(Webconnection c) {
-		Fmessage.findAllByMessageOwnerAndOwnerDetail(c, Webconnection.OWNERDETAIL_FAILED).each {
-			send(it)
+		Fmessage.findAllByMessageOwner(c).each {
+			if(it.ownerDetail == Webconnection.OWNERDETAIL_FAILED)
+				send(it)
 		}
 	}
 
@@ -110,7 +111,7 @@ class WebconnectionService {
 	}
 
 	private changeMessageOwnerDetail(Fmessage message, String s) {
-		message.ownerDetail = s
+		message.setMessageDetail(message.messageOwner, s)
 		message.save(failOnError:true, flush:true)
 		println "Changing Status ${message.ownerDetail}"
 	}
