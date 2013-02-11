@@ -5,6 +5,6 @@
 			from="${Group.getAll()}"
 			value="${groupId}"
 			optionKey="id" optionValue="name"
-			class="notnull"/>
+			class="customactivity-field notnull"/>
 </fsms:step>
 
