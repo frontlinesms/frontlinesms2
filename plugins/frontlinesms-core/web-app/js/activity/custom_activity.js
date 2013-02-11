@@ -115,7 +115,6 @@ var customActivityDialog = (function(){
 			} else if(stepType === "reply") {
 				detail = element.find("textarea[name=autoreplyText]").val();
 			}
-			alert("Step type: " + stepType);
 			output = "<p>" +
 					i18n("customactivity." + stepType + ".description", detail) +
 					"</p>";
@@ -128,7 +127,7 @@ var customActivityDialog = (function(){
 		} else if (sortingType === "global") {
 			keywords = i18n("autoreply.blank.keyword");
 		} else {
-			alert("please define i18n message for this sorting option");
+			alert("please define i18n message for this sorting option"); // FIXME
 		}
 		$("#keyword-confirm").html("<p>" + keywords  + "</p>");
 	};
