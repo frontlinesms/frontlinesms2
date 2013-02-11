@@ -14,6 +14,7 @@ class AutoreplyServiceSpec extends Specification {
 			def messageSendService = Mock(MessageSendService)
 			def incoming = Mock(Fmessage)
 			incoming.src >> "123"
+			incoming.messageOwner >> Mock(Activity)
 			def outgoing = Mock(Fmessage)
 			service.messageSendService = messageSendService
 			invoker.getPropertyValue('autoreplyText') >> 'step autoreply text'
