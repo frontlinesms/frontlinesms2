@@ -584,7 +584,7 @@ class AutoforwardSummaryTab extends geb.Module {
 
 class CustomActivityCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("customactivity") || popupTitle.contains("edit activity")
+		popupTitle.contains("custom activity") || popupTitle.contains("edit activity")
 	}
 	static content = {
 		keyword { module ConfigureCustomKeywordTab}
