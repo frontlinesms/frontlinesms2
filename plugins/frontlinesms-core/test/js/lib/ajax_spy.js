@@ -1,22 +1,26 @@
 ajax_spy = (function() {
 	var
-	addResponse = function(request, response) {
-		responses.push({ rq:request, res:response });
-	},
+	requests,
+	responses,
 	defaultResponse,
 	init = function(_defaultResponse) {
+		requests = [],
+		responses = [],
 		defaultResponse = _defaultResponse || function() {
 			return {};
 		};
 		$.ajax = processAjax;
 		$.getJSON = processAjax;
 	},
+	addResponse = function(request, response) {
+		responses.push({ rq:request, res:response });
+	},
 	processAjax = function(url, data, callback) {
 		var responseData;
-		requests.push({ url:url, data:data, callback:callback });
 		// TODO map args to jQuery.ajax args
 		// TODO attempt to match request to response
-		responseData = processResponse(defaultResponse);
+		responseData = responseData || processResponse(defaultResponse);
+		requests.push({ url:url, data:data, response:responseData });
 		callback(responseData);
 	},
 	processResponse = function(r) {
@@ -28,16 +32,16 @@ ajax_spy = (function() {
 		}
 		return r;
 	},
-	requests = [],
-	responses = [],
 	requestCount = function() {
-		return responses.length;
+		return requests.length;
 	},
 	___end___;
 	return {
 		addResponse:addResponse,
 		init:init,
-		requestCount:requestCount
+		requestCount:requestCount,
+		getRequest:function(i) { return requests[i]; },
+		getRequests:function() { return requests; }
 	};
 }());
 

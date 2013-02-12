@@ -15,21 +15,15 @@ timer = (function() {
 		if(count === undefined) {
 			count = 1;
 		}
-		console.log("timer.tick() :: clock=" + clock + "; count=" + count);
 		while(--count >= 0) {
 			processTick();
 		}
 	},
 	processTick = function() {
 		var c, i;
-		console.log("timer.processTick() :: callbacks.length=" + callbacks.length);
 		++clock;
 		for(i=callbacks.length-1; i>=0; --i) {
 			c = callbacks[i];
-			console.log("___________________________________________");
-			console.log("timer.processTick() :: c.repeat=" + c.repeat);
-			console.log("timer.processTick() :: c.interval=" + c.interval);
-			console.log("timer.processTick() :: c.next=" + c.next);
 			if(c.next === clock) {
 				c.func();
 				if(c.repeat) {
@@ -41,7 +35,6 @@ timer = (function() {
 		}
 	},
 	addCallback = function(func, interval, repeat) {
-		console.log("timer.addCallback() :: ENTRY");
 		if(typeof func === "string") {
 			throw new Exception("You probably shouldn't be passing code to setTimeout/setInterval.");
 		}
@@ -51,7 +44,6 @@ timer = (function() {
 			next:clock + interval,
 			interval:interval,
 			repeat:repeat });
-		console.log("timer.addCallback() :: EXIT");
 	},
 	setInterval = function(func, interval) {
 		addCallback(func, interval, true);
