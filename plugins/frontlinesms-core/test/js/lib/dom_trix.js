@@ -6,6 +6,7 @@ dom_trix = (function() {
 		console.log("JSDOM loaded.");
 	} catch(err) {
 		console.log("Error trying to load JSDOM: " + err);
+		console.error("ERROR: " + err);
 		process.exit(1);
 	}
 
