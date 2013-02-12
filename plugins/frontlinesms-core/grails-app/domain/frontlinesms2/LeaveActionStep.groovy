@@ -9,7 +9,6 @@ class LeaveActionStep extends Step {
 	static configFields = [group: Group]
 
 	static constraints = {
-		stepProperties nullable: true
 	}
 
 	Map getConfig() {
@@ -32,8 +31,7 @@ class LeaveActionStep extends Step {
 		subscriptionService.doLeave(this, message)
 	}
 
-	def getNiceFormat() {
-		"Leaving '${this?.group?.name}' group"
-        }
-
+    def getDescription() {
+		i18nUtilService.getMessage(code:"customactivity.${this.shortName}.description", args:[this?.group?.name])
+	}
 }

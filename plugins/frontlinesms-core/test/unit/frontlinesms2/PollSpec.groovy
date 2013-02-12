@@ -6,11 +6,11 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Poll)
-@Mock(PollResponse)
+@Mock([PollResponse, MessageDetail])
 @Build(Fmessage)
 class PollSpec extends Specification {
 	/** some responses that should pass validation */
-	def OK_RESPONSES = [new PollResponse(value: "one"), new PollResponse(value: "two")]
+	def OK_RESPONSES = [new PollResponse(value:'one', key:'A'), new PollResponse(value:'two', key:'B')]
 	private static final String TEST_NUMBER = "+2345678"
 	
 	def setup() {
@@ -25,7 +25,7 @@ class PollSpec extends Specification {
 	def 'poll must have at least three responses'() {
 		given:
 			def p = new Poll(name:'test poll')
-			p.responses = []
+			p.responses = [] as SortedSet
 			responseCount.times { p.responses << new PollResponse(value:"r-$it", key:"$it") }
 		expect:
 			p.validate() == valid
@@ -83,11 +83,13 @@ class PollSpec extends Specification {
 			def sendService = Mock(MessageSendService)
 			poll.messageSendService = sendService
 			poll.autoreplyText = "some reply text"
+			poll.save(failOnError:true, flush:true)
 
 			def replyMessage = Fmessage.build(text:"woteva")
 			sendService.createOutgoingMessage({ params ->
 				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
 			}) >> replyMessage
+
 
 			def inMessage = Fmessage.build(text:"message text", src:TEST_NUMBER)
 		when:
@@ -143,6 +145,7 @@ class PollSpec extends Specification {
 			responses[key] = r
 			p.addToResponses(r)
 		}
+		p.save(failOnError:true, flush:true)
 		return [poll:p, responses:responses]
 	}
 }

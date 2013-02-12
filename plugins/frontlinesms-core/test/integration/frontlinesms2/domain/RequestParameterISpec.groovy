@@ -20,9 +20,10 @@ class RequestParameterISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			returnval == webconnectionService.getProcessedValue(parameter, message)
 		where:
-			returnval					|paramText
-			'Sample text to send out'	|"message_body"
-			'12345'						|"message_src_number"
-			'12345'						|"message_src_name"
+			returnval                   |paramText
+			'Sample text to send out'   |"message_body"
+			'12345'                     |"message_src_number"
+			'12345'                     |"message_src_name"
+			'something_nonexistant'     |"something_nonexistant"
 	}
 }

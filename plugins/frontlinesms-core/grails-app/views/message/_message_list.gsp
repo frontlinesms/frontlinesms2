@@ -66,8 +66,8 @@
 			</g:else>
 		</g:if>
 		<g:else>
-			<tr>
-				<td colspan="5" class="no-content">
+			<tr class="no-content">
+				<td colspan="5">
 					<g:if test="${messageSection=='result'}">
 						<g:if test="${searchDescription}">
 							<g:message code="fmessage.search.none"/>

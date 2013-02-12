@@ -13,8 +13,8 @@ class Poll extends Activity {
 	String autoreplyText
 	String question
 	boolean yesNo
-	List responses
 	static hasMany = [responses: PollResponse]
+	SortedSet responses
 
 //> SETTINGS
 	static transients = ['unknown']
@@ -25,15 +25,8 @@ class Poll extends Activity {
 	}
 
 	def getDisplayText(Fmessage msg) {
-		def p = PollResponse.withCriteria {
-			messages {
-				eq('isDeleted', false)
-				eq('archived', false)
-				eq('id', msg.id)
-			}
-		}
-
-		p?.size() ? "${p[0].value} (\"${msg.text}\")" : msg.text
+		def p = responses.find { "$it.id" == msg.ownerDetail }
+		p? "${p.value} (\"${msg.text}\")": msg.text
 	}
 			
 	static constraints = {
@@ -61,11 +54,12 @@ class Poll extends Activity {
 		if(!messages) messages = []
 		messages << message
 		message.messageOwner = this
+		this.save(failOnError:true)
 		if(message.inbound) {
 			this.responses.each {
 				it.removeFromMessages(message)
 			}
-			this.unknown.messages.add(message)
+			this.unknown.addToMessages(message)
 		}
 		this
 	}
@@ -82,8 +76,8 @@ class Poll extends Activity {
 	}
 	
 	def getResponseStats() {
-		def totalMessageCount = this.messages.findAll { it.inbound && !it.isDeleted }.size()
-		responses.sort {it.key?.toLowerCase()}.collect {
+		def totalMessageCount = messages?.count { it.inbound && !it.isDeleted && (it.archived == this.archived) }?: 0
+		responses.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,
@@ -150,37 +144,38 @@ class Poll extends Activity {
 		if(raw) raw.toUpperCase().replaceAll(/\s/, "").split(",").findAll { it }.join(", ")
 	}
 
+	def processKeyword(Fmessage message, Keyword keyword) {
+		def response = getPollResponse(message, keyword)
+		response?.addToMessages(message)
+		response?.save()
+		if(this.autoreplyText) {
+			def params = [:]
+			params.addresses = message.src
+			params.messageText = this.autoreplyText
+			def outgoingMessage = messageSendService.createOutgoingMessage(params)
+			this.addToMessages(outgoingMessage)
+			messageSendService.send(outgoingMessage)
+			this.save(failOnError:true)
+		}
+		this.save(failOnError:true)
+	}
+	
+	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
+		if(!keyword || (keyword?.isTopLevel && !keyword?.ownerDetail)){
+			return this.unknown
+		} else {
+			return this.responses.find { keyword.ownerDetail == it.key }
+		}
+	}
+
 	def deleteResponse(PollResponse response) {
 		response.messages.findAll { message ->
-			this.unknown.messages.add(message)
+			this.unknown.addToMessages(message)
 		}
 		this.removeFromResponses(response)
 		response.delete()
 		this
 	}
 
-	def processKeyword(Fmessage message, Keyword keyword) {
-		def response = getPollResponse(message, keyword)
-		response.addToMessages(message)
-		response.save()
-		def poll = this
-		if(poll.autoreplyText) {
-			def params = [:]
-			params.addresses = message.src
-			params.messageText = poll.autoreplyText
-			def outgoingMessage = messageSendService.createOutgoingMessage(params)
-			poll.addToMessages(outgoingMessage)
-			messageSendService.send(outgoingMessage)
-			poll.save(failOnError:true)
-		}
-	}
-	
-	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
-		if(keyword.isTopLevel && !keyword.ownerDetail){
-			return this.unknown
-		} else {
-			return this.responses.find{ keyword.ownerDetail == it.key }
-		}
-	}
 }
 

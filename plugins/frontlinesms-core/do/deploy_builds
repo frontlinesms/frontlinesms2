@@ -24,7 +24,7 @@ mac_file=`ls install/target/install4j/ | grep mac`
 unix_file=`ls install/target/install4j/ | grep unix`
 
 r_windows_path=$r_path$windows_file
-r_mac_path=$r_mac_path$mac_file
+r_mac_path=$r_path$mac_file
 r_unix_path=$r_path$unix_file
 
 echo ">>>>>>>>>>> Uploading to"$remote_upload_path
@@ -75,14 +75,14 @@ else
 	exit 0
 fi
 
-exit ##Exiting so as not to upload link file
+
 
 echo "#### Creating the xml file with file names"
 touch build_links.php
-echo "<?php echo "{\'windows\':\'$r_windows_path\', \'mac\':\'$r_mac_path\', \'unix\':\'$r_unix_path\'}" ?>" >> build_links.php
+echo "<?php echo "\"{\'windows\':\'$r_windows_path\', \'mac\':\'$r_mac_path\', \'unix\':\'$r_unix_path\'}\"" ?>" >> build_links.php
 echo "#### Uloading xml document with file names"
 local_json_path="build_links.php"
-#curl -v -T $local_json_path -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_upload_path"
+curl -v -T $local_json_path -u $USERNAME:$PASSWORD -Q "TYPE I" "$remote_upload_path"
 cat build_links.php
 echo "#### Removing build_links.php... :("
 rm build_links.php

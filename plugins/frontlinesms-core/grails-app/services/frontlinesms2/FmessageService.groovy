@@ -11,21 +11,8 @@ class FmessageService {
     			messageInstance.isDeleted = false
 				Trash.findByObject(messageInstance)?.delete(failOnError:true)
 				if (params.messageSection == 'activity') {
-					messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
-					activity.addToMessages(messageInstance)
-					if(activity.metaClass.hasProperty(null, 'autoreplyText') && activity.autoreplyText) {
-						params.addresses = messageInstance.src
-						params.messageText = activity.autoreplyText
-						def outgoingMessage = messageSendService.createOutgoingMessage(params)
-						outgoingMessage.save()
-						messagesToSend << outgoingMessage
-						activity.addToMessages(outgoingMessage)
-						activity.save()
-					} else if(activity instanceof Webconnection) {
-						activity.processKeyword(messageInstance, null)
-					}else if(activity instanceof Autoforward) {
-						activity.processKeyword(messageInstance, null)
-					}
+					activity.move(messageInstance)
+					activity.save(failOnError:true, flush:true)
 				} else if (params.ownerId && params.ownerId != 'inbox') {
 					messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save(failOnError:true)
@@ -38,8 +25,9 @@ class FmessageService {
 						}
 					}
 				}
-    		}
+			}
 		}
+
 		if(messagesToSend) {
 			MessageSendJob.defer(messagesToSend)
 		}

@@ -51,8 +51,8 @@ class WebconnectionActionStep extends Step {
 		webconnectionService.doUpload(this, message)
 	}
 
-	def getNiceFormat() {
-		"Upload to '${this.url}'"
+	def getDescription() {
+		i18nUtilService.getMessage(code:"customactivity.${this.shortName}.description", args:[this.url])
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {
