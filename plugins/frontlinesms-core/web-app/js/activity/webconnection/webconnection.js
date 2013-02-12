@@ -184,7 +184,3 @@ var webconnectionDialog = (function () {
 	};
 }());
 
-function setPara(selecter, text) {
-	$(selecter).html("<p>" + text + "</p>");
-}
-
