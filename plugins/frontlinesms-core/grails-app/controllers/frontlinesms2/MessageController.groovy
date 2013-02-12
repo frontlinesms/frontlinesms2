@@ -42,7 +42,7 @@ class MessageController extends ControllerUtils {
 		} else if(section == 'activity') {
 			def getSent = null
 			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
-			messageCount = Activity.get(params.ownerId)?.getActivityMessages(params.starred, getSent)?.size()
+			messageCount = Activity.get(params.ownerId)?.getMessageCount(params.starred, getSent)
 		} else if(section == 'folder') {
 			def getSent = null
 			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
@@ -137,7 +137,7 @@ class MessageController extends ControllerUtils {
 			render view:"/activity/${activityInstance.shortName}/show",
 				model:[messageInstanceList: messageInstanceList,
 						messageSection: params.messageSection?:'activity',
-						messageInstanceTotal: messageInstanceList?.size(),
+						messageInstanceTotal: activityInstance.getMessageCount(params.starred, getSent),
 						stepInstance:Step.get(params.stepId),
 						ownerInstance: activityInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null,
