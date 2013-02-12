@@ -192,14 +192,15 @@ class ContactController extends ControllerUtils {
 //> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {
 		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
+		if (existingContact && existingContact != contactInstance) {
+			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
+			return false
+		}
 		if (contactInstance.save()) {
 			flash.message = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
-		} else if (existingContact && existingContact != contactInstance) {
-			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
-			return false
 		}
 		return false
 	}
