@@ -10,7 +10,7 @@
 		<g:else>
 			var initialScripts = <fsms:render template="/webconnection/${Webconnection.implementations[1].type}/scripts"/>;
 			webconnectionDialog.setScripts(initialScripts);
-			toggleApiTab();
+			webconnectionDialog.toggleApiTab();
 		</g:else>
 		
 		webconnectionDialog.addValidationRules();
