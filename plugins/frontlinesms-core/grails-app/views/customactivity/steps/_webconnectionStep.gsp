@@ -1,9 +1,4 @@
-<li class='webconnection-action-step step' index='${stepId}'>
-	<div><a class='remove-command remove-step'></a></div>
-	
-	<g:hiddenField name='stepId' value="${stepId}"/>
-	<g:hiddenField name='stepType' value='webconnectionStep'/>
-	<br>
+<fsms:step type="webconnectionStep" stepId="${stepId}">
 	<div>
 		<label for="url"><g:message code="webconnection.url.label"/></label>
 		<g:textField name="url" />
@@ -46,5 +41,4 @@
 			</g:else>
 		</tbody>
 	</table>
-</li>
-
+</fsms:step>
