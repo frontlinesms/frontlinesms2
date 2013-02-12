@@ -30,9 +30,13 @@ function run_test() {
 	grep -v "^ERROR.*" $ERROR_FILE
 }
 
-pushd test/js
-TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
-popd
+if [ -z "$@" ]; then
+	pushd test/js
+	TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
+	popd
+else
+	TESTS="$@"
+fi
 echo "# Tests to run: $TESTS"
 
 for TEST in $TESTS; do
