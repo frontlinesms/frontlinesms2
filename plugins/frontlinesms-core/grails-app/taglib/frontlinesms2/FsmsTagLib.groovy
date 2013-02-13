@@ -455,6 +455,7 @@ class FsmsTagLib {
 				id:att.textAreaId)
 
 			out << '<div class="controls">'
+				out << '<div class="character-count-display">0</div><br/>'
 				def magicWandAttributes = [controller:att.controller, target:att.target, fields:att.fields, hidden:false]
 				out << magicWand(magicWandAttributes)
 			out << '</div>'

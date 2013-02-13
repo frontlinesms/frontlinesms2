@@ -115,19 +115,21 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 	margin: 0;
 	max-width: 90%;
 }
-
 .message-composer .controls {
 	display:inline-block !important;
-	max-width: 10%;
+	max-width: 20%;
 	float: right;
 	margin: 0 !important;
 	padding: 0 !important;
 }
-
-div.message-composer .controls .magicwand-container a{
-	margin: 0 !important;
+.message-composer .controls .magicwand-container a{ margin: 0 !important; }
+.message-composer .clearfix { clear: both; }
+.message-composer .character-count-display { 
+	text-align: right;
+	width: 100%;
+	display:inline-block !important;
+	margin: 4px 0;
+	font-weight: bold;
+	color: #000;
 }
-
-.message-composer .clearfix {
-	clear: both;
-}
+.message-composer .character-count-display.warning { color: #999; }
