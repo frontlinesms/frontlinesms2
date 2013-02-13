@@ -8,14 +8,14 @@
 		<g:set var="httpMethod" value="${httpMethod}"/>
 		
 		<label for="httpMethod"><g:message code="webconnection.httpMethod.get"/></label>
-		<g:radio name="httpMethod" id="" class="customactivity-field" value="GET" checked="" />
+		<g:radio name="httpMethod" id="" class="customactivity-field" value="GET" checked="${(httpMethod == 'GET')?'checked':''}" />
 
 		<label for="httpMethod"><g:message code="webconnection.httpMethod.post"/></label>
-		<g:radio name="httpMethod" id="" class="customactivity-field" value="POST" checked="" />
+		<g:radio name="httpMethod" id="" class="customactivity-field" value="POST" checked="${(httpMethod == 'POST')?'checked':''}" />
 	</div>
 
 	<h2><g:message code="webconnection.parameters"/></h2>
-	### ${requestParameters} ####
+
 	<table class="web-connection-param-table">
 		<thead>
 			<tr class="prop">

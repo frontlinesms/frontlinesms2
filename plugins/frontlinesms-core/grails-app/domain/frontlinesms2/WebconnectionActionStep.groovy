@@ -38,13 +38,14 @@ class WebconnectionActionStep extends Step {
 	}
 
 	def getRequestParameters() {
-		def params = []
+		def parameters = []
 		this.stepProperties?.each { property->
-			if((property.key =! "url") && (property.key =! "httpMethod") ) {
-				params << new RequestParameter(name:property.key, value:property.value)
+			if(!(property.key in ["url", "httpMethod"])) {
+				parameters << [name:property.key, value:property.value]
 			}
 		}
-		return params
+		println "## webconnectionStep.params # ${parameters}"
+		return parameters
 	}
 	
 	def process(Fmessage message) {
