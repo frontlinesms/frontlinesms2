@@ -97,7 +97,15 @@ var customActivityDialog = (function(){
 		var data = {};
 		container.find(fieldSelecter).each(function(index, field) {
 			field = $(field);
-			data[field.attr("name")] = field.val();
+			if((field.attr("name") != "param-name") && (field.attr("name") != "param-value")) {
+				data[field.attr("name")] = field.val();
+			}
+			//handling for webconnection step
+			if(field.val() == "webconnectionStep") {
+				var names = $.map($(field).parent().find("input[name='param-name']"), function(element, index){ return $(element).val(); });
+				var values = $.map($(field).parent().find("input[name='param-value']"), function(element, index){ return $(element).val(); });
+				$.each(names,function(index, name){ data[name] = values[index]; });
+			}
 		});
 		return data;
 	},
