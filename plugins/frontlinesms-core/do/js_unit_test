@@ -1,6 +1,15 @@
 #!/bin/bash
 ERROR_FILE=target/js_unit_test.log.err
 
+if [ -z "$@" ]; then
+	pushd test/js
+	TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
+	popd
+else
+	TESTS="$@"
+fi
+echo "# Tests to run: $TESTS"
+
 function err {
 	1>&2 echo "$@"
 }
@@ -21,23 +30,12 @@ check_npm_module_available jquery
 check_npm_module_available jsdom
 check_npm_module_available qunit
 
-set -e
-
 function run_test() {
 	TARGET=$1
 	echo "# Running tests for $TARGET..."
 	qunit -c "web-app/js/${TARGET}.js" -d `ls test/js/lib/*.js` -t "test/js/${TARGET}_tests.js" 2> $ERROR_FILE
 	grep -v "^ERROR.*" $ERROR_FILE
 }
-
-if [ -z "$@" ]; then
-	pushd test/js
-	TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
-	popd
-else
-	TESTS="$@"
-fi
-echo "# Tests to run: $TESTS"
 
 for TEST in $TESTS; do
 	run_test $TEST
