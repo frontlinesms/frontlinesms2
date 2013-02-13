@@ -19,7 +19,7 @@ class HelpController extends ControllerUtils {
 				helpText = markdownFile.text
 			}
 		}
-		if(!helpText) helpText = "This help file is not yet available, sorry."
+		if(!helpText) helpText = g.message(code:"help.notfound")
 		render text:helpText.markdownToHtml()
 	}
 	def updateShowNewFeatures() {
