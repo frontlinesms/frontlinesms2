@@ -14,13 +14,24 @@ class HelpController extends ControllerUtils {
 	def section() {
 		def helpText
 		if(params.helpSection) {
-			// FIXME this is open to injection attacks
+			def suppliedPluginName = params.helpSection.split('/')[0]
+			// make sure that this is restricted to configured plugins
 			def pluginManager = PluginManagerHolder.pluginManager
 			def plugin = pluginManager.allPlugins.find { plugin ->
-				plugin.name.startsWith("frontlinesmsCore")
+				println "checking::: $plugin ::: ${suppliedPluginName == 'frontlinesms-core' && plugin.name.startsWith('frontlinesmsCore')}"
+				suppliedPluginName == 'frontlinesms-core' && plugin.name.startsWith('frontlinesmsCore') || 
+						plugin.name == suppliedPluginName
 			}
-			def pluginDir = plugin.descriptor.file.parentFile
-			def markdownFile = new File("$pluginDir/web-app/help/" + params.helpSection + ".txt")
+			println "plugin::: ${plugin.descriptor}"
+			def pluginDir = plugin.descriptor?.file?.parentFile
+			// FIXME this is open to injection attacks
+			def markdownFile
+			if(pluginDir) {
+				markdownFile = new File(pluginDir, "web-app/help/${params.helpSection}.txt")
+			} else {
+				markdownFile = new File("web-app/help/${params.helpSection}.txt")
+			}
+			println "markdownFile::: $markdownFile"
 			if (markdownFile.canRead()) {
 				helpText = markdownFile.text
 			}
@@ -37,7 +48,7 @@ class HelpController extends ControllerUtils {
 	def newfeatures() {
 		appSettingsService['newfeatures.popup.show.immediately'] = false
 		appSettingsService.persist()
-		params.helpSection = 'core/features/new'
+		params.helpSection = 'frontlinesms-core/features/new'
 		section()
 	}
 }
