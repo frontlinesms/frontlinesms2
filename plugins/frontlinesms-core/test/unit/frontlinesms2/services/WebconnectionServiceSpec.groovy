@@ -53,7 +53,7 @@ class WebconnectionServiceSpec extends Specification {
 			def controller = [request:[:], render: { renderedArgs = it }]
 			controller.request = [JSON:requestBody]
 		when:
-			def responseBody = service.apiProcess(webcon, controller)
+			service.apiProcess(webcon, controller)
 		then:
 			renderedArgs.status == 401
 			renderedArgs.text == expectedResponse
@@ -77,7 +77,7 @@ class WebconnectionServiceSpec extends Specification {
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
 		when:
-			def responseBody = service.apiProcess(webcon, controller)
+			service.apiProcess(webcon, controller)
 		then:
 			renderedArgs.status == 400
 			renderedArgs.text == expectedResponse
