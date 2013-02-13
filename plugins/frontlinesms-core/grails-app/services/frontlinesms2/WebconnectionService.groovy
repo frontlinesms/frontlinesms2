@@ -7,7 +7,6 @@ import grails.converters.JSON
 
 import frontlinesms2.api.*
 
-
 class WebconnectionService {
 	def camelContext
 	def i18nUtilService
