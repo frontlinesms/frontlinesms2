@@ -447,9 +447,19 @@ class FsmsTagLib {
 		out << '<div class="message-composer">'
 			//<fsms:messageComposer name="myMessage" placeholder="message.compose.prompt"/>
 			def placeholder = g.message(code:att.placeholder)
-			out << g.textArea(name:att.name, value:att.value, placeholder:placeholder, rows:att.rows?:"3")
-			def magicWandAttributes = [controller:att.controller, target:att.target, fields:att.fields, hidden:false]
-			out << magicWand(magicWandAttributes)
+			out << g.textArea(
+				name:att.name,
+				value:att.value,
+				placeholder:placeholder,
+				rows:att.rows?:"3",
+				id:att.textAreaId)
+
+			out << '<div class="controls">'
+				def magicWandAttributes = [controller:att.controller, target:att.target, fields:att.fields, hidden:false]
+				out << magicWand(magicWandAttributes)
+			out << '</div>'
+			out << '<div class="clearfix"></div>'
+
 		out << '</div>'
 	}
 
