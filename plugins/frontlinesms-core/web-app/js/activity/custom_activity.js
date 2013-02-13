@@ -48,7 +48,9 @@ var customActivityDialog = (function(){
 			errorContainer: ".error-panel",
 			rules: {
 				autoreplyText: { required:true },
-				name: { required:true }
+				name: { required:true },
+				url: { required :true },
+				'param-name' : { required : true }
 			},
 			errorPlacement: function(error, element){
 				$(".error-panel").html(error);
@@ -69,6 +71,14 @@ var customActivityDialog = (function(){
 			});
 
 			$.each($("select[name='group']"), function(index, element) {
+				valid = valid && validator.element($(element));
+			});
+
+			$.each($("input[name='url']"), function(index, element) {
+				valid = valid && validator.element($(element));
+			});
+
+			$.each($("input[name='param-name']"), function(index, element) {
 				valid = valid && validator.element($(element));
 			});
 
