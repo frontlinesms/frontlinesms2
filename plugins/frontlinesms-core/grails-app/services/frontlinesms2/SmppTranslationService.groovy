@@ -5,21 +5,25 @@ import org.apache.camel.Exchange
 
 class SmppTranslationService implements Processor {
 	void process(Exchange exchange) {
-		println "ENTRY"
 		def log = { t->
 			println "SmppTranslationService.process ${t}"
 		}
-		println("exchange ${exchange}")
+		log "ENTRY"
+		log ("exchange ${exchange}")
 		def i = exchange.in
-		println("in: ${i}")
-		println("in.headers: ${i.headers}")
-		println("in.getHeaders: ${i.getHeaders()}")
+		log ("in: ${i}")
+		log ("in.headers: ${i.headers}")
+		log ("in.body: ${i.body}")
+		log ("in.getHeaders: ${i.getHeaders()}")
 		
-		if(i.headers['CamelSmppSourceAddr']) {
+		//TODO allow messages is source is set
+		//if(i.headers['CamelSmppSourceAddr']) {
+		if(true) {
 			Fmessage message = new Fmessage(inbound:true)
 			def messageBody = i.body
-			def messageSource = i.headers['CamelSmppSourceAddr']
-			def messageDate = i.headers['CamelSmppDoneDate']
+			log "###### If the Source and Date are not available ## Fake ones will be set +999999999 and 1306142323 ######"
+			def messageSource = i.headers['CamelSmppSourceAddr']?:'+999999999'
+			def messageDate = i.headers['CamelSmppDoneDate']?:'1306142323'
 			
 			message.src = messageSource
 			message.text = messageBody
@@ -30,9 +34,8 @@ class SmppTranslationService implements Processor {
 			log "message sent on ${message.date}"
 
 
-			exchange.out.body = message
+			exchange.in.body = message
 			log "IN::BODY ${exchange.in.body}"
-			log "OUT::BODY ${exchange.out.body}"
 		} else {
 			exchange.setProperty(Exchange.ROUTE_STOP, Boolean.TRUE);
 		}

@@ -67,10 +67,10 @@ class SmppFconnection extends Fconnection {
 	}
 
 	private getSendingUrl(){
-		return "smpp://${this.username}@${this.url}:${this.port}?password=${this.password}&enquireLinkTimer=3000&transactionTimer=5000&systemType=producer"
+		return "smpp://${this.username}@${this.url}:${this.port}?password=${this.password}&enquireLinkTimer=30000&transactionTimer=50000&systemType=producer"
 	}
 
 	private getReceivingUrl(){
-		return "smpp://${this.username}@${this.url}:${this.port}?password=${this.password}&enquireLinkTimer=3000&transactionTimer=5000&systemType=consumer"
+		return "smpp://${this.username}@${this.url}:${this.port}?password=${this.password}&enquireLinkTimer=30000&transactionTimer=50000&systemType=consumer"
 	}
 }

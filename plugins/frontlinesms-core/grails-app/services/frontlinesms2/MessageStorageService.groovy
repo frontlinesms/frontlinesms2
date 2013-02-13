@@ -5,6 +5,8 @@ import org.apache.camel.Processor
 
 class MessageStorageService implements Processor {
 	public void process(Exchange ex) {
+		def log = { println "MessageStorageService.process() : $it" }
+		log "headers # $ex.in.headers"
 		def message = ex.in.body
 		assert message instanceof Fmessage
 		message = message.id ? Fmessage.findById(message.id) : message
