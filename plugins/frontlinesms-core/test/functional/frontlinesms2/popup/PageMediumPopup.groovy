@@ -315,7 +315,7 @@ class WebconnectionRequestFormatTab extends geb.Module {
 		get { $("input[value='GET']") }
 		url { $("input#url") }
 		addParam { $('a.btn.addNew') }
-		parameters { moduleList WebconnectionParam, $('#web-connection-param-table tbody tr') }
+		parameters { moduleList WebconnectionParam, $('.web-connection-param-table tbody tr') }
 	}
 }
 

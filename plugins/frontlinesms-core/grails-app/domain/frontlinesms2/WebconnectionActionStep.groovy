@@ -18,7 +18,7 @@ class WebconnectionActionStep extends Step {
 	}
 
 	Map getConfig() {
-		[stepId:id, httpMethod:httpMethod, urlEncode:url, params:params]
+		[stepId:id, httpMethod:getHttpMethod(), urlEncode:getUrl(), requestParameters:getRequestParameters()]
 	}
 
 	def getHttpMethod() {
@@ -37,10 +37,10 @@ class WebconnectionActionStep extends Step {
 		setPropertyValue("url", url)
 	}
 
-	def getParams() {
+	def getRequestParameters() {
 		def params = []
 		this.stepProperties?.each { property->
-			if((property.key =! "url") && (property.key =! "method") ) {
+			if((property.key =! "url") && (property.key =! "httpMethod") ) {
 				params << new RequestParameter(name:property.key, value:property.value)
 			}
 		}

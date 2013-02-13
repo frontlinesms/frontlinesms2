@@ -56,7 +56,7 @@
 			$(list).trigger("keyup");
 		}
 
-		var addNewParam = function() {
+		var addNewParam = function(tableParent) {
 			if($('.web-connection-parameter:hidden').length === 1) {
 					$('.web-connection-parameter').show();
 					$('.web-connection-parameter').removeClass("disabled");
@@ -74,7 +74,7 @@
 			newRow.find('input.param-name').val("");
 			newRow.find('input.param-value').val("");
 			newRow.find('.remove-command').show();
-			$('#web-connection-param-table tbody').append(newRow);
+			$(tableParent).find("tbody").append(newRow);
 			magicwand.init(newRow.find('select[id^="magicwand-select"]'));
 			magicwand.reset(template.find("select"));
 		}

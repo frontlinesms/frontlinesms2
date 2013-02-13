@@ -445,6 +445,11 @@ class CoreBootStrap {
 	private def dev_initCustomActivities() {
 		if(!bootstrapData) return
 
+		def uploadStep = new WebconnectionActionStep()
+			.addToStepProperties(new StepProperty(key:'url', value:'http://frontlinesms.com'))
+			.addToStepProperties(new StepProperty(key:'httpMethod', value:'GET'))
+			.addToStepProperties(new StepProperty(key:'myNumber', value:'23123123'))
+			.addToStepProperties(new StepProperty(key:'myMessage', value:'i will upload forever'))
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
 		def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
 		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:'autoreplyText', value:'reply to you all'))
@@ -452,6 +457,7 @@ class CoreBootStrap {
 				.addToSteps(joinStep)
 				.addToSteps(leaveStep)
 				.addToSteps(replyStep)
+				.addToSteps(uploadStep)
 				.addToKeywords(value:"CUSTOM")
 				.save(failOnError:true, flush:true)
 	}
