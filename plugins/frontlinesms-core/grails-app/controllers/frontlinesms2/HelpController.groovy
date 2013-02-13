@@ -2,6 +2,7 @@ package frontlinesms2
 
 import frontlinesms2.*
 import grails.converters.JSON
+import org.codehaus.groovy.grails.plugins.PluginManagerHolder
 
 class HelpController extends ControllerUtils {
 	def appSettingsService
@@ -14,7 +15,12 @@ class HelpController extends ControllerUtils {
 		def helpText
 		if(params.helpSection) {
 			// FIXME this is open to injection attacks
-			def markdownFile = new File("web-app/help/" + params.helpSection + ".txt")
+			def pluginManager = PluginManagerHolder.pluginManager
+			def plugin = pluginManager.allPlugins.find { plugin ->
+				plugin.name.startsWith("frontlinesmsCore")
+			}
+			def pluginDir = plugin.descriptor.file.parentFile
+			def markdownFile = new File("$pluginDir/web-app/help/" + params.helpSection + ".txt")
 			if (markdownFile.canRead()) {
 				helpText = markdownFile.text
 			}
