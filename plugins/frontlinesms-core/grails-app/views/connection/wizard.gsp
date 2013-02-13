@@ -68,7 +68,7 @@ fconnection.setType = function(connectionType) {
 function initializePopup() {
 	fconnection.validator();
 	<g:if test="${!fconnectionInstance}">
-		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
+		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: Fconnection.implementations[0].shortName}");
 	</g:if>
 	
 	fconnection.init();
