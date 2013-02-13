@@ -6,7 +6,7 @@ def unfiltered = '<unfiltered>' + sin.text + '</unfiltered>'
 
 def slurp = new XmlParser().parseText(unfiltered)
 def suites = slurp.testsuites
-suites.retainAll { suites.lastIndexOf(it) == suites.size() - 1 }
+suites = suites? [suites[-1]]: []
 
 Node root = new Node(null, 'testsuites')
 suites.each { testsuites ->
