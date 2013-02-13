@@ -99,7 +99,7 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 
 .message-composer {
 	border: 1px solid rgb(187, 187, 187);
-	padding: 0;
+	padding: 5px;
 	margin: 10px 0;
 }
 .message-composer.focus {
@@ -120,6 +120,8 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 	display:inline-block !important;
 	max-width: 10%;
 	float: right;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 div.message-composer .controls .magicwand-container a{
