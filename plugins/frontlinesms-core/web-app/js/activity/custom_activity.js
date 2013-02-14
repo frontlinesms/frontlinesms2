@@ -22,6 +22,9 @@ var custom_activity = (function() {
 		widths = titles.map(function() { return $(this).width(); });
 		maxWidth = Math.max.apply(null, widths.get());
 		titles.map(function() { $(this).width(maxWidth); });
+		$.each($('.message-composer'), function(index, value) {
+			messageComposerUtils.updateCharacterCount($(value));	
+		});
 	},
 	init = function() {
 		$(CONFIG_CONTAINER).sortable();
@@ -97,7 +100,7 @@ var customActivityDialog = (function(){
 
 	setJsonToSend = function() {
 		var data = $("li.step").map(function(index, element) {
-			return getStepProperties("select.customactivity-field,input.customactivity-field,textarea.customactivity-field",
+			return getStepProperties("select.customactivity-field,input.customactivity-field,.message-composer textarea",
 					$(element));
 		}).get();
 		$("#jsonToSubmit").val(JSON.stringify(data));

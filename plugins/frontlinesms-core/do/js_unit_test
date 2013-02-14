@@ -1,4 +1,6 @@
 #!/bin/bash
+ERROR_FILE=target/js_unit_test.log.err
+
 function err {
 	1>&2 echo "$@"
 }
@@ -24,7 +26,8 @@ set -e
 function run_test() {
 	TARGET=$1
 	echo "# Running tests for $TARGET..."
-	qunit -c "web-app/js/${TARGET}.js" -d `ls test/js/lib/*.js` -t "test/js/${TARGET}_tests.js"
+	qunit -c "web-app/js/${TARGET}.js" -d `ls test/js/lib/*.js` -t "test/js/${TARGET}_tests.js" 2> $ERROR_FILE
+	grep -v "^ERROR.*" $ERROR_FILE
 }
 
 pushd test/js

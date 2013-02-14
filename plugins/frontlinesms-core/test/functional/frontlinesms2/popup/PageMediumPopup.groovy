@@ -584,7 +584,7 @@ class AutoforwardSummaryTab extends geb.Module {
 
 class CustomActivityCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("custom activity") || popupTitle.contains("edit activity") || popupTitle.contains("customactivity")
+		popupTitle.contains("custom activity") || popupTitle.contains("edit")
 	}
 	static content = {
 		keyword { module ConfigureCustomKeywordTab}
@@ -608,10 +608,10 @@ class ConfigureCustomKeywordTab extends geb.Module {
 
 class ConfigureCustomActivityTab extends geb.Module {
 	static base = { $('div#tabs-2')}
-	static content = {
-		stepButton { buttonText->
-			$("#add-${buttonText}-action-step")
-		}
+	static content = {		
+		joinButton { $("a", text:"Add sender to group") }
+		leaveButton { $("a", text:"Remove sender from group") }
+		replyButton { $("a", text:"Autoreply") }
 		stepsContainer { $("#custom-activity-actions-container") }
 		steps { $(".step") }
 	}

@@ -1,5 +1,5 @@
 <fsms:step type="reply" stepId="${stepId}">
-	<g:textArea id="autoreplyText${stepId}${random}" name="autoreplyText" rows="3" value="${autoreplyText}" class="customactivity-field"/>
-	<fsms:magicWand target="autoreplyText${stepId}${random}" controller="autoreply" hidden="true" instance="${activityInstanceToEdit?:null}"/>
+	<div class='input'>
+		<fsms:messageComposer name="autoreplyText" rows="3" textAreaId="autoreplyText${stepId}${random}" target="autoreplyText${stepId}${random}" controller="autoreply" value="${autoreplyText}"/>
+	</div>
 </fsms:step>
-

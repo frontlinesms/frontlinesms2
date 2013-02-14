@@ -464,6 +464,7 @@ class CoreBootStrap {
 	
 	private def dev_initLogEntries() {
 		if(!bootstrapData) return
+
 		def now = new Date()
 		[new LogEntry(date:now, content: "entry1"),
 				new LogEntry(date:now-2, content: "entry2"),

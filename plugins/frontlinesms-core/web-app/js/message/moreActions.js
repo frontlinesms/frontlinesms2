@@ -79,14 +79,19 @@ var more_actions = (function() {
 	},
 	init = function() {
 		$('.more-actions').bind('change', function() {
-			if ($(this).find('option:selected').val() === 'delete') {
+			var selectedValue = $(this).find('option:selected').val();
+			if (selectedValue === 'delete') {
 				deleteAction();
-			} else if($(this).find('option:selected').val() === 'rename') {
+			} else if(selectedValue === 'rename') {
 				renameAction();
-			} else if($(this).find('option:selected').val() === 'edit') {
+			} else if(selectedValue === 'edit') {
 				editAction();
-			} else if($(this).find('option:selected').val() === 'export') {
+			} else if(selectedValue === 'export') {
 				exportAction();
+			} else {
+				activityType = $("#activityType").val();
+				ownerId = $("#ownerId").val();
+				window.location = url_root + activityType + '/' + selectedValue + '?ownerId=' + ownerId;
 			}
 			selectmenuTools.snapback($('#more-actions'));
 		});

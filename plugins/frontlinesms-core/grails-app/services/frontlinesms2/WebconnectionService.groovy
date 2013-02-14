@@ -65,7 +65,7 @@ class WebconnectionService {
 		}
 		return val
 	}
-
+	
 	def preProcess(Exchange x) {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
@@ -119,11 +119,12 @@ class WebconnectionService {
 		sendMessageAndHeaders("seda:activity-${activityOrStep.shortName}-${activityOrStep.id}", message, headers)
 	}
 
-	def retryFailed(Webconnection c) {
-		Fmessage.findAllByMessageOwnerAndOwnerDetail(c, Webconnection.OWNERDETAIL_FAILED).each {
-			send(it)
-		}
-	}
+ 	def retryFailed(Webconnection c) {
+ 		Fmessage.findAllByMessageOwner(c).each {
+ 			if(it.ownerDetail == Webconnection.OWNERDETAIL_FAILED)
+ 				send(it)
+ 		}
+ 	}
 
 	def saveInstance(Webconnection webconnectionInstance, params) {
 		webconnectionInstance.keywords?.clear()
@@ -167,6 +168,12 @@ class WebconnectionService {
 	def getStatusOf(Webconnection w) {
 		camelContext.routes.any { it.id ==~ /.*activity-${w.shortName}-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
 	}
+
+ 	private changeMessageOwnerDetail(Fmessage message, String s) {
+ 		message.setMessageDetail(message.messageOwner, s)
+ 		message.save(failOnError:true, flush:true)
+ 		println "Changing Status ${message.ownerDetail}"
+ 	}
 
 	def apiProcess(webcon, controller) {
 		controller.render(generateApiResponse(webcon, controller))

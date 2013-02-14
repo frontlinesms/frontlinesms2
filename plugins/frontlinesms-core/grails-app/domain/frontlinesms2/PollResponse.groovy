@@ -29,7 +29,7 @@ class PollResponse implements Comparable {
 	List getMessages() {
 		if(poll.messages == null) return []
 		if(isUnknown()) {
-			return poll.messages.findAll { (it.ownerDetail == Poll.KEY_UNKNOWN) && it.inbound }.asList()
+			return poll.messages.findAll { it.ownerDetail == Poll.KEY_UNKNOWN && it.inbound }.asList()
 		}
 		return poll.messages.findAll { it.ownerDetail == "$id" && it.inbound }.asList()
 	}

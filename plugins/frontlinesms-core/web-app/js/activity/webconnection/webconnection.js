@@ -1,6 +1,6 @@
 var webconnectionDialog = (function () {
 	var pollInterval, _updateConfirmationScreen, validationMessageGenerator, _showTestRouteBtn, 
-			_setType, _handlers, _testRouteStatus, _checkRouteStatus, generateMessages;
+			_setType, _handlers, _testRouteStatus, _checkRouteStatus, generateMessages, _toggleApiTab;
 	_updateConfirmationScreen = function () {};
 	_setType = function(type) {
 		$.getJSON(url_root + "webconnection/" + type + "/config", function(data) {
@@ -104,6 +104,16 @@ var webconnectionDialog = (function () {
 			displayErrors(response);
 		}
 	};
+
+	_toggleApiTab = function() {
+		$("input[name=webconnectionType]").live('change', function() {
+			if($(this).val() === 'generic') {
+				mediumPopup.enableTab('webconnection-api');
+			} else {
+				mediumPopup.disableTab('webconnection-api');
+			}
+		});
+	};
 	
 	generateMessages = function(fieldsAndRules) {
 		var i, rules, field, messageMap = {};
@@ -169,21 +179,8 @@ var webconnectionDialog = (function () {
 		showTestRouteBtn:_showTestRouteBtn,
 		checkRouteStatus:_checkRouteStatus,
 		testRouteStatus:_testRouteStatus,
+		toggleApiTab:_toggleApiTab,
 		___end___:null
 	};
 }());
-
-function setPara(selecter, text) {
-	$(selecter).html("<p>" + text + "</p>");
-}
-
-function toggleApiTab() {
-	$("input[name=webconnectionType]").live('change', function() {
-		if($(this).val() === 'generic') {
-			mediumPopup.enableTab('webconnection-api');
-		} else {
-			mediumPopup.disableTab('webconnection-api');
-		}
-	});
-}
 

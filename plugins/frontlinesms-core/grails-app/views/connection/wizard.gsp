@@ -21,10 +21,12 @@ fconnection.getType = function() {
 };
 
 fconnection.setType = function(connectionType) {
-	if(!$("input[name=connectionType]:checked")) {
+	if(!$("input[name=connectionType]:checked").size()) {
 		$("input[name=connectionType]").each(function() {
 			var e = $(this);
-			e.attr("checked", e.val() == connectionType);
+			if (e.val() == connectionType) {
+				e.attr("checked", "checked");
+			}
 		});
 	}
 	<g:each in="${Fconnection.implementations*.shortName}">
@@ -68,7 +70,7 @@ fconnection.setType = function(connectionType) {
 function initializePopup() {
 	fconnection.validator();
 	<g:if test="${!fconnectionInstance}">
-		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
+		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: Fconnection.implementations[0].shortName}");
 	</g:if>
 	
 	fconnection.init();

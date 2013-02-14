@@ -39,6 +39,10 @@ abstract class Activity extends MessageOwner {
 	def getActivityMessages(getOnlyStarred=false, getSent=null, stepId=null, params=null) {
 		Fmessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
 	}
+
+	def getMessageCount(getOnlyStarred=false, getSent=null) {
+		Fmessage.owned(this, getOnlyStarred, getSent).count()
+	}
 	
 	def getLiveMessageCount() {
 		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)

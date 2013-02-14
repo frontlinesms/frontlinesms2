@@ -11,6 +11,7 @@ import grails.buildtestdata.mixin.Build
 
 @TestFor(WebconnectionService)
 @Build([Group, SmartGroup, Contact, Fmessage])
+@Mock([Fmessage])
 class WebconnectionServiceSpec extends Specification {
 	def requestedId
 	def mockConnection
@@ -37,6 +38,9 @@ class WebconnectionServiceSpec extends Specification {
 		given:
 			service.metaClass.private.changeMessageOwnerDetail = {Fmessage a, String b -> b}
 			def m = Fmessage.build(text:"testing", src:"23423")
+			def m = Mock(Fmessage)
+			m.messageOwner >> mockConnection
+			Fmessage.metaClass.static.get = { Serializable id -> return m }
 			def x = mockExchange(null, ['webconnection-id':'123','fmessage-id':m.id])
 		when:
 			service.postProcess(x)

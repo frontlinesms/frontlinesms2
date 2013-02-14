@@ -40,7 +40,7 @@ function goToSection() {
 			// action URLs TODO long-term solution is to fix help generation/iframe it
 			$("#help-content img").each(function(i, e) {
 				e = $(e);
-				e.attr("src", url_root + "help/" + e.attr("src"));
+				e.attr("src", url_root + e.attr("src"));
 			});
 		}
 	});

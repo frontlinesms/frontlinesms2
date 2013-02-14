@@ -113,7 +113,6 @@ class PollSpec extends Specification {
 		given:
 			Fmessage m = new Fmessage()
 			Poll p = new Poll()
-					.addToMessages(m)
 		when:
 			p.removeFromMessages(m)
 		then:
