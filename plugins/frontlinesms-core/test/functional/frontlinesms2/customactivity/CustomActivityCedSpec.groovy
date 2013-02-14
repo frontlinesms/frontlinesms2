@@ -77,7 +77,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			next.click()
 			configure.replyButton.click()
 			configure.joinButton.click()
-			configure.steps[0].jquery.find("#autoreplyText").value("Sample Text")
+			configure.steps[0].jquery.find("textarea[name=autoreplyText]").value("Sample Text")
 			configure.steps[1].jquery.find("#group").value(Group.findByName("Camping").id)
 			next.click()
 			confirm.name.value("Wewe wacha hakuna haja")
@@ -107,7 +107,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			configure.replyButton.click()
 			configure.joinButton.click()
-			configure.steps[2].jquery.find("#autoreplyText").value("Sample Text")
+			configure.steps[2].jquery.find("textarea[name=autoreplyText]").value("Sample Text")
 			configure.steps[3].jquery.find("#group").value(Group.findByName("Camping").id)
 			next.click()
 			confirm.name.value("ni hivyo hivyo tu")
