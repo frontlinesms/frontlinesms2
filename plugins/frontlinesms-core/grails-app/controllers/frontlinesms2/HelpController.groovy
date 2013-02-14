@@ -18,11 +18,9 @@ class HelpController extends ControllerUtils {
 			// make sure that this is restricted to configured plugins
 			def pluginManager = PluginManagerHolder.pluginManager
 			def plugin = pluginManager.allPlugins.find { plugin ->
-				println "checking::: $plugin ::: ${suppliedPluginName == 'frontlinesms-core' && plugin.name.startsWith('frontlinesmsCore')}"
 				suppliedPluginName == 'frontlinesms-core' && plugin.name.startsWith('frontlinesmsCore') || 
 						plugin.name == suppliedPluginName
 			}
-			println "plugin::: ${plugin.descriptor}"
 			def pluginDir = plugin.descriptor?.file?.parentFile
 			// FIXME this is open to injection attacks
 			def markdownFile
