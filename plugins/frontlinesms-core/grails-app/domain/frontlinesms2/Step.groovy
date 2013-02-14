@@ -3,10 +3,14 @@ package frontlinesms2
 import grails.converters.JSON
 
 abstract class Step {
+
+	def i18nUtilService
+	
 	static belongsTo = [activity: CustomActivity]
 	static hasMany = [stepProperties: StepProperty]
 	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
 
+	static transients = ['i18nUtilService']
 	static configFields = [:]
 
 	static constraints = {
@@ -32,4 +36,7 @@ abstract class Step {
 	String getJsonConfig() {
 		return getConfig() as JSON
 	}
+
+	def activate() {}
+	def deactivate() {}
 }

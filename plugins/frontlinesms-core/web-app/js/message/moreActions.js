@@ -8,7 +8,10 @@ var more_actions = (function() {
 		// used to determine the controller to use, so we should
 		// use a specific one when it is available, but otherwise
 		// use standard activity.
-		return $("#activityType").val() || $("#messageSection").val();
+		return $("#messageSection").val();
+	},
+	getActivityType = function() {
+		return $("#activityType").val()
 	},
 	buildUrl = function(action) {
 		return url_root + getController() + "/" + action;
@@ -19,7 +22,7 @@ var more_actions = (function() {
 			url: buildUrl("confirmDelete"),
 			data: { id:getOwnerId() },
 			success: function(data) {
-				launchSmallPopup(i18n("smallpopup.fmessage.delete.title", getController()), data, i18n("action.delete")); }
+				launchSmallPopup(i18n("smallpopup.fmessage.delete.title", (getActivityType() || getController())), data, i18n("action.delete")); }
 		});
 	},
 	exportAction = function() {
@@ -50,7 +53,7 @@ var more_actions = (function() {
 	},
 	editAction = function() {
 		var title;
-		title = i18n("wizard.fmessage.edit.title", getController());
+		title = i18n("wizard.fmessage.edit.title", (getActivityType() || getController()));
 		$.ajax({
 			type:'GET',
 			url: buildUrl("edit"),
@@ -70,26 +73,31 @@ var more_actions = (function() {
 			beforeSend: function() { showThinking(); },
 			success: function(data) {
 				hideThinking();
-				launchSmallPopup(i18n("smallpopup.fmessage.rename.title", getController()), data, i18n("action.rename"), 'validate');
+				launchSmallPopup(i18n("smallpopup.fmessage.rename.title", (getActivityType() || getController())), data, i18n("action.rename"), 'validate');
 			}
 		});
 	},
 	init = function() {
 		$('.more-actions').bind('change', function() {
-			if ($(this).find('option:selected').val() === 'delete') {
+			var selectedValue = $(this).find('option:selected').val();
+			if (selectedValue === 'delete') {
 				deleteAction();
-			} else if($(this).find('option:selected').val() === 'rename') {
+			} else if(selectedValue === 'rename') {
 				renameAction();
-			} else if($(this).find('option:selected').val() === 'edit') {
+			} else if(selectedValue === 'edit') {
 				editAction();
-			} else if($(this).find('option:selected').val() === 'export') {
+			} else if(selectedValue === 'export') {
 				exportAction();
+			} else {
+				activityType = $("#activityType").val();
+				ownerId = $("#ownerId").val();
+				window.location = url_root + activityType + '/' + selectedValue + '?ownerId=' + ownerId;
 			}
 			selectmenuTools.snapback($('#more-actions'));
 		});
 		$("#export").click(exportAction);
 	};
-	return { init:init };
+	return { init:init, getOwnerId:getOwnerId };
 }());
 
 $(document).ready(function() {

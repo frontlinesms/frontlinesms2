@@ -10,6 +10,7 @@ modules = {
 		resource url:[dir:'css', file:'contact.css']
 		resource url:[dir:'css', file:'archive.css']
 		resource url:[dir:'css', file:'activity.css']
+		resource url:[dir:'css', file:"activity/customactivity.css"]
 		resource url:[dir:'css', file:"activity/webconnection.css"]
 		resource url:[dir:'css', file:'search.css']
 		resource url:[dir:'css', file:'settings.css']
@@ -52,6 +53,8 @@ modules = {
 		resource url:[dir:'js', file:'selectmenuTools.js'], disposition:'head'
 		resource url:[dir:'js', file:"activity/popupCustomValidation.js"], disposition:'head'
 		resource url:[dir:'js', file:'/settings/connectionTooltips.js']
+		resource url:[dir:'js', file:'jquery.autosize-min.js']
+		resource url:[dir:'js', file:'message_composer.js']
 		
 		resource url:[dir:'js', file:"guiders-1.2.8.js"], disposition:'head'
 		resource url:[dir:'css', file:"guiders-1.2.8.css"], disposition:'head'

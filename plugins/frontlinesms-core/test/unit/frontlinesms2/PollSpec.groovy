@@ -6,7 +6,7 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Poll)
-@Mock(PollResponse)
+@Mock([PollResponse, MessageDetail])
 @Build(Fmessage)
 class PollSpec extends Specification {
 	/** some responses that should pass validation */
@@ -90,6 +90,7 @@ class PollSpec extends Specification {
 				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
 			}) >> replyMessage
 
+
 			def inMessage = Fmessage.build(text:"message text", src:TEST_NUMBER)
 		when:
 			poll.processKeyword(inMessage, new Keyword(value:'test', isTopLevel:true, ownerDetail:null))
@@ -112,7 +113,6 @@ class PollSpec extends Specification {
 		given:
 			Fmessage m = new Fmessage()
 			Poll p = new Poll()
-					.addToMessages(m)
 		when:
 			p.removeFromMessages(m)
 		then:

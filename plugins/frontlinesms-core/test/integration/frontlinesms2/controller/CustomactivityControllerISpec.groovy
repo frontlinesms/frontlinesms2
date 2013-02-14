@@ -7,7 +7,7 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 
 	def "can create a new custom activity"(){grails.plugin.spock.IntegrationSpec
 		given:
-			controller.params.jsonToSubmit = """[{"stepId":"","stepType":"join", "stepProperty": [{"key":"group", "value":"5"}] }, {"stepId":"","stepType":"leave", "stepProperty": [{"key":"group", "value":"5"}] }]"""
+			controller.params.jsonToSubmit = """[{"stepId":"","stepType":"join", "group":"5"}, {"stepId":"","stepType":"leave", "group":"5" }]"""
 			controller.params.name = "test save"
 			controller.params.keywords = "test, custom"
 			controller.params.sorting = "enabled"
@@ -34,7 +34,7 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 			controller.params.keywords = "new, just, yeah"
 			controller.params.sorting = "enabled"
 			controller.params.ownerId = a.id
-			controller.params.jsonToSubmit = """[{"stepId":"","stepType":"join", "stepProperty": [{"key":"group", "value":"5"}] } ]"""		
+			controller.params.jsonToSubmit = """[{"stepId":"","stepType":"join", "group":"5"}]""" 
 		when:
 			controller.save()
 		then:

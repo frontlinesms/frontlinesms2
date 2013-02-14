@@ -39,6 +39,10 @@ abstract class Activity extends MessageOwner {
 	def getActivityMessages(getOnlyStarred=false, getSent=null, stepId=null, params=null) {
 		Fmessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
 	}
+
+	def getMessageCount(getOnlyStarred=false, getSent=null) {
+		Fmessage.owned(this, getOnlyStarred, getSent).count()
+	}
 	
 	def getLiveMessageCount() {
 		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
@@ -63,7 +67,11 @@ abstract class Activity extends MessageOwner {
 		this.messages*.isDeleted = false
 	}
 
-	def processKeyword(Fmessage message, Keyword match) {}
+	def processKeyword(Fmessage message, Keyword match) {
+		message.setMessageDetail(this, "")
+		this.addToMessages(message)
+		this.save(failOnError:true)
+	}
 
 	/**
 	 * Activcate this activity.  If it is already activated, this method should
@@ -72,6 +80,11 @@ abstract class Activity extends MessageOwner {
 	def activate() {}
 
 	def deactivate() {}
+
+	def move(messageInstance) {
+		messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
+		this.processKeyword(messageInstance, null)
+	}
 
 	private def logFail(c, ex) {
 		ex.printStackTrace()

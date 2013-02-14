@@ -2,10 +2,11 @@ package frontlinesms2
 
 import frontlinesms2.*
 
+// TODO TODO TODO this class needs a serious refactor as there's masses of copy.pasted code
 class SubscriptionService {
 	def messageSendService
 
-    def saveInstance(Subscription subscriptionInstance, params) {
+	def saveInstance(Subscription subscriptionInstance, params) {
 		subscriptionInstance.group = Group.get(params.subscriptionGroup)
 		if(subscriptionInstance.keywords)
 			subscriptionInstance.keywords.clear()
@@ -38,7 +39,7 @@ class SubscriptionService {
 	}
 
 	def doJoin(subscriptionOrActionStep, message) {
-		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.JOIN.toString())
+		message.setMessageDetail(subscriptionOrActionStep, Subscription.Action.JOIN.toString())
 		message.save(failOnError:true)
 		def group = subscriptionOrActionStep.group
 		def foundContact
@@ -59,7 +60,7 @@ class SubscriptionService {
 	}
 
 	def doLeave(subscriptionOrActionStep, message) {
-		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.LEAVE.toString())
+		message.setMessageDetail(subscriptionOrActionStep, Subscription.Action.LEAVE.toString())
 		message.save(failOnError:true)
 		def group = subscriptionOrActionStep.group
 		def foundContact
@@ -77,7 +78,7 @@ class SubscriptionService {
 	}
 
 	def doToggle(subscriptionOrActionStep, message) {
-		message.setMessageDetailValue(subscriptionOrActionStep, Subscription.Action.TOGGLE.toString())
+		message.setMessageDetail(subscriptionOrActionStep, Subscription.Action.TOGGLE.toString())
 		message.save(failOnError:true)
 		def group = subscriptionOrActionStep.group
 		def foundContact
@@ -126,9 +127,9 @@ class SubscriptionService {
 		if(addToActivity) {
 			subscription.addToMessages(outgoingMessage)
 			subscription.save(failOnError:true)
-		}
-		else
+		} else {
 			outgoingMessage.save(failOnError:true)
+		}
 		messageSendService.send(outgoingMessage)
 	}
 }

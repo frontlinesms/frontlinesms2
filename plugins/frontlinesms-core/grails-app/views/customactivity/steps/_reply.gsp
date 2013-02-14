@@ -1,8 +1,5 @@
-<li class='reply-action-step step' index='${stepId}'>
-	<div><a class='remove-command remove-step'></a></div>
-	<span>Reply</span>
-	<g:hiddenField name='stepId' value='${stepId}'/>
-	<g:hiddenField name='stepType' value='reply'/>
-	<g:textArea name='autoreplyText' value='${autoreplyText}'/>
-</li>
-
+<fsms:step type="reply" stepId="${stepId}">
+	<div class='input'>
+		<fsms:messageComposer name="autoreplyText" rows="3" textAreaId="autoreplyText${stepId}${random}" target="autoreplyText${stepId}${random}" controller="autoreply" value="${autoreplyText}"/>
+	</div>
+</fsms:step>

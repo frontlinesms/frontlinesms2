@@ -4,9 +4,12 @@ import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class CustomActivityService {
-	static transactional = true
-
-
+	/* TODO if you do insist on committing printlns, please make sure they are neat and make sense when
+	   reading them on the console.  E.g. include the class and method name at the start, make them precise.
+	   Things like the following are not helpful:
+			println "<<<>>>"
+			println "$it"
+	 */
 	def saveInstance(customActivity, params) {
 		println "customActivity Params ::${params}"
 		def steps = new JSONArray(params.jsonToSubmit)
@@ -15,12 +18,13 @@ class CustomActivityService {
 		customActivity.keywords?.clear()
 		println "removing existing steps if any"
 		customActivity.steps?.clear()
-		
+
 		getSteps(steps).each {
 			customActivity.addToSteps(it)
 		}
 
 		println "##Just about to save"
+		// FIXME why are there multiple saves here?
 		customActivity.save(flush:true, failOnError:true)
 		println "##Just saved round 1"
 
@@ -37,7 +41,8 @@ class CustomActivityService {
 		}
 
 		println "# 2 ######### Saving Round 2 # $customActivity.errors.allErrors"
-		customActivity.save(failOnError:true,flush:true)
+		// FIXME why are there multiple saves here?
+		customActivity.save(failOnError:true, flush:true)
 	}
 
 	private getSteps(steps) {
@@ -49,11 +54,14 @@ class CustomActivityService {
 			
 			def stepInstance = Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
 			stepInstance.save()
-			step.stepProperties.each { stepProperty ->
-				def stepProp = new StepProperty(stepProperty)
-				println "$stepProp::: ${stepProp.key}: ${stepProp.value}"
-				stepInstance.addToStepProperties(stepProp)
-				println "$stepInstance::: ${stepInstance.stepProperties}"
+			step.each { k,v ->
+				def stepProp
+				if(!(k in ["stepType", "stepId"])) {
+					stepProp = new StepProperty(key:k, value:v)
+					println "$stepProp::: ${stepProp.key}: ${stepProp.value}"
+					stepInstance.addToStepProperties(stepProp)
+					println "$stepInstance::: ${stepInstance.stepProperties}"
+				}
 
 			}
 			stepInstanceList << stepInstance
