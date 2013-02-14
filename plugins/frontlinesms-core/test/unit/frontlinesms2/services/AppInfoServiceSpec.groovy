@@ -36,12 +36,12 @@ class AppInfoServiceSpec extends Specification {
 		when:
 			service.provide('a', mockController)
 		then:
-			1 * a.call(mockController)
+			1 * a.call(service.grailsApplication, mockController)
 			0 * _
 		when:
 			service.provide('b', mockController)
 		then:
-			1 * b.call(mockController)
+			1 * b.call(service.grailsApplication, mockController)
 			0 * _
 	}
 

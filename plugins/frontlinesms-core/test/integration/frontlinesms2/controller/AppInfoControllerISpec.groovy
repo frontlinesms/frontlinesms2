@@ -1,14 +1,13 @@
 package frontlinesms2.controller
 
 import frontlinesms2.*
+import grails.converters.JSON
+import org.codehaus.groovy.grails.commons.DefaultGrailsApplication
 import spock.lang.*
 
-import grails.converters.JSON
-
 class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
-	private static final String JSON_MIME_TYPE = 'application/json'
-
 	def controller
+	def mockApp
 	def service
 
 	def setup() {
@@ -20,11 +19,8 @@ class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'appInfoService should be called with request for relevant data (0 requested items)'() {
 		given:
 			def requestData = []
-			controller.request.format = JSON_MIME_TYPE
-			controller.request.JSON = (requestData as JSON).toString()
 		when:
 			def response = controller.index()
-			println response
 		then:
 			0 * _
 			JSON.parse(controller.response.contentAsString).keySet().sort() == requestData
@@ -33,11 +29,9 @@ class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'appInfoService should be called with request for relevant data (1 requested item)'() {
 		given:
 			def requestData = ['devices']
-			controller.request.format = JSON_MIME_TYPE
-			controller.request.JSON = (requestData as JSON).toString()
+			controller.params['interest[]'] = 'devices'
 		when:
 			def response = controller.index()
-			println response
 		then:
 			1 * service.provide('devices', controller)
 			0 * _
@@ -47,11 +41,9 @@ class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'appInfoService should be called with request for relevant data (2 requested items)'() {
 		given:
 			def requestData = ['devices', 'gribbles']
-			controller.request.format = JSON_MIME_TYPE
-			controller.request.JSON = (requestData as JSON).toString()
+			controller.params['interest[]'] = requestData
 		when:
 			def response = controller.index()
-			println response
 		then:
 			1 * service.provide('devices', controller)
 			1 * service.provide('gribbles', controller)

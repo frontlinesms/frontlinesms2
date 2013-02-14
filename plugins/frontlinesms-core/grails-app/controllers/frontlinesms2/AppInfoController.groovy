@@ -6,13 +6,20 @@ class AppInfoController {
 	def appInfoService
 
 	def index() {
-		render request.JSON.collectEntries { key ->
+		render getInterest().collectEntries { key ->
 			[(key):appInfoService.provide(key, this)]
 		} as JSON
 	}
 
-	private def listDetected() {
-		detectedDevices:deviceDetectionService.detected
+	private def getInterest() {
+		def interest = params.'interest[]'
+		if(!interest) {
+			return []
+		}
+		if(interest instanceof String) {
+			return [interest]
+		}
+		return interest
 	}
 }
 
