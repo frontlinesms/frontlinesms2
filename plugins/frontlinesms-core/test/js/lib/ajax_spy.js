@@ -10,12 +10,31 @@ ajax_spy = (function() {
 			return {};
 		};
 		$.ajax = processAjax;
-		$.getJSON = processAjax;
+		$.getJSON = processGetJson;
 	},
 	addResponse = function(request, response) {
 		responses.push({ rq:request, res:response });
 	},
-	processAjax = function(url, data, callback) {
+	processAjax = function(url, settings) {
+		var requestData, responseData;
+		if(typeof url !== "string") {
+			settings = url;
+		} else {
+			settings.url = url;
+		}
+
+		requestData = settings.data;
+		if(settings.processData === false && settings.contentType === "application/json") {
+			requestData = JSON.parse(requestData);
+		}
+
+		// TODO map args to jQuery.ajax args
+		// TODO attempt to match request to response
+		responseData = responseData || processResponse(defaultResponse);
+		requests.push({ url:settings.url, data:requestData, response:responseData });
+		settings.success(responseData);
+	},
+	processGetJson = function(url, data, callback) {
 		var responseData;
 		// TODO map args to jQuery.ajax args
 		// TODO attempt to match request to response
