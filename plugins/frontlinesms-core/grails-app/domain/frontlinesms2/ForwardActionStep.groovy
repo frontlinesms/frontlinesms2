@@ -65,8 +65,8 @@ class ForwardActionStep extends Step {
 		autoforwardService.doForward(this, message)
 	}
 
-	def getNiceFormat() {
-		"Forwarding with '${this.sentMessageText}'"
+	def getDescription() {
+		i18nUtilService.getMessage(code:"customactivity.${this.shortName}.description", args:[this.sentMessageText])
 	}
 
 }

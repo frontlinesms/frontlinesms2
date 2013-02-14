@@ -7,11 +7,7 @@ import frontlinesms2.*
 class CustomActivityISpec extends IntegrationSpec {
 	def "a custom activity can have one step"() {
 		given:
-<<<<<<< HEAD
-			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
-=======
 			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"football"))
->>>>>>> CORE-1104-fix
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
 			customActivity.save(flush:true, failOnError:true)
@@ -49,11 +45,7 @@ class CustomActivityISpec extends IntegrationSpec {
 
 	def "processKeyword should add the message to the CustomActivity and invoke CustomActivityService.triggerSteps"() {
 		given:
-<<<<<<< HEAD
-			def joinStep = new JoinActionStep(stepProperties:[new StepProperty(key:"group", value:"football")])
-=======
 			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"football"))
->>>>>>> CORE-1104-fix
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
 			customActivity.save(flush:true, failOnError:true)
