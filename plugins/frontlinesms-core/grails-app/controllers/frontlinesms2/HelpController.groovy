@@ -29,7 +29,6 @@ class HelpController extends ControllerUtils {
 			} else {
 				markdownFile = new File("web-app/help/${params.helpSection}.txt")
 			}
-			println "markdownFile::: $markdownFile"
 			if (markdownFile.canRead()) {
 				helpText = markdownFile.text
 			}
