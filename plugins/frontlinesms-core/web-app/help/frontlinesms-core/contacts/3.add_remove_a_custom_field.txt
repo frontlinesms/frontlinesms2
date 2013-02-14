@@ -45,5 +45,5 @@ _**Note:** This will **not** remove the custom field from the "Add more informat
 [7]: core/contacts/6.add_remove_contact_to_from_a_group
 [9]: core/contacts/5.creating_a_smart_group
 [10]: core/contacts/4.creating_a_group
-[11]: ../images/help/add_more_info.png
-[12]: ../images/help/namecustomfield.png
+[11]: images/help/add_more_info.png
+[12]: images/help/namecustomfield.png

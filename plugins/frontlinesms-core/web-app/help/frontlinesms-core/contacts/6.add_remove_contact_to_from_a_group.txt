@@ -89,9 +89,9 @@ __Group List View__
 [8]: core/messages/9.exporting
 [9]: core/contacts/3.add_remove_a_custom_field
 [10]: core/contacts/4.creating_a_group
-[11]: ../images/help/add_to_group.png
-[12]: ../images/help/multiple_add_to_group.png
-[13]: ../images/help/remove_single_contact.png
-[14]: ../images/help/contact_select.png
-[15]: ../images/help/group_dropdown.png
-[16]: ../images/help/removesinglecontact.png
+[11]: images/help/add_to_group.png
+[12]: images/help/multiple_add_to_group.png
+[13]: images/help/remove_single_contact.png
+[14]: images/help/contact_select.png
+[15]: images/help/group_dropdown.png
+[16]: images/help/removesinglecontact.png

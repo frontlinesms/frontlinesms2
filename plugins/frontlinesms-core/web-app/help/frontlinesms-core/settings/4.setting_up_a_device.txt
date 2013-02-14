@@ -53,5 +53,5 @@ If you are having trouble getting a connection set up then please click [here][3
 [6]: core/settings/6.edit_delete_connection
 [7]: core/settings/4a.intellisms
 [8]: core/settings/4b.clickatell
-[9]: ../images/help/successfully_connected.png
-[10]: ../images/help/connecting.png
+[9]: images/help/successfully_connected.png
+[10]: images/help/connecting.png

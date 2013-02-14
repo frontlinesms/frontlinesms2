@@ -25,4 +25,4 @@ There are currently six kinds of activities:
 [6]: core/activities/8.creating_an_autoforward
 [7]: ???
 [8]: ???
-[5]: ../images/help/creating_activity.png
+[5]: images/help/creating_activity.png

@@ -26,4 +26,4 @@ Your message(s) will be updated with new categories and the poll statistics will
 [3]: core/activities/6.renaming_an_activity
 [4]: core/activities/4.creating_an_announcement
 [5]: core/activities/7.exporting_an_activity
-[6]: ../images/help/manual_response.png
+[6]: images/help/manual_response.png

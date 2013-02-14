@@ -24,5 +24,5 @@ Your folder will be created and will be displayed underneath the "Folders" sub h
 [4]: core/archive/3.archiving_activities_folders
 [5]: core/activities/2.creating_an_activity
 [6]: core/messages/8.mrfd
-[7]: ../images/help/creating_folder.png
-[8]: ../images/help/folder_dialog.png
+[7]: images/help/creating_folder.png
+[8]: images/help/folder_dialog.png

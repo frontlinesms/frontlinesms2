@@ -64,9 +64,9 @@ Your Autoforward will appear under the Activities sub-heading.
 [4]: core/activities/3.creating_a_poll
 [5]: core/contacts/4.creating_a_group
 [6]: core/contacts/5.creating_a_smart_group
-[7]: ../images/help/autoforward1.png
-[8]: ../images/help/autoforward2.png
-[9]: ../images/help/autoforward3.png
-[10]: ../images/help/autoforward4.png
-[11]: ../images/help/autoforward5.png
-[12]: ../images/help/autoforward6.png
+[7]: images/help/autoforward1.png
+[8]: images/help/autoforward2.png
+[9]: images/help/autoforward3.png
+[10]: images/help/autoforward4.png
+[11]: images/help/autoforward5.png
+[12]: images/help/autoforward6.png

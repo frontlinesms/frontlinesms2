@@ -49,4 +49,4 @@ If you attach a device while FrontlineSMS is running, you may need to press the 
 [10]: core/status/1.getting_around_the_status_tab
 [11]: core/status/1.getting_around_the_status_tab
 [12]: core/status/1.getting_around_the_status_tab
-[13]: ../images/help/status_overview.png
+[13]: images/help/status_overview.png

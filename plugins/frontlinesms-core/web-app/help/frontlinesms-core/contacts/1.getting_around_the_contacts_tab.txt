@@ -46,4 +46,4 @@ The [search filter][10] allows you to quickly search through the displayed conta
 [8]: core/contacts/6.add_remove_contact_to_from_a_group
 [9]: core/contacts/1.getting_around_the_contacts_tab
 [10]: core/contacts/8.searching_through_contacts
-[11]: ../images/help/contacts_overview.png
+[11]: images/help/contacts_overview.png

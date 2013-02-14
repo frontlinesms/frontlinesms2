@@ -42,5 +42,5 @@ The selected messages will be moved to your chosen destination.
 [7]: core/archive/2.archiving_messages
 [8]: core/folders/1.getting_around_folders
 [9]: core/archive/4.unarchive
-[10]: ../images/help/sent.png
-[11]: ../images/help/messageforward.png
+[10]: images/help/sent.png
+[11]: images/help/messageforward.png

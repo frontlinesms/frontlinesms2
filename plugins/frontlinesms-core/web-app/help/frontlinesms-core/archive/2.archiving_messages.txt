@@ -33,4 +33,4 @@ Messages archived from [sent messages][10] will be found in the [sent archive][1
 [10]: core/messages/5.sent
 [11]: core/archive/1b.sent_archive
 [12]: core/archive/4.unarchive
-[13]: ../images/help/mrfd_reply.png
+[13]: images/help/mrfd_reply.png

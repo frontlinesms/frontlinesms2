@@ -18,4 +18,4 @@ There are 3 sections in the settings area. Please select one to see more informa
 [4]: core/settings/2.changing_languages
 [5]: core/settings/2.changing_languages
 [7]: core/settings/8.basic_auth
-[6]: ../images/help/settings_menu.png
+[6]: images/help/settings_menu.png

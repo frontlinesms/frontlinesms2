@@ -68,8 +68,8 @@ You can export the entire database of your [contacts][12], a particular [group][
 [14]: core/contacts/5.creating_a_smart_group
 [17]: core/messages/8.mrfd
 [18]: core/archive/2.archiving_messages
-[19]: ../images/help/export_message_tab.png
-[20]: ../images/help/export_activity.png
-[21]: ../images/help/export_search_tab.png
-[22]: ../images/help/export_dialog.png
-[24]: ../images/help/groupexport.png
+[19]: images/help/export_message_tab.png
+[20]: images/help/export_activity.png
+[21]: images/help/export_search_tab.png
+[22]: images/help/export_dialog.png
+[24]: images/help/groupexport.png

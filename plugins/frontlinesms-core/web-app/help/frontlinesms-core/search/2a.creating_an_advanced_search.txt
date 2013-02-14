@@ -85,4 +85,4 @@ In this example search, we  will be searching for received messages with the key
 [6]: core/search/1.getting_around_the_search_tab
 [7]: core/contacts/8.searching_through_contacts
 [8]: core/search/1.getting_around_the_search_tab
-[9]: ../images/help/advanced_search.png
+[9]: images/help/advanced_search.png

@@ -54,5 +54,5 @@ You can [reply][15], [move][15], [forward][15] and [delete][15] messages from he
 [13]: core/activities/3a.manually_categorising
 [15]: core/messages/8.mrfd
 [16]: core/messages/1.getting_around_the_messages_tab
-[17]: ../images/help/activity_overview.png
-[18]: ../images/help/poll_chart.png
+[17]: images/help/activity_overview.png
+[18]: images/help/poll_chart.png

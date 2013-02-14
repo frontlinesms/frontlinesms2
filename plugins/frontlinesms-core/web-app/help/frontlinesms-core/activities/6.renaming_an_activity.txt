@@ -27,5 +27,5 @@ _**Note:** Activity names must be unique. You cannot have two activities with th
 [3]: core/activities/3.creating_a_poll
 [4]: core/activities/4.creating_an_announcement
 [5]: core/activities/3a.manually_categorising
-[6]: ../images/help/rename_poll.png
-[7]: ../images/help/rename_poll_dialog.png
+[6]: images/help/rename_poll.png
+[7]: images/help/rename_poll_dialog.png

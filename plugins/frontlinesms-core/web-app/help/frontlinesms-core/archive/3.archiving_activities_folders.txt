@@ -44,4 +44,4 @@ To view your archived folder, navigate to the [archive tab][4] and then click on
 [12]: core/folders/1.getting_around_folders
 [13]: core/archive/4.unarchive
 [14]: core/activities/4.creating_an_announcement
-[15]: ../images/help/archive_activity.png
+[15]: images/help/archive_activity.png

@@ -26,5 +26,5 @@ Your messages will be exported to the desired format.
 [3]: core/activities/3.creating_a_poll
 [4]: core/activities/4.creating_an_announcement
 [5]: core/activities/3a.manually_categorising
-[6]: ../images/help/export_activity.png
-[7]: ../images/help/export_dialog.png
+[6]: images/help/export_activity.png
+[7]: images/help/export_dialog.png

@@ -68,12 +68,12 @@ Your Web Connection will appear under the Activities sub-heading.
 [5]: core/contacts/5.creating_a_smart_group
 [15]: core/activities/10.web_connection_api
 
-[6]: ../images/help/webconnection1.png
-[7]: ../images/help/webconnection2.png
-[8]: ../images/help/webconnection3.png
-[9]: ../images/help/webconnection4.png
-[10]: ../images/help/webconnection5.png
-[11]: ../images/help/webconnection6.png
-[12]: ../images/help/webconnection7.png
-[14]: ../images/help/autoforward1.png
+[6]: images/help/webconnection1.png
+[7]: images/help/webconnection2.png
+[8]: images/help/webconnection3.png
+[9]: images/help/webconnection4.png
+[10]: images/help/webconnection5.png
+[11]: images/help/webconnection6.png
+[12]: images/help/webconnection7.png
+[14]: images/help/autoforward1.png
 

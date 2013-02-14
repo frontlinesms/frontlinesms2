@@ -68,7 +68,7 @@ Clicking 'send' will complete the action.
 [9]: core/activities/3.creating_a_poll
 [10]: core/messages/7.pending
 [11]: core/activities/4.creating_an_announcement
-[12]: ../images/help/quick_message1.png
-[13]: ../images/help/quickmessage2.png
-[14]: ../images/help/quickmessage3.png
-[15]: ../images/help/quickmessagecontact.png
+[12]: images/help/quick_message1.png
+[13]: images/help/quickmessage2.png
+[14]: images/help/quickmessage3.png
+[15]: images/help/quickmessagecontact.png

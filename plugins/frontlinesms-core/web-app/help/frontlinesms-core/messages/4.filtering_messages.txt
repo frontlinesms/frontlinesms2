@@ -21,5 +21,5 @@ When in an activity or folder, there will be more filtering options present, all
 [1]: core/messages/2.sss
 [4]: core/search/1.getting_around_the_search_tab
 [5]: core/messages/8.mrfd
-[6]: ../images/help/filtering_messages.png
-[7]: ../images/help/filtering2.png
+[6]: images/help/filtering_messages.png
+[7]: images/help/filtering2.png

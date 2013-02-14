@@ -72,4 +72,4 @@ When multiple messages are selected, a summary of how many messages have been se
 [17]: core/messages/1.getting_around_the_messages_tab
 [18]: core/messages/2.sss
 [19]: core/messages/1.getting_around_the_messages_tab
-[20]: ../images/help/message_tab_overview.png
+[20]: images/help/message_tab_overview.png

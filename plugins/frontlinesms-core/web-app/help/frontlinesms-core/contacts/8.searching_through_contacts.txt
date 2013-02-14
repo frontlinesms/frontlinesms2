@@ -26,4 +26,4 @@ This search filter works by matching the contents of the 'Name' field of your co
 [5]: core/messages/9.exporting
 [6]: core/contacts/5.creating_a_smart_group
 [7]: core/contacts/4.creating_a_group
-[8]: ../images/help/contact_search.png
+[8]: images/help/contact_search.png

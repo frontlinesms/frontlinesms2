@@ -66,8 +66,8 @@ If the connection fails then you may have entered information incorrectly. This 
 [7]: core/settings/4.setting_up_a_device
 [8]: core/settings/4a.intellisms
 [9]: core/settings/4b.clickatell
-[10]: ../images/help/detect_activity.png
-[11]: ../images/help/settings_connections.png
-[12]: ../images/help/add_new_connection.png
-[13]: ../images/help/phone_modem.png
-[14]: ../images/help/phone_modem_confirm.png
+[10]: images/help/detect_activity.png
+[11]: images/help/settings_connections.png
+[12]: images/help/add_new_connection.png
+[13]: images/help/phone_modem.png
+[14]: images/help/phone_modem_confirm.png

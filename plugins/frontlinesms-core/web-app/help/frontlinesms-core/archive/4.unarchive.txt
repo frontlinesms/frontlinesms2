@@ -62,5 +62,5 @@ Your folder will now appear in the [messages][1] tab.
 [13]: core/activities/2.creating_an_activity
 [14]: core/messages/3.quick_message
 [15]: core/messages/8.mrfd
-[16]: ../images/help/unarchive_message.png
-[17]: ../images/help/activityunarchive.png
+[16]: images/help/unarchive_message.png
+[17]: images/help/activityunarchive.png

@@ -34,4 +34,4 @@ You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
 [9]: core/messages/8.mrfd
 [10]: core/messages/1.getting_around_the_messages_tab
 [11]: core/folders/2.creating_a_folder
-[12]: ../images/help/folder_overview.png
+[12]: images/help/folder_overview.png

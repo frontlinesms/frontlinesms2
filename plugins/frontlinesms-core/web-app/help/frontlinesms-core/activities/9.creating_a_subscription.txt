@@ -86,9 +86,9 @@ On this screen you can edit the name of the subscription. The name needs to be u
 [4]: core/activities/3.creating_a_poll
 [5]: core/contacts/4.creating_a_group
 [6]: core/contacts/5.creating_a_smart_group
-[7]: ../images/help/autoforward1.png
-[8]: ../images/help/subscription1.png
-[9]: ../images/help/subscription2.png
-[10]: ../images/help/subscription3.png
-[11]: ../images/help/subscription4.png
-[12]: ../images/help/subscription5.png
+[7]: images/help/autoforward1.png
+[8]: images/help/subscription1.png
+[9]: images/help/subscription2.png
+[10]: images/help/subscription3.png
+[11]: images/help/subscription4.png
+[12]: images/help/subscription5.png

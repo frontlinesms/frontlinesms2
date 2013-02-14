@@ -31,5 +31,5 @@ Clicking on a single folder will take you to that folders detail view which rese
 [6]: core/folders/1.getting_around_folders
 [7]: core/archive/3.archiving_activities_folders
 [8]: core/archive/2.archiving_messages
-[9]: ../images/help/folder_archive.png
-[10]: ../images/help/folder_archive_detail.png
+[9]: images/help/folder_archive.png
+[10]: images/help/folder_archive_detail.png

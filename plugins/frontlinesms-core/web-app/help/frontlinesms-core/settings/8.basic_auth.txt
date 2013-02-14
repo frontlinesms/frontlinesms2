@@ -12,4 +12,4 @@ Navigate to the General Settings menu, and scroll down to the Basic Authenticati
 
 To switch this feature off, you first need to be signed in to your FrontlineSMS instance using the password that was previously set up. Navigate to General Settings and uncheck the 'Enable Basic Authentication' checkbox and click save. Once this is done, you will no longer need to enter a password to use FrontlineSMS
 
-[1]: ../images/help/settings_basicauth.png
+[1]: images/help/settings_basicauth.png

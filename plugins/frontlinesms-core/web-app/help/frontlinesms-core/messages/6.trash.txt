@@ -26,4 +26,4 @@ All messages in the trash folder will be permanently deleted.
 [2]: core/messages/8.mrfd
 [4]: core/archive/2.archiving_messages
 [5]: core/archive/4.unarchive
-[6]: ../images/help/trash.png
+[6]: images/help/trash.png

@@ -66,8 +66,8 @@ Your Auto-reply will appear under the Activities sub-heading.
 [6]: core/activities/3.creating_a_poll
 [7]: core/contacts/4.creating_a_group
 [8]: core/contacts/5.creating_a_smart_group
-[9]: ../images/help/poll1.png
-[10]: ../images/help/autoreply1.png
-[11]: ../images/help/autoreply2.png
-[12]: ../images/help/autoreply3.png
-[13]: ../images/help/autoreply4.png
+[9]: images/help/poll1.png
+[10]: images/help/autoreply1.png
+[11]: images/help/autoreply2.png
+[12]: images/help/autoreply3.png
+[13]: images/help/autoreply4.png
