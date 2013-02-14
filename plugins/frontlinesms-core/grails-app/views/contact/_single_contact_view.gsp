@@ -113,7 +113,7 @@
 		<div id="message-stats">
 			<h2><g:message code="contact.messages.label"/></h2>
 			<ul>
-				<li class="sent"><g:message code="contact.sent.messages" args="${[contactInstance?.outboundMessagesCount]}"/></li>
+				<li class="sent"><g:message code="contact.messages.sent" args="${[contactInstance?.outboundMessagesCount]}"/></li>
 				<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
 			</ul>
 			<g:link class="btn search" controller='search' action='result'
@@ -124,19 +124,14 @@
 	</g:if>
 </div>
 <r:script>
-function refreshMessageStats(data) {
-	var url, numSent, numRecieved;
-	url = "contact/messageStats";
-	numSent = $('#num-sent');
-	numRecieved = $('#num-recieved');
-	$.getJSON(url_root + url, { id: "${contactInstance?.id}" }, function(data) {
-		numSent.text(numSent.text().replace(/\d{1,}/, data.outboundMessagesCount));
-		numRecieved.text(numRecieved.text().replace(/\d{1,}/, data.inboundMessagesCount));
-	});
-}
-
 $(function() {
-	setInterval(refreshMessageStats, 15000);
+	app_info.listen("contact_message_stats", { id: "${contactInstance?.id}" }, function(data) {
+		if(!data.contact_message_stats) return;
+		data = data.contact_message_stats;
+		$("#message-stats .sent").text(i18n("contact.messages.sent", data.outbound));
+		$("#message-stats .recieved").text(i18n("contact.messages.received", data.inbound));
+	});
+
 	$("td > input[type=text]").each(function(index) {
 		var clear = $(this).next();
 		if($(this).val() === "") {

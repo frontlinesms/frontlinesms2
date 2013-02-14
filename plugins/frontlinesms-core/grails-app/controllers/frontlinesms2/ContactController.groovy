@@ -180,14 +180,6 @@ class ContactController extends ControllerUtils {
 			if(!foundContact && params.mobile) render true
 			else render false
 	}
-	
-	def messageStats() {
-		def contactInstance = Contact.get(params.id)
-		if(contactInstance) {
-			def messageStats = [inboundMessagesCount: contactInstance.inboundMessagesCount, outboundMessagesCount: contactInstance.outboundMessagesCount]
-			render messageStats as JSON
-		}
-	}
 
 //> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {

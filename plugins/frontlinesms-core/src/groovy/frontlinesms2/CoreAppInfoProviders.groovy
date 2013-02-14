@@ -10,6 +10,14 @@ class CoreAppInfoProviders {
 			def c = Fconnection.get(data.id)
 			if(c) [id:c.id , status:c.status.toString()]
 		}
+
+		s.registerProvider('contact_message_stats') { app, controller, data ->
+			def c = Contact.get(data.id)
+			if(c) {
+				[inbound:c.inboundMessagesCount,
+						outbound:c.outboundMessagesCount]
+			}
+		}
 	}
 }
 
