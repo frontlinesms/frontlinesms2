@@ -18,13 +18,17 @@ class ReplyActionStep extends Step {
 	def getAutoreplyText() {
 		getPropertyValue("autoreplyText")
 	}
-	
+
+	def getAutoreplyTextSummary() {
+		this.autoreplyText.truncate(20);
+	}
+
 	def process(Fmessage message) {
 		autoreplyService.doReply(this, message)
 	}
 
 	def getDescription() {
-		i18nUtilService.getMessage(code:"customactivity.${this.shortName}.description", args:[this.autoreplyText])
+		i18nUtilService.getMessage(code:"customactivity.${this.shortName}.description", args:[this.autoreplyTextSummary])
 	}
 
 }
