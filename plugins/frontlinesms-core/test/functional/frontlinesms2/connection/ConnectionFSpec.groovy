@@ -43,7 +43,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageConnection, createTestEmailConnection()
 		then:
-			connectionList.btnCreateRoute.displayed
+			connectionList.btnEnableRoute.displayed
 	}
 
 	def 'DELETE button should remove selected fconnection from the list'() {
@@ -62,11 +62,11 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to PageConnection, testConnection
-			waitFor { connectionList.btnRetryConnection.displayed }
+			waitFor { connectionList.btnEnableRoute.displayed }
 		then:
 			!connectionList.btnTestRoute.displayed
 		when:
-			connectionList.btnRetryConnection.click()
+			connectionList.btnEnableRoute.click()
 		then:
 			waitFor('very slow') { connectionList.status == "Connected" }
 			waitFor { connectionList.btnTestRoute.displayed }
@@ -77,7 +77,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			def c = createTestEmailConnection()
 		when:
 			to PageConnection, c
-			connectionList.btnCreateRoute.click()
+			connectionList.btnEnableRoute.click()
 		then:
 			waitFor('very slow') { connectionList.status == "Connected" }
 			!connectionList.btnDelete.displayed
@@ -199,7 +199,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		given:
 			to PageConnection, createTestEmailConnection()
 		when:
-			connectionList.btnCreateRoute.click()
+			connectionList.btnEnableRoute.click()
 		then:
 			waitFor('slow') {connectionList.btnTestRoute.displayed}
 		when:
@@ -241,8 +241,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	private def startBadConnection() {
 		def connectionId = SmslibFconnection.findByName('Bad Port').id
 		to PageConnection, connectionId
-		waitFor { connectionList.btnRetryConnection.displayed }
-		connectionList.btnRetryConnection.click()
+		waitFor { connectionList.btnEnableRoute.displayed }
+		connectionList.btnEnableRoute.click()
 	}
 
 	private def launchCreateWizard(def type=null) {

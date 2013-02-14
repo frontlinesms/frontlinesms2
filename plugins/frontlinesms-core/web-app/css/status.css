@@ -118,6 +118,7 @@
 #connection-status #stored-connections .name { width:100%; padding-left:47px;
 	background-image:url('../images/status/green.png'); background-repeat:no-repeat; background-position:17px center; }
 #connection-status #stored-connections .name.FAILED { background-image: url('../images/status/red.png'); }
+#connection-status #stored-connections .name.NOT_CONNECTED { background-image: url('../images/status/red.png'); }
 #connection-status #stored-connections .name.CONNECTING { background-image: url('../images/status/orange.png'); }
 #connection-status #stored-connections .name.DISABLED { background-image: url('../images/status/grey.png'); }
 #connection-status #stored-connections .value { white-space:nowrap; padding-right:17px; }
