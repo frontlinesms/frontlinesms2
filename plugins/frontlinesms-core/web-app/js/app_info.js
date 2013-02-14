@@ -25,7 +25,7 @@ app_info = (function() {
 				requestData.push(c.interest);
 			}
 		}
-		$.getJSON(url_root + "appInfo", requestData, callbackProcessor);
+		$.getJSON(url_root + "appInfo", { interest:requestData }, callbackProcessor);
 	},
 	listen = function(interestedIn, fCallback, callback) {
 		if(!callback) {
@@ -39,6 +39,7 @@ app_info = (function() {
 		}
 		callbacks.push({ interest:interestedIn, frequency:fCallback, callback:callback });
 	};
+
 	return { init:init, listen:listen };
 }());
 
