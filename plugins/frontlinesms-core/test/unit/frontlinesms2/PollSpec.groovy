@@ -112,8 +112,7 @@ class PollSpec extends Specification {
 	def 'removing a message from a poll should remove it from poll.messages'() {
 		given:
 			Fmessage m = new Fmessage()
-			Poll p = new Poll(name:"test")
-					.addToMessages(m)
+			Poll p = new Poll()
 		when:
 			p.removeFromMessages(m)
 		then:
