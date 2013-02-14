@@ -15,6 +15,7 @@
 			</g:if>
 			<g:else>
 				<g:each in="${detectedDevices}" var="d">
+					<%-- TODO once functionality is merged, include the following as a template --%>
 					<tr>
 						<td>${d.port}</td>
 						<td>${d.description}</td>
@@ -25,3 +26,26 @@
 		</tbody>
 	</table>
 </div>
+
+<%-- TODO once functionality is merged, include the following as a template with type=sanchez --%>
+<script id="detected-device-detail" type="text/x-sanchez-template">
+	<tr>
+		<td>{{port}}</td>
+		<td>{{description}}</td>
+		<td>{{lockType}}</td>
+	</tr>
+</script>
+
+<r:script>
+	app_info.listen("device_detection", function(data) {
+		var table;
+		if(!data.device_detection) return;
+
+		table = $("#detected-devices tbody");
+		table.empty();
+		$.each(data.device_detection, function(i, d) {
+			sanchez.append(table, "detected-device-detail", d);
+		});
+	});
+</r:script>
+

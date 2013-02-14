@@ -29,6 +29,7 @@
 		return translated;
 	}
 
+	app_info.init();
 	var systemNotification = new SystemNotification();
 	var statusIndicator = new StatusIndicator();
 	// declare vars that are populated in JS files

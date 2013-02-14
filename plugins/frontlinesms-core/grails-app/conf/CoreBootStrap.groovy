@@ -20,6 +20,7 @@ import org.codehaus.groovy.grails.commons.ApplicationHolder
 
 class CoreBootStrap {
 	def applicationContext
+	def appInfoService
 	def appSettingsService
 	def grailsApplication
 	def deviceDetectionService
@@ -92,6 +93,7 @@ class CoreBootStrap {
 		ensureResourceDirExists()
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
+		CoreAppInfoProviders.registerAll(appInfoService)
 		activateActivities()
 		println '\\o/ FrontlineSMS started.'
 	}
@@ -627,14 +629,13 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 
 	private def setCustomJSONRenderers() {
 		JSON.registerObjectMarshaller(Announcement) {
-			def returnArray = [:]
-			returnArray['id'] = it.id
-			returnArray['dateCreated'] = it.dateCreated
-			returnArray['name'] = it.name
-			returnArray['sentMessageText'] = it.sentMessageText
-			return returnArray
+			[id:it.id, dateCreated:it.dateCreated, name:it.name, sentMessageText:it.sentMessageText]
+		}
+		JSON.registerObjectMarshaller(DetectedDevice) {
+			[port:it.port, description:it.description, lockType:it.lockType]
 		}
 	}
+
 	private setDefaultMessageRoutingPreferences(){
 		if(!appSettingsService.get('routing.preferences.edited') || (appSettingsService.get('routing.preferences.edited') == false)){
 			println "### Changing Routing preferences ###"
