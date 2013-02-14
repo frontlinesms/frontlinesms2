@@ -13,7 +13,7 @@ class AppInfoServiceSpec extends Specification {
 
 	def 'provide should throw exception if no provider registered'() {
 		when:
-			service.provide 'some key'
+			service.provide mockController, 'some key', null
 		then:
 			thrown(RuntimeException)
 	}
@@ -34,14 +34,14 @@ class AppInfoServiceSpec extends Specification {
 			service.registerProvider 'a', a
 			service.registerProvider 'b', b
 		when:
-			service.provide('a', mockController)
+			service.provide mockController, 'a', null
 		then:
-			1 * a.call(service.grailsApplication, mockController)
+			1 * a.call(service.grailsApplication, mockController, null)
 			0 * _
 		when:
-			service.provide('b', mockController)
+			service.provide mockController, 'b', null
 		then:
-			1 * b.call(service.grailsApplication, mockController)
+			1 * b.call(service.grailsApplication, mockController, null)
 			0 * _
 	}
 

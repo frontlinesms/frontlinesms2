@@ -6,18 +6,17 @@
 		<g:if test="${params.createRoute}">
 			<r:script>
 				$(function() {
-					var connectionTimer = setInterval(refreshConnectionStatus, 2000);
-					function refreshConnectionStatus() {
-						$.get("${createLink(controller:'connection', action:'list', id:params?.id, params:[format:'json'])}", function(connection) {
-							var status;
-							status = connection.status.substring(17).toUpperCase();
-							if(status !== "CONNECTING") {
-								clearInterval(connectionTimer);
-								$("div.flash").hide();
-								fconnection_show.update(status, connection.id);
-							}
-						});
-					}
+					app_info.listen("connection_show", { id:${params.id} }, function(data) {
+						console.log("connection_show.callback :: data=" + JSON.stringify(data));
+						var c;
+						if(!data.connection_show) return;
+						c = data.connection_show;
+						if(c.status !== "CONNECTING") {
+							app_info.stopListening("connection_show");
+							$("div.flash").hide();
+							fconnection_show.update(c.status, c.id);
+						}
+					});
 				});
 			</r:script>
 		</g:if>

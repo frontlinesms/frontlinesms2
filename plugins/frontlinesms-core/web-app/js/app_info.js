@@ -34,8 +34,8 @@ app_info = (function() {
 				}
 			}
 		}
-		console.log("requester() :: requestData=" + JSON.stringify(requestData));
 		if(!jQuery.isEmptyObject(requestData)) {
+			console.log("requester() :: requestData=" + JSON.stringify(requestData));
 			jQuery.ajax({ type:"POST",
 				url:url_root + "appInfo",
 				contentType:"application/json",

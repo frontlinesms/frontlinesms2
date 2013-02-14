@@ -20,6 +20,8 @@
 				<li class="connection ${c == connectionInstance ? 'selected' : ''}">
 					<fsms:render template="connection" model="[c:c]"/>
 					<g:if test="${c == connectionInstance}">
+						<%-- TODO when sanchez template rendering taglib is included, refactor here to use
+							the newly-refactored selected_connection templates --%>
 						<fsms:render template="selected_connection" model="[c:c]"/>
 					</g:if>
 				</li>

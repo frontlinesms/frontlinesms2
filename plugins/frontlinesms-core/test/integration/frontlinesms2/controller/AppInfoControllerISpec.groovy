@@ -19,6 +19,7 @@ class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'appInfoService should be called with request for relevant data (0 requested items)'() {
 		given:
 			def requestData = []
+			controller.request.JSON = requestData
 		when:
 			def response = controller.index()
 		then:
@@ -28,27 +29,27 @@ class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'appInfoService should be called with request for relevant data (1 requested item)'() {
 		given:
-			def requestData = ['devices']
-			controller.params['interest[]'] = 'devices'
+			def requestData = [devices:null]
+			controller.request.JSON = requestData
 		when:
 			def response = controller.index()
 		then:
-			1 * service.provide('devices', controller)
+			1 * service.provide(controller, 'devices', _)
 			0 * _
-			JSON.parse(controller.response.contentAsString).keySet().sort() == requestData
+			JSON.parse(controller.response.contentAsString).keySet().sort() == requestData.keySet().sort()
 	}
 
 	def 'appInfoService should be called with request for relevant data (2 requested items)'() {
 		given:
-			def requestData = ['devices', 'gribbles']
-			controller.params['interest[]'] = requestData
+			def requestData = [devices:null, gribbles:null]
+			controller.request.JSON = requestData
 		when:
 			def response = controller.index()
 		then:
-			1 * service.provide('devices', controller)
-			1 * service.provide('gribbles', controller)
+			1 * service.provide(controller, 'devices', _)
+			1 * service.provide(controller, 'gribbles', _)
 			0 * _
-			JSON.parse(controller.response.contentAsString).keySet().sort() == requestData
+			JSON.parse(controller.response.contentAsString).keySet().sort() == requestData.keySet().sort()
 	}
 }
 

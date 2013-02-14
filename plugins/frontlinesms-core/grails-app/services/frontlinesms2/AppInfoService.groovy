@@ -11,12 +11,12 @@ class AppInfoService {
 		providers[key] = provider
 	}
 
-	def provide(String key, AppInfoController controller) {
+	def provide(AppInfoController controller, String key, data) {
 		def provider
 		synchronized(this) {
 			provider = providers[key]
 		}
-		return provider.call(grailsApplication, controller)
+		return provider.call(grailsApplication, controller, data)
 	}
 }
 

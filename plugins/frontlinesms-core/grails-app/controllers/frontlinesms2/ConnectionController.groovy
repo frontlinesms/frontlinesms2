@@ -21,12 +21,7 @@ class ConnectionController extends ControllerUtils {
 		if(params?.id) {
 			model << show()
 			def connectionInstance = model.connectionInstance
-			withFormat {
-				html { render view:'show', model:model }
-				json {
-					render( [id: connectionInstance.id , status: connectionInstance.status.i18n] as JSON)
-				}
-			}
+			render view:'show', model:model
 		} else {
 			params.id = fconnectionInstanceList[0]?.id
 			render view:'show', model:model

@@ -6,20 +6,14 @@ class AppInfoController {
 	def appInfoService
 
 	def index() {
-		render getInterest().collectEntries { key ->
-			[(key):appInfoService.provide(key, this)]
+		render request.JSON.collectEntries { key, value ->
+			try {
+				[key, appInfoService.provide(this, key, value)]
+			} catch(Exception ex) {
+				log.warn("Problem processing app info key=$key, value=$value", ex)
+				[key, ex.message]
+			}
 		} as JSON
-	}
-
-	private def getInterest() {
-		def interest = params.'interest[]'
-		if(!interest) {
-			return []
-		}
-		if(interest instanceof String) {
-			return [interest]
-		}
-		return interest
 	}
 }
 
