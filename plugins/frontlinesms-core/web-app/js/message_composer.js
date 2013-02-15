@@ -10,9 +10,7 @@ messageComposerUtils = {
 	updateCharacterCount: function(messageComposerInstance) {
 		var charCount, charCountDisplay, textArea, text;
 		textArea = $(messageComposerInstance).children('textarea')
-		// charCountDisplay = $($(messageComposerInstance)
 		charCountDisplay = $($(messageComposerInstance).children('.controls')[0]).children('.character-count-display');
-		console.log($(charCountDisplay));
 		charCount = this.getCharacterCount($(messageComposerInstance))
 		text = this.getText($(messageComposerInstance))
 		$(charCountDisplay).html(charCount);
@@ -24,18 +22,15 @@ messageComposerUtils = {
 	}
 }
 
-$(function() {
-	$('.message-composer').live('focus', function() {
-		$(this).addClass('focus');
-		$(this).children('textarea').autosize();
-	});
-
-	$('.message-composer').live('blur', function() {
-		$(this).removeClass('focus');
-	});
-
-	$('.message-composer textarea').live('keyup', function() {
-		messageComposerUtils.updateCharacterCount($($(this).parent()[0]));
-	});
+$('.message-composer').live('focus', function() {
+	$(this).addClass('focus');
+	$(this).children('textarea').autosize();
 });
 
+$('.message-composer').live('blur', function() {
+	$(this).removeClass('focus');
+});
+
+$('.message-composer textarea').live('keyup', function() {
+	messageComposerUtils.updateCharacterCount($($(this).parent()[0]));
+});
