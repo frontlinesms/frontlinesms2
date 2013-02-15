@@ -19,3 +19,12 @@ test("messageComposerUtils.getText should return the text contained in the texta
 	equal(messageText, "This is a message");
 
 });
+
+test("messageComposerUtils.updateCharacterCount should update character counter to reflect change in associated textarea", function() {
+	setup();
+	var messageComposerTextarea= $($('.message-composer')[0]).children('textarea')[0];
+	messageComposerInstance = $('.message-composer')[0],
+	$(messageComposerTextarea).val("This is a message, edited.");
+	charCount = messageComposerUtils.getCharacterCount($(messageComposerInstance));
+	equal(charCount, 26);
+});
