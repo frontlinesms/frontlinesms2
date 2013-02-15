@@ -28,6 +28,7 @@ var custom_activity = (function() {
 	},
 	init = function() {
 		$(CONFIG_CONTAINER).sortable();
+		messageComposerUtils.init($(CONFIG_CONTAINER));
 		// Defer creation of selectmenus and magic wand widgets until
 		// they're actually visible...
 		$("#tabs").bind("tabsshow", function(event, ui) {
