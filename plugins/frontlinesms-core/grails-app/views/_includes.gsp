@@ -58,5 +58,6 @@
 			newFeatures.showPopup();
 		});
 	</fsms:ifAppSetting>
+	messageComposerUtils.init();
 </r:script>
 
