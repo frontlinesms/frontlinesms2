@@ -74,6 +74,10 @@
 							</li>
 						</g:each>
 					</fsms:checkboxGroup>
+					<div class="input">
+						<ul class="favourite no-description" ></ul><br>
+					</div>
+					
 					<fsms:radioGroup name="otherwise" title="routing.rules.otherwise"
 							values="any,dontsend"
 							labels="${g.message(code:'routing.rule.useany')}, ${g.message(code:'routing.rule.dontsend')}"

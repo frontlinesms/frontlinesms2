@@ -1,6 +1,17 @@
 
 $(function(){
-	$("ul.sortable.checklist").sortable();
+	//$("ul.sortable.checklist").sortable();
+	$( "ul.sortable.checklist" ).sortable({
+		connectWith: "ul"
+	});
+
+	$( "ul.favourite" ).sortable({
+		connectWith: "ul",
+		dropOnEmpty: true
+	});
+
+	$( "ul.sortable.checklist, ul.favourite").disableSelection();
+
 	$("#routing-form").submit(function() {
 		var form = $(this),
 		routingUseOrder = [];

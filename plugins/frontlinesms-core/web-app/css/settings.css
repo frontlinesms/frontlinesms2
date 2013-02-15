@@ -42,3 +42,11 @@
 #body-content #basic-authentication input[type='text'].error, input[type='password'].error  {
 	border:1px solid red;
 }
+ul.select.sortable.checklist.no-description.ui-sortable li,ul.favourite li { margin: 2px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; 
+	-o-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; border: 1px solid black; border-color: rgba(0, 0, 0, 0.3);
+}
+ul.favourite li { height:32px; position:absolute; }
+ul.favourite { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; background: #eee; padding: 5px; width:auto;}
+ul.favourite label { position: relative; display: block; padding: 10px;}
+
+
