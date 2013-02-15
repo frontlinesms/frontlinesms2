@@ -1,0 +1,3 @@
+git reset --hard
+rm FrontlinesmsCoreMultitenantGrailsPlugin.groovy
+rm -r web-app/css/frontlinesms-core/
