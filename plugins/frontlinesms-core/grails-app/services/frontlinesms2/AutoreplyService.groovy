@@ -39,6 +39,7 @@ class AutoreplyService {
 		message.messageOwner.addToMessages(outgoingMessage)
 		message.messageOwner.save(failOnError:true)
 		outgoingMessage.setMessageDetail(activityOrStep, message.id)
+		outgoingMessage.save(failOnError:true)
 		
 		messageSendService.send(outgoingMessage)
 		activityOrStep.save()
