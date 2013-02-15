@@ -6,6 +6,10 @@ class CustomActivity extends Activity {
 	static String getShortName() { 'customactivity' }
 	static hasMany = [steps: Step]
 
+	static mapping = {
+		steps cascade: "all-delete-orphan"
+	}
+
 	def getActivityMessages(getOnlyStarred=false, getSent=null, stepId=null, params=null) {
 		if(stepId) {
 			def outgoingMessagesByStep = []

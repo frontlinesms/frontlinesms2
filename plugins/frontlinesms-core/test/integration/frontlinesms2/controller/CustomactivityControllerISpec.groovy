@@ -5,7 +5,7 @@ import frontlinesms2.*
 class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller = new CustomactivityController()
 
-	def "can create a new custom activity"(){grails.plugin.spock.IntegrationSpec
+	def "can create a new custom activity"(){
 		given:
 			controller.params.jsonToSubmit = """[{"stepId":"","stepType":"join", "group":"5"}, {"stepId":"","stepType":"leave", "group":"5" }]"""
 			controller.params.name = "test save"
@@ -22,7 +22,7 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 	def "can edit an existing custom activity"() {
 		given:
 			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
-			def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
+			def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
 
 			def a = new CustomActivity(name:'Do it all')
 				.addToSteps(joinStep)
@@ -48,7 +48,7 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 			controller = new MessageController()
 			def group = Group.build()
 			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"${group.id}"))
-			def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"${group.id}"))
+			def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"${group.id}"))
 			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"sending this message"))
 
 			def a = new CustomActivity(name:'Do it all')
@@ -72,5 +72,30 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 			controller.activity()
 		then:
 			controller.modelAndView.model.messageInstanceList.size() == 2
+	}
+@spock.lang.IgnoreRest
+	def "steps should be edited when editing a custom activity not removed"() {
+		given:
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
+			def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
+
+			def a = new CustomActivity(name:'Do it all')
+				.addToSteps(joinStep)
+				.addToSteps(leaveStep)
+				.addToKeywords(value:"CUSTOM")
+				.save(failOnError:true, flush:true)
+
+			controller.params.name = "just edited"
+			controller.params.keywords = "new, just, yeah"
+			controller.params.sorting = "enabled"
+			controller.params.ownerId = a.id
+			controller.params.jsonToSubmit = """[{"stepId":"${joinStep.id}","stepType":"join", "group":"2"}, {"stepId":"","stepType":"reply", "autoreplyText":"where is the help controller" }]"""
+		when:
+			controller.save()
+		then:
+			def activity = CustomActivity.findByName("just edited")
+			activity.keywords*.value.containsAll(["NEW", "JUST", "YEAH"])
+			activity.steps*.id.contains(joinStep.id)
+			activity.steps.size() == 2
 	}
 }
