@@ -21,7 +21,7 @@ class HelpController extends ControllerUtils {
 				suppliedPluginName == 'frontlinesms-core' && plugin.name.startsWith('frontlinesmsCore') || 
 						plugin.name == suppliedPluginName
 			}
-			def pluginDir = plugin.descriptor?.file?.parentFile
+			def pluginDir = plugin?.descriptor?.file?.parentFile
 			// FIXME this is open to injection attacks
 			def markdownFile
 			if(pluginDir) {

@@ -42,7 +42,10 @@ class ExpressionProcessorService {
 	private getReplacement(expression, dispatch) {
 		try {
 			// TODO could replace this manual mapping wth...a Map!  e.g. [sender_number:{incomingMessage.src}]
-			def incomingMessage = Fmessage.get(dispatch.message.ownerDetail)
+			def ownerD = dispatch.message.ownerDetail
+			println "### Owner Detail for ${dispatch} ## ${ownerD}"
+			def incomingMessage = Fmessage.get(ownerD)
+			println "### Triggering incoming message # ${incomingMessage} # ${incomingMessage?.text}"
 			def getKeyword = { incomingMessage.messageOwner?.keywords?.find { incomingMessage.text.toUpperCase().startsWith(it.value) }?.value }
 			if (expression == '${message_text}') {
 				def keyword = getKeyword()
