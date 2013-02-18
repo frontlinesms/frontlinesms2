@@ -120,7 +120,7 @@ class AutoforwardSpec extends Specification {
 		m.src >> src
 		m.setOwnerDetail >> ownerDetail
 		def owner = Mock(CustomActivity)
-		owner.addToMessages { ms -> return "added message to messageOwner" }
+		owner.addToMessages(_) >> { ms -> return "added message to messageOwner" }
 		m.messageOwner >> owner
 		return m
 	}

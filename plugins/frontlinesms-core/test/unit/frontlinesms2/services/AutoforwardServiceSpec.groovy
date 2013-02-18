@@ -15,7 +15,7 @@ class AutoforwardServiceSpec extends Specification {
 			
 			def message = Mock(Fmessage)
 			message.id >> 1
-			owner.addToMessages { ms-> return "adding message to messageOwner"}
+			owner.addToMessages(_) >> { ms-> return "adding message to messageOwner"}
 			message.messageOwner >> owner
 			
 			def outgoingMessage = Mock(Fmessage)
