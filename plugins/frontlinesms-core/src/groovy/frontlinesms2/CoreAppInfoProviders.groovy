@@ -18,6 +18,16 @@ class CoreAppInfoProviders {
 						outbound:c.outboundMessagesCount]
 			}
 		}
+
+		s.registerProvider('system_notification') { app, controller, data ->
+			SystemNotification.findAllByRead(false).collectEntries { [it.id, it.text] }
+		}
+
+		s.registerProvider('status_indicator') { app, controller, data ->
+			def connections = Fconnection.list()
+			def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
+			return color
+		}
 	}
 }
 

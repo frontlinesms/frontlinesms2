@@ -6,12 +6,6 @@ class StatusController extends ControllerUtils {
 	def index() {
 		redirect action:'show', params:params
 	}
-
-	def trafficLightIndicator() {
-		def connections = Fconnection.list()
-		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
-		render text:color, contentType:'text/plain'
-	}
 	
 	def show() {
 		[connectionInstanceList: Fconnection.list(),

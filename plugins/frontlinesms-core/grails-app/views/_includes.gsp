@@ -49,8 +49,8 @@
 			fsmsButton.findAndApply("input[type='submit'], input[type='button']");
 
 			// Enable system notification refresh
-			setInterval(systemNotification.refresh, 10000);
-			setInterval(statusIndicator.refresh, 10000);
+			systemNotification.init();
+			statusIndicator.init();
 		});
 	</g:else>
 

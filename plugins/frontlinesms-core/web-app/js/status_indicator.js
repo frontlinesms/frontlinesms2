@@ -14,7 +14,6 @@ var StatusIndicator = function() {
 		if(_failureCount === 0) {
 			++_failureCount;
 		} else if(!_getConnectionLostNotification().length) {
-			
 			var notification = '<div id="server-connection-lost-notification"><div class="content"><p>'
 					+ i18n('server.connection.fail.title')
 					+ '</p><p>'
@@ -25,22 +24,23 @@ var StatusIndicator = function() {
 		_updateLight('red');
 	},
 	_successHandler = function(data) {
-		var connectionLostNotification = _getConnectionLostNotification();
+		var connectionLostNotification;
+		if(!data.status_indicator) {
+			return;
+		}
+		data = data.status_indicator;
+		connectionLostNotification = _getConnectionLostNotification();
 		_failureCount = 0;
 		if(connectionLostNotification) {
 			connectionLostNotification.remove();
 		}
 		_updateLight(data);
 	},
-	_refresh = function() {
-		$.ajax({
-			url: url_root + 'status/trafficLightIndicator',
-			cache: false,
-			success: _successHandler,
-			error: _errorHandler
-		});
+	init = function() {
+		app_info.listen("status_indicator", _successHandler);
+		app_info.listenForFailures(_errorHandler);
 	};
 
-	return { refresh:_refresh };
+	return { init:init };
 };
 

@@ -2,6 +2,7 @@ app_info = (function() {
 	var
 	callbacks,
 	counter,
+	failCallback,
 	init = function() {
 		counter = 0;
 		callbacks = {};
@@ -16,6 +17,11 @@ app_info = (function() {
 					c.callback(data);
 				}
 			}
+		}
+	},
+	failureProcessor = function(data) {
+		if(typeof failureProcessor !== "undefined") {
+			failureProcessor.call();
 		}
 	},
 	requester = function() {
@@ -41,7 +47,8 @@ app_info = (function() {
 				contentType:"application/json",
 				data:JSON.stringify(requestData),
 				processData:false,
-				success:callbackProcessor });
+				success:callbackProcessor,
+				fail:failureProcessor });
 		}
 	},
 	listen = function(interest, f, data, callback) {
@@ -65,10 +72,19 @@ app_info = (function() {
 		}
 		callbacks[interest] = { frequency:f, callback:callback, data:data };
 	},
+	listenForFailures = function(listener) {
+		if(typeof listener !== "function") {
+			throw "Failure listener must be a function.";
+		}
+		if(typeof failCallback !== "undefined") {
+			throw "Cannot override old failure listener.";
+		}
+		failCallback = listener;
+	},
 	stopListening = function(disinterest) {
 		delete callbacks[disinterest];
 	};
 
-	return { init:init, listen:listen, stopListening:stopListening };
+	return { init:init, listen:listen, listenForFailures:listenForFailures, stopListening:stopListening };
 }());
 
