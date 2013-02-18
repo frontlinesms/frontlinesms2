@@ -48,6 +48,13 @@ class SettingsController extends ControllerUtils {
 				appSettings:appSettings]
 	}
 
+	def test(){
+		def appSettings = [:] 
+		appSettings['routing.use'] = appSettingsService.get("routing.use")
+		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
+		render fconnectionRoutingMap
+	}
+
 	def selectLocale() {
 		i18nUtilService.setLocale(request, response, params.language?:'en')
 		redirect view:'general'

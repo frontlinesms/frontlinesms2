@@ -43,12 +43,9 @@
 	border:1px solid red;
 }
 
-ul.select.sortable.checklist.no-description.ui-sortable li,ul.favourite li { margin: 2px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; 
+ul.select.sortable.checklist.no-description.ui-sortable li { margin: 2px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; 
 	-o-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; border: 1px solid black; border-color: rgba(0, 0, 0, 0.3);
 }
-ul.favourite { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; background: #eee; padding: 5px; width:1000px;}
-ul.favourite label { display: block; padding: 10px;}
-div.input ul.favourite li label input[type="checkbox"] { position: absolute; top: 10px; left: 10px; }
 span.grabber {
 	background-image:url("../images/icons/grabber.png");
 	background-repeat: no-repeat;
@@ -59,6 +56,7 @@ span.grabber {
 	height: 20px;
 	width: 3px;
 }
+#warning_message { color:#ff0000; padding:10px;}
 
 
 

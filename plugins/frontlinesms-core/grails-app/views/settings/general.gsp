@@ -59,28 +59,34 @@
 				<g:form name="routing-form" url="[controller:'settings', action:'changeRoutingPreferences']">
 					<g:hiddenField name="routingUseOrder" value=""/>
 					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable checklist no-description">
-						<g:each in="${fconnectionRoutingMap}" status="i" var="it">
-							<li>
-								<span class="grabber"></span>
-								<label for="routeRule-${i}">
-									<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
+						<g:each in="${fconnectionRoutingMap}" status="i" var="it">						
+							<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
+								<li>
+									<span class="grabber"></span>
+									<label for="routeRule-${i}">
 										<g:message code="routing.rule.${it.key}"/>
 										<g:checkBox name="routeRule-${i}" value="${it.key}" checked="${it.value}"/>
-									</g:if>
-									<g:else>
-										<g:message code="routing.rules.device" args="[it.key.name]" />
-										<g:checkBox name="routeRule-${i}" value="fconnection-${it.key.id}" checked="${it.value}"/>
-									</g:else>
-								</label>
-							</li>
+									</label>
+								</li>
+							</g:if>		
 						</g:each>
 					</fsms:checkboxGroup>
+					<fsms:checkboxGroup label="routing.rule" title="routing.rules.not_selected" listClass="sortable checklist no-description">
+						<g:each in="${fconnectionRoutingMap}" status="i" var="it">					
+							<g:if test="${(it.key instanceof frontlinesms2.Fconnection)}">
+								<li>
+									<span class="grabber"></span>
+									<label for="routeRule-${i}">
+										<p class="connection_names"><g:message code="routing.rules.device" args="[it.key.name]" /></p>
+										<g:checkBox name="routeRule-${i}" value="fconnection-${it.key.id}" checked="${it.value}"/>
+									</label>
+								</li>
+							</g:if>		
+						</g:each>
+						<p id="warning_message"></p>
+					</fsms:checkboxGroup>
 					
-					<fsms:radioGroup name="otherwise" title="routing.rules.otherwise"
-							values="any,dontsend"
-							labels="${g.message(code:'routing.rule.useany')}, ${g.message(code:'routing.rule.dontsend')}"
-							checked="${appSettings['routing.otherwise']}"/>
-					<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}" />
+					<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}" />		
 				</g:form>
 			</div>
 		</div>
@@ -89,8 +95,26 @@
 
 <r:script>
 $(function() {
+	var checked,msg,chkboxSelector;
 	basicAuthValidation.enable();
 	$("#basic-authentication input[name=enabled]").attr("onchange", "basicAuthValidation.toggleFields(this)");
 	$("#basic-authentication input[type=submit]").attr("onclick", "basicAuthValidation.showErrors()");
+
+	checked = 0;
+	chkboxSelector = 'input[name^="routeRule"]';
+	$(chkboxSelector).each(function() {
+	 	if ($(this).is(':checked')) { checked++; }
+	});
+	$(chkboxSelector).change(function() {
+		$($(this)).each(function() {
+		  if ($(this).is(':checked')) { checked++; }
+		  else { checked--; }
+		});
+		console.log("checked:"+checked);
+		msg = $("#warning_message");
+		if (checked === 0) { msg.html("Warning you have no rules or phone numbers selected.No messages will be sent. If you wish to send messages, please enable one of the above options"); }
+		else { msg.html(""); }
+	});
 });
+
 </r:script>
