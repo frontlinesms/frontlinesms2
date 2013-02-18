@@ -13,7 +13,9 @@ class CoreUrlMappings {
 		"/search/result/show/"(controller:'search', action:'result') {}
 		"/search/result/show/$messageId"(controller:'search', action:'result') {}
 		
+		"/message/inbox/"(controller:'message', action:'inbox') {}
 		"/message/inbox/show/$messageId"(controller:'message', action:'inbox') {}
+
 		"/message/sent/show/$messageId"(controller:'message', action:'sent') {}
 		"/message/pending/show/$messageId"(controller:'message', action: 'pending') {}
 		"/message/trash/show/$id"(controller:'message', action: 'trash') {}
