@@ -97,5 +97,6 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 			activity.keywords*.value.containsAll(["NEW", "JUST", "YEAH"])
 			activity.steps*.id.contains(joinStep.id)
 			activity.steps.size() == 2
+			activity.steps*.stepProperties*.flatten().value.containsAll([["2"], ["where is the help controller"]])
 	}
 }
