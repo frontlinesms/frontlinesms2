@@ -17,8 +17,6 @@
 <r:script>
 $(function() {
 	var pollGraph = new PollGraph(${pollResponse}, "${ownerInstance.id}", "${createLink(controller:'poll', action:'pollStats')}");
-	$("#poll-graph-btn").live("click", pollGraph.show);
-	setInterval(pollGraph.updateStats, 5000);
 });
 </r:script>
 
