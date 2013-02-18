@@ -10,7 +10,7 @@ var PollGraph = function(pollResponse, ownerId, statsUrl) {
 		}
 		return _stats;
 	},
-	_processUpdate(data) {
+	_processUpdate = function(data) {
 		_refresh = true;
 		_stats.id = $.map(data, function(a) { return a.id; });
 		_stats.count = $.map(data, function(a) { return a.count; });
