@@ -21,7 +21,7 @@ class NexmoPostProcessor implements Processor {
 		log "in.body as JSON:"+jsonValue
 		log "message count:"+jsonValue.message_count
 		log "message status:"+jsonValue.messages[0].status
-		if(jsonValue.messages.status[0] == '0'){
+		if(jsonValue.messages[0].status == '0'){
 			log "message sent successfully" 
 		}
 		else if(jsonValue.messages[0].status == '2' || jsonValue.messages[0].status == '3' || jsonValue.messages[0].status == '4') {
