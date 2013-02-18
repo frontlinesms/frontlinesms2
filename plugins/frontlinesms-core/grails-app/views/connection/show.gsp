@@ -4,17 +4,17 @@
 		<meta name="layout" content="settings"/>
 		<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
 		<g:if test="${params.createRoute}">
+			<%-- Could just replace params.createRoute with a check for connectionInstance.status --%>
 			<r:script>
 				$(function() {
 					app_info.listen("connection_show", { id:${params.id} }, function(data) {
 						console.log("connection_show.callback :: data=" + JSON.stringify(data));
-						var c;
-						if(!data.connection_show) return;
-						c = data.connection_show;
-						if(c.status !== "CONNECTING") {
+						data = data.connection_show;
+						if(!data) { return; }
+						if(data.status !== "CONNECTING") {
 							app_info.stopListening("connection_show");
 							$("div.flash").hide();
-							fconnection_show.update(c.status, c.id);
+							fconnection_show.update(data.status, data.id);
 						}
 					});
 				});

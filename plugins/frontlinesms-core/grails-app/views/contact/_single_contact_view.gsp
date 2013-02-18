@@ -126,8 +126,8 @@
 <r:script>
 $(function() {
 	app_info.listen("contact_message_stats", { id: "${contactInstance?.id}" }, function(data) {
-		if(!data.contact_message_stats) return;
 		data = data.contact_message_stats;
+		if(!data) { return; }
 		$("#message-stats .sent").text(i18n("contact.messages.sent", data.outbound));
 		$("#message-stats .recieved").text(i18n("contact.messages.received", data.inbound));
 	});

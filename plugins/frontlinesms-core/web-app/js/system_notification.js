@@ -17,10 +17,8 @@ var SystemNotification = function() {
 	_refresh = function(data) {
 		// remove any notifications no longer in the list
 		var _key, value, found;
-		if(!data.system_notification) {
-			return;
-		}
 		data = data.system_notification;
+		if(!data) { return; }
 		found = [];
 		$(".system-notification").each(function(i, e) {
 			e = $(e);

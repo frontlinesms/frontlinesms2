@@ -14,6 +14,9 @@ app_info = (function() {
 			if(callbacks.hasOwnProperty(c)) {
 				c = callbacks[c];
 				if((counter % c.frequency) === 0) {
+					// TODO should check that requested data is present and only
+					// do callback if that is the case.  N.B. difference between
+					// null and undefined is v important in this case
 					c.callback(data);
 				}
 			}
@@ -44,6 +47,7 @@ app_info = (function() {
 			console.log("requester() :: requestData=" + JSON.stringify(requestData));
 			jQuery.ajax({ type:"POST",
 				url:url_root + "appInfo",
+				cache:false,
 				contentType:"application/json",
 				data:JSON.stringify(requestData),
 				processData:false,

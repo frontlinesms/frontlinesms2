@@ -39,11 +39,12 @@
 <r:script>
 	app_info.listen("device_detection", function(data) {
 		var table;
-		if(!data.device_detection) return;
+		data = data.device_detection;
+		if(!data) { return; }
 
 		table = $("#detected-devices tbody");
 		table.empty();
-		$.each(data.device_detection, function(i, d) {
+		$.each(data, function(i, d) {
 			sanchez.append(table, "detected-device-detail", d);
 		});
 	});

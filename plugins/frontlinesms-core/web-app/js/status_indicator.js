@@ -25,10 +25,8 @@ var StatusIndicator = function() {
 	},
 	_successHandler = function(data) {
 		var connectionLostNotification;
-		if(!data.status_indicator) {
-			return;
-		}
 		data = data.status_indicator;
+		if(!data) { return; }
 		connectionLostNotification = _getConnectionLostNotification();
 		_failureCount = 0;
 		if(connectionLostNotification) {

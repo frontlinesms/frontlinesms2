@@ -28,6 +28,27 @@ class CoreAppInfoProviders {
 			def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
 			return color
 		}
+
+		s.registerProvider('new_messages') { app, controller, data ->
+			def section = data.messageSection
+			def messageCount
+			if(!data.ownerId && section != 'trash') {
+				if(section == 'pending') {
+					messageCount = Fmessage.countPending(data.failed)
+				} else {
+					messageCount = Fmessage."$section"(data.starred).count()
+				}
+			} else if(section == 'activity') {
+				def getSent = null
+				if(data.inbound) getSent = Boolean.parseBoolean(data.inbound)
+				messageCount = Activity.get(data.ownerId)?.getActivityMessages(data.starred, getSent)?.count()
+			} else if(section == 'folder') {
+				def getSent = null
+				if(data.inbound) getSent = Boolean.parseBoolean(data.inbound)
+				messageCount = Folder.get(data.ownerId)?.getFolderMessages(data.starred, getSent)?.count()
+			} else messageCount = 0
+			return messageCount
+		}
 	}
 }
 
