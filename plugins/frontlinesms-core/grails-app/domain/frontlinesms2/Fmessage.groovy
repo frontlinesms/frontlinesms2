@@ -338,7 +338,7 @@ class Fmessage {
 			return t
 		} else {
 			println "Fmessage.getMessageDetailValue # for Other Activities # "
-			return this.details?.find { it.ownerType == ownerType && it.ownerId == owner.id }?.value?:''
+			return this.details?.find { it.ownerType == ownerType && it.ownerId == owner?.id }?.value?:''
 		}
 	}
 
