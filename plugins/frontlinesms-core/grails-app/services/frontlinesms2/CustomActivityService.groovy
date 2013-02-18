@@ -33,7 +33,8 @@ class CustomActivityService {
 		//Adding Steps
 		println "# Adding the steps"
 		steps.each { step->
-			def stepToEdit = storedSteps.find { it.id == step.stepId } ?: Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
+			def stepToEdit = customActivity.steps.find { it.id == (step.stepId as Long) } ?: Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
+			println "# StepToEdit_ID # ${stepToEdit.id}"
 			println "# Adding step of type # ${stepToEdit.shortName}"
 			step.each { k,v->
 				if(!(k in ["stepType", "stepId"])) {
@@ -41,8 +42,10 @@ class CustomActivityService {
 					println "# Setting $k $v for ${step.stepType}"
 				}
 			}
-			if(!step.stepId)
+			if(!stepToEdit.id)
 				customActivity.addToSteps(stepToEdit)
+			else
+				stepToEdit.save()
 		}
 
 		println "# The steps to save are ${customActivity.steps*.shortName}"
@@ -67,36 +70,6 @@ class CustomActivityService {
 		println "# 2 ######### Saving Round 2 # $customActivity.errors.allErrors"
 		// FIXME why are there multiple saves here?
 		customActivity.save(failOnError:true, flush:true)
-	}
-
-	private getSteps(steps) {
-		def stepInstanceList = []
-		println "steps::::: $steps"
-
-		steps.each { step ->
-			println "step:::: $step"
-			
-			def stepInstance = Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
-			stepInstance.save()
-			step.each { k,v ->
-				def stepProp
-				if(!(k in ["stepType", "stepId"])) {
-					stepProp = new StepProperty(key:k, value:v)
-					println "$stepProp::: ${stepProp.key}: ${stepProp.value}"
-					stepInstance.addToStepProperties(stepProp)
-					println "$stepInstance::: ${stepInstance.stepProperties}"
-				}
-
-			}
-			stepInstanceList << stepInstance
-		}
-		stepInstanceList.each {
-			println "<<<>>>"
-			println "$it"
-			println "${it.stepProperties*.key}"
-			println "<<<>>>"
-		}
-		stepInstanceList
 	}
 
 	def triggerSteps(c, message) {
