@@ -53,6 +53,15 @@ class CoreAppInfoProviders {
 			} else messageCount = 0
 			return messageCount
 		}
+
+		s.registerProvider('webconnection_status') { app, controller, data ->
+			def c = Webconnection.get(data.ownerId)
+			def response = [ownerId:data.ownerId, ok:true]
+			if(c) {
+				def message = Fmessage.findByMessageOwnerAndText(c, Fmessage.TEST_MESSAGE_TEXT)
+				response.status = message?.ownerDetail
+			}
+		}
 	}
 }
 
