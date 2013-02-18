@@ -21,7 +21,7 @@ class CustomActivityService {
 		//Removing Steps
 		def storedSteps = customActivity.steps
 		println "# StepsIds in # ${steps*.stepId.collect { (it != "")?(it as Long):null }}"
-		def stepsToDelete = storedSteps*.id?:[] - steps*.stepId.collect { (it != "")?(it as Long):null }
+		def stepsToDelete = (storedSteps*.id?:[]) - steps*.stepId.collect { (it != "")?(it as Long):null }
 		println "# Steps saved already ${customActivity.steps*.id}"
 		println "# Steps to delete ${stepsToDelete}"
 
