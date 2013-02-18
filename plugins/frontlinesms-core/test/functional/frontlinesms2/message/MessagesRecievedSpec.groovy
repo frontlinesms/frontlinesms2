@@ -11,19 +11,12 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			to PageMessageInbox
 		then:
 			messageList.messages.size() == 2
-		when:
-			sleep 11000
-		then:
-			messageList.messages.size() == 2
 			!messageList.newMessageNotification.displayed
 		when:
 			createTestMessages()
-			sleep 5000
 		then:
-			messageList.messages.size() == 2
+			waitFor { messageList.messages.size() == 2 }
 			!messageList.newMessageNotification.displayed
-		when:
-			sleep 5000
 		then:
 			waitFor { messageList.newMessageNotification.displayed }
 	}
@@ -36,9 +29,8 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			messageList.messages.size() == 2
 		when:
 			createTestMessages()
-			sleep 11000
 		then:
-			waitFor { messageList.newMessageNotification.displayed }
+			waitFor('very-slow') { messageList.newMessageNotification.displayed }
 			messageList.messages.size() == 3
 		when:
 			messageList.newMessageNotification.find("a").click()
@@ -55,9 +47,8 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			messageList.messages.size() == 2
 		when:
 			createTestMessages()
-			sleep 11000
 		then:
-			waitFor { messageList.newMessageNotification.displayed }
+			waitFor('very-slow') { messageList.newMessageNotification.displayed }
 		when:
 			messageList.newMessageNotification.find("a").click()
 		then:
@@ -65,3 +56,4 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			waitFor { singleMessageDetails.sender == "Bob" }
 	}
 }
+

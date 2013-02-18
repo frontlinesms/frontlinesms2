@@ -40,6 +40,8 @@ class CoreAppInfoProviders {
 		s.registerProvider('new_messages') { app, controller, data ->
 			def section = data.messageSection
 			def messageCount
+			data.starred = data.starred? Boolean.parseBoolean(data.starred): false
+			data.inbound = data.inbound? Boolean.parseBoolean(data.inbound): null
 			if(!data.ownerId && section != 'trash') {
 				if(section == 'pending') {
 					messageCount = Fmessage.countPending(data.failed)
@@ -47,13 +49,9 @@ class CoreAppInfoProviders {
 					messageCount = Fmessage."$section"(data.starred).count()
 				}
 			} else if(section == 'activity') {
-				def getSent = null
-				if(data.inbound) getSent = Boolean.parseBoolean(data.inbound)
-				messageCount = Activity.get(data.ownerId)?.getActivityMessages(data.starred, getSent)?.count()
+				messageCount = Activity.get(data.ownerId)?.getActivityMessages(data.starred, data.inbound)?.count()
 			} else if(section == 'folder') {
-				def getSent = null
-				if(data.inbound) getSent = Boolean.parseBoolean(data.inbound)
-				messageCount = Folder.get(data.ownerId)?.getFolderMessages(data.starred, getSent)?.count()
+				messageCount = Folder.get(data.ownerId)?.getFolderMessages(data.starred, data.inbound)?.count()
 			} else messageCount = 0
 			return messageCount
 		}
@@ -65,6 +63,10 @@ class CoreAppInfoProviders {
 				def message = Fmessage.findByMessageOwnerAndText(c, Fmessage.TEST_MESSAGE_TEXT)
 				response.status = message?.ownerDetail
 			}
+		}
+
+		s.registerProvider('poll_stats') { app, controller, data ->
+			Poll.get(data.ownerId)?.responseStats
 		}
 	}
 }

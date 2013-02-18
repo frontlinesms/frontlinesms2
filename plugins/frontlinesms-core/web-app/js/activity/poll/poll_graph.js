@@ -85,7 +85,7 @@ var PollGraph = function(pollResponse, ownerId, statsUrl) {
 	},
 	___end___;
 
-	$("#poll-graph-btn").click(show);
+	$("#poll-graph-btn").click(_show);
 	app_info.listen("poll_stats", { ownerId:ownerId }, _processUpdate);
 
 	return {};
