@@ -73,7 +73,7 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 		then:
 			controller.modelAndView.model.messageInstanceList.size() == 2
 	}
-@spock.lang.IgnoreRest
+
 	def "steps should be edited when editing a custom activity not removed"() {
 		given:
 			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
