@@ -61,6 +61,7 @@
 					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable checklist no-description">
 						<g:each in="${fconnectionRoutingMap}" status="i" var="it">
 							<li>
+								<span class="grabber"></span>
 								<label for="routeRule-${i}">
 									<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
 										<g:message code="routing.rule.${it.key}"/>
@@ -74,9 +75,6 @@
 							</li>
 						</g:each>
 					</fsms:checkboxGroup>
-					<div class="input">
-						<ul class="favourite no-description" ></ul><br>
-					</div>
 					
 					<fsms:radioGroup name="otherwise" title="routing.rules.otherwise"
 							values="any,dontsend"
