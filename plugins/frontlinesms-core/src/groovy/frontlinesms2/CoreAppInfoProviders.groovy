@@ -1,6 +1,12 @@
 package frontlinesms2
 
 class CoreAppInfoProviders {
+	static def statusIndicatorProvider = { app, controller, data ->
+		def connections = Fconnection.list()
+		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
+		return color
+	}
+
 	static void registerAll(AppInfoService s) {
 		s.registerProvider('device_detection') { app, controller, data ->
 			app.mainContext.deviceDetectionService.detected
@@ -23,11 +29,7 @@ class CoreAppInfoProviders {
 			SystemNotification.findAllByRead(false).collectEntries { [it.id, it.text] }
 		}
 
-		s.registerProvider('status_indicator') { app, controller, data ->
-			def connections = Fconnection.list()
-			def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
-			return color
-		}
+		s.registerProvider 'status_indicator', statusIndicatorProvider
 
 		s.registerProvider('inbox_unread') { app, controller, data ->
 			Fmessage.countUnreadMessages()
