@@ -80,6 +80,7 @@ class CoreBootStrap {
 			dev_initAnnouncements()
 			dev_initSubscriptions()
 			dev_initWebconnections()
+			dev_initCustomActivities()
 			dev_initLogEntries()
 		}
 
@@ -441,8 +442,25 @@ class CoreBootStrap {
 
 		footballGroup.save(failOnError:true)
 	}
+
+	private def dev_initCustomActivities() {
+		if(!bootstrapData) return
+
+		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
+		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
+		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"I will send you forever"))
+
+		new CustomActivity(name:'Do it all')
+				.addToSteps(joinStep)
+				.addToSteps(leaveStep)
+				.addToSteps(replyStep)
+				.addToKeywords(value:"CUSTOM")
+				.save(failOnError:true, flush:true)
+	}
 	
 	private def dev_initLogEntries() {
+		if(!bootstrapData) return
+
 		if(!bootstrapData) return
 		def now = new Date()
 		[new LogEntry(date:now, content: "entry1"),

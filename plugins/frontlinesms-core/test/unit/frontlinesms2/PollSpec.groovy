@@ -6,7 +6,7 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Poll)
-@Mock(PollResponse)
+@Mock([PollResponse, MessageDetail])
 @Build(Fmessage)
 class PollSpec extends Specification {
 	/** some responses that should pass validation */
@@ -18,6 +18,10 @@ class PollSpec extends Specification {
 		PollResponse.metaClass.removeFromMessages = { m ->
 			delegate.messages.remove(m)
 			m.messageOwner = null
+		}
+
+		Activity.metaClass.static.get = {Long id -> 
+			Poll.findById(id)
 		}
 	}
 
@@ -113,7 +117,6 @@ class PollSpec extends Specification {
 		given:
 			Fmessage m = new Fmessage()
 			Poll p = new Poll()
-					.addToMessages(m)
 		when:
 			p.removeFromMessages(m)
 		then:

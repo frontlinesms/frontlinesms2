@@ -5,9 +5,9 @@ class FmessageService {
 	
     def move(messageList, activity, params) {
     	def messagesToSend = []
-    	messageList.each { messageInstance ->	
-    		if(messageInstance.isMoveAllowed()) {	
-    			messageInstance.ownerDetail = null
+    	messageList.each { messageInstance ->
+    		if(messageInstance.isMoveAllowed()){
+    			messageInstance.clearAllDetails()
     			messageInstance.isDeleted = false
 				Trash.findByObject(messageInstance)?.delete(failOnError:true)
 				if (params.messageSection == 'activity') {

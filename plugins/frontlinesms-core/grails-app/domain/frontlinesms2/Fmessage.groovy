@@ -17,7 +17,6 @@ class Fmessage {
 	String text
 	String inboundContactName
 	String outboundContactName
-	String ownerDetail
 	
 	boolean read
 	boolean starred
@@ -26,7 +25,7 @@ class Fmessage {
 	
 	boolean inbound
 
-	static hasMany = [dispatches:Dispatch]
+	static hasMany = [dispatches:Dispatch, details:MessageDetail]
 
 	static mapping = {
 		sort date:'desc'
@@ -51,7 +50,7 @@ class Fmessage {
 				val ^ (obj.dispatches? true: false)
 		})
 		dispatches nullable:true
-		ownerDetail nullable:true
+		details nullable:true
 	}
 
 	def beforeInsert = {
@@ -327,4 +326,56 @@ class Fmessage {
 	def getReceivedOn() {
 		Fconnection.findByMessages(this).list()[0]
 	}
+
+	def getMessageDetailValue(owner) {
+		println "# Fmessage.getMessageDetailValue # ${owner}"
+		def ownerType = getOwnerType(owner)
+		if(owner && (Activity.get(owner?.id) instanceof CustomActivity)) {
+			println "Fmessage.getMessageDetailValue # for CustomActivity # "
+			def stepId = this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }?.value
+			def t = this.details.find { (it.ownerType == MessageDetail.OwnerType.STEP) && (it.ownerId == stepId as Long) }?.value
+			println "Fmessage.getMessageDetailValue # for CustomActivity # and ownerDetail is # ${t}"
+			return t
+		} else {
+			println "Fmessage.getMessageDetailValue # for Other Activities # "
+			return this.details?.find { it.ownerType == ownerType && it.ownerId == owner?.id }?.value?:''
+		}
+	}
+
+	//> GETTER AND SETTER OF MESSAGE DETAIL THAT USE CURRENT MESSAGE OWNER
+	def getOwnerDetail() {
+		getMessageDetailValue(this.messageOwner)
+	}
+
+	def setMessageDetail(activityOrStep, val) {
+		println "# Fmessage.setMessageDetail # ${activityOrStep} # ${val}"
+		if (activityOrStep instanceof Activity) {
+			this.setMessageDetailValue(activityOrStep, val)
+		} else {
+			this.setMessageDetailValue(this.messageOwner, activityOrStep.id)
+			this.setMessageDetailValue(activityOrStep, val)
+		}
+	}
+
+	private def setMessageDetailValue(owner, value) {
+		println "# Fmessage.setMessageDetailValue # ${owner} # ${value} #"
+		def ownerType = getOwnerType(owner)
+		def messageDetailInstance = this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }
+		if(!messageDetailInstance) {
+			messageDetailInstance = new MessageDetail(ownerType:ownerType, ownerId:owner.id)
+			this.addToDetails(messageDetailInstance)
+		}
+		messageDetailInstance.value = value
+		this.save(failOnError:true)
+		messageDetailInstance.save(failOnError:true)
+	}
+
+	private def getOwnerType(owner) {
+		owner instanceof Step ? MessageDetail.OwnerType.STEP : MessageDetail.OwnerType.ACTIVITY
+	}
+
+	def clearAllDetails() {
+		this.details?.clear()
+	}
 }
+

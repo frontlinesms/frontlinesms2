@@ -60,7 +60,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			poll.archive()
 			poll.save(flush:true)
 			poll.refresh()
-			assert poll.activityMessages.list().every { it.archived }
+			assert poll.activityMessages.every { it.archived }
 		when:
 			to PageMessagePoll, 'thingy'
 			messageList.selectAll.click()

@@ -21,6 +21,7 @@ class CoreUrlMappings {
 		"/message/trash/show/$id"(controller:'message', action: 'trash') {}
 
 		"/message/activity/$ownerId"(controller:'message', action:'activity') {}
+		"/message/activity/$ownerId/step/$stepId"(controller:'message', action:'activity') {}
 		"/message/activity/$ownerId/show/$messageId"(controller:'message', action:'activity') {}
 
 		"/message/folder/$ownerId"(controller:'message', action:'folder') {}
@@ -36,6 +37,9 @@ class CoreUrlMappings {
 		"/autoreply/create"(controller:'autoreply', action: 'create')
 		"/autoreply/save"(controller:'autoreply', action: 'save')
 		"/autoforward/create"(controller:'autoforward', action: 'create')
+
+		"/customactivity/create"(controller:'customactivity', action: 'create')
+		"/customactivity/save"(controller:'customactivity', action: 'save')
 		
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}
