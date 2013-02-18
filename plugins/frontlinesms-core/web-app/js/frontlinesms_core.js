@@ -57,14 +57,6 @@ function refreshMessageCount() {
 	});
 }
 
-function isEmpty(val) {
-	return val.trim().length === 0;
-}
-
-function isElementEmpty(selector) {
-	return isEmpty($(selector).val());
-}
-
 function getSelectedGroupElements(groupName) {
 	return $('input[name=' + groupName + ']:checked');
 }
@@ -73,23 +65,10 @@ function isGroupChecked(groupName) {
 	return getSelectedGroupElements(groupName).length > 0;
 }
 
-function isDropDownSelected(id) {
-	var selectedOptions = $("#" + id + " option:selected");
-	return selectedOptions.length > 0  && (!isEmpty(selectedOptions[0].value));
-}
-
 $('.check-bound-text-area').live('focus', function() {
 	var checkBoxId = $(this).attr('checkbox_id');
 	$('#' + checkBoxId).attr('checked', true);
 });
-
-function findInputWithValue(value) {
-	return $('input[value=' + "'" + value + "'" + ']');
-}
-
-function isCheckboxSelected(value) {
-	return findInputWithValue(value).is(':checked');
-}
 
 $.fn.renderDefaultText = function() {
 	return this.focus(function() {
@@ -169,26 +148,3 @@ $(function() {
 	});
 });
 
-$(function(){
-	return;
-	// TODO this should be done in the GSP, and events should not be bound in web-app/js files
-	$.ajax({
-		url: url_root + 'help/newfeatures',
-		cache: false,
-		success: function(data) {
-			if(data != "last version already displayed"){
-				mediumPopup.launchNewFeaturePopup(i18n("new.features"), data, i18n("action.close"), function(){
-					$.ajax({
-						url: url_root + 'help/updateShowNewFeatures',
-						data:{enableNewFeaturesPopup:$('#enableNewFeaturesPopup').is(":checked")},
-						cache: false,
-						success: function(data) { 
-							$('#modalBox').parent().remove();
-						}
-					});
-				});
-				$('#modalBox').addClass('help');
-			}
-		}
-	});
-});
