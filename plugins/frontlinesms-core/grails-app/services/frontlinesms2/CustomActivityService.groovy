@@ -33,7 +33,7 @@ class CustomActivityService {
 		//Adding Steps
 		println "# Adding the steps"
 		steps.each { step->
-			def stepToEdit = customActivity.steps.find { it.id == (step.stepId as Long) } ?: Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
+			def stepToEdit = customActivity.steps.find { "${it.id}" == step.stepId } ?: Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
 			println "# StepToEdit_ID # ${stepToEdit.id}"
 			println "# Adding step of type # ${stepToEdit.shortName}"
 			step.each { k,v->
@@ -61,6 +61,7 @@ class CustomActivityService {
 			def keywordRawValues = params.keywords?.toUpperCase().replaceAll(/\s/, "").split(",")
 			for(keywordValue in keywordRawValues) {
 				def keyword = new Keyword(value: keywordValue.trim().toUpperCase())
+				println "# Adding keyword # ${keyword.value}"
 				customActivity.addToKeywords(keyword)
 			}
 		} else {
