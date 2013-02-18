@@ -7,6 +7,14 @@ class CoreAppInfoProviders {
 		return color
 	}
 
+	static def contactMessageStats =  { app, controller, data ->
+		def c = Contact.get(data.id)
+		if(c) {
+			[inbound:c.inboundMessagesCount,
+					outbound:c.outboundMessagesCount]
+		}
+	}
+
 	static void registerAll(AppInfoService s) {
 		s.registerProvider('device_detection') { app, controller, data ->
 			app.mainContext.deviceDetectionService.detected
@@ -17,13 +25,7 @@ class CoreAppInfoProviders {
 			if(c) [id:c.id , status:c.status.toString()]
 		}
 
-		s.registerProvider('contact_message_stats') { app, controller, data ->
-			def c = Contact.get(data.id)
-			if(c) {
-				[inbound:c.inboundMessagesCount,
-						outbound:c.outboundMessagesCount]
-			}
-		}
+		s.registerProvider 'contact_message_stats', contactMessageStats
 
 		s.registerProvider('system_notification') { app, controller, data ->
 			SystemNotification.findAllByRead(false).collectEntries { [it.id, it.text] }
