@@ -20,7 +20,7 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			createTestData()
 		when:
-			def results = recipientLookupService.lookup("12")
+			def results = recipientLookupService.lookup([term:"12"])
 		then:
 			getLookupResultFor(results, "group") == ["test-group-12"]
 			getLookupResultFor(results, "smartGroup") == ["test-smartgroup-12"]
@@ -37,14 +37,14 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			getLookupResultFor(results, "address") == expectedResult
 		where:
-			query             | expectedResult
-			"12"              | ["\"12\""]
-			"+12"             | ["\"+12\""]
-			"1 2"             | ["\"12\""]
-			"1 2"             | ["\"12\""]
-			"1 2"             | ["\"12\""]
-			"1(2)a23"         | ["\"1223\""]
-			"()test"          | null
+			query                | expectedResult
+			[term:"12"]          | ["\"12\""]
+			[term:"+12"]         | ["\"+12\""]
+			[term:"1 2"]         | ["\"12\""]
+			[term:"1 2"]         | ["\"12\""]
+			[term:"1 2"]         | ["\"12\""]
+			[term:"1(2)a23"]     | ["\"1223\""]
+			[term:"()test"]      | null
 	}
 
 	def "contactSearchResults() should return the selected groups, contacts, smartgroups and addresses"() {

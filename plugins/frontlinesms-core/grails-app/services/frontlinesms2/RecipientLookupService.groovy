@@ -27,7 +27,7 @@ class RecipientLookupService {
 	}
 
 	private def objects(selectedList, clazz) {
-		clazz.getAll(ids(selectedList, clazz.shortName)) - null
+		clazz.getAll(ids(selectedList, clazz)) - null
 	}
 
 	def lookup(params) {
