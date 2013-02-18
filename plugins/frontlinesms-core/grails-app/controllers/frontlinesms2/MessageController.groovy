@@ -255,10 +255,6 @@ class MessageController extends ControllerUtils {
 		trashService.emptyTrash()
 		redirect action:'inbox'
 	}
-	
-	def unreadMessageCount() {
-		render text:Fmessage.countUnreadMessages(), contentType:'text/plain'
-	}
 
 	def sendMessageCount() {
 		render fmessageInfoService.getMessageInfos(params.message) as JSON

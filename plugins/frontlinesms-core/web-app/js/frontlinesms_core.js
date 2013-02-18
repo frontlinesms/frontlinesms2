@@ -49,14 +49,6 @@ if(jQuery.browser.msie) { $(function() {
 	};
 }(jQuery));
 
-function refreshMessageCount() {
-	$.ajax({
-			url: url_root + 'message/unreadMessageCount',
-			cache: false,
-			success: function(data) { $('#inbox-indicator').html(data); }
-	});
-}
-
 function getSelectedGroupElements(groupName) {
 	return $('input[name=' + groupName + ']:checked');
 }
@@ -125,8 +117,6 @@ function insertAtCaret(areaId, text) {
 }
 
 $(function() {
-	// FIXME no binding to events should take place in this file
-	setInterval(refreshMessageCount, 30000);
 	$.extend($.validator.messages, {
 		required: i18n("jquery.validation.required"),
 		remote: i18n("jquery.validation.remote"),

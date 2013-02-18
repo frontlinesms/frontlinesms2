@@ -35,6 +35,12 @@
 	// declare vars that are populated in JS files
 	var check_list, fconnection;
 
+	app_info.listen("inbox_unread", function(data) {
+		data = data.inbox_unread;
+		if(!data) { return; }
+		$('#inbox-indicator').html(data);
+	});
+
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {};

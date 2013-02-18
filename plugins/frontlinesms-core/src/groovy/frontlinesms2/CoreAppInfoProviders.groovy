@@ -29,6 +29,10 @@ class CoreAppInfoProviders {
 			return color
 		}
 
+		s.registerProvider('inbox_unread') { app, controller, data ->
+			Fmessage.countUnreadMessages()
+		}
+
 		s.registerProvider('new_messages') { app, controller, data ->
 			def section = data.messageSection
 			def messageCount
