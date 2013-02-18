@@ -260,9 +260,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			tabs.unreadcount == 1
 		when:
 			Fmessage.build().save(flush:true, failOnError:true)
-			js.refreshMessageCount()
 		then:
-			waitFor { tabs.unreadcount == 2}
+			waitFor { tabs.unreadcount == 2 }
 	}
 
 	def "should show create contact link for a recipient that is not in the contact list"() {

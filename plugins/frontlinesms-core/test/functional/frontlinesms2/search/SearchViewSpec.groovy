@@ -283,11 +283,10 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "should update message count when in search tab"() {
 		when:
 			to PageSearchResult, ""
-			def message = Fmessage.build(src:'+254999999', text:'message count')
 		then:
 			tabs.unreadcount == 2
 		when:
-			js.refreshMessageCount()
+			Fmessage.build(src:'+254999999', text:'message count')
 		then:
 			waitFor('very slow') { tabs.unreadcount == 3 }
 	}
