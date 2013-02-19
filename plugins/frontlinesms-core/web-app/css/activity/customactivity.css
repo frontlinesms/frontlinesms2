@@ -13,10 +13,13 @@
 #custom-activity-config-container .step.reply div.input { margin: 0; padding: 0; }
 
 #custom-activity-config-container .step.webconnectionStep .webconnection-server-control { width: 96%; border-radius: 2px; margin: 10px 0; padding: 0;}
-#custom-activity-config-container .step.webconnectionStep h4 { margin-bottom: 5px; } 
-#custom-activity-config-container .step.webconnectionStep table { margin: 0 auto; display: block; width: 90%; } 
-#custom-activity-config-container .step.webconnectionStep .webconnection-server-control label input[type=radio] { margin: 0 3px; }
-#custom-activity-config-container .step.webconnectionStep .web-connection-param-table { margin: 0; padding: 0; width: 100%; }
-#custom-activity-config-container .step.webconnectionStep .web-connection-param-table tr { margin: 0; padding: 2px 0; }
+#custom-activity-config-container .step.webconnectionStep h4 { margin-bottom: 10px; } 
+#custom-activity-config-container .step.webconnectionStep .btn.addNew { margin: 0 5px; } 
+#custom-activity-config-container .step.webconnectionStep .webconnection-server-control { margin: 3px 5px; padding: 0; }
+#custom-activity-config-container .step.webconnectionStep .webconnection-server-control input[type=text] { width: 255px; }
+#custom-activity-config-container .step.webconnectionStep .webconnection-server-control input[type=radio] { vertical-align: middle; margin-left: 4px; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table { margin: 3px 5px; padding: 0; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table tbody tr { border-bottom: 3px solid transparent; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table td { margin: 0; padding: 0; }
-#custom-activity-config-container .step.webconnectionStep .web-connection-param-table input[type=text] { margin: 0; padding: 2%; width: 96%; max-width: 96%; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table input[type=text] { margin-right: 2px; padding: 4px; width: 180px; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table .magicwand-container { visibility:visible; margin: 0 5px; }
