@@ -1,5 +1,5 @@
 var webconnectionDialog = (function () {
-	var pollInterval, _updateConfirmationScreen, validationMessageGenerator, _showTestRouteBtn, 
+	var pollInterval, _updateConfirmationScreen, validationMessageGenerator, _showTestRouteBtn, _toggleWizardButtons,
 			_setType, _handlers, _testRouteStatus, _checkRouteStatus, generateMessages, _toggleApiTab;
 	_updateConfirmationScreen = function () {};
 	_setType = function(type) {
@@ -31,7 +31,7 @@ var webconnectionDialog = (function () {
 		if(testRouteBtn.length === 0) {
 			testRouteBtn = mediumPopup.appendButton("testRoute", "submit", i18n('webconnection.testroute.label'));
 			testRouteBtn.bind({
-				click: webconnectionDialog.testRouteStatus
+				click: _testRouteStatus
 			});
 		} else {
 			testRouteBtn.show();
@@ -48,7 +48,7 @@ var webconnectionDialog = (function () {
 				type: 'post',
 				data: $("#new-webconnection-form").serialize() + "&" + $.param(params),
 				url: url_root + "webconnection/testRoute",
-				success: function(data, textStatus) {webconnectionDialog.checkRouteStatus(data);}
+				success: function(data, textStatus) {_checkRouteStatus(data);}
 			});
 		} else {
 			$('.error-panel').show();
@@ -56,7 +56,7 @@ var webconnectionDialog = (function () {
 		return false;
 	};
 
-	function toggleWizardButtons() {
+	_toggleWizardButtons = function() {
 		if($("#submit").is(":disabled")) {
 			$("#testRoute").attr('disabled', false);
 			$("#submit").attr('disabled', false);
@@ -80,14 +80,14 @@ var webconnectionDialog = (function () {
 				data: {ownerId:response.ownerId},
 				url: url_root + "webconnection/checkRouteStatus"
 			});
-			toggleWizardButtons();
+			_toggleWizardButtons();
 			pollInterval = setInterval( function() {
 				$.ajax({
 					success: function(response) {
 								if(response.status === "success" || response.status === "failed") {
 									$(".error-panel").text(i18n('webconnection.popup.'+ response.status + '.label'));
 									$(".error-panel").show();
-									toggleWizardButtons();
+									_toggleWizardButtons();
 									if(response.status === "success") {
 										loadSummaryTab(response, i18n('webconnection.label'));
 									} else {
@@ -177,8 +177,6 @@ var webconnectionDialog = (function () {
 		handlers:_handlers,
 		setType:_setType,
 		showTestRouteBtn:_showTestRouteBtn,
-		checkRouteStatus:_checkRouteStatus,
-		testRouteStatus:_testRouteStatus,
 		toggleApiTab:_toggleApiTab,
 		___end___:null
 	};

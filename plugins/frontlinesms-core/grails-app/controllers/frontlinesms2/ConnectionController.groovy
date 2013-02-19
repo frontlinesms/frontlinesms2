@@ -57,7 +57,7 @@ class ConnectionController extends ControllerUtils {
 
 	def delete() {
 		def connection = Fconnection.get(params.id)
-		if(connection.status == ConnectionStatus.NOT_CONNECTED) {
+		if(connection.status == ConnectionStatus.DISABLED) {
 			connection.delete()
 			flash.message = message code:'connection.deleted', args:[connection.name]
 			redirect action:'list'
@@ -74,10 +74,10 @@ class ConnectionController extends ControllerUtils {
 			withFormat {
 				html {
 					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name'), fconnectionInstance.id]))
-					redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
+					redirect(controller:'connection', action: 'enable', id: fconnectionInstance.id)
 				}
 				json {
-					render([ok:true, redirectUrl:createLink(action:'createRoute', id:fconnectionInstance.id)] as JSON)
+					render([ok:true, redirectUrl:createLink(action:'enable', id:fconnectionInstance.id)] as JSON)
 				}
 			}
 		} else {
@@ -113,9 +113,9 @@ class ConnectionController extends ControllerUtils {
 		params << newParams
 	}
 	
-	def createRoute() {
-		CreateRouteJob.triggerNow([connectionId:params.id])
-		params.createRoute = true
+	def enable() {
+		EnableFconnectionJob.triggerNow([connectionId:params.id])
+		params.connecting = true
 		flash.message = message(code: 'connection.route.connecting')
 		def connectionInstance = Fconnection.get(params.id)
 		if(connectionInstance?.shortName == 'smssync')
@@ -123,9 +123,9 @@ class ConnectionController extends ControllerUtils {
 		redirect(action:'list', params:params)
 	}
   
-	def destroyRoute() {
+	def disable() {
 		withFconnection { c ->
-			fconnectionService.destroyRoutes(c)
+			fconnectionService.disableFconnection(c)
 			flash.message = message(code: 'connection.route.disconnecting')
 			redirect(action:'list', id:c.id)
 		}
@@ -133,7 +133,7 @@ class ConnectionController extends ControllerUtils {
 
 	def listComPorts() {
 		// This is a secret debug method for now to help devs see what ports are available
-		render(text: "${serial.CommPortIdentifier.portIdentifiers*.name}")
+		render text:serial.CommPortIdentifier.portIdentifiers*.name
 	}
 
 	def createTest() {
@@ -160,10 +160,10 @@ class ConnectionController extends ControllerUtils {
 			withFormat {
 				html {
 					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
-					forward(action:"createRoute", id:fconnectionInstance.id)
+					forward action:'enable', id:fconnectionInstance.id
 				}
 				json {
-					render([ok:true, redirectUrl:createLink(action:'createRoute', id:fconnectionInstance.id)] as JSON)
+					render([ok:true, redirectUrl:createLink(action:'enable', id:fconnectionInstance.id)] as JSON)
 				}
 			}
 		} else {

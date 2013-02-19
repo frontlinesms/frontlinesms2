@@ -18,20 +18,13 @@ class Autoreply extends Activity {
 	}
 
 //> SERVICES
-	def messageSendService
+	def autoreplyService
 
 //> PROCESS METHODS
 	def processKeyword(Fmessage message, Keyword matchedKeyword) {
-		def params = [:]
-		params.addresses = message.src
-		params.messageText = autoreplyText
 		addToMessages(message)
-		def outgoingMessage = messageSendService.createOutgoingMessage(params)
-		outgoingMessage.ownerDetail = message.id
-		addToMessages(outgoingMessage)
-		messageSendService.send(outgoingMessage)
-		save()
-		println "Autoreply message sent to ${message.src}"
+		autoreplyService.doReply(this, message)
+		save(failOnError:true)
 	}
 }
 

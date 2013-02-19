@@ -41,9 +41,11 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 				.save(failOnError:true, flush:true)
 			def inbound = new Fmessage(src:'112233', inbound:true, text:'Incoming Message Text').save(failOnError:true, flush:true)
 			autoforward.addToMessages(inbound)
+
 			def outbound = new Fmessage(src:'0', inbound:false, ownerDetail:inbound.id, text:outboundMessageText)
 			Dispatch dis = new Dispatch(dst:'445566', status:DispatchStatus.PENDING)
 			outbound.addToDispatches(dis)
+			outbound.addToDetails(new MessageDetail(value: inbound.id, ownerType: MessageDetail.OwnerType.ACTIVITY, ownerId: autoforward.id))
 			outbound.text = outboundMessageText
 			autoforward.addToMessages(outbound).save(failOnError:true, flush:true)
 			inbound.refresh()

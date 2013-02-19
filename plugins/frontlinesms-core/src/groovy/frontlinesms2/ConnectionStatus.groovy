@@ -1,9 +1,11 @@
 package frontlinesms2
 
 enum ConnectionStatus {
-	NOT_CONNECTED,
 	CONNECTING,
-	CONNECTED
+	CONNECTED,
+	DISABLED,
+	FAILED,
+	NOT_CONNECTED
 
 	String getI18n() {
 		getClass().simpleName.toLowerCase() + "." + name().toLowerCase()
