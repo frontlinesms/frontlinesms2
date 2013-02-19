@@ -52,7 +52,7 @@ class SettingsController extends ControllerUtils {
 		def appSettings = [:] 
 		appSettings['routing.use'] = appSettingsService.get("routing.use")
 		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
-		render fconnectionRoutingMap
+		render "Use:${fconnectionRoutingMap}"
 	}
 
 	def selectLocale() {

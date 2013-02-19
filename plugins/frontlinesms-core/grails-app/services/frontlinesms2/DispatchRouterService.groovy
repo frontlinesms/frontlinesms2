@@ -57,6 +57,7 @@ class DispatchRouterService {
 			}
 
 			if(!routeId) {
+				//FIXME update based on the new connection sorting rules
 				if(appSettingsService.get('routing.otherwise') == 'any') {
 					log "## Sending to any available connection ##"
 					routeId = getRouteIdByRoundRobin()

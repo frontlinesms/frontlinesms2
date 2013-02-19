@@ -58,12 +58,13 @@
 				<fsms:info message="routing.info"/>
 				<g:form name="routing-form" url="[controller:'settings', action:'changeRoutingPreferences']">
 					<g:hiddenField name="routingUseOrder" value=""/>
+					<label id="warning_message"></label>
 					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable checklist no-description">
 						<g:each in="${fconnectionRoutingMap}" status="i" var="it">						
 							<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
 								<li>
-									<span class="grabber"></span>
 									<label for="routeRule-${i}">
+										<span class="grabber"></span>
 										<g:message code="routing.rule.${it.key}"/>
 										<g:checkBox name="routeRule-${i}" value="${it.key}" checked="${it.value}"/>
 									</label>
@@ -75,17 +76,15 @@
 						<g:each in="${fconnectionRoutingMap}" status="i" var="it">					
 							<g:if test="${(it.key instanceof frontlinesms2.Fconnection)}">
 								<li>
-									<span class="grabber"></span>
-									<label for="routeRule-${i}">
-										<p class="connection_names"><g:message code="routing.rules.device" args="[it.key.name]" /></p>
+									<label for="routeRule-${i}">										
+										<span class="grabber"></span>
+										<g:message code="routing.rules.device" args="[it.key.name]" />										
 										<g:checkBox name="routeRule-${i}" value="fconnection-${it.key.id}" checked="${it.value}"/>
 									</label>
 								</li>
 							</g:if>		
 						</g:each>
-						<p id="warning_message"></p>
 					</fsms:checkboxGroup>
-					
 					<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}" />		
 				</g:form>
 			</div>
@@ -95,26 +94,30 @@
 
 <r:script>
 $(function() {
-	var checked,msg,chkboxSelector;
+	var checkedValues,msg,chkboxSelector;
 	basicAuthValidation.enable();
 	$("#basic-authentication input[name=enabled]").attr("onchange", "basicAuthValidation.toggleFields(this)");
 	$("#basic-authentication input[type=submit]").attr("onclick", "basicAuthValidation.showErrors()");
 
-	checked = 0;
+	checkedValues = 0;
 	chkboxSelector = 'input[name^="routeRule"]';
+	msg = $("#warning_message");
 	$(chkboxSelector).each(function() {
-	 	if ($(this).is(':checked')) { checked++; }
+	 	if ($(this).is(':checked')) { checkedValues++; }
 	});
+	checkboxChecker(checkedValues, msg);
 	$(chkboxSelector).change(function() {
 		$($(this)).each(function() {
-		  if ($(this).is(':checked')) { checked++; }
-		  else { checked--; }
+			if ($(this).is(':checked')) { checkedValues++; }
+			else { checkedValues--; }
 		});
-		console.log("checked:"+checked);
-		msg = $("#warning_message");
-		if (checked === 0) { msg.html("Warning you have no rules or phone numbers selected.No messages will be sent. If you wish to send messages, please enable one of the above options"); }
-		else { msg.html(""); }
+		checkboxChecker(checkedValues, msg);
 	});
+
+	function checkboxChecker(checkedValues, warningObject){
+		if (checkedValues === 0) { warningObject.html("Warning you have no rules or phone numbers selected.No messages will be sent. If you wish to send messages, please enable one of the above options"); }
+		else { warningObject.html(""); }
+	}
 });
 
 </r:script>
