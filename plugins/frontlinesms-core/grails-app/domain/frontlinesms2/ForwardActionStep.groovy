@@ -10,12 +10,12 @@ class ForwardActionStep extends Step {
 
 	static configFields = [sentMessageText: 'textarea', recipients: '']
 
-	private static def RECIPIENT_VALIDATOR = { val, obj ->
+	private static def propertyValidator = { val, obj ->
 		obj.sentMessageText && obj.stepProperties.find { it.key == "recipient" }?.value
 	}
 
 	static constraints = {
-		stepProperties validator:RECIPIENT_VALIDATOR
+		stepProperties validator:propertyValidator
 	}
 
 	Map getConfig() {
@@ -59,7 +59,22 @@ class ForwardActionStep extends Step {
 		domainInstances - null
 	}
 
-	def setRecipients(groups, smartGroups, contacts, addresses) { }
+	def setRecipients(groups, smartGroups, contacts, addresses) {
+		if(groups)
+			setRecipientsBydomain("Group", groups)
+		if(smartGroups)
+			setRecipientsBydomain("SmartGroup", smartGroups)
+		if(contacts)
+			setRecipientsBydomain("Contact", contacts)
+		if(addresses)
+			setRecipientsBydomain("Address", addresses)
+	}
+
+	private def setRecipientsBydomain(domainName, instanceList) {
+		instanceList.each {
+			this.addToStepProperties(new StepProperty(key:"recipient", value:"${domainName}-${domainName == 'Address' ? it : it.id}")).save()
+		}
+	}
 	
 	def process(Fmessage message) {
 		autoforwardService.doForward(this, message)
