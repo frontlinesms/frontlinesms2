@@ -612,6 +612,7 @@ class ConfigureCustomActivityTab extends geb.Module {
 		joinButton { $("a", text:"Add sender to group") }
 		leaveButton { $("a", text:"Remove sender from group") }
 		replyButton { $("a", text:"Autoreply") }
+		forwardButton { $("a", text:"Autoforward") }
 		stepsContainer { $("#custom-activity-actions-container") }
 		steps { $(".step") }
 	}

@@ -118,4 +118,21 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			waitFor("very slow") { summary.displayed }
 	}
 
+	def 'Foward action step is part of the options present for the Customactivity'() {
+		when:
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
+		then:
+			waitFor { at CreateActivityDialog}
+		when:
+			customactivity.click()
+		then:
+			waitFor('slow') { at CustomActivityCreateDialog }
+		when:
+			keyword.keywordText.value("test")
+			next.click()
+		then:
+			configure.forwardButton.present
+	}
+
 }
