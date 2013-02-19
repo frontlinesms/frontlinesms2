@@ -18,6 +18,25 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 			activity.keywords*.value.containsAll(["TEST", "CUSTOM"])
 			activity.steps.size() == 2
 	}
+
+	def "autoforward steps are saved correctly"(){
+		given:
+			def contact1 = Contact.build(mobile:"123123")
+			def contact2 = Contact.build(mobile:"123124")
+			def group = Group.build()
+			def smartGroup = SmartGroup.build(name:'English numbers', mobile:'+44')
+			controller.params.jsonToSubmit = """[{"stepId":"","stepType":"forward","sentMessageText":"testmessage","recipients":["contact-${contact1.id}","contact-${contact2.id}","address-12343123","group-${group.id}","smartgroup-${smartGroup.id}"]}]"""
+			controller.params.name = "test save"
+			controller.params.keywords = "test, custom"
+			controller.params.sorting = "enabled"
+		when:
+			controller.save()
+		then:
+			def activity = CustomActivity.findByName("test save")
+			activity.keywords*.value.containsAll(["TEST", "CUSTOM"])
+			activity.steps.size() == 1
+			activity.steps*.stepProperties*.flatten().value.flatten().containsAll(["testmessage", "Contact-${contact1.id}", "Contact-${contact2.id}", "Address-12343123", "Group-${group.id}", "SmartGroup-${smartGroup.id}"])
+	}
 	
 	def "can edit an existing custom activity"() {
 		given:
