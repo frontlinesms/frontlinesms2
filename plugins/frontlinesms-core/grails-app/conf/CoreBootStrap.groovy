@@ -449,7 +449,7 @@ class CoreBootStrap {
 		def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
 		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:'autoreplyText', value:'reply to you all'))
 		def forwardStep = new ForwardActionStep()
-				.addToStepProperties(new StepProperty(key:'sentMessageText',value:'sending forward'))
+				.addToStepProperties(new StepProperty(key:'sentMessageText',value:"sending forward ${message_text}"))
 				.addToStepProperties(new StepProperty(key:'recipient',value:'Address-123123'))
 
 		new CustomActivity(name:'Do it all')
