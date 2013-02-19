@@ -10,6 +10,7 @@ class CustomActivityService {
 			println "<<<>>>"
 			println "$it"
 	 */
+	def recipientLookupService
 	def saveInstance(customActivity, params) {
 		println "customActivity Params ::${params}"
 		def steps = new JSONArray(params.jsonToSubmit)
@@ -37,7 +38,11 @@ class CustomActivityService {
 			println "# StepToEdit_ID # ${stepToEdit.id}"
 			println "# Adding step of type # ${stepToEdit.shortName}"
 			step.each { k,v->
-				if(!(k in ["stepType", "stepId"])) {
+				if(k == "recipients") {
+					println "processing recipients for ${stepToEdit.shortName} instance ${stepToEdit.id}. Value from widget is $v"
+					stepToEdit.setRecipients(recipientLookupService.getContacts([recipients:v]).values() as List)
+				}
+				else if(!(k in ["stepType", "stepId"])) {
 					stepToEdit.setPropertyValue(k,v)
 					println "# Setting $k $v for ${step.stepType}"
 				}

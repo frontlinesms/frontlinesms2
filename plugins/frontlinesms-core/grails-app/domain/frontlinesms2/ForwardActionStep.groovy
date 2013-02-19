@@ -59,7 +59,8 @@ class ForwardActionStep extends Step {
 		domainInstances - null
 	}
 
-	def setRecipients(groups, smartGroups, contacts, addresses) {
+	def setRecipients(contacts, groups, smartgroups, addresses) {
+		this.properties.findAllByKey("recipient").each { it.delete() }
 		if(groups)
 			setRecipientsBydomain("Group", groups)
 		if(smartGroups)
