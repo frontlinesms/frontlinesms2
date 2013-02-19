@@ -56,23 +56,13 @@ class DispatchRouterService {
 				}
 			}
 
-			if(!routeId) {
-				//FIXME update based on the new connection sorting rules
-				if(appSettingsService.get('routing.otherwise') == 'any') {
-					log "## Sending to any available connection ##"
-					routeId = getRouteIdByRoundRobin()
-				} else {
-					log "## Not sending message at all ##"
-				}
-			}
-
 			if(routeId) {
 				log "Sending with route: $routeId"
 				def fconnectionId = (routeId =~ /.*-(\d+)$/)[0][1]
 				def queueName = "seda:out-$fconnectionId"
 				log "Routing to $queueName"
 				return queueName
-			}
+			} else { log "## Not sending message at all ##" }
 
 			throw new NoRouteAvailableException()
 		}

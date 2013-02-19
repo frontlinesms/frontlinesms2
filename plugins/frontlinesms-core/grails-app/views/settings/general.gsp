@@ -94,24 +94,24 @@
 
 <r:script>
 $(function() {
-	var checkedValues,msg,chkboxSelector;
+	var checkedValues, warningObject, chkboxSelector;
 	basicAuthValidation.enable();
 	$("#basic-authentication input[name=enabled]").attr("onchange", "basicAuthValidation.toggleFields(this)");
 	$("#basic-authentication input[type=submit]").attr("onclick", "basicAuthValidation.showErrors()");
 
 	checkedValues = 0;
 	chkboxSelector = 'input[name^="routeRule"]';
-	msg = $("#warning_message");
+	warningObject = $("#warning_message");
 	$(chkboxSelector).each(function() {
-	 	if ($(this).is(':checked')) { checkedValues++; }
+		if ($(this).is(':checked')) { checkedValues++; }
 	});
-	checkboxChecker(checkedValues, msg);
+	checkboxChecker(checkedValues, warningObject);
 	$(chkboxSelector).change(function() {
 		$($(this)).each(function() {
 			if ($(this).is(':checked')) { checkedValues++; }
 			else { checkedValues--; }
 		});
-		checkboxChecker(checkedValues, msg);
+		checkboxChecker(checkedValues, warningObject);
 	});
 
 	function checkboxChecker(checkedValues, warningObject){

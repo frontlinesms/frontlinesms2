@@ -639,8 +639,18 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		if(!appSettingsService.get('routing.preferences.edited') || (appSettingsService.get('routing.preferences.edited') == false)){
 			println "### Changing Routing preferences ###"
 			appSettingsService.set('routing.uselastreceiver', false)
-			appSettingsService.set('routing.otherwise', 'any')
 			appSettingsService.set('routing.preferences.edited', true)
+		}
+		else {
+			def fcon = Fconnection.findAllBySendEnabled(true)
+			def one = ""
+			fcon.each {
+				def a = it as String
+				def b = a.split(":")
+				println "fconnection id:"+b[1]
+				one += "fconnection-"+b[1]+","
+			}
+			appSettingsService.set('routing.use', one as Object)
 		}
 	}
 }
