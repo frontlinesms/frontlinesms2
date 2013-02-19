@@ -1,11 +1,10 @@
 <%@ page import="frontlinesms2.WebconnectionActionStep" %>
 <fsms:step type="webconnectionStep" stepId="${stepId}">
 	<div class='webconnection-server-control'>
-		<label for="url"><g:message code="webconnection.url.label"/></label>
-		<g:textField name="url" id="" class="customactivity-field" value="${urlEncode}" size="30"/>
+		<label for="url"><g:message code="webconnection.url.label"/>
+			<g:textField name="url" id="" class="customactivity-field" value="${urlEncode}" size="30"/>
+		</label>
 
-
-		<g:set var="httpMethod" value="${httpMethod}"/>
 		
 		<label for="httpMethod">
 			<g:radio name="httpMethod" id="" class="customactivity-field" value="GET" checked="${(httpMethod == 'GET')?'checked':''}" />
