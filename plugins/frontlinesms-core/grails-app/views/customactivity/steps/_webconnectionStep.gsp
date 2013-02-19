@@ -1,20 +1,22 @@
 <%@ page import="frontlinesms2.WebconnectionActionStep" %>
 <fsms:step type="webconnectionStep" stepId="${stepId}">
-	<div>
+	<div class='webconnection-server-control'>
 		<label for="url"><g:message code="webconnection.url.label"/></label>
-		<g:textField name="url" id="" class="customactivity-field" value="${urlEncode}"/>
-	</div>
-	<div>
+		<g:textField name="url" id="" class="customactivity-field" value="${urlEncode}" size="30"/>
+
+
 		<g:set var="httpMethod" value="${httpMethod}"/>
 		
-		<label for="httpMethod"><g:message code="webconnection.httpMethod.get"/></label>
-		<g:radio name="httpMethod" id="" class="customactivity-field" value="GET" checked="${(httpMethod == 'GET')?'checked':''}" />
+		<label for="httpMethod">
+			<g:radio name="httpMethod" id="" class="customactivity-field" value="GET" checked="${(httpMethod == 'GET')?'checked':''}" />
+			<g:message code="webconnection.httpMethod.get"/>
+		</label>
 
-		<label for="httpMethod"><g:message code="webconnection.httpMethod.post"/></label>
-		<g:radio name="httpMethod" id="" class="customactivity-field" value="POST" checked="${(httpMethod == 'POST')?'checked':''}" />
+		<label for="httpMethod">
+			<g:radio name="httpMethod" id="" class="customactivity-field" value="POST" checked="${(httpMethod == 'POST')?'checked':''}" />
+			<g:message code="webconnection.httpMethod.post"/>
+		</label>
 	</div>
-
-	<h2><g:message code="webconnection.parameters"/></h2>
 
 	<table class="web-connection-param-table">
 		<thead>

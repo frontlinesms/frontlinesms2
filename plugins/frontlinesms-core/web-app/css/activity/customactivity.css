@@ -10,3 +10,10 @@
 #custom-activity-config-container .step.reply .controls .magicwand-container { visibility:visible; }
 #custom-activity-config-container .step.reply .controls.hidden { display:none; }
 #custom-activity-config-container .step.reply div.input { margin: 0; padding: 0; }
+
+#custom-activity-config-container .step.webconnectionStep .webconnection-server-control { width: 96%; border-radius: 2px; margin: 10px 0; padding: 0;}
+#custom-activity-config-container .step.webconnectionStep .webconnection-server-control label input[type=radio] { margin: 0 3px; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table { margin: 0; padding: 0; width: 100%; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table tr { margin: 0; padding: 2px 0; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table td { margin: 0; padding: 0; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table input[type=text] { margin: 0; padding: 2%; width: 96%; max-width: 96%; }
