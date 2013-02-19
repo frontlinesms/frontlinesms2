@@ -3,7 +3,7 @@ package frontlinesms2.message
 import frontlinesms2.*
 import frontlinesms2.utils.*
 
-class MessagesRecievedSpec extends MessageBaseSpec {
+class MessagesReceivedSpec extends MessageBaseSpec {
 	
 	def 'new messages in the current section are checked for in the backround every ten seconds and causes a notification to appear if there are new messages'() {
 		when:
