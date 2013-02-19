@@ -14,7 +14,6 @@ var custom_activity = (function() {
 		var titles, widths, maxWidth;
 		$(CONFIG_CONTAINER + " .step .remove-command").click(removeStep);
 		selectmenuTools.initAll(CONFIG_CONTAINER + " select:not([name=recipients])");
-		console.log("calling select menu");
 		magicwand.init($(CONFIG_CONTAINER + " select[id^='magicwand-select']"));
 
 		// calculate the length of the longest title here
@@ -26,6 +25,7 @@ var custom_activity = (function() {
 		$.each($('.message-composer'), function(index, value) {
 			messageComposerUtils.updateCharacterCount($(value));	
 		});
+		contactsearch.init($('select.chzn-select'));
 	},
 	init = function() {
 		$(CONFIG_CONTAINER).sortable();
