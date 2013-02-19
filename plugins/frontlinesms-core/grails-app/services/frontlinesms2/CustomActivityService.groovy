@@ -40,7 +40,7 @@ class CustomActivityService {
 			step.each { k,v->
 				if(k == "recipients") {
 					println "processing recipients for ${stepToEdit.shortName} instance ${stepToEdit.id}. Value from widget is $v"
-					stepToEdit.setRecipients(recipientLookupService.getContacts([recipients:v]).values() as List)
+					stepToEdit.setRecipients(recipientLookupService.contactSearchResults([recipients:v]).values() as List)
 				}
 				else if(!(k in ["stepType", "stepId"])) {
 					stepToEdit.setPropertyValue(k,v)

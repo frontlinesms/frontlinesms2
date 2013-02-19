@@ -40,7 +40,7 @@ class ForwardActionStepISpec extends grails.plugin.spock.IntegrationSpec {
 			group.save()
 			def smartGroup = new SmartGroup(name:'English numbers', mobile:'+44').save()
 
-			step.setRecipients([group], [smartGroup], [contact, contact2], ["+123321", "+234432"])
+			step.setRecipients([contact, contact2], [group], [smartGroup], ["+123321", "+234432"])
 		then:
 			step.recipients.containsAll(["+234234", "+2577", "+4411", "+4422", "+4433", "+123321", "+234432"])
 	}
