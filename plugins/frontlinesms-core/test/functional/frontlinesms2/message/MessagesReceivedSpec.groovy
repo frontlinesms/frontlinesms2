@@ -4,7 +4,6 @@ import frontlinesms2.*
 import frontlinesms2.utils.*
 
 class MessagesReceivedSpec extends MessageBaseSpec {
-	
 	def 'new messages in the current section are checked for in the backround every ten seconds and causes a notification to appear if there are new messages'() {
 		when:
 			createInboxTestMessages()
@@ -20,7 +19,7 @@ class MessagesReceivedSpec extends MessageBaseSpec {
 		then:
 			waitFor { messageList.newMessageNotification.displayed }
 	}
-	
+
 	def 'clicking the new message notification refreshes the list and removes the notification'() {
 		when:
 			createInboxTestMessages()
