@@ -6,12 +6,12 @@
 		</label>
 
 		
-		<label for="httpMethod">
+		<label>
 			<g:radio name="httpMethod" id="" class="customactivity-field" value="GET" checked="${(httpMethod == 'GET')?'checked':''}" />
 			<g:message code="webconnection.httpMethod.get"/>
 		</label>
 
-		<label for="httpMethod">
+		<label>
 			<g:radio name="httpMethod" id="" class="customactivity-field" value="POST" checked="${(httpMethod == 'POST')?'checked':''}" />
 			<g:message code="webconnection.httpMethod.post"/>
 		</label>
@@ -21,10 +21,10 @@
 		<thead>
 			<tr class="prop">
 				<td>
-					<label for="param-name"><g:message code="webconnection.param.name"/></label>
+					<g:message code="webconnection.param.name"/>
 				</td>
 				<td>
-					<label for="param-value"><g:message code="webconnection.param.value"/></label>
+					<g:message code="webconnection.param.value"/>
 				</td>
 			</tr>
 		</thead>
