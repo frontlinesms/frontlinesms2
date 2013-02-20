@@ -1,8 +1,12 @@
 var webconnectionDialog = (function () {
-	var pollInterval, _updateConfirmationScreen, validationMessageGenerator, _showTestRouteBtn, _toggleWizardButtons,
-			_setType, _handlers, _testRouteStatus, _checkRouteStatus, generateMessages, _toggleApiTab;
-	_updateConfirmationScreen = function () {};
-	_setType = function(type) {
+	var
+	updateConfirmationScreen = function () {},
+	setScripts =  function(scripts) {
+		resetValidator(scripts.validation);
+		webconnectionDialog.updateConfirmationScreen = scripts.updateConfirmationScreen;
+		webconnectionDialog.handlers = scripts.handlers;
+	},
+	setType = function(type) {
 		$.getJSON(url_root + "webconnection/" + type + "/config", function(data) {
 			var configTab, confirmTab; 
 			configTab = $("#webconnection-config");
@@ -12,34 +16,31 @@ var webconnectionDialog = (function () {
 			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
 
 			$("#webconnection-confirm").html(data.confirm);
-			webconnectionDialog.setScripts(eval("(" + data.scripts + ")"));
-			webconnectionDialog.updateConfirmationScreen();
+			setScripts(eval("(" + data.scripts + ")"));
+			updateConfirmationScreen();
 		});
-	};
-
-	_handlers = {};
+	},
 	validationMessageGenerator = function(fieldName, ruleName) {
 		var i18nKey, i18nString;
 		i18nKey = "webconnection." + fieldName + ".validation.error";
 		i18nString = i18n(i18nKey);
 		return i18nKey === i18nString? "": i18nString;
-	};
-	_showTestRouteBtn = function() {
+	},
+	showTestRouteBtn = function() {
 		var buttonSet, testRouteBtn; 
 		buttonSet = $('.ui-dialog-buttonset');
 		testRouteBtn = buttonSet.find("#testRoute");
 		if(testRouteBtn.length === 0) {
 			testRouteBtn = mediumPopup.appendButton("testRoute", "submit", i18n('webconnection.testroute.label'));
 			testRouteBtn.bind({
-				click: _testRouteStatus
+				click: testRouteStatus
 			});
 		} else {
 			testRouteBtn.show();
 		}
 		buttonSet.append(testRouteBtn);
-	};
-
-	_testRouteStatus = function() {
+	},
+	testRouteStatus = function() {
 		var params = {};
 		if(mediumPopup.tabValidates(mediumPopup.getCurrentTab())) {
 			params.ownerId = $("#activityId").val();
@@ -48,15 +49,14 @@ var webconnectionDialog = (function () {
 				type: 'post',
 				data: $("#new-webconnection-form").serialize() + "&" + $.param(params),
 				url: url_root + "webconnection/testRoute",
-				success: function(data, textStatus) {_checkRouteStatus(data);}
+				success: function(data, textStatus) { checkRouteStatus(data); }
 			});
 		} else {
 			$('.error-panel').show();
 		}
 		return false;
-	};
-
-	_toggleWizardButtons = function() {
+	},
+	toggleWizardButtons = function() {
 		if($("#submit").is(":disabled")) {
 			$("#testRoute").attr('disabled', false);
 			$("#submit").attr('disabled', false);
@@ -68,9 +68,8 @@ var webconnectionDialog = (function () {
 			$("#cancel").attr('disabled', "disabled");
 			$("#prevPage").attr('disabled', "disabled");
 		}
-	}
-	
-	_checkRouteStatus = function(response) {
+	},
+	checkRouteStatus = function(response) {
 		if(response.ok) {
 			$("#testRoute").children().remove();
 			$("#testRoute").append("<span>"+i18n('webconnection.testing.label')+"</span>");
@@ -80,14 +79,14 @@ var webconnectionDialog = (function () {
 				data: {ownerId:response.ownerId},
 				url: url_root + "webconnection/checkRouteStatus"
 			});
-			_toggleWizardButtons();
+			toggleWizardButtons();
 			pollInterval = setInterval( function() {
 				$.ajax({
 					success: function(response) {
 								if(response.status === "success" || response.status === "failed") {
 									$(".error-panel").text(i18n('webconnection.popup.'+ response.status + '.label'));
 									$(".error-panel").show();
-									_toggleWizardButtons();
+									toggleWizardButtons();
 									if(response.status === "success") {
 										loadSummaryTab(response, i18n('webconnection.label'));
 									} else {
@@ -99,13 +98,11 @@ var webconnectionDialog = (function () {
 							}
 				});
 			}, 3000);
-
 		} else {
 			displayErrors(response);
 		}
-	};
-
-	_toggleApiTab = function() {
+	},
+	toggleApiTab = function() {
 		$("input[name=webconnectionType]").live('change', function() {
 			if($(this).val() === 'generic') {
 				mediumPopup.enableTab('webconnection-api');
@@ -113,8 +110,7 @@ var webconnectionDialog = (function () {
 				mediumPopup.disableTab('webconnection-api');
 			}
 		});
-	};
-	
+	},
 	generateMessages = function(fieldsAndRules) {
 		var i, rules, field, messageMap = {};
 		for(field in fieldsAndRules) {
@@ -129,56 +125,50 @@ var webconnectionDialog = (function () {
 			}
 		}
 		return messageMap;
+	},
+	addValidationRules =  function() {
+		var keyWordTabValidation, configureTabValidation, confirmTabValidation;
+
+		aliasCustomValidation();
+		genericSortingValidation();
+
+		keyWordTabValidation = function() {
+			return !isGroupChecked("blankKeyword") || validator.element('#keywords');
+		};
+
+		configureTabValidation = function() {
+			var isValid = true;
+			$('#webconnection-config input:visible').each(function() {
+				isValid = isValid && validator.element(this);
+			});
+			return isValid;
+		};
+
+		confirmTabValidation = function() {
+			return validator.element('input[name=name]');
+		};
+
+		mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
+		mediumPopup.addValidation('webconnection-configure', configureTabValidation);
+		mediumPopup.addValidation('webconnection-confirm', confirmTabValidation);
+	},
+	resetValidator = function(messageRules) {
+		$("#new-webconnection-form").data("validator", null);
+		validator = $("#new-webconnection-form").validate({
+			errorContainer:".error-panel",
+			messages:generateMessages(messageRules)
+		});
 	};
 
 	return {
-		resetValidator: function(messageRules) {
-			$("#new-webconnection-form").data("validator", null);
-			validator = $("#new-webconnection-form").validate({
-				errorContainer:".error-panel",
-				messages:generateMessages(messageRules)
-			});
-		},
-		addValidationRules: function() {
-			var keyWordTabValidation, configureTabValidation, confirmTabValidation;
-
-			aliasCustomValidation();
-			genericSortingValidation();
-
-			keyWordTabValidation = function() {
-				var valid;
-				if(!isGroupChecked("blankKeyword")) { valid = validator.element('#keywords'); }
-				else { valid = true; }
-				return valid;
-			};
-
-			configureTabValidation = function() {
-				var isValid = true;
-				$('#webconnection-config input:visible').each(function() {
-					isValid = isValid && validator.element(this);
-				});
-				return isValid;
-			};
-
-			confirmTabValidation = function() {
-				return validator.element('input[name=name]');
-			};
-
-			mediumPopup.addValidation('activity-generic-sorting', keyWordTabValidation);
-			mediumPopup.addValidation('webconnection-configure', configureTabValidation);
-			mediumPopup.addValidation('webconnection-confirm', confirmTabValidation);
-		},
-		setScripts: function(scripts) {
-			webconnectionDialog.resetValidator(scripts.validation);
-			webconnectionDialog.updateConfirmationScreen = scripts.updateConfirmationScreen;
-			webconnectionDialog.handlers = scripts.handlers;
-		},
-		updateConfirmationScreen:_updateConfirmationScreen,
-		handlers:_handlers,
-		setType:_setType,
-		showTestRouteBtn:_showTestRouteBtn,
-		toggleApiTab:_toggleApiTab,
-		___end___:null
-	};
+		resetValidator:resetValidator,
+		addValidationRules:addValidationRules,
+		setScripts:setScripts,
+		updateConfirmationScreen:updateConfirmationScreen,
+		handlers:{},
+		setType:setType,
+		showTestRouteBtn:showTestRouteBtn,
+		toggleApiTab:toggleApiTab
+	},
 }());
 
