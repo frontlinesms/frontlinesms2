@@ -1,7 +1,7 @@
-#custom-activity-actions-container { width:100%; }
+#custom-activity-actions-container { margin:3px; margin-bottom: 5px; padding:5px; text-align: right; }
+#custom-activity-actions-container h4 { font-weight: bold; display: inline-block; } 
 #custom-activity-config-container { padding:2px; }
-#custom-activity-config-container .step { padding:5px; margin:3px 0; cursor:move; border-bottom:1px solid #9E9E9E; }
-#custom-activity-config-container .step:last-child { border-bottom:none; }
+#custom-activity-config-container .step { padding:5px; padding-top:6px; cursor:move; border-top:1px solid #9E9E9E; }
 #custom-activity-config-container .step > .remove-command { float:right; padding:5px 0; background:none; text-indent: 0; cursor: pointer; }
 #custom-activity-config-container .step textarea { display:block; width:98%; }
 #custom-activity-config-container .step h4 { display:inline-block; padding-left:2px; }
