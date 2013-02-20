@@ -56,9 +56,9 @@
 			<div id="routing-preferences">
 				<h2><g:message code="routing.title"/></h2>
 				<fsms:info message="routing.info"/>
+				<div class="input"><p class="warning_message"></p></div>
 				<g:form name="routing-form" url="[controller:'settings', action:'changeRoutingPreferences']">
 					<g:hiddenField name="routingUseOrder" value=""/>
-					<label id="warning_message"></label>
 					<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable checklist no-description">
 						<g:each in="${fconnectionRoutingMap}" status="i" var="it">						
 							<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
@@ -101,7 +101,7 @@ $(function() {
 
 	checkedValues = 0;
 	chkboxSelector = 'input[name^="routeRule"]';
-	warningObject = $("#warning_message");
+	warningObject = $(".warning_message");
 	$(chkboxSelector).each(function() {
 		if ($(this).is(':checked')) { checkedValues++; }
 	});
@@ -115,8 +115,8 @@ $(function() {
 	});
 
 	function checkboxChecker(checkedValues, warningObject){
-		if (checkedValues === 0) { warningObject.html("Warning you have no rules or phone numbers selected.No messages will be sent. If you wish to send messages, please enable one of the above options"); }
-		else { warningObject.html(""); }
+		if (checkedValues === 0) { warningObject.html("Warning you have no rules or phone numbers selected.No messages will be sent. If you wish to send messages, please enable one of the above options").css("visibility","visible").show( "drop", { direction: "up" }, "slow"); }
+		else { warningObject.html("").hide( "drop", { direction: "up" }, "slow"); }
 	}
 });
 

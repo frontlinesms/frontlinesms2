@@ -46,7 +46,6 @@ class CoreBootStrap {
 			appSettingsService['newfeatures.popup.show.immediately'] = false
 			//default routing in tests is to use any available connections
 			appSettingsService.set('routing.use', 'uselastreceiver')
-			appSettingsService.set('routing.otherwise', 'any')
 			appSettingsService.set('routing.preferences.edited', true)
 		}
 
@@ -63,7 +62,6 @@ class CoreBootStrap {
 			//camelContext.tracing = true
 			dev_disableSecurityFilter()
 			updateFeaturePropertyFileValues()
-			setDefaultMessageRoutingPreferences()
 		}
 
 		if(bootstrapData) {
@@ -80,6 +78,7 @@ class CoreBootStrap {
 			dev_initSubscriptions()
 			dev_initWebconnections()
 			dev_initLogEntries()
+			setDefaultMessageRoutingPreferences()
 		}
 
 		if(Environment.current == Environment.PRODUCTION) {
@@ -643,14 +642,15 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		}
 		else {
 			def fcon = Fconnection.findAllBySendEnabled(true)
-			def one = ""
+			def ids = ""
 			fcon.each {
-				def a = it as String
-				def b = a.split(":")
-				println "fconnection id:"+b[1]
-				one += "fconnection-"+b[1]+","
+				def map = it as String
+				def separator = map.split(":")
+				def id = separator[1].trim()
+				println "fconnection id:${id}"
+				ids += "fconnection-${id},"
 			}
-			appSettingsService.set('routing.use', one as Object)
+			appSettingsService.set('routing.use', ids as Object)
 		}
 	}
 }
