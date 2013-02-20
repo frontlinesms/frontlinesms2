@@ -6,7 +6,7 @@ app_info = (function() {
 	init = function() {
 		counter = 0;
 		callbacks = {};
-		timer.setInterval(requester, 1000);
+		timer.setInterval(requester, 15000);
 	},
 	callbackProcessor = function(data) {
 		var c;
