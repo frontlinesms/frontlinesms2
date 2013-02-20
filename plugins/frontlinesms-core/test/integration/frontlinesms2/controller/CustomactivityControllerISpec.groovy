@@ -33,9 +33,10 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 			controller.save()
 		then:
 			def activity = CustomActivity.findByName("test save")
+			def expectedResults = ["testmessage", "Contact-${contact1.id}", "Contact-${contact2.id}", "Address-12343123", "Group-${group.id}", "SmartGroup-${smartGroup.id}"].collect { it.toString() }
 			activity.keywords*.value.containsAll(["TEST", "CUSTOM"])
 			activity.steps.size() == 1
-			activity.steps*.stepProperties*.flatten().value.flatten().containsAll(["testmessage", "Contact-${contact1.id}", "Contact-${contact2.id}", "Address-12343123", "Group-${group.id}", "SmartGroup-${smartGroup.id}"])
+			activity.steps*.stepProperties*.flatten().value.flatten().containsAll(expectedResults)
 	}
 	
 	def "can edit an existing custom activity"() {
