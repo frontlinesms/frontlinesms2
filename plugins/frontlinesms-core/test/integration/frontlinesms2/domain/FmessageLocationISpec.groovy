@@ -102,10 +102,10 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can fetch all pending messages"() {
 		setup:
-			def m4 = new Fmessage(src:"src", text:"text", starred:true, date:new Date())
+			new Fmessage(src:"src", text:"text", starred:true, date:new Date())
 				.addToDispatches(dst:'1234567', status:DispatchStatus.PENDING)
 				.save(failOnError:true)
-			def m3 = new Fmessage(src:"src", text:"text", date:new Date())
+			new Fmessage(src:"src", text:"text", date:new Date())
 				.addToDispatches(dst:'1234567', status:DispatchStatus.FAILED)
 				.save(failOnError:true)
 		when:
@@ -205,16 +205,16 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		Fmessage.build(src:"9544426444", starred:true, date:BASE_DATE - 5000)
 		
 		// OUTGOING MESSAGES
-		def m1 = new Fmessage(src:'Mary', text:'hi Mary', date:BASE_DATE - 2)
+		new Fmessage(src:'Mary', text:'hi Mary', date:BASE_DATE - 2)
 				.addToDispatches(dst:'1234567', status:DispatchStatus.SENT, dateSent:new Date())
 				.save(flush:true, failOnError:true)
-		def m2 = new Fmessage(src:'+254445566', text:'test', date:BASE_DATE - 1, starred:true)
+		new Fmessage(src:'+254445566', text:'test', date:BASE_DATE - 1, starred:true)
 				.addToDispatches(dst:'1234567', status:DispatchStatus.SENT, dateSent:new Date())
 				.save(flush:true, failOnError:true)
-		def m3 = new Fmessage(src:"src", text:"text", date:new Date())
+		new Fmessage(src:"src", text:"text", date:new Date())
 				.addToDispatches(dst:'1234567', status:DispatchStatus.FAILED)
 				.save(flush:true, failOnError:true)
-		def m4 = new Fmessage(src:"src", text:"text", starred:true, date:new Date())
+		new Fmessage(src:"src", text:"text", starred:true, date:new Date())
 				.addToDispatches(dst:'1234567', status:DispatchStatus.PENDING)
 				.save(flush:true, failOnError:true)
 	}
