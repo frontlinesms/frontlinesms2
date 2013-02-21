@@ -39,6 +39,9 @@
 	handlers: (function() {
 		var removeRule = function(_removeAnchor) {
 			var row = $(_removeAnchor).closest('.web-connection-parameter');
+			if($('.web-connection-parameter').length === 1) {
+				row.parent().parent().find("thead").hide();
+			}
 			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
 			if(row.parent().find('.web-connection-parameter').length === 1) {
 				row.addClass("disabled");
@@ -58,6 +61,7 @@
 
 		var addNewParam = function(tableParent) {
 			if($('.web-connection-parameter:hidden').length === 1) {
+					tableParent.find("thead").show();
 					$('.web-connection-parameter').show();
 					$('.web-connection-parameter').removeClass("disabled");
 					$('.web-connection-parameter').find("input").attr("disabled", false);
