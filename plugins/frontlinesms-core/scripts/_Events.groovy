@@ -74,6 +74,7 @@ def getApplicationProperty(key) {
 }
 
 eventCompileStart = { kind ->
+	ant.exec executable:'do/clean_naughty_camel'
 	if(Environment.current == Environment.PRODUCTION) {
 		// Check we have no snapshot dependencies
 		if(new File('grails-app/conf/BuildConfig.groovy').text.contains('SNAPSHOT')) {
