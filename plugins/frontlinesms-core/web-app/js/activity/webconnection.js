@@ -169,6 +169,6 @@ var webconnectionDialog = (function () {
 		setType:setType,
 		showTestRouteBtn:showTestRouteBtn,
 		toggleApiTab:toggleApiTab
-	},
+	}
 }());
 
