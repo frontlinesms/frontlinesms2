@@ -10,13 +10,6 @@
 		<fsms:magicWand target="param-value" fields="${Webconnection.subFields*.key}" onchange='webconnectionDialog.handlers.autofillValue(this);'/>
 	</td>
 	<td>
-		<a	class="addNew"
-			title="Add new parameter"
-			onclick="webconnectionDialog.handlers.addNewParam($(this).parent().parent().parent().parent())">
-			+
-		</a>
-	</td>
-	<td>
 		<a onclick="webconnectionDialog.handlers.removeRule(this)" class="remove-command" title='Delete'>-</a>
 	</td>
 </tr>

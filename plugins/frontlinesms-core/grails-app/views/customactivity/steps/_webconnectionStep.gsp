@@ -7,7 +7,7 @@
 
 		
 		<label>
-			<g:radio name="httpMethod-${stepId}-${random}" id="" class="customactivity-field" value="GET" checked="${(httpMethod == 'GET')?'checked':''}" />
+			<g:radio name="httpMethod-${stepId}-${random}" id="" class="customactivity-field" value="GET" checked="${(httpMethod == 'GET' || httpMethod == null)?'checked':''}" />
 			<g:message code="webconnection.httpMethod.get"/>
 		</label>
 
@@ -44,4 +44,7 @@
 			</g:else>
 		</tbody>
 	</table>
+	<a class="btn addNew" onclick="webconnectionDialog.handlers.addNewParam($(this).parent().find('.web-connection-param-table'))">
+		<g:message code="webconnection.add.anotherparam"/>
+	</a>
 </fsms:step>
