@@ -12,7 +12,7 @@ var custom_activity = (function() {
 	},
 	initSteps = function() {
 		var titles, widths, maxWidth;
-		$(CONFIG_CONTAINER + " .step .remove-command").click(removeStep);
+		$(CONFIG_CONTAINER + " .step > .remove-command").click(removeStep);
 		selectmenuTools.initAll(CONFIG_CONTAINER + " select");
 		magicwand.init($(CONFIG_CONTAINER + " select[id^='magicwand-select']"));
 
@@ -53,7 +53,7 @@ var customActivityDialog = (function(){
 				autoreplyText: { required:true },
 				name: { required:true },
 				url: { required :true },
-				'param-name' : { required : true }
+				'param-name:not([disabled])' : { required : true }
 			},
 			errorPlacement: function(error, element){
 				$(".error-panel").html(error);
@@ -81,7 +81,7 @@ var customActivityDialog = (function(){
 				valid = valid && validator.element($(element));
 			});
 
-			$.each($("input[name='param-name']"), function(index, element) {
+			$.each($("input[name='param-name']:not([disabled])"), function(index, element) {
 				valid = valid && validator.element($(element));
 			});
 

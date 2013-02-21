@@ -40,7 +40,7 @@
 		var removeRule = function(_removeAnchor) {
 			var row = $(_removeAnchor).closest('.web-connection-parameter');
 			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
-			if($('.web-connection-parameter').length === 1) {
+			if(row.parent().find('.web-connection-parameter').length === 1) {
 				row.addClass("disabled");
 				row.find("input").removeClass("error");
 				row.find("input").attr("disabled", "disabled");
