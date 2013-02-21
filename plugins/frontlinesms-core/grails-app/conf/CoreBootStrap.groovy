@@ -641,16 +641,9 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 			appSettingsService.set('routing.preferences.edited', true)
 		}
 		else {
-			def fcon = Fconnection.findAllBySendEnabled(true)
-			def ids = ""
-			fcon.each {
-				def map = it as String
-				def separator = map.split(":")
-				def id = separator[1].trim()
-				println "fconnection id:${id}"
-				ids += "fconnection-${id},"
-			}
-			appSettingsService.set('routing.use', ids as Object)
+			def fconnectionInstanceList = Fconnection.findAllBySendEnabled(true)
+			def fconnectionIdList = fconnectionInstanceList.collect {"fconnection-${it.id}"}.join(",")
+			appSettingsService.set('routing.use', fconnectionIdList)
 		}
 	}
 }
