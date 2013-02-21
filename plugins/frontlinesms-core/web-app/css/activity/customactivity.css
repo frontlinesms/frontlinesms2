@@ -1,7 +1,8 @@
 #custom-activity-actions-container { margin:3px; margin-bottom: 5px; padding:5px; padding-right: 2px; text-align: right; }
 #custom-activity-actions-container h4 { font-weight: bold; display: inline-block; } 
 #custom-activity-config-container { padding:2px; }
-#custom-activity-config-container .step { padding:5px; cursor:move; border:1px solid #bbb; border-radius: 3px; margin: 3px 0; }
+#custom-activity-config-container .step { padding:5px; cursor: move; border-bottom:2px solid #efefef; }
+#custom-activity-config-container .step:hover { background-color: #eee; }
 #custom-activity-config-container .step > .remove-command { font-weight:bold; font-size: 1.2em; float:right; cursor: pointer; margin-top: 4px; }
 #custom-activity-config-container .step textarea { display:block; width:98%; }
 #custom-activity-config-container .step h4 { display:inline-block; padding-left:2px; padding-top: 3px; }
@@ -20,7 +21,9 @@
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table { margin: 5px; margin-top: 10px; padding: 0; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table tbody tr { border-bottom: 3px solid transparent; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table td { margin: 0; padding: 0; }
-#custom-activity-config-container .step.webconnectionStep .web-connection-param-table tbody .addNew { cursor:pointer; font-weight: bold; font-size: 1.4em; padding: 2px; }
-#custom-activity-config-container .step.webconnectionStep td > .remove-command { background:none; text-indent: 0; cursor: pointer; font-weight: bold; font-size: 1.4em; padding: 2px; padding-bottom: 7px; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table td > a { cursor:pointer; font-weight: bold; font-size: 1.4em; color: #fff; background-color: #bbb; border-radius: 50%; text-align: center; height: 8px; width: 16px; display: inline-block; padding: auto 3px; padding-bottom: 7px; padding-top: 1px; line-height: 0.8em;  }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table td > a:hover { background-color: #999; } 
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table td > a span { vertical-align: middle; } 
+#custom-activity-config-container .step.webconnectionStep td > .remove-command { background:none; text-indent: 0; margin-bottom: 0; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table input[type=text] { margin-right: 2px; padding: 4px; width: 175px; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table .magicwand-container { visibility:visible; margin: 0 5px; }
