@@ -25,6 +25,6 @@
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table td > a { cursor:pointer; font-weight: bold; font-size: 1.4em; color: #fff; background-color: #bbb; border-radius: 50%; text-align: center; height: 8px; width: 16px; display: inline-block; padding: auto 3px; padding-bottom: 7px; padding-top: 1px; line-height: 0.8em;  }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table td > a:hover { background-color: #999; } 
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table td > a span { vertical-align: middle; } 
-#custom-activity-config-container .step.webconnectionStep td > .remove-command { background:none; text-indent: 0; margin-bottom: 0; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table td > a.remove-command { background-image:none; text-indent: 0; margin-bottom: 0; line-height: 0.8em; padding-bottom: 8px; padding-top: 0; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table input[type=text] { margin-right: 2px; padding: 4px; width: 175px; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table .magicwand-container { visibility:visible; margin: 0 5px; }
