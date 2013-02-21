@@ -76,6 +76,6 @@
 	padding-right:5px;
 }
 
-input[type='text'].error, #recipients-list.error, textarea.error {
+input[type='text'].error, #recipients-list.error, textarea.error, .chzn-container-multi .chzn-choices.error {
 	border:1px solid red;
 }

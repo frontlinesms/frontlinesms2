@@ -77,12 +77,17 @@ var customActivityDialog = (function(){
 				valid = valid && validator.element($(element));
 			});
 
+			$.each($(".chzn-select"), function(index, element) {
+				valid = valid && validator.element($(element));
+			});
+			$(".chzn-select").live("change", function() { validator.element($(this)); });
 			return valid;
 		},
 		confirmTabValidation = function() {
 			setJsonToSend();
 			return validator.element("input[name=name]");
 		};
+		customValidationForRecipientSelector();
 		customValidationForGroups();
 
 		mediumPopup.addValidation("activity-generic-sorting", keyWordTabValidation);

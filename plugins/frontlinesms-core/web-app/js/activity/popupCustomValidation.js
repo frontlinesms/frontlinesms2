@@ -85,3 +85,17 @@ function customValidationForGroups(){
 		return ($(element).val() != "null")
 	}, i18n("validation.group.notnull"));
 }
+
+function customValidationForRecipientSelector(){
+	jQuery.validator.addMethod("chzn-select", function(value, element) {
+		var isValid = $(element).val() != null;
+		var wrapperUl = $(element).parent().find('.chzn-choices');
+		if (!isValid) {
+			$(wrapperUl).addClass("error");
+		}
+		else {
+			$(wrapperUl).removeClass("error");
+		}
+		return ($(element).val() != null);
+	}, i18n("validation.recipients.notnull"));
+}
