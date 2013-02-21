@@ -81,6 +81,7 @@ class CreateActivityDialog extends MediumPopup {
 		autoforward { $('input[value="autoforward"]') }
 		webconnection(wait:true) { $('input[value="webconnection"]') }
 		subscription { $('input[value="subscription"]') }
+		customactivity { $('input[value="customactivity"]') }
 	}
 }
 
@@ -576,6 +577,57 @@ class AutoforwardConfirmTab extends geb.Module {
 
 class AutoforwardSummaryTab extends geb.Module {
 	static base = { $('div#tabs-5') }
+	static content = {
+		message { $("div.summary") }
+	}
+}
+
+class CustomActivityCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("custom activity") || popupTitle.contains("edit")
+	}
+	static content = {
+		keyword { module ConfigureCustomKeywordTab}
+		configure { module ConfigureCustomActivityTab}
+		confirm { module CustomActivityConfirmTab}
+		summary { module CustomActivitySummaryTab}
+		validationErrorText { $('label.error').text() }
+		errorText { errorPanel.text()?.toLowerCase() }
+		error { errorPanel }
+		create { $('button#submit') }
+	}
+}
+
+class ConfigureCustomKeywordTab extends geb.Module {
+	static base = { $('div#tabs-1')}
+	static content = {
+		keywordText { $('#keywords') }
+		blankKeyword {$('#blankKeyword')}
+	}
+}
+
+class ConfigureCustomActivityTab extends geb.Module {
+	static base = { $('div#tabs-2')}
+	static content = {		
+		joinButton { $("a", text:"Add sender to group") }
+		leaveButton { $("a", text:"Remove sender from group") }
+		replyButton { $("a", text:"Autoreply") }
+		stepsContainer { $("#custom-activity-actions-container") }
+		steps { $(".step") }
+	}
+}
+
+class CustomActivityConfirmTab extends geb.Module {
+	static base = { $("div#tabs-3") }
+	static content = {
+		name { $('input#name') }
+		keywordConfirm {$("#keyword-confirm").text()}
+		stepActionsConfirm { $("#customactivity-confirm-action-steps").text() }
+	}
+}
+
+class CustomActivitySummaryTab extends geb.Module {
+	static base = { $("div#tabs-4") }
 	static content = {
 		message { $("div.summary") }
 	}

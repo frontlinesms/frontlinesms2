@@ -72,7 +72,6 @@ class SettingsController extends ControllerUtils {
 		println "params:: $params"
 
 		appSettingsService.set('routing.use', params.routingUseOrder)
-		appSettingsService.set('routing.otherwise', params.otherwise)
 		redirect action:'general'
 	}
 

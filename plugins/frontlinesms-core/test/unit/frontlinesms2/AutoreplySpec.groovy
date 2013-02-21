@@ -4,7 +4,7 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(Autoreply)
-@Mock([Keyword])
+@Mock([Keyword, AutoreplyService])
 class AutoreplySpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
 	
@@ -34,23 +34,18 @@ class AutoreplySpec extends Specification {
 			'test' | 'something' | true
 	}
 
-	def 'processKeyword should generate an autoreply'() {
+	def 'processKeyword should invoke doReply on autoreplyService'() {
 		given:
 			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
 
-			def sendService = Mock(MessageSendService)
-			autoreply.messageSendService = sendService
-
-			def replyMessage = mockFmessage("woteva")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
-			}) >> replyMessage
+			def autoreplyService = Mock(AutoreplyService)
+			autoreply.autoreplyService = autoreplyService
 
 			def inMessage = mockFmessage("message text", TEST_NUMBER)
 		when:
 			autoreply.processKeyword(inMessage, Mock(Keyword))
 		then:
-			1 * sendService.send(replyMessage)
+			1 * autoreplyService.doReply(autoreply, inMessage)
 	}
 
 	private def mockKeyword(String value) {

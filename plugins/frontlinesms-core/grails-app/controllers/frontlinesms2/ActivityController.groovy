@@ -20,6 +20,7 @@ class ActivityController extends ControllerUtils {
 	
 	def edit() {
 		withActivity { activityInstance ->
+			// TODO groups should only be provided if this activity specifically needs them
 			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 			def activityType = activityInstance.shortName
 			render view:"../$activityType/create", model:[contactList: Contact.list(),

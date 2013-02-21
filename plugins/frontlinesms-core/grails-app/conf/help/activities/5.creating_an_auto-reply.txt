@@ -1,0 +1,73 @@
+# Creating an AutoReply #
+
+An autoreply is a type of activity which allows you to set up FrontlineSMS to automatically send replies to messages as they are received. Autoreplies can be set up to work globally, on all messages that are received, or they can be set up to be triggered by messages containing [keywords][1]. 
+
+Received messages that trigger an autoreply based on a keyword will be moved into the autoreply activity along with a copy of the autoreply that was sent. 
+
+A global autoreply will copy incoming messages from the [inbox][2] to the autoreply activity, ensuring that the original message isn't lost. 
+
+Auto-replies would be useful as an Out of Office message, to provide an acknowledgement of receipt, or to disseminate information on demand. For example, they could be set up to provide medical information for illnesses or symptoms set up as keywords in the system.
+
+### [How to Create an AutoReply][3]
+
+1.  From the [messages tab][2] click on 'Create New Activity'.
+2.  A new window will appear and you will be presented with a number of options. Choose "AutoReply" and click next.
+![Select Activity][9]
+
+## Automatic Sorting
+![Auto sorting][10]
+
+On the next tab, you can configure FrontlineSMS to automatically process an autoreply message when a certain keyword is received; not to use a keyword, in which case the autoreply is only triggered when messages are manually moved into your Autoreply; or to respond to all incoming messages with an autoreply. Only one activity at a time can have this setting. 
+
+Select your desired option. In the lower half of this dialogue, you can set the keyword, if applicable. You can enter any number of keywords separated by commas, and any incoming message that starts with one of those keywords will trigger the autoreply. This means that you can cater for spelling errors, different languages, and other reasons for differing keywords.
+
+_**Note:** Top Level Keywords are **unique.** Once a top level keyword has been used in an activity it cannot be used in another activity, unless that activity is archived or deleted._
+
+When you have finished setting up your automatic processing options, click next.
+
+**_Enter Message_**  
+
+![Enter Message][11]
+
+On this screen you will be able to enter the message you would like to use as the autoreply.
+
+You can also add expressions to the message to add a more personal touch.
+
+**_Summary Screen_**  
+
+On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
+
+![Summary][12]
+
+You will also be able to name your autoreply so that it is easily recognizable.
+
+_**Note:** Activity names must be unique. You cannot have two activities with the same name. When an activity is deleted **and** removed from the trash, that name can then be used in any new activities._
+
+Clicking next will create the [activity][5].
+
+**_Confirmation_**  
+
+Once successfully created, you will see a confirmation screen like this one:
+
+![Confirmation][13]
+
+Clicking OK will take you back to the [Messages Tab][2]
+
+Your Auto-reply will appear under the Activities sub-heading.
+
+### Related Actions
+[Creating a Poll][6]  
+[Creating a Group][7]  
+[Creating a Smart Group][8]  
+
+[2]: ../messages/1.getting_around_the_messages_tab
+[3]: ../activities/5.creating_an_auto-reply
+[5]: ../activities/1.getting_around_activities
+[6]: ../activities/3.creating_a_poll
+[7]: ../contacts/4.creating_a_group
+[8]: ../contacts/5.creating_a_smart_group
+[9]: ../images/help/poll1.png
+[10]: ../images/help/autoreply1.png
+[11]: ../images/help/autoreply2.png
+[12]: ../images/help/autoreply3.png
+[13]: ../images/help/autoreply4.png

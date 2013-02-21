@@ -17,10 +17,24 @@ class CoreAppInfoProvidersSpec extends Specification {
 			color == expectedColor
 		where:
 			expectedColor | statuses
-			'red'         | []
-			'red'         | [ConnectionStatus.NOT_CONNECTED, ConnectionStatus.NOT_CONNECTED]
-			'green'       | [ConnectionStatus.NOT_CONNECTED, ConnectionStatus.CONNECTED, ConnectionStatus.NOT_CONNECTED]
-			'green'       | [ConnectionStatus.CONNECTED, ConnectionStatus.CONNECTED]
+			'grey'        | []
+			'grey'        | [DISABLED]
+			'grey'        | [NOT_CONNECTED, NOT_CONNECTED]
+			'grey'        | [DISABLED, NOT_CONNECTED, NOT_CONNECTED]
+			'orange'      | [CONNECTING]
+			'orange'      | [CONNECTING, NOT_CONNECTED]
+			'orange'      | [CONNECTING, NOT_CONNECTED, DISABLED]
+			'orange'      | [CONNECTING, NOT_CONNECTED, DISABLED, CONNECTED]
+			'green'       | [NOT_CONNECTED, CONNECTED, NOT_CONNECTED]
+			'green'       | [DISABLED, NOT_CONNECTED, CONNECTED, NOT_CONNECTED]
+			'green'       | [CONNECTED]
+			'green'       | [CONNECTED, CONNECTED]
+			'green'       | [DISABLED, CONNECTED]
+			'green'       | [DISABLED, CONNECTED, CONNECTED]
+			'red'         | [FAILED]
+			'red'         | [FAILED, DISABLED]
+			'red'         | [FAILED, NOT_CONNECTED]
+			'red'         | [FAILED, CONNECTED]
 	}
 }
 

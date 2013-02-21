@@ -30,7 +30,7 @@ else
 fi
 
 echo "# Linting: $FILES"
-jslint --white --sloppy --white --browser --nomen --plusplus --forin --undef $EXTRA_FLAGS \
+jslint --white --sloppy --white --browser --plusplus --forin --undef $EXTRA_FLAGS \
 --predef $ \
 --predef jQuery \
 --predef url_root \

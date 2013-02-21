@@ -98,6 +98,7 @@ class MessageController extends ControllerUtils {
 	def poll() { redirect(action: 'activity', params: params) }
 	def webconnection() { redirect(action: 'activity', params: params) }
 	def autoforward() { redirect(action: 'activity', params: params) }
+	def customactivity() { redirect(action: 'activity', params: params) }
 	def announcement() { redirect(action: 'activity', params: params) }
 	def autoreply() { redirect(action: 'activity', params: params) }
 	def subscription() { redirect(action: 'activity', params: params) }
@@ -105,7 +106,8 @@ class MessageController extends ControllerUtils {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
-			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent)
+			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
+			println messageInstanceList
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
 			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
@@ -113,9 +115,10 @@ class MessageController extends ControllerUtils {
 				sentMessageCount++
 			}
 			render view:"/activity/${activityInstance.shortName}/show",
-				model:[messageInstanceList: messageInstanceList?.list(params),
+				model:[messageInstanceList: messageInstanceList,
 						messageSection: params.messageSection?:'activity',
-						messageInstanceTotal: messageInstanceList?.count(),
+						messageInstanceTotal: activityInstance.getMessageCount(params.starred, getSent),
+						stepInstance:Step.get(params.stepId),
 						ownerInstance: activityInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null,
 						pollResponse: activityInstance instanceof Poll ? activityInstance.responseStats as JSON : null,

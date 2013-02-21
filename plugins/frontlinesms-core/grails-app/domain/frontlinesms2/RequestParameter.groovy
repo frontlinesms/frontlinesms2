@@ -30,5 +30,4 @@ class RequestParameter {
 		else
 			return arg
 	}
-
 }

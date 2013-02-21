@@ -48,7 +48,7 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 
 		def connectionToStart
 		def exactMatch = matchingModemAndSim.find { it.port == detector.portName }
-		if(exactMatch && exactMatch.status != ConnectionStatus.CONNECTED) {
+		if(exactMatch && !(exactMatch.status in [ConnectionStatus.CONNECTED, ConnectionStatus.DISABLED])) {
 			log "Found exact match: $exactMatch"
 			connectionToStart = exactMatch
 		} else {
@@ -60,7 +60,7 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 				if(!c.serial) c.setSerial(detector.serial)
 				if(!c.imsi) c.setImsi(detector.imsi)
 				if(dirty) c.save()
-				connectionToStart = c
+				if(c.enabled) connectionToStart = c
 			} else {
 				def name = i18nUtilService.getMessage(code:'connection.name.autoconfigured', args:[
 						detector.manufacturer, detector.model, detector.portName])

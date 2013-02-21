@@ -138,11 +138,22 @@ class FsmsTagLib {
 	def render = { att ->
 		boolean rendered = false
 		def plugins = grailsApplication.config.frontlinesms.plugins
+		def templateId = att.remove 'id'
+		def type = att.remove 'type'
+		if(type == 'sanchez') {
+			def runtimeVars = att.remove('runtimeVars')?.split(",")*.trim()
+			if(runtimeVars) {
+				if(!att.model) att.model = [:]
+				runtimeVars.each { att.model[it] = "{{$it}}" }
+			}
+		}
 		([null] + plugins).each { plugin ->
 			if(!rendered) {
 				try {
 					att.plugin = plugin
+					if(type == 'sanchez') out << '<script id="' + templateId + '" type="text/x-sanchez-template">'
 					out << g.render(att)
+					if(type == 'sanchez') out << '</script>'
 					rendered = true
 				} catch(GrailsTagException ex) {
 					if(ex.message.startsWith("Template not found")) {
@@ -430,6 +441,31 @@ class FsmsTagLib {
 			}
 		}
 		out << g.select(att, body)
+	}
+
+	def messageComposer = { att, body ->
+		out << '<div class="message-composer">'
+			//<fsms:messageComposer name="myMessage" placeholder="message.compose.prompt"/>
+			def placeholder = g.message(code:att.placeholder)
+			out << g.textArea(
+				name:att.name,
+				value:att.value,
+				placeholder:placeholder,
+				rows:att.rows?:"3",
+				id:att.textAreaId)
+
+			out << '<div class="controls">'
+				out << '<div class="character-count-display">0</div><br/>'
+				def magicWandAttributes = [controller:att.controller, target:att.target, fields:att.fields, hidden:false]
+				out << magicWand(magicWandAttributes)
+			out << '</div>'
+			out << '<div class="clearfix"></div>'
+
+		out << '</div>'
+	}
+
+	def step = { att, body ->
+		out << render(template:'/customactivity/step', model:[stepId:att.stepId, type:att.type, body:body])
 	}
 	
 	private def getFields(att) {

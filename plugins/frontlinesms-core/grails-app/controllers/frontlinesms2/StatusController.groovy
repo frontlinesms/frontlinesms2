@@ -46,5 +46,5 @@ class StatusController extends ControllerUtils {
 					activityInstanceList: Activity.findAllByDeleted(false),
 					folderInstanceList: Folder.findAllByDeleted(false)]
 	}
-	
 }
+

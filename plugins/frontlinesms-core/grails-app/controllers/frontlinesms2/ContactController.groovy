@@ -183,7 +183,9 @@ class ContactController extends ControllerUtils {
 
 //> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {
-		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
+		def mobile = params.mobile?.replaceAll(/\D/, '')
+		if(params.mobile && params.mobile[0] == '+') mobile = '+' + mobile
+		def existingContact = mobile ? Contact.findByMobileLike(mobile) : null
 		if (existingContact && existingContact != contactInstance) {
 			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
 			return false

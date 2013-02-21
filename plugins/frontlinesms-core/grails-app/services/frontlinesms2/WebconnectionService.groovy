@@ -13,8 +13,9 @@ class WebconnectionService {
 	def messageSendService
 
 	def retryFailed(Webconnection c) {
-		Fmessage.findAllByMessageOwnerAndOwnerDetail(c, Webconnection.OWNERDETAIL_FAILED).each {
-			send(it)
+		Fmessage.findAllByMessageOwner(c).each {
+			if(it.ownerDetail == Webconnection.OWNERDETAIL_FAILED)
+				send(it)
 		}
 	}
 
@@ -105,11 +106,11 @@ class WebconnectionService {
 	}
 
 	def getStatusOf(Webconnection w) {
-		camelContext.routes.any { it.id ==~ /.*activity-webconnection-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
+		camelContext.routes.any { it.id ==~ /.*activity-webconnection-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.FAILED
 	}
 
 	private changeMessageOwnerDetail(Fmessage message, String s) {
-		message.ownerDetail = s
+		message.setMessageDetail(message.messageOwner, s)
 		message.save(failOnError:true, flush:true)
 		println "Changing Status ${message.ownerDetail}"
 	}

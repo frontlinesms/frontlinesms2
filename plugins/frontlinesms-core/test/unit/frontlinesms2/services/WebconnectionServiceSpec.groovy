@@ -11,6 +11,7 @@ import grails.buildtestdata.mixin.Build
 
 @TestFor(WebconnectionService)
 @Build([Group, SmartGroup, Contact, Fmessage])
+@Mock([Fmessage])
 class WebconnectionServiceSpec extends Specification {
 	def requestedId
 	def mockConnection
@@ -35,7 +36,9 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'postprocess call is handed back to the relevant domain object'() {
 		given:
-			def m = Fmessage.build()
+			def m = Mock(Fmessage)
+			m.messageOwner >> mockConnection
+			Fmessage.metaClass.static.get = { Serializable id -> return m }
 			def x = mockExchange(null, ['webconnection-id':'123','fmessage-id':m.id])
 		when:
 			service.postProcess(x)

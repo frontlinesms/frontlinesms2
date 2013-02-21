@@ -115,8 +115,8 @@ var mediumPopup = (function() {
 								id: id,
 								type:type
 							});
-		button.append("<span>"+value+"</span>")
-		return button
+		button.append("<span>"+value+"</span>");
+		return button;
 	};
 	submitWithoutClose = function() {
 		$("#submit").attr('disabled', 'disabled');

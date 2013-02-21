@@ -35,9 +35,9 @@ class PollResponseISpec extends grails.plugin.spock.IntegrationSpec {
 			def m2 = Fmessage.build(src: "src4", inbound: true, date: new Date() - 10)
 			def m3 = Fmessage.build(src: "src4", inbound: true, date: new Date() - 10)
 			[m1, m2, m3].each { p.addToMessages(it) }
-			m1.ownerDetail = r.id
+			m1.setMessageDetail(p, r.id)
 			m1.save()
-			m3.ownerDetail = r.id
+			m3.setMessageDetail(p, r.id)
 			m3.save()
 		when:
 			def messages = r.getMessages()	

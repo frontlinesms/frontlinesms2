@@ -40,5 +40,21 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			true    | 'true'
 			false   | 'false'
 	}
+
+	def 'If a help file with the given name does not exist error text will be rendered'() {
+		when:
+			controller.section()
+		then:
+			controller.response.contentAsString == '<p>This help file is not yet available, sorry.</p>'
+	}
+
+	def 'If a help file with the given name exists its text will be rendered'() {
+		given:
+			controller.params.helpSection = 'testHelp'
+		when:
+			controller.section()
+		then:
+			controller.response.contentAsString == '<p>This is test content for the help</p>'
+	}
 }
 

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+APP_NAME=`grep '^app.name=' application.properties | cut -d= -f2`
+GRAILS_VERSION=`grep '^app.grails.version=' application.properties | cut -d= -f2`
+CAMEL_DIR=~/.grails/$GRAILS_VERSION/projects/$APP_NAME/plugins/routing-1.2.2-camel-2.9.4/
+echo "# Removing $CAMEL_DIR..."
+rm -rf $CAMEL_DIR
+echo "# Camel dir removed."
+

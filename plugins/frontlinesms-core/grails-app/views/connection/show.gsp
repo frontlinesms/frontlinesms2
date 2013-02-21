@@ -3,8 +3,8 @@
 	<head>
 		<meta name="layout" content="settings"/>
 		<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
-		<g:if test="${params.createRoute}">
-			<%-- Could just replace params.createRoute with a check for connectionInstance.status --%>
+		<g:if test="${params.connecting}">
+			<%-- Could just replace params.createRoute and params.connecting with a check for connectionInstance.status --%>
 			<r:script>
 				$(function() {
 					app_info.listen("connection_show", { id:${params.id} }, function(data) {
@@ -25,3 +25,4 @@
 		<fsms:render template="/connection/connection_list"/>
 	</body>
 </html>
+

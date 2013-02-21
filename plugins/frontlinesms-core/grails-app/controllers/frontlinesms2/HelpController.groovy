@@ -2,26 +2,25 @@ package frontlinesms2
 
 import frontlinesms2.*
 import grails.converters.JSON
+import org.codehaus.groovy.grails.plugins.PluginManagerHolder
 
 class HelpController extends ControllerUtils {
 	def appSettingsService
 
-	def index() { redirect action:'main' }
-	
-	def main() {}
+	def index() {}
 	
 	def section() {
-		def helpText
-		if(params.helpSection) {
-			// FIXME this is open to injection attacks
-			def markdownFile = new File("web-app/help/" + params.helpSection + ".txt")
-			if (markdownFile.canRead()) {
-				helpText = markdownFile.text
-			}
-		}
-		if(!helpText) helpText = "This help file is not yet available, sorry."
+		def helpText = this.class.getResource("/help/${params.helpSection}.txt")?.text
+		if(!helpText) helpText = g.message(code:"help.notfound")
 		render text:helpText.markdownToHtml()
 	}
+
+	def image() {
+		def uri = r.resource(uri:"/images/${params.imagePath}.png")
+		uri = uri.substring(request.contextPath.size())
+		redirect(uri:uri, absolute:true)
+	}
+
 	def updateShowNewFeatures() {
 		appSettingsService['newfeatures.popup.show.infuture'] = params.enableNewFeaturesPopup?: false
 		appSettingsService.persist()
@@ -31,7 +30,7 @@ class HelpController extends ControllerUtils {
 	def newfeatures() {
 		appSettingsService['newfeatures.popup.show.immediately'] = false
 		appSettingsService.persist()
-		params.helpSection = 'core/features/new'
+		params.helpSection = 'frontlinesms-core/features/new'
 		section()
 	}
 }
