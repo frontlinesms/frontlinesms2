@@ -45,4 +45,4 @@ messageComposerUtils = (function() {
 		getText: getText,
 		updateCharacterCount: updateCharacterCount
 	};
-})();
+}());

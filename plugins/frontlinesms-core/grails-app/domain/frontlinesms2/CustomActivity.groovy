@@ -23,8 +23,8 @@ class CustomActivity extends Activity {
 	}
 
 	def processKeyword(Fmessage message, Keyword matchedKeyword) {
-		addToMessages(message)
-		save(flush:true)
+		this.addToMessages(message)
+		this.save(flush:true)
 		customActivityService.triggerSteps(this, message)
 	}
 }

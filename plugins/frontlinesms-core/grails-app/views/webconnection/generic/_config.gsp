@@ -33,15 +33,15 @@
 		<g:if test="${activityInstanceToEdit?.id}">
 			<g:if test="${activityInstanceToEdit?.requestParameters}">
 				<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
-					<fsms:render template="/webconnection/parameter" model="[name:parameter.name, value:parameter.value]" />
+					<fsms:render template="parameter" model="[name:parameter.name, value:parameter.value]" />
 				</g:each>
 			</g:if>
 			<g:else>
-				<fsms:render template="/webconnection/parameter" model="[name:'',  value:'']"/>
+				<fsms:render template="parameter" model="[name:'',  value:'']"/>
 			</g:else>
 		</g:if>
 		<g:else>
-			<fsms:render template="/webconnection/parameter" model="[name:'message',  value:'${message_body}']"/>
+			<fsms:render template="parameter" model="[name:'message',  value:'${message_body}']"/>
 		</g:else>
 	</tbody>
 </table>

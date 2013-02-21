@@ -17,12 +17,19 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.displayed
 			connectionList.text()?.contains('You have no connections configured.')
 	}
-	
-	def 'There is a Not Connected label shown for inactive connection'() {
+
+	def 'There is a Failed label shown for failed connection'() {
+		when:
+			to PageConnection, createSecondTestEmailConnection()
+		then:
+			connectionList.status == "Failed"
+	}
+
+	def 'There is a Disabled label shown for disabled connection'() {
 		when:
 			to PageConnection, createTestEmailConnection()
 		then:
-			connectionList.status == "Not connected"
+			connectionList.status == "Disabled"
 	}
 
 	def 'there is a DELETE button shown for inactive connection'() {
@@ -31,12 +38,12 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			connectionList.btnDelete.displayed
 	}
-	
+
 	def 'should show "create route" button for inactive connection'() {
 		when:
 			to PageConnection, createTestEmailConnection()
 		then:
-			connectionList.btnCreateRoute.displayed
+			connectionList.btnEnableRoute.displayed
 	}
 
 	def 'DELETE button should remove selected fconnection from the list'() {
@@ -55,11 +62,11 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to PageConnection, testConnection
-			waitFor { connectionList.btnCreateRoute.displayed }
+			waitFor { connectionList.btnEnableRoute.displayed }
 		then:
 			!connectionList.btnTestRoute.displayed
 		when:
-			connectionList.btnCreateRoute.click()
+			connectionList.btnEnableRoute.click()
 		then:
 			waitFor('very slow') { connectionList.status == "Connected" }
 			waitFor { connectionList.btnTestRoute.displayed }
@@ -70,12 +77,12 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			def c = createTestEmailConnection()
 		when:
 			to PageConnection, c
-			connectionList.btnCreateRoute.click()
+			connectionList.btnEnableRoute.click()
 		then:
 			waitFor('very slow') { connectionList.status == "Connected" }
 			!connectionList.btnDelete.displayed
 	}
-	
+
 	def 'The first connection in the connection list page is selected'() {
 		when: 
 			to PageConnection, createTestEmailConnection()
@@ -192,7 +199,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		given:
 			to PageConnection, createTestEmailConnection()
 		when:
-			connectionList.btnCreateRoute.click()
+			connectionList.btnEnableRoute.click()
 		then:
 			waitFor('slow') {connectionList.btnTestRoute.displayed}
 		when:
@@ -234,8 +241,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	private def startBadConnection() {
 		def connectionId = SmslibFconnection.findByName('Bad Port').id
 		to PageConnection, connectionId
-		waitFor { connectionList.btnCreateRoute.displayed }
-		connectionList.btnCreateRoute.click()
+		waitFor { connectionList.btnEnableRoute.displayed }
+		connectionList.btnEnableRoute.click()
 	}
 
 	private def launchCreateWizard(def type=null) {
@@ -254,18 +261,27 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		createTestEmailConnection()
 		createTestSmsConnection()
 	}
-	
+
 	def createTestEmailConnection() {
+		EmailFconnection.build(name:'test email connection',
+				receiveProtocol:EmailReceiveProtocol.IMAPS,
+				serverName:'imap.zoho.com', serverPort:993,
+				username:'mr.testy@zoho.com', password:'mter',
+				enabled:false)
+	}
+
+	def createSecondTestEmailConnection() {
 		EmailFconnection.build(name:'test email connection',
 				receiveProtocol:EmailReceiveProtocol.IMAPS,
 				serverName:'imap.zoho.com', serverPort:993,
 				username:'mr.testy@zoho.com', password:'mter')
 	}
-	
+
 	def createTestSmsConnection() {
 		MockModemUtils.initialiseMockSerial([
 				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
-		SmslibFconnection.build(name:'MTN Dongle', port:'COM99')
+		SmslibFconnection.build(name:'MTN Dongle', port:'COM99', enabled:true)
 	}
+
 }
 

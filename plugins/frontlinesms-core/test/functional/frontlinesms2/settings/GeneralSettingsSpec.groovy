@@ -20,12 +20,9 @@ class GeneralSettingsSpec extends grails.plugin.geb.GebSpec {
 			routing.useLastReceivedConnection.@checked
 		when:
 			routing.useLastReceivedConnection.click()
-			routing.useAnyAvailableConnection.click()
 			routing.save.click()
 		then:
 			waitFor { at PageGeneralSettings }
 			!routing.useLastReceivedConnection.@checked
-			routing.useAnyAvailableConnection.@checked
-			!routing.dontSend.@checked
 	}
 }

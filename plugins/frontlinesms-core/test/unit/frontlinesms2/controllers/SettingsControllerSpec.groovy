@@ -81,11 +81,9 @@ class SettingsControllerSpec extends Specification {
 	def 'can set the routing preferences'(){
 		given:
 			params.routingUseOrder = "uselastreceiver"
-			params.otherwise = "any"
 		when:
 			controller.changeRoutingPreferences()
 		then:
-			1 * appSettingsService.set('routing.otherwise', params.otherwise)
 			1 * appSettingsService.set('routing.use','uselastreceiver')
 			0 * appSettingsService.set(_, _)
 	}
@@ -93,12 +91,10 @@ class SettingsControllerSpec extends Specification {
 	def "can set routing rules available connections"() {
 		given:
 			params.routingUseOrder = "uselastreceiver,fconnection-1,fconnection-3,fconnection-5"
-			params.otherwise = "any"
 		when:
 			controller.changeRoutingPreferences()
 		then:
 			1 * appSettingsService.set('routing.use','uselastreceiver,fconnection-1,fconnection-3,fconnection-5')
-			1 * appSettingsService.set('routing.otherwise', params.otherwise)
 	}
 
 	def "can retrieve routing rules defined for connections with send enabled"() {

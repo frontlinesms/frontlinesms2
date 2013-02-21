@@ -74,6 +74,7 @@ def getApplicationProperty(key) {
 }
 
 eventCompileStart = { kind ->
+	ant.exec executable:'do/clean_naughty_camel'
 	if(Environment.current == Environment.PRODUCTION) {
 		// Check we have no snapshot dependencies
 		if(new File('grails-app/conf/BuildConfig.groovy').text.contains('SNAPSHOT')) {
@@ -102,13 +103,6 @@ eventCompileStart = { kind ->
 }
 
 eventCompileEnd = {
-	def inlinePlugins = grailsSettings.inlinePluginDirectories
-	// inlinePlugins.each { pluginPath ->
-	// 	ant.copy(toDir:'web-app/help') {
-	// 		fileset dir:"$pluginPath/web-app/help"
-	// 	}
-	// }
-	// Copy i18n properties files to web-app so they are available for i18nService in dev mode
 	def folderMap = [
 		"grails-app/i18n":"web-app/WEB-INF/grails-app/i18n"
 	]

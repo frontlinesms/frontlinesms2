@@ -19,51 +19,79 @@ class FconnectionServiceSpec extends Specification {
 		def i18nUtilService = Mock(I18nUtilService)
 		i18nUtilService.getMessage(_) >> { args -> args.code[0] }
 		service.i18nUtilService = i18nUtilService
-		Fconnection.metaClass.static.get = { Serializable id -> println "overrided 'get()' called"; return [] } 
+		Fconnection.metaClass.static.get = { Serializable id -> println "overrided 'get()' called"; return [] }
+
+		service.deviceDetectionService = Mock(DeviceDetectionService)
 	}
 
-	def 'Unconnected Fconnection gives a status of NOT_CONNECTED'() {
+	def 'Unconnected enabled Fconnection gives a status of FAILED'() {
 		given:
 			context.routes >> []
-			def notConnected = Mock(Fconnection)
+			def c = mockFconnection(1, true)
 		when:
-			def status = service.getConnectionStatus(notConnected)
+			def status = service.getConnectionStatus(c)
+		then:
+			status == ConnectionStatus.FAILED
+	}
+
+	def 'Unconnected enabled SmslibFconnection gives a status of NOT_CONNECTED'() {
+		given:
+			context.routes >> []
+			def c = mockSmslibFconnection(1, true)
+		when:
+			def status = service.getConnectionStatus(c)
 		then:
 			status == ConnectionStatus.NOT_CONNECTED
 	}
-	
+
+	def 'Connecting enabled SmslibFconnection gives a status of CONNECTING'() {
+		given:
+			context.routes >> []
+			def c = mockSmslibFconnection(1, true)
+			service.deviceDetectionService.isConnecting(_) >> { ConnectionStatus.CONNECTING }
+		when:
+			def status = service.getConnectionStatus(c)
+		then:
+			status == ConnectionStatus.CONNECTING
+	}
+
+	def 'Disabled Fconnection gives a status of DISABLED'() {
+		given:
+			def disabledConnection = mockFconnection(2, false)
+		when:
+			true
+		then:
+			service.getConnectionStatus(disabledConnection) == ConnectionStatus.DISABLED
+	}
+
 	def 'Connected Fconnection gives a status of CONNECTED'() {
 		given:
 			def connected = mockFconnection(1)
-			def notConnected = mockFconnection(2)
 			def alsoConnected = mockFconnection(3)
 			context.routes >> ["in-1", "out-3"].collect { [id:it] }
 		when:
 			true
 		then:
 			service.getConnectionStatus(connected) == ConnectionStatus.CONNECTED
-			service.getConnectionStatus(notConnected) == ConnectionStatus.NOT_CONNECTED
 			service.getConnectionStatus(alsoConnected) == ConnectionStatus.CONNECTED
 	}
-	
+
 	@Unroll
 	def 'test route statuses'() {
 		given:
 			context.routes >> routeNames.collect { [id:it] }
-			def c = mockFconnection(id)
+			def c = mockFconnection(id, enabled)
 		expect:
 			service.getConnectionStatus(c) == expectedStatus
 		where:
-			id | routeNames                 | expectedStatus
-			1  | []                         | ConnectionStatus.NOT_CONNECTED
-			1  | ['in-2', 'out-3']          | ConnectionStatus.NOT_CONNECTED
-			1  | ['in-1']                   | ConnectionStatus.CONNECTED
-			1  | ['out-1']                  | ConnectionStatus.CONNECTED
-			1  | ['in-1', 'out-1']          | ConnectionStatus.CONNECTED
-			1  | ['in-1', 'out-internet-1'] | ConnectionStatus.CONNECTED
-			1  | ['in-1', 'out-modem-1']    | ConnectionStatus.CONNECTED
-			1  | ['out-internet-1']         | ConnectionStatus.CONNECTED
-			1  | ['out-modem-1']            | ConnectionStatus.CONNECTED
+			id | routeNames                 | enabled | expectedStatus
+			1  | []                         | false   | ConnectionStatus.DISABLED
+			1  | ['in-2', 'out-modem-3']    | true    | ConnectionStatus.FAILED
+			1  | ['in-1']                   | true    | ConnectionStatus.CONNECTED
+			1  | ['in-1', 'out-internet-1'] | true    | ConnectionStatus.CONNECTED
+			1  | ['in-1', 'out-modem-1']    | true    | ConnectionStatus.CONNECTED
+			1  | ['out-internet-1']         | true    | ConnectionStatus.CONNECTED
+			1  | ['out-modem-1']            | true    | ConnectionStatus.CONNECTED
 	}
 
 	def 'creating a SMSLib route should stop detection on the corresponding port'() {
@@ -77,12 +105,13 @@ class FconnectionServiceSpec extends Specification {
 		then:
 			1 * detector.stopFor(PORT)
 	}
-	
+
 	def 'creating a non-smslib route should not affect the device detector'() {
 		given:
 			DeviceDetectionService detector = Mock()
 			service.deviceDetectionService = detector
 			Fconnection f = Mock()
+			f.enabled >> true
 			f.getCamelProducerAddress() >> 'nothing'
 		when:
 			service.createRoutes(f)
@@ -93,13 +122,14 @@ class FconnectionServiceSpec extends Specification {
 	def 'Routes supplied by the Fconnection are added to the camel context'() {
 		given:
 			def c = Mock(Fconnection)
-			c.routeDefinitions >> [[id:'in-mock'], [id:'out-mock']]
+			c.routeDefinitions >> [[id:'in-1'], [id:'out-modem-1']]
+			c.enabled >> true
 		when:
 			service.createRoutes(c)
 		then:
-			1 * context.addRouteDefinitions { it*.id.sort() == ['in-mock', 'out-mock'] }
+			1 * context.addRouteDefinitions { it*.id.sort() == ['in-1', 'out-modem-1'] }
 	}
-	
+
 	@Unroll
 	def 'handleDisconnection should trigger shutdown of related Fconnection'() {
 		given:
@@ -116,7 +146,7 @@ class FconnectionServiceSpec extends Specification {
 			jobRouteId == connectionId
 		where:
 			routeId          | connectionId
-			"out-1"          | 1
+			"out-modem-1"    | 1
 			"out-internet-2" | 2
 			"out-modem-3"    | 3
 			"in-4"           | 4
@@ -142,9 +172,18 @@ class FconnectionServiceSpec extends Specification {
 			['out-internet-1'] | ['in-2', 'out-internet-3']
 	}
 
-	private def mockFconnection(int id) {
-		Fconnection c = Mock()
+	private def mockSmslibFconnection(int id, boolean enabled=true) {
+		mockFconnection(SmslibFconnection, id, enabled)
+	}
+
+	private def mockFconnection(int id, boolean enabled=true) {
+		mockFconnection(Fconnection, id, enabled)
+	}
+
+	private def mockFconnection(clazz, int id, boolean enabled) {
+		def c = Mock(clazz)
 		c.id >> id
+		c.enabled >> enabled
 		return c
 	}
 }
