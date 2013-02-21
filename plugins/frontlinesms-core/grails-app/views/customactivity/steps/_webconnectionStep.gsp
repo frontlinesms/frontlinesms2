@@ -2,7 +2,7 @@
 <fsms:step type="webconnectionStep" stepId="${stepId}">
 	<div class='webconnection-server-control'>
 		<label for="url"><g:message code="webconnection.url.label"/>
-			<g:textField name="url" id="" class="customactivity-field" value="${urlEncode}"/>
+			<g:textField name="url" id="url-${stepId}-${random}" class="customactivity-field" value="${urlEncode}"/>
 		</label>
 
 		
