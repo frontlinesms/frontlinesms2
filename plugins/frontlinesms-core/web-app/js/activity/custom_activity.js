@@ -119,6 +119,8 @@ var customActivityDialog = (function(){
 				detail = element.find("select[name=group] option:selected").text();
 			} else if(stepType === "reply") {
 				detail = element.find("textarea[name=autoreplyText]").val();
+			} else if(stepType === "forward") {
+				detail = element.find("textarea[name=sentMessageText]").val();
 			}
 			output = "<p>" +
 					i18n("customactivity." + stepType + ".description", detail) +
