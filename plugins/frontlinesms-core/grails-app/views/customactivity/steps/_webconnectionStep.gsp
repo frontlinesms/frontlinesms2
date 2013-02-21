@@ -32,19 +32,16 @@
 			<g:if test="${stepId}">
 				<g:if test="${requestParameters}">
 					<g:each in="${requestParameters}" var="parameter" status="i">
-						<fsms:render template="/webconnection/parameter" model="[name:parameter.name, value:parameter.value]" />
+						<fsms:render template="/customactivity/steps/webconnectionStepParameter" model="[name:parameter.name, value:parameter.value]" />
 					</g:each>
 				</g:if>
 				<g:else>
-					<fsms:render template="/webconnection/parameter" model="[name:'',  value:'']"/>
+					<fsms:render template="/customactivity/steps/webconnectionStepParameter" model="[name:'',  value:'']"/>
 				</g:else>
 			</g:if>
 			<g:else>
-				<fsms:render template="/webconnection/parameter" model="[name:'message',  value:'${message_body}']"/>
+				<fsms:render template="/customactivity/steps/webconnectionStepParameter" model="[name:'message',  value:'${message_body}']"/>
 			</g:else>
 		</tbody>
 	</table>
-	<a class="btn addNew" onclick="webconnectionDialog.handlers.addNewParam($(this).parent().find('.web-connection-param-table'))">
-		<g:message code="webconnection.add.anotherparam"/>
-	</a>
 </fsms:step>
