@@ -166,7 +166,7 @@ class WebconnectionService {
 	}
 
 	def getStatusOf(Webconnection w) {
-		camelContext.routes.any { it.id ==~ /.*activity-${w.shortName}-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
+		camelContext.routes.any { it.id ==~ /.*activity-${w.shortName}-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.FAILED
 	}
 
  	private changeMessageOwnerDetail(Fmessage message, String s) {

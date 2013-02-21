@@ -24,6 +24,7 @@ class CoreBootStrap {
 	def grailsApplication
 	def deviceDetectionService
 	def failPendingMessagesService
+	def fconnectionService
 	def localeResolver
 	def camelContext
 	def messageSource
@@ -46,7 +47,6 @@ class CoreBootStrap {
 			appSettingsService['newfeatures.popup.show.immediately'] = false
 			//default routing in tests is to use any available connections
 			appSettingsService.set('routing.use', 'uselastreceiver')
-			appSettingsService.set('routing.otherwise', 'any')
 			appSettingsService.set('routing.preferences.edited', true)
 		}
 
@@ -63,7 +63,6 @@ class CoreBootStrap {
 			//camelContext.tracing = true
 			dev_disableSecurityFilter()
 			updateFeaturePropertyFileValues()
-			setDefaultMessageRoutingPreferences()
 		}
 
 		if(bootstrapData) {
@@ -81,6 +80,7 @@ class CoreBootStrap {
 			dev_initWebconnections()
 			dev_initCustomActivities()
 			dev_initLogEntries()
+			setDefaultMessageRoutingPreferences()
 		}
 
 		if(Environment.current == Environment.PRODUCTION) {
@@ -94,6 +94,7 @@ class CoreBootStrap {
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
 		activateActivities()
+		initialiseNonSmslibFconnections()
 		println '\\o/ FrontlineSMS started.'
 	}
 
@@ -131,7 +132,6 @@ class CoreBootStrap {
 
 		(1..101).each {
 			new Contact(name:"test-${it}", mobile:"number-${it}").save(failOnError:true)
-			if (it % 1000 == 0) println "${it}"
 		}
 		
 		[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
@@ -221,11 +221,11 @@ class CoreBootStrap {
 	
 	private def dev_initRealSmslibFconnections() {
 		if(!bootstrapData) return
-		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234', enabled:false).save(failOnError:true)
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
 		new SmslibFconnection(name:"MobiGater Modem", port:'/dev/ttyACM0', baud:9600, pin:'1149').save(failOnError:true)
-		new SmssyncFconnection(name:"SMSSync connection", secret:'secret').save(flush: true, failOnError:true)
+		new SmssyncFconnection(name:"SMSSync connection", secret:'secret', enabled:false).save(flush: true, failOnError:true)
 		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 		
 	}
@@ -451,8 +451,9 @@ class CoreBootStrap {
 			.addToStepProperties(new StepProperty(key:'myNumber', value:'23123123'))
 			.addToStepProperties(new StepProperty(key:'myMessage', value:'i will upload forever'))
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
-		def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
-		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:'autoreplyText', value:'reply to you all'))
+		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
+		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"I will send you forever"))
+
 		new CustomActivity(name:'Do it all')
 				.addToSteps(joinStep)
 				.addToSteps(leaveStep)
@@ -485,10 +486,11 @@ class CoreBootStrap {
 	
 	private def initialiseSerial() {
 		if(Environment.current == Environment.TEST
-				|| Boolean.parseBoolean(System.properties['serial.mock']))
+				|| Boolean.parseBoolean(System.properties['serial.mock'])) {
 			initialiseMockSerial()
-		else
+		} else {
 			initialiseRealSerial()
+		}
 
 		def ports = serial.CommPortIdentifier.portIdentifiers
 		if(ports) {
@@ -544,6 +546,15 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		log.info "Adding $jniPath/$os/$architecture to library paths..."
 		addJavaLibraryPath "$jniPath/$os/$architecture"
 		serial.SerialClassFactory.init(serial.SerialClassFactory.PACKAGE_RXTX) // TODO hoepfully this step of specifying the package is unnecessary
+	}
+
+	private def initialiseNonSmslibFconnections() {
+		Fconnection.findAllByEnabled(true).each { connection ->
+			if (connection.shortName != "smslib") {
+				println "CoreBootStrap.initialiseNonSmslibFconnections() :: creating routes for $connection.shortName:$connection.id"
+				fconnectionService.createRoutes(connection)
+			}
+		}
 	}
 
 	private def activateActivities() {
@@ -661,8 +672,12 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		if(!appSettingsService.get('routing.preferences.edited') || (appSettingsService.get('routing.preferences.edited') == false)){
 			println "### Changing Routing preferences ###"
 			appSettingsService.set('routing.uselastreceiver', false)
-			appSettingsService.set('routing.otherwise', 'any')
 			appSettingsService.set('routing.preferences.edited', true)
+		}
+		else {
+			def fconnectionInstanceList = Fconnection.findAllBySendEnabled(true)
+			def fconnectionIdList = fconnectionInstanceList.collect {"fconnection-${it.id}"}.join(",")
+			appSettingsService.set('routing.use', fconnectionIdList)
 		}
 	}
 }

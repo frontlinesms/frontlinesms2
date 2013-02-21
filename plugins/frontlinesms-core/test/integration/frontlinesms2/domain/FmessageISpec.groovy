@@ -437,6 +437,14 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Fmessage.findBySrc('111', [sort: 'dateCreated', order:'desc']).text == 'youngest'
 	}
+
+	def 'calling the Fmessage.getOwnerType should return proper value'(){
+		when:
+			def customActivity = CustomActivity.build()
+			def message = Fmessage.build()
+		then:
+			message.getOwnerType(customActivity) == MessageDetail.OwnerType.ACTIVITY
+	}
 	
 	private Folder getTestFolder(params=[]) {
 		new Folder(name:params.name?:'test',

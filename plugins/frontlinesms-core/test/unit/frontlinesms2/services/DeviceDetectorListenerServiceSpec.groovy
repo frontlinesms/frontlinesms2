@@ -110,7 +110,7 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			!SmslibFconnection.findByPortAndSerialAndImsi(port, serial, imsi)
 	}
 
-	def 'handleDetected should create a new fconnection if fconnection is configured with same serial+IMSI and port is not visible'() {
+	def 'handleDetected should create a new fconnection if fconnection is configured with same serial+IMSI and other configured port is not visible'() {
 		given:
 			def port = "PORT1"
 			def otherPort = '/dev/different'
@@ -161,11 +161,21 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 		then:
 			1 * fconnectionService.createRoutes(c)
 	}
-	
+
+	def 'handleDetected should not create routes for disabled connection'() {
+		given:
+			def c = mockFconnection(enabled:false)
+			def d = mockDetector()
+		when:
+			service.handleDetectionCompleted(d)
+		then:
+			0 * fconnectionService.createRoutes(c)
+	}
+
 	@Unroll
 	def 'handleDetected should update IMSI and serial settings of connection if required'() {
 		given:
-			def c = mockFconnection(serial:initialSerial, imsi:initialImsi)
+			def c = mockFconnection(serial:initialSerial, imsi:initialImsi, enabled:enabled)
 			def d = mockDetector(imsi:detectedImsi, serial:detectedSerial)
 		when:
 			service.handleDetectionCompleted(d)
@@ -173,13 +183,17 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			updateImsi * c.setImsi(detectedImsi)
 			updateSerial * c.setSerial(detectedSerial)
 			// save * c.save() FIXME this doesn't work, and I have no idea why
-			1 * fconnectionService.createRoutes(c)
+			(enabled?1:0) * fconnectionService.createRoutes(c)
 		where:
-			save| updateImsi | initialImsi | detectedImsi | updateSerial | initialSerial | detectedSerial
-			1   | 1          | null        | '00000'      | 1            | null          | '11111'
-			1   | 0          | '00000'     | '00000'      | 1            | null          | '11111'
-			1   | 1          | null        | '00000'      | 0            | '11111'       | '11111'
-			0   | 0          | '00000'     | '00000'      | 0            | '11111'       | '11111'
+			save| updateImsi | initialImsi | detectedImsi | updateSerial | initialSerial | detectedSerial | enabled
+			1   | 1          | null        | '00000'      | 1            | null          | '11111'        | false
+			1   | 0          | '00000'     | '00000'      | 1            | null          | '11111'        | false
+			1   | 1          | null        | '00000'      | 0            | '11111'       | '11111'        | false
+			0   | 0          | '00000'     | '00000'      | 0            | '11111'       | '11111'        | false
+			1   | 1          | null        | '00000'      | 1            | null          | '11111'        | true
+			1   | 0          | '00000'     | '00000'      | 1            | null          | '11111'        | true
+			1   | 1          | null        | '00000'      | 0            | '11111'       | '11111'        | true
+			0   | 0          | '00000'     | '00000'      | 0            | '11111'       | '11111'        | true
 	}
 	
 	private SmslibFconnection mockFconnection(Map params) {
@@ -187,6 +201,8 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 		Fconnection c = Mock(SmslibFconnection)
 		c.serial >> params?.serial
 		c.imsi >> params?.imsi
+		c.enabled >> (params.containsKey('enabled')? params.enabled: true)
+		c.isEnabled() >> (params.containsKey('enabled')? params.enabled: true)
 		mockFconnections([c])
 		return c
 	}

@@ -25,7 +25,8 @@ abstract class Step {
 	}
 
 	def setPropertyValue(key, value){
-		stepProperties?.find { it.key == key }?.value = value
+		def prop = stepProperties?.find { it.key == key }
+		prop? (prop.value = value) : this.addToStepProperties(key:key, value:value)
 	}
 
 	// helper method to retrieve list of entities saved as StepProperties

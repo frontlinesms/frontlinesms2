@@ -19,6 +19,10 @@ class PollSpec extends Specification {
 			delegate.messages.remove(m)
 			m.messageOwner = null
 		}
+
+		Activity.metaClass.static.get = {Long id -> 
+			Poll.findById(id)
+		}
 	}
 
 	@Unroll

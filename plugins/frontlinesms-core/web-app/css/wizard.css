@@ -29,7 +29,7 @@ div.input ul.select li input[type="checkbox"] { position:absolute; top:0; left:0
 div.input ul.select li input[type="text"] { display:block; margin-left:25px; margin-top:10px; }
 
 div.input ul.select.radio label,
-		div.input ul.select.checklist label { margin:5px 0; position:relative; display:block; padding:10px; }
+		div.input ul.select.checklist label { margin:5px 0; position:relative; display:block; padding:8px; }
 div.input ul.select.radio label { cursor:pointer; }
 div.input ul.select.checklist label { cursor:move; }
 div.input ul.select.radio.no-description li,
@@ -51,7 +51,8 @@ div.input .controls > :first-child { width:100%; }
 #tabs thead tr { background: none;}
 div.input .controls .magicwand-container a { text-align:right; }
 div.input .controls div.magicwand-container.hidden { visibility:hidden; }
-#tabs div.confirm td { padding:5px; }
+#tabs div.confirm tr td { padding:5px; vertical-align:top; }
+#tabs div.confirm tr td p { margin-bottom:5px; }
 #tabs div.confirm td:first-child { padding-left:0; font-weight:bold; }
 #tabs div.confirm td:last-child { padding-right:0; }
 

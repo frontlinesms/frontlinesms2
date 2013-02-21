@@ -1,7 +1,13 @@
 #!/bin/bash
 echo "Optimising PNGs with PNGout..."
 
-find web-app/ -name "*.png" -print0 -type f | xargs --null -n 1 pngout -r
+if [ -z "$@" ]; then
+	IMAGE_LOCATION=web-app/
+else
+	IMAGE_LOCATION="$@"
+fi
 
+echo "Searching for images in $IMAGE_LOCATION..."
+find $IMAGE_LOCATION -name "*.png" -print0 -type f | xargs --null -n 1 pngout -r
 echo "Image optimisation complete."
 

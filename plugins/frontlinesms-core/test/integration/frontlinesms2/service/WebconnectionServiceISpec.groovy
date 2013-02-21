@@ -101,7 +101,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		given:
 			def webconnection =  Webconnection.findByName("Sync")
 		expect:
-			webconnectionService.getStatusOf(webconnection) == ConnectionStatus.NOT_CONNECTED
+			webconnectionService.getStatusOf(webconnection) == ConnectionStatus.FAILED
 	}
 
 	def 'webconnectionservice.getWebconnectionStatus should return CONNECTED when the webconnection is active'() {
