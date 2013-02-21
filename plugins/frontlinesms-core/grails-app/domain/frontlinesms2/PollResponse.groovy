@@ -19,7 +19,7 @@ class PollResponse implements Comparable {
 	}
 
 	def removeFromMessages(m) {
-		if(m.ownerDetail == "$id") m.ownerDetail = null
+		if(m.ownerDetail == "$id") m.setMessageDetail(this.poll, "")
 	}
 
 	boolean isUnknown() {
@@ -29,7 +29,7 @@ class PollResponse implements Comparable {
 	List getMessages() {
 		if(poll.messages == null) return []
 		if(isUnknown()) {
-			return poll.messages.findAll { !it.ownerDetail && it.inbound }.asList()
+			return poll.messages.findAll { it.ownerDetail == Poll.KEY_UNKNOWN && it.inbound }.asList()
 		}
 		return poll.messages.findAll { it.ownerDetail == "$id" && it.inbound }.asList()
 	}
@@ -40,11 +40,12 @@ class PollResponse implements Comparable {
 			this.poll.messages = []
 		this.poll.messages << message
 		message.messageOwner = this.poll
+		// TODO do we really need different handling for the unknown repsonse here?
 		if(isUnknown()) {
-			message.ownerDetail = null
+			message.setMessageDetail(this.poll, Poll.KEY_UNKNOWN)
 		} else {
 			if(!id) throw new IllegalStateException('Cannot add a message to an unsaved PollResponse.')
-			message.ownerDetail = "$id"
+			message.setMessageDetail(this.poll, "$id")
 		}
 		message.save()
 	}
@@ -58,3 +59,4 @@ class PollResponse implements Comparable {
 		new PollResponse(value:'Unknown', key:Poll.KEY_UNKNOWN)
 	}
 }
+

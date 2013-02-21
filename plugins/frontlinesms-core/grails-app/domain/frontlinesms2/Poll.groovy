@@ -54,6 +54,7 @@ class Poll extends Activity {
 		if(!messages) messages = []
 		messages << message
 		message.messageOwner = this
+		this.save()
 		if(message.inbound) {
 			this.responses.each {
 				it.removeFromMessages(message)

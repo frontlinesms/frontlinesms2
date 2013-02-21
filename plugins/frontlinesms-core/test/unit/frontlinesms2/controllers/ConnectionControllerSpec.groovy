@@ -10,18 +10,18 @@ class ConnectionControllerSpec extends Specification {
 	def "test that createRoute actually calls FconnectionService"() {
 		setup:
 			def routesTriggered = []
-			CreateRouteJob.metaClass.static.triggerNow = { LinkedHashMap map -> routesTriggered << map.connectionId }
+			EnableFconnectionJob.metaClass.static.triggerNow = { LinkedHashMap map -> routesTriggered << map.connectionId }
 			[new Fconnection(), new Fconnection()]*.save()
 		when:
 			params.id = 1 // mock the parameters for the request.  NB. mockParams cannot be overridden - only added and removed from
-			controller.createRoute()
+			controller.enable()
 		then:
 			routesTriggered == [1]
 	}
 
 	def "delete should delete an inactive Fconnection"() {
 		given:
-			def c = buildTestConnection(ConnectionStatus.NOT_CONNECTED)
+			def c = buildTestConnection(ConnectionStatus.DISABLED)
 			params.id = c.id
 		when:
 			controller.delete()
@@ -39,6 +39,9 @@ class ConnectionControllerSpec extends Specification {
 		then:
 			thrown(RuntimeException)
 			SmslibFconnection.findAll() == [c]
+		where:
+			status << [ConnectionStatus.CONNECTED, ConnectionStatus.NOT_CONNECTED,
+					ConnectionStatus.CONNECTING, ConnectionStatus.FAILED]
 	}
 
 	private def buildTestConnection(status) {

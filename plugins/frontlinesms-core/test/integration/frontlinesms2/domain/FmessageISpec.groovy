@@ -391,6 +391,25 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			message.receivedOn == null
 	}
 
+	def "Fmessage.getOwnerDetail should return the value set by setMessageDetail in CustomActivity" (){
+		when:
+			def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
+			def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"i will send this."))
+
+			def customActivity = new CustomActivity(name:'Do it all')
+				.addToSteps(joinStep)
+				.addToSteps(replyStep)
+				.addToKeywords(value:"CUSTOM")
+				.save(failOnError:true, flush:true)
+ 
+			def incomingMessage = Fmessage.build(text:"incoming message", messageOwner: customActivity)
+			def outgoingMessage = new Fmessage(text:'sending this message', inbound:false, date:new Date(), messageOwner:customActivity)
+							.addToDispatches(new Dispatch(dst:'234', status:DispatchStatus.PENDING)).save(failOnError:true)
+			outgoingMessage.setMessageDetail(replyStep, incomingMessage.id)
+		then:
+			outgoingMessage.ownerDetail == incomingMessage.id.toString()
+	}
+
 	def 'doing a Fmessage.findBySrc should give me youngest message'() {
 		when:
 			Fmessage.build(src:'111', text:'oldest')
@@ -398,6 +417,14 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.build(src:'111', text:'youngest')
 		then:
 			Fmessage.findBySrc('111', [sort: 'dateCreated', order:'desc']).text == 'youngest'
+	}
+
+	def 'calling the Fmessage.getOwnerType should return proper value'(){
+		when:
+			def customActivity = CustomActivity.build()
+			def message = Fmessage.build()
+		then:
+			message.getOwnerType(customActivity) == MessageDetail.OwnerType.ACTIVITY
 	}
 	
 	private Folder getTestFolder(params=[]) {

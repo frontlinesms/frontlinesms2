@@ -10,6 +10,7 @@ modules = {
 		resource url:[dir:'css', file:'contact.css']
 		resource url:[dir:'css', file:'archive.css']
 		resource url:[dir:'css', file:'activity.css']
+		resource url:[dir:'css', file:"activity/customactivity.css"]
 		resource url:[dir:'css', file:"activity/webconnection.css"]
 		resource url:[dir:'css', file:'search.css']
 		resource url:[dir:'css', file:'settings.css']
@@ -24,10 +25,11 @@ modules = {
 		resource url:[dir:'css', file:'help.css']
 
 		resource url:[dir:'js', file:"frontlinesms_core.js"], disposition:'head'
+		resource url:[dir:'js', file:"activity/custom_activity.js"], disposition:'head'
 		resource url:[dir:'js', file:"activity/popups.js"], disposition:'head'
 		resource url:[dir:'js', file:"activity/poll/poll.js"], disposition:'head'
-		resource url:[dir:'js', file:"activity/webconnection/webconnection.js"], disposition:'head'
 		resource url:[dir:'js', file:"activity/poll/poll_graph.js"], disposition:'head'
+		resource url:[dir:'js', file:"activity/webconnection.js"], disposition:'head'
 		resource url:[dir:'js', file:'button.js'], disposition:'head'
 		resource url:[dir:'js', file:'characterSMS-count.js'], disposition:'head'
 		resource url:[dir:'js', file:'check_list.js'], disposition:'head'
@@ -47,6 +49,8 @@ modules = {
 		resource url:[dir:'js', file:'selectmenuTools.js'], disposition:'head'
 		resource url:[dir:'js', file:"activity/popupCustomValidation.js"], disposition:'head'
 		resource url:[dir:'js', file:'/settings/connectionTooltips.js']
+		resource url:[dir:'js', file:'jquery.autosize-min.js']
+		resource url:[dir:'js', file:'message_composer.js']
 		
 		resource url:[dir:'js', file:"guiders-1.2.8.js"], disposition:'head'
 		resource url:[dir:'css', file:"guiders-1.2.8.css"], disposition:'head'

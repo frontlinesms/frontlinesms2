@@ -3,7 +3,7 @@ package frontlinesms2
 abstract class Activity extends MessageOwner {
 //> STATIC PROPERTIES
 	static boolean editable = { true }
-	static def implementations = [Announcement, Autoreply, Autoforward, Poll, Subscription, Webconnection]
+	static def implementations = [Announcement, Autoreply, Poll, Subscription, Webconnection, Autoforward, CustomActivity]
 	protected static final def NAME_VALIDATOR = { activityDomainClass ->
 		return { val, obj ->
 			if(obj?.deleted || obj?.archived) return true
@@ -36,8 +36,12 @@ abstract class Activity extends MessageOwner {
 	}
 
 //> ACCESSORS
-	def getActivityMessages(getOnlyStarred=false, getSent=null) {
-		Fmessage.owned(this, getOnlyStarred, getSent)
+	def getActivityMessages(getOnlyStarred=false, getSent=null, stepId=null, params=null) {
+		Fmessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
+	}
+
+	def getMessageCount(getOnlyStarred=false, getSent=null) {
+		Fmessage.owned(this, getOnlyStarred, getSent).count()
 	}
 	
 	def getLiveMessageCount() {
@@ -64,7 +68,7 @@ abstract class Activity extends MessageOwner {
 	}
 
 	def processKeyword(Fmessage message, Keyword match) {
-		message.ownerDetail = null
+		message.setMessageDetail(this, "")
 		this.addToMessages(message)
 		this.save(failOnError:true)
 	}

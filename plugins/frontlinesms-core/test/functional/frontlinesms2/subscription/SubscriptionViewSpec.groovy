@@ -292,7 +292,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { at PageMessageSubscription }
 			["join", "prudence", "wilburforce"].each {
-				assert messageList.messages[0].text()?.contains(it)
+				messageList.messages[0].text()?.contains(it)
 			}
 		when:
 			header.groupLink.click()

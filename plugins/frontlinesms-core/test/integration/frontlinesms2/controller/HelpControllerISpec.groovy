@@ -54,7 +54,7 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'If a help file with the given name exists its text will be rendered'() {
 		given:
 			def helpFileContent = "This is test content for the help"
-			String.metaClass.markdownToHtml = { "markdown:$delegate" }
+			registerMetaClass File
 			File.metaClass.constructor = { String name ->
 				if(name != 'web-app/help/testHelp.txt') throw new RuntimeException("unexpected filename: $name")
 				return [text:helpFileContent, canRead:{ true }]

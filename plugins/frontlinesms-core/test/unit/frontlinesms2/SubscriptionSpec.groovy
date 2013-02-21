@@ -6,14 +6,14 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Subscription)
-@Mock([Group, GroupMembership])
+@Mock([Group, GroupMembership, SubscriptionService])
 @Build([Contact, Fmessage])
 class SubscriptionSpec extends Specification {
 
 	private static final String TEST_CONTACT = '+1111111111'
 	private static final String TEST_NON_CONTACT = '+2222222222'
 
-	def s, c, g
+	def s, c, g, subscriptionService, m
 
 	def setup() {
 		createTestSubscriptionAndGroup()
@@ -21,77 +21,41 @@ class SubscriptionSpec extends Specification {
 		Subscription.metaClass.addToMessages  = { m -> m }
 	}
 
-	def 'join autoreply message should be sent when join action is triggered'() {
-		given:
-			def sendService = Mock(MessageSendService)
-			s.messageSendService = sendService
-
-			def replyMessage = mockFmessage("woteva")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==TEST_CONTACT && params.messageText=='you have joined'
-			}) >> replyMessage
+	def 'subscriptionService.doJoin is called when processJoin is called'() {
 		when:
 			processKeyword("KEY JOIN", TEST_CONTACT, "JOIN")
 		then:
-			1 * sendService.send(replyMessage)
+			1 * subscriptionService.doJoin(_, _)
 	}
 
-	def 'leave autoreply message should be sent when leave action is triggered'() {
-		given:
-			def sendService = Mock(MessageSendService)
-			s.messageSendService = sendService
-
-			def replyMessage = mockFmessage("woteva")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==TEST_CONTACT && params.messageText=='you have left'
-			}) >> replyMessage
+	def 'subscriptionService.doLeave is called when processLeave is called'() {
 		when:
 			processKeyword("KEY LEAVE", TEST_CONTACT, "LEAVE")
 		then:
-			1 * sendService.send(replyMessage)
+			1 * subscriptionService.doLeave(_, _)
 	}
 
-	def 'correct autoreply message for join should be sent when toggle action is triggered'() {
-		given:
-			def sendService = Mock(MessageSendService)
-			s.messageSendService = sendService
-
-			def replyMessage = mockFmessage("woteva")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==TEST_CONTACT && params.messageText=='you have joined'
-			}) >> replyMessage
+	def 'subscriptionService.doToggle is called when processToggle is called'() {
 		when:
-			processKeyword("KEY", TEST_CONTACT, null)
+			processKeyword("KEY TOGGLE", TEST_CONTACT, "TOGGLE")
 		then:
-			1 * sendService.send(replyMessage)
-	}
-
-	def 'correct autoreply message for leave should be sent when toggle action is triggered'() {
-		given:
-			def sendService = Mock(MessageSendService)
-			s.messageSendService = sendService
-			c.addToGroups(g)
-
-			def replyMessage = mockFmessage("woteva")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==TEST_CONTACT && params.messageText=='you have left'
-			}) >> replyMessage
-		when:
-			processKeyword("KEY", TEST_CONTACT, null)
-		then:
-			1 * sendService.send(replyMessage)
+			1 * subscriptionService.doToggle(_, _)
 	}
 
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
 		s = new Subscription(name:"test subscription", group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
+		subscriptionService = Mock(SubscriptionService)
+		s.subscriptionService = subscriptionService
 	}
 
 	//> HELPERS
 	private def processKeyword(String messageText, String sourcePhoneNumber, String ownerDetail) {
 		def k = Mock(Keyword)
 		k.ownerDetail >> ownerDetail
-		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), k)
+		def m = mockMessage(messageText, sourcePhoneNumber)
+		s.processKeyword(m, k)
+		m
 	}
 
 	private def createTestContact() {
@@ -108,4 +72,5 @@ class SubscriptionSpec extends Specification {
 		m.src >> src
 		return m
 	}
+
 }
