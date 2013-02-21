@@ -4,14 +4,11 @@
 
 <div id="custom-activity-actions-container">
 	<label> <h4>Add a step: </h4>
-		<select class="dropdown">
+		<fsms:select class="dropdown" name="custom_activity_select" from="${['reply', 'join', 'leave', 'webconnectionStep']}" noSelection="${['':'Select an action']}" onchange="selectmenuTools.snapback(this);" optionValue="${{g.message(code:'customactivity.step.' + it + '.add')}}">
 			<g:each var="type" in="${['reply', 'join', 'leave', 'webconnectionStep']}">
-				<option value="${type}">
-					<g:message code="customactivity.step.${type}.add"/>
-				</option>
 				<fsms:render template="/customactivity/steps/${type}" type="sanchez" id="step-${type}" runtimeVars="random"/>
 			</g:each>
-		</select>
+		</fsms:select>
 	</label>
 </div>
 

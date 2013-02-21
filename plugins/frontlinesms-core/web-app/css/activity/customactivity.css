@@ -1,10 +1,10 @@
-#custom-activity-actions-container { margin:3px; margin-bottom: 5px; padding:5px; text-align: right; }
+#custom-activity-actions-container { margin:3px; margin-bottom: 5px; padding:5px; padding-right: 2px; text-align: right; }
 #custom-activity-actions-container h4 { font-weight: bold; display: inline-block; } 
 #custom-activity-config-container { padding:2px; }
-#custom-activity-config-container .step { padding:5px; padding-top:6px; cursor:move; border-top:1px solid #9E9E9E; }
-#custom-activity-config-container .step > .remove-command { float:right; padding:5px 0; background:none; text-indent: 0; cursor: pointer; }
+#custom-activity-config-container .step { padding:5px; cursor:move; border:1px solid #bbb; border-radius: 3px; margin: 3px 0; }
+#custom-activity-config-container .step > .remove-command { font-weight:bold; font-size: 1.2em; float:right; cursor: pointer; margin-top: 4px; }
 #custom-activity-config-container .step textarea { display:block; width:98%; }
-#custom-activity-config-container .step h4 { display:inline-block; padding-left:2px; }
+#custom-activity-config-container .step h4 { display:inline-block; padding-left:2px; padding-top: 3px; }
 #custom-activity-config-container .step.reply h4 { display:block; }
 #custom-activity-config-container .step.reply .controls .magicwand-container a { text-align:right; }
 #custom-activity-config-container .step.reply .controls .magicwand-container { visibility:visible; }
@@ -14,11 +14,13 @@
 #custom-activity-config-container .step.webconnectionStep .webconnection-server-control { width: 96%; border-radius: 2px; margin: 10px 0; padding: 0;}
 #custom-activity-config-container .step.webconnectionStep h4 { margin-bottom: 10px; } 
 #custom-activity-config-container .step.webconnectionStep .btn.addNew { margin: 0 5px; } 
-#custom-activity-config-container .step.webconnectionStep .webconnection-server-control { margin: 3px 5px; padding: 0; }
-#custom-activity-config-container .step.webconnectionStep .webconnection-server-control input[type=text] { width: 255px; }
+#custom-activity-config-container .step.webconnectionStep .webconnection-server-control { margin: 3px 5px; margin-top: 1px; padding: 0; }
+#custom-activity-config-container .step.webconnectionStep .webconnection-server-control input[type=text] { width: 200px; }
 #custom-activity-config-container .step.webconnectionStep .webconnection-server-control input[type=radio] { vertical-align: middle; margin-left: 4px; }
-#custom-activity-config-container .step.webconnectionStep .web-connection-param-table { margin: 3px 5px; padding: 0; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table { margin: 5px; margin-top: 10px; padding: 0; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table tbody tr { border-bottom: 3px solid transparent; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table td { margin: 0; padding: 0; }
-#custom-activity-config-container .step.webconnectionStep .web-connection-param-table input[type=text] { margin-right: 2px; padding: 4px; width: 180px; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table tbody .addNew { cursor:pointer; font-weight: bold; font-size: 1.4em; padding: 2px; }
+#custom-activity-config-container .step.webconnectionStep td > .remove-command { background:none; text-indent: 0; cursor: pointer; font-weight: bold; font-size: 1.4em; padding: 2px; padding-bottom: 7px; }
+#custom-activity-config-container .step.webconnectionStep .web-connection-param-table input[type=text] { margin-right: 2px; padding: 4px; width: 175px; }
 #custom-activity-config-container .step.webconnectionStep .web-connection-param-table .magicwand-container { visibility:visible; margin: 0 5px; }
