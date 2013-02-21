@@ -60,6 +60,20 @@ var customActivityDialog = (function(){
 				url: { required :true },
 				'param-name:not([disabled])' : { required : true }
 			},
+			messages: {
+				autoreplyText: {
+					required: i18n("customactivity.validation.error.autoreplytext")
+				},
+				name: {
+					required: i18n("customactivity.validation.error.name")
+				},
+				url: {
+					required: i18n("customactivity.validation.error.url")
+				},
+				'param-name': {
+					required: i18n("customactivity.validation.error.paramname")
+				},
+			},
 			errorPlacement: function(error, element){
 				$(".error-panel").html(error);
 			}
