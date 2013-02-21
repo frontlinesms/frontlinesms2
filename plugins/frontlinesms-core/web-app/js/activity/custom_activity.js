@@ -110,11 +110,14 @@ var customActivityDialog = (function(){
 		var data = {};
 		container.find(fieldSelecter).each(function(index, field) {
 			field = $(field);
-			if((field.attr("name") != "param-name") && (field.attr("name") != "param-value")) {
+			if((field.attr("name") != "param-name") && (field.attr("name") != "param-value") && !(field.attr("name").startsWith("httpMethod-"))) {
 				data[field.attr("name")] = field.val();
 			}
-			//handling for webconnection step
-			if(field.val() == "webconnectionStep") {
+			// webconnection step parameter handling
+			if(field.attr("name") == "stepType" && field.val() == "webconnectionStep") {
+				// get httpMethod
+				data['httpMethod'] = container.find("input[name^='httpMethod-']:checked").val();
+				// get params
 				var names = $.map($(field).parent().find("input[name='param-name']"), function(element, index){ return $(element).val(); });
 				var values = $.map($(field).parent().find("input[name='param-value']"), function(element, index){ return $(element).val(); });
 				$.each(names,function(index, name){ data[name] = values[index]; });
