@@ -102,6 +102,8 @@ $(function() {
 	checkedValues = 0;
 	chkboxSelector = 'input[name^="routeRule"]';
 	warningObject = $(".warning_message");
+	warningObject.hide();
+
 	$(chkboxSelector).each(function() {
 		if ($(this).is(':checked')) { checkedValues++; }
 	});
@@ -115,9 +117,9 @@ $(function() {
 	});
 
 	function checkboxChecker(checkedValues, warningObject){
-		if (checkedValues === 0) { warningObject.html("Warning you have no rules or phone numbers selected.No messages will be sent. If you wish to send messages, please enable one of the above options").css("visibility","visible").show( "drop", { direction: "up" }, "slow"); }
-		else { warningObject.html("").hide( "drop", { direction: "up" }, "slow"); }
-	}
+		if (checkedValues === 0) { warningObject.html("Warning: You have no rules or phone numbers selected.No messages will be sent. If you wish to send messages, please enable one of the above options").show( "drop", { direction: "up" }, "slow"); 
+		} else { warningObject.html("").hide(); }
+}
 });
 
 </r:script>

@@ -47,7 +47,7 @@ ul.select.sortable.checklist.no-description.ui-sortable li label { margin: 2px; 
 	-o-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; border: 1px solid black; border-color: rgba(0, 0, 0, 0.3);
 }
 span.grabber { background-image:url("../images/icons/grabber.png"); background-repeat: no-repeat; background-position: 0 0; position: absolute; left: 2px; top: 7px; height: 20px;width: 3px; }
-.warning_message { color:#a61b1b; padding:10px; background-color:#FEF1EC; border:1px solid #CD0A0A; visibility: hidden; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px;
+.warning_message { color:#a61b1b; padding:10px; background-color:#FEF1EC; border:1px solid #CD0A0A; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px;
 	-o-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; margin-left: 27px; margin-right: 27px;}
 
 
