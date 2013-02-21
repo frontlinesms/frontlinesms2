@@ -169,26 +169,3 @@ $(function() {
 	});
 });
 
-$(function(){
-	return;
-	// TODO this should be done in the GSP, and events should not be bound in web-app/js files
-	$.ajax({
-		url: url_root + 'help/newfeatures',
-		cache: false,
-		success: function(data) {
-			if(data != "last version already displayed"){
-				mediumPopup.launchNewFeaturePopup(i18n("new.features"), data, i18n("action.close"), function(){
-					$.ajax({
-						url: url_root + 'help/updateShowNewFeatures',
-						data:{enableNewFeaturesPopup:$('#enableNewFeaturesPopup').is(":checked")},
-						cache: false,
-						success: function(data) { 
-							$('#modalBox').parent().remove();
-						}
-					});
-				});
-				$('#modalBox').addClass('help');
-			}
-		}
-	});
-});
