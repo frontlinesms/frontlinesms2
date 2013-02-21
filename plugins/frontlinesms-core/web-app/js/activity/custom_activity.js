@@ -113,8 +113,8 @@ var customActivityDialog = (function(){
 	getStepProperties = function(fieldSelecter, container) {
 		var data = {};
 		container.find(fieldSelecter).each(function(index, field) {
-			field = $(field);
-			if((field.attr("name") != "param-name") && (field.attr("name") != "param-value") && !(field.attr("name").startsWith("httpMethod-"))) {
+			field = $(field); //field.attr("name").startsWith("httpMethod-")
+			if((field.attr("name") != "param-name") && (field.attr("name") != "param-value") && !( field.attr("name").match(/httpMethod.*/))) {
 				data[field.attr("name")] = field.val();
 			}
 			// webconnection step parameter handling
