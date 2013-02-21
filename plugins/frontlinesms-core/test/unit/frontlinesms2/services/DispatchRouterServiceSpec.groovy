@@ -121,36 +121,6 @@ class DispatchRouterServiceSpec extends Specification {
 			thrown NoRouteAvailableException
 	}
 
-	def 'slip should fall back to the -otherwise- if received connection is set as prefered route and it is not avalilable'() {
-		given://'route 2 is the receivedOn route and it is not available'
-			mockAppSettingsService(true, 'any')
-			mockRoutes(1, 3)
-		when:
-			def routedTo = service.slip(mockExchange(), null, null)
-		then: 'message routed to available message'
-			routedTo == "seda:out-1"
-	}
-
-	def 'slip should assign messages to round robin if routing preference is set to use avalilable routes'() {
-		given:
-			mockAppSettingsService(false, 'any')
-			mockRoutes(1, 2, 3)
-		when:
-			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
-		then:
-			routedTo == [1, 2, 3, 1, 2].collect { "seda:out-$it" }
-	}
-
-	def 'slip should prioritise internet services over modems if routing preference is set to use avalilable routes'() {
-		given:
-			mockAppSettingsService(false, 'any')
-			mockRoutes(1:'internet', 2:'modem', 3:'internet', 4:'modem')
-		when:
-			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
-		then:
-			routedTo == [1, 3, 1, 3, 1].collect { "seda:out-$it" }
-	}
-
 	private def mockExchange() {
 		def exchange = Mock(Exchange)
 		exchange.in >> mockExchangeMessage(['frontlinesms.dispatch.id':'1'], Mock(Dispatch))

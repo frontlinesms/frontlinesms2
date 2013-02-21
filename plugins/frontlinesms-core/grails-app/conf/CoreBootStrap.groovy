@@ -47,7 +47,6 @@ class CoreBootStrap {
 			appSettingsService['newfeatures.popup.show.immediately'] = false
 			//default routing in tests is to use any available connections
 			appSettingsService.set('routing.use', 'uselastreceiver')
-			appSettingsService.set('routing.otherwise', 'any')
 			appSettingsService.set('routing.preferences.edited', true)
 		}
 
@@ -64,7 +63,6 @@ class CoreBootStrap {
 			//camelContext.tracing = true
 			dev_disableSecurityFilter()
 			updateFeaturePropertyFileValues()
-			setDefaultMessageRoutingPreferences()
 		}
 
 		if(bootstrapData) {
@@ -82,6 +80,7 @@ class CoreBootStrap {
 			dev_initWebconnections()
 			dev_initCustomActivities()
 			dev_initLogEntries()
+			setDefaultMessageRoutingPreferences()
 		}
 
 		if(Environment.current == Environment.PRODUCTION) {
@@ -666,9 +665,14 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 	}
 	private setDefaultMessageRoutingPreferences(){
 		if(!appSettingsService.get('routing.preferences.edited') || (appSettingsService.get('routing.preferences.edited') == false)){
-			println "CoreBootStrap.setDefaultMessageRoutingPreferences() :: setting default preferences."
-			appSettingsService.set('routing.otherwise', 'any')
+			println "### Changing Routing preferences ###"
+			appSettingsService.set('routing.uselastreceiver', false)
 			appSettingsService.set('routing.preferences.edited', true)
+		}
+		else {
+			def fconnectionInstanceList = Fconnection.findAllBySendEnabled(true)
+			def fconnectionIdList = fconnectionInstanceList.collect {"fconnection-${it.id}"}.join(",")
+			appSettingsService.set('routing.use', fconnectionIdList)
 		}
 	}
 }
