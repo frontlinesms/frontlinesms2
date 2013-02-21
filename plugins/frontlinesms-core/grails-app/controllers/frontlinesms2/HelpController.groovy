@@ -7,35 +7,20 @@ import org.codehaus.groovy.grails.plugins.PluginManagerHolder
 class HelpController extends ControllerUtils {
 	def appSettingsService
 
-	def index() { redirect action:'main' }
-	
-	def main() {}
+	def index() {}
 	
 	def section() {
-		def helpText
-		if(params.helpSection) {
-			def suppliedPluginName = params.helpSection.split('/')[0]
-			// make sure that this is restricted to configured plugins
-			def pluginManager = PluginManagerHolder.pluginManager
-			def plugin = pluginManager.allPlugins.find { plugin ->
-				suppliedPluginName == 'frontlinesms-core' && plugin.name.startsWith('frontlinesmsCore') || 
-						plugin.name == suppliedPluginName
-			}
-			def pluginDir = plugin?.descriptor?.file?.parentFile
-			// FIXME this is open to injection attacks
-			def markdownFile
-			if(pluginDir) {
-				markdownFile = new File(pluginDir, "web-app/help/${params.helpSection}.txt")
-			} else {
-				markdownFile = new File("web-app/help/${params.helpSection}.txt")
-			}
-			if (markdownFile.canRead()) {
-				helpText = markdownFile.text
-			}
-		}
+		def helpText = this.class.getResource("/help/${params.helpSection}.txt")?.text
 		if(!helpText) helpText = g.message(code:"help.notfound")
 		render text:helpText.markdownToHtml()
 	}
+
+	def image() {
+		def uri = r.resource(uri:"/images/${params.imagePath}.png")
+		uri = uri.substring(request.contextPath.size())
+		redirect(uri:uri, absolute:true)
+	}
+
 	def updateShowNewFeatures() {
 		appSettingsService['newfeatures.popup.show.infuture'] = params.enableNewFeaturesPopup?: false
 		appSettingsService.persist()
