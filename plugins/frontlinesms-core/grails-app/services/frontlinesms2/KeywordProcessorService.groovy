@@ -7,13 +7,14 @@ class KeywordProcessorService {
 		if(!topLevelMatch) topLevelMatch = Keyword.getFirstLevelMatch('')
 		if(topLevelMatch) {
 			def secondLevelMatch = null
-			if(words.length > 1)
+			if(words.length > 1) {
 				secondLevelMatch = Keyword.getSecondLevelMatchInActivity(words[1], topLevelMatch.activity)
+			}
 			if (secondLevelMatch) {
 				secondLevelMatch.activity.processKeyword(message, secondLevelMatch)
-			}
-			else
+			} else {
 				topLevelMatch.activity.processKeyword(message, topLevelMatch)
+			}
 		}
 	}
 }
