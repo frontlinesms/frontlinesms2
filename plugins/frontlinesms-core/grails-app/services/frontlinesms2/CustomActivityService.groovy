@@ -37,6 +37,9 @@ class CustomActivityService {
 			def stepToEdit = customActivity.steps.find { "${it.id}" == step.stepId } ?: Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
 			println "# StepToEdit_ID # ${stepToEdit.id}"
 			println "# Adding step of type # ${stepToEdit.shortName}"
+			println "# Clearing step properties before update #"
+			stepToEdit.stepProperties?.clear()
+			if(stepToEdit.id) stepToEdit.save(failOnError:true, flush:true)
 			step.each { k,v->
 				if(k == "recipients") {
 					println "processing recipients for ${stepToEdit.shortName} instance ${stepToEdit.id}. Value from widget is $v"
