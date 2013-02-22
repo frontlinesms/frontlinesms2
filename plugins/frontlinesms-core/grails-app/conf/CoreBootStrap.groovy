@@ -446,10 +446,10 @@ class CoreBootStrap {
 		if(!bootstrapData) return
 
 		def uploadStep = new WebconnectionActionStep()
-			.addToStepProperties(new StepProperty(key:'url', value:'http://frontlinesms.com'))
-			.addToStepProperties(new StepProperty(key:'httpMethod', value:'GET'))
-			.addToStepProperties(new StepProperty(key:'myNumber', value:'23123123'))
-			.addToStepProperties(new StepProperty(key:'myMessage', value:'i will upload forever'))
+			.setPropertyValue('url', 'http://frontlinesms.com')
+			.setPropertyValue('httpMethod', 'GET')
+			.setPropertyValue('myNumber', '23123123')
+			.setPropertyValue('myMessage', 'i will upload forever')
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
 		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
 		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"I will send you forever"))
