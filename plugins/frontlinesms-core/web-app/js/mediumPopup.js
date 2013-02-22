@@ -172,10 +172,9 @@ var mediumPopup = (function() {
 					$('.error-panel').show();
 				}
 				return thisTabValidates;
-			} else {
-				changeButtons(getButtonToTabMappings(), ui.index);
-				return true;
 			}
+			changeButtons(getButtonToTabMappings(), ui.index);
+			return true;
 		}});
 	};
 	tabValidates = function(tab) {
