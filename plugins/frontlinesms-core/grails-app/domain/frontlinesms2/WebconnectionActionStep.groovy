@@ -29,7 +29,7 @@ class WebconnectionActionStep extends Step {
 		setPropertyValue("httpMethod", method)
 	}
 
-	def getUrl() {
+	String getUrl() {
 		getPropertyValue("url")
 	}
 
@@ -71,7 +71,7 @@ class WebconnectionActionStep extends Step {
 									.handled(true)
 									.beanRef('webconnectionService', 'handleException')
 									.end()
-						.to("${WebconnectionActionStep.this.url}")
+						.to(WebconnectionActionStep.this.url)
 						.beanRef('webconnectionService', 'postProcess')
 						.routeId("activity-${WebconnectionActionStep.shortName}-${WebconnectionActionStep.this.id}")]
 			}
@@ -110,7 +110,6 @@ class WebconnectionActionStep extends Step {
 		println "# Exchange after adding other headers in the Webconnection.preProcess()"
 		println "x.in.headers = $x.in.headers"
 		println "x.in.body = $x.in.body"
-		x
 	}
 
 	def postProcess(Exchange x) {
