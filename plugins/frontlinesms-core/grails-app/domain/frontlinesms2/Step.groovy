@@ -18,6 +18,10 @@ abstract class Step {
 		stepProperties(nullable: true)
 	}
 	
+	static mapping = {
+		stepProperties cascade: "all-delete-orphan"
+	}
+	
 	abstract def process(Fmessage message)
 
 	String getPropertyValue(key) {

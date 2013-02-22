@@ -37,6 +37,7 @@ class CustomActivityService {
 			println "# Adding step of type # ${stepToEdit.shortName}"
 			println "# Clearing step properties before update #"
 			stepToEdit.stepProperties?.clear()
+			if(stepToEdit.id) stepToEdit.save(failOnError:true, flush:true)
 			step.each { k,v->
 				if(!(k in ["stepType", "stepId"])) {
 					stepToEdit.setPropertyValue(k,v)

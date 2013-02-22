@@ -33,10 +33,6 @@ class WebconnectionActionStep extends Step {
 		getPropertyValue("url")
 	}
 
-	def setUrl(String url) {
-		setPropertyValue("url", url)
-	}
-
 	def setPropertyValue(key, value) {
 		super.setPropertyValue("${key in ['url', 'httpMethod']?'':'param:'}$key", value)
 	}
