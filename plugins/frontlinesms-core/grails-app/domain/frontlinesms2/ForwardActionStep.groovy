@@ -19,7 +19,11 @@ class ForwardActionStep extends Step {
 	}
 
 	Map getConfig() {
-                [stepId:id, sentMessageText:sentMessageText]
+		def config = [stepId:id, sentMessageText:sentMessageText]
+		['contacts':'Contact', 'groups':'Group', 'smartGroups':'SmartGroup', 'addresses':'Address'].each { name, type ->
+			config."$name" = getRecipientsByDomain(type)
+		}
+		config
         }
 
 	def getSentMessageText() {
