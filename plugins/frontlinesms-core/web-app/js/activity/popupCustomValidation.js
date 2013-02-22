@@ -82,6 +82,6 @@ function genericSortingValidation() {
 
 function customValidationForGroups(){
 	jQuery.validator.addMethod("notnull", function(value, element) {
-		return ($(element).val() != "null")
+		return ($(element).val() !== "null");
 	}, i18n("validation.group.notnull"));
 }
