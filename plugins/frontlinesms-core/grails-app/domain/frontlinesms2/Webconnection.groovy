@@ -149,11 +149,10 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		println "x.in.body = $x.in.body"
 	}
 
-	def postProcess(Exchange x) {
+	void postProcess(Exchange x) {
 		println "###### Webconnection.postProcess() with Exchange # ${x}"
 		println "Web Connection Response::\n ${x.in.body}"
 		log.info "Web Connection Response::\n ${x.in.body}"
-		x
 	}
 
 	private String urlEncode(String s) throws UnsupportedEncodingException {

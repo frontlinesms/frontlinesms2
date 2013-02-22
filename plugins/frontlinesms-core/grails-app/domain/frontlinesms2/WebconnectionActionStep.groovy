@@ -91,9 +91,9 @@ class WebconnectionActionStep extends Step {
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
 		def fmessage = Fmessage.get(x.in.headers.'fmessage-id')
-		def stepProperties = this.stepProperties.collect { if(!(it.key ==~ /httpMethod|url/)) it} - null
+		def stepProperties = this.requestParameters.collect { if(!(it.key ==~ /httpMethod|url/)) it} - null
 		def encodedParameters = stepProperties?.collect {
-			urlEncode(it.key) + '=' + urlEncode(webconnectionService.getProcessedValue(it, fmessage))
+			urlEncode(it.name) + '=' + urlEncode(webconnectionService.getProcessedValue(it, fmessage))
 		}.join('&')
 		println "PARAMS:::$encodedParameters"
 		x.in.headers[Exchange.HTTP_PATH] = this.url
@@ -112,11 +112,10 @@ class WebconnectionActionStep extends Step {
 		println "x.in.body = $x.in.body"
 	}
 
-	def postProcess(Exchange x) {
+	void postProcess(Exchange x) {
 		println "###### WebconnectionActionStep.postProcess() with Exchange # ${x}"
 		println "Web Connection ActionStep Response::\n ${x.in.body}"
 		log.info "Web Connection ActionStep Response::\n ${x.in.body}"
-		x
 	}
 
 	private String urlEncode(String s) throws UnsupportedEncodingException {
