@@ -346,7 +346,25 @@ class FsmsTagLib {
 
 	def recipientSelector = { att ->
 		out << '<select name="recipients" style="width:320px;" data-placeholder="' + i18nUtilService.getMessage([code:'contact.search.placeholder']) + '" multiple class="chzn-select customactivity-field">'
-		out << '<option></option>'
+
+		def contacts = att?.contacts
+		def groups = att?.groups
+		def smartGroups = att?.smartGroups
+		def addresses = att?.addresses
+
+		["contact":contacts, "group":groups, "smartGroup":smartGroups, "address":addresses].each { typeKey, typeValue ->
+			if ( typeValue ) {
+				def optgroupLabel, optionValue, optionLabel
+				optgroupLabel = g.message(code:'contact.search.'+typeKey)
+				out << "<optgroup label='${optgroupLabel}'>"
+					typeValue.each { recipient ->
+						optionValue = typeKey+'-'+((typeKey != 'address')?(recipient.id):(recipient))
+						optionLabel = (typeKey != 'address')?recipient.name:recipient
+						out << "<option value='${optionValue}' selected>${optionLabel}</option>"
+					}
+				out << '</optgroup>'
+			}
+		}
 		out << '</select>'
 	}
 
