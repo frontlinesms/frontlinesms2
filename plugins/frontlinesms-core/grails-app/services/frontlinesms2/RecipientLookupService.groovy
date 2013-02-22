@@ -33,9 +33,9 @@ class RecipientLookupService {
 	def lookup(params) {
 		def query = "%${params.term.toLowerCase()}%"
 		def selectedSoFar = getSelectedSoFar(params)
-		def results = [contacts:lookupContacts(query, ids(selectedSoFar, Contact)),
-				groups:lookupGroups(query, ids(selectedSoFar, Group)),
-				smartgroups:lookupSmartgroups(query, ids(selectedSoFar, SmartGroup))].collect { k, v ->
+		def results = [contact:lookupContacts(query, ids(selectedSoFar, Contact)),
+				group:lookupGroups(query, ids(selectedSoFar, Group)),
+				smartgroup:lookupSmartgroups(query, ids(selectedSoFar, SmartGroup))].collect { k, v ->
 			if(v) [group:true, text:i18nUtilService.getMessage(code:"contact.search.$k"), items:v] } - null
 		def strippedNumber = stripNumber(params.term)
 		if (strippedNumber)

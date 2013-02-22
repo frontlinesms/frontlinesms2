@@ -355,7 +355,7 @@ class FsmsTagLib {
 		["contact":contacts, "group":groups, "smartGroup":smartGroups, "address":addresses].each { typeKey, typeValue ->
 			if ( typeValue ) {
 				def optgroupLabel, optionValue, optionLabel
-				optgroupLabel = g.message(code:'recipientselector.'+typeKey+'.title')
+				optgroupLabel = g.message(code:'contact.search.'+typeKey)
 				out << "<optgroup label='${optgroupLabel}'>"
 					typeValue.each { recipient ->
 						optionValue = typeKey+'-'+((typeKey != 'address')?(recipient.id):(recipient))
