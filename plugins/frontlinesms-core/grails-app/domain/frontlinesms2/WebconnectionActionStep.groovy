@@ -37,11 +37,15 @@ class WebconnectionActionStep extends Step {
 		setPropertyValue("url", url)
 	}
 
+	def setPropertyValue(key, value) {
+		super.setPropertyValue("${key in ['url', 'httpMethod']?'':'param:'}$key", value)
+	}
+
 	def getRequestParameters() {
 		def parameters = []
 		this.stepProperties?.each { property->
-			if(!(property.key in ["url", "httpMethod"])) {
-				parameters << [name:property.key, value:property.value]
+			if(property.key.startsWith("param:")) {
+				parameters << [name:property.key.split("param:", 2)[1], value:property.value]
 			}
 		}
 		println "## webconnectionStep.params # ${parameters}"
