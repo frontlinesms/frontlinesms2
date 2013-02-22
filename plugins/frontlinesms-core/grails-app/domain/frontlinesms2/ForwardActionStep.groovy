@@ -10,12 +10,7 @@ class ForwardActionStep extends Step {
 
 	static configFields = [sentMessageText: 'textarea', recipients: '']
 
-	private static def propertyValidator = { val, obj ->
-		obj.sentMessageText && obj.stepProperties.find { it.key == "recipient" }?.value
-	}
-
 	static constraints = {
-		stepProperties validator:propertyValidator
 	}
 
 	Map getConfig() {
