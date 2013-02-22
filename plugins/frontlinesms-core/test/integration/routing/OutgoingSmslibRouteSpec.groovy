@@ -12,6 +12,8 @@ import spock.lang.*
 class OutgoingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 	def messageSendService
 	def fconnectionService
+	def appSettingsService
+	static transactional = false
 
 	def 'message send service should send a message to connected SMSLib connection'() {
 		given:
@@ -20,9 +22,9 @@ class OutgoingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			MockModemUtils.initialiseMockSerial(MOCK1:new CommPortIdentifier('MOCK1',
 					MockModemUtils.createMockPortHandler(true, [:], sentMessages)))
 			// route is setup and started
-			def connection = SmslibFconnection.build(port:'MOCK1').save(failOnError:true)
+			def connection = new SmslibFconnection(name:'test connection', port:'MOCK1', baud:9600).save(failOnError:true, flush:true)
 			fconnectionService.createRoutes(connection)
-
+			appSettingsService.set('routing.use', "fconnection-${connection.id}")
 			// message is initialised
 			def m = createOutgoing('+447890123456', 'test message')
 		when:
