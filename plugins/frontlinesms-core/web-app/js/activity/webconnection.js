@@ -68,8 +68,7 @@ var webconnectionDialog = (function () {
 			$("#cancel").attr('disabled', "disabled");
 			$("#prevPage").attr('disabled', "disabled");
 		}
-	}
-
+	},
 	processCheckRouteResponse = function(response) {
 		response = response.webconnection_status;
 		if(!response) { return; }
@@ -87,8 +86,7 @@ var webconnectionDialog = (function () {
 			$("#testRoute").append("<span>"+i18n('webconnection.testroute.label')+"</span>");
 		}
 		app_info.stopListening("webconnection_status");
-	};
-	
+	},
 	checkRouteStatus = function(response) {
 		if(response.ok) {
 			$("#testRoute").children().remove();
@@ -96,7 +94,6 @@ var webconnectionDialog = (function () {
 			$("#activityId").val(response.ownerId);
 			toggleWizardButtons();
 			app_info.listen("webconnection_status", { ownerId:response.ownerId }, processCheckRouteResponse);
-		}
 		} else {
 			displayErrors(response);
 		}
