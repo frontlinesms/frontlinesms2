@@ -99,11 +99,11 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageAnnouncement, 'New Office'
-			messageList.toggleSelected(0)
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.sender.contains("Jane") }
 		when:
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
@@ -117,8 +117,8 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
 		when:
 			to PageMessageAnnouncement, 'New Office'
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.replyAll.displayed }

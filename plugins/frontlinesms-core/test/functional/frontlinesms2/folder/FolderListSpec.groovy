@@ -105,9 +105,9 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
-			messageList.toggleSelected(0)
+			messageList.toggleSelect(0)
 			waitFor("slow") { singleMessageDetails.displayed }
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
@@ -121,8 +121,8 @@ class FolderListSpec extends FolderBaseSpec {
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 			multipleMessageDetails.replyAll.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }

@@ -16,7 +16,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
 			to PageMessageInbox
-			messageList.toggleSelected(0)
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.text == "test2" }
 			singleMessageDetails.archive.click()
 			to PageArchiveInbox
@@ -38,7 +38,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
 			to PageMessageSent
-			messageList.toggleSelected(0)
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.text == "hi Mary" }
 			singleMessageDetails.archive.click()
 			to PageArchiveSent
@@ -55,8 +55,8 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			to PageMessagePoll, Poll.findByName('Miauow Mix').id, Fmessage.findBySrc('Barnabus')
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		 then:
 			waitFor { !multipleMessageDetails.archiveAll.displayed }
 	 }
