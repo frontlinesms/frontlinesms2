@@ -163,13 +163,13 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor('very slow') { multipleMessageDetails.displayed }
 			waitFor('very slow') { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { !multipleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "hi Alice" }
