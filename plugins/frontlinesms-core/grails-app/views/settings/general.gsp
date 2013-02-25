@@ -63,8 +63,7 @@
 						<g:each in="${fconnectionRoutingMap}" status="i" var="it">						
 							<g:if test="${!(it.key instanceof frontlinesms2.Fconnection)}">
 								<li>
-									<label for="routeRule-${i}">
-										<span class="grabber"></span>
+									<label for="routeRule-${i}" class="grabber">
 										<g:message code="routing.rule.${it.key}"/>
 										<g:checkBox name="routeRule-${i}" value="${it.key}" checked="${it.value}"/>
 									</label>
@@ -76,8 +75,7 @@
 						<g:each in="${fconnectionRoutingMap}" status="i" var="it">					
 							<g:if test="${(it.key instanceof frontlinesms2.Fconnection)}">
 								<li>
-									<label for="routeRule-${i}">										
-										<span class="grabber"></span>
+									<label for="routeRule-${i}" class="grabber">										
 										<g:message code="routing.rules.device" args="[it.key.name]" />										
 										<g:checkBox name="routeRule-${i}" value="fconnection-${it.key.id}" checked="${it.value}"/>
 									</label>
