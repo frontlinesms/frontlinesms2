@@ -12,8 +12,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		then:
 			waitFor { messageList.selectAll.checked }
 	}
@@ -23,8 +23,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		then:
 			waitFor('veryslow') { multipleMessageDetails.checkedMessageCount == "2 messages selected"}
 	}
@@ -35,11 +35,11 @@ class MessageCheckSpec extends MessageBaseSpec {
 			def m = Fmessage.findBySrc('Bob')
 		when:
 			to PageMessageInbox, m.id
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor('veryslow') { singleMessageDetails.sender == messageList.displayedNameFor(m) }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor('veryslow') { messageList.messages[1].hasClass("selected") }
 	}
@@ -51,8 +51,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
@@ -69,8 +69,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
@@ -91,8 +91,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Contact.build(name:'Alice', mobile:'Alice')
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
@@ -133,7 +133,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when: 
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			messageList.messages[0].checkbox.checked
 		when:
@@ -150,17 +150,17 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Fmessage.build()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		then:
 			waitFor('veryslow') { multipleMessageDetails.displayed }
 			multipleMessageDetails.checkedMessageCount == '2 messages selected'
 		when:
-			messageList.messages[2].checkbox.click()
+			messageList.toggleSelected(2)
 		then:
 			waitFor { multipleMessageDetails.checkedMessageCount == '3 messages selected' }
 		when:
-			messageList.messages[2].checkbox.click()
+			messageList.toggleSelected(2)
 		then:
 			waitFor { multipleMessageDetails.checkedMessageCount == '2 messages selected' }
 	}

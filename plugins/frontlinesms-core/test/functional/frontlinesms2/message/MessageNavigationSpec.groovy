@@ -9,7 +9,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			messageList.messages[0].hasClass("selected")
 		when:
@@ -25,7 +25,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			messageList.messages[1].hasClass("selected")
 		when:

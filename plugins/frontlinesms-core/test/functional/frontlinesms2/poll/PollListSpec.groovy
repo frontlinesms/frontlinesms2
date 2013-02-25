@@ -82,15 +82,15 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessagePoll, 'Football Teams'
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { singleMessageDetails.text == "I like manchester" }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 			def message = Fmessage.findBySrc('Alice')
 		then:
 			waitFor { singleMessageDetails.sender == message.src }
