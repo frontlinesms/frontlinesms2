@@ -18,3 +18,4 @@ class AutoreplyHeaderModule extends frontlinesms2.message.ContentHeader {
 		autoreplyMessage { infoListItems[1] }
 	}
 }
+

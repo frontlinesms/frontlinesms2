@@ -6,7 +6,6 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class MessageCheckSpec extends MessageBaseSpec {
-	
 	def "header checkbox is checked when all the messages are checked"() {
 		given:
 			createInboxTestMessages()
@@ -17,7 +16,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		then:
 			waitFor { messageList.selectAll.checked }
 	}
-	
+
 	def "message count displayed when multiple messages are selected"() {
 		given:
 			createInboxTestMessages()
@@ -28,7 +27,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		then:
 			waitFor('veryslow') { multipleMessageDetails.checkedMessageCount == "2 messages selected"}
 	}
-	
+
 	def "checked message details are displayed when message is checked"() {
 		given:
 			createInboxTestMessages()
@@ -43,7 +42,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		then:
 			waitFor('veryslow') { messageList.messages[1].hasClass("selected") }
 	}
-	
+
 	def "'Reply All' button appears for multiple selected messages and works"() {
 		given:
 			createInboxTestMessages()
@@ -110,14 +109,14 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "'Forward' button works even when all messages are unchecked"() {
 		given:
 			createInboxTestMessages()
-		when: 
+		when:
 			to PageMessageInbox, Fmessage.findBySrc('Alice').id
 			messageList.selectAll.click()
 		then:
 			waitFor { messageList.selectedMessages.size() == 2 }
 		when:
 			messageList.selectAll.click()
-		then: 
+		then:
 			waitFor { singleMessageDetails.sender == "Alice" }
 		when:
 			singleMessageDetails.forward.click()
@@ -131,7 +130,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "should uncheck message when a different message is clicked"() {
 		given:
 			createInboxTestMessages()
-		when: 
+		when:
 			to PageMessageInbox
 			messageList.toggleSelected(0)
 		then:
