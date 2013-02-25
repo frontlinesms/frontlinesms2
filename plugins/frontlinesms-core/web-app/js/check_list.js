@@ -70,14 +70,10 @@ check_list = (function() {
 			params = { contactsSection:$('input:hidden[name=contactsSection]').val() };
 			action = '/updateContactPane/';
 		}
+		$("#multiple-"+itemTypeString+"s").hide();
 
 		singleDetails = $("#single-" + itemTypeString);
-		if(itemTypeString === "message") {
-			singleDetails.find("#message-detail-content").html("<p>" + i18n("content.loading") + "</p>");
-		} else {
-		}
-
-		$("#multiple-"+itemTypeString+"s").hide();
+		singleDetails.html("<p class='loading'>" + i18n("content.loading") + "</p>");
 		singleDetails.show();
 
 		$.get(url_root + itemTypeString + action + itemId, params, function(data) {
