@@ -74,6 +74,7 @@ class MessageList extends geb.Module {
 		selectAll { $("input#message-select-all") }
 		sources { $('td.message-sender-cell')*.text() }
 		messages { moduleList MessageListRow, $('tbody tr') }
+		toggleSelect { index -> ++index; $("tbody tr:nth-child($index) input[type=checkbox]").click(); true }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
 		noContent { $('tr.no-content') }
 		starFor { message ->

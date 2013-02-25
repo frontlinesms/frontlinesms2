@@ -6,7 +6,7 @@ import org.apache.camel.Exchange
 class IntelliSmsTranslationService implements Processor {
 	static final String INTELLISMS_MESSAGING_ADDR = '@messaging.intellisoftware.co.uk'
 	static final String INTERNATIONAL_SYMBOL = '+'
-	static transactional = false
+	static transactional = false //TODO please explain why this is not transactional
 
 	void process(Exchange exchange) {
 		println("exchange ${exchange}")

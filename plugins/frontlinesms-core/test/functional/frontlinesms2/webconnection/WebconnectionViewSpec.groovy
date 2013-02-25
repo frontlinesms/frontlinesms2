@@ -134,7 +134,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -146,9 +146,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()		
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			multipleMessageDetails.checkedMessageCount == "2 messages selected"
@@ -160,7 +160,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].checkbox.click()
+			messageList.toggleSelected(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			messageList.messages[3].hasClass("selected")
@@ -173,7 +173,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -189,9 +189,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
@@ -207,7 +207,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -230,9 +230,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:

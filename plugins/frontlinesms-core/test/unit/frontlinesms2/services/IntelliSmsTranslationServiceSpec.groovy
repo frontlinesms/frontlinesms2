@@ -10,6 +10,12 @@ import frontlinesms2.*
 
 @TestFor(IntelliSmsTranslationService)
 class IntelliSmsTranslationServiceSpec extends Specification {
+	def setup() {
+		String.metaClass.truncate = { max=16 ->
+			delegate.size() <= max? delegate: delegate.substring(0, max-1) + '…'
+		}
+	}
+	
 	def "incoming intellisms email message is translated into Fmessage"() {
 		given:
 			def testDate = "Fri, 20 Apr 2012 14:27:14 +0100"
