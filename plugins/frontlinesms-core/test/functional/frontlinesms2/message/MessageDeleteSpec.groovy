@@ -43,8 +43,8 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def "'Delete All' button appears for multiple selected messages and works"() {
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.checkedMessageCount == '2 messages selected' }
 			multipleMessageDetails.deleteAll.click()

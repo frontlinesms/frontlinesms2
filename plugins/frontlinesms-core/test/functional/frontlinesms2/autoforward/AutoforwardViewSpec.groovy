@@ -93,7 +93,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == 'Sudden shock 0' }
@@ -105,9 +105,9 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
@@ -119,7 +119,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].checkbox.click()
+			messageList.toggleSelected(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			messageList.messages[3].hasClass("selected")
@@ -132,7 +132,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -148,9 +148,9 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
@@ -166,7 +166,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Sudden shock 0" }
@@ -189,9 +189,9 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:

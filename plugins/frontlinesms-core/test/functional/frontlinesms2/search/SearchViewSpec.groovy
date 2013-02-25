@@ -156,7 +156,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.searchBtn.click()
 		then:
 			waitFor { messageList.messages.size() == 6 }
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor("veryslow") { singleMessageDetails.text == "received1" }
 			singleMessageDetails.delete.click()
 		then:
@@ -194,7 +194,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearchResult, "alex"
 		then:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor { singleMessageDetails.text == "hi alex" }
 		when:
 			singleMessageDetails.archive.click()
@@ -297,13 +297,13 @@ class SearchViewSpec extends SearchBaseSpec {
 			def m1 = Fmessage.build(src:'+25499912', text:'archived1', archived:true)
 			to PageSearchResult, "archived", "inArchive=true"
 		then:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		when:
 			waitFor { singleMessageDetails.text == "archived1" }
 		then:
 			!singleMessageDetails.single_moveActions.displayed
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			multipleMessageDetails.multiple_moveActions.displayed
 	}

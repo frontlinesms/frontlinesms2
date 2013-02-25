@@ -25,9 +25,9 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def "'Reply All' button does not appears for multiple selected messages"() {
 		when:
 			to PageMessagePending
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 			waitFor("veryslow") { multipleMessageDetails.displayed }
 		then:
 			waitFor("veryslow") { multipleMessageDetails.text == '2 messages selected' }
@@ -37,7 +37,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def "should be able to retry a failed message"() {
 		when:
 			to PageMessagePending
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { singleMessageDetails.reply.displayed }
 		when:
@@ -49,7 +49,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def "should be able to retry all failed messages"() {
 		when:
 			to PageMessagePending
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { singleMessageDetails.reply.displayed }
 		when:
