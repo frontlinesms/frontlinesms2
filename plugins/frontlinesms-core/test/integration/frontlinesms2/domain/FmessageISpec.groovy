@@ -407,7 +407,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 							.addToDispatches(new Dispatch(dst:'234', status:DispatchStatus.PENDING)).save(failOnError:true)
 			outgoingMessage.setMessageDetail(replyStep, incomingMessage.id)
 		then:
-			outgoingMessage.setMessageDetail == incomingMessage.id.toString()
+			outgoingMessage.ownerDetail == incomingMessage.id.toString()
 	}
 
 	def "Setting the owner detail for webconnection" (){
