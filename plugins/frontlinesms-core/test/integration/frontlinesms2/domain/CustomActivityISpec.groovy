@@ -63,7 +63,6 @@ class CustomActivityISpec extends IntegrationSpec {
 			def joinStep = Mock(JoinActionStep)
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
-			customActivity.save(flush:true)
 		when:
 			customActivity.activate()
 		then:
@@ -75,7 +74,6 @@ class CustomActivityISpec extends IntegrationSpec {
 			def joinStep = Mock(JoinActionStep)
 			def customActivity = new CustomActivity(name:"Custom Activity")
 			customActivity.addToSteps(joinStep)
-			customActivity.save(flush:true)
 		when:
 			customActivity.deactivate()
 		then:
