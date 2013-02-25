@@ -57,7 +57,7 @@ class CoreAppInfoProviders {
 					messageCount = Fmessage."$section"(data.starred).count()
 				}
 			} else if(section == 'activity') {
-				messageCount = Activity.get(data.ownerId)?.getActivityMessages(data.starred, data.inbound)?.count()
+				messageCount = Activity.get(data.ownerId)?.getMessageCount(data.starred, data.inbound)
 			} else if(section == 'folder') {
 				messageCount = Folder.get(data.ownerId)?.getFolderMessages(data.starred, data.inbound)?.count()
 			} else messageCount = 0
