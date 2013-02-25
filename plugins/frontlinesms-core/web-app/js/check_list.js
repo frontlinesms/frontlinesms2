@@ -60,7 +60,7 @@ check_list = (function() {
 	};
 
 	updateSingleCheckedDetails = function(itemTypeString, itemId, row) {
-		var params, action;
+		var params, action, singleDetails;
 		if (itemTypeString === 'message') {
 			row.removeClass("unread");
 			row.addClass("read");
@@ -70,11 +70,23 @@ check_list = (function() {
 			params = { contactsSection:$('input:hidden[name=contactsSection]').val() };
 			action = '/updateContactPane/';
 		}
+
+		singleDetails = $("#single-" + itemTypeString);
+		if(itemTypeString === "message") {
+			singleDetails.find("#message-detail-content").html("<p>" + i18n("content.loading") + "</p>");
+		} else {
+		}
+
+		$("#multiple-"+itemTypeString+"s").hide();
+		singleDetails.show();
+
 		$.get(url_root + itemTypeString + action + itemId, params, function(data) {
-			$('#multiple-'+itemTypeString+'s').hide();
 			var newPane = $(data);
+			if(!singleDetails.is(":visible")) {
+				return;
+			}
 			fsmsButton.findAndApply("input[type='submit']", newPane);
-			$('#single-'+itemTypeString).replaceWith(newPane);
+			singleDetails.replaceWith(newPane);
 			newPane.find('.dropdown').selectmenu();
 			if (itemTypeString === 'contact') {
 				applyContactPaneJavascriptEnhancements(newPane);
