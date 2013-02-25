@@ -122,7 +122,7 @@ class WebconnectionService {
  	def retryFailed(Webconnection c) {
  		Fmessage.findAllByMessageOwner(c).each {
  			if(it.ownerDetail == Webconnection.OWNERDETAIL_FAILED)
- 				send(it)
+ 				doUpload(c, it)
  		}
  	}
 
