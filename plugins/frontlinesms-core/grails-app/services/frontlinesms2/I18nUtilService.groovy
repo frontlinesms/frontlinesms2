@@ -1,5 +1,6 @@
 package frontlinesms2
 
+import grails.util.Environment
 import org.springframework.web.servlet.LocaleResolver
 import org.springframework.web.servlet.support.RequestContextUtils
 import org.springframework.util.StringUtils
@@ -23,13 +24,24 @@ class I18nUtilService {
 		appSettingsService.set('language', language)
 	}
 
+	private boolean isTranslationFilesEncodedAsJavePropertiesFiles() {
+		return Environment.current == Environment.PRODUCTION
+	}
+
 	synchronized def getAllTranslations() {
 		if(!this.@allTranslations) {
 			def translations = [:]
 			new  File(getRootDirectory()).eachFileMatch groovy.io.FileType.FILES, ~/messages(_\w\w)*\.properties$/, { file ->
 				def filename = file.name
 				def locale = getLocaleKey(filename)
-				def language = getLanguageName(filename)
+				def language
+				if(isTranslationFilesEncodedAsJavePropertiesFiles()) {
+					def prop = new Properties()
+					prop.load(file.newInputStream())
+					language = prop.getProperty('language.name')
+				} else {
+					language = getLanguageName(filename)
+				}
 				translations[locale] = language
 			}
 			this.allTranslations = translations.sort { it.value }

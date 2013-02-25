@@ -24,7 +24,7 @@ class BodyMenu extends geb.Module {
 		messageSection { section ->
 			$("a", text: "${section}")
 		}
-		selected { $('#body-menu .selected').text().toLowerCase() }
+		selected { $('#body-menu .selected').text()?.toLowerCase() }
 		activityList { $('#body-menu li.activities ul.submenu li') }
 		activityLinks { $('#body-menu li.activities ul.submenu li a') }
 		newActivity { $('#body-menu a#create-new-activity') }
@@ -39,7 +39,7 @@ class BodyMenu extends geb.Module {
 class ContentHeader extends geb.Module {
 	static base = { $('#main-list-head') }
 	static content = {
-		title { $('h1').text().toLowerCase() }
+		title { $('h1').text()?.toLowerCase() }
 		buttons { $('a.btn, input[type="button"], button') }
 		export (required:false) { $('#export-btn a') }
 		moreActions { $('div.header-buttons select#more-actions') }
@@ -74,8 +74,9 @@ class MessageList extends geb.Module {
 		selectAll { $("input#message-select-all") }
 		sources { $('td.message-sender-cell')*.text() }
 		messages { moduleList MessageListRow, $('tbody tr') }
+		toggleSelect { index -> ++index; $("tbody tr:nth-child($index) input[type=checkbox]").click(); true }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
-		noContent { $('td.no-content') }
+		noContent { $('tr.no-content') }
 		starFor { message ->
 			if (message instanceof Fmessage) {
 					return $("tr #star-${message.id} a")
@@ -115,7 +116,7 @@ class MessageListRow extends geb.Module {
 class SingleMessageDetails extends geb.Module {
 	static base = { $('#single-message') }
 	static content = {
-		noneSelected { $('#message-detail-content').text().toLowerCase() == "no message selected" }
+		noneSelected { $('#message-detail-content').text()?.toLowerCase() == "no message selected" }
 		sender { $('#message-detail-sender').text() }
 		senderLink { $('#message-detail-sender a') }
 		addToContacts(required:false) { $('#add-contact') }

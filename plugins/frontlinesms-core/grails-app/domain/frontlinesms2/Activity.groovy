@@ -3,7 +3,7 @@ package frontlinesms2
 abstract class Activity extends MessageOwner {
 //> STATIC PROPERTIES
 	static boolean editable = { true }
-	static def implementations = [Announcement, Autoreply, Autoforward, Poll, Subscription, Webconnection]
+	static def implementations = [Announcement, Autoreply, Poll, Subscription, Webconnection, Autoforward, CustomActivity]
 	protected static final def NAME_VALIDATOR = { activityDomainClass ->
 		return { val, obj ->
 			if(obj?.deleted || obj?.archived) return true
@@ -30,11 +30,18 @@ abstract class Activity extends MessageOwner {
 
 	static constraints = {
 		sentMessageText(nullable:true)
+		keywords(validator: { val, obj ->
+			!val || val?.every { it.validate() }
+		})
 	}
 
 //> ACCESSORS
-	def getActivityMessages(getOnlyStarred=false, getSent=null) {
-		Fmessage.owned(this, getOnlyStarred, getSent)
+	def getActivityMessages(getOnlyStarred=false, getSent=null, stepId=null, params=null) {
+		Fmessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
+	}
+
+	def getMessageCount(getOnlyStarred=false, getSent=null) {
+		Fmessage.owned(this, getOnlyStarred, getSent).count()
 	}
 	
 	def getLiveMessageCount() {
@@ -60,7 +67,11 @@ abstract class Activity extends MessageOwner {
 		this.messages*.isDeleted = false
 	}
 
-	def processKeyword(Fmessage message, Keyword match) {}
+	def processKeyword(Fmessage message, Keyword match) {
+		message.setMessageDetail(this, "")
+		this.addToMessages(message)
+		this.save(failOnError:true)
+	}
 
 	/**
 	 * Activcate this activity.  If it is already activated, this method should
@@ -69,6 +80,11 @@ abstract class Activity extends MessageOwner {
 	def activate() {}
 
 	def deactivate() {}
+
+	def move(messageInstance) {
+		messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
+		this.processKeyword(messageInstance, null)
+	}
 
 	private def logFail(c, ex) {
 		ex.printStackTrace()

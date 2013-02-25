@@ -13,10 +13,10 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageArchiveInbox
 		then:
-			waitFor() { messageList.noContent.text() == "No messages here!" }
+			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor { singleMessageDetails.text == "test2" }
 			singleMessageDetails.archive.click()
 			to PageArchiveInbox
@@ -35,10 +35,10 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 		    to PageArchiveSent
 		then:
-			waitFor() { messageList.noContent.text() == "No messages here!" }
+			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
 			to PageMessageSent
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor { singleMessageDetails.text == "hi Mary" }
 			singleMessageDetails.archive.click()
 			to PageArchiveSent
@@ -47,7 +47,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageMessageSent
 		then:
-			waitFor() { messageList.noContent.text() == "No messages here!" }
+			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 	}
 
 	 def 'should not be able to archive activity messages'() {
@@ -55,8 +55,8 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			to PageMessagePoll, Poll.findByName('Miauow Mix').id, Fmessage.findBySrc('Barnabus')
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		 then:
 			waitFor { !multipleMessageDetails.archiveAll.displayed }
 	 }

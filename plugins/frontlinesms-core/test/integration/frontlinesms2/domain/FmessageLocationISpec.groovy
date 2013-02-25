@@ -32,8 +32,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			createTestData()
 			def inboxMessages = Fmessage.inbox()
 		then:
-			Fmessage.inbox().count() == 4
-			Fmessage.inbox().list(max:3, offset:0)*.src == ["+254778899", , "Bob", "9544426444"]
+			inboxMessages.count() == 4
+			inboxMessages.list(max:3, offset:0)*.src == ["+254778899", , "Bob", "9544426444"]
 	}
 
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {
@@ -102,10 +102,10 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can fetch all pending messages"() {
 		setup:
-			def m4 = new Fmessage(src:"src", text:"text", starred:true, date:new Date())
+			new Fmessage(src:"src", text:"text", starred:true, date:new Date())
 				.addToDispatches(dst:'1234567', status:DispatchStatus.PENDING)
 				.save(failOnError:true)
-			def m3 = new Fmessage(src:"src", text:"text", date:new Date())
+			new Fmessage(src:"src", text:"text", date:new Date())
 				.addToDispatches(dst:'1234567', status:DispatchStatus.FAILED)
 				.save(failOnError:true)
 		when:
@@ -205,33 +205,22 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		Fmessage.build(src:"9544426444", starred:true, date:BASE_DATE - 5000)
 		
 		// OUTGOING MESSAGES
-		def m1 = new Fmessage(src:'Mary', text:'hi Mary', date:BASE_DATE - 2)
+		new Fmessage(src:'Mary', text:'hi Mary', date:BASE_DATE - 2)
 				.addToDispatches(dst:'1234567', status:DispatchStatus.SENT, dateSent:new Date())
 				.save(flush:true, failOnError:true)
-		def m2 = new Fmessage(src:'+254445566', text:'test', date:BASE_DATE - 1, starred:true)
+		new Fmessage(src:'+254445566', text:'test', date:BASE_DATE - 1, starred:true)
 				.addToDispatches(dst:'1234567', status:DispatchStatus.SENT, dateSent:new Date())
 				.save(flush:true, failOnError:true)
-		def m3 = new Fmessage(src:"src", text:"text", date:new Date())
+		new Fmessage(src:"src", text:"text", date:new Date())
 				.addToDispatches(dst:'1234567', status:DispatchStatus.FAILED)
 				.save(flush:true, failOnError:true)
-		def m4 = new Fmessage(src:"src", text:"text", starred:true, date:new Date())
+		new Fmessage(src:"src", text:"text", starred:true, date:new Date())
 				.addToDispatches(dst:'1234567', status:DispatchStatus.PENDING)
 				.save(flush:true, failOnError:true)
 	}
 	
 	def createPollTestData() {
-		def poll = new Poll(name:'Miauow Mix')
-		poll.editResponses(choiceA:'chicken', choiceB:'liver', aliasA:'A', aliasB:'B')
-		poll.save(flush:true, failOnError:true)
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', date: new Date(), inbound:true)
-		def liverResponse = PollResponse.findByValue('liver').save(flush:true, failOnError:true)
-		def chickenResponse = PollResponse.findByValue('chicken').save(flush:true, failOnError:true)
-		liverResponse.addToMessages(liverMessage)
-		liverResponse.save(flush:true, failOnError:true)
-		chickenResponse.addToMessages(chickenMessage)
-		chickenResponse.save(flush:true, failOnError:true)
-		poll.save(flush:true, failOnError:true)
+		TestData.createMiaowMixPoll()
 	}
 
 	private def setUpFolderMessages() {

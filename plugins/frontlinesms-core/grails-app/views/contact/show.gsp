@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.Contact" %>
 <html>
 	<head>
-		<title>${contactsSection ? "Contacts >> ${contactsSection.name}" : 'Contacts'}</title>
+		<title><g:message code="${contactsSection ? 'contact.header.group' : 'contact.header'}" args= "[contactsSection?.name]"/></title>
 		<meta name="layout" content="contacts"/>
 		<r:script>
 			$(function() {
@@ -20,3 +20,4 @@
 		</div>
 	</body>
 </html>
+

@@ -9,71 +9,36 @@
 		<li><a href="#tabs-2"><g:message code="connection.details" /></a></li>
 		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
 	</ol>
-	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
+	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); fconnection.handleSaveResponse(data)">
 		<fsms:wizardTabs templates="type, details, confirm"/>
 	</g:formRemote>
 </div>
 
 <r:script>
+fconnection.getType = function() {
+	<g:if test="${fconnectionInstance}">return "${fconnectionInstance?.shortName}";</g:if>
+	<g:else>return $("input[name=connectionType]:checked").val();</g:else>
+};
 
-var fconnection = {
-	validator : function() { return $("#connectionForm").validate({ errorContainer: ".error-panel"})},
-	getType: function() {
-		<g:if test="${fconnectionInstance}">return "${fconnectionInstance?.shortName}";</g:if>
-		<g:else>return $("input[name=connectionType]:checked").val();</g:else>
-	},
-	setType: function(connectionType) {
-		if(!$("input[name=connectionType]:checked")) {
-			$("input[name=connectionType]").each(function() {
-				var e = $(this);
-				e.attr("checked", e.val() == connectionType);
-			});
-		}
-		<g:each in="${Fconnection.implementations*.shortName}">
-			$("#${it}-form").hide();
-		</g:each>
-		$("#" + connectionType + "-form").css('display', 'inline');
-		fconnection.init();
-		connectionTooltips.init(connectionType);
-	},
-	init: function() {
-		var keys = fconnection[fconnection.getType()].validationSubsectionFieldKeys;
-		$.each(keys, function(index, value) {
-			fconnection.toggleSubFields(value);
-		});
-		connectionTooltips.init(fconnection.getType());
-	},
-	show: function() {
-		setConfirmVal('type', fconnection.humanReadableName());
-		setConfirmation('name');
-		fconnection[fconnection.getType()].show();
-	},
-	isValid: function() {
-		var valid = true;
-		var fields = $('input:enabled:visible.required');
-		$.each(fields, function(index, value) {
-			if (!fconnection.validator().element(value) && valid) {
-				valid = false;
-				$(".error-panel").text(i18n("connection.validation.prompt"));
+fconnection.setType = function(connectionType) {
+	if(!$("input[name=connectionType]:checked").size()) {
+		$("input[name=connectionType]").each(function() {
+			var e = $(this);
+			if (e.val() == connectionType) {
+				e.attr("checked", "checked");
 			}
 		});
-		return valid;
-	},
-	humanReadableName: function() {
-		return fconnection[fconnection.getType()].humanReadableName;
-	},
-	toggleSubFields: function(key) {
-		if(isSubsection(key)) {
-			// TODO why can't these be combined?
-			if(!getFieldVal(key))
-				disableSubsectionFields(key);
-			if(getFieldVal(key))
-				enableSubsectionFields(key);
-		}	
-	},
+	}
+	<g:each in="${Fconnection.implementations*.shortName}">
+		$("#${it}-form").hide();
+	</g:each>
+	$("#" + connectionType + "-form").css('display', 'inline');
+	fconnection.init();
+	connectionTooltips.init(connectionType);
+};
 
-	<g:each in="${Fconnection.implementations}" var="imp">
-	${imp.shortName}: {
+<g:each in="${Fconnection.implementations}" var="imp">
+	fconnection.${imp.shortName} = {
 		<%
 			def asJs = { it? '"' + it.join('", "') + '"': '' }
 			def nonNullableConfigFields = asJs(Fconnection.getNonnullableConfigFields(imp))
@@ -81,7 +46,7 @@ var fconnection = {
 		%>
 		requiredFields: [${nonNullableConfigFields}],
 		validationSubsectionFieldKeys: [${validationSubsectionFieldKeys}],
-		humanReadableName: "<g:message code="${imp.simpleName.toLowerCase()}.label"/>",
+		humanReadableName: "<g:message code="${imp.shortName}.label"/>",
 		show: function() {
 			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
 				$("#${it}-confirm").hide();
@@ -99,110 +64,21 @@ var fconnection = {
 			</g:each>
 			$("#${imp.shortName}-confirm").show();
 		}
-	},
-	</g:each>
-	_terminator: null // this is here to prevent the trailing comma which kills IE7
-};
-
-function isFieldValid(fieldName) {
-	var val = getFieldVal(fieldName);
-	if(typeof(val) === "boolean") {
-		if(val && isSubsection(fieldName)) {
-			return validateSubsectionFields(fieldName);
-		}
-	} else {
-		return !getField(fieldName).hasClass("error") && isFieldSet(fieldName);
-	}
-}
-
-function isFieldSet(fieldName) {
-	var val = getFieldVal(fieldName);
-	return val!==null && val.length>0;
-}
-
-function isSubsection(fieldName) {
-	return $('#' + fieldName + '-subsection').length > 0;
-}
-
-function disableSubsectionFields(field) {
-	var subSectionFields = $('.' + field + '-subsection-member');
-	$.each(subSectionFields, function(index, value) {
-		$(value).disableField();
-	});
-}
-
-function enableSubsectionFields(field) {
-	var subSectionFields = $('.' + field + '-subsection-member');
-	$.each(subSectionFields, function(index, value) {
-		$(value).enableField();
-	});
-}
-
-function getFieldVal(fieldName) {
-	var field = getField(fieldName);
-	if(field.attr("type") === "checkbox") {
-		return field.prop("checked");
-	} else {
-		return field.val();
-	}
-}
-
-function getField(fieldName) {
-	return $('#' + fconnection.getType() + fieldName);
-}
-
-function setConfirmVal(fieldName, val) {
-	var isCheckbox = $('#' + fconnection.getType() + fieldName).attr("type") === "checkbox";
-	
-	if(isCheckbox == true) {
-		var text = (val == true) ? "Yes": "No";
-		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).text(text);
-	} else if($('#' + fconnection.getType() + fieldName).is(":disabled") === false) {
-		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).parent().removeClass("hide");
-		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).text(val);
-	} else {
-		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).parent().addClass("hide");
-	}
-}
-
-function setConfirmation(fieldName) {
-	setConfirmVal(fieldName, getFieldVal(fieldName));
-}
-
-function setSecretConfirmation(fieldName) {
-	var val = isFieldSet(fieldName)? '****': 'None'; // FIXME i18n
-	setConfirmVal(fieldName, val);
-}
-
-function attachCheckBoxListener() {
-	$("input[type='checkbox']").bind("change", function() {
-		var key = $(this).attr("field");
-		fconnection.toggleSubFields(key);
-	});
-}
+	};
+</g:each>
 
 function initializePopup() {
 	fconnection.validator();
 	<g:if test="${!fconnectionInstance}">
-		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
+		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: Fconnection.implementations[0].shortName}");
 	</g:if>
 	
 	fconnection.init();
 	$("#tabs").bind("tabsshow", fconnection.show);
-	attachCheckBoxListener();
+	fconnection.attachCheckBoxListener();
 	$("#tabs-2").contentWidget({
 		validate: fconnection.isValid
 	});
 }
-
-function handleSaveResponse(response) {
-	if(response.ok) {
-		window.location = response.redirectUrl;
-	} else {
-		var errors = $(".error-panel");
-		errors.text(response.text);
-		errors.show();
-		$("#submit").removeAttr('disabled');
-	}
-}
 </r:script>
+

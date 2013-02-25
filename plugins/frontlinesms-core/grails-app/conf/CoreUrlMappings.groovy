@@ -13,12 +13,15 @@ class CoreUrlMappings {
 		"/search/result/show/"(controller:'search', action:'result') {}
 		"/search/result/show/$messageId"(controller:'search', action:'result') {}
 		
+		"/message/inbox/"(controller:'message', action:'inbox') {}
 		"/message/inbox/show/$messageId"(controller:'message', action:'inbox') {}
+
 		"/message/sent/show/$messageId"(controller:'message', action:'sent') {}
 		"/message/pending/show/$messageId"(controller:'message', action: 'pending') {}
 		"/message/trash/show/$id"(controller:'message', action: 'trash') {}
 
 		"/message/activity/$ownerId"(controller:'message', action:'activity') {}
+		"/message/activity/$ownerId/step/$stepId"(controller:'message', action:'activity') {}
 		"/message/activity/$ownerId/show/$messageId"(controller:'message', action:'activity') {}
 
 		"/message/folder/$ownerId"(controller:'message', action:'folder') {}
@@ -34,6 +37,9 @@ class CoreUrlMappings {
 		"/autoreply/create"(controller:'autoreply', action: 'create')
 		"/autoreply/save"(controller:'autoreply', action: 'save')
 		"/autoforward/create"(controller:'autoforward', action: 'create')
+
+		"/customactivity/create"(controller:'customactivity', action: 'create')
+		"/customactivity/save"(controller:'customactivity', action: 'save')
 		
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}
@@ -47,6 +53,10 @@ class CoreUrlMappings {
 		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
 
 		"/webconnection/$imp/$action"(controller:'webconnection') {}
+
+		"/help/images/$imagePath**.png"(controller:'help', action:'image') {}
+		"/help/$helpSection**"(controller:'help', action:'section') {}
+		"/help"(controller:'help', action:'index') {}
 
 		"/$controller/$action?/$id?"{
 			constraints {

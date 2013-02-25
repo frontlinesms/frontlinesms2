@@ -9,7 +9,10 @@
 	<table>
 		<tr>
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
-			<td><g:textField name="name" value="${contactInstance?.name}"/></td>
+			<td>
+				<g:textField name="name" value="${contactInstance?.name}"/>
+				<a class="remove-command not-custom-field" id="remove-name">&nbsp;</a>
+			</td>
 		</tr>
 		<tr>
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
@@ -122,10 +125,11 @@
 </div>
 <r:script>
 function refreshMessageStats(data) {
-	var url = 'contact/messageStats';
-	var numSent = $('#num-sent');
-	var numRecieved = $('#num-recieved');
-	$.getJSON(url_root + url, {id: "${contactInstance?.id}"},function(data) {
+	var url, numSent, numRecieved;
+	url = "contact/messageStats";
+	numSent = $('#num-sent');
+	numRecieved = $('#num-recieved');
+	$.getJSON(url_root + url, { id: "${contactInstance?.id}" }, function(data) {
 		numSent.text(numSent.text().replace(/\d{1,}/, data.outboundMessagesCount));
 		numRecieved.text(numRecieved.text().replace(/\d{1,}/, data.inboundMessagesCount));
 	});
@@ -133,6 +137,27 @@ function refreshMessageStats(data) {
 
 $(function() {
 	setInterval(refreshMessageStats, 15000);
+	$("td > input[type=text]").each(function(index) {
+		var clear = $(this).next();
+		if($(this).val() === "") {
+			clear.addClass("hidden");
+		} else {
+			clear.removeClass("hidden");
+		}
+	}).keyup(function() {
+		var clear = $(this).next();
+		if($(this).val() !== "") {
+			clear.removeClass("hidden");
+			if($(this).attr("name") === "mobile") {
+				$(".send-message").removeClass("hidden");
+			}
+		} else {
+			clear.addClass("hidden");
+			if($(this).attr("name") === "mobile") {
+				$(".send-message").addClass("hidden");
+			}
+		}
+	});
 });
 </r:script>
 

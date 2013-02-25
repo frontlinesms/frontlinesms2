@@ -4,8 +4,6 @@
 		<r:script library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
 		<r:script>
-			url_root = "${request.contextPath}/";
-			
 			function initializePopup() {
 				$("#submit").attr('disabled', 'disabled');
 			}
@@ -19,15 +17,12 @@
 		<r:layoutResources/>
 	</head>
 	<body>
-		<div class="input select">
-			<g:each var="activityType" in="${frontlinesms2.Activity.implementations*.shortName}">
-				<label>
-					<g:radio name="activity" value="${activityType}" onchange="setActivityTypeSelected()"/>
-					<h3><g:message code="${activityType.toLowerCase()}.label"/></h3>
-					<div class="info"><g:message code="${activityType.toLowerCase()}.description"/></div>
-				</label>
-			</g:each>
-		</div>
+		<fsms:radioGroup
+				name="activity"
+				values="${frontlinesms2.Activity.implementations*.shortName}"
+				labelSuffix=".label" descriptionSuffix=".description"
+				onchange="setActivityTypeSelected()"/>
 		<r:layoutResources/>
 	</body>
 </html>
+

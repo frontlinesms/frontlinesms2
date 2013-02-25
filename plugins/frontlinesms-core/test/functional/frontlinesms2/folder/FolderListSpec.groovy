@@ -105,9 +105,9 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor("slow") { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
@@ -121,8 +121,8 @@ class FolderListSpec extends FolderBaseSpec {
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 			multipleMessageDetails.replyAll.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
@@ -158,7 +158,7 @@ class FolderListSpec extends FolderBaseSpec {
 				ok.jquery.trigger("click")
 			then:
 				at CreateFolderPopup
-				waitFor { errorPanel.text().toLowerCase() == "used folder name" }
+				waitFor { errorPanel.text()?.toLowerCase() == "used folder name" }
 	}
 
 	def "display error when renaming a folder with a blank name"() {
@@ -173,7 +173,7 @@ class FolderListSpec extends FolderBaseSpec {
 			folderName.value("")
 			ok.jquery.trigger("click")
 		then:
-			waitFor { errorPanel.text().toLowerCase() == "folder name cannot be blank" }
+			waitFor { errorPanel.text()?.toLowerCase() == "folder name cannot be blank" }
 	}
 
 	def "can delete a folder"() {

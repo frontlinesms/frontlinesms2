@@ -22,6 +22,9 @@ th.sortable.asc a, th.sortable.desc a { padding-left:15px; }
 th.sortable.asc a { background-image:url("../images/icons/down_arrow.png"); }
 th.sortable.desc a { background-image:url("../images/icons/up_arrow.png"); }
 
+ul.sortable li, ul.sortable label { cursor:move; }
+ul.sortable input[type=checkbox] { cursor:default; }
+
 a.prevLink, a.nextLink { display:inline-block; width:25px; height:25px; background-position:left center; background-repeat:no-repeat; }
 a.prevLink { background-image:url("../images/pagination/left.png"); }
 a.prevLink:hover { background-image:url("../images/pagination/left_hover.png"); }
@@ -33,13 +36,16 @@ a.nextLink:active { background-image:url("../images/pagination/right_active.png"
 a.nextLink.disabled { background-image:url("../images/pagination/right_disabled.png"); }
 
 input,textarea { background:white; }
-.btn, .ui-selectmenu, button, input[type="submit"] { display:inline-block;
+.btn, .ui-selectmenu, button, input[type="submit"] { display:inline-block; padding:6px 10px; text-align:center; }
+.btn, .ui-selectmenu, button, input[type="submit"], .button-bar { color:black; cursor:pointer;
 	background-repeat:repeat-x; background-image:url("../images/button/standard.png"); background-size:contain;
-	border-left:solid #6b6b6b 1px; border-right:solid #6b6b6b 1px; padding:6px 10px;
-	color:black; cursor:pointer; text-align:center; }
+	border-left:solid #6b6b6b 1px; border-right:solid #6b6b6b 1px; }
 .btn:hover, .ui-selectmenu:hover, button:hover, input[type="submit"]:hover { background-image:url("../images/button/hover.png"); }
 .btn:active, .ui-selectmenu:active, button:active, input[type="submit"]:active { background-image:url("../images/button/active.png"); }
 .btn.disabled, button:disabled, .ui-button-disabled, input[type="submit"]:disabled { background-image:url("../images/button/disabled.png"); cursor:default; color:#777777; }
+.button-bar .btn:first-child { margin-left:-1px; }
+.button-bar .btn:not(:first-child) { margin-left:-5px; border-left:solid 1px #bbb; border-right:solid 1px #bbb; }
+
 .ui-selectmenu { display:block; text-align:left; padding:0; }
 .ui-selectmenu-status { width:100%; padding:6px 0; text-indent:10px; }
 .ui-selectmenu-menu-dropdown li:hover { background-color:#e5eff3; }
@@ -51,7 +57,9 @@ input,textarea { background:white; }
 	text-transform:uppercase; font-weight:bold; }
 
 #body #main-list { background-color:white; }
-#body #main-list .no-content, #body-content .no-content { font-weight:bold; font-size:180%; text-align:center; padding:17px; }
+#body .no-content { font-size:150%; }
+#body .no-content, #body .no-content * { font-weight:bold !important; color:#aaa !important; text-align:center !important; padding:17px !important; }
+#body .no-content:hover, #body .no-content * { background-color:transparent !important; }
 
 #body #main-list-foot { background-color:#f0f0f0; border-top:solid #9e9e9e 1px; padding:10px 17px; font-size:95%; }
 #body #main-list-foot .controls { display:table; width:100%; }
@@ -84,3 +92,44 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 #thinking { background-color:transparent; z-index:99;
 	display:none; background-image:url('../images/thinking.gif'); background-position:center; background-repeat:no-repeat; }
 
+.remove-command { background-image:url('../images/icons/remove.png'); background-repeat:no-repeat;
+	display:inline-block; height:14px; text-indent:-999999px; display:ltr; width:14px; margin-left:3px; }
+.remove-command:hover { background-image:url('../images/icons/remove_hover.png'); }
+.remove-command.hidden { display:none; }
+
+.message-composer {
+	border: 1px solid rgb(187, 187, 187);
+	padding: 5px;
+	margin: 10px 0;
+}
+.message-composer.focus {
+	outline-color: rgb(60, 59, 55);
+	outline-style: auto;
+	outline-width: 5px;
+}
+.message-composer textarea {
+	resize: none;
+	border: none;
+	outline: none;
+	display:inline-block !important;
+	margin: 0;
+	max-width: 90%;
+}
+.message-composer .controls {
+	display:inline-block !important;
+	max-width: 20%;
+	float: right;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+.message-composer .controls .magicwand-container a{ margin: 0 !important; }
+.message-composer .clearfix { clear: both; }
+.message-composer .character-count-display { 
+	text-align: right;
+	width: 100%;
+	display:inline-block !important;
+	margin: 4px 0;
+	font-weight: bold;
+	color: #000;
+}
+.message-composer .character-count-display.warning { color: #999; }

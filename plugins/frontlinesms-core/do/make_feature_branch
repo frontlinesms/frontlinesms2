@@ -1,0 +1,16 @@
+#!/bin/bash
+count=`git status --porcelain | wc -c`
+if [ $count -ne 0 ]; then
+	echo "git status is not clean, stage and commit changes first"
+	exit 1
+fi
+if [ -z $1 ]; then
+	echo "This script takes one argument which is the name of the branch e.g do/make_feature_branch CORE-XYZ"
+	exit 1
+fi
+git checkout master
+git pull
+git checkout -b $1
+git push -u origin $1
+wget -O /dev/null "http://192.168.0.200/exec_script.php?user=jenkins&cmd=clone_jenkins_job&args=frontlinesms2-core-master%20$1%20frontlinesms2-$1"
+exit 0

@@ -1,0 +1,29 @@
+# Manually Categorizing a Message
+
+A Poll will attempt to automatically categorize incoming responses according to the message content. This allows FrontlineSMS to show you the results of polls in easy-to-read tables and visually represented as charts. If the keyword is not present or incorrectly spelled, the system will not recognize responses and may not be able to automatically categorize them. In these cases, it is possible to manually categorize a message, or multiple messages under the correct response.
+
+![Manually Categorize a Response][6]
+
+### Manually Categorizing a Message/Messages
+
+1. Select the Activity you want to work with.
+2. From the message list, select the message or messages you wish to categorize using the checkboxes. 
+3. From the message details, open the drop down box called "Categorize Response".
+4. From this list choose the appropriate response for the message or messages.  
+
+_**Note:** For [Yes/No Polls][2], the only categories available will be Yes or No. For [Multiple Choice Polls][2] the available categories will be the same in number and name as the multiple choice options you entered when creating the Poll._
+
+Your message(s) will be updated with new categories and the poll statistics will be updated accordingly.
+
+### Related Actions
+[Renaming an Activity][3]  
+[Creating a Poll][2]  
+[Creating an Announcement][4]  
+[Exporting an Activity][5]
+
+[1]: ../activities/3a.manually_categorising
+[2]: ../activities/3.creating_a_poll
+[3]: ../activities/6.renaming_an_activity
+[4]: ../activities/4.creating_an_announcement
+[5]: ../activities/7.exporting_an_activity
+[6]: ../images/help/manual_response.png

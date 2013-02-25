@@ -18,8 +18,8 @@ abstract class PageSearch extends frontlinesms2.page.PageBase {
 class SearchSideBar extends geb.Module {
 	static base = { $('#body-menu') }
 	static content = {
-		archive { $("#inArchive") }
-		inArchive { $("#inArchive").value() }
+		archive { $('input[name=inArchive]') }
+		inArchive { archive.value() }
 		activityId { $("#activityId") }
 		searchField { $("#searchString") }
 		searchString { $("#searchString").jquery.val() }

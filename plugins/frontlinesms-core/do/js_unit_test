@@ -1,13 +1,20 @@
 #!/bin/bash
-function check_npm_module_available() {
+ERROR_FILE=target/js_unit_test.log.err
+
+function err {
+	1>&2 echo "$@"
+}
+
+function check_npm_module_available {
 	MODULE_NAME=$1
-	echo "# Checking for NPM module: $MODULE_NAME..."
+	err "# Checking for NPM module: $MODULE_NAME..."
 	INSTALL_COUNT=`(npm list; npm -g list) | grep -c "^[├└]─[─┬] $MODULE_NAME\@"`
 	if [ 0 -eq $INSTALL_COUNT ]; then
-		echo "# NPM module missing: $MODULE_NAME.  Please run 'npm install $MODULE_NAME' or 'sudo npm i -g $MODULE_NAME'"
-		exit 1
+		err "# NPM module missing: $MODULE_NAME.  To install globally, please run 'sudo npm i -g $MODULE_NAME'"
+		err "# Installing module locally..."
+		npm install $MODULE_NAME
 	fi
-	echo "# NPM Module found: $MODULE_NAME"
+	err "# NPM Module found: $MODULE_NAME"
 }
 check_npm_module_available fs
 check_npm_module_available jquery
@@ -19,7 +26,8 @@ set -e
 function run_test() {
 	TARGET=$1
 	echo "# Running tests for $TARGET..."
-	qunit -c "web-app/js/${TARGET}.js" -d `ls test/js/lib/*.js` -t "test/js/${TARGET}_tests.js"
+	qunit -c "web-app/js/${TARGET}.js" -d `ls test/js/lib/*.js` -t "test/js/${TARGET}_tests.js" 2> $ERROR_FILE
+	grep -v "^ERROR.*" $ERROR_FILE
 }
 
 pushd test/js
@@ -27,5 +35,7 @@ TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
 popd
 echo "# Tests to run: $TESTS"
 
-run_test recipient_selecter
+for TEST in $TESTS; do
+	run_test $TEST
+done
 

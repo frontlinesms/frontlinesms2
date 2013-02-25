@@ -9,9 +9,12 @@ class FconnectionService {
 	def camelContext
 	def deviceDetectionService
 	def i18nUtilService
-	
+	def smssyncService
+	def connectingIds = [].asSynchronized()
+
 	def createRoutes(Fconnection c) {
 		println "FconnectionService.createRoutes() :: ENTRY :: $c"
+		assert c.enabled
 		if(c instanceof SmslibFconnection) {
 			deviceDetectionService.stopFor(c.port)
 			// work-around for CORE-736 - NoSuchPortException can be thrown
@@ -23,6 +26,7 @@ class FconnectionService {
 		}
 		println "creating route for fconnection $c"
 		try {
+			connectingIds << c.id
 			def routes = c.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
 			createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
@@ -32,15 +36,17 @@ class FconnectionService {
 		} catch(Exception ex) {
 			logFail(c, ex)
 			destroyRoutes(c.id as long)
+		} finally {
+			connectingIds -= c.id
 		}
 		println "FconnectionService.createRoutes() :: EXIT :: $c"
 	}
-	
+
 	def destroyRoutes(Fconnection c) {
 		destroyRoutes(c.id as long)
 		createSystemNotification('connection.route.destroyNotification', [c?.name?: c?.id])
 	}
-	
+
 	def destroyRoutes(long id) {
 		println "fconnectionService.destroyRoutes : ENTRY"
 		println "fconnectionService.destroyRoutes : id=$id"
@@ -57,16 +63,32 @@ class FconnectionService {
 				ex.printStackTrace()
 			}
 		}
+		def connection = Fconnection.get(id)
+		if (connection.shortName == 'smssync')
+			smssyncService.handleRouteDestroyed(connection)
 		println "fconnectionService.destroyRoutes : EXIT"
 	}
-	
+
 	def getConnectionStatus(Fconnection c) {
-		if (c instanceof SmslibFconnection)
-			return camelContext.routes.any { it.id ==~ /.*-$c.id$/ } ? ConnectionStatus.CONNECTED : deviceDetectionService.isConnecting((c as SmslibFconnection).port) ? ConnectionStatus.CONNECTING : ConnectionStatus.NOT_CONNECTED
-		else
-			return camelContext.routes.any { it.id ==~ /.*-$c.id$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED
+		if(!c.enabled) return ConnectionStatus.DISABLED
+		if(c.id in connectingIds) {
+			return ConnectionStatus.CONNECTING
+		}
+		if(camelContext.routes.any { it.id ==~ /.*-$c.id$/ }) {
+			return ConnectionStatus.CONNECTED
+		}
+		if (c instanceof SmslibFconnection) {
+			if(deviceDetectionService.isConnecting(((SmslibFconnection) c).port)) {
+				return ConnectionStatus.CONNECTING
+			}
+			if(isFailed(c)) {
+				return ConnectionStatus.FAILED
+			}
+			return ConnectionStatus.NOT_CONNECTED
+		}
+		return ConnectionStatus.FAILED
 	}
-	
+
 	// TODO rename 'handleNotConnectedException'
 	def handleDisconnection(Exchange ex) {
 		try {
@@ -85,6 +107,18 @@ class FconnectionService {
 		}
 	}
 
+	def enableFconnection(Fconnection c) {
+		c.enabled = true
+		c.save(failOnError:true)
+		createRoutes(c)
+	}
+
+	def disableFconnection(Fconnection c) {
+		destroyRoutes(c)
+		c.enabled = false
+		c.save(failOnError:true)
+	}
+
 	private def logFail(c, ex) {
 		ex.printStackTrace()
 		log.warn("Error creating routes to fconnection with id $c?.id", ex)
@@ -98,6 +132,10 @@ class FconnectionService {
 		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
 		notification.read = false
 		notification.save(failOnError:true, flush:true)
+	}
+
+	private def isFailed(Fconnection c) {
+		false
 	}
 }
 

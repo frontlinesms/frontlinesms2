@@ -1,6 +1,7 @@
 package frontlinesms2.services
 
 import frontlinesms2.*
+import frontlinesms2.camel.exception.NoRouteAvailableException
 
 import spock.lang.*
 import grails.test.mixin.*
@@ -10,13 +11,39 @@ import org.apache.camel.Exchange
 import org.apache.camel.Message
 
 @TestFor(DispatchRouterService)
-@Mock([Dispatch, Fmessage])
+@Mock([Dispatch, Fmessage, Fconnection, SmslibFconnection, SystemNotification])
 class DispatchRouterServiceSpec extends Specification {
+	def appSettingsService
+
+	def setup() {
+		Fmessage.metaClass.static.findBySrc = { src, map->
+			def m = Mock(Fmessage)
+			def f = Mock(Fconnection)
+			f.id >> 2
+			m.receivedOn >> f
+			return m
+		}
+
+		Dispatch.metaClass.static.get = { id->
+			def d = Mock(Dispatch)
+			d.id >> id
+			d.dst >> '123456'
+			println " mocked dispatch $d"
+			return d
+		}
+
+		service.i18nUtilService = Mock(I18nUtilService)
+		service.i18nUtilService.getMessage(_) >> 'blah blah blah'
+
+		appSettingsService = Mock(AppSettingsService)
+		service.appSettingsService = appSettingsService
+	}
+
 	def "should update the dispatch when no route is found"() {
 		setup:
 			def exchange = Mock(Exchange)
 			def camelContext = Mock(CamelContext)
-			camelContext.getRoutes()>> []
+			camelContext.getRoutes() >> []
 
 			def camelMessage = Mock(org.apache.camel.Message)
 			exchange.getIn() >> camelMessage
@@ -26,9 +53,9 @@ class DispatchRouterServiceSpec extends Specification {
 		when:
 			service.slip(exchange, null, null)
 		then:
-			RuntimeException ex = thrown()
+			thrown NoRouteAvailableException
 	}
-	
+
 	@Unroll
 	def 'slip should return null if previous is set'() {
 		given:
@@ -48,34 +75,69 @@ class DispatchRouterServiceSpec extends Specification {
 		where:
 			id << [1, 10, 100]
 	}
-	
-	def 'slip should assign messages to routes using round robin'() {
+
+	def 'slip should assign message to the last received route if route preference set to last received route'() {
 		given:
+			mockAppSettingsService(true, 'any')
 			mockRoutes(1, 2, 3)
 		when:
-			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
+			def routedTo = service.slip(mockExchange(), null, null)
 		then:
-			routedTo == [1, 2, 3, 1, 2].collect { "seda:out-$it" }
+			routedTo == "seda:out-2"
 	}
-	
-	def 'slip should prioritise internet services over modems'() {
+
+	@Unroll
+	def 'slip should use the defined rules to determine fconnection to use'() {
 		given:
-			mockRoutes(1:'internet', 2:'modem', 3:'internet', 4:'modem')
+			mockAppSettingsService(settings)
+			def fconnection1 = new SmslibFconnection(name:"test 1", port:"/dev/ttyUSB0").save(flush:true)
+			def fconnection2 = new SmslibFconnection(name:"test 2", port:"/dev/ttyUSB0").save(flush:true)
+			def fconnection3 = new SmslibFconnection(name:"test 3", port:"/dev/ttyUSB0").save(flush:true)
+			mockRoutes(fconnection1.id.toInteger(), fconnection2.id.toInteger(), fconnection3.id.toInteger())
+		expect:
+			service.slip(mockExchange(), null, null) == route
+		where:
+			settings                                                       | route 
+			[true, 'any', 'fconnection-4, fconnection-1, fconnection-2']   | "seda:out-1"
+			[true, 'any', 'uselastreceiver, fconnection-3, fconnection-1'] | "seda:out-2"
+	}
+
+	def 'slip should not assign messages to any route if routing preference is not to send messages even if routes are available'() {
+		given:
+			mockAppSettingsService(false, 'dontsend')
+			mockRoutes(1, 2, 3)
 		when:
-			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
+			def routedTo = service.slip(mockExchange(), null, null)
 		then:
-			routedTo == [1, 3, 1, 3, 1].collect { "seda:out-$it" }
+			thrown NoRouteAvailableException
 	}
-	
+
+	def 'slip should not assign messages to any route if routing preference is not to send messages when routes are not avalilable'() {
+		given:
+			mockAppSettingsService(false, 'dontsend')
+		when:
+			def routedTo = service.slip(mockExchange(), null, null)
+		then:
+			thrown NoRouteAvailableException
+	}
+
 	private def mockExchange() {
-		def x = Mock(Exchange)
-		def out = Mock(Message)
-		out.headers >> [:]
-		x.out >> out
-		return x
+		def exchange = Mock(Exchange)
+		exchange.in >> mockExchangeMessage(['frontlinesms.dispatch.id':'1'], Mock(Dispatch))
+		exchange.out >> mockExchangeMessage([:], null)
+		println "x.in.headers ######### $exchange.in.headers"
+		return exchange
 	}
 	
-	private def mockRoutes(int...ids) {
+	private mockExchangeMessage(headers, body){
+		def m = Mock(Message)
+		body.id >> 1
+
+		m.body >> body
+		m.headers >> headers
+		return m
+	}
+	private def mockRoutes(int... ids) {
 		CamelContext c = Mock()
 		c.routes >> ids.collect { [[id:"in-$it"], [id:"out-$it"]] }.flatten()
 		service.camelContext = c
@@ -86,4 +148,12 @@ class DispatchRouterServiceSpec extends Specification {
 		c.routes >> idsAndPrefixes.collect { k, v -> [[id:"in-$k"], [id:"out-$v-$k"]] }.flatten()
 		service.camelContext = c
 	}
+
+	private mockAppSettingsService(useLastReceiver, otherwise, use = null) {
+		if(useLastReceiver) use = use? "$use,uselastreceiver": 'uselastreceiver'
+		appSettingsService.get("routing.use") >> use
+		appSettingsService.get("routing.otherwise") >> otherwise
+		service.appSettingsService = appSettingsService
+	}
 }
+

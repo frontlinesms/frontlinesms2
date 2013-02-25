@@ -163,13 +163,13 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(0)
+			messageList.toggleSelected(1)
 		then:
 			waitFor('very slow') { multipleMessageDetails.displayed }
 			waitFor('very slow') { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { !multipleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "hi Alice" }
@@ -247,7 +247,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, Fmessage.findByText('hello').id
 			singleMessageDetails.moveTo(Folder.findByName('my-folder').id)
 		then:
-			waitFor("veryslow") { messageList.noContent.text() == "No messages here!" }
+			waitFor("veryslow") { messageList.noContent.text() == "No messages here, yet." }
 			bodyMenu.selected == "inbox"
 	}
 

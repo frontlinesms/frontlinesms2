@@ -7,7 +7,7 @@ import grails.test.mixin.*
 import org.codehaus.groovy.grails.orm.hibernate.cfg.*
 
 @TestFor(SettingsController)
-@Mock([LogEntry, AppSettingsService])
+@Mock([LogEntry, AppSettingsService, Fconnection, SmslibFconnection])
 class SettingsControllerSpec extends Specification {
 	def TEST_DATE = new Date()
 
@@ -51,7 +51,7 @@ class SettingsControllerSpec extends Specification {
 
 	def "can enable application authentication from settings if details validate"() {
 		given:
-			params.enabledAuthentication = 'true'
+			params.enabled = 'true'
 			params.username = "test"
 			params.password = "pass"
 			params.confirmPassword = "pass"
@@ -66,16 +66,59 @@ class SettingsControllerSpec extends Specification {
 
 	def "should not enable application authentication from settings if details don't validate"() {
 		given:
-			mockAppSettings(enabledAuthentication: false,
+			mockAppSettings('auth.basic.enabled': false,
 					username:'', password:'')
 		when:
-			params.enabledAuthentication = "true"
+			params.enabled = "true"
 			params.username = "test"
 			params.password = "pass"
 			params.confirmPassword = "me"
 			controller.basicAuth()
 		then:
 			0 * appSettingsService.set(_, _)
+	}
+
+	def 'can set the routing preferences'(){
+		given:
+			params.routingUseOrder = "uselastreceiver"
+		when:
+			controller.changeRoutingPreferences()
+		then:
+			1 * appSettingsService.set('routing.use','uselastreceiver')
+			0 * appSettingsService.set(_, _)
+	}
+
+	def "can set routing rules available connections"() {
+		given:
+			params.routingUseOrder = "uselastreceiver,fconnection-1,fconnection-3,fconnection-5"
+		when:
+			controller.changeRoutingPreferences()
+		then:
+			1 * appSettingsService.set('routing.use','uselastreceiver,fconnection-1,fconnection-3,fconnection-5')
+	}
+
+	def "can retrieve routing rules defined for connections with send enabled"() {
+		given:
+			def conn1 = new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+			def conn2 = new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
+			def conn3 = new SmslibFconnection(name:"COM5", port:'COM5', baud:9600, sendEnabled:false).save(failOnError:true)
+			controller.appSettingsService = ['routing.use':"uselastreceiver,fconnection-${conn2.id},fconnection-${conn1.id}"]
+		when:
+			def model = controller.general()
+		then:
+			model.fconnectionRoutingMap*.key*.toString() == ["uselastreceiver", conn2, conn1]*.toString()
+			model.fconnectionRoutingMap*.value == [true,true,true]
+	}
+
+	def "should not display routing rules for devices that have been deleted from the system"() {
+		given:
+			def conn1 = new SmslibFconnection(name:"Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+			def conn2 = new SmslibFconnection(name:"COM5", port:'COM4', baud:9600).save(failOnError:true)
+			controller.appSettingsService = ['routing.use':"uselastreceiver,fconnection-${conn2.id},fconnection-3,fconnection-${conn1.id}"]
+		when:
+			def model = controller.general()
+		then:
+			model.fconnectionRoutingMap*.key*.toString() == ['uselastreceiver', conn2, conn1]*.toString()
 	}
 
 	private def mockAppSettings(Map s) {

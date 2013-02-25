@@ -8,7 +8,6 @@ import org.apache.camel.model.RouteDefinition
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
-
 	def fconnectionService
 	
 	static final String HEADER_FCONNECTION_ID = 'fconnection-id'
@@ -17,20 +16,12 @@ class Fconnection {
 
 	static hasMany = [messages: Fmessage]
 	
-	static def getImplementations() {
-		if(Environment.current == Environment.PRODUCTION) {
-			[SmslibFconnection,
-				ClickatellFconnection,
-				IntelliSmsFconnection,
-				SmppFconnection]
-		} else {
-			[SmslibFconnection,
-				ClickatellFconnection,
-				IntelliSmsFconnection,
-				SmssyncFconnection,
-				SmppFconnection]
-		}
-	}
+	static final def implementations = [SmslibFconnection,
+			ClickatellFconnection,
+			IntelliSmsFconnection,
+			NexmoFconnection,
+			SmssyncFconnection,
+			SmppFconnection]
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
@@ -52,6 +43,9 @@ class Fconnection {
 	}
 	
 	String name
+	boolean sendEnabled = true
+	boolean receiveEnabled = true
+	boolean enabled = true
 	
 	static namedQueries = {
 		findByMessages { messageInstance ->
@@ -85,3 +79,4 @@ class Fconnection {
 		}.routeDefinitions
 	}
 }
+

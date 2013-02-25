@@ -53,7 +53,7 @@ class QuickMessageRecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 		manualContacts { $("li.manual").find("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
 		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
@@ -81,6 +81,7 @@ class CreateActivityDialog extends MediumPopup {
 		autoforward { $('input[value="autoforward"]') }
 		webconnection(wait:true) { $('input[value="webconnection"]') }
 		subscription { $('input[value="subscription"]') }
+		customactivity { $('input[value="customactivity"]') }
 	}
 }
 
@@ -166,7 +167,7 @@ class RecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 	}
 }
 
@@ -291,8 +292,9 @@ class WebconnectionWizard extends MediumPopup {
 		configureUshahidi(required:false) { module ConfigureUshahidiWebconnectionTab }
 
 		option(wait:true, cache:false) { shortName -> $('input', name:'webconnectionType', value:shortName) }
-		getTitle { shortName -> option(shortName).previous('label').text() }
-		getDescription { shortName -> option(shortName).previous('p').text() }
+		getTitle { shortName -> option(shortName).previous('h3').text() }
+		getDescription { shortName -> option(shortName).previous('p.info').text() }
+		testConnectionButton(required:false) { $("#testRoute")}
 	}
 }
 
@@ -551,7 +553,7 @@ class AutoforwardRecipientsTab extends geb.Module {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text().toInteger() }
+		count { $('#recipient-count').text()?.toInteger() }
 		manualContacts { $("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
 		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
@@ -575,6 +577,57 @@ class AutoforwardConfirmTab extends geb.Module {
 
 class AutoforwardSummaryTab extends geb.Module {
 	static base = { $('div#tabs-5') }
+	static content = {
+		message { $("div.summary") }
+	}
+}
+
+class CustomActivityCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("custom activity") || popupTitle.contains("edit")
+	}
+	static content = {
+		keyword { module ConfigureCustomKeywordTab}
+		configure { module ConfigureCustomActivityTab}
+		confirm { module CustomActivityConfirmTab}
+		summary { module CustomActivitySummaryTab}
+		validationErrorText { $('label.error').text() }
+		errorText { errorPanel.text()?.toLowerCase() }
+		error { errorPanel }
+		create { $('button#submit') }
+	}
+}
+
+class ConfigureCustomKeywordTab extends geb.Module {
+	static base = { $('div#tabs-1')}
+	static content = {
+		keywordText { $('#keywords') }
+		blankKeyword {$('#blankKeyword')}
+	}
+}
+
+class ConfigureCustomActivityTab extends geb.Module {
+	static base = { $('div#tabs-2')}
+	static content = {		
+		joinButton { $("a", text:"Add sender to group") }
+		leaveButton { $("a", text:"Remove sender from group") }
+		replyButton { $("a", text:"Autoreply") }
+		stepsContainer { $("#custom-activity-actions-container") }
+		steps { $(".step") }
+	}
+}
+
+class CustomActivityConfirmTab extends geb.Module {
+	static base = { $("div#tabs-3") }
+	static content = {
+		name { $('input#name') }
+		keywordConfirm {$("#keyword-confirm").text()}
+		stepActionsConfirm { $("#customactivity-confirm-action-steps").text() }
+	}
+}
+
+class CustomActivitySummaryTab extends geb.Module {
+	static base = { $("div#tabs-4") }
 	static content = {
 		message { $("div.summary") }
 	}

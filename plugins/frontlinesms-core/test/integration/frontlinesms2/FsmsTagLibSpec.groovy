@@ -61,22 +61,22 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			def clazz = new IntelliSmsFconnection()
 		when:
 			params = [clazz:clazz]
-			template = '<fsms:input field="send" instanceClass="${clazz.class}" instance="${clazz}" />'
+			template = '<fsms:input field="sendEnabled" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
-			output.contains 'input type="checkbox" name="intellismssend"'
+			output.contains 'input type="checkbox" name="intellismssendEnabled"'
 	}
 	
 	def "INPUTS generates subsections for a field Map"() {
 		setup:
-			def clazz = new IntelliSmsFconnection(name:"Test", send:true, username:"test_acc", password:"test")
+			def clazz = new IntelliSmsFconnection(name:"Test", sendEnabled:true, username:"test_acc", password:"test")
 		when:
 			params = [clazz:clazz]
 			template = '<fsms:inputs instanceClass="${clazz.class}" instance="${clazz}" />'
 			def configFields = clazz.configFields
 		then:
 			configFields.each {k,v -> if(v) output.contains("<div id=\"$k-subsection\">")}
-			clazz.configFields.send.each { output.contains "field=\"$it\" class=\"$it-subsection-member\""}
-			clazz.configFields.receive.each { output.contains "field=\"$it\" class=\"$it-subsection-member\""}
+			clazz.configFields.sendEnabled.each { output.contains "field=\"$it\" class=\"$it-subsection-member\""}
+			clazz.configFields.receiveEnabled.each { output.contains "field=\"$it\" class=\"$it-subsection-member\""}
 	}
 	
 	def "confirmTable generates all the details of a CrazyFconnection"() {
@@ -94,7 +94,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 	
 	def "confirmTable generates all the details of an intellismsFconnection"() {
 		setup:
-			def clazz = new IntelliSmsFconnection(name:"Test", send:true, username:"test_acc", password:"test")
+			def clazz = new IntelliSmsFconnection(name:"Test", sendEnabled:true, username:"test_acc", password:"test")
 		when:
 			params = [clazz:clazz]
 			template = '<fsms:confirmTable instanceClass="${clazz.class}" instance="${clazz}" />'

@@ -82,7 +82,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			controller.params.name = "Test IntelliSmsFconnection"
 			controller.params.connectionType = 'intellisms'
-			controller.params.send = 'true'
+			controller.params.sendEnabled = 'true'
 			controller.params.username = "test"
 			controller.params.password = "test"
 		when:
@@ -169,11 +169,11 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can edit an existing IntelliSmsFconnection"() {
 		given:
-			def intellismsConn = new IntelliSmsFconnection(send:true, name:"Test IntelliSmsFconnection", username:"test", password:"****").save(flush:true)
+			def intellismsConn = new IntelliSmsFconnection(sendEnabled:true, name:"Test IntelliSmsFconnection", username:"test", password:"****").save(flush:true)
 			controller.params.connectionType = 'intellisms'
 			controller.params.id = intellismsConn.id
-			controller.params._intellismssend = ''
-			controller.params.receive = 'true'
+			controller.params._intellismssendEnabled = ''
+			controller.params.receiveEnabled = 'true'
 			controller.params.receiveProtocol = "POP3"
 			controller.params.serverName = 'pop3.gmail.com'
 			controller.params.serverPort = '465'
@@ -184,10 +184,10 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def conn = IntelliSmsFconnection.findByName("Test IntelliSmsFconnection")
 		then:
 			conn
-			!conn.send
+			!conn.sendEnabled
 			conn.username == "test"
 			conn.password == "****"
-			conn.receive
+			conn.receiveEnabled
 			conn.receiveProtocol == EmailReceiveProtocol.POP3
 			conn.serverName == "pop3.gmail.com"
 			conn.serverPort == 465

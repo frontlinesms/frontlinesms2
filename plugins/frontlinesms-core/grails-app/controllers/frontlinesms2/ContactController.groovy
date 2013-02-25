@@ -54,7 +54,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()]
 		render view:'/contact/_single_contact_view', model:model
 	}
@@ -65,7 +64,7 @@ class ContactController extends ControllerUtils {
 		}
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
-		def contactInstanceTotal = contactList.contactInstanceTotal
+		def contactInstanceTotal = Contact.count()
 		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList ? contactInstanceList[0] : null))
 		def usedFields = contactInstance?.customFields ?: []
 		def usedFieldNames = []
@@ -83,13 +82,11 @@ class ContactController extends ControllerUtils {
 			flash.message = message(code:'contact.not.found')
 			redirect(action: 'show')
 			return false
-		}
-		else if(params.groupId && !contactList.contactsSection) {
+		} else if(params.groupId && !contactList.contactsSection) {
 			flash.message = message(code:'group.not.found')
 			redirect(action: 'show')
 			return false
-		}
-		else if(params.smartGroupId && !contactList.contactsSection) {
+		} else if(params.smartGroupId && !contactList.contactsSection) {
 			flash.message = message(code:'smartgroup.not.found')
 			redirect(action: 'show')
 			return false
@@ -100,6 +97,7 @@ class ContactController extends ControllerUtils {
 				contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
 				contactsSection: contactList.contactsSection,
+				contactsSectionContactTotal: contactList.contactsSectionContactTotal,
 				contactFieldInstanceList: usedFields,
 				contactGroupInstanceList: contactGroupInstanceList,
 				contactGroupInstanceTotal: contactGroupInstanceList.size(),
@@ -107,7 +105,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()]
 	}
 	
@@ -120,7 +117,6 @@ class ContactController extends ControllerUtils {
 				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				smartGroupInstanceList: SmartGroup.list()] << contactSearchService.contactList(params)
 	}
 
@@ -173,7 +169,7 @@ class ContactController extends ControllerUtils {
 	}
 
 	def search() {
-		render template:'search_results', model:contactSearchService.contactList(params)
+		fsms.render template:'search_results', model:contactSearchService.contactList(params)
 	}
 	
 	def checkForDuplicates() {
@@ -195,15 +191,18 @@ class ContactController extends ControllerUtils {
 
 //> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {
-		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
+		def mobile = params.mobile?.replaceAll(/\D/, '')
+		if(params.mobile && params.mobile[0] == '+') mobile = '+' + mobile
+		def existingContact = mobile ? Contact.findByMobileLike(mobile) : null
+		if (existingContact && existingContact != contactInstance) {
+			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
+			return false
+		}
 		if (contactInstance.save()) {
 			flash.message = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
-		} else if (existingContact && existingContact != contactInstance) {
-			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
-			return false
 		}
 		return false
 	}

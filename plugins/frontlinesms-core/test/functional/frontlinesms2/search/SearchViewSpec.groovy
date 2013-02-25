@@ -19,6 +19,23 @@ class SearchViewSpec extends SearchBaseSpec {
 			waitFor("veryslow") { messageList.messages.size() == 3 }
 	}
 	
+	def "can toggle between viewing all results and viewing only starred"() {
+		when:
+			to PageNewSearch
+			waitFor("veryslow") { searchsidebar.searchBtn.displayed }
+			searchsidebar.searchBtn.click()
+		then:
+			waitFor("veryslow") { messageList.messages.size() == 3 }
+		when:
+			footer.showStarred.click()
+		then:
+			waitFor("veryslow") { messageList.messages.size() == 1 }
+		when:
+			footer.showAll.click()
+		then:
+			waitFor("veryslow") { messageList.messages.size() == 3 }
+	}
+
 	def "group list and activity lists are displayed when they exist"() {
 		when:
 			to PageNewSearch
@@ -57,14 +74,14 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor("veryslow") { searchsidebar.activityId.jquery.val() == "folder-$a.id" }
 	}
-	
+
 	def "can search in archive or not, is enabled by default"() {
 		when:
 			to PageNewSearch
 		then:
 			searchsidebar.inArchive == "on"
 		when:
-			searchsidebar.archive.click()
+			searchsidebar.archive.value(false)
 			searchsidebar.searchBtn.click()
 		then:
 			!searchsidebar.inArchive
@@ -139,12 +156,12 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.searchBtn.click()
 		then:
 			waitFor { messageList.messages.size() == 6 }
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor("veryslow") { singleMessageDetails.text == "received1" }
 			singleMessageDetails.delete.click()
 		then:
 			waitFor("veryslow") { messageList.messages.size() == 5 }
-			notifications.flashMessage.text().contains("Message moved to trash")
+			notifications.flashMessage.text()?.contains("Message moved to trash")
 	}
 
 	def "should have the start date not set, then as the user set one the result page should contain his start date"() {
@@ -177,7 +194,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearchResult, "alex"
 		then:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor { singleMessageDetails.text == "hi alex" }
 		when:
 			singleMessageDetails.archive.click()
@@ -281,13 +298,13 @@ class SearchViewSpec extends SearchBaseSpec {
 			def m1 = Fmessage.build(src:'+25499912', text:'archived1', archived:true)
 			to PageSearchResult, "archived", "inArchive=true"
 		then:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		when:
 			waitFor { singleMessageDetails.text == "archived1" }
 		then:
 			!singleMessageDetails.single_moveActions.displayed
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			multipleMessageDetails.multiple_moveActions.displayed
 	}

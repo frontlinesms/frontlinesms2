@@ -160,7 +160,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
 			messageList.messages.each { messageRow ->
 				if (messageRow.source == "prudence") {
-					assert messageRow.text().contains("join")
+					assert messageRow.text()?.contains("join")
 				}
 			}
 		when:
@@ -207,7 +207,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
 			messageList.messages.each { messageRow ->
 				if (messageRow.source == "prudence") {
-					assert messageRow.text().contains("leave")
+					assert messageRow.text()?.contains("leave")
 				}
 			}
 		when:
@@ -255,7 +255,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
 			messageList.messages.each { messageRow ->
 				if (messageRow.source == "prudence") {
-					assert messageRow.text().contains("toggle")
+					assert messageRow.text()?.contains("toggle")
 				}
 			}
 		when:
@@ -292,7 +292,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { at PageMessageSubscription }
 			["join", "prudence", "wilburforce"].each {
-				assert messageList.messages[0].text().contains(it)
+				messageList.messages[0].text()?.contains(it)
 			}
 		when:
 			header.groupLink.click()
@@ -342,7 +342,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -354,9 +354,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()		
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
@@ -368,7 +368,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].checkbox.click()
+			messageList.toggleSelected(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			messageList.messages[3].hasClass("selected")
@@ -381,7 +381,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -397,9 +397,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
@@ -415,7 +415,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -438,9 +438,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelected(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelected(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:

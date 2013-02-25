@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+TEMP_DIR=../../../frontlinesms2-db-migrate-test-temp
+echo "# Checking if $TEMP_DIR folder exists already..."
+TODO
+
+echo "# Running the tests..."
+TODO
+
+echo "# Cleaning temp dir $TEMP_DIR..."
+rm -rf $TEMP_DIR
+
+echo "# migration test script complete."
+

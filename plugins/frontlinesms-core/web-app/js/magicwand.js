@@ -14,16 +14,21 @@ var magicwand = {
 	 * @arg list jquery selecter for the <option/> element
 	 */
 	reset: function(list) {
-		if(selectmenuTools.isSupported()) {
+		if(magicwand.isSupported()) {
 			list.selectmenu("destroy");
 		}
 		list[0].selectedIndex = 0;
 		magicwand.init(list);
 	},
 
+	isSupported: function() {
+		return selectmenuTools.isSupported() &&
+				!(jQuery.browser.msie && jQuery.browser.version <= 8);
+	},
+
 	init: function(list) {
 		var status, statusParent;
-		if(!selectmenuTools.isSupported()) { return; }
+		if(!magicwand.isSupported()) { return; }
 		list.selectmenu();
 		status = list.parent().find(".ui-selectmenu-status");
 		status.text('');

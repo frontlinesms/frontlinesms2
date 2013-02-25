@@ -6,7 +6,11 @@ import frontlinesms2.popup.MediumPopup
 import geb.Module
 
 class PageConnection extends PageBase {
-	static url = 'connection/list'
+	String convertToPath(Object[] args) {
+		if(!args) 'connection/list'
+		else if(args[0] instanceof Number) 'connection/show/' + args[0]
+		else 'connection/show/' + args[0].id
+	}
 
 	static content = {
 		connectionList { module ConnectionList }
@@ -22,7 +26,9 @@ class ConnectionList extends Module {
 	static content = {
 		connection(required:false) { $("li.connection") }
 		selectedConnection(required:false) { $("li.connection.selected") }
-		btnCreateRoute(wait:true) {  $(".btn", text:'Create route') }
+		btnEnableRoute(wait:true) {  $(".btn", text:'Enable') }
+		btnRetryConnection(wait:true) {  $(".btn", text:'Retry Connection') }
+		btnDisableRoute(wait:true) {  $(".btn", text:'Disable') }
 		btnDelete(required:false) { $('.btn', text:'Delete Connection') }
 		btnTestRoute(required:false) {  $('.btn', text:'Send test message') }
 		status { $('p.connection-status').text() }

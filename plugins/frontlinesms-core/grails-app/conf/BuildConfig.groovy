@@ -49,7 +49,7 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
 		// runtime 'mysql:mysql-connector-java:5.1.16'
-		def seleniumVersion = '2.28.0'
+		def seleniumVersion = '2.30.0'
 		def camel = {
 			def camelVersion = "2.9.4"
 			"org.apache.camel:camel-$it:$camelVersion"
@@ -75,6 +75,9 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.core:at-modem-detector:0.8'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
+		compile('org.codehaus.groovy.modules.http-builder:http-builder:0.6') {
+			excludes "commons-logging", "xml-apis", "groovy"
+		}
 	}
 
 	plugins {
@@ -88,9 +91,9 @@ grails.project.dependency.resolution = {
 		runtime ":markdown:1.0.0.RC1"
 		runtime ':routing:1.2.2-camel-2.9.4'
 		runtime ":csv:0.3.1"
-		compile ":quartz2:0.2.3-frontlinesms"
+		compile ":quartz2:2.1.6.2"
 
-		compile ':platform-core:1.0.RC2'
+		compile ':platform-core:1.0.RC3-frontlinesms'
 
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.17"
@@ -130,4 +133,3 @@ codenarc {
 		GrailsPublicControllerMethod.enabled = false
 	}
 }
-

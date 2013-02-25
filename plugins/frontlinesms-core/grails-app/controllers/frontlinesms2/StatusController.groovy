@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import frontlinesms2.ConnectionStatus as CS
+
 class StatusController extends ControllerUtils {
 	def deviceDetectionService
 	
@@ -8,8 +10,15 @@ class StatusController extends ControllerUtils {
 	}
 
 	def trafficLightIndicator() {
-		def connections = Fconnection.list()
-		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
+		def status = Fconnection.list()*.status
+		def color = 'grey'
+		if(CS.FAILED in status) {
+			color = 'red'
+		} else if(CS.CONNECTING in status) {
+			color = 'orange'
+		} else if(CS.CONNECTED in status) {
+			color = 'green'
+		}
 		render text:color, contentType:'text/plain'
 	}
 	
@@ -26,7 +35,7 @@ class StatusController extends ControllerUtils {
 	}
 	
 	def listDetected() {
-		render template:'device_detection', model:[detectedDevices:deviceDetectionService.detected]
+		fsms.render template:'device_detection', model:[detectedDevices:deviceDetectionService.detected]
 	}
 	
 	def resetDetection() {
