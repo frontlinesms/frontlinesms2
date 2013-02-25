@@ -163,7 +163,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			messageList.toggleSelect(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[3].hasClass("selected")
+			messageList.hasClass(3, "selected")
 			singleMessageDetails.text == "Test message 3"
 	}
 
