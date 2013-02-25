@@ -40,7 +40,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		when:
 			messageList.toggleSelect(1)
 		then:
-			waitFor('veryslow') { messageList.messages[1].hasClass("selected") }
+			waitFor('veryslow') { messageList.hasClass(1, "selected") }
 	}
 
 	def "'Reply All' button appears for multiple selected messages and works"() {

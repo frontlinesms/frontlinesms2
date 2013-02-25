@@ -42,8 +42,8 @@ class SearchCheckSpec extends SearchBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			messageList.messages[1].hasClass("selected")
-			messageList.messages[2].hasClass("selected")
+			messageList.hasClass(1, "selected")
+			messageList.hasClass(2, "selected")
 	}
 
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -93,7 +93,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 			to PageSearchResult, "hi"
 			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.messages[1].hasClass("selected") }
+			waitFor { messageList.hasClass(1, "selected") }
 	}
 
 
