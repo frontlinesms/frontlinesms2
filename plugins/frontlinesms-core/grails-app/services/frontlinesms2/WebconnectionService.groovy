@@ -18,7 +18,7 @@ class WebconnectionService {
 	private String getReplacement(String arg, Fmessage msg) {
 		arg = (arg - '${') - '}'
 		def c = Webconnection.subFields[arg]
-		return c(msg)
+		return c ? c(msg) : arg
 	}
 
 	private changeMessageOwnerDetail(activityOrStep, message, s) {
