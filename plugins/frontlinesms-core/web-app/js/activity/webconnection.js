@@ -133,7 +133,7 @@ var webconnectionDialog = (function () {
 		genericSortingValidation();
 
 		keyWordTabValidation = function() {
-			return !isGroupChecked("blankKeyword") || validator.element('#keywords');
+			return isGroupChecked("blankKeyword") || validator.element('#keywords');
 		};
 
 		configureTabValidation = function() {
