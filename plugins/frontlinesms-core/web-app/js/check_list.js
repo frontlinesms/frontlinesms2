@@ -1,5 +1,6 @@
 check_list = (function() {
-	var checkAll, itemCheckChanged, showMultipleDetailsPanel, updateCheckAllBox;
+	var checkAll, itemCheckChanged, showMultipleDetailsPanel, updateCheckAllBox,
+			tick = 0;
 
 	showMultipleDetailsPanel = function(itemTypeString) {
 		// hide single message view
@@ -60,7 +61,7 @@ check_list = (function() {
 	};
 
 	updateSingleCheckedDetails = function(itemTypeString, itemId, row) {
-		var params, action, singleDetails;
+		var params, action, singleDetails, callerTick;
 		if (itemTypeString === 'message') {
 			row.removeClass("unread");
 			row.addClass("read");
@@ -76,9 +77,10 @@ check_list = (function() {
 		singleDetails.html("<p class='loading'>" + i18n("content.loading") + "</p>");
 		singleDetails.show();
 
+		callerTick = ++tick;
 		$.get(url_root + itemTypeString + action + itemId, params, function(data) {
 			var newPane = $(data);
-			if(!singleDetails.is(":visible")) {
+			if(callerTick !== tick) {
 				return;
 			}
 			fsmsButton.findAndApply("input[type='submit']", newPane);
