@@ -41,19 +41,19 @@ class WebconnectionActionStepSpec extends Specification {
 		given:
 			def step = new WebconnectionActionStep()
 			step.webconnectionService = webconnectionService
-			["url":"http://test.me", "httpMethod":"GET", "message":'${messageText}'].each { k,v ->
+			["url":"http://test.me", "httpMethod":"GET", "param:message":'${messageText}'].each { k,v ->
 				println "creating stepProp with k:$k, v:$v"
 				def stepProp = new StepProperty(key:k, value:v)
 				step.addToStepProperties(stepProp)
 			}
 			println "step.props >> ${step.stepProperties}"
 			step.save(flush:true)
+			def mockExchange = mockExchange('', [:])
 		when:
-			def exchangeOut = step.preProcess(mockExchange('', [:]))
+			step.preProcess(mockExchange)
 		then:
-			exchangeOut
-			exchangeOut.in.headers
-			!exchangeOut.in.body
+			mockExchange.in.headers*.value.containsAll(["http://test.me", "GET", "message=%24%7BmessageText%7D"])
+			!mockExchange.in.body
 	}
 
 	Exchange mockExchange(body, Map headers) {
