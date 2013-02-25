@@ -29,7 +29,12 @@
 		return translated;
 	}
 
-	app_info.init();
+	<g:if env="test">
+		app_info.init(3000);
+	</g:if>
+	<g:else>
+		app_info.init();
+	</g:else>
 	var systemNotification = new SystemNotification();
 	var statusIndicator = new StatusIndicator();
 	// declare vars that are populated in JS files

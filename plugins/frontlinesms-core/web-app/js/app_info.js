@@ -3,10 +3,11 @@ app_info = (function() {
 	callbacks,
 	counter,
 	failCallback,
-	init = function() {
+	init = function(repeatInterval) {
 		counter = 0;
 		callbacks = {};
-		timer.setInterval(requester, 15000);
+		repeatInterval = repeatInterval || 15000;
+		timer.setInterval(requester, repeatInterval);
 	},
 	callbackProcessor = function(data) {
 		var c;
