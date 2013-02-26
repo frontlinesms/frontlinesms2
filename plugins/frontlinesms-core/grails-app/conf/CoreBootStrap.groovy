@@ -446,6 +446,11 @@ class CoreBootStrap {
 	private def dev_initCustomActivities() {
 		if(!bootstrapData) return
 
+		def uploadStep = new WebconnectionActionStep()
+			.setPropertyValue('url', 'http://frontlinesms.com')
+			.setPropertyValue('httpMethod', 'GET')
+			.setPropertyValue('myNumber', '23123123')
+			.setPropertyValue('myMessage', 'i will upload forever')
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
 		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
 		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"I will send you forever"))
@@ -454,6 +459,7 @@ class CoreBootStrap {
 				.addToSteps(joinStep)
 				.addToSteps(leaveStep)
 				.addToSteps(replyStep)
+				.addToSteps(uploadStep)
 				.addToKeywords(value:"CUSTOM")
 				.save(failOnError:true, flush:true)
 	}
@@ -461,7 +467,6 @@ class CoreBootStrap {
 	private def dev_initLogEntries() {
 		if(!bootstrapData) return
 
-		if(!bootstrapData) return
 		def now = new Date()
 		[new LogEntry(date:now, content: "entry1"),
 				new LogEntry(date:now-2, content: "entry2"),

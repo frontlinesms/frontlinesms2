@@ -66,6 +66,7 @@ var mediumPopup = (function() {
 		closeWhenDone = (typeof closeOnSubmit === 'undefined'? true: closeOnSubmit);
 		modalBox = createModalBox(html);
 		$("#messageText").keyup();
+		contactsearch.init(modalBox.find('select#contactsearch'));
 		magicwand.init(modalBox.find('select[id^="magicwand-select"]'));
 		modalBox.dialog({
 			modal: true,

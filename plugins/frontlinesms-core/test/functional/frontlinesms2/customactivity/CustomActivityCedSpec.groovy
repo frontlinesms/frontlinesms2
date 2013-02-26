@@ -50,8 +50,8 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			keyword.keywordText.value("test")
 			next.click()
-			configure.replyButton.click()
-			configure.joinButton.click()
+			configure.stepActions.jquery.val("reply").jquery.trigger('change')
+			configure.stepActions.jquery.val("join").jquery.trigger('change')
 		then:
 			configure.steps.size() == 2
 		when:
@@ -75,8 +75,8 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			keyword.keywordText.value("test")
 			next.click()
-			configure.replyButton.click()
-			configure.joinButton.click()
+			configure.stepActions.jquery.val("reply").jquery.trigger('change')
+			configure.stepActions.jquery.val("join").jquery.trigger('change')
 			configure.steps[0].jquery.find("textarea[name=autoreplyText]").value("Sample Text")
 			configure.steps[1].jquery.find("#group").value(Group.findByName("Camping").id)
 			next.click()
@@ -105,8 +105,8 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		then:
 			configure.steps.size() == 2
 		when:
-			configure.replyButton.click()
-			configure.joinButton.click()
+			configure.stepActions.jquery.val("reply").jquery.trigger('change')
+			configure.stepActions.jquery.val("join").jquery.trigger('change')
 			configure.steps[2].jquery.find("textarea[name=autoreplyText]").value("Sample Text")
 			configure.steps[3].jquery.find("#group").value(Group.findByName("Camping").id)
 			next.click()

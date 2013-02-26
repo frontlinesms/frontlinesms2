@@ -315,7 +315,7 @@ class WebconnectionRequestFormatTab extends geb.Module {
 		get { $("input[value='GET']") }
 		url { $("input#url") }
 		addParam { $('a.btn.addNew') }
-		parameters { moduleList WebconnectionParam, $('#web-connection-param-table tbody tr') }
+		parameters { moduleList WebconnectionParam, $('.web-connection-param-table tbody tr') }
 	}
 }
 
@@ -608,12 +608,9 @@ class ConfigureCustomKeywordTab extends geb.Module {
 
 class ConfigureCustomActivityTab extends geb.Module {
 	static base = { $('div#tabs-2')}
-	static content = {		
-		joinButton { $("a", text:"Add sender to group") }
-		leaveButton { $("a", text:"Remove sender from group") }
-		replyButton { $("a", text:"Autoreply") }
-		stepsContainer { $("#custom-activity-actions-container") }
-		steps { $(".step") }
+	static content = {
+		stepActions { $("#custom_activity_select") }
+		steps(required:false) { $("li.step") }
 	}
 }
 

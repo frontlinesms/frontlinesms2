@@ -410,6 +410,25 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			outgoingMessage.ownerDetail == incomingMessage.id.toString()
 	}
 
+	def "Setting the owner detail for webconnection" (){
+		when:
+			def uploadStep = new WebconnectionActionStep().addToStepProperties(new StepProperty(key:"url", value:"http://192.168.0.200"))
+				.addToStepProperties(new StepProperty(key:"httpMethod", value:"GET"))
+				.addToStepProperties(new StepProperty(key:"message", value:"I will upload you"))
+				.addToStepProperties(new StepProperty(key:"source", value:"123123"))
+			def customActivity = new CustomActivity(name:'Do it all')
+				.addToSteps(uploadStep)
+				.addToKeywords(value:"CUSTOM")
+				.save(failOnError:true, flush:true)
+ 
+			def incomingMessage = Fmessage.build(text:"incoming message", messageOwner: customActivity)
+			incomingMessage.setMessageDetail(uploadStep, 'success')
+			incomingMessage.save(failOnError:true)
+			incomingMessage.refresh()
+		then:
+			incomingMessage.getOwnerDetail() == "success"
+	}
+
 	def 'doing a Fmessage.findBySrc should give me youngest message'() {
 		when:
 			Fmessage.build(src:'111', text:'oldest')
