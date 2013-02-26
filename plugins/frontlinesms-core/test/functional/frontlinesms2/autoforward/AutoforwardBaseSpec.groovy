@@ -22,8 +22,8 @@ class AutoforwardBaseSpec extends grails.plugin.geb.GebSpec {
 		(0..90).each {
 			def m = Fmessage.build(src:'Nagila', text:"Sudden shock $it", date:new Date()-it)
 			a.addToMessages(m)
-			a.save(failOnError:true, flush:true)
 		}
+		a.save(failOnError:true, flush:true)
 	}
 
 	static createTestActivities() {

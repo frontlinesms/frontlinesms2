@@ -609,8 +609,8 @@ class ConfigureCustomKeywordTab extends geb.Module {
 class ConfigureCustomActivityTab extends geb.Module {
 	static base = { $('div#tabs-2')}
 	static content = {
-		stepActions { $("#custom-activity-actions-container select") }
-		steps { $("li.step") }
+		stepActions { $("#custom_activity_select") }
+		steps(required:false) { $("li.step") }
 	}
 }
 

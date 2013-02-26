@@ -14,7 +14,6 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		createTestMessages(Webconnection.findByName("Sync"))
 	}
 
-	@Unroll
 	def "Webconnection page should show the details of a generic Webconnection in the header"() {
 		setup:
 			def webconnection  = Webconnection.findByName("Sync")
@@ -22,14 +21,11 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			to PageMessageWebconnection, webconnection
 		then:
 			waitFor { title?.toLowerCase().contains("web connection") }
-			header[item] == value
-		where:
-			item        | value
-			'name'      | "sync web connection"
-			'url'       | 'http://www.frontlinesms.com/sync'
-			'sendMethod'| 'get'
-			'subtitle'  | 'http web connection'
-			'api'       | 'api url : (api disabled)'
+			header.name == 'sync web connection'
+			header.url == 'http://www.frontlinesms.com/sync'
+			header.sendMethod == 'get'
+			header.subtitle == 'http web connection'
+			header.api == 'api url : (api disabled)'
 	}
 
 	@Unroll
@@ -44,7 +40,6 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			secret << [null, 'imagine']
 	}
 
-	@Unroll
 	def "Webconnection page should show the details of an Ushahidi Webconnection in the header"() {
 		setup:
 			def webconnection  = Webconnection.findByName("Ush")
@@ -52,13 +47,10 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			to PageMessageWebconnection, webconnection
 		then:
 			waitFor { title?.toLowerCase().contains("web connection") }
-			header[item] == value
-		where:
-			item        | value
-			'name'      | 'ush web connection'
-			'url'       | 'http://www.ushahidi.com/frontlinesms'
-			'sendMethod'| 'get'
-			'subtitle'  | 'web connection to ushahidi'
+			header.name == 'ush web connection'
+			header.url == 'http://www.ushahidi.com/frontlinesms'
+			header.sendMethod == 'get'
+			header.subtitle == 'web connection to ushahidi'
 	}
 
 	def "clicking the archive button archives the Webconnection and redirects to inbox "() {
@@ -190,7 +182,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor { messageList.displayed }
 		when:
 			messageList.toggleSelect(0)
-			waitFor {singleMessageDetails.displayed }
+			waitFor { singleMessageDetails.displayed }
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
@@ -231,7 +223,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor { messageList.displayed }
 		when:
 			messageList.toggleSelect(0)
-			waitFor {singleMessageDetails.displayed }
+			waitFor { singleMessageDetails.displayed }
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
@@ -252,7 +244,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			to PageMessageWebconnection, Webconnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.any { it.hasStatus("sent")}
+			messageList.messages*.any { it.hasStatus("sent") }
 	}
 
 	def "retry failed uploads option should be present in more actions dropdown, and should redirect to same view"() {

@@ -96,7 +96,7 @@ log4j = {
 					threshold:org.apache.log4j.Level.WARN
 		}
 		development { console name:'dev', threshold:org.apache.log4j.Level.INFO }
-		test { console name:'test', threshold:org.apache.log4j.Level.WARN }
+		test { console name:'test', threshold:org.apache.log4j.Level.ERROR }
 	}
 
 	root {
