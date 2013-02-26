@@ -18,7 +18,7 @@
 	</ul>
 </div>
 <h2><g:message code="webconnection.parameters"/></h2>
-<table id="web-connection-param-table">
+<table class="web-connection-param-table">
 	<thead>
 		<tr class="prop">
 			<td>
@@ -45,6 +45,6 @@
 		</g:else>
 	</tbody>
 </table>
-<a class="btn addNew" onclick="webconnectionDialog.handlers.addNewParam()">
+<a class="btn addNew" onclick="webconnectionDialog.handlers.addNewParam($(this).parent().find('.web-connection-param-table'))">
 	<g:message code="webconnection.add.anotherparam"/>
 </a></br>

@@ -17,7 +17,7 @@ class WebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			webconnection.processKeyword(incomingMessage, k)
 		then:
-			1 * webCService.send(incomingMessage)
+			1 * webCService.doUpload(webconnection, incomingMessage)
 	}
 
 	def 'incoming message should match if keyword is blank and exactmatch == false'() {
@@ -31,6 +31,6 @@ class WebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			webconnection.processKeyword(incomingMessage, k)
 		then:
-			1 * webCService.send(incomingMessage)
+			1 * webCService.doUpload(webconnection, incomingMessage)
 	}
 }

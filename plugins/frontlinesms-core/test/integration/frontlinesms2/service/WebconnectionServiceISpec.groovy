@@ -83,12 +83,12 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webconnection.addToMessages(Fmessage.build(text:"simple"))
 			webconnection.save(flush:true)
 		when:
-			webconnectionService.send(Fmessage.findByText("simple"))
+			webconnectionService.doUpload(webconnection, Fmessage.findByText("simple"))
 		then:
 			Fmessage.findByText("simple").ownerDetail == "pending"
 	}
 
-	def 'webconnectionService.handleException() shoulf change ownerDetail to onwerdetail-failed'(){
+	def 'webconnectionService.handleException() should change ownerDetail to onwerdetail-failed'(){
 		given:
 			def x = mockExchange("simple","post", false)
 		when:

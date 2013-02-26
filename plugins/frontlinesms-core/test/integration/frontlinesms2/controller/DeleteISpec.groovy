@@ -27,8 +27,8 @@ class DeleteISpec extends IntegrationSpec {
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
-			def r1 = PollResponse.findByValue('Manchester').addToMessages(message1)
-			def r2 = PollResponse.findByValue('Barcelona').addToMessages(message2)
+			PollResponse.findByValue('Manchester').addToMessages(message1)
+			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		when:
 			messageController.beforeInterceptor.action.call()
@@ -138,16 +138,5 @@ class DeleteISpec extends IntegrationSpec {
 		trashService.sendToTrash(o)
 	}
 
-	private def createPollController() {
-		def pc = new PollController()
-		pc.trashService = trashService
-		return pc
-	}
-
-	private def createFolderController() {
-		def fc = new FolderController()
-		fc.trashService = trashService
-		return fc
-	}
 }
 

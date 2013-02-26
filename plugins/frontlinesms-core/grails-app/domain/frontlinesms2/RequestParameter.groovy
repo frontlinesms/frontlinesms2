@@ -9,8 +9,6 @@ class RequestParameter {
 		value(blank:false)
 	}
 
-	static def regex = /[$][{]*[a-z_]*[}]/
-
 	static belongsTo = [connection:Webconnection]
 
 	String getProcessedValue(Fmessage msg) {

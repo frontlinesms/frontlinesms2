@@ -36,6 +36,7 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'postprocess call is handed back to the relevant domain object'() {
 		given:
+			service.metaClass.private.changeMessageOwnerDetail = {Fmessage a, String b -> b}
 			def m = Mock(Fmessage)
 			m.messageOwner >> mockConnection
 			Fmessage.metaClass.static.get = { Serializable id -> return m }
