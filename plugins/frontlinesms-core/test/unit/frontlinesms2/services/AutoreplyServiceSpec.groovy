@@ -13,6 +13,10 @@ class AutoreplyServiceSpec extends Specification {
 			def invoker = Mock(invokerType)
 			def messageSendService = Mock(MessageSendService)
 			def incoming = Mock(Fmessage)
+			def owner = Mock(CustomActivity)
+			
+			owner.addToMessages { ms-> return "" }
+			incoming.messageOwner >> owner
 			incoming.src >> "123"
 			incoming.messageOwner >> Mock(Activity)
 			def outgoing = Mock(Fmessage)

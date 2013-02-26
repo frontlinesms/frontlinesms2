@@ -8,22 +8,68 @@ import grails.converters.JSON
 import frontlinesms2.api.*
 
 class WebconnectionService {
+	static def regex = /[$][{]*[a-z_]*[}]/
+	// Substitution variables
 	def camelContext
 	def i18nUtilService
 	def messageSendService
 
-	def retryFailed(Webconnection c) {
-		Fmessage.findAllByMessageOwner(c).each {
-			if(it.ownerDetail == Webconnection.OWNERDETAIL_FAILED)
-				send(it)
+	private String getReplacement(String arg, Fmessage msg) {
+		arg = (arg - '${') - '}'
+		def c = Webconnection.subFields[arg]
+		return c ? c(msg) : arg
+	}
+
+	private changeMessageOwnerDetail(activityOrStep, message, s) {
+		println "Status to set to $message is $s"
+		message.setMessageDetail(activityOrStep, s)
+		message.save(failOnError:true, flush:true)
+		println "Changing Status ${message.ownerDetail}"
+	}
+
+	private def createRoute(webconnectionInstance, routes) {
+		try {
+			deactivate(webconnectionInstance)
+			camelContext.addRouteDefinitions(routes)
+			LogEntry.log("Created Webconnection routes: ${routes*.id}")
+		} catch(FailedToCreateProducerException ex) {
+			println ex
+		} catch(Exception ex) {
+			println ex
+			deactivate(webconnectionInstance)
 		}
 	}
 
+	private Fmessage createTestMessage() {
+		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)
+		fm.save(failOnError:true, flush:true)
+	}
+
+	private def getWebConnection(Exchange x) {
+		def webConnection
+		if(x.in.headers.'webconnection-id') {
+			webConnection = Webconnection.get(x.in.headers.'webconnection-id')
+		} else if(x.in.headers.'webconnectionStep-id') {
+			webConnection = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
+		}
+		webConnection
+	}
+
+
+	String getProcessedValue(prop, msg) {
+		def val = prop.value
+		def matches = val.findAll(regex)
+		matches.each { match ->
+			val = val.replaceFirst(regex, getReplacement(match, msg))
+		}
+		return val
+	}
+	
 	def preProcess(Exchange x) {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		def webConn = getWebConnection(x)
 		webConn.preProcess(x)
 	}
 
@@ -33,22 +79,27 @@ class WebconnectionService {
 		println "x.in.headers: ${x.in.headers}"
 		println "### WebconnectionService.postProcess() ## headers ## ${x.in.headers}"
 		println "#### Completed postProcess #### ${x.in.headers.'fmessage-id'}"
-		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		def webConn = getWebConnection(x)
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
-		changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_SUCCESS)
+		changeMessageOwnerDetail(webConn, message, Webconnection.OWNERDETAIL_SUCCESS)
 		webConn.postProcess(x)
 	}
 
 	def handleException(Exchange x) {
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
-		changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_FAILED)
+		changeMessageOwnerDetail(getWebConnection(x), message, Webconnection.OWNERDETAIL_FAILED)
 		println "### WebconnectionService.handleException() ## headers ## ${x.in.headers}"
 		println "Web Connection request failed with exception: ${x.in.body}"
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
 	def createStatusNotification(Exchange x) {
-		def webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		def webConn
+		if(x.in.headers.'webconnection-id') {
+			webConn = Webconnection.get(x.in.headers.'webconnection-id')
+		} else if(x.in.headers.'webconnectionStep-id') {
+			webConn = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
+		}
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
 		def text = i18nUtilService.getMessage(code:"webconnection.${message.ownerDetail}.label", args:[webConn.name])
 		println "######## StatusNotification::: $text #########"
@@ -57,14 +108,22 @@ class WebconnectionService {
 		notification.save(failOnError:true, flush:true)
 	}
 
-	def send(Fmessage message) {
-		println "## Webconnection.send() ## sending message # ${message}"
+	def doUpload(activityOrStep, message) {
+		println "## Webconnection.doUpload() ## uploading message # ${message}"
 		def headers = [:]
 		headers.'fmessage-id' = message.id
-		headers.'webconnection-id' = message.messageOwner.id
-		changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_PENDING)
-		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
+		if(activityOrStep instanceof Webconnection) (headers.'webconnection-id' = activityOrStep.id) 
+		else (headers.'webconnectionStep-id' = activityOrStep.id)
+		changeMessageOwnerDetail(activityOrStep, message, Webconnection.OWNERDETAIL_PENDING)
+		sendMessageAndHeaders("seda:activity-${activityOrStep.shortName}-${activityOrStep.id}", message, headers)
 	}
+
+ 	def retryFailed(Webconnection c) {
+ 		Fmessage.findAllByMessageOwner(c).each {
+ 			if(it.ownerDetail == Webconnection.OWNERDETAIL_FAILED)
+ 				doUpload(c, it)
+ 		}
+ 	}
 
 	def saveInstance(Webconnection webconnectionInstance, params) {
 		webconnectionInstance.keywords?.clear()
@@ -93,30 +152,40 @@ class WebconnectionService {
 			webconnectionInstance.addToMessages(message)
 			webconnectionInstance.save(failOnError:true)
 		}
-		webconnectionInstance.createRoute(webconnectionInstance.testRouteDefinitions)
+		createRoute(webconnectionInstance, webconnectionInstance.testRouteDefinitions)
 		if(getStatusOf(webconnectionInstance) == ConnectionStatus.CONNECTED) {
 			def headers = [:]
 			headers.'fmessage-id' = message.id
 			headers.'webconnection-id'= webconnectionInstance.id
-			sendMessageAndHeaders("seda:activity-webconnection-${webconnectionInstance.id}", message, headers)
-			changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_PENDING)
+			sendMessageAndHeaders("seda:activity-${webconnectionInstance.shortName}-${webconnectionInstance.id}", message, headers)
+			changeMessageOwnerDetail(webconnectionInstance, message, Webconnection.OWNERDETAIL_PENDING)
 		} else {
-			changeMessageOwnerDetail(message, Webconnection.OWNERDETAIL_FAILED)
+			changeMessageOwnerDetail(webconnectionInstance, message, Webconnection.OWNERDETAIL_FAILED)
 		}
 	}
 
 	def getStatusOf(Webconnection w) {
-		camelContext.routes.any { it.id ==~ /.*activity-webconnection-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.FAILED
+		camelContext.routes.any { it.id ==~ /.*activity-${w.shortName}-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.FAILED
 	}
 
-	private changeMessageOwnerDetail(Fmessage message, String s) {
-		message.setMessageDetail(message.messageOwner, s)
-		message.save(failOnError:true, flush:true)
-		println "Changing Status ${message.ownerDetail}"
-	}
+ 	private changeMessageOwnerDetail(Fmessage message, String s) {
+ 		message.setMessageDetail(message.messageOwner, s)
+ 		message.save(failOnError:true, flush:true)
+ 		println "Changing Status ${message.ownerDetail}"
+ 	}
 
 	def apiProcess(webcon, controller) {
 		controller.render(generateApiResponse(webcon, controller))
+	}
+
+	def activate(activityOrStep) {
+		createRoute(activityOrStep, activityOrStep.routeDefinitions)
+	}
+
+	def deactivate(activityOrStep) {
+		println "################ Deactivating Webconnection :: ${activityOrStep}"
+		camelContext.stopRoute("activity-${activityOrStep.shortName}-${activityOrStep.id}")
+		camelContext.removeRoute("activity-${activityOrStep.shortName}-${activityOrStep.id}")
 	}
 
 	def generateApiResponse(webcon, controller) {
@@ -190,10 +259,5 @@ class WebconnectionService {
 		webcon.addToMessages(m)
 		webcon.save(failOnError: true)
 		"message successfully queued to send to ${m.dispatches.size()} recipient(s)"
-	}
-
-	private Fmessage createTestMessage() {
-		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)
-		fm.save(failOnError:true, flush:true)
 	}
 }

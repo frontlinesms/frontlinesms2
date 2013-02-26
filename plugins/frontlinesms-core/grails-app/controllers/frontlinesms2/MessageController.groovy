@@ -107,7 +107,6 @@ class MessageController extends ControllerUtils {
 		if (activityInstance) {
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
-			println messageInstanceList
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
 			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {

@@ -12,8 +12,9 @@ var custom_activity = (function() {
 	},
 	initSteps = function() {
 		var titles, widths, maxWidth;
-		$(CONFIG_CONTAINER + " .step .remove-command").click(removeStep);
+		$(CONFIG_CONTAINER + " .step > .remove-command").click(removeStep);
 		selectmenuTools.initAll(CONFIG_CONTAINER + " select");
+		selectmenuTools.initAll("#custom-activity-actions-container select");
 		magicwand.init($(CONFIG_CONTAINER + " select[id^='magicwand-select']"));
 
 		// calculate the length of the longest title here
@@ -36,6 +37,9 @@ var custom_activity = (function() {
 				initSteps();
 			}
 		});
+		$('#custom-activity-actions-container select').on('change', function() {
+			addStep($(this).val());
+		});
 	};
 	return {
 		addStep:addStep,
@@ -52,7 +56,23 @@ var customActivityDialog = (function(){
 			errorContainer: ".error-panel",
 			rules: {
 				autoreplyText: { required:true },
-				name: { required:true }
+				name: { required:true },
+				url: { required :true },
+				'param-name:not([disabled])' : { required : true }
+			},
+			messages: {
+				autoreplyText: {
+					required: i18n("customactivity.validation.error.autoreplytext")
+				},
+				name: {
+					required: i18n("customactivity.validation.error.name")
+				},
+				url: {
+					required: i18n("customactivity.validation.error.url")
+				},
+				'param-name': {
+					required: i18n("customactivity.validation.error.paramname")
+				},
 			},
 			errorPlacement: function(error, element){
 				$(".error-panel").html(error);
@@ -73,6 +93,14 @@ var customActivityDialog = (function(){
 			});
 
 			$.each($("select[name='group']"), function(index, element) {
+				valid = valid && validator.element($(element));
+			});
+
+			$.each($("input[name='url']"), function(index, element) {
+				valid = valid && validator.element($(element));
+			});
+
+			$.each($("input[name='param-name']:not([disabled])"), function(index, element) {
 				valid = valid && validator.element($(element));
 			});
 
@@ -100,8 +128,19 @@ var customActivityDialog = (function(){
 	getStepProperties = function(fieldSelecter, container) {
 		var data = {};
 		container.find(fieldSelecter).each(function(index, field) {
-			field = $(field);
-			data[field.attr("name")] = field.val();
+			field = $(field); //field.attr("name").startsWith("httpMethod-")
+			if((field.attr("name") != "param-name") && (field.attr("name") != "param-value") && !( field.attr("name").match(/httpMethod.*/))) {
+				data[field.attr("name")] = field.val();
+			}
+			// webconnection step parameter handling
+			if(field.attr("name") == "stepType" && field.val() == "webconnectionStep") {
+				// get httpMethod
+				data['httpMethod'] = container.find("input[name^='httpMethod-']:checked").val();
+				// get params
+				var names = $.map($(field).parent().find("input[name='param-name']"), function(element, index){ return $(element).val(); });
+				var values = $.map($(field).parent().find("input[name='param-value']"), function(element, index){ return $(element).val(); });
+				$.each(names,function(index, name){ data[name] = values[index]; });
+			}
 		});
 		return data;
 	},
@@ -118,7 +157,9 @@ var customActivityDialog = (function(){
 				detail = element.find("select[name=group] option:selected").text();
 			} else if(stepType === "reply") {
 				detail = element.find("textarea[name=autoreplyText]").val();
-			}
+			} else if(stepType === "webconnectionStep") {
+				detail = element.find("input[name=url]").val();
+			} 
 			output = "<p>" +
 					i18n("customactivity." + stepType + ".description", detail) +
 					"</p>";

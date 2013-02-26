@@ -9,6 +9,7 @@ class FsmsTagLib {
 	def appSettingsService
 	def expressionProcessorService
 	def grailsApplication
+	def i18nUtilService 
 
 	def info = { att ->
 		def cssClass = 'info'
@@ -184,8 +185,11 @@ class FsmsTagLib {
 			['', "_${locale.language}",
 					"_${locale.language}_${locale.country}",
 					"_${locale.language}_${locale.country}_${locale.variant}"].each { localeSuffix ->
-				def link = g.resource plugin:bundle, dir:'i18n', file:"messages${localeSuffix}.js"
-				out << "<script type=\"text/javascript\" src=\"$link\" charset=\"UTF-8\"></script>\n" }
+				if(i18nUtilService.allTranslations.containsKey(localeSuffix - '_')) {
+					def link = g.resource plugin:bundle, dir:'i18n', file:"messages${localeSuffix}.js"
+					out << "<script type=\"text/javascript\" src=\"$link\" charset=\"UTF-8\"></script>\n"
+				}
+			}
 		}
 	}
 	
@@ -341,6 +345,12 @@ class FsmsTagLib {
 		}
 		out << '</select>'
 		out << '</div>'
+	}
+
+	def recipientSelector = { att ->
+		out << '<select name="recipients" id="contactsearch" style="width:320px;" data-placeholder="' + i18nUtilService.getMessage([code:'contact.search.placeholder']) + '" multiple class="chzn-select">'
+		out << '<option></option>'
+		out << '</select>'
 	}
 
 	def unsubstitutedMessageText = { att ->
@@ -572,3 +582,4 @@ class FsmsTagLib {
 		cssClasses
 	}
 }
+

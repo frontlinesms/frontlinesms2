@@ -19,17 +19,16 @@ class SmppTranslationServiceSpec extends Specification {
 			def messageText = "Test message"
 			def source = "+254725672318"
 			def testDate = "Fri, 20 Apr 2012 14:27:14 +0100"
-			def date = new Date().parse("EEE, dd MMM yyyy hh:mm:ss Z", testDate).format("YYMMDDhhmm")
+			def date = new Date().parse("EEE, dd MMM yyyy hh:mm:ss Z", testDate).format("yyMMddHHmm")
 			def testExchange = createTestExchange([source: source, body:messageText, date:date])
 			println "Exchange HEADERS ${testExchange.in.headers}"
 			println "Exchange BODY ${testExchange.in.body}"
 		when:
 			service.process(testExchange)
 		then:
-			testExchange.out.body instanceof Fmessage
-			testExchange.out.body.src == "+254725672318"
-			testExchange.out.body.text == "Test message"
-			testExchange.out.body.date == testDate
+			1 * testExchange.in.setBody({ m ->
+					(m.src == source) && (m.text == messageText) && (m.date == Date.parse("yyMMddHHmm", date))
+				})
 	}
 	
 	private Exchange createTestExchange(params = []) {

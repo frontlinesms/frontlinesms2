@@ -8,7 +8,7 @@ abstract class Step {
 	
 	static belongsTo = [activity: CustomActivity]
 	static hasMany = [stepProperties: StepProperty]
-	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep]
+	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep, WebconnectionActionStep]
 
 	static transients = ['i18nUtilService']
 	static configFields = [:]
@@ -16,6 +16,10 @@ abstract class Step {
 	static constraints = {
 		// the following assumes all configFields are mandatory
 		stepProperties(nullable: true)
+	}
+	
+	static mapping = {
+		stepProperties cascade: "all-delete-orphan"
 	}
 	
 	abstract def process(Fmessage message)
