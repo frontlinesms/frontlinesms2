@@ -28,7 +28,7 @@ class SmppTranslationService implements Processor {
 			message.src = messageSource
 			message.text = messageBody
 			//TODO pick the value from Exchange
-			message.date = Date.parse("YYMMDDhhmm",messageDate)
+			message.date = Date.parse("yyMMddHHmm",messageDate)
 			
 			log "message source is ${message.src}"
 			log "message body is ${message.text}"
