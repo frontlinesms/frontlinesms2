@@ -5,7 +5,7 @@ class Autoforward extends Activity {
 	static def shortName = 'autoforward'
 
 //> SERVICES
-	def messageSendService
+	def autoforwardService
 
 //> PROPERTIES
 	static hasMany = [contacts:Contact, groups:Group, smartGroups:SmartGroup]
@@ -30,11 +30,7 @@ class Autoforward extends Activity {
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		if(addressesAvailable()){
-			def m = messageSendService.createOutgoingMessage([contacts:contacts, groups:groups?:[] + smartGroups?:[], messageText:sentMessageText])
-			m.setMessageDetail(this, message.id)
-			this.addToMessages(m)
-			m.save(failOnError:true)
-			messageSendService.send(m)
+			autoforwardService.doForward(this, message)
 		}
 	}
 

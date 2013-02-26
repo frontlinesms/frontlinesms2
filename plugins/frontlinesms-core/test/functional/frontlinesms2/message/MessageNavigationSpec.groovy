@@ -9,15 +9,15 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.toggleSelected(0)
+			messageList.toggleSelect(0)
 		then:
-			messageList.messages[0].hasClass("selected")
+			messageList.hasClass(0, "selected")
 		when:
 			messageList << Keys.chord(Keys.ARROW_DOWN)
 		then:
-			waitFor { messageList.messages[1].hasClass("selected") }
+			waitFor { messageList.hasClass(1, "selected") }
 			waitFor { messageList.messages[1].text == singleMessageDetails.text }
-			!messageList.messages[0].hasClass("selected")
+			!messageList.hasClass(0, "selected")
 	}
 	
 	def "should move to the previous message when 'up' arrow is pressed and message should be loaded in the Single Message Details"() {
@@ -25,15 +25,15 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(1)
 		then:
-			messageList.messages[1].hasClass("selected")
+			messageList.hasClass(1, "selected")
 		when:
 			messageList << Keys.chord(Keys.ARROW_UP)
 		then:
-			waitFor { messageList.messages[0].hasClass("selected") }
+			waitFor { messageList.hasClass(0, "selected") }
 			waitFor { messageList.messages[0].text == singleMessageDetails.text }
-			!messageList.messages[1].hasClass("selected")
+			!messageList.hasClass(1, "selected")
 	}
 
 	def "first message row should be highlighted when up key is pressed"() {
@@ -43,7 +43,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			to PageMessageInbox
 			messageList << Keys.chord(Keys.ARROW_UP)
 		then:
-			messageList.messages[0].hasClass("selected")
+			messageList.hasClass(0, "selected")
 	}
 
 	def "first message row should be highlighted when down key is pressed"() {
@@ -53,7 +53,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			to PageMessageInbox
 			messageList << Keys.chord(Keys.ARROW_DOWN)
 		then:
-			messageList.messages[0].hasClass("selected")
+			messageList.hasClass(0, "selected")
 	}
 
 	def "first message row should be highlighted when up key is pressed in Trash Page"() {
@@ -67,7 +67,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			to PageMessageTrash
 			messageList << Keys.chord(Keys.ARROW_UP)
 		then:
-			messageList.messages[0].hasClass("selected")
+			messageList.hasClass(0, "selected")
 	}
 
 	def "single message shoould not be updated when navigating in the Trash Page"() {

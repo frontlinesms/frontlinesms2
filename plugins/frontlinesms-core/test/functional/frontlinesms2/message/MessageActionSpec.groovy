@@ -93,7 +93,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.toggleSelected(0)
+			messageList.toggleSelect(0)
 		then:
 			waitFor("veryslow") { singleMessageDetails.displayed }
 			!singleMessageDetails.archive.displayed

@@ -12,9 +12,9 @@ class SearchCheckSpec extends SearchBaseSpec {
 		when:
 			to PageSearchResult, "hi"
 			waitFor("veryslow") { messageList.displayed }
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
-			messageList.toggleSelected(2)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
+			messageList.toggleSelect(2)
 		then:
 			waitFor { messageList.selectAll.checked }
 	}
@@ -24,8 +24,8 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageSearchResult, "hi"
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { messageList.selectedMessages.size() == 2}
 	}
@@ -35,15 +35,15 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageSearchResult, "hi"
-			messageList.toggleSelected(2)
+			messageList.toggleSelect(2)
 		then:
 			waitFor { singleMessageDetails.text == 'hi Bob' }
 		when:
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			messageList.messages[1].hasClass("selected")
-			messageList.messages[2].hasClass("selected")
+			messageList.hasClass(1, "selected")
+			messageList.hasClass(2, "selected")
 	}
 
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -53,8 +53,8 @@ class SearchCheckSpec extends SearchBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageSearchResult, "hi"
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
@@ -69,13 +69,13 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageSearchResult, "hi"
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { messageList.selectedMessages.size() == 2 }
 		when:
-			messageList.toggleSelected(0)
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { singleMessageDetails.text == "hi Alice" }
 		when:
@@ -91,9 +91,9 @@ class SearchCheckSpec extends SearchBaseSpec {
 			def message = Fmessage.findBySrc('Bob')
 		when:
 			to PageSearchResult, "hi"
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.messages[1].hasClass("selected") }
+			waitFor { messageList.hasClass(1, "selected") }
 	}
 
 
@@ -107,11 +107,11 @@ class SearchCheckSpec extends SearchBaseSpec {
 		then:
 			waitFor { messageList.selectedMessages.size() == 3 }
 		when:
-			messageList.toggleSelected(1)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { messageList.selectedMessages.size() == 2 }
 		when:
-			messageList.toggleSelected(2)
+			messageList.toggleSelect(2)
 		then:
 			waitFor { messageList.selectedMessages.size() == 1 }
 	}

@@ -5,7 +5,7 @@ import spock.lang.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Autoforward)
-@Mock([Keyword, SmartGroup, Group, Contact, Fmessage, MessageSendService])
+@Mock([Keyword, SmartGroup, Group, Contact, Fmessage, MessageSendService, AutoforwardService, CustomActivity])
 @Build([Contact, Autoforward])
 class AutoforwardSpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
@@ -41,13 +41,15 @@ class AutoforwardSpec extends Specification {
 	def 'processKeyword should send a message if exact match is found and activity'() {
 		given:
 			def autoforward = Autoforward.build(contacts:[Contact.build(mobile:TEST_NUMBER)], sentMessageText:'some forward text')
-			def sendService = Mock(MessageSendService)
-			autoforward.messageSendService = sendService
-
 			def forwardMessage = mockFmessage("message text")
+			def sendService = Mock(MessageSendService)
 			sendService.createOutgoingMessage({ params ->
 				params.contacts*.mobile==[TEST_NUMBER] && params.messageText=='some forward text'
 			}) >> forwardMessage
+
+			def forwardService =  new AutoforwardService()
+			forwardService.messageSendService = sendService
+			autoforward.autoforwardService = forwardService
 
 			def inMessage = mockFmessage("message text", '+123457890')
 		when:
@@ -117,6 +119,9 @@ class AutoforwardSpec extends Specification {
 		m.text >> messageText
 		m.src >> src
 		m.setOwnerDetail >> ownerDetail
+		def owner = Mock(CustomActivity)
+		owner.addToMessages { ms -> return "added message to messageOwner" }
+		m.messageOwner >> owner
 		return m
 	}
 }

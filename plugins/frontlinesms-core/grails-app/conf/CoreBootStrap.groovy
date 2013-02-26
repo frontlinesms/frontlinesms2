@@ -216,8 +216,8 @@ class CoreBootStrap {
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
-		new IntelliSmsFconnection(name:"IntelliSms Mock connection", send:true, username:"johnmark", password:"pass_word").save(failOnError:true)
-		new SmppFconnection(name:'Vanuatu', send:true, receive:true, url:'127.0.0.1', port:'5775', fromNumber:'FrontlineSMS', username:'pavel', password:'wpsd').save(failOnError:true)
+		new IntelliSmsFconnection(name:"IntelliSms Mock connection", sendEnabled:true, username:"johnmark", password:"pass_word").save(failOnError:true)
+		new SmppFconnection(name:'Vanuatu', sendEnabled:true, receive:true, url:'127.0.0.1', port:'5775', fromNumber:'FrontlineSMS', username:'pavel', password:'wpsd').save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {
@@ -446,6 +446,11 @@ class CoreBootStrap {
 	private def dev_initCustomActivities() {
 		if(!bootstrapData) return
 
+		def uploadStep = new WebconnectionActionStep()
+			.setPropertyValue('url', 'http://frontlinesms.com')
+			.setPropertyValue('httpMethod', 'GET')
+			.setPropertyValue('myNumber', '23123123')
+			.setPropertyValue('myMessage', 'i will upload forever')
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
 		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
 		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"I will send you forever"))
@@ -454,6 +459,7 @@ class CoreBootStrap {
 				.addToSteps(joinStep)
 				.addToSteps(leaveStep)
 				.addToSteps(replyStep)
+				.addToSteps(uploadStep)
 				.addToKeywords(value:"CUSTOM")
 				.save(failOnError:true, flush:true)
 	}
@@ -461,7 +467,6 @@ class CoreBootStrap {
 	private def dev_initLogEntries() {
 		if(!bootstrapData) return
 
-		if(!bootstrapData) return
 		def now = new Date()
 		[new LogEntry(date:now, content: "entry1"),
 				new LogEntry(date:now-2, content: "entry2"),

@@ -209,7 +209,6 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webconnection.addToKeywords(keyword)
 			webconnection.save(failOnError:true, flush:true)
 
-			// adding 3 successful uploads, two failed ones, and one pending
 			def m
 			5.times { it ->
 				m = new Fmessage(text:"test", inbound:true, src:"+1234$it").save(failOnError:true)

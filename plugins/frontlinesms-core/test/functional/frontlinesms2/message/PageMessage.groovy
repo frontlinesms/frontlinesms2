@@ -74,24 +74,26 @@ class MessageList extends geb.Module {
 		selectAll { $("input#message-select-all") }
 		sources { $('td.message-sender-cell')*.text() }
 		messages { moduleList MessageListRow, $('tbody tr') }
-		toggleSelect { index -> ++index; $("tbody tr:nth-child($index) input[type=checkbox]").click(); true }
+		message { index -> ++index; $("tbody tr:nth-child($index)") }
+		toggleSelect { index -> message(index).find('input[type=checkbox]').click(); true }
+		hasClass { index, cssClass -> message(index).hasClass(cssClass) }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
 		noContent { $('tr.no-content') }
 		starFor { message ->
 			if (message instanceof Fmessage) {
-					return $("tr #star-${message.id} a")
+				return $("tr #star-${message.id} a")
 			} else if(message instanceof Number) {
 				return $("tr #star-${message} a")
 			}
 		}
-		displayedNameFor { message->
-			if (message instanceof Fmessage){
-					return $(".displayName-${message.id}").text()
-			}else if(message instanceof Number){
+		displayedNameFor { message ->
+			if(message instanceof Fmessage) {
+				return $(".displayName-${message.id}").text()
+			} else if(message instanceof Number) {
 				return $(".displayName-${message.id}").text()
 			}
 		}
-		newMessageNotification(required: false) { $("#new-message-notification") }
+		newMessageNotification(required:false) { $("#new-message-notification") }
 	}
 }
 

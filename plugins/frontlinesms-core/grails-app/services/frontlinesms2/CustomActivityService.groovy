@@ -16,7 +16,6 @@ class CustomActivityService {
 		customActivity.name = params.name
 		//TODO DRY the functionality of creating and editing keywords
 		customActivity.keywords?.clear()
-		println "# Removing existing steps if any"
 				
 		//Removing Steps
 		def storedSteps = customActivity.steps
@@ -36,6 +35,9 @@ class CustomActivityService {
 			def stepToEdit = customActivity.steps.find { "${it.id}" == step.stepId } ?: Step.implementations.find {it.shortName == step.stepType}.newInstance(step)
 			println "# StepToEdit_ID # ${stepToEdit.id}"
 			println "# Adding step of type # ${stepToEdit.shortName}"
+			println "# Clearing step properties before update #"
+			stepToEdit.stepProperties?.clear()
+			if(stepToEdit.id) stepToEdit.save(failOnError:true, flush:true)
 			step.each { k,v->
 				if(!(k in ["stepType", "stepId"])) {
 					stepToEdit.setPropertyValue(k,v)

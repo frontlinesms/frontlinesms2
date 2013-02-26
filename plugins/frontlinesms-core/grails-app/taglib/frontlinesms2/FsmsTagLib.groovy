@@ -9,6 +9,7 @@ class FsmsTagLib {
 	def appSettingsService
 	def expressionProcessorService
 	def grailsApplication
+	def i18nUtilService 
 
 	def info = { att ->
 		def cssClass = 'info'
@@ -343,6 +344,12 @@ class FsmsTagLib {
 		out << '</div>'
 	}
 
+	def recipientSelector = { att ->
+		out << '<select name="recipients" id="contactsearch" style="width:320px;" data-placeholder="' + i18nUtilService.getMessage([code:'contact.search.placeholder']) + '" multiple class="chzn-select">'
+		out << '<option></option>'
+		out << '</select>'
+	}
+
 	def unsubstitutedMessageText = { att ->
 		out << expressionProcessorService.getUnsubstitutedDisplayText(att.messageText)
 	}
@@ -572,3 +579,4 @@ class FsmsTagLib {
 		cssClasses
 	}
 }
+
