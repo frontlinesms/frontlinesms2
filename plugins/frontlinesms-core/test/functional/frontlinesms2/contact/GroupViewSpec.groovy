@@ -47,9 +47,7 @@ class GroupViewSpec extends GroupBaseSpec {
 			def links = contactList.contactsLink
 		then:
 			links.size() == 2
-			links.each() {
-				assert it ==~ '/group/show/\\d+/contact/show/\\d+\\?.+'
-			}
+			links.every() { it ==~ '/group/show/\\d+/contact/show/\\d+\\?.+' }
 	}
 	
 	def 'group members list is paginated'() {
@@ -61,7 +59,7 @@ class GroupViewSpec extends GroupBaseSpec {
 			to PageContactShow, friendsGroup 
 		then:
 			def contactNames = contactList.contacts - "Select All"
-			def expectedNames = (11..60).collect{"Contact${it}"}
+			def expectedNames = (11..60).collect{ "Contact${it}" }
 			contactNames == expectedNames
 	}
 	
@@ -82,5 +80,4 @@ class GroupViewSpec extends GroupBaseSpec {
 			waitFor { !footer.prevPage.disabled }
 	}	
 }
-
 
