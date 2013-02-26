@@ -26,10 +26,9 @@ class SmppTranslationServiceSpec extends Specification {
 		when:
 			service.process(testExchange)
 		then:
-			testExchange.out.body instanceof Fmessage
-			testExchange.out.body.src == "+254725672318"
-			testExchange.out.body.text == "Test message"
-			testExchange.out.body.date == testDate
+			1 * testExchange.in.setBody({ m ->
+					(m.src == source) && (m.text == messageText)
+				})
 	}
 	
 	private Exchange createTestExchange(params = []) {

@@ -21,15 +21,14 @@ class SmppTranslationService implements Processor {
 		if(true) {
 			Fmessage message = new Fmessage(inbound:true)
 			def messageBody = i.body
-			log "###### If the Source and Date are not available ## Fake ones will be set +999999999 and 1306142323 ######"
-			def messageSource = i.headers['CamelSmppSourceAddr']?:'+999999999'
+			def messageSource = i.headers['CamelSmppSourceAddr']
 			log "###### message-timestamp ${i.headers['CamelSmppDoneDate']}"
-			def messageDate = i.headers['CamelSmppDoneDate']?:'0000000000'
+			def messageDate = i.headers['CamelSmppDoneDate']
 			
 			message.src = messageSource
 			message.text = messageBody
 			//TODO pick the value from Exchange
-			message.date = new Date()//Date.parse("YYMMDDhhmm",messageDate)
+			message.date = Date.parse("YYMMDDhhmm",messageDate)
 			
 			log "message source is ${message.src}"
 			log "message body is ${message.text}"
