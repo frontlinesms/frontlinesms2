@@ -37,7 +37,7 @@ class ContactListSpec extends ContactBaseSpec {
 			to PageContactShow
 		then:
 			def contactNames = contactList.contacts - "Select All"
-			def expectedNames = (11..60).collect{"Contact${it}"}
+			def expectedNames = (11..60).collect { "Contact${it}" }
 			assert contactNames == expectedNames
 	}
 	
@@ -152,7 +152,7 @@ class ContactListSpec extends ContactBaseSpec {
 			singleContactDetails.searchForMessages.click()
 		then:
 			waitFor { at PageSearchResult }
-			messageList.messages.size() == 21
+			messageList.messageCount() == 21
 	}
 
 	def 'can search for all messages from an unnamed contact'() {
@@ -171,7 +171,7 @@ class ContactListSpec extends ContactBaseSpec {
 			singleContactDetails.searchForMessages.click()
 		then:
 			waitFor { at PageSearchResult }
-			messageList.messages.size() == 21
+			messageList.messageCount() == 21
 	}
 }
 

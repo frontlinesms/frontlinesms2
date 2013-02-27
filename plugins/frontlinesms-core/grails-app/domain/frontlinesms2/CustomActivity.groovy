@@ -27,5 +27,13 @@ class CustomActivity extends Activity {
 		this.save(flush:true)
 		customActivityService.triggerSteps(this, message)
 	}
+
+	def activate() {
+		steps.each { it.activate() }
+	}
+
+	def deactivate() {
+		steps.each { it.deactivate() }
+	}
 }
 

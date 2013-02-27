@@ -39,8 +39,11 @@
 	handlers: (function() {
 		var removeRule = function(_removeAnchor) {
 			var row = $(_removeAnchor).closest('.web-connection-parameter');
-			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
 			if($('.web-connection-parameter').length === 1) {
+				row.parent().parent().find("thead").hide();
+			}
+			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
+			if(row.parent().find('.web-connection-parameter').length === 1) {
 				row.addClass("disabled");
 				row.find("input").removeClass("error");
 				row.find("input").attr("disabled", "disabled");
@@ -56,8 +59,9 @@
 			$(list).trigger("keyup");
 		}
 
-		var addNewParam = function() {
+		var addNewParam = function(tableParent) {
 			if($('.web-connection-parameter:hidden').length === 1) {
+					tableParent.find("thead").show();
 					$('.web-connection-parameter').show();
 					$('.web-connection-parameter').removeClass("disabled");
 					$('.web-connection-parameter').find("input").attr("disabled", false);
@@ -74,7 +78,7 @@
 			newRow.find('input.param-name').val("");
 			newRow.find('input.param-value').val("");
 			newRow.find('.remove-command').show();
-			$('#web-connection-param-table tbody').append(newRow);
+			$(tableParent).find("tbody").append(newRow);
 			magicwand.init(newRow.find('select[id^="magicwand-select"]'));
 			magicwand.reset(template.find("select"));
 		}

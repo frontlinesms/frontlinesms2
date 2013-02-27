@@ -17,7 +17,9 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
 		then:
-			messageList.sources.containsAll(['Jane', 'Max'])
+			messageList.messageCount() == 2
+			messageList.messageSource(0) == 'Jane'
+			messageList.messageSource(1) == 'Max'
 	}
 
 	def 'no message is selected when a folder is first loaded'() {
@@ -38,9 +40,9 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, folder
 		then:
-			messageList.messages[1].source == 'Max'
-			messageList.messages[1].text == 'I will be late'
-			DATE_FORMAT.format(messageList.messages[1].date) ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messageSource(1) == 'Max'
+			messageList.messageText(1) == 'I will be late'
+			messageList.messageDate(1)
 	}
 
 	def 'selected folder is highlighted'() {
@@ -73,17 +75,18 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, Folder.findByName('Work'), Fmessage.findBySrc('Max')
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.jquery.trigger("click")
 		then:
-			waitFor { messageList.messages.size() == 2 }
-			messageList.messages[1].source == 'Max'
+			waitFor { messageList.messageCount() == 2 }
+			messageList.messageSource(1) == 'Max'
 		when:
 			footer.showAll.jquery.trigger("click")
 		then:
-			waitFor { messageList.messages.size() == 2 }
-			messageList.sources.containsAll(['Jane', 'Max'])
+			waitFor { messageList.messageCount() == 2 }
+			messageList.messageSource(0) == 'Jane'
+			messageList.messageSource(1) == 'Max'
 	}
 
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -105,9 +108,9 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor("slow") { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
@@ -121,8 +124,8 @@ class FolderListSpec extends FolderBaseSpec {
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 			multipleMessageDetails.replyAll.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
@@ -198,9 +201,9 @@ class FolderListSpec extends FolderBaseSpec {
 			at PageMessageFolder
 			to PageMessageTrash, Trash.findByObjectId(folderId).id
 		then:
-			messageList.messages[0].source == 'Work'
-			messageList.messages[0].text == '2 message(s)'
-			DATE_FORMAT.format(messageList.messages[0].date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
+			messageList.messageSource(0) == 'Work'
+			messageList.messageText(0) == '2 message(s)'
+			DATE_FORMAT.format(messageList.messageDate(0)) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			senderDetails == 'Work folder'
 			DATE_FORMAT.format(date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 	}
@@ -231,13 +234,11 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, Folder.findByName('Projects'), Fmessage.findBySrc('Patrick')
 		then:
-			messageList.messages.size() == 3
+			messageList.messageCount() == 3
 		when:
 			footer.showIncoming.click()
 		then:
-			waitFor { messageList.messages.size() == 2 }
-		when:
-			sleep 11000
+			waitFor { messageList.messageCount() == 2 }
 		then:
 			!messageList.newMessageNotification.displayed
 	}

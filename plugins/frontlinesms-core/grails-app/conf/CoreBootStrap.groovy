@@ -217,6 +217,7 @@ class CoreBootStrap {
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
 		new IntelliSmsFconnection(name:"IntelliSms Mock connection", sendEnabled:true, username:"johnmark", password:"pass_word").save(failOnError:true)
+		new SmppFconnection(name:'Vanuatu', sendEnabled:true, receive:true, url:'127.0.0.1', port:'5775', fromNumber:'FrontlineSMS', username:'pavel', password:'wpsd').save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {
@@ -445,11 +446,16 @@ class CoreBootStrap {
 	private def dev_initCustomActivities() {
 		if(!bootstrapData) return
 
+		def uploadStep = new WebconnectionActionStep()
+			.setPropertyValue('url', 'http://frontlinesms.com')
+			.setPropertyValue('httpMethod', 'GET')
+			.setPropertyValue('myNumber', '23123123')
+			.setPropertyValue('myMessage', 'i will upload forever')
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
 		def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
 		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:'autoreplyText', value:'reply to you all'))
 		def forwardStep = new ForwardActionStep()
-				.addToStepProperties(new StepProperty(key:'sentMessageText',value:"sending forward \${message_text}"))
+				.addToStepProperties(new StepProperty(key:'sentMessageText',value:'sending forward ${message_text}'))
 				.addToStepProperties(new StepProperty(key:'recipient',value:'Address-123123'))
 
 		new CustomActivity(name:'Do it all')
@@ -457,6 +463,7 @@ class CoreBootStrap {
 				.addToSteps(leaveStep)
 				.addToSteps(replyStep)
 				.addToSteps(forwardStep)
+				.addToSteps(uploadStep)
 				.addToKeywords(value:"CUSTOM")
 				.save(failOnError:true, flush:true)
 	}
@@ -464,8 +471,6 @@ class CoreBootStrap {
 	private def dev_initLogEntries() {
 		if(!bootstrapData) return
 
-		// FIXME uncomment this
-		if(!bootstrapData) return
 		def now = new Date()
 		[new LogEntry(date:now, content: "entry1"),
 				new LogEntry(date:now-2, content: "entry2"),

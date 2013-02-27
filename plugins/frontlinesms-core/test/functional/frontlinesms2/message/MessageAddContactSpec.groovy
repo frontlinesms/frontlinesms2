@@ -14,7 +14,7 @@ class MessageAddContactSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox, contactlessMessage.id
 		then:
-			waitFor { messageList.messages[0].source == '+254778899' }
+			waitFor { messageList.messageSource(0) == '+254778899' }
 	}
 	
 	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {

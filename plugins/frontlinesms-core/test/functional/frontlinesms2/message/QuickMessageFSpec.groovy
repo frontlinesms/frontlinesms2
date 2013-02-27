@@ -103,7 +103,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageMessagePending
 		then:
-			waitFor { messageList.messages.size() == 1 }
+			waitFor { messageList.messageCount() == 1 }
 	}
 
 	def "should select members belonging to the selected group"() {

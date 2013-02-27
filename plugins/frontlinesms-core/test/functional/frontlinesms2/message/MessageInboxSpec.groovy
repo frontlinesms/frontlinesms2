@@ -14,7 +14,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			messageList.sources.containsAll(['Alice', 'Bob'])
+			messageList.messageSource(0) == 'Alice'
+			messageList.messageSource(1) == 'Bob'
 	}
 
 	def 'message details are shown in row'() {
@@ -23,9 +24,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			messageList.messages[1].source == 'Bob'
-			messageList.messages[1].text == 'hi Bob'
-			messageList.messages[1].date != null // ie is a valid date object
+			messageList.messageSource(1) == 'Bob'
+			messageList.messageText(1) == 'hi Bob'
+			messageList.messageDate(1) // ie is a valid date object
 	}
 
 	def 'no message is selected when inbox is first loaded'() {
@@ -60,11 +61,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox, aliceMessage.id
 		then:
-			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${aliceMessage.id}"
+			messageList.selectedMessageLinkUrl == "/message/inbox/show/${aliceMessage.id}"
 		when:
 			to PageMessageInbox, bobMessage.id
 		then:
-			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${bobMessage.id}"
+			messageList.selectedMessageLinkUrl == "/message/inbox/show/${bobMessage.id}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
@@ -76,8 +77,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox, m2.id
 		then:
-			messageList.messages[0].isRead
-			!messageList.messages[1].isRead
+			messageList.isRead(0)
+			!messageList.isRead(1)
 	}
 
 	def 'contact name is displayed if message src is an existing contact'() {
@@ -87,7 +88,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			messageList.sources.contains('June')
+			messageList.messageSource(0) == 'June'
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
@@ -110,17 +111,18 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox, Fmessage.list()[0].id
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.click()
-			waitFor { messageList.messages.size() == 1 }
+			waitFor { messageList.messageCount() == 1 }
 		then:
-			messageList.messages[0].source == 'Alice'
+			messageList.messageSource(0) == 'Alice'
 		when:
 			footer.showAll.click()
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 		then:
-			messageList.sources.containsAll(['Alice', 'Bob'])
+			messageList.messageSource(0) == 'Alice'
+			messageList.messageSource(1) == 'Bob'
 	}
 
 	def "should autopopulate the message body  when 'forward' is clicked"() {
@@ -163,13 +165,13 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor('very slow') { multipleMessageDetails.displayed }
 			waitFor('very slow') { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { !multipleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "hi Alice" }

@@ -95,6 +95,57 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			conn.password == "test"
 	}
 
+	def "can save a new SmppFconnection"() {
+		given:
+			controller.params.name = "Test SmppFconnection"
+			controller.params.connectionType = 'smpp'
+			controller.params.username = "test"
+			controller.params.password = "test"
+			controller.params.port = '5775'
+			controller.params.url = 'http://12.23.34.45'
+			controller.params.fromNumber = '+1223234'
+			controller.params.send = 'true'
+			controller.params.receive = 'true'
+		when:
+			controller.save()
+		then:
+			def conn = SmppFconnection.findByName("Test SmppFconnection")
+			conn.name == "Test SmppFconnection"
+			conn.username == "test"
+			conn.password == "test"
+			conn.port == '5775'
+			conn.url == 'http://12.23.34.45'
+			conn.fromNumber == '+1223234'
+			conn.send == true
+			conn.receive == true
+	}
+
+	def "can edit an existingSmppFconnection"() {
+		given:
+			new SmppFconnection(name : "Test SmppFconnection", connectionType : 'smpp', username : "test", password : "test", port : '5775', url : 'http://12.23.34.45', fromNumber : '+1223234', send : 'true', receive : 'true').save(failOnError:true)
+			controller.params.name = "Testing SmppFconnection"
+			controller.params.connectionType = 'smpp'
+			controller.params.username = "testing"
+			controller.params.password = "testing"
+			controller.params.port = '5770'
+			controller.params.url = 'http://12.23.34.45'
+			controller.params.fromNumber = '+1223223'
+			controller.params.send = 'false'
+			controller.params.receive = 'false'
+		when:
+			controller.save()
+		then:
+			def conn = SmppFconnection.findByName("Testing SmppFconnection")
+			conn.name == "Testing SmppFconnection"
+			conn.username == "testing"
+			conn.password == "testing"
+			conn.port == '5770'
+			conn.url == 'http://12.23.34.45'
+			conn.fromNumber == '+1223223'
+			conn.send == false
+			conn.receive == false
+	}
+
 	def "sendTest redirects to the show LIST action"() {
 		given:
 			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.IMAP, name:"test connection", serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)

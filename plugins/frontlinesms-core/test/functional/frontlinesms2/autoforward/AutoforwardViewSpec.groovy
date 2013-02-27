@@ -93,7 +93,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == 'Sudden shock 0' }
@@ -105,9 +105,9 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
@@ -119,10 +119,10 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].checkbox.click()
+			messageList.toggleSelect(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[3].hasClass("selected")
+			messageList.hasClass(3, "selected")
 			singleMessageDetails.text == "Sudden shock 3"
 	}
 
@@ -132,7 +132,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -148,9 +148,9 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
@@ -166,7 +166,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Sudden shock 0" }
@@ -189,9 +189,9 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
@@ -227,11 +227,11 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		when:
 			to PageMessageAutoforward, a
 		then:
-			messageList.messages.size() == 5
+			messageList.messageCount() == 5
 		when:
 			footer.showOutgoing.click()
 		then:
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 	}
 
 	def "clicking on the received message filter should display incoming messages only"() {
@@ -240,11 +240,11 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		when:
 			to PageMessageAutoforward, a
 		then:
-			messageList.messages.size() == 5
+			messageList.messageCount() == 5
 		when:
 			footer.showIncoming.click()
 		then:
-			waitFor { messageList.messages.size() == 3 }
+			waitFor { messageList.messageCount() == 3 }
 	}
 
 	private Autoforward createInAndOutTestMessages() {

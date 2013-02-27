@@ -28,7 +28,7 @@ function changeRowSelection(oldSelected, newSelected) {
 		if(newSelectedId.indexOf("activity") === -1) {
 			if($("input:hidden[name=messageSection]").val() !== "trash") {
 				updateSingleCheckedDetails("message", newSelectedId.substring("message-".length), newSelected);
-				oldSelectedRow.find(".message-select-checkbox").prop("checked", false);
+				oldSelected.find(".message-select-checkbox").prop("checked", false);
 				newSelected.find(".message-select-checkbox").prop("checked", true);
 			}
 		}

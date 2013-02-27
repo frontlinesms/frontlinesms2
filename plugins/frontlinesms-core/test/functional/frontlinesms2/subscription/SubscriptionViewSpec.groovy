@@ -157,12 +157,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
 		then:
 			waitFor { at PageMessageSubscription }
-			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
-			messageList.messages.each { messageRow ->
-				if (messageRow.source == "prudence") {
-					assert messageRow.text()?.contains("join")
-				}
-			}
+			messageList.messageSource(0) == 'wilburforce'
+			messageList.messageSource(1) == 'prudence'
+			messageList.messageText(1).startsWith('join ')
 		when:
 			header.groupLink.click()
 		then:
@@ -204,12 +201,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
 		then:
 			waitFor { at PageMessageSubscription }
-			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
-			messageList.messages.each { messageRow ->
-				if (messageRow.source == "prudence") {
-					assert messageRow.text()?.contains("leave")
-				}
-			}
+			messageList.messageSource(0) == 'wilburforce'
+			messageList.messageSource(1) == 'prudence'
+			messageList.messageText(1).startsWith('leave ')
 		when:
 			header.groupLink.click()
 		then:
@@ -252,12 +246,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
 		then:
 			waitFor { at PageMessageSubscription }
-			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
-			messageList.messages.each { messageRow ->
-				if (messageRow.source == "prudence") {
-					assert messageRow.text()?.contains("toggle")
-				}
-			}
+			messageList.messageSource(0) == 'wilburforce'
+			messageList.messageSource(1) == 'prudence'
+			messageList.messageText(1).startsWith('toggle ') // TODO should these really say TOGGLE?  or rather 'join' or 'leave' depending on what the toggle caused?
 		when:
 			header.groupLink.click()
 		then:
@@ -292,7 +283,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { at PageMessageSubscription }
 			["join", "prudence", "wilburforce"].each {
-				messageList.messages[0].text()?.contains(it)
+				messageList.messageText(0)?.contains(it)
 			}
 		when:
 			header.groupLink.click()
@@ -342,7 +333,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -354,9 +345,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()		
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
@@ -368,45 +359,45 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].checkbox.click()
+			messageList.toggleSelect(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[3].hasClass("selected")
+			messageList.hasClass(3, "selected")
 			singleMessageDetails.text == "Test message 3"
 	}
 
-	def "delete single message action works "() {
+	def "delete single message action works"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
 			singleMessageDetails.delete.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) != 'Test message 0'
 	}
 
-	def "delete multiple message action works for multiple select"(){
+	def "delete multiple message action works for multiple select"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
 			multipleMessageDetails.deleteAll.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
 	}
 
 	def "move single message action works"() {
@@ -415,7 +406,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -424,12 +415,12 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageSubscription }
 			waitFor { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) != 'Test message 0'
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) == 'Test message 0'
 	}
 
 	def "move multiple message action works"() {
@@ -438,21 +429,23 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
+			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			messageList.messageText(0) == 'Test message 0'
+			messageList.messageText(1) == 'Test message 1'
 	}
 
 	def "moving a message from another activity to a subscription opens the categorise popup for the chosen subscription"() {

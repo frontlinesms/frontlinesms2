@@ -315,7 +315,7 @@ class WebconnectionRequestFormatTab extends geb.Module {
 		get { $("input[value='GET']") }
 		url { $("input#url") }
 		addParam { $('a.btn.addNew') }
-		parameters { moduleList WebconnectionParam, $('#web-connection-param-table tbody tr') }
+		parameters { moduleList WebconnectionParam, $('.web-connection-param-table tbody tr') }
 	}
 }
 
@@ -614,7 +614,8 @@ class ConfigureCustomActivityTab extends geb.Module {
 		replyButton { $("a", text:"Autoreply") }
 		forwardButton { $("a", text:"Autoforward") }
 		stepsContainer { $("#custom-activity-actions-container") }
-		steps { $(".step") }
+		steps(required:false) { $("li.step") }
+		stepActions { $("#custom_activity_select") }
 	}
 }
 

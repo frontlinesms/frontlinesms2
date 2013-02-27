@@ -6,44 +6,43 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class MessageCheckSpec extends MessageBaseSpec {
-	
 	def "header checkbox is checked when all the messages are checked"() {
 		given:
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { messageList.selectAll.checked }
 	}
-	
+
 	def "message count displayed when multiple messages are selected"() {
 		given:
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor('veryslow') { multipleMessageDetails.checkedMessageCount == "2 messages selected"}
 	}
-	
+
 	def "checked message details are displayed when message is checked"() {
 		given:
 			createInboxTestMessages()
 			def m = Fmessage.findBySrc('Bob')
 		when:
 			to PageMessageInbox, m.id
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor('veryslow') { singleMessageDetails.sender == messageList.displayedNameFor(m) }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
-			waitFor('veryslow') { messageList.messages[1].hasClass("selected") }
+			waitFor('veryslow') { messageList.hasClass(1, "selected") }
 	}
-	
+
 	def "'Reply All' button appears for multiple selected messages and works"() {
 		given:
 			createInboxTestMessages()
@@ -51,8 +50,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
@@ -69,8 +68,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
@@ -91,8 +90,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Contact.build(name:'Alice', mobile:'Alice')
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
@@ -110,14 +109,14 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "'Forward' button works even when all messages are unchecked"() {
 		given:
 			createInboxTestMessages()
-		when: 
+		when:
 			to PageMessageInbox, Fmessage.findBySrc('Alice').id
 			messageList.selectAll.click()
 		then:
-			waitFor { messageList.selectedMessages.size() == 2 }
+			waitFor { messageList.selectedMessageCount() == 2 }
 		when:
 			messageList.selectAll.click()
-		then: 
+		then:
 			waitFor { singleMessageDetails.sender == "Alice" }
 		when:
 			singleMessageDetails.forward.click()
@@ -131,17 +130,17 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "should uncheck message when a different message is clicked"() {
 		given:
 			createInboxTestMessages()
-		when: 
-			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-		then:
-			messageList.messages[0].checkbox.checked
 		when:
-			messageList.messages[1].textLink.click()
+			to PageMessageInbox
+			messageList.toggleSelect(0)
+		then:
+			messageList.isChecked(0)
+		when:
+			messageList.clickLink(1)
 		then:
 			waitFor('veryslow') { at PageMessageInbox }
 			waitFor('verslow') { messageList.displayed }
- 			!messageList.messages[0].checkbox.checked
+			!messageList.isChecked(0)
 	}
 
 	def "select all should update the total message count when messages are checked"() {
@@ -150,17 +149,17 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Fmessage.build()
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor('veryslow') { multipleMessageDetails.displayed }
 			multipleMessageDetails.checkedMessageCount == '2 messages selected'
 		when:
-			messageList.messages[2].checkbox.click()
+			messageList.toggleSelect(2)
 		then:
 			waitFor { multipleMessageDetails.checkedMessageCount == '3 messages selected' }
 		when:
-			messageList.messages[2].checkbox.click()
+			messageList.toggleSelect(2)
 		then:
 			waitFor { multipleMessageDetails.checkedMessageCount == '2 messages selected' }
 	}

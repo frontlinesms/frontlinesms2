@@ -16,21 +16,21 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 	}
 
 	@Unroll
-	def "autoreply page should show the details of the autoreply in the header"() {		
+	def "autoreply page should show the details of the autoreply in the header"() {
 		setup:
 			def autoreply  = Autoreply.findByName("Fruits")
-		when:						
+		when:
 			to PageMessageAutoreply, autoreply
 		then:
 			waitFor { header.title?.toLowerCase().contains("autoreply") }
-			
+
 			header[item] == value
 		where:
 			item				| value
-			'title'				| "fruits autoreply"			
-			'autoreplyMessage'  | 'Hello, this is an autoreply message'			
+			'title'				| "fruits autoreply"
+			'autoreplyMessage'  | 'Hello, this is an autoreply message'
 	}
-	
+
 	def "clicking the edit option opens the Autoreply Dialog for editing"() {
 		when:
 			to PageMessageAutoreply, Autoreply.findByName("Fruits")
@@ -92,7 +92,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -104,9 +104,9 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()		
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
@@ -118,10 +118,10 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].checkbox.click()
+			messageList.toggleSelect(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[3].hasClass("selected")
+			messageList.hasClass(3, "selected")
 			singleMessageDetails.text == "Test message 3"
 	}
 
@@ -131,7 +131,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -147,9 +147,9 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
@@ -165,7 +165,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -188,9 +188,9 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
@@ -216,7 +216,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			waitFor { singleMessageDetails.displayed }
 		when:
 			singleMessageDetails.moveTo(autoreply.id)
-		then:		
+		then:
 			waitFor { flashMessage.displayed }
 	}
 
@@ -226,24 +226,24 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		when:
 			to PageMessageAutoreply, a
 		then:
-			messageList.messages.size() == 5
+			messageList.messageCount() == 5
 		when:
 			footer.showOutgoing.click()
 		then:
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 	}
-	
+
 	def "clicking on the received message filter should display incoming messages only"() {
 		given:
 			def a = createInAndOutTestMessages()
 		when:
 			to PageMessageAutoreply, a
 		then:
-			messageList.messages.size() == 5
+			messageList.messageCount() == 5
 		when:
 			footer.showIncoming.click()
 		then:
-			waitFor { messageList.messages.size() == 3 }
+			waitFor { messageList.messageCount() == 3 }
 	}
 
 	private Autoreply createInAndOutTestMessages() {

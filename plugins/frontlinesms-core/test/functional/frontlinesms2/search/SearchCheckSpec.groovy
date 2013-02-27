@@ -12,9 +12,9 @@ class SearchCheckSpec extends SearchBaseSpec {
 		when:
 			to PageSearchResult, "hi"
 			waitFor("veryslow") { messageList.displayed }
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
-			messageList.messages[2].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
+			messageList.toggleSelect(2)
 		then:
 			waitFor { messageList.selectAll.checked }
 	}
@@ -24,10 +24,10 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageSearchResult, "hi"
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.selectedMessages.size() == 2}
+			waitFor { messageList.selectedMessageCount() == 2}
 	}
 	
 	def "checked message details are displayed when message is checked"() {
@@ -35,15 +35,15 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageSearchResult, "hi"
-			messageList.messages[2].checkbox.click()
+			messageList.toggleSelect(2)
 		then:
 			waitFor { singleMessageDetails.text == 'hi Bob' }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			messageList.messages[1].hasClass("selected")
-			messageList.messages[2].hasClass("selected")
+			messageList.hasClass(1, "selected")
+			messageList.hasClass(2, "selected")
 	}
 
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -53,8 +53,8 @@ class SearchCheckSpec extends SearchBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageSearchResult, "hi"
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
@@ -69,13 +69,13 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageSearchResult, "hi"
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.selectedMessages.size() == 2 }
+			waitFor { messageList.selectedMessageCount() == 2 }
 		when:
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { singleMessageDetails.text == "hi Alice" }
 		when:
@@ -91,9 +91,9 @@ class SearchCheckSpec extends SearchBaseSpec {
 			def message = Fmessage.findBySrc('Bob')
 		when:
 			to PageSearchResult, "hi"
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.messages[1].hasClass("selected") }
+			waitFor { messageList.hasClass(1, "selected") }
 	}
 
 
@@ -105,14 +105,14 @@ class SearchCheckSpec extends SearchBaseSpec {
 			to PageSearchResult, "hi"
 			messageList.selectAll.click()
 		then:
-			waitFor { messageList.selectedMessages.size() == 3 }
+			waitFor { messageList.selectedMessageCount() == 3 }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.selectedMessages.size() == 2 }
+			waitFor { messageList.selectedMessageCount() == 2 }
 		when:
-			messageList.messages[2].checkbox.click()
+			messageList.toggleSelect(2)
 		then:
-			waitFor { messageList.selectedMessages.size() == 1 }
+			waitFor { messageList.selectedMessageCount() == 1 }
 	}
 }

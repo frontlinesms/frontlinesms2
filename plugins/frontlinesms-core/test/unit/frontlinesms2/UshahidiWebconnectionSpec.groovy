@@ -38,6 +38,10 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 			def connection = new UshahidiWebconnection(name:'name',
 					url:"www.ushahidi.com/frontlinesms2",
 					httpMethod:Webconnection.HttpMethod.GET)
+
+			def mockService = Mock(WebconnectionService)
+			mockService.getProcessedValue(_,_) >> { a -> "test" }
+			connection.webconnectionService = mockService
 			mockRequestParams(connection, [s:'${message_src_name}', m:'${message_body}', key:'1234567'])
 
 			def headers = ['fmessage-id':message.id,'webconnection-id':connection.id]
@@ -55,7 +59,6 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 			def rp = Mock(RequestParameter)
 			rp.name >> key
 			rp.value >> value
-			rp.getProcessedValue(_) >> { a -> "test" }
 			connection.addToRequestParameters(rp)
 		}
 	}

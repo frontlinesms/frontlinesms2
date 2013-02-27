@@ -38,7 +38,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			messageList.messages.size() == 1
+			messageList.messageCount() == 1
 	}
 	
 	def "can categorize poll messages using dropdown"() {
@@ -93,7 +93,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor("veryslow") { singleMessageDetails.displayed }
 			!singleMessageDetails.archive.displayed
@@ -108,7 +108,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages.checkbox[0].click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -119,8 +119,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			bodyMenu.messageSection("Inbox").click()
 		then:
 			waitFor { title == "Inbox" }
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 	}
 }
-
 

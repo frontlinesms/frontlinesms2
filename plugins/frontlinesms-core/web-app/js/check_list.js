@@ -1,5 +1,6 @@
 check_list = (function() {
-	var checkAll, itemCheckChanged, showMultipleDetailsPanel, updateCheckAllBox;
+	var checkAll, itemCheckChanged, showMultipleDetailsPanel, updateCheckAllBox,
+			tick = 0;
 
 	showMultipleDetailsPanel = function(itemTypeString) {
 		// hide single message view
@@ -60,7 +61,7 @@ check_list = (function() {
 	};
 
 	updateSingleCheckedDetails = function(itemTypeString, itemId, row) {
-		var params, action;
+		var params, action, singleDetails, callerTick;
 		if (itemTypeString === 'message') {
 			row.removeClass("unread");
 			row.addClass("read");
@@ -70,11 +71,20 @@ check_list = (function() {
 			params = { contactsSection:$('input:hidden[name=contactsSection]').val() };
 			action = '/updateContactPane/';
 		}
+		$("#multiple-"+itemTypeString+"s").hide();
+
+		singleDetails = $("#single-" + itemTypeString);
+		singleDetails.html("<p class='loading'>" + i18n("content.loading") + "</p>");
+		singleDetails.show();
+
+		callerTick = ++tick;
 		$.get(url_root + itemTypeString + action + itemId, params, function(data) {
-			$('#multiple-'+itemTypeString+'s').hide();
 			var newPane = $(data);
+			if(callerTick !== tick) {
+				return;
+			}
 			fsmsButton.findAndApply("input[type='submit']", newPane);
-			$('#single-'+itemTypeString).replaceWith(newPane);
+			singleDetails.replaceWith(newPane);
 			newPane.find('.dropdown').selectmenu();
 			if (itemTypeString === 'contact') {
 				applyContactPaneJavascriptEnhancements(newPane);

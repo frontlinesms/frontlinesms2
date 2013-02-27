@@ -132,7 +132,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			requestTab.post.click()
 			next.click()
 		then:
-			waitFor { error.contains('Url is required') }
+			waitFor { error.contains('URL is required') }
 	}
 
 	def "If parameter added a name must be given"() {

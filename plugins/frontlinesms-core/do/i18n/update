@@ -39,10 +39,14 @@ master.eachLine("utf8") { masterLine ->
 		def lineParts = masterLine.split('=', 2)
 		def key = lineParts[0].trim()
 		def masterValue = lineParts[1]
-		if(!(masterValue ==~ /\s*\{[0-9]\}\s*$/ ))
-			newSlaveLines << (existingSlaveLines.find {
-						it ==~ "^${key.replace('.', '\\.')}\\s*=.*" && it.split("=").size() > 1
-					} ?: "$key=TODO:$masterValue")
+		if(!(masterValue ==~ /\s*\{[0-9]\}\s*$/ )) {
+			def matchingSlaveLines = existingSlaveLines.findAll { it ==~ "^${key.replace('.', '\\.')}\\s*=.*" && it.split("=").size() > 1 } 
+			if (matchingSlaveLines.size() == 1)
+				newSlaveLines << matchingSlaveLines[0]
+			else if (matchingSlaveLines.size() == 0)
+				newSlaveLines << "$key=TODO:$masterValue"
+			else throw new RuntimeException("There are duplicate entries in the target file for key ${key}")
+		}
 	} else throw new RuntimeException('Something strange is going on, we should only have props, comments or whitespace!')
 }
 

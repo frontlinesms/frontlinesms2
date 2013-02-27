@@ -16,16 +16,16 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			waitFor { singleMessageDetails.text == "test2" }
+			messageList.toggleSelect(0)
+			waitFor { singleMessageDetails.text == 'test2' }
 			singleMessageDetails.archive.click()
 			to PageArchiveInbox
 		then:
-			messageList.messages[0].text == "test2"
+			messageList.messageText(0) == 'test2'
 		when:
 			to PageMessageInbox
 		then:
-			!messageList.messages.text.contains("test2")
+			messageList.messageText(0) != 'test2'
 	}
 
 	def 'archived messages do not show up in sent view'() {
@@ -38,12 +38,12 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
 			to PageMessageSent
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.text == "hi Mary" }
 			singleMessageDetails.archive.click()
 			to PageArchiveSent
 		then:
-	        waitFor { messageList.messages[0].text == "hi Mary" }
+	        waitFor { messageList.messageText(0) == "hi Mary" }
 		when:
 			to PageMessageSent
 		then:
@@ -55,8 +55,8 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			to PageMessagePoll, Poll.findByName('Miauow Mix').id, Fmessage.findBySrc('Barnabus')
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		 then:
 			waitFor { !multipleMessageDetails.archiveAll.displayed }
 	 }
