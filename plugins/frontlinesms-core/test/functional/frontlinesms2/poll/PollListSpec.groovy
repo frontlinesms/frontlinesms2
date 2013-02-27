@@ -6,7 +6,6 @@ import frontlinesms2.message.PageMessage
 import frontlinesms2.page.PageMessageActivity
 
 class PollListSpec extends PollBaseSpec {
-
 	def "poll message list is displayed"() {
 		given:
 			createTestPolls()
@@ -63,15 +62,15 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.click()
-			waitFor { messageList.messages.size() == 1 }
+			waitFor { messageList.messageCount() == 1 }
 		then:
 			messageList.sources == ['Bob']
 		when:
 			footer.showAll.click()
-			waitFor {messageList.messages.size() == 2}
+			waitFor {messageList.messageCount() == 2}
 		then:
 			messageList.sources == ['Alice', 'Bob']
 	}
@@ -132,12 +131,12 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 			to PageMessagePoll, 'Football Teams'
 		then:
-			messageList.messages.size == 2
+			messageList.messageCount() == 2
 			!messageList.newMessageNotification.displayed
 		when:
 			createMoreTestMessages()
 		then:
-			waitFor { messageList.messages.size == 2 }
+			waitFor { messageList.messageCount() == 2 }
 			!messageList.newMessageNotification.displayed
 			waitFor { messageList.newMessageNotification.displayed }
 	}

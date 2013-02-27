@@ -152,7 +152,7 @@ class ContactListSpec extends ContactBaseSpec {
 			singleContactDetails.searchForMessages.click()
 		then:
 			waitFor { at PageSearchResult }
-			messageList.messages.size() == 21
+			messageList.messageCount() == 21
 	}
 
 	def 'can search for all messages from an unnamed contact'() {
@@ -171,7 +171,7 @@ class ContactListSpec extends ContactBaseSpec {
 			singleContactDetails.searchForMessages.click()
 		then:
 			waitFor { at PageSearchResult }
-			messageList.messages.size() == 21
+			messageList.messageCount() == 21
 	}
 }
 

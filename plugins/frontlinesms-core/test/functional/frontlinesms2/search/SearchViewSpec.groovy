@@ -16,7 +16,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			waitFor("veryslow") { searchsidebar.searchBtn.displayed }
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 3 }
+			waitFor("veryslow") { messageList.messageCount() == 3 }
 	}
 	
 	def "can toggle between viewing all results and viewing only starred"() {
@@ -25,15 +25,15 @@ class SearchViewSpec extends SearchBaseSpec {
 			waitFor("veryslow") { searchsidebar.searchBtn.displayed }
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 3 }
+			waitFor("veryslow") { messageList.messageCount() == 3 }
 		when:
 			footer.showStarred.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 1 }
+			waitFor("veryslow") { messageList.messageCount() == 1 }
 		when:
 			footer.showAll.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 3 }
+			waitFor("veryslow") { messageList.messageCount() == 3 }
 	}
 
 	def "group list and activity lists are displayed when they exist"() {
@@ -129,7 +129,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor{ searchsidebar.searchBtn.displayed }
 			searchsidebar.messageStatus == 'outbound'
-			messageList.messages.size() == 3
+			messageList.messageCount() == 3
 	}
 
 	def "should clear search results" () {
@@ -155,12 +155,12 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.searchBtn.displayed
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor { messageList.messages.size() == 6 }
+			waitFor { messageList.messageCount() == 6 }
 			messageList.toggleSelect(0)
 			waitFor("veryslow") { singleMessageDetails.text == "received1" }
 			singleMessageDetails.delete.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 5 }
+			waitFor("veryslow") { messageList.messageCount() == 5 }
 			notifications.flashMessage.text()?.contains("Message moved to trash")
 	}
 
@@ -325,7 +325,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.searchBtn.click()
 		then:
 			waitFor{ searchsidebar.searchBtn.displayed }
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 			messageList.messages[0].text == 'experiment'
 			messageList.messages[0].source == 'To: 3 recipients'
 	}

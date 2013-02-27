@@ -15,15 +15,15 @@ class MessageTrashSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageMessageTrash
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.click()
-			waitFor { messageList.messages.size() == 1 }
+			waitFor { messageList.messageCount() == 1 }
 		then:
 			messageList.messages[0].source == "src1"
 		when:
 			footer.showAll.click()
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 		then:
 			messageList.messages[0].source == "src1"
 			messageList.messages[1].source == "src2"
