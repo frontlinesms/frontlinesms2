@@ -73,16 +73,16 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, Folder.findByName('Work'), Fmessage.findBySrc('Max')
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.jquery.trigger("click")
 		then:
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 			messageList.messages[1].source == 'Max'
 		when:
 			footer.showAll.jquery.trigger("click")
 		then:
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 			messageList.sources.containsAll(['Jane', 'Max'])
 	}
 
@@ -231,11 +231,11 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, Folder.findByName('Projects'), Fmessage.findBySrc('Patrick')
 		then:
-			messageList.messages.size() == 3
+			messageList.messageCount() == 3
 		when:
 			footer.showIncoming.click()
 		then:
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 		when:
 			sleep 11000
 		then:

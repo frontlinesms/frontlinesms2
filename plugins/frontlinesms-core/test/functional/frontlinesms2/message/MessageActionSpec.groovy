@@ -38,7 +38,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			messageList.messages.size() == 1
+			messageList.messageCount() == 1
 	}
 	
 	def "can categorize poll messages using dropdown"() {
@@ -119,7 +119,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			bodyMenu.messageSection("Inbox").click()
 		then:
 			waitFor { title == "Inbox" }
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 	}
 }
 

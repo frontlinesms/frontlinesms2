@@ -10,17 +10,17 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 			to PageMessageInbox
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			sleep 11000
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 			!messageList.newMessageNotification.displayed
 		when:
 			createTestMessages()
 			sleep 5000
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 			!messageList.newMessageNotification.displayed
 		when:
 			sleep 5000
@@ -33,17 +33,17 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 			to PageMessageInbox
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			createTestMessages()
 			sleep 11000
 		then:
 			waitFor { messageList.newMessageNotification.displayed }
-			messageList.messages.size() == 3
+			messageList.messageCount() == 3
 		when:
 			messageList.newMessageNotification.find("a").click()
 		then:
-			waitFor { messageList.messages.size() == 5 }
+			waitFor { messageList.messageCount() == 5 }
 			!messageList.newMessageNotification.displayed
 	}
 
@@ -52,7 +52,7 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 			to PageMessageInbox, Fmessage.findBySrc('Bob').id
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			createTestMessages()
 			sleep 11000

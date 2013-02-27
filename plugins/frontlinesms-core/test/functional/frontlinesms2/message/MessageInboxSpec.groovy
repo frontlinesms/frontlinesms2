@@ -110,15 +110,15 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox, Fmessage.list()[0].id
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.click()
-			waitFor { messageList.messages.size() == 1 }
+			waitFor { messageList.messageCount() == 1 }
 		then:
 			messageList.messages[0].source == 'Alice'
 		when:
 			footer.showAll.click()
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 		then:
 			messageList.sources.containsAll(['Alice', 'Bob'])
 	}

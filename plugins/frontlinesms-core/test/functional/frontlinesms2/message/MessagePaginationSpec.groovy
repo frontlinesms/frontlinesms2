@@ -7,20 +7,18 @@ import frontlinesms2.poll.*
 import frontlinesms2.folder.*
 
 class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
-
 	def "should paginate inbox messages"() {
 		setup:
 			setupInboxMessages()
 		when:
 			to PageMessageInbox
 		then:
-			messageList.messages.size() == 50
+			messageList.messageCount() == 50
 		when:
 			footer.nextPage.click()
 			waitFor {footer.nextPage.hasClass("disabled")}
 		then:
-			messageList.messages.size() == 1
-
+			messageList.messageCount() == 1
 	}
 
 	def "should paginate pending messages"() {
@@ -29,15 +27,14 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessagePending
 		then:
-			messageList.messages.size() == 50
+			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
 			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			messageList.messages.size() == 1
+			messageList.messageCount() == 1
 			footer.nextPage.hasClass("disabled")
-
 	}
 
 	def "should paginate deleted messages"() {
@@ -46,13 +43,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessageTrash
 		then:
-			messageList.messages.size() == 50
+			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
 			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			messageList.messages.size() == 1
+			messageList.messageCount() == 1
 			footer.nextPage.hasClass("disabled")
 	}
 
@@ -62,13 +59,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessageSent
 		then:
-			messageList.messages.size() == 50
+			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
 			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			messageList.messages.size() == 1
+			messageList.messageCount() == 1
 			footer.nextPage.hasClass("disabled")
 	}
 
@@ -79,13 +76,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessageFolder, folderId
 		then:
-			messageList.messages.size() == 50
+			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
 			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			messageList.messages.size() == 1
+			messageList.messageCount() == 1
 			footer.nextPage.hasClass("disabled")
 	}
 
@@ -96,13 +93,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessagePoll, pollId
 		then:
-			messageList.messages.size() == 50
+			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
 			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			messageList.messages.size() == 1
+			messageList.messageCount() == 1
 			footer.nextPage.hasClass("disabled")
 	}
 

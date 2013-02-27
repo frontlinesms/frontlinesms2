@@ -227,11 +227,11 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		when:
 			to PageMessageAutoforward, a
 		then:
-			messageList.messages.size() == 5
+			messageList.messageCount() == 5
 		when:
 			footer.showOutgoing.click()
 		then:
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 	}
 
 	def "clicking on the received message filter should display incoming messages only"() {
@@ -240,11 +240,11 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		when:
 			to PageMessageAutoforward, a
 		then:
-			messageList.messages.size() == 5
+			messageList.messageCount() == 5
 		when:
 			footer.showIncoming.click()
 		then:
-			waitFor { messageList.messages.size() == 3 }
+			waitFor { messageList.messageCount() == 3 }
 	}
 
 	private Autoforward createInAndOutTestMessages() {
