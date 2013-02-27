@@ -34,7 +34,9 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 	}
 
 	def 'validation in configure tab works'() {
-		//TODO ensure that group has to be selected
+		expect:
+			//TODO ensure that group has to be selected
+			false
 	}
 
 	def 'can add and remove steps in the confiure tab'(){
