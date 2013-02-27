@@ -16,7 +16,6 @@ class MessagesReceivedSpec extends MessageBaseSpec {
 		then:
 			messageList.messageCount() == 2
 			!messageList.newMessageNotification.displayed
-		then:
 			waitFor { messageList.newMessageNotification.displayed }
 	}
 

@@ -27,7 +27,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 			messageList.toggleSelect(0)
 			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.selectedMessages.size() == 2}
+			waitFor { messageList.selectedMessageCount() == 2}
 	}
 	
 	def "checked message details are displayed when message is checked"() {
@@ -72,7 +72,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 			messageList.toggleSelect(0)
 			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.selectedMessages.size() == 2 }
+			waitFor { messageList.selectedMessageCount() == 2 }
 		when:
 			messageList.toggleSelect(0)
 			messageList.toggleSelect(1)
@@ -105,14 +105,14 @@ class SearchCheckSpec extends SearchBaseSpec {
 			to PageSearchResult, "hi"
 			messageList.selectAll.click()
 		then:
-			waitFor { messageList.selectedMessages.size() == 3 }
+			waitFor { messageList.selectedMessageCount() == 3 }
 		when:
 			messageList.toggleSelect(1)
 		then:
-			waitFor { messageList.selectedMessages.size() == 2 }
+			waitFor { messageList.selectedMessageCount() == 2 }
 		when:
 			messageList.toggleSelect(2)
 		then:
-			waitFor { messageList.selectedMessages.size() == 1 }
+			waitFor { messageList.selectedMessageCount() == 1 }
 	}
 }

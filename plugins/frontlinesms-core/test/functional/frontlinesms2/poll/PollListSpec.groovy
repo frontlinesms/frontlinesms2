@@ -13,7 +13,8 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			messageList.sources.containsAll('Alice', 'Bob')
+			messageList.messageSource(0) == 'Alice'
+			messageList.messageSource(1) == 'Bob'
 	}
 
 	def "message's poll details are shown in list"() {
@@ -23,9 +24,9 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc('Bob').id
 		then:
-			messageList.messages[1].source == 'Bob'
-			messageList.messages[1].text == 'manchester ("I like manchester")'
-			messageList.messages[1].dateCell ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messageSource(1) == 'Bob'
+			messageList.messageText(1) == 'manchester ("I like manchester")'
+			messageList.messageDate(1)
 	}
 
 	def "poll details are shown in header and graph is displayed"() {
@@ -67,12 +68,13 @@ class PollListSpec extends PollBaseSpec {
 			footer.showStarred.click()
 			waitFor { messageList.messageCount() == 1 }
 		then:
-			messageList.sources == ['Bob']
+			messageList.messageSource(0) == 'Bob'
 		when:
 			footer.showAll.click()
-			waitFor {messageList.messageCount() == 2}
+			waitFor { messageList.messageCount() == 2 }
 		then:
-			messageList.sources == ['Alice', 'Bob']
+			messageList.messageSource(0) == 'Alice'
+			messageList.messageSource(1) == 'Bob'
 	}
 
 	def "should display message details when message is checked"() {
@@ -131,13 +133,12 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 			to PageMessagePoll, 'Football Teams'
 		then:
-			messageList.messageCount() == 2
+			messageList.messageCount == 2
 			!messageList.newMessageNotification.displayed
 		when:
 			createMoreTestMessages()
 		then:
-			waitFor { messageList.messageCount() == 2 }
-			!messageList.newMessageNotification.displayed
-			waitFor { messageList.newMessageNotification.displayed }
+			waitFor('very slow') { messageList.newMessageNotification.displayed }
 	}
 }
+

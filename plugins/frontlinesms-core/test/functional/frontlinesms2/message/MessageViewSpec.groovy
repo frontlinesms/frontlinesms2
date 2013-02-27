@@ -11,8 +11,8 @@ class MessageViewSpec extends grails.plugin.geb.GebSpec {
 		when: 'Inbox is open'
 			to PageMessageInbox
 		then: 'message column should display the appropriate text'
-			messageList.messages[0].source == 'Bob'
-			messageList.messages[0].text == '<hello>'
+			messageList.messageSource(0) == 'Bob'
+			messageList.messageText(0) == '<hello>'
 	}
 
 	def "message with special html characters should display in confirm tab"(){

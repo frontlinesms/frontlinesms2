@@ -20,13 +20,13 @@ class MessageTrashSpec extends grails.plugin.geb.GebSpec {
 			footer.showStarred.click()
 			waitFor { messageList.messageCount() == 1 }
 		then:
-			messageList.messages[0].source == "src1"
+			messageList.messageSource(0) == "src1"
 		when:
 			footer.showAll.click()
 			waitFor { messageList.messageCount() == 2 }
 		then:
-			messageList.messages[0].source == "src1"
-			messageList.messages[1].source == "src2"
+			messageList.messageSource(0) == 'src1'
+			messageList.messageSource(1) == 'src2'
 	}
 	
 	def "should not contain export button" () {

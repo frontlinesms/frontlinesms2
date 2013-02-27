@@ -16,7 +16,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			messageList << Keys.chord(Keys.ARROW_DOWN)
 		then:
 			waitFor { messageList.hasClass(1, "selected") }
-			waitFor { messageList.messages[1].text == singleMessageDetails.text }
+			waitFor { messageList.messageText(1) == singleMessageDetails.text }
 			!messageList.hasClass(0, "selected")
 	}
 	
@@ -32,7 +32,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			messageList << Keys.chord(Keys.ARROW_UP)
 		then:
 			waitFor { messageList.hasClass(0, "selected") }
-			waitFor { messageList.messages[0].text == singleMessageDetails.text }
+			waitFor { messageList.messageText(0) == singleMessageDetails.text }
 			!messageList.hasClass(1, "selected")
 	}
 
@@ -82,12 +82,12 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			messageList << Keys.chord(Keys.ARROW_DOWN)
 			def currrentText = singleMessageDetails.text
 		then:
-			waitFor { messageList.messages[0].text != currrentText }
+			waitFor { messageList.messageText(0) != currrentText }
 			waitFor { singleMessageDetails.text == currrentText }
 		when:
 			messageList << Keys.chord(Keys.ARROW_DOWN)
 		then:
-			 waitFor { messageList.messages[0].text != currrentText }
+			 waitFor { messageList.messageText(0) != currrentText }
 			 waitFor { singleMessageDetails.text == currrentText }
 	}
 }

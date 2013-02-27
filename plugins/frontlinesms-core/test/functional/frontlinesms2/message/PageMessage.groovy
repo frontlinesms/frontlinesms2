@@ -72,13 +72,23 @@ class MessageList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
 		selectAll { $("input#message-select-all") }
-		sources { $('td.message-sender-cell')*.text() }
-		messages { moduleList MessageListRow, $('tbody tr') }
-		message { index -> ++index; $("tbody tr:nth-child($index)") }
+		messageSource { i=0 -> message(i).find('td.message-sender-cell').text() }
+		message { i=0, onlySelected=false -> onlySelected? $('tbody tr.selected', i): $("tbody tr:nth-of-type(${i+1})") }
 		messageCount { js.exec('return jQuery("#main-list tbody tr").size()') as Integer }
-		toggleSelect { index -> message(index).find('input[type=checkbox]').click(); true }
-		hasClass { index, cssClass -> message(index).hasClass(cssClass) }
-		selectedMessages { moduleList MessageListRow, $('tr.selected') }
+		selectedMessageCount { js.exec('return jQuery("#main-list tbody tr.selected").size()') as Integer }
+		clickLink { i -> message(i).find('td.message-text-cell a').click(); true }
+		selectedMessageLinkUrl { i=0 -> message(i, true).find('td.message-text-cell a').@href }
+		getCheckbox { i -> message(i).find('input[type=checkbox]') }
+		isChecked { i -> getCheckbox(i).checked }
+		isRead { i -> hasClass(i, 'read') }
+		toggleSelect { i -> getCheckbox(i).click(); true }
+		hasClass { i, cssClass -> message(i).hasClass(cssClass) }
+		getDateCell { i -> message(i).find('td.message-date-cell') }
+		messageDate { i=0 ->
+			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse(getDateCell(i).text())
+		}
+		messageText { i=0, onlySelected=false -> message(i, onlySelected).find('td.message-text-cell').text() }
+		selectedMessageText { i=0 -> messageText(i, true) }
 		noContent { $('tr.no-content') }
 		starFor { message ->
 			if (message instanceof Fmessage) {
@@ -95,24 +105,6 @@ class MessageList extends geb.Module {
 			}
 		}
 		newMessageNotification(required:false) { $("#new-message-notification") }
-	}
-}
-
-class MessageListRow extends geb.Module {
-	static content = {
-		checkbox { $('td.message-select-cell input[type="checkbox"]') }
-		star { $('a.starred, a.unstarred') }
-		isStarred { $('a.starred').count() == 1 }
-		isRead { $(':first-child').parent().hasClass('read') } //TODO: replace with a more sensible selector for base
-		source { $('td.message-sender-cell').text() }
-		text { $('td.message-text-cell').text() }
-		textLink { $('td.message-text-cell a')}
-		dateCell {$('td.message-date-cell').text()}
-		date {
-			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse($('td.message-date-cell').text())
-		}
-		linkUrl { $('td.message-text-cell a').@href }
-		hasStatus { status -> $(':first-child').parent().hasClass(status) }
 	}
 }
 
@@ -160,3 +152,4 @@ class MultipleMessageDetails extends geb.Module {
 		moveActions { $('select#move-actions option')*.text() }
 	}
 }
+
