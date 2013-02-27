@@ -342,8 +342,9 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			to PageMessageTrash, Trash.findByObjectId(poll.id).id
 		then:
-			messageList.sources.join() == 'Who is badder?'
-			messageList.messages.text.join() == "0 message(s)"
+			messageList.messageCount == 1
+			messageList.messageSource == 'Who is badder?'
+			messageList.messageText == '0 message(s)'
 	}
 
 	def "selected poll and its details are displayed"() {
@@ -352,9 +353,10 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			to PageMessageTrash, Trash.findByObjectId(poll.id).id
 		then:
-			messageList.sources.join() == "${poll.name}"
-			messageList.messages.text.join() == "${poll.getLiveMessageCount()} message(s)"
-			messageList.messages.dateCell.join() ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messageCount == 1
+			messageList.messageSource == poll.name
+			messageList.messageText == "${poll.getLiveMessageCount()} message(s)"
+			messageList.messageDate
 	}
 
 	def "clicking on empty trash permanently deletes a poll"() {

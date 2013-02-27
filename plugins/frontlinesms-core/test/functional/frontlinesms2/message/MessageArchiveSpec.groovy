@@ -17,15 +17,15 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)
-			waitFor { singleMessageDetails.text == "test2" }
+			waitFor { singleMessageDetails.text == 'test2' }
 			singleMessageDetails.archive.click()
 			to PageArchiveInbox
 		then:
-			messageList.messages[0].text == "test2"
+			messageList.messageText(0) == 'test2'
 		when:
 			to PageMessageInbox
 		then:
-			!messageList.messages.text.contains("test2")
+			messageList.messageText(0) != 'test2'
 	}
 
 	def 'archived messages do not show up in sent view'() {
@@ -43,7 +43,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			singleMessageDetails.archive.click()
 			to PageArchiveSent
 		then:
-	        waitFor { messageList.messages[0].text == "hi Mary" }
+	        waitFor { messageList.messageText(0) == "hi Mary" }
 		when:
 			to PageMessageSent
 		then:

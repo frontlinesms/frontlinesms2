@@ -113,7 +113,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			to PageMessageInbox, Fmessage.findBySrc('Alice').id
 			messageList.selectAll.click()
 		then:
-			waitFor { messageList.selectedMessages.size() == 2 }
+			waitFor { messageList.selectedMessageCount() == 2 }
 		when:
 			messageList.selectAll.click()
 		then:
@@ -134,13 +134,13 @@ class MessageCheckSpec extends MessageBaseSpec {
 			to PageMessageInbox
 			messageList.toggleSelect(0)
 		then:
-			messageList.messages[0].checkbox.checked
+			messageList.isChecked(0)
 		when:
-			messageList.messages[1].textLink.click()
+			messageList.clickLink(1)
 		then:
 			waitFor('veryslow') { at PageMessageInbox }
 			waitFor('verslow') { messageList.displayed }
- 			!messageList.messages[0].checkbox.checked
+			!messageList.isChecked(0)
 	}
 
 	def "select all should update the total message count when messages are checked"() {

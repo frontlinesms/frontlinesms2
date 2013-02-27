@@ -103,7 +103,10 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:	
 			waitFor { searchsidebar.searchBtn.displayed }
 			searchsidebar.messageStatus == 'inbound'
-			messageList.messages.text.containsAll(['hi alex', 'meeting at 11.00'])
+			messageList.messageCount() == 3
+			messageList.messageText(0) == 'chicken ("eat more cow")'
+			messageList.messageText(1) == 'hi alex'
+			messageList.messageText(2) == 'meeting at 11.00'
 	}
 	
 	def "should fetch all sent messages alone"() {
@@ -327,7 +330,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor{ searchsidebar.searchBtn.displayed }
 			messageList.messageCount() == 2
-			messageList.messages[0].text == 'experiment'
-			messageList.messages[0].source == 'To: 3 recipients'
+			messageList.messageText(0) == 'experiment'
+			messageList.messageSource(0) == 'To: 3 recipients'
 	}
 }

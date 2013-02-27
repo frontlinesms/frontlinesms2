@@ -17,7 +17,9 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
 		then:
-			messageList.sources.containsAll(['Jane', 'Max'])
+			messageList.messageCount() == 2
+			messageList.messageSource(0) == 'Jane'
+			messageList.messageSource(1) == 'Max'
 	}
 
 	def 'no message is selected when a folder is first loaded'() {
@@ -38,9 +40,9 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, folder
 		then:
-			messageList.messages[1].source == 'Max'
-			messageList.messages[1].text == 'I will be late'
-			DATE_FORMAT.format(messageList.messages[1].date) ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messageSource(1) == 'Max'
+			messageList.messageText(1) == 'I will be late'
+			messageList.messageDate(1)
 	}
 
 	def 'selected folder is highlighted'() {
@@ -78,12 +80,13 @@ class FolderListSpec extends FolderBaseSpec {
 			footer.showStarred.jquery.trigger("click")
 		then:
 			waitFor { messageList.messageCount() == 2 }
-			messageList.messages[1].source == 'Max'
+			messageList.messageSource(1) == 'Max'
 		when:
 			footer.showAll.jquery.trigger("click")
 		then:
 			waitFor { messageList.messageCount() == 2 }
-			messageList.sources.containsAll(['Jane', 'Max'])
+			messageList.messageSource(0) == 'Jane'
+			messageList.messageSource(1) == 'Max'
 	}
 
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -198,9 +201,9 @@ class FolderListSpec extends FolderBaseSpec {
 			at PageMessageFolder
 			to PageMessageTrash, Trash.findByObjectId(folderId).id
 		then:
-			messageList.messages[0].source == 'Work'
-			messageList.messages[0].text == '2 message(s)'
-			DATE_FORMAT.format(messageList.messages[0].date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
+			messageList.messageSource(0) == 'Work'
+			messageList.messageText(0) == '2 message(s)'
+			DATE_FORMAT.format(messageList.messageDate(0)) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			senderDetails == 'Work folder'
 			DATE_FORMAT.format(date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 	}
@@ -236,8 +239,6 @@ class FolderListSpec extends FolderBaseSpec {
 			footer.showIncoming.click()
 		then:
 			waitFor { messageList.messageCount() == 2 }
-		when:
-			sleep 11000
 		then:
 			!messageList.newMessageNotification.displayed
 	}

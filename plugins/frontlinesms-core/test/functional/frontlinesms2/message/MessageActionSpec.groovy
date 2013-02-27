@@ -108,7 +108,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages.checkbox[0].click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -122,5 +122,4 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			messageList.messageCount() == 2
 	}
 }
-
 

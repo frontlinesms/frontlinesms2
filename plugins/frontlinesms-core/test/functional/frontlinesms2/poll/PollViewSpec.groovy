@@ -31,7 +31,7 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams', message.id
 		then:
-			messageList.messages[1].source == 'Bob'
+			messageList.messageSource(1) == 'Bob'
 	}
 
 	def 'selected message and its details are displayed'() {
@@ -42,9 +42,9 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams', message.id
 		then:
-			messageList.messages[0].source == message.src
-			messageList.messages[0].dateCell ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
-			messageList.messages[0].text == 'manchester ("go manchester")'
+			messageList.messageSource(0) == message.src
+			messageList.messageDate(0)
+			messageList.messageText(0) == 'manchester ("go manchester")'
 	}
 
 	def 'selected message is highlighted'() {
@@ -57,10 +57,13 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams', aliceMessage.id
 		then:
-			messageList.selectedMessages.text == ['manchester ("go manchester")']
+			messageList.selectedMessageCount == 1
+			messageList.selectedMessageText == 'manchester ("go manchester")'
 		when:
 			to PageMessagePoll, 'Football Teams', bobMessage.id
 		then:
-			messageList.selectedMessages.text == ['manchester ("I like manchester")']
+			messageList.selectedMessageCount == 1
+			messageList.selectedMessageText == 'manchester ("I like manchester")'
 	}
 }
+
