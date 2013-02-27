@@ -10,7 +10,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
 		then:
-			waitFor { at CreateActivityDialog}
+			waitFor { at CreateActivityDialog }
 		when:
 			customactivity.click()
 		then:
@@ -22,7 +22,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
 		then:
-			waitFor { at CreateActivityDialog}
+			waitFor { at CreateActivityDialog }
 		when:
 			customactivity.click()
 		then:
@@ -42,7 +42,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
 		then:
-			waitFor { at CreateActivityDialog}
+			waitFor { at CreateActivityDialog }
 		when:
 			customactivity.click()
 		then:
@@ -67,7 +67,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
 		then:
-			waitFor { at CreateActivityDialog}
+			waitFor { at CreateActivityDialog }
 		when:
 			customactivity.click()
 		then:
@@ -119,3 +119,4 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 	}
 
 }
+
