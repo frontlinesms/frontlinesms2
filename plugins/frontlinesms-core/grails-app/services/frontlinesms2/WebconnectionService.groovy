@@ -7,7 +7,6 @@ import grails.converters.JSON
 
 import frontlinesms2.api.*
 
-
 class WebconnectionService {
 	static def regex = /[$][{]*[a-z_]*[}]/
 	// Substitution variables

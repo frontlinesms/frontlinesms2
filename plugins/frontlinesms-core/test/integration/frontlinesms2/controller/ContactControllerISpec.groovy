@@ -159,20 +159,6 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			tom.email == null
 	}
-	
-	def "messageStats returns the correct number of messages for a given contact"() {
-		setup:
-			def contact = Contact.build(mobile:"1234567")
-			Fmessage.build(src:'1234567')
-		when:
-			controller.params.id = contact.id
-			controller.messageStats()
-			def response = controller.response.contentAsString
-			def stats = JSON.parse(response)
-		then:
-			stats.inboundMessagesCount == 1
-			stats.outboundMessagesCount == 0
-	}
 
 	def "attempting to view a missing contact should forward to index"() {
 		when:

@@ -49,22 +49,6 @@ if(jQuery.browser.msie) { $(function() {
 	};
 }(jQuery));
 
-function refreshMessageCount() {
-	$.ajax({
-			url: url_root + 'message/unreadMessageCount',
-			cache: false,
-			success: function(data) { $('#inbox-indicator').html(data); }
-	});
-}
-
-function isEmpty(val) {
-	return val.trim().length === 0;
-}
-
-function isElementEmpty(selector) {
-	return isEmpty($(selector).val());
-}
-
 function getSelectedGroupElements(groupName) {
 	return $('input[name=' + groupName + ']:checked');
 }
@@ -73,23 +57,10 @@ function isGroupChecked(groupName) {
 	return getSelectedGroupElements(groupName).length > 0;
 }
 
-function isDropDownSelected(id) {
-	var selectedOptions = $("#" + id + " option:selected");
-	return selectedOptions.length > 0  && (!isEmpty(selectedOptions[0].value));
-}
-
 $('.check-bound-text-area').live('focus', function() {
 	var checkBoxId = $(this).attr('checkbox_id');
 	$('#' + checkBoxId).attr('checked', true);
 });
-
-function findInputWithValue(value) {
-	return $('input[value=' + "'" + value + "'" + ']');
-}
-
-function isCheckboxSelected(value) {
-	return findInputWithValue(value).is(':checked');
-}
 
 $.fn.renderDefaultText = function() {
 	return this.focus(function() {
@@ -146,8 +117,6 @@ function insertAtCaret(areaId, text) {
 }
 
 $(function() {
-	// FIXME no binding to events should take place in this file
-	setInterval(refreshMessageCount, 30000);
 	$.extend($.validator.messages, {
 		required: i18n("jquery.validation.required"),
 		remote: i18n("jquery.validation.remote"),

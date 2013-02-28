@@ -1,3 +1,4 @@
+<%-- TODO when sanchez template rndering taglib is included, refactor here to use that instead of explicit sanchez templates --%>
 <div class="controls"></div>
 
 <script id="fconnection-controls-FAILED" type="text/x-sanchez-template">

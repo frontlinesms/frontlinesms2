@@ -1,8 +1,7 @@
 fconnection_show = (function() {
-	var showControls;
-	update = function(status, id) {
+	var update = function(status, id) {
 		$("#body-content.connections .selected .connection-status").text(i18n("connectionstatus." + status.toLowerCase()));
-		sanchez.replaceContent("#body-content.connections .selected .controls", "fconnection-controls-" + status, {connectionId:id});
+		sanchez.replaceContent("#body-content.connections .selected .controls", "fconnection-controls-" + status, { connectionId:id });
 	};
 	return {
 		update:update

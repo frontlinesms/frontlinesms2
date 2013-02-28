@@ -1,24 +1,22 @@
-package frontlinesms2.controllers
-
-import frontlinesms2.*
+package frontlinesms2
 
 import spock.lang.*
-import grails.test.mixin.*
 
-import static frontlinesms2.ConnectionStatus.*
+import frontlinesms2.CoreAppInfoProviders as CAIP
 
-@TestFor(StatusController)
-class StatusControllerSpec extends Specification {
+import static ConnectionStatus.*
+
+class CoreAppInfoProvidersSpec extends Specification {
 	@Unroll
-	def 'test traffic lights'() {
+	def 'test statusIndicatorProvider traffic lights'() {
 		setup:
 			Fconnection.metaClass.static.list = {
 				statuses.collect { [status:it] }
 			}
 		when:
-			controller.trafficLightIndicator()
+			def color = CAIP.statusIndicatorProvider(null, null, null)
 		then:
-			controller.response.contentAsString == expectedColor
+			color == expectedColor
 		where:
 			expectedColor | statuses
 			'grey'        | []

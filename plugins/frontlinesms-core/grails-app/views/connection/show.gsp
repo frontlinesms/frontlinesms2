@@ -4,20 +4,19 @@
 		<meta name="layout" content="settings"/>
 		<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
 		<g:if test="${params.connecting}">
+			<%-- Could just replace params.createRoute and params.connecting with a check for connectionInstance.status --%>
 			<r:script>
 				$(function() {
-					var connectionTimer = setInterval(refreshConnectionStatus, 2000);
-					function refreshConnectionStatus() {
-						$.get("${createLink(controller:'connection', action:'list', id:params?.id, params:[format:'json'])}", function(connection) {
-							var status;
-							status = connection.status.substring(17).toUpperCase();
-							if(status !== "CONNECTING") {
-								clearInterval(connectionTimer);
-								$("div.flash").hide();
-								fconnection_show.update(status, connection.id);
-							}
-						});
-					}
+					app_info.listen("connection_show", { id:${params.id} }, function(data) {
+						console.log("connection_show.callback :: data=" + JSON.stringify(data));
+						data = data.connection_show;
+						if(!data) { return; }
+						if(data.status !== "CONNECTING") {
+							app_info.stopListening("connection_show");
+							$("div.flash").hide();
+							fconnection_show.update(data.status, data.id);
+						}
+					});
 				});
 			</r:script>
 		</g:if>
@@ -26,3 +25,4 @@
 		<fsms:render template="/connection/connection_list"/>
 	</body>
 </html>
+

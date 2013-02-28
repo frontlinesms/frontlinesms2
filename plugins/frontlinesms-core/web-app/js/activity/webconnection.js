@@ -46,10 +46,10 @@ var webconnectionDialog = (function () {
 			params.ownerId = $("#activityId").val();
 			params.format = "json";
 			$.ajax({
-				type: 'post',
-				data: $("#new-webconnection-form").serialize() + "&" + $.param(params),
-				url: url_root + "webconnection/testRoute",
-				success: function(data, textStatus) { checkRouteStatus(data); }
+				type:"POST",
+				data:$("#new-webconnection-form").serialize() + "&" + $.param(params),
+				url:url_root + "webconnection/testRoute",
+				success:checkRouteStatus
 			});
 		} else {
 			$('.error-panel').show();
@@ -69,35 +69,31 @@ var webconnectionDialog = (function () {
 			$("#prevPage").attr('disabled', "disabled");
 		}
 	},
+	processCheckRouteResponse = function(response) {
+		response = response.webconnection_status;
+		if(!response) { return; }
+		if(response.status !== "success" && response.status !== "failed") {
+			// checking still in progress...
+			return;
+		}
+		$(".error-panel").text(i18n('webconnection.popup.'+ response.status + '.label'));
+		$(".error-panel").show();
+		toggleWizardButtons();
+		if(response.status === "success") {
+			loadSummaryTab(response, i18n('webconnection.label'));
+		} else {
+			$("#testRoute").children().remove();
+			$("#testRoute").append("<span>"+i18n('webconnection.testroute.label')+"</span>");
+		}
+		app_info.stopListening("webconnection_status");
+	},
 	checkRouteStatus = function(response) {
 		if(response.ok) {
 			$("#testRoute").children().remove();
 			$("#testRoute").append("<span>"+i18n('webconnection.testing.label')+"</span>");
 			$("#activityId").val(response.ownerId);
-			$.ajaxSetup({
-				type: 'post',
-				data: {ownerId:response.ownerId},
-				url: url_root + "webconnection/checkRouteStatus"
-			});
 			toggleWizardButtons();
-			pollInterval = setInterval( function() {
-				$.ajax({
-					success: function(response) {
-								if(response.status === "success" || response.status === "failed") {
-									$(".error-panel").text(i18n('webconnection.popup.'+ response.status + '.label'));
-									$(".error-panel").show();
-									toggleWizardButtons();
-									if(response.status === "success") {
-										loadSummaryTab(response, i18n('webconnection.label'));
-									} else {
-										$("#testRoute").children().remove();
-										$("#testRoute").append("<span>"+i18n('webconnection.testroute.label')+"</span>");
-									}
-									clearInterval(pollInterval);
-								}
-							}
-				});
-			}, 3000);
+			app_info.listen("webconnection_status", { ownerId:response.ownerId }, processCheckRouteResponse);
 		} else {
 			displayErrors(response);
 		}

@@ -46,7 +46,7 @@ class MessagesReceivedSpec extends MessageBaseSpec {
 		when:
 			createTestMessages()
 		then:
-			waitFor { messageList.newMessageNotification.displayed }
+			waitFor('very-slow') { messageList.newMessageNotification.displayed }
 		when:
 			messageList.newMessageNotification.find("a").click()
 		then:
@@ -54,3 +54,4 @@ class MessagesReceivedSpec extends MessageBaseSpec {
 			waitFor { singleMessageDetails.sender == "Bob" }
 	}
 }
+

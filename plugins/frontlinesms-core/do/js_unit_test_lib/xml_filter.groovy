@@ -6,12 +6,7 @@ def unfiltered = '<unfiltered>' + sin.text + '</unfiltered>'
 
 def slurp = new XmlParser().parseText(unfiltered)
 def suites = slurp.testsuites
-def toRemove = []
-suites.iterator().eachWithIndex { suite, i ->
-	if(i % 6 != 0) toRemove << suite
-}
-
-toRemove.each { suites.remove(it) }
+suites = suites? [suites[-1]]: []
 
 Node root = new Node(null, 'testsuites')
 suites.each { testsuites ->

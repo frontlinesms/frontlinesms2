@@ -1,7 +1,6 @@
 package frontlinesms2.services
 
 import spock.lang.*
-import grails.test.mixin.*
 
 import frontlinesms2.*
 

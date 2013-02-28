@@ -27,12 +27,6 @@ class PollController extends ActivityController {
 		render ''
 	}
 
-	def pollStats() {
-		withPoll { pollInstance ->
-			render (pollInstance.responseStats as JSON)
-		}
-	}
-
 	private def withPoll = withDomainObject Poll, { params.ownerId }
 }
 

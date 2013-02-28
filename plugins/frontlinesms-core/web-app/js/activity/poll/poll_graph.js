@@ -1,5 +1,5 @@
 var PollGraph = function(pollResponse, ownerId, statsUrl) {
-	var ___start___,
+	var
 	_loaded = false,
 	_refresh = false,
 	_stats = {},
@@ -10,20 +10,17 @@ var PollGraph = function(pollResponse, ownerId, statsUrl) {
 		}
 		return _stats;
 	},
-	_updateStats = function() {
-		var params = { ownerId: ownerId };
-		$.getJSON(statsUrl, params, function(data) {
-			_refresh = true;
-			_stats.id = $.map(data, function(a) { return a.id; });
-			_stats.count = $.map(data, function(a) { return a.count; });
-			_stats.xdata = $.map(data, function(a) { return a.value; });
-			_stats.data =  $.map(data, function(a) { return a.percent; });
-			$.each(_stats.id, function(index, value) {
-				$("#response-"+ value).find("td.count").html(_stats.count[index]);
-				$("#response-"+ value).find("td.percent").html(_stats.data[index] + "%");
-			});
-			_showGraph();
+	_processUpdate = function(data) {
+		_refresh = true;
+		_stats.id = $.map(data, function(a) { return a.id; });
+		_stats.count = $.map(data, function(a) { return a.count; });
+		_stats.xdata = $.map(data, function(a) { return a.value; });
+		_stats.data =  $.map(data, function(a) { return a.percent; });
+		$.each(_stats.id, function(index, value) {
+			$("#response-"+ value).find("td.count").html(_stats.count[index]);
+			$("#response-"+ value).find("td.percent").html(_stats.data[index] + "%");
 		});
+		_showGraph();
 	},
 	_hideMessages = function() {
 		_loaded = true;
@@ -87,9 +84,10 @@ var PollGraph = function(pollResponse, ownerId, statsUrl) {
 		}
 	},
 	___end___;
-	return {
-		updateStats:_updateStats,
-		show:_show
-	};
+
+	$("#poll-graph-btn").click(_show);
+	app_info.listen("poll_stats", { ownerId:ownerId }, _processUpdate);
+
+	return {};
 };
 

@@ -30,27 +30,6 @@ class MessageController extends ControllerUtils {
 		redirect action:'inbox', params:params
 	}
 
-	def newMessageCount() {
-		def section = params.messageSection
-		def messageCount
-		if(!params.ownerId && section != 'trash') {
-			if(section == 'pending') {
-				messageCount = Fmessage.countPending(params.failed)
-			} else {
-				messageCount = Fmessage."$section"(params.starred).count()
-			}
-		} else if(section == 'activity') {
-			def getSent = null
-			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
-			messageCount = Activity.get(params.ownerId)?.getMessageCount(params.starred, getSent)
-		} else if(section == 'folder') {
-			def getSent = null
-			if(params.inbound) getSent = Boolean.parseBoolean(params.inbound)
-			messageCount = Folder.get(params.ownerId)?.getFolderMessages(params.starred, getSent)?.count()
-		} else messageCount = 0
-		render messageCount
-	}
-
 	def show() {
 		def messageInstance = Fmessage.get(params.messageId)
 		def ownerInstance = MessageOwner.get(params?.ownerId)
@@ -277,10 +256,6 @@ class MessageController extends ControllerUtils {
 	def emptyTrash() {
 		trashService.emptyTrash()
 		redirect action:'inbox'
-	}
-	
-	def unreadMessageCount() {
-		render text:Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 
 	def sendMessageCount() {

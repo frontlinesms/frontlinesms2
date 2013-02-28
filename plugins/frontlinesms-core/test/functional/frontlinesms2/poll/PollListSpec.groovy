@@ -6,7 +6,6 @@ import frontlinesms2.message.PageMessage
 import frontlinesms2.page.PageMessageActivity
 
 class PollListSpec extends PollBaseSpec {
-
 	def "poll message list is displayed"() {
 		given:
 			createTestPolls()

@@ -89,7 +89,8 @@ check_list = (function() {
 			if (itemTypeString === 'contact') {
 				applyContactPaneJavascriptEnhancements(newPane);
 			} else if (itemTypeString === 'message') {
-				refreshMessageCount();
+				// TODO if message was unread and we're in the inbox, please decrement unread messages count
+				// on the tab (e.g. MESSAGES (123) -> MESSAGES (122)
 			}
 		});
 	};

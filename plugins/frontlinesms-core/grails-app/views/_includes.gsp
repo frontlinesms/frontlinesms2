@@ -29,10 +29,22 @@
 		return translated;
 	}
 
+	<g:if env="test">
+		app_info.init(3000);
+	</g:if>
+	<g:else>
+		app_info.init();
+	</g:else>
 	var systemNotification = new SystemNotification();
 	var statusIndicator = new StatusIndicator();
 	// declare vars that are populated in JS files
 	var check_list, fconnection;
+
+	app_info.listen("inbox_unread", function(data) {
+		data = data.inbox_unread;
+		if(!data) { return; }
+		$('#inbox-indicator').html(data);
+	});
 
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
@@ -48,8 +60,8 @@
 			fsmsButton.findAndApply("input[type='submit'], input[type='button']");
 
 			// Enable system notification refresh
-			setInterval(systemNotification.refresh, 10000);
-			setInterval(statusIndicator.refresh, 10000);
+			systemNotification.init();
+			statusIndicator.init();
 		});
 	</g:else>
 

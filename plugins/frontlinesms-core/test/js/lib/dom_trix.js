@@ -1,16 +1,26 @@
 dom_trix = (function() {
-	var jsdom;
-	try {
-		console.log("Loading JSDOM...");
-		jsdom = require('jsdom');
-		console.log("JSDOM loaded.");
-	} catch(err) {
-		console.log("Error trying to load JSDOM: " + err);
-		console.error("ERROR: " + err);
-		process.exit(1);
-	}
+	var jsdom, loadModule,
+			initDomFromString, initDomFromFile, initEmptyDom, initJquery,
+			initJqueryValidation, initI18n, jqueryValidations;
 
-	var initDomFromString, initDomFromFile, initJquery, initJqueryValidation, initI18n, jqueryValidations;
+	loadModule = function(moduleName) {
+		var mod;
+		try {
+			console.log("Loading module: " + moduleName + "...");
+			mod = require(moduleName);
+			console.log(moduleName + " loaded.");
+			return mod;
+		} catch(err) {
+			console.log("Error trying to load module: " + moduleName + ": " + err);
+			console.error("ERROR: " + err);
+			process.exit(1);
+		}
+	}
+	jsdom = loadModule("jsdom");
+
+	initEmptyDom = function() {
+		initDomFromString("<html><head></head><body></body></html");
+	};
 
 	initDomFromString = function(domString) {
 		console.log("Initialising DOM with HTML: " + domString + "...");
@@ -24,7 +34,7 @@ dom_trix = (function() {
 	};
 
 	initDomFromFile = function(file) {
-		var fs = require('fs');
+		var fs = loadModule('fs');
 		initDomFromString(fs.readFileSync(file).toString());
 	};
 
@@ -35,8 +45,9 @@ dom_trix = (function() {
 	};
 
 	initJquery = function() {
+		var jq;
 		console.log("Initialising jQuery...");
-		global.jQuery = window.jQuery = global.$ = window.$ = require("jquery").create(global.window);
+		global.jQuery = window.jQuery = global.$ = window.$ = loadModule("jquery").create(global.window);
 		console.log("jQuery initialiased.");
 	};
 
@@ -51,6 +62,7 @@ dom_trix = (function() {
 	};
 
 	return {
+		initEmptyDom:initEmptyDom,
 		initDomFromString:initDomFromString,
 		initDomFromFile:initDomFromFile
 	};
