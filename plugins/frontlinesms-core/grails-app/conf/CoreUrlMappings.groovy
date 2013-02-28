@@ -44,6 +44,7 @@ class CoreUrlMappings {
 		"/customactivity/create"(controller:'customactivity', action: 'create')
 		"/customactivity/save"(controller:'customactivity', action: 'save')
 		
+		"/archive/inbox"(controller:'archive', action:'inbox') {}
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}
 		"/archive/activity"(controller:'archive', action:'activityList') {}
@@ -59,6 +60,7 @@ class CoreUrlMappings {
 
 		"/settings/general"(controller:'settings', action:'general') {}
 		
+		"/connection/save"(controller:'connection', action:'save') {}
 		"/connection/list"(controller:'connection', action:'list') {}
 
 		"/help/images/$imagePath**.png"(controller:'help', action:'image') {}
