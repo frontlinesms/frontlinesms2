@@ -60,3 +60,4 @@ if $M2_DEPLOY ;then
 	EOF
 	echo "# Plugin deployed to remote maven repo."
 fi
+
