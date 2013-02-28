@@ -327,6 +327,21 @@ Copyright (c) 2011 by Harvest
       return Chosen.__super__.constructor.apply(this, arguments);
     }
 
+	function calculateDropTop(container, offset) {
+		var dd_top, scrollTop;
+		offset = offset || container.offset();
+		dd_top = container.height();
+		scrollTop = Math.max(parseInt($(window).scrollTop(), 10), 0);
+		return offset.top + dd_top - scrollTop;
+	}
+
+	function calculateDropLeft(container, offset) {
+		var scrollLeft;
+		offset = offset || container.offset();
+		scrollLeft = Math.max(parseInt($(window).scrollLeft(), 10), 0);
+		return offset.left - scrollLeft;
+	}
+
     Chosen.prototype.setup = function() {
       this.form_field_jq = $(this.form_field);
       this.current_value = this.form_field_jq.val();
@@ -605,6 +620,14 @@ Copyright (c) 2011 by Harvest
     };
 
     Chosen.prototype.results_show = function() {
+      var self = this;
+
+      // picked from robmcguinness on https://github.com/harvesthq/chosen/issues/86:
+      // hide .chzn-drop when the window resizes else it will stay fixed with previous top and left coordinates
+      $(window).resize(function() {
+        self.results_hide();
+      });
+
       var dd_top;
       if (!this.is_multiple) {
         this.selected_item.addClass("chzn-single-with-drop");
@@ -621,10 +644,14 @@ Copyright (c) 2011 by Harvest
       this.form_field_jq.trigger("liszt:showing_dropdown", {
         chosen: this
       });
+
+      var offset = this.container.offset();
       this.dropdown.css({
-        "top": dd_top + "px",
-        "left": 0
+        "top": calculateDropTop(this.container, offset) + "px",
+        "left": calculateDropLeft(this.container, offset) + "px",
+        position:"fixed"
       });
+
       this.results_showing = true;
       this.search_field.focus();
       this.search_field.val(this.search_field.val());
@@ -1052,9 +1079,8 @@ Copyright (c) 2011 by Harvest
         this.search_field.css({
           'width': w + 'px'
         });
-        dd_top = this.container.height();
         return this.dropdown.css({
-          "top": dd_top + "px"
+          "top": calculateDropTop(this.container) + "px"
         });
       }
     };
