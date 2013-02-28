@@ -38,8 +38,12 @@ class RecipientLookupService {
 				smartgroup:lookupSmartgroups(query, ids(selectedSoFar, SmartGroup))].collect { k, v ->
 			if(v) [group:true, text:i18nUtilService.getMessage(code:"contact.search.$k"), items:v] } - null
 		def strippedNumber = stripNumber(params.term)
-		if (strippedNumber)
-			results << [group:true, text: i18nUtilService.getMessage([code:"contact.search.address"]), items: [[value: "address-$strippedNumber", text: "\"$strippedNumber\""]]]
+		if (strippedNumber) {
+			results << [group:true,
+					text:i18nUtilService.getMessage([code:"contact.search.address"]),
+					items:[[value: "address-$strippedNumber",
+							text: "\"$strippedNumber\""]]]
+		}
 		return results
 	}
 
@@ -59,7 +63,7 @@ class RecipientLookupService {
 	}
 
 	private def lookupContacts(query, alreadySelected=[]) {
-		contactSearchService.getContacts([searchString:query, max:MAX_PER_SECTION]).collect {
+		contactSearchService.getContacts([searchString:query, max:MAX_PER_SECTION, exclude:alreadySelected]).collect {
 			[value: "contact-${it.id}", text: it.name] }
 	}
 
