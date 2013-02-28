@@ -20,7 +20,9 @@ class SmssyncService {
 	}
 
 	def reportTimeout(connection) {
-		new SystemNotification(text:i18nUtilService.getMessage(code:'smssync.timeout', args:[connection.name, connection.timeout, connection.id])).save(failOnError:true)
+		SystemNotification.findOrCreateByText(i18nUtilService.getMessage(
+						code:'smssync.timeout', args:[connection.name, connection.timeout, connection.id]))
+				.save(failOnError:true)
 	}
 
 	def apiProcess(connection, controller) {

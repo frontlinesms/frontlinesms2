@@ -11,7 +11,7 @@ class FailPendingMessagesService {
 				it.save()
 			}
 			def text = "${pendingDispatchList.size()} pending message(s) failed. Go to pending messages section to view."
-			def sn = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+			def sn = SystemNotification.findOrCreateByText(text)
 			sn.read = false
 			sn.save(failOnError:true)
 		}

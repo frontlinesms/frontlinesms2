@@ -103,7 +103,7 @@ class WebconnectionService {
 		def message = Fmessage.get(x.in.headers.'fmessage-id')
 		def text = i18nUtilService.getMessage(code:"webconnection.${message.ownerDetail}.label", args:[webConn.name])
 		println "######## StatusNotification::: $text #########"
-		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+		def notification = SystemNotification.findOrCreateByText(text)
 		notification.read = false
 		notification.save(failOnError:true, flush:true)
 	}

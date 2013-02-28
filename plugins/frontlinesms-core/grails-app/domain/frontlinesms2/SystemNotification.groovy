@@ -13,3 +13,4 @@ class SystemNotification {
 		this.text = text?.truncate(MAX_TEXT_LENGTH)
 	}
 }
+
