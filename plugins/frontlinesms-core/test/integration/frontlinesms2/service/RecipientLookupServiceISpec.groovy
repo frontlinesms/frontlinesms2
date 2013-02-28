@@ -6,15 +6,17 @@ import spock.lang.*
 class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	@Shared
 	def recipientLookupService
-	private static final i18ns = [group: "Groups", smartGroup: "Smartgroups", contact: "Contacts", address: "Add phone number"]
+	private static final i18ns = [group:'Groups', smartGroup:'Smartgroups', contact:'Contacts', address:'Add phone number']
 
 	// we can set up the data model here because none of these tests modify data
-	def setupSpec() {
+	def setup() {
+println "setupSpec() :: All contacts: ${Contact.findAll()*.name}"
 		20.times {
 			Contact.build(name:"test-contact-$it")	
 			SmartGroup.build(name:"test-smartgroup-$it", mobile:"+543")	
 			Group.build(name:"test-group-$it")	
 		}
+println "setupSpec() :: All contacts: ${Contact.findAll()*.name}"
 	}
 
 	def 'lookup should not return a contact if he is already selected'() {
@@ -33,7 +35,7 @@ println "All contacts: ${Contact.findAll()*.name}"
 			getLookupResultFor(results, "group") == ["test-group-12"]
 			getLookupResultFor(results, "smartGroup") == ["test-smartgroup-12"]
 			getLookupResultFor(results, "contact") == ["test-contact-12"]
-			getLookupResultFor(results, "address") == ["\"12\""]
+			getLookupResultFor(results, "address") == ['"12"']
 	}
 
 	@Unroll
