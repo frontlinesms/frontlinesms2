@@ -4,6 +4,8 @@ import spock.lang.*
 
 import frontlinesms2.CoreAppInfoProviders as CAIP
 
+import static ConnectionStatus.*
+
 class CoreAppInfoProvidersSpec extends Specification {
 	@Unroll
 	def 'test statusIndicatorProvider traffic lights'() {
