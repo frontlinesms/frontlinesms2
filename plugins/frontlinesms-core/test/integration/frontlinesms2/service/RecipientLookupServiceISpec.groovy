@@ -4,15 +4,12 @@ import frontlinesms2.*
 import spock.lang.*
 
 class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
-	/*
-	* TODO: UNCOMMENT THIS ONCE CORE-1703 IS MERGED TO MASTER
-	*
-
+	@Shared
 	def recipientLookupService
-	def i18ns = [group: "Groups", smartGroup: "Smartgroups", contact: "Contacts", address: "Add phone number"]
+	private static final i18ns = [group: "Groups", smartGroup: "Smartgroups", contact: "Contacts", address: "Add phone number"]
 
-	def createTestData() {
-		recipientLookupService.contactSearchService = new ContactSearchService()
+	// we can set up the data model here because none of these tests modify data
+	def setupSpec() {
 		20.times {
 			Contact.build(name:"test-contact-$it")	
 			SmartGroup.build(name:"test-smartgroup-$it", mobile:"+543")	
@@ -20,9 +17,16 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		}
 	}
 
+	def 'lookup should not return a contact if he is already selected'() {
+		when:
+println "All contacts: ${Contact.findAll()*.name}"
+			def firstContactId = Contact.findByName('test-contact-1').id
+			def results = recipientLookupService.lookup([term:"test-contact-1", 'selectedSoFar[]':"contact-${firstContactId}"])
+		then:
+			getLookupResultFor(results, 'contact') == ['test-contact-10', 'test-contact-11', 'test-contact-12']
+	}
+
 	def "lookup should return matching contacts, groups and smartgroups, as well as the raw contact name"() {
-		given:
-			createTestData()
 		when:
 			def results = recipientLookupService.lookup([term:"12"])
 		then:
@@ -34,8 +38,6 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
 	@Unroll
 	def "lookup should only return addresses if they are valid phone numbers"() {
-		given:
-			createTestData()
 		when:
 			def results = recipientLookupService.lookup(query)
 		then:
@@ -52,8 +54,6 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	def "contactSearchResults() should return the selected groups, contacts, smartgroups and addresses"() {
-		given:
-			createTestData()
 		when:
 			def results = recipientLookupService.contactSearchResults([recipients:["contact-${Contact.getAll()[0].id}".toString(), "group-${Group.getAll()[0].id}".toString(), "smartgroup-${SmartGroup.getAll()[0].id}".toString(), "address-+12345"]])	
 		then:
@@ -63,5 +63,5 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	private def getLookupResultFor(lookupResult, section) {
 		return lookupResult.find { it.text == i18ns."$section" }?.items*.text
 	}
-	*/
 }
+
