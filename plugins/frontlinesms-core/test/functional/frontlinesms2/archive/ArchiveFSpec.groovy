@@ -26,12 +26,15 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		when:
 			to PageArchiveInbox, Fmessage.findBySrc('Max')
 		then:
-			messageList.sources.sort() == ['Jane', 'Max']
+			messageList.messageCount == 2
+			messageList.messageSource(0) == 'Jane'
+			messageList.messageSource(1) == 'Max'
 		when:
 			to PageArchiveInbox, Fmessage.findBySrc('Max')
 			singleMessageDetails.delete.click()
 		then:
-			messageList.sources == ['Jane']
+			messageList.messageCount == 1
+			messageList.messageSource == 'Jane'
 	}
 
 	def '"Archive All" button does not appear in archive section'() {

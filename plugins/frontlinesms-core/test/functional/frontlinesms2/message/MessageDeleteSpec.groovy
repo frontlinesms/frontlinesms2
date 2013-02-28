@@ -15,7 +15,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			def bobMessage = Fmessage.findBySrc('Bob')
 			deleteMessage(bobMessage)
 			to PageMessageTrash
-			messageList.messages[0].textLink.click()
+			messageList.clickLink()
 		then:
 			waitFor { singleMessageDetails.displayed }
 			Fmessage.deleted(false).count() == 1

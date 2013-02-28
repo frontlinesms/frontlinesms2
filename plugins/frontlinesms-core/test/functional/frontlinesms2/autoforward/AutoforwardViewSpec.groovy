@@ -139,7 +139,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			singleMessageDetails.delete.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.contains("Sudden shock 0")
+			messageList.messageText(0) != 'Sudden shock 0'
 	}
 
 	def "delete multiple message action works for multiple select"(){
@@ -157,7 +157,8 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			multipleMessageDetails.deleteAll.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
+			!(messageList.messageText(0) in ['Sudden shock 0', 'Sudden shock 1'])
+			!(messageList.messageText(1) in ['Sudden shock 0', 'Sudden shock 1'])
 	}
 
 	def "move single message action works"() {
@@ -175,12 +176,12 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageAutoforward }
 			waitFor { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.contains("Sudden shock 0")
+			messageList.messageText(0) != 'Sudden shock 0'
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.contains("Sudden shock 0")
+			messageList.messageText(0) == 'Sudden shock 0'
 	}
 
 	def "move multiple message action works"() {
@@ -198,12 +199,14 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
+			!(messageList.messageText(0) in ['Sudden shock 0', 'Sudden shock 1'])
+			!(messageList.messageText(1) in ['Sudden shock 0', 'Sudden shock 1'])
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
+			messageList.messageText(0) in ['Sudden shock 0', 'Sudden shock 1']
+			messageList.messageText(1) in ['Sudden shock 0', 'Sudden shock 1']
 	}
 
 	def "moving a message from another activity to a autoforward displays an update message"() {
