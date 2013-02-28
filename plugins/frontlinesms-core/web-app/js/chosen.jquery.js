@@ -328,11 +328,18 @@ Copyright (c) 2011 by Harvest
     }
 
 	function calculateDropTop(self, offset) {
-		var dd_top, scrollTop;
+		var dd_top, scrollTop, top, dropdownHeight, windowHeight;
 		offset = offset || self.container.offset();
 		dd_top = self.is_multiple ? self.container.height() : self.container.height() - 1;
 		scrollTop = Math.max(parseInt($(window).scrollTop(), 10), 0);
-		return offset.top + dd_top - scrollTop;
+		dropdownHeight = self.dropdown.height();
+		windowHeight = $(window).height();
+		top = offset.top + dd_top - scrollTop;
+		if(top + dropdownHeight > windowHeight) {
+			return top - dropdownHeight - dd_top;
+		} else {
+			return top;
+		}
 	}
 
 	function calculateDropLeft(container, offset) {
@@ -907,6 +914,9 @@ Copyright (c) 2011 by Harvest
                 $("#" + this.results_data[option.group_array_index].dom_id).css('display', 'list-item');
               }
             } else {
+              return this.dropdown.css({
+                "top": calculateDropTop(this) + "px"
+              });
               if (this.result_highlight && result_id === this.result_highlight.attr('id')) {
                 this.result_clear_highlight();
               }
