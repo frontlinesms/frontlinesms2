@@ -327,10 +327,10 @@ Copyright (c) 2011 by Harvest
       return Chosen.__super__.constructor.apply(this, arguments);
     }
 
-	function calculateDropTop(container, offset) {
+	function calculateDropTop(self, offset) {
 		var dd_top, scrollTop;
-		offset = offset || container.offset();
-		dd_top = container.height();
+		offset = offset || self.container.offset();
+		dd_top = self.is_multiple ? self.container.height() : self.container.height() - 1;
 		scrollTop = Math.max(parseInt($(window).scrollTop(), 10), 0);
 		return offset.top + dd_top - scrollTop;
 	}
@@ -628,7 +628,6 @@ Copyright (c) 2011 by Harvest
         self.results_hide();
       });
 
-      var dd_top;
       if (!this.is_multiple) {
         this.selected_item.addClass("chzn-single-with-drop");
         if (this.result_single_selected) {
@@ -640,14 +639,13 @@ Copyright (c) 2011 by Harvest
         });
         return false;
       }
-      dd_top = this.is_multiple ? this.container.height() : this.container.height() - 1;
       this.form_field_jq.trigger("liszt:showing_dropdown", {
         chosen: this
       });
 
       var offset = this.container.offset();
       this.dropdown.css({
-        "top": calculateDropTop(this.container, offset) + "px",
+        "top": calculateDropTop(this, offset) + "px",
         "left": calculateDropLeft(this.container, offset) + "px",
         position:"fixed"
       });
@@ -1080,7 +1078,7 @@ Copyright (c) 2011 by Harvest
           'width': w + 'px'
         });
         return this.dropdown.css({
-          "top": calculateDropTop(this.container) + "px"
+          "top": calculateDropTop(this) + "px"
         });
       }
     };
