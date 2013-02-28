@@ -34,9 +34,23 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 	}
 
 	def 'validation in configure tab works'() {
-		expect:
-			//TODO ensure that group has to be selected
-			false
+		when:
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
+		then:
+			waitFor { at CreateActivityDialog }
+		when:
+			customactivity.click()
+		then:
+			waitFor('slow') { at CustomActivityCreateDialog }
+		when:
+			keyword.keywordText.value("test")
+			next.click()
+			configure.stepActions.jquery.val("join").jquery.trigger('change')
+			next.click()
+		then:
+			error.displayed	
+			errorText == "please select a group"
 	}
 
 	def 'can add and remove steps in the confiure tab'(){
