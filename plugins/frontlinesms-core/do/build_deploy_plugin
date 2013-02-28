@@ -3,7 +3,6 @@ set -e
 
 # Extract flags
 FLAGS=""
-M2_DEPLOY=false
 while [[ $1 == "--"* ]]; do
 	if [ -z "$FLAGS" ]; then
 		FLAGS=$1
@@ -13,6 +12,7 @@ while [[ $1 == "--"* ]]; do
 	shift
 done
 
+unset M2_DEPLOY
 if [[ $FLAGS == *"--m2-deploy"* ]]; then
 	M2_DEPLOY=true
 fi
@@ -42,21 +42,21 @@ cp $NEW_PLUGIN_ZIP_NAME $IVY_CACHED_ZIP
 
 echo "# Plugin built and deployed to local ivy cache."
 
-if $M2_DEPLOY ;then
+if [ -n "$M2_DEPLOY" ]; then
 	echo "# deploy core plugin to remote plugin repo"
 	echo "# TODO skip maven deploy for non-SNAPSHOT builds"
 	echo "# Using maven password: $FRONTLINESMS_MAVEN_PASSWORD"
 	ftp -nv dev.frontlinesms.com << EOF
-	hash
-	user m2repo $FRONTLINESMS_MAVEN_PASSWORD
-	mkdir org
-	mkdir org/grails/plugins
-	mkdir org/grails/plugins/$APP_NAME
-	cd org/grails/plugins/$APP_NAME
-	mkdir $PLUGIN_VERSION
-	cd $PLUGIN_VERSION
-	put $NEW_PLUGIN_ZIP_NAME
-	exit
+		hash
+		user m2repo $FRONTLINESMS_MAVEN_PASSWORD
+		mkdir org
+		mkdir org/grails/plugins
+		mkdir org/grails/plugins/$APP_NAME
+		cd org/grails/plugins/$APP_NAME
+		mkdir $PLUGIN_VERSION
+		cd $PLUGIN_VERSION
+		put $NEW_PLUGIN_ZIP_NAME
+		exit
 	EOF
 	echo "# Plugin deployed to remote maven repo."
 fi
