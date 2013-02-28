@@ -172,7 +172,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			singleMessageDetails.delete.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) != 'Test message 0'
 	}
 
 	def "delete multiple message action works for multiple select"(){
@@ -190,7 +190,8 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			multipleMessageDetails.deleteAll.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
+			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 	}
 
 	def "move single message action works"() {
@@ -208,12 +209,12 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageWebconnection }
 			waitFor { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) != 'Test message 0'
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) == 'Test message 0'
 	}
 
 	def "move multiple message action works"() {
@@ -231,12 +232,14 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
+			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			messageList.messageText(0) in ['Test message 0', 'Test message 1']
+			messageList.messageText(1) in ['Test message 0', 'Test message 1']
 	}
 
 	def "should display SENT message status for successfully forwarded messages"() {
@@ -244,7 +247,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			to PageMessageWebconnection, Webconnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.any { it.hasStatus("sent") }
+			js.exec '''
+				return $("#main-list tbody tr.ownerdetail-webconnection-SENT").size() > 0
+			'''
 	}
 
 	def "retry failed uploads option should be present in more actions dropdown, and should redirect to same view"() {

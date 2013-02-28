@@ -76,7 +76,7 @@ class MessageList extends geb.Module {
 		message { i=0, onlySelected=false -> onlySelected? $('tbody tr.selected', i): $("tbody tr:nth-of-type(${i+1})") }
 		messageCount { js.exec('return jQuery("#main-list tbody tr").size()') as Integer }
 		selectedMessageCount { js.exec('return jQuery("#main-list tbody tr.selected").size()') as Integer }
-		clickLink { i -> message(i).find('td.message-text-cell a').click(); true }
+		clickLink { i=0 -> message(i).find('td.message-text-cell a').click(); true }
 		selectedMessageLinkUrl { i=0 -> message(i, true).find('td.message-text-cell a').@href }
 		getCheckbox { i -> message(i).find('input[type=checkbox]') }
 		isChecked { i -> getCheckbox(i).checked }

@@ -26,9 +26,9 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 			header[item] == value
 		where:
-			item				| value
-			'title'				| "fruits autoreply"
-			'autoreplyMessage'  | 'Hello, this is an autoreply message'
+			item               | value
+			'title'            | "fruits autoreply"
+			'autoreplyMessage' | 'Hello, this is an autoreply message'
 	}
 
 	def "clicking the edit option opens the Autoreply Dialog for editing"() {
@@ -138,7 +138,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			singleMessageDetails.delete.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) != 'Test message 0'
 	}
 
 	def "delete multiple message action works for multiple select"(){
@@ -148,7 +148,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			waitFor { messageList.displayed }
 		when:
 			messageList.toggleSelect(0)
-			waitFor {singleMessageDetails.displayed }
+			waitFor { singleMessageDetails.displayed }
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
@@ -156,7 +156,8 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			multipleMessageDetails.deleteAll.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
+			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 	}
 
 	def "move single message action works"() {
@@ -174,12 +175,11 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageAutoreply }
 			waitFor { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) != 'Test message 0'
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
-			waitFor { messageList.displayed }
-			messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) == 'Test message 0'
 	}
 
 	def "move multiple message action works"() {
@@ -197,12 +197,14 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
+			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			messageList.messageText(0) in ['Test message 0', 'Test message 1']
+			messageList.messageText(1) in ['Test message 0', 'Test message 1']
 	}
 
 	def "moving a message from another activity to a autoreply displays an update message"() {
