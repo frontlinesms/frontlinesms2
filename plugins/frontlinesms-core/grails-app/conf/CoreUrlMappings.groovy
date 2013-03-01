@@ -30,13 +30,10 @@ class CoreUrlMappings {
 		// Don't know why this is neccessary, but it is
 		"/poll/create"(controller:'poll', action:'create')
 		"/poll/save"(controller:'poll', action:'save')
-		
 		"/folder/create"(controller:'folder', action:'create')
 		"/folder/save"(controller:'folder', action:'save')
-		
 		"/announcement/create"(controller:'announcement', action: 'create')
 		"/announcement/save"(controller:'announcement', action: 'save')
-		
 		"/autoreply/create"(controller:'autoreply', action: 'create')
 		"/autoreply/save"(controller:'autoreply', action: 'save')
 		"/autoforward/create"(controller:'autoforward', action: 'create')
@@ -44,30 +41,22 @@ class CoreUrlMappings {
 		"/customactivity/create"(controller:'customactivity', action: 'create')
 		"/customactivity/save"(controller:'customactivity', action: 'save')
 		
-		"/archive/inbox"(controller:'archive', action:'inbox') {}
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}
+		
 		"/archive/activity"(controller:'archive', action:'activityList') {}
 		"/archive/activity/$ownerId"(controller:'archive', action:'activity') {}
 		"/archive/activity/$ownerId/show/$messageId"(controller:'archive', action:'activity') {}
+		
 		"/archive/folder"(controller:'archive', action:'folderList') {}
 		"/archive/folder/$ownerId"(controller:'archive', action:'folder') {}
 		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
 
 		"/webconnection/$imp/$action"(controller:'webconnection') {}
 
-		"/status/show"(controller:'status', action:'show') {}
-
-		"/settings/general"(controller:'settings', action:'general') {}
-		
-		"/connection/save"(controller:'connection', action:'save') {}
-		"/connection/list"(controller:'connection', action:'list') {}
-
 		"/help/images/$imagePath**.png"(controller:'help', action:'image') {}
 		"/help/$helpSection**"(controller:'help', action:'section') {}
 		"/help"(controller:'help', action:'index') {}
-
-		"/export/wizard"(controller:'export', action:'wizard') {}
 
 		"/$controller/$action?/$id?"{
 			constraints {
