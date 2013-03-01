@@ -6,13 +6,17 @@ def unfiltered = '<unfiltered>' + sin.text + '</unfiltered>'
 
 def slurp = new XmlParser().parseText(unfiltered)
 def suites = slurp.testsuites
-suites = suites? [suites[-1]]: []
 
 Node root = new Node(null, 'testsuites')
-suites.each { testsuites ->
+// Reverse the suites so we get the last-run first - this should give us proper timings for
+// the tests
+def alreadySeen = []
+suites.reverse().each { testsuites ->
 	testsuites.children().each { testsuite ->
-		def expectedChildren = ['properties', 'system-out', 'system-err']
 		def classname = 'js.' + testsuite.attributes().name
+		if(classname in alreadySeen) return;
+		alreadySeen << classname
+		def expectedChildren = ['properties', 'system-out', 'system-err']
 		testsuite.attributes().name = classname
 		testsuite.children().each { testcase ->
 			expectedChildren.remove(testcase.name())
