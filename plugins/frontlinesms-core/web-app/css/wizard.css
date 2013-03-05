@@ -42,7 +42,7 @@ div.input ul.select.radio label input[type="radio"],
 		div.input ul.select.checklist label input[type="checkbox"] { position:absolute; top:10px; left:10px; }
 div.input ul.select.radio label h3,
 		div.input ul.select.checklist label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }
-div.input ul.select.radio label .info,
+div.input ul.select.radio label .info, div.input ul.select.radio label img,
 		div.input ul.select.checklist label .info { margin-left:25px; margin-bottom:0; padding-left:0; font-weight:normal; }
 
 div.input .controls { display:table; margin-top:10px; }

@@ -108,6 +108,7 @@ class FsmsTagLib {
 		def descriptionPrefix = att.remove('descriptionPrefix')?: ''
 		def descriptionSuffix = att.remove('descriptionSuffix')?: ''
 		def hasDescription = descriptionPrefix || descriptionSuffix
+		def useImages = att.remove('useImages')
 		def cssClasses = ['select', 'radio']
 		if(!hasDescription) cssClasses << 'no-description'
 		out << "<div class='input'>"
@@ -118,8 +119,13 @@ class FsmsTagLib {
 			def id = att.name + '-' + i
 			def itemAttributes = att + [value:value, checked:isChecked(value), id:id]
 			out << '<li><label>'
+			def imagePath = "images/icons/${value}.png"
 			if(hasDescription) {
-				out << "<h3>$label</h3>"
+				if(useImages && grailsApplication.parentContext.getResource(imagePath)?.exists()) {
+					out << "<img src='${g.resource(file: imagePath)}' />"
+				}
+				else
+					out << "<h3>$label</h3>"
 				out << info(message:descriptionPrefix + value + descriptionSuffix)
 			} else {
 				out << label
