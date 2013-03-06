@@ -31,7 +31,8 @@ class CoreBootStrap {
 	def messageSource
 	def quartzScheduler
 
-	def bootstrapData = Environment.current == Environment.DEVELOPMENT || Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']?:'')
+	def bootstrapData = System.properties['frontlinesms2.bootstrap.data']? Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']):
+			Environment.current == Environment.DEVELOPMENT
 	
 	def init = { servletContext ->
 		println "BootStrap.init() : Env=${Environment.current}"
@@ -220,7 +221,7 @@ class CoreBootStrap {
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
 		new IntelliSmsFconnection(name:"IntelliSms Mock connection", sendEnabled:true, username:"johnmark", password:"pass_word").save(failOnError:true)
 	}
-	
+
 	private def dev_initRealSmslibFconnections() {
 		if(!bootstrapData) return
 		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234', enabled:false).save(failOnError:true)
@@ -231,8 +232,7 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 		
 	}
-	
-	
+
 	private def dev_initMockSmslibFconnections() {
 		if(!bootstrapData) return
 		new SmslibFconnection(name:"MOCK95: rejects all pins", pin:'1234', port:'MOCK95', baud:9600).save(failOnError:true)
@@ -242,9 +242,7 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"MOCK99: incoming messages, and can send", port:'MOCK99', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK100: incoming messages for autoreplies", port:'MOCK100', baud:9600).save(failOnError:true)	
 	}
-	
-	
-	
+
 	private def dev_initPolls() {
 		if(!bootstrapData) return
 		def keyword1 = new Keyword(value: 'FOOTBALL')
@@ -358,7 +356,6 @@ class CoreBootStrap {
 		}
 	}
 
-
 	private def dev_initWebconnections() {
 		if(!bootstrapData) return
 		[	new Fmessage(src:'Wanyama', text:'forward me to the server'),
@@ -410,7 +407,6 @@ class CoreBootStrap {
 		ushahidiWebconnection.addToMessages(Fmessage.findBySrc('James'))
 		ushahidiWebconnection.save(failOnError:true, flush:true)
 	}
-
 
 	private def dev_initSubscriptions() {
 		if(!bootstrapData) return
@@ -485,7 +481,7 @@ class CoreBootStrap {
 		def c = new Contact(name: n, mobile: a)
 		c.save(failOnError: true)
 	}
-	
+
 	private def initialiseSerial() {
 		if(Environment.current == Environment.TEST
 				|| Boolean.parseBoolean(System.properties['serial.mock'])) {
@@ -507,7 +503,7 @@ ARE A MEMBER OF THE APPROPRIATE GROUP (e.g. "dialout").  OTHERWISE MAKE SURE THA
 YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		}
 	}
-	
+
 	private def initialiseRealSerial() {
 		dev_initRealSmslibFconnections()
 		
