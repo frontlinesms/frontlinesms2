@@ -17,7 +17,7 @@ class HelpController extends ControllerUtils {
 
 	def image() {
 		def uri = r.resource(uri:"/images/${params.imagePath}.png")
-		uri = uri.substring(request.contextPath.size())
+		uri = uri.substring(request.requestURI.indexOf('help/images') + 'help/images'.size())
 		redirect(uri:uri, absolute:true)
 	}
 
