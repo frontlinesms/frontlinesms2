@@ -54,7 +54,7 @@ class CoreUrlMappings {
 
 		"/webconnection/$imp/$action"(controller:'webconnection') {}
 
-		"/help/images/$imagePath**.png"(controller:'help', action:'image') {}
+		"/static/images/help/$imagePath**.png"(controller:'help', action:'image') {}
 		"/help/$helpSection**"(controller:'help', action:'section') {}
 		"/help"(controller:'help', action:'index') {}
 
