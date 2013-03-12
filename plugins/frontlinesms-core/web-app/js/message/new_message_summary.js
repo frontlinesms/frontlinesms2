@@ -2,8 +2,20 @@
 new_message_summary = (function() {
 	var
 	newMessageSummaryResponseHandler = function(data) {
-		console.log(" woop! ");
-		console.log(data);
+		data = data.new_message_summary
+		console.log(data.inbox);
+		updateSpan($("li[entitytype='inbox']"), data.inbox);
+	},
+	updateSpan = function(liSelector, value) {
+		var existingSpan = $(liSelector).find("span.unread_message_count");
+		if($(existingSpan).length) {
+			console.log("FOUND, UPDATING");
+			$(existingSpan).text(value);
+		}
+		else {
+			console.log("NOT FOUND, CREATING");
+			$(liSelector).append("<span class='unread_message_count'>"+value+"</span>");
+		}
 	},
 	init = function() {
 		app_info.listen("new_message_summary", newMessageSummaryResponseHandler);
