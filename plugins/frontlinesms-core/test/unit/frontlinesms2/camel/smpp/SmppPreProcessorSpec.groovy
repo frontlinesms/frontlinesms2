@@ -33,7 +33,7 @@ class SmppPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			1 * x.in.setBody("more+complex")
+			1 * x.in.setBody("more complex")
 	}
 	
 	def 'dispatch ID should be set in header'() {

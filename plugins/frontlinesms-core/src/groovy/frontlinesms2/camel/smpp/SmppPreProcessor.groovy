@@ -12,7 +12,7 @@ class SmppPreProcessor implements Processor {
 		// URL-encode body
 		def d = x.in.body
 		x.in.headers['frontlinesms.dispatch.id'] = d.id
-		x.in.body = urlEncode(d.text)
+		x.in.body = d.text
 		
 		def destination = d.dst
 		if(destination && destination.charAt(0)=='+') destination = destination.substring(1)
