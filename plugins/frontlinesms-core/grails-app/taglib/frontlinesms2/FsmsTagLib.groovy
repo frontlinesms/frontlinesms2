@@ -424,7 +424,12 @@ class FsmsTagLib {
 	def menuitem = { att, body ->
 		def classlist = att.class?:""
 		classlist += att.selected ? " selected" : ""
-		out << '<li class="' + classlist + '" >'
+		out << '<li class="' + classlist + '" '
+		if(att?.entitytype)
+			out << "entitytype='${att.entitytype}' "
+		if(att?.entityid)
+			out << "entityid='${att.entityid}' "
+		out << '>'
 		if (att?.bodyOnly)
 		{
 			out << body()
