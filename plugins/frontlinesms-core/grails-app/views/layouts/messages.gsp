@@ -6,6 +6,7 @@
 		<g:layoutHead/>
 		<r:require module="messages"/>
 		<r:require module="newMessagesCount"/>
+		<r:require module="newMessageSummary"/>
 		<fsms:render template="/includes"/>
 		<fsms:i18nBundle/>
 		<r:script>

@@ -76,6 +76,17 @@ class CoreAppInfoProviders {
 		s.registerProvider('poll_stats') { app, controller, data ->
 			Poll.get(data.ownerId)?.responseStats
 		}
+
+		s.registerProvider('new_message_summary') { app, controller, data ->
+			def m = [inbox: [Fmessage.countUnreadMessages()], activities: [:], folders: [:]]
+			Activity.findAllByArchivedAndDeleted(false, false).each { act ->
+				m.activities."${act.id}" = act.liveMessageCount
+			}
+			Folder.findAllByArchivedAndDeleted(false, false).each { folder ->
+				m.folders."${folder.id}" = folder.liveMessageCount
+			}
+			return m
+		}
 	}
 }
 
