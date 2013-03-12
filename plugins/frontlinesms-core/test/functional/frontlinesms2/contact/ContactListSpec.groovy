@@ -52,7 +52,7 @@ class ContactListSpec extends ContactBaseSpec {
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
-			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones', 'SaM Tina']) }
+			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones', 'SaM Tina']) && contactList.contacts.size() == 3 }
 	}
 
 	def 'should be able to search contacts by phone number'() {
