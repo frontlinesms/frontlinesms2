@@ -5,6 +5,12 @@ new_message_summary = (function() {
 		data = data.new_message_summary
 		console.log(data.inbox);
 		updateSpan($("li[entitytype='inbox']"), data.inbox);
+		$.each(data.activities, function(activityId, unreadMessageCount) {
+			updateSpan($("li[entitytype='activity'][entityid='" + activityId + "']"), unreadMessageCount);
+		});
+		$.each(data.folders, function(folderId, unreadMessageCount) {
+			updateSpan($("li[entitytype='folder'][entityid='" + folderId + "']"), unreadMessageCount);
+		});
 	},
 	updateSpan = function(liSelector, value) {
 		var existingSpan = $(liSelector).find("span.unread_message_count");
