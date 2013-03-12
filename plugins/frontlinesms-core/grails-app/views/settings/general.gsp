@@ -35,24 +35,10 @@
 					<label for="importCsvFile"><g:message code="import.prompt"/></label>
 				</g:uploadForm>
 			</div>
-			<div id="database-backup">
-				<h2><g:message code="configuration.location.title"/></h2>
-				<fsms:info message="configuration.location.description"/>
-				<p><g:message code="configuration.location.instructions"/></p>
-				<% def loc = frontlinesms2.ResourceUtils.resourcePath %>
-				<input type="text" value="${loc}" size="${loc.size()}"/>
-				<a href="file://${loc}"><g:message code="action.view"/></a>
-			</div>
-			<div id="basic-authentication">
-				<h2><g:message code="auth.basic.label" /></h2>
-				<fsms:info message="auth.basic.info"/>
-				<g:form name="basic-auth" action="basicAuth" controller="settings">
-					<fsms:inputs labelPrefix="auth.basic." table="true" submit="action.save"
-							fields="enabled, username, password, confirmPassword"
-							values="${[authEnabled, username, '', '']}"
-							types="${['isBoolean', null, 'password', 'password']}"/>
-				</g:form>
-			</div>
+
+			<fsms:render template="/settings/sections/database_backup"/>
+			<fsms:render template="/settings/sections/basic_auth"/>
+
 			<div id="routing-preferences">
 				<h2><g:message code="routing.title"/></h2>
 				<fsms:info message="routing.info"/>
