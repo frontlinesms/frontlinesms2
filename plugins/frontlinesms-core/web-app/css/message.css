@@ -14,8 +14,8 @@
 	padding: 4px 5px;
 	text-align: center;
 	border-radius: 3px;
-	margin-top: -7px;
-	height:6px;
+	right:12px;
+	margin-top: -9px;
 }
 #body-menu span.unread_message_count.zero {
 	display:none;
