@@ -2,24 +2,22 @@ new_message_summary = (function() {
 	var
 	newMessageSummaryResponseHandler = function(data) {
 		data = data.new_message_summary;
-		console.log("New message summary f0llows");
-		console.log(data);
-		updateSpan($("li[entitytype='inbox']"), data.inbox);
+		updateSpan($("li[entitytype='inbox'] a"), data.inbox[0]);
 		$.each(data.activities, function(activityId, unreadMessageCount) {
-			updateSpan($("li[entitytype='activity'][entityid='" + activityId + "']"), unreadMessageCount);
+			updateSpan($("li[entitytype='activity'][entityid='" + activityId + "'] a"), unreadMessageCount);
 		});
 		$.each(data.folders, function(folderId, unreadMessageCount) {
-			updateSpan($("li[entitytype='folder'][entityid='" + folderId + "']"), unreadMessageCount);
+			updateSpan($("li[entitytype='folder'][entityid='" + folderId + "'] a"), unreadMessageCount);
 		});
 	},
-	updateSpan = function(liSelector, value) {
-		var existingSpan = $(liSelector).find("span.unread_message_count");
+	updateSpan = function(anchorSelecter, value) {
+		var existingSpan = $(anchorSelecter).find("span.unread_message_count");
 		if($(existingSpan).length) {
 			$(existingSpan).text(value);
 			// TODO flash if number is greater than previous value
 		}
 		else {
-			$(liSelector).append("<span class='unread_message_count'>"+value+"</span>");
+			$(anchorSelecter).append("<span class='unread_message_count'>"+value+"</span>");
 		}
 	},
 	init = function() {

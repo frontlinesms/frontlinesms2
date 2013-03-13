@@ -439,10 +439,10 @@ class FsmsTagLib {
 			def msgargs = att.msgargs
 			def p = att.params
 			out << g.link(controller:att.controller, action:att.action, params:p, id:att.id) {
-				out << (att.string ? att.string : g.message(code:msg, args:msgargs))
-			}
-			if (body) {
-				out << body()
+				out << "<span class='menu-item-label'>${(att.string ? att.string : g.message(code:msg, args:msgargs))}</span>"
+				if (body) {
+					out << body()
+				}
 			}
 		}
 		out << '</li>'
@@ -450,7 +450,7 @@ class FsmsTagLib {
 
 	def unreadCount = { att, body ->
 		def val = att.unreadCount
-		out << "<span class='unread_message_count'>" + val + "</span>"
+		out << "<span class='unread_message_count ${val == 0 ? 'zero' : ''}'>" + val + "</span>"
 	}
 
 	def select = { att, body ->

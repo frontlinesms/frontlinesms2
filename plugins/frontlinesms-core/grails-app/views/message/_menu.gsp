@@ -12,7 +12,7 @@
 	<fsms:submenu code="activities.header" class="activities">
 		<g:each in="${activityInstanceList}" status="i" var="a">
 			<fsms:menuitem class="" selected="${a == ownerInstance}" controller="message" action="activity" code="${a.shortName.toLowerCase()}.title" msgargs="${[a.name]}" params="[ownerId: a.id]" entitytype="activity" entityid="${a.id}">
-				<fsms:unreadCount unreadCount="${a.liveMessageCount}"/>
+				<fsms:unreadCount unreadCount="${Fmessage.countUnreadMessages(a)}"/>
 			</fsms:menuitem>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
@@ -24,7 +24,7 @@
 	<fsms:submenu code="folder.header" class="folders">
 		<g:each in="${folderInstanceList}" status="i" var="f">
 			<fsms:menuitem class="" selected="${f == ownerInstance}" controller="message" action="folder" string="${f.name}" params="[ownerId: f.id]" entitytype="folder" entityid="${f.id}">
-				<fsms:unreadCount unreadCount="${f.liveMessageCount}"/>
+				<fsms:unreadCount unreadCount="${Fmessage.countUnreadMessages(f)}"/>
 			</fsms:menuitem>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
