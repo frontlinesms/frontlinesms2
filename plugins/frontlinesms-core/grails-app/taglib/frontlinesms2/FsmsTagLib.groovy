@@ -441,8 +441,16 @@ class FsmsTagLib {
 			out << g.link(controller:att.controller, action:att.action, params:p, id:att.id) {
 				out << (att.string ? att.string : g.message(code:msg, args:msgargs))
 			}
+			if (body) {
+				out << body()
+			}
 		}
 		out << '</li>'
+	}
+
+	def unreadCount = { att, body ->
+		def val = att.unreadCount
+		out << "<span class='unread_message_count'>" + val + "</span>"
 	}
 
 	def select = { att, body ->

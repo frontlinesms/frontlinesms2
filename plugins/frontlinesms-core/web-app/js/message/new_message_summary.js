@@ -1,9 +1,9 @@
-// TODO probably want to rename this something more descriptive such as message_list
 new_message_summary = (function() {
 	var
 	newMessageSummaryResponseHandler = function(data) {
-		data = data.new_message_summary
-		console.log(data.inbox);
+		data = data.new_message_summary;
+		console.log("New message summary f0llows");
+		console.log(data);
 		updateSpan($("li[entitytype='inbox']"), data.inbox);
 		$.each(data.activities, function(activityId, unreadMessageCount) {
 			updateSpan($("li[entitytype='activity'][entityid='" + activityId + "']"), unreadMessageCount);
@@ -15,11 +15,10 @@ new_message_summary = (function() {
 	updateSpan = function(liSelector, value) {
 		var existingSpan = $(liSelector).find("span.unread_message_count");
 		if($(existingSpan).length) {
-			console.log("FOUND, UPDATING");
 			$(existingSpan).text(value);
+			// TODO flash if number is greater than previous value
 		}
 		else {
-			console.log("NOT FOUND, CREATING");
 			$(liSelector).append("<span class='unread_message_count'>"+value+"</span>");
 		}
 	},
