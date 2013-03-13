@@ -106,12 +106,15 @@ class MessageController extends ControllerUtils {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
+			def starred = params.starred ? params.starred : true
+			println "activity::${activityInstance}    param:::${params}"
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
+			println "after::::::::::::::"
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
 			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
 				sentDispatchCount += it.dispatches.size()
-				sentMessageCount++
+				sentMessageCount++				
 			}
 			render view:"/activity/${activityInstance.shortName}/show",
 				model:[messageInstanceList: messageInstanceList,
