@@ -2,20 +2,13 @@
 set -e
 
 # Extract flags
-FLAGS=""
 while [[ $1 == "--"* ]]; do
-	if [ -z "$FLAGS" ]; then
-		FLAGS=$1
-	else
-		FLAGS="$FLAGS $1"
+	if [ "$1" == "--m2-deploy" ]; then
+		echo "# Maven deployment enabled."
+		M2_DEPLOY=true
 	fi
 	shift
 done
-
-unset M2_DEPLOY
-if [[ $FLAGS == *"--m2-deploy"* ]]; then
-	M2_DEPLOY=true
-fi
 
 echo "# extract app name from application.properties..."
 APP_NAME=`grep '^app.name=' application.properties | cut -d= -f2 | sed -E 's/(([^^])([A-Z]))/\2-\3/g' | tr [:upper:] [:lower:]`
@@ -24,8 +17,8 @@ echo "# extract version from application.properties..."
 PLUGIN_VERSION=$(env groovy -e "`grep -E '^\s*def\s+version' *GrailsPlugin.groovy`; println version")
 echo "# Extracted plugin version as $PLUGIN_VERSION"
 rm plugin.xml || echo "# no plugin.xml present"
-grails clean
-grails package-plugin
+grails --non-interactive clean
+grails --non-interactive package-plugin
 NEW_PLUGIN_ZIP_NAME=$APP_NAME-$PLUGIN_VERSION.zip
 OLD_PLUGIN_ZIP_NAME=grails-$NEW_PLUGIN_ZIP_NAME
 echo "# renaming $OLD_PLUGIN_ZIP_NAME to $NEW_PLUGIN_ZIP_NAME"
@@ -47,17 +40,17 @@ if [ -n "$M2_DEPLOY" ]; then
 	echo "# TODO skip maven deploy for non-SNAPSHOT builds"
 	echo "# Using maven password: $FRONTLINESMS_MAVEN_PASSWORD"
 	ftp -nv dev.frontlinesms.com << EOF
-		hash
-		user m2repo $FRONTLINESMS_MAVEN_PASSWORD
-		mkdir org
-		mkdir org/grails/plugins
-		mkdir org/grails/plugins/$APP_NAME
-		cd org/grails/plugins/$APP_NAME
-		mkdir $PLUGIN_VERSION
-		cd $PLUGIN_VERSION
-		put $NEW_PLUGIN_ZIP_NAME
-		exit
-	EOF
+hash
+user m2repo $FRONTLINESMS_MAVEN_PASSWORD
+mkdir org
+mkdir org/grails/plugins
+mkdir org/grails/plugins/$APP_NAME
+cd org/grails/plugins/$APP_NAME
+mkdir $PLUGIN_VERSION
+cd $PLUGIN_VERSION
+put $NEW_PLUGIN_ZIP_NAME
+exit
+EOF
 	echo "# Plugin deployed to remote maven repo."
 fi
 
