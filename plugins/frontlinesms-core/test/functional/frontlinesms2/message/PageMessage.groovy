@@ -31,7 +31,7 @@ class BodyMenu extends geb.Module {
 		newFolder { $('#body-menu li.folders a.btn.create') }
 		folderLinks { $('ul li.folders ul.submenu li a') }
 		activityLink { activityName ->
-			$('#body-menu li.activities ul.submenu li a', text: activityName + " " + Activity.findByName(activityName)?.shortName)
+			$('#body-menu li.activities ul.submenu li a', text: startsWith(activityName + " " + Activity.findByName(activityName)?.shortName))
 		}
 	}
 }
