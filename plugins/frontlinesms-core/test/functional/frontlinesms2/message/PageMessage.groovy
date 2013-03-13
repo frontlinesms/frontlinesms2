@@ -24,6 +24,7 @@ class BodyMenu extends geb.Module {
 		messageSection { section ->
 			$("a", text: "${section}")
 		}
+		inboxNewMessageCount { $('#body-menu span.unread_message_count')[0].text() as Integer }
 		selected { $('#body-menu .selected').text()?.toLowerCase() }
 		activityList { $('#body-menu li.activities ul.submenu li') }
 		activityLinks { $('#body-menu li.activities ul.submenu li a') }
