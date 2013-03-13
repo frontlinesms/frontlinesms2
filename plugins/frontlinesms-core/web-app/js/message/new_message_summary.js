@@ -12,12 +12,31 @@ new_message_summary = (function() {
 	},
 	updateSpan = function(anchorSelecter, value) {
 		var existingSpan = $(anchorSelecter).find("span.unread_message_count");
+		var previousValue = 0;
 		if($(existingSpan).length) {
+			previousValue = $(existingSpan).text();
 			$(existingSpan).text(value);
-			// TODO flash if number is greater than previous value
 		}
 		else {
 			$(anchorSelecter).append("<span class='unread_message_count'>"+value+"</span>");
+			existingSpan = $(anchorSelecter).find("span.unread_message_count");
+		}
+		if(value == 0) {
+			$(existingSpan).addClass("zero");	
+		}
+		else {
+			$(existingSpan).removeClass("zero");	
+			if(value > previousValue) {
+				$(existingSpan).pulse({
+					backgroundColor : '#C03283',
+					color           : 'white'
+				},
+				{
+					returnDelay : 300,
+					interval    : 400,
+					pulses      : 1
+				});
+			}
 		}
 	},
 	init = function() {

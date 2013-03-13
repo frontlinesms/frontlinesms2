@@ -74,6 +74,7 @@ modules = {
 	newMessageSummary {
 		dependsOn 'jquery'
 		resource url:[dir:'js', file:'message/new_message_summary.js']
+		resource url:[dir:'js', file:'jquery.pulse.js']
 	}
 
 	archive {
