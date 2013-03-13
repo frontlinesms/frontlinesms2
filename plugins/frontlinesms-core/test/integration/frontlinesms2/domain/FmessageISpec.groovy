@@ -445,6 +445,21 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			message.getOwnerType(customActivity) == MessageDetail.OwnerType.ACTIVITY
 	}
+
+	def "countUnreadMessages with an owner argument limits the count to only that owner's messages"() {
+		setup:
+			Fmessage.build(read:true)
+			Fmessage.build()
+			def autoReply = Autoreply.build()
+			3.times { autoReply.addToMessages(Fmessage.build()) }
+			Fmessage.build(archived:true)
+		when:
+			def inboxUnread = Fmessage.countUnreadMessages()
+			def autoreplyUnread = Fmessage.countUnreadMessages(autoReply)
+		then:
+			inboxUnread == 1
+			autoreplyUnread == 3
+	}
 	
 	private Folder getTestFolder(params=[]) {
 		new Folder(name:params.name?:'test',
