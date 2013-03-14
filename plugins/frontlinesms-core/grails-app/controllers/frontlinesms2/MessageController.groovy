@@ -109,9 +109,7 @@ class MessageController extends ControllerUtils {
 			if (params.failed == null) params.failed = false
 			if (params.sort == null) params.sort = 'desc'
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
-			println "activity::${activityInstance}    param:::${params}"
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
-			println "after::::::::::::::"
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
 			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
@@ -137,6 +135,7 @@ class MessageController extends ControllerUtils {
 	def folder() {
 		def folderInstance = Folder.get(params.ownerId)
 		if (folderInstance) {
+			if (params.starred == null) params.starred = false
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
 			def messageInstanceList = folderInstance?.getFolderMessages(params.starred, getSent)
 			if (params.flashMessage) { flash.message = params.flashMessage }
