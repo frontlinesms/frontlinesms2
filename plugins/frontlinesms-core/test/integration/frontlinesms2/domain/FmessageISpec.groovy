@@ -460,6 +460,18 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			inboxUnread == 1
 			autoreplyUnread == 3
 	}
+
+	def "pendingAndNotFailed returns count of dispatches with PENDING status"() {
+		setup:
+			def m1 = Fmessage.buildWithoutSave(inbound:false, date: new Date() - 10)
+			4.times { m1.addToDispatches(Dispatch.build(status: DispatchStatus.PENDING)) }
+			m1.addToDispatches(Dispatch.build(status: DispatchStatus.SENT, dateSent:new Date()))
+			m1.addToDispatches(Dispatch.build(status: DispatchStatus.FAILED))
+		when:
+			def pendingCount = Fmessage.pendingAndNotFailed.count()
+		then:
+			pendingCount == 4
+	}
 	
 	private Folder getTestFolder(params=[]) {
 		new Folder(name:params.name?:'test',

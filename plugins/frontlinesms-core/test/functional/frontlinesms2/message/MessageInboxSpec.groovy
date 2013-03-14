@@ -315,6 +315,15 @@ class MessageInboxSpec extends MessageBaseSpec {
 			}
 	}
 
+	def "pending message count is shown in left-hand menu next to pending indicator"() {
+		given:
+			createPendingTestMessages()
+		when:
+			to PageMessageInbox
+		then:
+			bodyMenu.pendingMessageCount == 2
+	}
+
 	String dateToString(Date date) {
 		new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).format(date)
 	}
