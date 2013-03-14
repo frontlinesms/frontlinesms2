@@ -5,7 +5,9 @@
 			<fsms:unreadCount unreadCount="${Fmessage.countUnreadMessages()}"/>
 		</fsms:menuitem>
 		<fsms:menuitem class="" selected="${messageSection=='sent'}" controller="message" action="sent" code="fmessage.section.sent"/>
-		<fsms:menuitem class="" selected="${messageSection=='pending'}" controller="message" action="pending" code="fmessage.section.pending"/>
+		<fsms:menuitem class="" selected="${messageSection=='pending'}" controller="message" action="pending" code="fmessage.section.pending" entitytype="pending">
+			<fsms:pendingCount pendingCount="${Fmessage.pendingAndNotFailed.count()}"/>
+		</fsms:menuitem>
 		<fsms:menuitem class="" selected="${messageSection=='trash'}" controller="message" action="trash" code="fmessage.section.trash"/>
 	</fsms:submenu>
 
