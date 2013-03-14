@@ -453,6 +453,11 @@ class FsmsTagLib {
 		out << "<span class='unread_message_count ${val == 0 ? 'zero' : ''}'>" + val + "</span>"
 	}
 
+	def pendingCount = { att, body ->
+		def val = att.pendingCount
+		out << "<span class='pending_message_count ${val == 0 ? 'zero' : ''}'>" + val + "</span>"
+	}
+
 	def select = { att, body ->
 		// add the no-selection option to the list if required
 		if(!att.hideNoSelection && att.noSelection && att.value != null) {
