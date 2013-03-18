@@ -7,4 +7,5 @@ do/functional_test_unsafe_text_calls_checker
 do/functional_test_unflushed_saves_checker
 do/jslint_report
 do/csslint_report
+do/simian_report
 

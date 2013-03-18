@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+if [[ -z $SIMIAN_JAR ]]; then
+	echo "# Environment variable SIMIAN_JAR not set.  Simian report will not run."
+	exit 0
+fi
+
+if [[ $1 == "--xml" ]]; then
+	simianFormat='-formatter=xml:target/simian.xml'
+fi
+
+echo "# Using simian jar at: $SIMIAN_JAR..."
+echo "# I hope you've paid for a licence..."
+
+java -jar $SIMIAN_JAR $simianFormat -language=groovy "src/groovy/**/*.groovy" "grails-app/**/*.groovy" "test/**/*.groovy"
+
