@@ -31,8 +31,8 @@ class FconnectionService {
 			def routes = c.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
 			createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
-			event for:"fconnection", topic:"routeCreated", data:c
-			//logService.handleRouteCreated(c)
+			//event for:"fconnection", topic:"routeCreated", data:c
+			logService.handleRouteCreated(c)
 		} catch(FailedToCreateProducerException ex) {
 			logFail(c, ex.cause)
 		} catch(Exception ex) {
@@ -124,8 +124,8 @@ class FconnectionService {
 	private def logFail(c, ex) {
 		ex.printStackTrace()
 		log.warn("Error creating routes to fconnection with id $c?.id", ex)
-		event for:"fconnection", topic:"routeCreationFailed", data:c 
-		//logService.handleRouteCreationFailed(c)
+		//event for:"fconnection", topic:"routeCreationFailed", data:c 
+		logService.handleRouteCreationFailed(c)
 		//createSystemNotification('connection.route.failNotification', [c?.id, c?.name?:c?.id], ex)
 	}
 
