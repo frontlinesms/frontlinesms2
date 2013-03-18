@@ -109,7 +109,7 @@ class ConnectionController extends ControllerUtils {
 	}
 	
 	def enable() {
-		this.class.classLoader.findClass("EnableFconnectionJob").triggerNow([connectionId:params.id])
+		EnableFconnectionJob.triggerNow([connectionId:params.id])
 		params.connecting = true
 		flash.message = message(code: 'connection.route.connecting')
 		def connectionInstance = Fconnection.get(params.id)
