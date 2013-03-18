@@ -205,6 +205,18 @@ class SearchViewSpec extends SearchBaseSpec {
 			waitFor { searchsidebar.searchString == "alex" }
 	}
 
+	def "when message owner link is clicked it should redirect to the message owner page where no message is selected"() {
+		when:
+			to PageSearchResult, "cow"
+		then:
+			messageList.toggleSelect(0)
+			waitFor { singleMessageDetails.text == 'eat more cow' }
+		when:
+			detailsidebar.messageOwnerLink.click()
+		then:
+			waitFor { at frontlinesms2.poll.PageMessagePoll }
+	}
+
 	def "should expand the more option and select a contactName then the link to add contactName is hidden"() {
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
