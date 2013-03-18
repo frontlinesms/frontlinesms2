@@ -70,7 +70,13 @@ modules = {
 		dependsOn 'jquery'
 		resource url:[dir:'js', file:'message/check_for_new_messages.js']
 	}
-	
+
+	newMessageSummary {
+		dependsOn 'jquery'
+		resource url:[dir:'js', file:'message/new_message_summary.js']
+		resource url:[dir:'js', file:'jquery.pulse.js']
+	}
+
 	archive {
 		dependsOn 'messages'
 	}

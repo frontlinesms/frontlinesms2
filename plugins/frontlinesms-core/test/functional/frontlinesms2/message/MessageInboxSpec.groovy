@@ -300,6 +300,21 @@ class MessageInboxSpec extends MessageBaseSpec {
 			!singleMessageDetails.addToContacts.displayed
 	}
 
+	def "messageCount is shown in left-hand menu next to inbox indicator and is updated asynchronously"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to PageMessageInbox
+		then:
+			bodyMenu.inboxNewMessageCount == 2
+		when:
+			messageList.toggleSelect(0)
+		then:
+			waitFor('veryslow') {
+				bodyMenu.inboxNewMessageCount == 1
+			}
+	}
+
 	String dateToString(Date date) {
 		new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).format(date)
 	}

@@ -130,13 +130,16 @@ class Fmessage {
 					eq("inbound", getSent)
 			}
 		}
-		unread {
+		unread { MessageOwner owner=null ->
 			and {
 				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
 				eq("read", false)
-				isNull("messageOwner")
+				if(owner == null)
+					isNull("messageOwner")
+				else
+					eq("messageOwner", owner)
 			}
 		}
 
@@ -270,6 +273,10 @@ class Fmessage {
 	
 	static def countUnreadMessages() {
 		Fmessage.unread.count()
+	}
+
+	static def countUnreadMessages(owner) {
+		Fmessage.unread(owner).count()
 	}
 	
 	static def countAllMessages(params) {
