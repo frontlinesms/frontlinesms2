@@ -13,6 +13,9 @@ class FconnectionServiceSpec extends Specification {
 	def context
 
 	def setup() {
+		defineBeans {
+			logService(LogService)
+		}
 		context = Mock(CamelContext)
 		service.camelContext = context
 		def i18nUtilService = Mock(I18nUtilService)
