@@ -31,7 +31,6 @@ class FconnectionService {
 			def routes = c.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
 			createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
-			//event for:"fconnection", topic:"routeCreated", data:c
 			logService.handleRouteCreated(c)
 		} catch(FailedToCreateProducerException ex) {
 			logFail(c, ex.cause)
@@ -124,17 +123,16 @@ class FconnectionService {
 	private def logFail(c, ex) {
 		ex.printStackTrace()
 		log.warn("Error creating routes to fconnection with id $c?.id", ex)
-		//event for:"fconnection", topic:"routeCreationFailed", data:c 
 		logService.handleRouteCreationFailed(c)
-		//createSystemNotification('connection.route.failNotification', [c?.id, c?.name?:c?.id], ex)
+		createSystemNotification('connection.route.failNotification', [c?.id, c?.name?:c?.id], ex)
 	}
 
 	private def createSystemNotification(code, args, exception=null) {
 		if(exception) args += [i18nUtilService.getMessage(code:'connection.error.'+exception.class.name.toLowerCase(), args:[exception.message])]
 		def text = i18nUtilService.getMessage(code:code, args:args)
-		//def notification = SystemNotification.findOrCreateByText(text)
-		//notification.read = false
-		//notification.save(failOnError:true, flush:true)
+		def notification = SystemNotification.findOrCreateByText(text)
+		notification.read = false
+		notification.save(failOnError:true, flush:true)
 	}
 
 	private def isFailed(Fconnection c) {
