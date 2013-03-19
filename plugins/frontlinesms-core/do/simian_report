@@ -12,5 +12,8 @@ fi
 echo "# Using simian jar at: $SIMIAN_JAR..."
 echo "# I hope you've paid for a licence..."
 
+set +e
 java -jar $SIMIAN_JAR $simianFormat -language=groovy "src/groovy/**/*.groovy" "grails-app/**/*.groovy" "test/**/*.groovy"
+echo "# Simian completed with exit code: $?"
+set -e
 
