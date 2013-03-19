@@ -4,7 +4,7 @@ import frontlinesms2.*
 
 class PageMessagePoll extends frontlinesms2.page.PageMessageActivity {
 	static at = {
-		$('title').text().toLowerCase().contains('poll')
+		$('title')?.text()?.toLowerCase().contains('poll')
 	}
 
 	static content = {
