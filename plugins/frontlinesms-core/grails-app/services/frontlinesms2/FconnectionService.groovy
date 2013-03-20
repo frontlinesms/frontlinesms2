@@ -31,7 +31,7 @@ class FconnectionService {
 			connectingIds << c.id
 			def routes = c.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
-			systemNotificationService.createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
+			systemNotificationService.createSystemNotification('connection.route.successNotification', [c?.name?: c?.id], [connection:c])
 			logService.handleRouteCreated(c)
 		} catch(FailedToCreateProducerException ex) {
 			logFail(c, ex.cause)
@@ -46,7 +46,7 @@ class FconnectionService {
 
 	def destroyRoutes(Fconnection c) {
 		destroyRoutes(c.id as long)
-		systemNotificationService.createSystemNotification('connection.route.destroyNotification', [c?.name?: c?.id])
+		systemNotificationService.createSystemNotification('connection.route.destroyNotification', [c?.name?: c?.id], [connection:c])
 	}
 
 	def destroyRoutes(long id) {
