@@ -107,7 +107,6 @@ class MessageController extends ControllerUtils {
 		if (activityInstance) {
 			if (params.starred == null) params.starred = false
 			if (params.failed == null) params.failed = false
-			if (params.sort == null) params.sort = 'desc'
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
 			def sentMessageCount = 0
