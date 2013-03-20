@@ -16,8 +16,6 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			option('ushahidi').displayed
 		and:
-			getTitle('ushahidi') == 'Crowdmap / Ushahidi'
-		and:
 			getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server.'
 	}
 
