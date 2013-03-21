@@ -16,7 +16,7 @@ class AppInfoService {
 		synchronized(this) {
 			provider = providers[key]
 		}
-		return provider.call(grailsApplication, controller, data)
+		return provider?.call(grailsApplication, controller, data)
 	}
 }
 
