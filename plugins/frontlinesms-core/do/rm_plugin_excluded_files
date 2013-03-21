@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 NONEWLINES=$(tr -d '\n' < FrontlinesmsCoreGrailsPlugin.groovy)
 FILE_LIST=$(echo $NONEWLINES | grep -o '\[.*\]')
 ans=`echo $FILE_LIST | grep -o 'grai.*'`
