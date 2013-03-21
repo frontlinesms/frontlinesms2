@@ -2,6 +2,7 @@ grails.servlet.version = "2.5" // Change depending on target container complianc
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
+grails.project.work.dir = 'target'
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
@@ -85,7 +86,7 @@ grails.project.dependency.resolution = {
 		runtime ":database-migration:1.0"
 		runtime ":jquery:1.7.1"
 		runtime ':jquery-ui:1.8.15'
-		runtime ':resources:1.2.RC3'
+		compile ':resources:1.2'
 
 		runtime ":export:1.1"
 		runtime ":markdown:1.0.0.RC1"
@@ -133,3 +134,4 @@ codenarc {
 		GrailsPublicControllerMethod.enabled = false
 	}
 }
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+do/check_for_ignored_tests
+do/check_for_bad_template_renders
+do/check_for_setInterval_calls
+do/functional_test_unsafe_text_calls_checker
+do/functional_test_unflushed_saves_checker
+do/jslint_report
+do/csslint_report
+do/simian_report --xml
+

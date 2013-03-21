@@ -16,6 +16,13 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		createMiaouwMixPoll()
 	}
 	
+	static createPendingTestMessages() {
+		def a = Fmessage.buildWithoutSave(inbound:false)
+		a.addToDispatches(Dispatch.build(status: DispatchStatus.PENDING))
+		def b = Fmessage.buildWithoutSave(inbound:false)
+		b.addToDispatches(Dispatch.build(status: DispatchStatus.PENDING))
+	}
+	
 	static createSearchTestMessages() {
 		Fmessage.build(src:'Alex', text:'meeting at 11.00')
 		Fmessage.build(src:'Bob', text:'hi Bob')

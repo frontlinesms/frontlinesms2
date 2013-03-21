@@ -78,7 +78,7 @@ class CoreAppInfoProviders {
 		}
 
 		s.registerProvider('new_message_summary') { app, controller, data ->
-			def m = [inbox: [Fmessage.countUnreadMessages()], activities: [:], folders: [:]]
+			def m = [inbox: Fmessage.countUnreadMessages(), pending: Fmessage.pendingAndNotFailed.count(), activities: [:], folders: [:]]
 			Activity.findAllByArchivedAndDeleted(false, false).each { act ->
 				m.activities."${act.id}" = Fmessage.countUnreadMessages(act)
 			}

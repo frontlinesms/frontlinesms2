@@ -112,6 +112,24 @@ class Fmessage {
 				property 'id'
 			}
 		}
+
+		pendingAndNotFailed {
+			and {
+				eq("isDeleted", false)
+				eq("archived", false)
+				projections {
+					dispatches {
+						eq('status', DispatchStatus.PENDING)
+					}
+				}
+			}
+			projections {
+				distinct 'id'
+				property 'date'
+				property 'id'
+			}
+		}
+
 		deleted { getOnlyStarred=false ->
 			and {
 				eq("isDeleted", true)

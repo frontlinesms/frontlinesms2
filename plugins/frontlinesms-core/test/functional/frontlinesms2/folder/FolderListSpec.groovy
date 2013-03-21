@@ -144,7 +144,7 @@ class FolderListSpec extends FolderBaseSpec {
 			ok.jquery.trigger("click")
 			to PageMessageFolder
 		then:
-			folderLinks*.text().containsAll('New Work', 'Projects')
+			folderLinks*.text().every { it.startsWith('New Work') || it.startsWith('Projects') || it == "Create new folder" }
 	}
 
 	def 'Errors are displayed when creating a folder with an already existing folders name'() {
@@ -223,7 +223,7 @@ class FolderListSpec extends FolderBaseSpec {
 			waitFor { title.toLowerCase().contains("inbox") }
 		then:
 			at PageMessageInbox
-			bodyMenu.folderLinks*.text().containsAll('Projects')
+			bodyMenu.folderLinks*.text().any { it.startsWith "Projects" }
 	}
 
 	def "filter folder messages by incoming messages should not show new outgoing messages"() {
