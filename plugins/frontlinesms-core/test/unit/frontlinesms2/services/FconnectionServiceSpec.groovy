@@ -16,8 +16,10 @@ class FconnectionServiceSpec extends Specification {
 		context = Mock(CamelContext)
 		service.camelContext = context
 		def i18nUtilService = Mock(I18nUtilService)
+		def systemNotificationService = Mock(SystemNotificationService)
 		i18nUtilService.getMessage(_) >> { args -> args.code[0] }
 		service.i18nUtilService = i18nUtilService
+		service.systemNotificationService = systemNotificationService
 		Fconnection.metaClass.static.get = { Serializable id -> println "overrided 'get()' called"; return [] }
 		def logService = Mock(LogService)
 		logService.handleRouteCreated = {/* Impostor! */}
