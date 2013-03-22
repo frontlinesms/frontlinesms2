@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class SystemNotificationService {
+	def i18nUtilService
 	def createSystemNotification(code, args, kwargs=[:]) {
 		if(kwargs.exception) args += [i18nUtilService.getMessage(code:'connection.error.'+exception.class.name.toLowerCase(), args:[exception.message])]
 		def text = i18nUtilService.getMessage(code:code, args:args)
