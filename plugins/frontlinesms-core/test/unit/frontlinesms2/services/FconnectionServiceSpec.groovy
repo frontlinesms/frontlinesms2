@@ -11,12 +11,12 @@ import org.apache.camel.Exchange
 @Mock([LogEntry, Dispatch, Fmessage, SystemNotification])
 class FconnectionServiceSpec extends Specification {
 	def context
+	def systemNotificationService = Mock(SystemNotificationService)
 
 	def setup() {
 		context = Mock(CamelContext)
 		service.camelContext = context
 		def i18nUtilService = Mock(I18nUtilService)
-		def systemNotificationService = Mock(SystemNotificationService)
 		i18nUtilService.getMessage(_) >> { args -> args.code[0] }
 		service.i18nUtilService = i18nUtilService
 		service.systemNotificationService = systemNotificationService
@@ -147,7 +147,7 @@ class FconnectionServiceSpec extends Specification {
 		when:
 			service.handleDisconnection(exchange)
 		then:
-			SystemNotification.count()
+			1 * systemNotificationService.createSystemNotification(_,_,_)
 			jobRouteId == connectionId
 		where:
 			routeId          | connectionId
