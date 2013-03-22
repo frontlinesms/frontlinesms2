@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+NONEWLINES=$(tr -d '\n' < FrontlinesmsCoreGrailsPlugin.groovy)
+FILE_LIST=$(echo $NONEWLINES | grep -o '\[.*\]')
+ans=`echo $FILE_LIST | grep -o 'grai.*'`
+for i in $ans
+do
+	FILE=$(echo $i | tr -d ',' | tr -d '\"' | tr -d ']' | tr -d '[')
+	echo "# Deleting from core $FILE"
+	rm $FILE
+done
