@@ -10,7 +10,6 @@ class SubscriptionServiceSpec extends Specification {
 	def s, c, g, service, sendService, replyMessage
 
 	private static final String TEST_CONTACT = '+1111111111'
-	private static final String TEST_NON_CONTACT = '+2222222222'
 
 	def setup() {
 		service = new SubscriptionService()
@@ -69,12 +68,6 @@ class SubscriptionServiceSpec extends Specification {
 	}
 
 	//> HELPERS
-	private def processKeyword(String messageText, String sourcePhoneNumber, String ownerDetail) {
-		def k = Mock(Keyword)
-		k.ownerDetail >> ownerDetail
-		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), k)
-	}
-
 	private def createTestContact() {
 		c = Contact.build(mobile:TEST_CONTACT)
 	}
