@@ -19,7 +19,7 @@ When you have selected the appropriate connection type, click next.
 ## Configuring Crowdmap/Ushahidi
 ![Configuring Ushahidi][7]
 
-If you selected Ushahidi/Crowdmap, you will be prompted to enter details about your Crowdmap or Ushahidi deployment. This requires an active Crowdmap/Ushahidi deployment with the FrontlineSMS plugin installed. If you are connecting to Ushahidi, you will need to enter the complete URL, starting with http:// or https://. For Crowdmap, you only need to enter the subdomain name, e.g. for 'https://frontline.crowdmap.com', you only need to enter 'frontline' as the deployment address. In both cases, you will also need to provide your API key, which can be found on the Ushahidi FrontlineSMS plugin settings page.
+If you selected Ushahidi/Crowdmap, you will be prompted to enter details about your Crowdmap or Ushahidi deployment. This requires an active Crowdmap/Ushahidi deployment with the FrontlineSMS plugin installed. If you are connecting to Ushahidi, you will need to enter the complete URL, starting with http:// or https://. For Crowdmap, you only need to enter the subdomain name, e.g. for 'https://frontline.crowdmap.com', you only need to enter 'frontline' as the deployment address. In both cases, you will also need to provide your Ushahidi sync key into the API key dialogue box. This can be found on the Ushahidi FrontlineSMS plugin settings page.
 
 ## Configuring a Connection to another service
 ![Configuring Generic Web Connection][8]
