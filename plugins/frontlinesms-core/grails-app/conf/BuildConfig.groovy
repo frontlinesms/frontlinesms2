@@ -142,6 +142,8 @@ codenarc {
 		GrailsPublicControllerMethod.enabled = false
 		GrailsDomainHasToString.enabled = false
 		GrailsDomainHasEquals.enabled = false
+		ThrowRuntimeException.enabled = false
+		CatchException.enabled = false
 	}
 }
 
