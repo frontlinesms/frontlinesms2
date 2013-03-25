@@ -261,14 +261,6 @@ class Fmessage {
 		contactlist?contactlist:""
 	}
 
-	private boolean isMoveAllowed(){
-		if(this.messageOwner){
-			return !(this.messageOwner?.archived)
-		} else {
-			return (!this.isDeleted && !this.archived)
-		}
-    }
-
 	private def areAnyDispatches(status) {
 		dispatches?.any { it.status == status }
 	}
@@ -297,12 +289,8 @@ class Fmessage {
 		Fmessage.unread(owner).count()
 	}
 	
-	static def countAllMessages(params) {
-		def inboxCount = Fmessage.inbox.count()
-		def sentCount = Fmessage.sent.count()
-		def pendingCount = Fmessage.pending.count()
-		def deletedCount = Fmessage.deleted.count()
-		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
+	static def countAllMessages() {
+		['inbox', 'sent', 'pending', 'deleted'].collect { Fmessage[it].count() }
 	}
 
 	// TODO should this be in a service?
