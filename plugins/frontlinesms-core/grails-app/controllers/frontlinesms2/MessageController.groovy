@@ -280,7 +280,7 @@ class MessageController extends ControllerUtils {
 				checkedMessageCount: checkedMessageCount,
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
-				messageCount: Fmessage.countAllMessages(params),
+				messageCount: Fmessage.countAllMessages(),
 				hasFailedMessages: Fmessage.hasFailedMessages(),
 				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
