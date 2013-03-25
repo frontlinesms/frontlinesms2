@@ -67,7 +67,7 @@ class NexmoPreProcessorSpec extends CamelUnitSpecification {
 			x.out.headers.'nexmo.api_secret' == 'siri'
 			x.out.headers.'nexmo.fromNumber' == '123321'
 	}
-	private NexmoFconnection buildTestConnection(sendToUsa=false) {
+	private NexmoFconnection buildTestConnection() {
 		NexmoFconnection.build(api_key:'ufunguo', api_secret:'siri',fromNumber: "123321")
 	}
 }
