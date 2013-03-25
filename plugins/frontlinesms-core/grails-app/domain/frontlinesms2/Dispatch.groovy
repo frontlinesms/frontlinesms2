@@ -43,7 +43,6 @@ class Dispatch {
 			def messageOwner = params.messageOwner
 			def startDate = params.startDate.startOfDay
 			def endDate = params.endDate.endOfDay
-			def statuses = params.messageStatus.collect { it.toLowerCase() }
 			
 			and {
 				eq('isDeleted', false)
