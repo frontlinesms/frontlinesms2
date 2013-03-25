@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.*
 import org.apache.camel.*
 
 import grails.converters.JSON

@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
 
 class CustomActivityService {
 	/* TODO if you do insist on committing printlns, please make sure they are neat and make sense when
