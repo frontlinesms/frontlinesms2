@@ -109,7 +109,5 @@ class SettingsController extends ControllerUtils {
 
 		fconnectionRoutingMap
 	}
-
-	private def withFconnection = withDomainObject Fconnection, { params.id }, { render(view:'show_connections', model: [fconnectionInstanceTotal: 0]) }
 }
 

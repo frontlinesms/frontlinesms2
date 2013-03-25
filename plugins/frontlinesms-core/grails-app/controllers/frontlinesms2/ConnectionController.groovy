@@ -20,7 +20,6 @@ class ConnectionController extends ControllerUtils {
 				fconnectionInstanceTotal:fconnectionInstanceTotal]
 		if(params?.id) {
 			model << show()
-			def connectionInstance = model.connectionInstance
 			render view:'show', model:model
 		} else {
 			params.id = fconnectionInstanceList[0]?.id

@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import grails.converters.JSON
-
 class SubscriptionController extends ActivityController {
 	def subscriptionService
 

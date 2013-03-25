@@ -270,7 +270,7 @@ class MessageController extends ControllerUtils {
 
 	private def withFmessage = withDomainObject Fmessage, { params.messageId }
 
-	private def getShowModel(messageInstanceList) {
+	private def getShowModel() {
 		def messageInstance = params.messageId? Fmessage.get(params.messageId): null
 		messageInstance?.read = true
 		messageInstance?.save()
