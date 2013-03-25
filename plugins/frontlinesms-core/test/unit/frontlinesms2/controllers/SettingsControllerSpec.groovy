@@ -101,7 +101,7 @@ class SettingsControllerSpec extends Specification {
 		given:
 			def conn1 = new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 			def conn2 = new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
-			def conn3 = new SmslibFconnection(name:"COM5", port:'COM5', baud:9600, sendEnabled:false).save(failOnError:true)
+			new SmslibFconnection(name:"COM5", port:'COM5', baud:9600, sendEnabled:false).save(failOnError:true)
 			controller.appSettingsService = ['routing.use':"uselastreceiver,fconnection-${conn2.id},fconnection-${conn1.id}"]
 		when:
 			def model = controller.general()
