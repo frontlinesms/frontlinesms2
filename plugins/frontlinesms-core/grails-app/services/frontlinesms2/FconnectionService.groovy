@@ -135,6 +135,7 @@ class FconnectionService {
 	}
 
 	private def isFailed(Fconnection c) {
+		// TODO I rather suspect that this method needs implementing
 		false
 	}
 }
