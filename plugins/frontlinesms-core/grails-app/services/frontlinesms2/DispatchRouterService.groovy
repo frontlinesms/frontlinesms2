@@ -97,8 +97,6 @@ class DispatchRouterService {
 	def handleNoRoutes(Exchange x) {
 		println "DispatchRouterService.handleNoRoutes() : NoRouteAvailableException handling..."
 		createSystemNotification('no-available-route')
-		def id = x.in.getHeader('frontlinesms.dispatch.id')
-		def body = x.in.body
 		x.out.body = x.in.body
 		x.out.headers = x.in.headers
 		println "DispatchRouterService.handleNoRoutes() : EXIT"
