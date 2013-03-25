@@ -8,7 +8,7 @@ import grails.converters.JSON
 import frontlinesms2.api.*
 
 class WebconnectionService {
-	static def regex = /[$][{]*[a-z_]*[}]/
+	private static final REPLACEMENT_KEY = /[$][{]*[a-z_]*[}]/
 	// Substitution variables
 	def camelContext
 	def i18nUtilService
@@ -58,9 +58,9 @@ class WebconnectionService {
 
 	String getProcessedValue(prop, msg) {
 		def val = prop.value
-		def matches = val.findAll(regex)
+		def matches = val.findAll(REPLACEMENT_KEY)
 		matches.each { match ->
-			val = val.replaceFirst(regex, getReplacement(match, msg))
+			val = val.replaceFirst(REPLACEMENT_KEY, getReplacement(match, msg))
 		}
 		return val
 	}

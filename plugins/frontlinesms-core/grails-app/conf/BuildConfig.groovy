@@ -140,6 +140,8 @@ codenarc {
 
 	properties = {
 		GrailsPublicControllerMethod.enabled = false
+		GrailsDomainHasToString.enabled = false
+		GrailsDomainHasEquals.enabled = false
 	}
 }
 

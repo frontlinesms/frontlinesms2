@@ -175,13 +175,6 @@ class FsmsTagLib {
 		if(!rendered) throw new GrailsTagException("Failed to render [att=$att, plugins=${grailsApplication.config.frontlinesms.plugins}]")
 	}
 
-	private def templateExists(name, plugin) {
-		// FIXME need to use `plugin` variable when checking for resource
-		def fullUri = grailsAttributes.getTemplateUri(name, request)
-		def resource = grailsAttributes.pagesTemplateEngine.getResourceForUri(fullUri)
-		return resource && resource.file && resource.exists()
-	}
-
 	def i18nBundle = {
 		def locale = RequestContextUtils.getLocale(request)
 		// Always include English in case their locale is not available.  The most accurate
