@@ -1,8 +1,6 @@
 package frontlinesms2
 
-import frontlinesms2.*
 import grails.converters.JSON
-import org.codehaus.groovy.grails.plugins.PluginManagerHolder
 
 class HelpController extends ControllerUtils {
 	def appSettingsService

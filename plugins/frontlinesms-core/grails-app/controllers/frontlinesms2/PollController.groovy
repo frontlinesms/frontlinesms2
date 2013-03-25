@@ -1,8 +1,5 @@
 package frontlinesms2
 
-import grails.converters.JSON
-
-
 class PollController extends ActivityController {
 	def pollService
 
