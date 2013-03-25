@@ -5,8 +5,6 @@ import frontlinesms2.*
 import spock.lang.*
 import grails.test.mixin.*
 
-import org.springframework.web.multipart.commons.CommonsMultipartFile
-
 @TestFor(ImportController)
 @Mock([Group])
 class ImportControllerSpec extends Specification {
