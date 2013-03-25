@@ -144,6 +144,7 @@ codenarc {
 		GrailsDomainHasEquals.enabled = false
 		ThrowRuntimeException.enabled = false
 		CatchException.enabled = false
+		MisorderedStaticImports.enabled = false
 	}
 }
 
