@@ -62,7 +62,6 @@ class IntelliSmsFconnectionSpec extends Specification {
 			MetaClassModifiers.addMapMethods()
 			mockForConstraintsTests(IntelliSmsFconnection)
 		when:
-			def configFields = IntelliSmsFconnection.configFields
 			def conn = Fconnection.getNonnullableConfigFields(IntelliSmsFconnection)
 		then:
 			conn instanceof List
