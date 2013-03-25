@@ -13,7 +13,7 @@ class GroupISpec extends grails.plugin.spock.IntegrationSpec {
 			def samTina = new Contact(name: 'SaM Tina', mobile: "1234567893").save(failOnError: true)
 			samAnderson.addToGroups(fpGroup, true)
 			samJones.addToGroups(fpGroup,true)
-			def bob = new Contact(name: 'Bob', mobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
+			new Contact(name: 'Bob', mobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
 		when:
 			def results = contactSearchService.getContacts([groupId:fpGroup.id, searchString:"Sam", max:50, offset:0])
 			def resultsCount = contactSearchService.countContacts([groupId:fpGroup.id, searchString:"Sam"])
