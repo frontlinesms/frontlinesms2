@@ -9,10 +9,10 @@ class MessageSendServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			def contact1 = Contact.build(name: "test1", mobile:"+11111").save() // in g1
 			def contact2 = Contact.build(name: "test2", mobile:"+22222").save() // in g2
-			def contact3 = Contact.build(name: "test3", mobile:"+33333").save() // in sg1
-			def contact4 = Contact.build(name: "test4", mobile:"+44444").save() // in sg2
+			Contact.build(name: "test3", mobile:"+33333").save() // in sg1
+			Contact.build(name: "test4", mobile:"+44444").save() // in sg2
 			def contact5 = Contact.build(name: "test5", mobile:"+334455").save() // in g1 and sg1
-			def contact6 = Contact.build(name: "test6", mobile:"+66666").save() // in no groups or smartgroups
+			Contact.build(name: "test6", mobile:"+66666").save() // in no groups or smartgroups
 			def sg1 = SmartGroup.build(name: "test-smartgroup-1", mobile: "+33").save()
 			def sg2 = SmartGroup.build(name: "test-smartgroup-2", mobile: "+44").save()
 			def g1 = Group.build(name: "test-group-1").save()

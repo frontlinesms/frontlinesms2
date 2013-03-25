@@ -145,6 +145,7 @@ codenarc {
 		ThrowRuntimeException.enabled = false
 		CatchException.enabled = false
 		MisorderedStaticImports.enabled = false
+		EmptyMethod.doNotApplyToClassNames = '*Controller'
 	}
 }
 
