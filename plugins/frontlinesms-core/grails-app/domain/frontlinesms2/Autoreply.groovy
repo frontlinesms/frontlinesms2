@@ -21,7 +21,7 @@ class Autoreply extends Activity {
 	def autoreplyService
 
 //> PROCESS METHODS
-	def processKeyword(Fmessage message) {
+	def processKeyword(Fmessage message, Keyword matchedKeyword) {
 		this.addToMessages(message)
 		autoreplyService.doReply(this, message)
 		this.save(failOnError:true)
