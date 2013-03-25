@@ -2,7 +2,6 @@ package frontlinesms2
 
 import spock.lang.*
 import grails.plugin.spock.*
-import frontlinesms2.*
 
 class FsmsTagLibSpec extends GroovyPagesSpec {
 	def "confirmTypeRow generates a row that is properly internationalized"() {
