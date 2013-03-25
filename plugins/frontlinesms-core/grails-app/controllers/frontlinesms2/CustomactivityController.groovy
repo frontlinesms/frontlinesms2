@@ -5,7 +5,7 @@ class CustomactivityController extends ActivityController {
 
 	def save() {
 		withCustomActivity { customActivity ->
-			doSave('customactivity', customActivityService, customActivity)
+			doSave(customActivityService, customActivity)
 		}
 	}
 

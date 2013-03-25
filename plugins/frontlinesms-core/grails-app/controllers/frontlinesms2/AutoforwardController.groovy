@@ -5,7 +5,7 @@ class AutoforwardController extends ActivityController {
 
 	def save() {
 		withAutoforward { autoforward ->
-			doSave('autoreply', autoforwardService, autoforward)
+			doSave(autoforwardService, autoforward)
 		}
 	}
 
