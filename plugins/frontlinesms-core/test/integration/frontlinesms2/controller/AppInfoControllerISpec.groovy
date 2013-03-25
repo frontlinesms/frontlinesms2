@@ -2,7 +2,6 @@ package frontlinesms2.controller
 
 import frontlinesms2.*
 import grails.converters.JSON
-import org.codehaus.groovy.grails.commons.DefaultGrailsApplication
 import spock.lang.*
 
 class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
@@ -21,7 +20,7 @@ class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def requestData = []
 			controller.request.JSON = requestData
 		when:
-			def response = controller.index()
+			controller.index()
 		then:
 			0 * _
 			JSON.parse(controller.response.contentAsString).keySet().sort() == requestData
@@ -32,7 +31,7 @@ class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def requestData = [devices:null]
 			controller.request.JSON = requestData
 		when:
-			def response = controller.index()
+			controller.index()
 		then:
 			1 * service.provide(controller, 'devices', _)
 			0 * _
@@ -44,7 +43,7 @@ class AppInfoControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def requestData = [devices:null, gribbles:null]
 			controller.request.JSON = requestData
 		when:
-			def response = controller.index()
+			controller.index()
 		then:
 			1 * service.provide(controller, 'devices', _)
 			1 * service.provide(controller, 'gribbles', _)

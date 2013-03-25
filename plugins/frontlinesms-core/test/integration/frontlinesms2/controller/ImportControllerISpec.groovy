@@ -1,7 +1,6 @@
 package frontlinesms2.controller
 
 import frontlinesms2.*
-import org.springframework.web.multipart.commons.CommonsMultipartFile
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockMultipartFile
 
 class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
