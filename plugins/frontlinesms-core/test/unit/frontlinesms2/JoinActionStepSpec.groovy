@@ -1,14 +1,11 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
-import frontlinesms2.*
 
 @TestFor(JoinActionStep)
 @Mock([CustomActivity])
 class JoinActionStepSpec extends Specification {
 	@Unroll
-
 	def "Test dynamic constraints"() {
 		when:
 			def step = new JoinActionStep()
@@ -35,3 +32,4 @@ class JoinActionStepSpec extends Specification {
 			1 * i18nUtilService.getMessage(_)
 	}
 }
+
