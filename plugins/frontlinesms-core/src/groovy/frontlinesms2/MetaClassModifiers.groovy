@@ -19,7 +19,7 @@ class MetaClassModifiers {
 	static def addTodoConstantToSpecifications() {
 		try {
 			Class.forName("spock.lang.Specification")?.metaClass.static.getTODO = { false }
-		} catch(Exception ex) { ex.printStackTrace()/* presumably we are in prod mode and spock is not on the classpath */ }
+		} catch(Exception ex) { /* presumably we are in prod mode and spock is not on the classpath */ }
 	}
 
 	static def addZipMethodToFile() {
