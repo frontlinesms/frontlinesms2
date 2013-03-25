@@ -72,10 +72,6 @@ class SubscriptionServiceSpec extends Specification {
 		c = Contact.build(mobile:TEST_CONTACT)
 	}
 
-	private def mockMessage(String messageText, String sourcePhoneNumber) {
-		return Fmessage.build(text:messageText, src:sourcePhoneNumber)
-	}
-
 	private def mockFmessage(String messageText, String src=null) {
 		Fmessage m = Mock()
 		m.inbound >> true
