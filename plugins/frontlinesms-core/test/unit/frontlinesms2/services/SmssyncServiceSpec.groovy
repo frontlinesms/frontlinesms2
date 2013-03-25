@@ -6,7 +6,6 @@ import spock.lang.*
 
 @TestFor(SmssyncService)
 class SmssyncServiceSpec extends Specification {
-	private static final boolean TODO = false
 	private static final def TEST_MESSAGE = [to:'123', message:'hi']
 
 	def connection

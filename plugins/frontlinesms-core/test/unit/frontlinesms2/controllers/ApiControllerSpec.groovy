@@ -3,7 +3,6 @@ package frontlinesms2.controllers
 import frontlinesms2.*
 
 import spock.lang.*
-import grails.buildtestdata.mixin.Build
 
 @TestFor(ApiController)
 class ApiControllerSpec extends Specification {
