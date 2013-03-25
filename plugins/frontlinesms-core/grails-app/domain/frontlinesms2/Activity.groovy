@@ -67,7 +67,7 @@ abstract class Activity extends MessageOwner {
 		this.messages*.isDeleted = false
 	}
 
-	def processKeyword(Fmessage message) {
+	def processKeyword(Fmessage message, Keyword match) {
 		message.setMessageDetail(this, "")
 		this.addToMessages(message)
 		this.save(failOnError:true)
@@ -83,7 +83,7 @@ abstract class Activity extends MessageOwner {
 
 	def move(messageInstance) {
 		messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
-		this.processKeyword(messageInstance)
+		this.processKeyword(messageInstance, null)
 	}
 }
 
