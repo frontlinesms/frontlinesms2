@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import grails.converters.JSON
 class AutoreplyController extends ActivityController {
 	def autoreplyService
 

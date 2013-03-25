@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import grails.converters.JSON
 class AutoforwardController extends ActivityController {
 	def autoforwardService
 

@@ -91,9 +91,9 @@ class ExportController extends ControllerUtils {
 		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dispatches.dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
 		Map parameters = [title: message(code: 'export.message.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
-		try{
+		try {
 			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:], parameters)
-		} catch(Exception e){
+		} catch(Exception e) {
 			render(text: message(code: 'report.creation.error'))
 		}
 		[messageInstanceList: messageInstanceList]
@@ -121,9 +121,9 @@ class ExportController extends ControllerUtils {
 		}
 		Map parameters = [title: message(code: 'export.contact.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
-		try{
+		try {
 			exportService.export(params.format, response.outputStream, contactInstanceList, fields, labels, [:],parameters)
-		} catch(Exception e){
+		} catch(Exception e) {
 			render(text: message(code: 'report.creation.error'))
 		}
 		[contactInstanceList: contactInstanceList]
