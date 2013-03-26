@@ -116,7 +116,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpMessages()
 		when:
-			def messageCounts = Fmessage.countAllMessages(['archived':false, 'starred': false])
+			def messageCounts = Fmessage.countAllMessages()
 		then:
 			messageCounts['inbox'] == 2
 			messageCounts['sent'] == 4

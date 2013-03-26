@@ -255,10 +255,16 @@ class Fmessage {
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
 	def getHasFailed() { areAnyDispatches(DispatchStatus.FAILED) }
 	def getHasPending() { areAnyDispatches(DispatchStatus.PENDING) }
-	def getOutboundContactList(){ 
-		def contactlist = []
-		dispatches.each{ contactlist << Contact.findByMobile(it.dst)?.name }
-		contactlist?contactlist:""
+	def getOutboundContactList() {
+		dispatches.collect { Contact.findByMobile(it.dst)?.name } - null
+	}
+
+	private boolean isMoveAllowed() {
+		if(this.messageOwner){
+			return !(this.messageOwner?.archived)
+		} else {
+			return (!this.isDeleted && !this.archived)
+		}
 	}
 
 	private def areAnyDispatches(status) {
@@ -290,7 +296,7 @@ class Fmessage {
 	}
 	
 	static def countAllMessages() {
-		['inbox', 'sent', 'pending', 'deleted'].collect { Fmessage[it].count() }
+		['inbox', 'sent', 'pending', 'deleted'].collectEntries { [it, Fmessage[it].count()] }
 	}
 
 	// TODO should this be in a service?
