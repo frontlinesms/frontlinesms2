@@ -56,7 +56,14 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			return true
 			})
 		secret(nullable:true)
-		url nullable:false, url:true, validator:{ val, obj -> val ==~ 'http(s?)://.*' }
+		url nullable:false, url:true, validator:{ val, obj ->
+			if(!(val ==~ 'http(s?)://.*')) {
+				return "webconnection.url.error.url.start.with.http"
+			}
+			if(val.toLowerCase().contains("http://localhost")) {
+				return "webconnection.url.error.locahost.invalid.use.ip"
+			}
+		}
 	}
 	static mapping = {
 		requestParameters cascade: "all-delete-orphan"
