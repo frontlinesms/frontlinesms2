@@ -347,16 +347,12 @@ class Fmessage {
 	}
 
 	def getMessageDetailValue(owner) {
-		println "# Fmessage.getMessageDetailValue # ${owner}"
 		def ownerType = getOwnerType(owner)
 		if(owner && (Activity.get(owner?.id) instanceof CustomActivity)) {
-			println "Fmessage.getMessageDetailValue # for CustomActivity # "
 			def stepId = this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }?.value
 			def t = this.details.find { (it.ownerType == MessageDetail.OwnerType.STEP) && (it.ownerId == stepId as Long) }?.value
-			println "Fmessage.getMessageDetailValue # for CustomActivity # and ownerDetail is # ${t}"
 			return t
 		} else {
-			println "Fmessage.getMessageDetailValue # for Other Activities # "
 			return this.details?.find { it.ownerType == ownerType && it.ownerId == owner?.id }?.value?:''
 		}
 	}
