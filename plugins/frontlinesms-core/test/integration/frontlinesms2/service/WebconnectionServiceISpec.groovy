@@ -5,14 +5,12 @@ import spock.lang.*
 import org.apache.camel.*
 import org.apache.camel.Message
 import org.apache.camel.spi.UnitOfWork
-import org.apache.camel.spi.RouteContext
-import org.apache.camel.model.RouteDefinition
 
 class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 	def webconnectionService
 	def setup() {
 		def k = new Keyword(value:'FOREWARD')
-		def webconnection = new GenericWebconnection(name:"Sync", url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).addToKeywords(k).save(failOnError:true)
+		new GenericWebconnection(name:"Sync", url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.GET).addToKeywords(k).save(failOnError:true)
 	}
 	//Pre-Processor Tests
 	def 'out_header url should contain the RequestParameters for GET request'() {
@@ -163,11 +161,6 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		println "mockExchange() : x = $x"
 		return x
 		*/
-	}
-
-	private String urlEncode(String s) throws UnsupportedEncodingException {
-		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
-		return URLEncoder.encode(s, "UTF-8");
 	}
 
 	def mockExchangeMessage(headers, body) {

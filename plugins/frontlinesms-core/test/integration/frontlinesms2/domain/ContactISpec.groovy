@@ -31,9 +31,9 @@ class ContactISpec extends grails.plugin.spock.IntegrationSpec {
 			Contact contact = new Contact(name: "John", mobile: johnsmobile).save(flush:true)
 			def d1 = new Dispatch(dst: johnsmobile, status: DispatchStatus.FAILED)
 			def d2 = new Dispatch(dst: johnsmobile, status: DispatchStatus.FAILED)
-			def m1 = new Fmessage(text:'', isDeleted: false, inbound: false, date: new Date(), hasFailed:true).addToDispatches(d1).save(flush:true, failOnError:true)
-			def m2 = new Fmessage(text:'', isDeleted: true, inbound: false, date: new Date(), hasFailed:true).addToDispatches(d2).save(flush:true, failOnError:true)
-			def m3 = new Fmessage(text:'', isDeleted: false, inbound: false, date: new Date(), hasFailed:true).addToDispatches(d1).save(flush:true, failOnError:true)
+			new Fmessage(text:'', isDeleted: false, inbound: false, date: new Date(), hasFailed:true).addToDispatches(d1).save(flush:true, failOnError:true)
+			new Fmessage(text:'', isDeleted: true, inbound: false, date: new Date(), hasFailed:true).addToDispatches(d2).save(flush:true, failOnError:true)
+			new Fmessage(text:'', isDeleted: false, inbound: false, date: new Date(), hasFailed:true).addToDispatches(d1).save(flush:true, failOnError:true)
 		when:
 			def count = contact.outboundMessagesCount
 		then:

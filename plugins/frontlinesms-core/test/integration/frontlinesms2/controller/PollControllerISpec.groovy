@@ -211,7 +211,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "editing a poll and removing the top level keyword should set responses as top level"() {
 		setup:
-			def p = TestData.createFootballPollWithKeywords()
+			TestData.createFootballPollWithKeywords()
 		and:
 			controller.params.ownerId=Poll.findByName('This is a poll').id
 			controller.params.name = 'test-poll-1'

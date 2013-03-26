@@ -84,10 +84,6 @@ class SmssyncService {
 		return success(generateOutgoingResponse(connection, true))
 	}
 
-	private def handleRouteDestroyed(connection) {
-		ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
-	}
-
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {
 		def responseMap = [:]
 

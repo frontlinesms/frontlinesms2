@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.Fmessage
-
 class Trash {
 	Date dateCreated
 	Long objectId

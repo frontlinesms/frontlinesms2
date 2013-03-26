@@ -21,10 +21,10 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		controller.params.offset = 0
 		controller.params.starred = false
 		
-		def sahara = new Group(name: "Sahara").save(flush: true)
-		def thar = new Group(name: "Thar").save(flush: true)
+		new Group(name: "Sahara").save(flush: true)
+		new Group(name: "Thar").save(flush: true)
 
-		controller.metaClass.getPaginationCount = {-> return 10}
+		controller.metaClass.getPaginationCount = { -> return 10 }
 	}
 
 	def "should send a message to the given address"() {
@@ -44,7 +44,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			assert Fmessage.count() == 0
 			controller.send()
-			def flashMessage = controller.flash.message 
+			controller.flash.message 
 		then:
 			assert Fmessage.count() == 1
 			(Fmessage.getAll() as List)[0].dispatches*.dst.sort() == addresses.sort()

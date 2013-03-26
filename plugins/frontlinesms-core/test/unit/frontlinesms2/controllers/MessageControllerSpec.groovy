@@ -1,12 +1,11 @@
 package frontlinesms2.controllers
 
+import static frontlinesms2.DispatchStatus.*
 import frontlinesms2.*
 
 import spock.lang.*
 import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
-import frontlinesms2.*
-import static frontlinesms2.DispatchStatus.*
 
 @TestFor(MessageController)
 @Mock([Contact, Fmessage, Group, GroupMembership, Poll, Trash])

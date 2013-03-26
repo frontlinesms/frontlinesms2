@@ -11,8 +11,8 @@ class ContactControllerSpec extends Specification {
 	@Unroll
 	def "check for duplicates should return true or false depending on matches"() {
 		given:
-			def alice = new Contact(name: "Alice", mobile: "12345").save(flush: true)
-			def bob = new Contact(name: "Bob", mobile: "54321").save(flush: true)
+			new Contact(name: "Alice", mobile: "12345").save(flush: true)
+			new Contact(name: "Bob", mobile: "54321").save(flush: true)
 			println "ids: ${Contact.list()*.id}"
 		when:
 			params.mobile = suppliedMobile

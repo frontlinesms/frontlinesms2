@@ -3,7 +3,6 @@ package frontlinesms2.controllers
 import frontlinesms2.*
 
 import spock.lang.*
-import groovy.lang.MetaClass;
 import grails.buildtestdata.mixin.Build
 
 @TestFor(ArchiveController)

@@ -1,8 +1,6 @@
 package frontlinesms2
 
-import grails.test.mixin.*
 import spock.lang.*
-import frontlinesms2.*
 import frontlinesms2.camel.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
@@ -12,7 +10,6 @@ import grails.buildtestdata.mixin.Build
 @Mock([Keyword])
 @Build(Fmessage)
 class UshahidiWebconnectionSpec extends CamelUnitSpecification {
-	private static final String TEST_NUMBER = "+2345678"
 	def setup() {
 		Webconnection.metaClass.static.findAllByNameIlike = { name -> UshahidiWebconnection.findAll().findAll { it.name == name } }
 	}
@@ -76,3 +73,4 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 		return x
 	}
 }
+

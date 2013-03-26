@@ -97,7 +97,7 @@ grails.project.dependency.resolution = {
 		compile ':platform-core:1.0.RC3-frontlinesms'
 
 		test ":code-coverage:1.2.5"
-		test ":codenarc:0.17"
+		test ":codenarc:0.18.1"
 		test ":spock:0.6"
 		test ":geb:$gebVersion"
 
@@ -122,16 +122,30 @@ coverage {
 }
 
 codenarc {
-	reportName = 'target/analysis-reports/codenarc.xml'
-	reportType = 'xml'
+	reports = {
+		xmlReport('xml') {
+			outputFile = 'target/analysis-reports/codenarc.xml'
+			title = 'CodeNarc Report'
+		}
+		htmlReport('html') {
+			outputFile = 'target/analysis-reports/codenarc.html'
+			title = 'CodeNarc Report'
+		}
+	}
 	systemExitOnBuildException = false
 	// NB these numbers should be LOWERED over time as code quality should be INCREASING
 	maxPriority1Violations = 0
-	maxPriority2Violations = 250
+	maxPriority2Violations = 260
 	maxPriority3Violations = 500
 
 	properties = {
 		GrailsPublicControllerMethod.enabled = false
+		GrailsDomainHasToString.enabled = false
+		GrailsDomainHasEquals.enabled = false
+		ThrowRuntimeException.enabled = false
+		CatchException.enabled = false
+		MisorderedStaticImports.enabled = false
+		EmptyMethod.doNotApplyToClassNames = '*Controller'
 	}
 }
 

@@ -9,3 +9,4 @@ class IncomingMessageRouterService {
 		camelContext.routes*.endpoint.findAll { it.endpointUri.endsWith('-fmessages-to-process') }
 	}
 }
+

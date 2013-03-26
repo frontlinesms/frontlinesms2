@@ -34,7 +34,7 @@ class AutoforwardISpec extends grails.plugin.spock.IntegrationSpec {
 			def group = new Group (name:'Group 1').save(failOnError:true)
 			def smartGroup = new SmartGroup(name:'Group 2', mobile:'+44').save(failOnError:true)
 			def contact1 = new Contact(name:"Soja", mobile:"12345").save(failOnError:true)
-			def contact2 = new Contact(name:"tim", mobile:"+4412345321").save(failOnError:true)
+			new Contact(name:"tim", mobile:"+4412345321").save(failOnError:true)
 			def contact3 = new Contact(name:"Hijo", mobile:"34534534").save(failOnError:true)
 			group.addToMembers(contact1).save(failOnError:true)
 			def autoforward = new Autoforward(name: "test", sentMessageText: "Someone said something")
@@ -50,10 +50,10 @@ class AutoforwardISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Autoforward.addressesAvailable returns false if contacts/groups/smartgroups dont have contacts'(){
 		setup:
 			def group = new Group (name:'Group 1').save(failOnError:true)
-			def smartGroup = new SmartGroup(name:'Group 2', mobile:'+44').save(failOnError:true)
+			new SmartGroup(name:'Group 2', mobile:'+44').save(failOnError:true)
 			def contact1 = new Contact(name:"Soja", mobile:"12345").save(failOnError:true)
-			def contact2 = new Contact(name:"tim", mobile:"+4412345321").save(failOnError:true)
-			def contact3 = new Contact(name:"Hijo", mobile:"34534534").save(failOnError:true)
+			new Contact(name:"tim", mobile:"+4412345321").save(failOnError:true)
+			new Contact(name:"Hijo", mobile:"34534534").save(failOnError:true)
 			group.addToMembers(contact1).save(failOnError:true)
 			def autoforward = new Autoforward(name: "test", sentMessageText: "Someone said something")
 				.addToKeywords(new Keyword(value:"DOESNTMATTER"))

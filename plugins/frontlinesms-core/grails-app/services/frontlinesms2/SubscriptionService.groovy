@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.*
-
 // TODO TODO TODO this class needs a serious refactor as there's masses of copy.pasted code
 class SubscriptionService {
 	def messageSendService

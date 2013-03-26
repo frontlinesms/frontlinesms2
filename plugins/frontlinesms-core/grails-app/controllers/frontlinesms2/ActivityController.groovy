@@ -129,7 +129,7 @@ class ActivityController extends ControllerUtils {
 		return collidingKeywords
 	}
 
-	protected void doSave(classShortname, service, instance, activate=true) {
+	protected void doSave(service, instance, activate=true) {
 		try {
 			service.saveInstance(instance, params)
 			if(activate) instance.activate()
