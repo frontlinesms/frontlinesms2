@@ -28,8 +28,8 @@ class SettingsController extends ControllerUtils {
 
 	def general() {
 		def authEnabled = appSettingsService.get("auth.basic.enabled")
-		def username = new String(appSettingsService.get("auth.basic.username").decodeBase64())
-		def password = new String(appSettingsService.get("auth.basic.password").decodeBase64())
+		def username = appSettingsService.get("auth.basic.username")? new String(appSettingsService.get("auth.basic.username").decodeBase64()):''
+		def password = appSettingsService.get("auth.basic.password")? new String(appSettingsService.get("auth.basic.password").decodeBase64()):''
 		def appSettings = [:] 
 		
 		//TODO Filter out only connections with send enabled
