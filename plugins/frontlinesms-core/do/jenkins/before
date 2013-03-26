@@ -3,6 +3,7 @@ set -e
 do/check_for_ignored_tests
 do/check_for_bad_template_renders
 do/check_for_setInterval_calls
+do/i18n/check_for_bad_date_formats
 do/functional_test_unsafe_text_calls_checker
 do/functional_test_unflushed_saves_checker
 do/jslint_report
