@@ -33,6 +33,7 @@ class ClickatellFconnection extends Fconnection {
 	static passwords = ['password']
 
 	static mapping = {
+		tablePerHierarchy false
 		password column: 'clickatell_password'
 	}
 	
