@@ -331,7 +331,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.owned(owner, false, true).list(sort:'date', order:'desc') == [received]
 	}
 
-	def 'search page should display distinct messages'(){
+	def 'search page should display distinct messages'() {
 		setup:
 			createMessagesForSearch(60)
 			def controller = new SearchController()
@@ -346,7 +346,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	@Unroll
-	def 'pagination navigation should still work in search page'(){
+	def 'pagination navigation should still work in search page'() {
 		setup:
 			createMessagesForSearch(80)
 			def controller = new SearchController()
@@ -390,7 +390,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 				.save(failOnError:true, flush:true)
  
 			def incomingMessage = Fmessage.build(text:"incoming message", messageOwner: customActivity)
-			def outgoingMessage = new Fmessage(text:'sending this message', inbound:false, date:new Date(), messageOwner:customActivity)
+			def outgoingMessage = new Fmessage(text:'sending this message', inbound:false, date:TEST_DATE, messageOwner:customActivity)
 							.addToDispatches(new Dispatch(dst:'234', status:DispatchStatus.PENDING)).save(failOnError:true)
 			outgoingMessage.setMessageDetail(replyStep, incomingMessage.id)
 		then:
@@ -450,9 +450,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "pendingAndNotFailed returns count of dispatches with PENDING status"() {
 		setup:
-			def m1 = Fmessage.buildWithoutSave(inbound:false, date: new Date() - 10)
+			def m1 = Fmessage.buildWithoutSave(inbound:false, date: TEST_DATE - 10)
 			4.times { m1.addToDispatches(Dispatch.build(status: DispatchStatus.PENDING)) }
-			m1.addToDispatches(Dispatch.build(status: DispatchStatus.SENT, dateSent:new Date()))
+			m1.addToDispatches(Dispatch.build(status: DispatchStatus.SENT, dateSent:TEST_DATE))
 			m1.addToDispatches(Dispatch.build(status: DispatchStatus.FAILED))
 		when:
 			def pendingCount = Fmessage.pendingAndNotFailed.count()
@@ -519,10 +519,10 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	private def createMessagesForSearch(int messageCount) {
 		def message
-		(1..messageCount).each{
+		(1..messageCount).each {
 			message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
 			(0..10).each { num ->
-				message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date())
+				message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:TEST_DATE)
 			}
 			message.save(failOnError:true)
 		}
