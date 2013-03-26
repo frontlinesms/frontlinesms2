@@ -123,7 +123,8 @@ class FconnectionService {
 
 	def pauseFconnection(Fconnection c) {
 		pauseFconnection(c.id as long)
-		createSystemNotification('connection.route.pauseNotification', [c?.name?: c?.id])
+		c.enabled = false
+		c.save(failOnError:true)
 	}
 
 	def pauseFconnection(long id) {
@@ -144,7 +145,8 @@ class FconnectionService {
 
 	def resumeFconnection(Fconnection c) {
 		resumeFconnection(c.id as long)
-		createSystemNotification('connection.route.resumeNotification', [c?.name?: c?.id])
+		c.enabled = true
+		c.save(failOnError:true)
 	}
 
 	def resumeFconnection(long id) {
