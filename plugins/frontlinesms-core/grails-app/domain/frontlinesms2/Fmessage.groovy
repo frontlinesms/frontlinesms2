@@ -255,10 +255,16 @@ class Fmessage {
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
 	def getHasFailed() { areAnyDispatches(DispatchStatus.FAILED) }
 	def getHasPending() { areAnyDispatches(DispatchStatus.PENDING) }
-	def getOutboundContactList(){ 
-		def contactlist = []
-		dispatches.each{ contactlist << Contact.findByMobile(it.dst)?.name }
-		contactlist?contactlist:""
+	def getOutboundContactList() {
+		dispatches.collect { Contact.findByMobile(it.dst)?.name } - null
+	}
+
+	private boolean isMoveAllowed() {
+		if(this.messageOwner){
+			return !(this.messageOwner?.archived)
+		} else {
+			return (!this.isDeleted && !this.archived)
+		}
 	}
 
 	private def areAnyDispatches(status) {
@@ -290,7 +296,7 @@ class Fmessage {
 	}
 	
 	static def countAllMessages() {
-		['inbox', 'sent', 'pending', 'deleted'].collect { Fmessage[it].count() }
+		['inbox', 'sent', 'pending', 'deleted'].collectEntries { [it, Fmessage[it].count()] }
 	}
 
 	// TODO should this be in a service?
@@ -341,16 +347,12 @@ class Fmessage {
 	}
 
 	def getMessageDetailValue(owner) {
-		println "# Fmessage.getMessageDetailValue # ${owner}"
 		def ownerType = getOwnerType(owner)
 		if(owner && (Activity.get(owner?.id) instanceof CustomActivity)) {
-			println "Fmessage.getMessageDetailValue # for CustomActivity # "
 			def stepId = this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }?.value
 			def t = this.details.find { (it.ownerType == MessageDetail.OwnerType.STEP) && (it.ownerId == stepId as Long) }?.value
-			println "Fmessage.getMessageDetailValue # for CustomActivity # and ownerDetail is # ${t}"
 			return t
 		} else {
-			println "Fmessage.getMessageDetailValue # for Other Activities # "
 			return this.details?.find { it.ownerType == ownerType && it.ownerId == owner?.id }?.value?:''
 		}
 	}

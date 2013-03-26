@@ -24,7 +24,7 @@ class Contact {
 
 	static mapping = {
 		sort name:'asc'
-		customFields cascade:'all', sort:['name', 'value']
+		customFields cascade:'all', sort:'name'
 	}
 
 //> EVENT METHODS

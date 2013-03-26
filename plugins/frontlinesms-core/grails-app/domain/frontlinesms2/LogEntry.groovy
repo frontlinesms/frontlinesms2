@@ -10,7 +10,7 @@ class LogEntry {
 	}
 	
 	static def log(content) {
-		new LogEntry(date: new Date(), content: content).save()
+		new LogEntry(date: new Date(), content: content).save(failOnError:true)
 		return content
 	}
 }

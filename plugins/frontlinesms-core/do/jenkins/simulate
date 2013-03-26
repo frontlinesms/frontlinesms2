@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+echo "# Simulating steps of jenkins build on current version..."
+
+do/jenkins/before
+grails test-app -coverage
+do/jenkins/after
+
+echo "# Jenkins build simulation completed successfully."
+
