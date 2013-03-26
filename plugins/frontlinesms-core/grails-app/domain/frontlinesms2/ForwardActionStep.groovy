@@ -58,8 +58,6 @@ class ForwardActionStep extends Step {
 		}
 		domainInstances - null
 	}
-
-	def setRecipients(groups, smartGroups, contacts, addresses) { }
 	
 	def process(Fmessage message) {
 		autoforwardService.doForward(this, message)
