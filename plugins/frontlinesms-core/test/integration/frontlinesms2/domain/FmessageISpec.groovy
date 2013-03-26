@@ -333,14 +333,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'search page should display distinct messages'(){
 		setup:
-			def message
-			(1..60).each{
-				message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
-				(0..10).each { num ->
-					message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
-				}
-				message.save(failOnError:true)
-			}
+			createMessagesForSearch(60)
 			def controller = new SearchController()
 			controller.params.searchString = "sample"
 			controller.params.max = 50
@@ -351,17 +344,11 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			dataModel.messageInstanceList.size() == dataModel.messageInstanceList*.id.unique().size() &&
 					dataModel.messageInstanceList.size() == 50
 	}
-@Unroll
+
+	@Unroll
 	def 'pagination navigation should still work in search page'(){
 		setup:
-			def message
-			(1..80).each{
-				message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
-				(0..10).each { num ->
-					message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
-				}
-				message.save(failOnError:true)
-			}
+			createMessagesForSearch(80)
 			def controller = new SearchController()
 			controller.params.searchString = "sample"
 			controller.params.max = max
@@ -372,9 +359,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			dataModel.messageInstanceList.size() == dataModel.messageInstanceList*.id.unique().size()
 			dataModel.messageInstanceList*.id.containsAll(Fmessage.list(offset : offset,max : max,sort:"date", order:"desc")*.id)
 		where:
-			offset|max
-			0|50
-			50|50
+			offset | max
+			0      | 50
+			50     | 50
 	}
 
 	def "if an FMessage's receivedOn connection is deleted, the field should update to null"() {
@@ -528,6 +515,17 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		buildOutgoing(text:'This msg will not show up in inbox view', dispatches:dispatch())
 		buildWithDispatches(failedDispatch())
 		buildWithDispatches(pendingDispatch())
+	}
+
+	private def createMessagesForSearch(int messageCount) {
+		def message
+		(1..messageCount).each{
+			message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
+			(0..10).each { num ->
+				message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date())
+			}
+			message.save(failOnError:true)
+		}
 	}
 
 	private def dispatch() { sentDispatch() }
