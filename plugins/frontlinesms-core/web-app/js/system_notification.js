@@ -4,7 +4,7 @@ var SystemNotification = function() {
 	_getId = function(e) {
 		return e.attr("id").substring(13);
 	},
-	_create = function(id, text) {
+	create = function(id, text) {
 		var elementId = "notification-" + id;
 		return '<div class="system-notification" id="' + elementId + '">'
 				+ text
@@ -36,7 +36,7 @@ var SystemNotification = function() {
 		for(_key in data) {
 			value = data[_key];
 			if(value) {
-				$("#notifications").append(_create(_key, value));
+				$("#notifications").append(create(_key, value));
 			}
 		}
 	},
@@ -44,6 +44,7 @@ var SystemNotification = function() {
 		app_info.listen("system_notification", _refresh);
 	};
 	return {
+		create:create,
 		hide:hide,
 		init:init
 	};
