@@ -177,6 +177,30 @@ class FconnectionServiceSpec extends Specification {
 			['out-internet-1'] | ['in-2', 'out-internet-3']
 	}
 
+	def "pauseFconnection should suspend the enabled route"() {
+		given:
+			def c = Mock(Fconnection)
+			c.id >> 1
+			c.enabled >> true
+			context.routes >> [[id:'in-1']]
+		when:
+			service.pauseFconnection(c.id as Long)
+		then:
+			1 * context.suspendRoute('in-1')
+	}
+
+	def "resumeFconnection should resume a route"() {
+		given:
+			def c = Mock(Fconnection)
+			c.id >> 1
+			c.enabled >> true
+			context.routes >> [[id:'in-1']]
+		when:
+			service.resumeFconnection(c.id as Long)
+		then:
+			1 * context.resumeRoute('in-1')
+	}
+
 	private def mockSmslibFconnection(int id, boolean enabled=true) {
 		mockFconnection(SmslibFconnection, id, enabled)
 	}
