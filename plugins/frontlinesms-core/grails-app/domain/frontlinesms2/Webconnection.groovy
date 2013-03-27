@@ -60,7 +60,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 			if(!(val ==~ 'http(s?)://.*')) {
 				return "webconnection.url.error.url.start.with.http"
 			}
-			if(val.toLowerCase().contains("http://localhost")) {
+			if(val.toLowerCase() ==~ 'http(s?)://localhost(:[0-9]+)?(\\/.*)?') {
 				return "webconnection.url.error.locahost.invalid.use.ip"
 			}
 		}

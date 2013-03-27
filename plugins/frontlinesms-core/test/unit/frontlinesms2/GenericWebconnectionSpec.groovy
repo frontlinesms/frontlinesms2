@@ -47,6 +47,14 @@ class GenericWebconnectionSpec extends CamelUnitSpecification {
 			'htttp:/www.example.com/index.html'           | false
 			'htttp:/www..example.com/index.html'          | false
 			'ftp://www.example.com/home/smith/budget.wk1' | false
+			'http://localhost:8080/home'                  | false
+			'http://localhost:2323/asdasd'                | false
+			'http://localhost:1/sd/sd/'                   | false
+			'http://locahost/sd/sd'                       | false
+			'https://localhost/sd/sd'                     | false
+			'http://www.localhost.com'                    | true
+			'http://localhost.com'                        | true
+			'http://localhost.com/sd/sd'                  | true
 	}
 
 	def 'apiProcess should pass call to service'() {
