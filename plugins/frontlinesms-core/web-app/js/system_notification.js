@@ -4,6 +4,9 @@ var SystemNotification = function() {
 	_getId = function(e) {
 		return e.attr("id").substring(13);
 	},
+	add = function(id, text) {
+		$("#notifications").append(create(id, text));
+	},
 	create = function(id, text) {
 		var elementId = "notification-" + id;
 		return '<div class="system-notification" id="' + elementId + '">'
@@ -16,7 +19,7 @@ var SystemNotification = function() {
 	},
 	_refresh = function(data) {
 		// remove any notifications no longer in the list
-		var _key, value, found;
+		var _key, value, found, notifications;
 		data = data.system_notification;
 		if(!data) { return; }
 		found = [];
@@ -33,10 +36,11 @@ var SystemNotification = function() {
 		});
 
 		// add any new notifications to the bottom of the list
+		notifications = $("#notifications");
 		for(_key in data) {
 			value = data[_key];
 			if(value) {
-				$("#notifications").append(create(_key, value));
+				notifications.append(create(_key, value));
 			}
 		}
 	},
@@ -44,7 +48,7 @@ var SystemNotification = function() {
 		app_info.listen("system_notification", _refresh);
 	};
 	return {
-		create:create,
+		add:add,
 		hide:hide,
 		init:init
 	};
