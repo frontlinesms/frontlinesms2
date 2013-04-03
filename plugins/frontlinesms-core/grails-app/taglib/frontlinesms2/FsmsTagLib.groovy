@@ -241,7 +241,7 @@ class FsmsTagLib {
 	
 	def inputs = { att ->
 		if(att.table) out << '<table>'
-		if(att.list) out << "<ul class='input-list-ul'>"
+		if(att.list) out << "<div class='field-list'>"
 		def fields = getFields(att)
 		if(fields instanceof Map) {
 			generateSection(att, fields)
@@ -262,13 +262,13 @@ class FsmsTagLib {
 		}
 		if(att.submit) {
 			if(att.table) out << '<tr><td></td><td>'
-			if(att.list) out << "<li class='input-item'>"
+			if(att.list) out << "<div class='input-item'>"
 			out << g.submitButton(class:'btn', value:g.message(code:att.submit), name:att.submitName?:'submit')
-			if(att.list) out << '</li>'
+			if(att.list) out << '</div>'
 			if(att.table) out << '</td></tr>'
 		}
 		if(att.table) out << '</table>'
-		if(att.table) out << '</ul>'
+		if(att.list) out << '</div>'
 	}
 	
 	def input = { att, body ->
@@ -281,7 +281,7 @@ class FsmsTagLib {
 		def labelKey = (att.labelPrefix!=null? att.labelPrefix: instanceClass?instanceClass.shortName+'.':'') + att.field + '.label'
 		def validationRequired = instanceClass != null
 
-		if(att.list) out << "<li class='input-item'>"
+		if(att.list) out << "<div class='input-item'>"
 		else if(att.table) out << '<tr><td class="label">'
 		else out << '<div class="field">'
 		if(!groovyKey.startsWith("info-")) {
@@ -320,7 +320,7 @@ class FsmsTagLib {
 		} else {
 			out << "<div class='info'>${g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}")}</div>"
 		}
-		if(att.list) out << "</li>"
+		if(att.list) out << "</div>"
 		else if(att.table) {
 			out << '</td></tr>'
 		} else {
@@ -541,7 +541,8 @@ class FsmsTagLib {
 		keys.each { key ->
 			if(fields[key]) {
 				out << "<div id=\"$key-subsection\">"
-				out << "<fieldset>"
+				if(att.list) out << "<fieldset class='table'>"
+				else out << "<fieldset>"
 				out << "<legend>"
 				out << input(att + [field:key])
 				out << "</legend>"
@@ -552,7 +553,7 @@ class FsmsTagLib {
 				} else {
 					fields[key].each {field ->
 						if(field instanceof String) {
-							 out << input(att + [field:field] + [class:"$key-subsection-member"])
+							out << input(att + [field:field] + [class:"$key-subsection-member"])
 						}
 					}
 				}

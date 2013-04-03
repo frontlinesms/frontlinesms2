@@ -28,6 +28,7 @@ fconnection = (function() {
 	};
 
 	isSubsection = function(fieldName) {
+		if(new RegExp(/info\-.*/).test(fieldName)) { return false; }
 		return $('#' + fieldName + '-subsection').length > 0;
 	};
 

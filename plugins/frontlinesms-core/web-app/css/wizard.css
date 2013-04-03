@@ -76,3 +76,7 @@ div.sorting-option input#keywords { display: block; margin-top:5px; }
 #connectionForm label[for=connectionType] { font-weight: bold }
 #connectionForm td label:first-child { font-weight: bold }
 #connectionForm .connection-field-info { padding-left:10px; padding-bottom:3px;}
+
+fieldset.table { display:table; }
+.input-item { display:table-row; }
+.input-item label { display:table-cell; width:100px; }
