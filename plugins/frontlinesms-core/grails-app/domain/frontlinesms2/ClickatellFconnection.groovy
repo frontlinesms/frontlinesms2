@@ -9,7 +9,7 @@ import frontlinesms2.camel.exception.*
 
 class ClickatellFconnection extends Fconnection {
 	private static final String CLICKATELL_URL = 'http://api.clickatell.com/http/sendmsg?'
-	static final configFields = [name:null, apiId:null, username:null, password:null, sendToUsa:['fromNumber']]
+	static final configFields = ['info-local':['name'], 'info-clickatell':['apiId', 'username', 'password'], 'sendToUsa':['fromNumber']]
 	static final defaultValues = []
 	static String getShortName() { 'clickatell' }
 	
