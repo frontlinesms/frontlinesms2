@@ -54,7 +54,7 @@ class ClickatellFconnection extends Fconnection {
 										'password=${header.clickatell.password}&' + 
 										'to=${header.clickatell.dst}&' +
 										'text=${body}' +
-										(sendToUsa ? '&mo=1&from=${header.clickatell.fromNumber}' : '')))
+										(ClickatellFconnection.this.sendToUsa ? '&mo=1&from=${header.clickatell.fromNumber}' : '')))
 						.to(CLICKATELL_URL)
 						.process(new ClickatellPostProcessor())
 						.routeId("out-internet-${ClickatellFconnection.this.id}")]
