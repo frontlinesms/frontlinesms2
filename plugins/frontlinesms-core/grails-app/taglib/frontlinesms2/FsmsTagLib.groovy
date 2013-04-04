@@ -318,7 +318,7 @@ class FsmsTagLib {
 			} else out << g.textField(att)
 			out << body()
 		} else {
-			out << "<div class='info'>${g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}")}</div>"
+			out << "<div class='connection-info'>${g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}")}</div>"
 		}
 		if(att.list) out << "</div>"
 		else if(att.table) {
@@ -571,7 +571,7 @@ class FsmsTagLib {
 		keys.each { key ->
 			if(fields[key]) {
 				out << "<div class=\"confirm-$key-subsection\">"
-				out << confirmTableRow(att + [field:key])
+				if(!key.startsWith("info-")) out << confirmTableRow(att + [field:key])
 				
 				//handle subsections within a subsection
 				if(fields[key] instanceof LinkedHashMap) {
