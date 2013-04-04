@@ -160,6 +160,14 @@ class Fmessage {
 					eq("messageOwner", owner)
 			}
 		}
+		totalUnread {
+			and {
+				eq("isDeleted", false)
+				eq("archived", false)
+				eq("inbound", true)
+				eq("read", false)
+			}
+		}
 
 		search { search ->
 			def ids = Fmessage.withCriteria {
@@ -293,6 +301,10 @@ class Fmessage {
 
 	static def countUnreadMessages(owner) {
 		Fmessage.unread(owner).count()
+	}
+
+	static def countTotalUnreadMessages() {
+		Fmessage.totalUnread.count()
 	}
 	
 	static def countAllMessages() {
