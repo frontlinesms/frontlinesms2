@@ -42,7 +42,7 @@ class CoreAppInfoProviders {
 		s.registerProvider 'status_indicator', statusIndicatorProvider
 
 		s.registerProvider('inbox_unread') { app, controller, data ->
-			Fmessage.countUnreadMessages()
+			Fmessage.countTotalUnreadMessages()
 		}
 
 		s.registerProvider('new_messages') { app, controller, data ->

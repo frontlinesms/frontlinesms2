@@ -1,0 +1,7 @@
+fieldset.table { display:table; }
+.input-item { display:table-row; }
+.input-item label { display:table-cell; font-weight:bold; width:100px; }
+.input-item input,select { margin-bottom:5px; }
+
+.connection-info { padding:7px 0px 7px 0px; }
+.connection-info a { color:blue; }
