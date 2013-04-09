@@ -24,8 +24,8 @@ app_info = (function() {
 		}
 	},
 	failureProcessor = function(data) {
-		if(typeof failureProcessor !== "undefined") {
-			failureProcessor.call();
+		if(typeof failCallback !== "undefined") {
+			failCallback.call();
 		}
 	},
 	requester = function() {
@@ -52,8 +52,8 @@ app_info = (function() {
 				contentType:"application/json",
 				data:JSON.stringify(requestData),
 				processData:false,
-				success:callbackProcessor,
-				fail:failureProcessor });
+				success:callbackProcessor })
+			.fail(failureProcessor);
 		}
 	},
 	listen = function(interest, f, data, callback) {
