@@ -1,10 +1,13 @@
 package frontlinesms2
+
 import frontlinesms2.camel.routesms.*
+
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
-class ClickatellFconnection extends Fconnection {
+
+class RoutesmsFconnection extends Fconnection {
   private static final String ROUTESMS_URL = "http://121.241.242.114/websms/"
 	static final configFields = ["name", "username", "password"]
 	static final defaultValues = []
@@ -12,7 +15,15 @@ class ClickatellFconnection extends Fconnection {
 	
 	String username
 	String password // FIXME maybe encode this rather than storing plaintext
-	
+        String message
+        /** 
+        *String type
+        *String dlr
+        *String destination
+	*String source
+        *String server
+        */
+
 	static passwords = ['password']
 
 	static mapping = {
@@ -23,7 +34,7 @@ class ClickatellFconnection extends Fconnection {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				return [from("seda:out-${ClickatellFconnection.this.id}")
+				return [from("seda:out-${RoutesmsFconnection.this.id}")
 						.onException(AuthenticationException, InvalidApiIdException)
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
@@ -37,8 +48,8 @@ class ClickatellFconnection extends Fconnection {
 										'to=${header.routesms.dst}&' +
 										'text=${body}'))
 						.to(ROUTESMS_URL)
-						.process(new ClickatellPostProcessor())
-						.routeId("out-internet-${ClickatellFconnection.this.id}")]
+						.process(new RoutesmsPostProcessor())
+						.routeId("out-internet-${RoutesmsFconnection.this.id}")]
 			}
 		}.routeDefinitions
 	}
