@@ -48,6 +48,8 @@ class SettingsController extends ControllerUtils {
 				appSettings:appSettings]
 	}
 
+	def porting() {	}
+
 	def selectLocale() {
 		i18nUtilService.setLocale(request, response, params.language?:'en')
 		redirect view:'general'
