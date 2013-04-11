@@ -11,20 +11,6 @@
 		</div>
 		<div id="body-content">
 			<fsms:render template="/settings/sections/language"/>
-			<div id="import">
-				<h2><g:message code="import.label"/></h2>
-				<fsms:info message="import.backup.label"/>
-				<g:uploadForm name="importForm" controller="import" action="importData" method="post">
-					<fsms:radioGroup name="data" title="import.prompt.type"
-							values="contacts,messages"
-							labelPrefix="import."
-							checked="contacts"/>
-					<fsms:info message="import.version1.info"/>
-					<input type="file" name="importCsvFile" onchange="this.form.submit();"/>
-					<label for="importCsvFile"><g:message code="import.prompt"/></label>
-				</g:uploadForm>
-			</div>
-
 			<fsms:render template="/settings/sections/database_backup"/>
 			<fsms:render template="/settings/sections/basic_auth"/>
 
