@@ -107,7 +107,6 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			def camelContext = Mock(CamelContext)
 			def webconnection =  Webconnection.findByName("Sync")
 			webconnection.camelContext = camelContext
-			webconnectionService.metaClass.getStatusOf = {Webconnection w -> ConnectionStatus.CONNECTED}
 			webconnection.save(failOnError:true)
 		when:
 			webconnection.activate()

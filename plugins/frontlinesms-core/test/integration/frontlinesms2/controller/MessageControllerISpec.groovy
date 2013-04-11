@@ -23,8 +23,6 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		
 		new Group(name: "Sahara").save(flush: true)
 		new Group(name: "Thar").save(flush: true)
-
-		controller.metaClass.getPaginationCount = { -> return 10 }
 	}
 
 	def "should send a message to the given address"() {
