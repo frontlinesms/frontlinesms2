@@ -284,7 +284,8 @@ class Fmessage {
 	}
 
 	static def listPending(onlyFailed, params=[:]) {
-		Fmessage.getAll(pending(onlyFailed).list(params) as List)
+		def ids = pending(onlyFailed).list(params) as List
+		(!ids) ? [] : Fmessage.getAll(ids)
 	}
 
 	static def countPending(onlyFailed) {

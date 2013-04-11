@@ -121,50 +121,6 @@ class FconnectionService {
 		c.save(failOnError:true)
 	}
 
-	def pauseFconnection(Fconnection c) {
-		pauseFconnection(c.id as long)
-		c.enabled = false
-		c.save(failOnError:true)
-	}
-
-	def pauseFconnection(long id) {
-		println "fconnectionService.pauseFconnection : ENTRY"
-		println "fconnectionService.pauseFconnection : id=$id"
-		camelContext.routes.findAll { it.id ==~ /.*-$id$/ }.each {
-			try {
-				println "fconnectionService.pauseFconnection : route-id=$it.id"
-				println "fconnectionService.pauseFconnection : pausing route $it.id..."
-				camelContext.suspendRoute(it.id)
-			} catch(Exception ex) {
-				println "fconnectionService.pauseFconnection : Exception thrown while pausing $it.id: $ex"
-				ex.printStackTrace()
-			}
-		}
-		println "fconnectionService.pauseFconnection : EXIT"
-	}
-
-	def resumeFconnection(Fconnection c) {
-		resumeFconnection(c.id as long)
-		c.enabled = true
-		c.save(failOnError:true)
-	}
-
-	def resumeFconnection(long id) {
-		println "fconnectionService.resumeFconnection : ENTRY"
-		println "fconnectionService.resumeFconnection : id=$id"
-		camelContext.routes.findAll { it.id ==~ /.*-$id$/ }.each {
-			try {
-				println "fconnectionService.resumeFconnection : route-id=$it.id"
-				println "fconnectionService.resumeFconnection : resuming route $it.id..."
-				camelContext.resumeRoute(it.id)
-			} catch(Exception ex) {
-				println "fconnectionService.resumeFconnection : Exception thrown while resuming $it.id: $ex"
-				ex.printStackTrace()
-			}
-		}
-		println "fconnectionService.resumeFconnection : EXIT"
-	}
-
 	private def logFail(c, ex) {
 		ex.printStackTrace()
 		log.warn("Error creating routes to fconnection with id $c?.id", ex)

@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 echo "# Checking for calls to metaclass on non-instance variables..."
 grep -r '\s[A-Z][a-zA-Z]*\.metaClass' test/integration/ test/functional/
 if [ $? -eq 1 ]; then
