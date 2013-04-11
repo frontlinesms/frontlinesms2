@@ -5,7 +5,7 @@ echo "# Checking for bad date formats in $i18nDirectory..."
 pushd $i18nDirectory
 grep 'default\.date\.format' `ls *.properties` | groovy -e '
 	System.in.text.eachLine {
-		parts = it.split ":default.date.format="
+		parts = it.split(":default.date.format=")
 		file = parts[0]; dateFormat = parts[1]
 		try {
 			new java.text.SimpleDateFormat(dateFormat)
