@@ -19,7 +19,7 @@ class ConnectionController extends ControllerUtils {
 		def fconnectionInstanceTotal = Fconnection.count()
 
 		def model = [connectionInstanceList:fconnectionInstanceList,
-				fconnectionInstanceTotal:fconnectionInstanceTotal
+				fconnectionInstanceTotal:fconnectionInstanceTotal,
 				serverUrl:"${url}"]
 		if(params?.id) {
 			model << show()
