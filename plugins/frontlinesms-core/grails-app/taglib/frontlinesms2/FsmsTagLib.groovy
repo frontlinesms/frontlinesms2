@@ -318,7 +318,8 @@ class FsmsTagLib {
 			} else out << g.textField(att)
 			out << body()
 		} else {
-			out << "<div class='connection-info'>${g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}")}</div>"
+			def val = g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}").markdownToHtml()
+			out << "<div class='connection-info'>${val}</div>"
 		}
 		if(att.list) out << "</div>"
 		else if(att.table) {
