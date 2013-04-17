@@ -14,7 +14,7 @@ class ConnectionController extends ControllerUtils {
 	}
 	
 	def list() {
-		def url = request.serverPort? "http://${request.serverName}:${request.serverPort}" : request.serverName
+		def url = "http://${request.serverName == 'localhost' ? '&lt;your-ip-address&gt;' : request.serverName}${request.serverPort? (':' + request.serverPort) : ''}"
 		def fconnectionInstanceList = Fconnection.list(params)
 		def fconnectionInstanceTotal = Fconnection.count()
 
