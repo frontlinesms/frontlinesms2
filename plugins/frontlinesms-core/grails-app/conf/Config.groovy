@@ -69,11 +69,9 @@ grails.plugin.databasemigration.updateOnStart = System.properties['db.migrations
 environments {
     development {
         grails.logging.jul.usebridge = true
-	server.url = "http://&lt;your-ip-address&gt;"
     }
     production {
         grails.logging.jul.usebridge = false
-	server.url = "http://&lt;your-ip-address&gt;"
     }
 }
 

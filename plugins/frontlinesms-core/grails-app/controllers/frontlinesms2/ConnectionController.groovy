@@ -14,7 +14,7 @@ class ConnectionController extends ControllerUtils {
 	}
 	
 	def list() {
-		def url = grailsApplication.config.server.url
+		def url = request.serverPort? "http://${request.serverName}:${request.serverPort}" : request.serverName
 		def fconnectionInstanceList = Fconnection.list(params)
 		def fconnectionInstanceTotal = Fconnection.count()
 
