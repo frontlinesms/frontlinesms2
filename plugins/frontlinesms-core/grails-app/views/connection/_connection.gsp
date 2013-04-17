@@ -6,7 +6,7 @@
 			for each.
 			TODO 'your-ip-addres' should be 18n'd -->
 		<g:if test="${c instanceof frontlinesms2.SmssyncFconnection}">
-			<p class="smssync-url">${"http://&lt;your-ip-address&gt;"+createLink(uri: '/')+"api/1/smssync/"+c.id+"/"}</p>
+			<p class="smssync-url">${serverUrl + createLink(uri: '/')+"api/1/smssync/"+c.id+"/"}</p>
 		</g:if>
 		<p class="connection-status"><g:message code="${c.status.i18n}"/></p>
 	</div>
