@@ -3,10 +3,12 @@ package frontlinesms2
 import grails.converters.JSON
 class ConnectionController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete:'GET']
+	static final String RULE_PREFIX = "fconnection-"
 
 	def fconnectionService
 	def messageSendService
 	def smssyncService
+	def appSettingsService
 
 	def index() {
 		redirect action:'list'
@@ -15,9 +17,15 @@ class ConnectionController extends ControllerUtils {
 	def list() {
 		def fconnectionInstanceList = Fconnection.list(params)
 		def fconnectionInstanceTotal = Fconnection.count()
+		def appSettings = [:]
+		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
+		appSettings['routing.use'] = appSettingsService.get("routing.use")
+		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
 
 		def model = [connectionInstanceList:fconnectionInstanceList,
-				fconnectionInstanceTotal:fconnectionInstanceTotal]
+				fconnectionInstanceTotal:fconnectionInstanceTotal,
+				fconnectionRoutingMap:fconnectionRoutingMap,
+				appSettings:appSettings]
 		if(params?.id) {
 			model << show()
 			render view:'show', model:model
@@ -28,9 +36,16 @@ class ConnectionController extends ControllerUtils {
 	}
 	
 	def show() {
+		def appSettings = [:]
+		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
+		appSettings['routing.use'] = appSettingsService.get("routing.use")
+		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
+
 		withFconnection {
 			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
-					fconnectionInstanceTotal: Fconnection.list(params)]
+					fconnectionInstanceTotal: Fconnection.list(params),
+					fconnectionRoutingMap:fconnectionRoutingMap,
+					appSettings:appSettings]
 		}
 	}
 
@@ -88,6 +103,48 @@ class ConnectionController extends ControllerUtils {
 			}
 		}
 		}
+	}
+
+	def changeRoutingPreferences() {
+		println "params:: $params"
+
+		appSettingsService.set('routing.use', params.routingUseOrder)
+		redirect action:'list'
+	}
+
+	private getRoutingRules(routingRules) {
+		def fconnectionRoutingList = []
+		def fconnectionRoutingMap = [:]
+		def connectionInstanceList = Fconnection.findAllBySendEnabled(true)
+
+		if(routingRules) {
+			fconnectionRoutingList = routingRules.split(/\s*,\s*/)
+			println "Routing Rules before refinement:::: $routingRules"
+
+			// Replacing fconnection rules with fconnection instances
+			fconnectionRoutingList = fconnectionRoutingList.collect { rule ->
+				if(rule.startsWith(RULE_PREFIX)) {
+					connectionInstanceList.find {
+						println "Comparing rule:: $rule with id:: $it ::  ${it.id == ((rule - RULE_PREFIX) as Integer)}"
+						it.id == ((rule - RULE_PREFIX) as Integer)
+					}
+				} else rule
+			}
+
+			if(fconnectionRoutingList) {
+				def length = fconnectionRoutingList.size()
+				if(!fconnectionRoutingList.contains("uselastreceiver")) fconnectionRoutingList << "uselastreceiver"
+				((fconnectionRoutingList += connectionInstanceList) - null as Set).eachWithIndex { it, index ->
+					fconnectionRoutingMap[it] = index < length
+				}
+			}
+
+		 } else {
+		 	fconnectionRoutingList << "uselastreceiver"
+			((fconnectionRoutingList + connectionInstanceList) as Set).findAll{ fconnectionRoutingMap[it] = false }
+		}
+
+		fconnectionRoutingMap
 	}
 	
 	private def remapFormParams() {
