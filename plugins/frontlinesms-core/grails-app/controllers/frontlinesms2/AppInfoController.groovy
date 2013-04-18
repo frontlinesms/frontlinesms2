@@ -3,6 +3,7 @@ package frontlinesms2
 import grails.converters.JSON
 
 class AppInfoController {
+	static allowedMethods = [index: "POST"]
 	def appInfoService
 
 	def index() {
