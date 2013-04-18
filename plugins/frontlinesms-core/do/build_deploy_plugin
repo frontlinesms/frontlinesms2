@@ -2,10 +2,15 @@
 set -e
 
 # Extract flags
+binaryFlag=""
 while [[ $1 == "--"* ]]; do
 	if [ "$1" == "--m2-deploy" ]; then
 		echo "# Maven deployment enabled."
 		M2_DEPLOY=true
+	fi
+	if [[ "$1" == "--binary" ]]; then
+		echo "# Building plugin as binary."
+		binaryFlag="--binary"
 	fi
 	shift
 done
@@ -19,7 +24,7 @@ PLUGIN_VERSION=$(env groovy -e "`grep -E '^\s*def\s+version' *GrailsPlugin.groov
 echo "# Extracted plugin version as $PLUGIN_VERSION"
 rm plugin.xml || echo "# no plugin.xml present"
 grails --non-interactive clean
-grails --non-interactive --stacktrace package-plugin
+grails --non-interactive --stacktrace $binaryFlag package-plugin
 NEW_PLUGIN_ZIP_NAME=$PLUGIN_NAME-$PLUGIN_VERSION.zip
 OLD_PLUGIN_ZIP_NAME=grails-$NEW_PLUGIN_ZIP_NAME
 echo "# renaming $OLD_PLUGIN_ZIP_NAME to $NEW_PLUGIN_ZIP_NAME"
