@@ -3,9 +3,9 @@
 		<h1><g:message code="connection.header"/></h1>
 		<ul class="buttons">
 			<li>
-				<g:remoteLink class="btn" name="addConnection" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); mediumPopup.launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
+				<fsms:popup class="btn" name="addConnection" controller='connection' action="wizard" method="mediumPopup.launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
 					<g:message code="connection.add" />
-				</g:remoteLink>
+				</fsms:popup>
 			</li>
 		</ul>
 	</div>
