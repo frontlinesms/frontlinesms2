@@ -77,7 +77,7 @@ class ConnectionControllerSpec extends Specification {
 			new SmslibFconnection(name:"COM5", port:'COM5', baud:9600, sendEnabled:false).save(failOnError:true)
 			controller.appSettingsService = ['routing.use':"uselastreceiver,fconnection-${conn2.id},fconnection-${conn1.id}"]
 		when:
-			def model = controller.list()
+			controller.list()
 		then:
 			model.fconnectionRoutingMap*.key*.toString() == ["uselastreceiver", conn2, conn1]*.toString()
 			model.fconnectionRoutingMap*.value == [true,true,true]
@@ -89,7 +89,7 @@ class ConnectionControllerSpec extends Specification {
 			def conn2 = new SmslibFconnection(name:"COM5", port:'COM4', baud:9600).save(failOnError:true)
 			controller.appSettingsService = ['routing.use':"uselastreceiver,fconnection-${conn2.id},fconnection-3,fconnection-${conn1.id}"]
 		when:
-			def model = controller.list()
+			controller.list()
 		then:
 			model.fconnectionRoutingMap*.key*.toString() == ['uselastreceiver', conn2, conn1]*.toString()
 	}

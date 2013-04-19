@@ -27,7 +27,6 @@ class ConnectionController extends ControllerUtils {
 				fconnectionRoutingMap:fconnectionRoutingMap,
 				appSettings:appSettings]
 		if(params?.id) {
-			model << show()
 			render view:'show', model:model
 		} else {
 			params.id = fconnectionInstanceList[0]?.id
