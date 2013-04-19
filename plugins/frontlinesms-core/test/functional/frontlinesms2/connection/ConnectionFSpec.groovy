@@ -8,68 +8,66 @@ import frontlinesms2.dev.MockModemUtils
 
 import serial.mock.MockSerial
 import serial.mock.CommPortIdentifier
+import spock.lang.*
 
 class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'When there are no connections, this is explained to the user'() {
 		when:
 			to PageConnection
 		then:
-			connectionList.displayed
-			connectionList.text()?.contains('You have no connections configured.')
+			btnNewConnection.displayed
+			noContent?.text().contains('You have no connections configured.')
 	}
 
 	def 'There is a Failed label shown for failed connection'() {
 		when:
 			to PageConnection, createSecondTestEmailConnection()
 		then:
-			connectionList.status == "Failed"
+			connectionList.status(0).jquery.hasClass("FAILED")
 	}
 
 	def 'There is a Disabled label shown for disabled connection'() {
 		when:
 			to PageConnection, createTestEmailConnection()
 		then:
-			connectionList.status == "Disabled"
+			connectionList.status(0).jquery.hasClass("DISABLED")
 	}
 
 	def 'there is a DELETE button shown for inactive connection'() {
 		when:
 			to PageConnection, createTestEmailConnection()
 		then:
-			connectionList.btnDelete.displayed
+			connectionList.btnDelete(0).displayed
 	}
 
 	def 'should show "create route" button for inactive connection'() {
 		when:
 			to PageConnection, createTestEmailConnection()
 		then:
-			connectionList.btnEnableRoute.displayed
+			connectionList.btnEnableRoute(0).displayed
 	}
 
 	def 'DELETE button should remove selected fconnection from the list'() {
 		given:
 			to PageConnection, createTestEmailConnection()
 		when:
-			connectionList.btnDelete.click()
+			connectionList.btnDelete(0).click()
 		then:
 			waitFor { notifications.flashMessageText.contains("Connection test email connection was deleted.") }
-			connectionList.text()?.contains('You have no connections configured.')
+			noContent.displayed
+			noContent.text().contains('You have no connections configured.')
 	}
 
 	def 'Send test message button for particular connection displayed on a successfully created route'() {
 		given:
 			def testConnection = createTestSmsConnection()
-			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to PageConnection, testConnection
-			waitFor { connectionList.btnEnableRoute.displayed }
+			waitFor { connectionList.displayed }
+			connectionList.btnEnableRoute(0).click()
 		then:
-			!connectionList.btnTestRoute.displayed
-		when:
-			connectionList.btnEnableRoute.click()
-		then:
-			waitFor('very slow') { connectionList.status == "Connected" }
-			waitFor { connectionList.btnTestRoute.displayed }
+			waitFor('slow') { connectionList.btnTestRoute(0).displayed }
+			waitFor { connectionList.status(0).jquery.hasClass("CONNECTED") }
 	}
 
 	def 'delete button is not displayed for a connected Fconnection'() {
@@ -77,23 +75,16 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			def c = createTestEmailConnection()
 		when:
 			to PageConnection, c
-			connectionList.btnEnableRoute.click()
+			connectionList.btnEnableRoute(0).click()
 		then:
-			waitFor('very slow') { connectionList.status == "Connected" }
-			!connectionList.btnDelete.displayed
-	}
-
-	def 'The first connection in the connection list page is selected'() {
-		when: 
-			to PageConnection, createTestEmailConnection()
-		then:
-			connectionList.selectedConnection.size() == 1
+			waitFor('very slow') { connectionList.status(0).jquery.hasClass("CONNECTED") }
+			!connectionList.btnDelete(0).displayed
 	}
 
 	def 'creating a new fconnection adds the connection to the connections list'() {
 		given:
 			to PageConnection
-			assert connectionList.connection.size() == 0
+			assert noContent.displayed
 		when:
 			launchCreateWizard()
 			next.click()
@@ -109,8 +100,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			submit.click()
 		then:
 			at PageConnection
-			waitFor { connectionList.selectedConnection.text()?.contains('name') }
-			connectionList.connection.size() == 1
+			waitFor { connectionList.connectionName(0).contains('name') }
+			connectionList.listSize() == 1
 	}
 
 /* FIXME TODO FIXME TODO make this work reliably.  Prizes on offer.
@@ -173,7 +164,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at PageConnection
 		and:
-			waitFor { connectionList.selectedConnection.text()?.contains('Henry') }
+			waitFor { connectionList.connectionName(0).contains('Henry') }
 	}
 
 	def 'can set up a new IntelliSMS account'() {
@@ -192,18 +183,18 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			submit.click()
 		then:
 			at PageConnection
-			waitFor { connectionList.selectedConnection.text()?.contains('New IntelliSMS Connection') }
+			waitFor { connectionList.connectionName(0).contains('New IntelliSMS Connection') }
 	}
 
 	def 'clicking Send test message displays a popup with a default message and empty address field'() {
 		given:
 			to PageConnection, createTestEmailConnection()
 		when:
-			connectionList.btnEnableRoute.click()
+			connectionList.btnEnableRoute(0).click()
 		then:
-			waitFor('slow') {connectionList.btnTestRoute.displayed}
+			waitFor('slow') { connectionList.btnTestRoute(0).displayed }
 		when:
-			connectionList.btnTestRoute.click()
+			connectionList.btnTestRoute(0).click()
 		then:
 			waitFor { at TestMessagePopup }
 			addresses == ''
@@ -241,8 +232,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	private def startBadConnection() {
 		def connectionId = SmslibFconnection.findByName('Bad Port').id
 		to PageConnection, connectionId
-		waitFor { connectionList.btnEnableRoute.displayed }
-		connectionList.btnEnableRoute.click()
+		waitFor { connectionList.btnEnableRoute(0).displayed }
+		connectionList.btnEnableRoute(0).click()
 	}
 
 	private def launchCreateWizard(def type=null) {

@@ -1,4 +1,4 @@
-<tr class="connection-header connection" id="connection-${c?.id}">
+<tr class="connection-header connection ${c == connectionInstance ? 'selected' : ''}" id="connection-${c?.id}">
 	<td class="connection-status ${c.status}"></td>
 	<td class="connection-type"><g:message code="${c.shortName}.label"/></td>
 	<td class="connection-name">
