@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import au.com.bytecode.opencsv.CSVWriter
 
 class ImportController extends ControllerUtils {
-	private static final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	
 	def importData() {
 		if (params.data == 'contacts') importContacts()

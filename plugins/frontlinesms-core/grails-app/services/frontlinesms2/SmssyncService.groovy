@@ -6,6 +6,7 @@ import grails.plugin.quartz2.TriggerHelper
 import org.apache.camel.Exchange
 import frontlinesms2.api.*
 
+// TODO handle unscheduling of ReportSmssyncTimeoutJob as an event listener.
 class SmssyncService {
 	def i18nUtilService
 	def processSend(Exchange x) {
