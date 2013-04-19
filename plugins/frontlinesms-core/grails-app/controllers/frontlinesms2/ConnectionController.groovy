@@ -9,12 +9,14 @@ class ConnectionController extends ControllerUtils {
 	def messageSendService
 	def smssyncService
 	def appSettingsService
+	def grailsApplication
 
 	def index() {
 		redirect action:'list'
 	}
 	
 	def list() {
+		def url = "http://${request.serverName == 'localhost' ? '&lt;your-ip-address&gt;' : request.serverName}${request.serverPort? (':' + request.serverPort) : ''}"
 		def fconnectionInstanceList = Fconnection.list(params)
 		def fconnectionInstanceTotal = Fconnection.count()
 		def appSettings = [:]
@@ -25,7 +27,8 @@ class ConnectionController extends ControllerUtils {
 		def model = [connectionInstanceList:fconnectionInstanceList,
 				fconnectionInstanceTotal:fconnectionInstanceTotal,
 				fconnectionRoutingMap:fconnectionRoutingMap,
-				appSettings:appSettings]
+				appSettings:appSettings,
+				serverUrl:"${url}"]
 		if(params?.id) {
 			render view:'show', model:model
 		} else {

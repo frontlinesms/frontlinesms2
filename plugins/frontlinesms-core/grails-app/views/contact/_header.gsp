@@ -12,13 +12,13 @@
 							keys="${['rename', 'edit', 'delete']}"
 							noSelection="${['': g.message(code:'group.moreactions')]}"/>
 			</g:else>
-			<g:remoteLink class="btn" controller="export" action="contactWizard" params="[groupId:contactsSection?.id, contactsSection:contactsSection.shortName]" onSuccess="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="action.export"/></g:remoteLink>
+			<fsms:popup class="btn" controller="export" action="contactWizard" params="[groupId:contactsSection?.id, contactsSection:contactsSection.shortName]" method="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="action.export"/></fsms:popup>
 		</div>
 	</g:if>
 	<g:else>
 		<h1><g:message code="contact.all.contacts" args="${[contactInstanceTotal]}"/></h1>
 		<div class="header-buttons">
-			<g:remoteLink class="btn" controller="export" action="contactWizard" onSuccess="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="action.export"/></g:remoteLink>
+			<fsms:popup class="btn" controller="export" action="contactWizard" method="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="action.export"/></fsms:popup>
 		</div>
 	</g:else>
 </div>

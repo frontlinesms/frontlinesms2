@@ -18,9 +18,9 @@
 			</fsms:menuitem>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onLoading="showThinking();" onSuccess="hideThinking(); mediumPopup.launchMediumPopup(i18n('popup.activity.create'), data, (i18n('action.next')), chooseActivity);">
-						<g:message code="activities.create"/>
-			</g:remoteLink>
+			<fsms:popup class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" method="mediumPopup.launchMediumPopup(i18n('popup.activity.create'), data, (i18n('action.next')), chooseActivity);">
+				<g:message code="activities.create"/>
+			</fsms:popup>
 		</fsms:menuitem>
 	</fsms:submenu>
 	<fsms:submenu code="folder.header" class="folders">
@@ -30,9 +30,9 @@
 			</fsms:menuitem>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<g:remoteLink class="btn create" controller="folder" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('action.create'),'validate');">
+			<fsms:popup class="btn create" controller="folder" action="create" method="launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('action.create'),'validate')">
 				<g:message code="folder.create"/>
-			</g:remoteLink>
+			</fsms:popup>
 		</fsms:menuitem>
 	</fsms:submenu>
 </fsms:menu>

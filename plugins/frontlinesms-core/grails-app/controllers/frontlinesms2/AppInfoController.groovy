@@ -3,6 +3,8 @@ package frontlinesms2
 import grails.converters.JSON
 
 class AppInfoController {
+	//FIXME index method should only accept GET requests but POST is set to prevent rendering of blank pages
+	static allowedMethods = [index: "POST"] 
 	def appInfoService
 
 	def index() {
