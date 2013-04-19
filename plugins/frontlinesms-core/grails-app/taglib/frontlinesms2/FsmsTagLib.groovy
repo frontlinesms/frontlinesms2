@@ -193,15 +193,17 @@ class FsmsTagLib {
 	}
 	
 	def confirmTable = { att ->
-		out << '<table id="' + (att.instanceClass.shortName) + '-confirm" class="connection-confirm-table">'
-		out << confirmTypeRow(att)
 		def fields = getFields(att)
-		if(fields instanceof Map) {
-			generateConfirmSection(att, fields)
-		} else {
-			fields.each { out << confirmTableRow(att + [field:it.trim()]) }
+		if (fields) {
+			out << '<table id="' + (att.instanceClass.shortName) + '-confirm" class="connection-confirm-table">'
+			out << confirmTypeRow(att)
+			if(fields instanceof Map) {
+				generateConfirmSection(att, fields)
+			} else {
+				fields.each { out << confirmTableRow(att + [field:it.trim()]) }
+			}
+			out << '</table>'
 		}
-		out << '</table>'
 	}
 	
 	def confirmTypeRow = { att ->
@@ -243,29 +245,33 @@ class FsmsTagLib {
 		if(att.table) out << '<table>'
 		if(att.list) out << "<div class='field-list'>"
 		def fields = getFields(att)
-		if(fields instanceof Map) {
-			generateSection(att, fields)
-		} else {
-			def values = att.values
-			def types = att.types
-			['values', 'types'].each { att.remove(it) }
-			fields.eachWithIndex { field, i ->
-				def extraAttributes = [field:field]
-				if(values) {
-					extraAttributes.val = values[i]
-					if(types && types[i]) {
-						extraAttributes[types[i]] = true
+		if(fields) {
+			if(fields instanceof Map) {
+				generateSection(att, fields)
+			} else {
+				def values = att.values
+				def types = att.types
+				['values', 'types'].each { att.remove(it) }
+				fields.eachWithIndex { field, i ->
+					def extraAttributes = [field:field]
+					if(values) {
+						extraAttributes.val = values[i]
+						if(types && types[i]) {
+							extraAttributes[types[i]] = true
+						}
 					}
+					out << input(att + extraAttributes)
 				}
-				out << input(att + extraAttributes)
 			}
-		}
-		if(att.submit) {
-			if(att.table) out << '<tr><td></td><td>'
-			if(att.list) out << "<div class='input-item'>"
-			out << g.submitButton(class:'btn', value:g.message(code:att.submit), name:att.submitName?:'submit')
-			if(att.list) out << '</div>'
-			if(att.table) out << '</td></tr>'
+			if(att.submit) {
+				if(att.table) out << '<tr><td></td><td>'
+				if(att.list) out << "<div class='input-item'>"
+				out << g.submitButton(class:'btn', value:g.message(code:att.submit), name:att.submitName?:'submit')
+				if(att.list) out << '</div>'
+				if(att.table) out << '</td></tr>'
+			}
+		} else {
+			out << render(template: "/fconnection/${att.instanceClass?.shortName}/custom")
 		}
 		if(att.table) out << '</table>'
 		if(att.list) out << '</div>'
@@ -284,7 +290,7 @@ class FsmsTagLib {
 		if(att.list) out << "<div class='input-item'>"
 		else if(att.table) out << '<tr><td class="label">'
 		else out << '<div class="field">'
-		if(!groovyKey.startsWith("info-")) {
+		if(att.instanceClass.configFields && !groovyKey.startsWith("info-")) {
 			def val
 			if(att.val) {
 				val = att.val
@@ -317,9 +323,14 @@ class FsmsTagLib {
 				out << g.checkBox(att)
 			} else out << g.textField(att)
 			out << body()
+<<<<<<< HEAD
+		} else if(att.instanceClass.configFields) {
+			out << "<div class='connection-info'>${g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}")}</div>"
+=======
 		} else {
 			def val = g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}").markdownToHtml()
 			out << "<div class='connection-info'>${val}</div>"
+>>>>>>> master
 		}
 		if(att.list) out << "</div>"
 		else if(att.table) {
