@@ -4,7 +4,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 class ErrorController extends ControllerUtils {
-	static final def DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd")
+	private final def DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd")
 
 	def logs() { supplyDownload('log') }
 

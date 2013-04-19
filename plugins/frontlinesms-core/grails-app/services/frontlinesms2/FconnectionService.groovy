@@ -65,9 +65,7 @@ class FconnectionService {
 				ex.printStackTrace()
 			}
 		}
-		def connection = Fconnection.get(id)
-		if (connection.shortName == 'smssync')
-			smssyncService.handleRouteDestroyed(connection)
+		// TODO fire event to announce that route was destroyed
 		println "fconnectionService.destroyRoutes : EXIT"
 	}
 

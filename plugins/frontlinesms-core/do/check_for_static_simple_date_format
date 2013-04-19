@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "# Checking for non-thread-safe use of SimpleDateFormat..."
+grep -r 'static.*SimpleDateFormat' grails-app/ src/
+if [[ "$?" != "1" ]]; then
+	echo "# Static instances of SimpleDateFormat found.  This class is not thread-safe."
+	echo "# Either make the instances ThreadLocal or per-instance."
+	exit 1
+fi
+echo "# No bad SimpleDateFormat use found."
+

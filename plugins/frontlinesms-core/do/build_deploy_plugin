@@ -30,11 +30,17 @@ mkdir -p $IVY_CACHE_DIR
 IVY_CACHED_ZIP=$IVY_CACHE_DIR/$NEW_PLUGIN_ZIP_NAME
 echo "# Removing old plugin from local ivy cache at $IVY_CACHED_ZIP..."
 rm $IVY_CACHED_ZIP || echo "# Old plugin was not found in ivy cache."
-
 echo "# Deploying to local ivy cache..."
 cp $NEW_PLUGIN_ZIP_NAME $IVY_CACHED_ZIP
-
 echo "# Plugin built and deployed to local ivy cache."
+
+echo "# Deploying to local maven repository..."
+mavenRepoDir=~/.m2/repository/org/grails/plugins/$PLUGIN_NAME/$PLUGIN_VERSION/
+echo "# Creating maven repo dir at $mavenRepoDir..."
+mkdir -p $mavenRepoDir
+echo "# Deploying to ${mavenRepoDir}$NEW_PLUGIN_ZIP_NAME..."
+cp $NEW_PLUGIN_ZIP_NAME $mavenRepoDir
+echo "# Deployed to local maven repository."
 
 if [ -n "$M2_DEPLOY" ]; then
 	echo "# deploy core plugin to remote plugin repo"
