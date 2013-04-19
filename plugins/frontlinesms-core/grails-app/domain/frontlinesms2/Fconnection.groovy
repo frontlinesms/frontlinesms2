@@ -28,7 +28,6 @@ class Fconnection {
 		if (fields) {
 			if(fields instanceof Map) return fields.getAllValues()?.findAll { field -> !clazz.constraints[field].blank }
 			else return fields.findAll { field ->
-				"beep".execute()
 				if(!(clazz.metaClass.hasProperty(null, field).type in [Boolean, boolean])) {
 					!clazz.constraints[field].nullable
 				}
