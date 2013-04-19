@@ -18,7 +18,7 @@ class Fmessage {
 	String inboundContactName
 	String outboundContactName
 	
-	boolean viewed
+	boolean read
 	boolean starred
 	boolean archived
 	boolean isDeleted
@@ -404,14 +404,6 @@ class Fmessage {
 
 	def clearAllDetails() {
 		this.details?.clear()
-	}
-
-	def getRead() {
-		return viewed
-	}
-
-	def setRead(boolean read) {
-		viewed = read
 	}
 }
 
