@@ -1,6 +1,7 @@
 fconnection_show = (function() {
 	var update = function(status, id) {
-		$("#body-content.connections .selected .connection-status").text(i18n("connectionstatus." + status.toLowerCase()));
+		$("#body-content.connections .selected .connection-status").attr("class", "connection-status "+status);
+		console.log($("#body-content.connections .selected .connection-status").attr("class"));
 		sanchez.replaceContent("#body-content.connections .selected .controls", "fconnection-controls-" + status, { connectionId:id });
 	};
 	return {

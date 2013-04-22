@@ -46,6 +46,7 @@ app_info = (function() {
 		}
 		if(!jQuery.isEmptyObject(requestData)) {
 			console.log("requester() :: requestData=" + JSON.stringify(requestData));
+			//FIXME Should fix type to GET but POST is set to prevent rendering of blank pages
 			jQuery.ajax({ type:"POST",
 				url:url_root + "appInfo",
 				cache:false,

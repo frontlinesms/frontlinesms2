@@ -28,9 +28,9 @@
 						</select>
 					</li>
 					<li>
-						<g:remoteLink class="btn" controller="settings" action="logsWizard" id="downloadLogs" onSuccess="launchSmallPopup(i18n('logs.download.title'), data, i18n('logs.download.continue'))">
+						<fsms:popup class="btn" controller="settings" action="logsWizard" id="downloadLogs" method="launchSmallPopup(i18n('logs.download.title'), data, i18n('logs.download.continue'))">
 							<g:message code="logs.download.buttontext"/>
-						</g:remoteLink>
+						</fsms:popup>
 					</li>
 				</ul>
 			</div>

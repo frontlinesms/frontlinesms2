@@ -32,7 +32,20 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			go 'connection/list'
 		then:
 			at PageConnectionSettings
-			(/http:\/\/you-ip-address\/frontlinesms-core\/api\/.*\/smssync\// =~ connections[2].children().text()[2])
+			connections[2].text().contains("http://<your-ip-address>/frontlinesms-core/api/1")
+	}
+
+	def 'Saving routing preferences persists the changes'(){
+		when:
+			to PageConnectionSettings
+		then:
+			routing.useLastReceivedConnection.@checked
+		when:
+			routing.useLastReceivedConnection.click()
+			routing.save.click()
+		then:
+			waitFor { at PageConnectionSettings }
+			!routing.useLastReceivedConnection.@checked
 	}
 
 	def createTestConnections() {
