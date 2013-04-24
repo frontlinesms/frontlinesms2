@@ -17,11 +17,19 @@ while [[ $1 == "--"* ]]; do
 	shift
 done
 
+echo "# Extracting grails version from application.properties..."
+grailsVersion=$(grep 'app\.grails\.version=' application.properties | cut -d= -f2)
+echo "# Grails version is $grailsVersion"
+
 echo "# extract app name from application.properties..."
 pluginName=`ls *GrailsPlugin.groovy | cut -d. -f1 | sed -E -e 's/^(.*)GrailsPlugin$/\1/' | sed -E 's/(([^^])([A-Z]))/\2-\3/g' | tr [:upper:] [:lower:]`
 echo "# Extracted plugin name as $pluginName"
 
 echo "# extract version from application.properties..."
+if $buildBinary; then
+	echo "# Changing plugin version to include binary and grails version in the name."
+	sed -E -i -e "s/^\s*def\s+version\s*=\s*['\"](.*?)(-SNAPSHOT)['\"]\s*$/\tdef version = \"\1-binary-$grailsVersion\2\"/g" *GrailsPlugin.groovy
+fi
 pluginVersion=$(env groovy -e "`grep -E '^\s*def\s+version' *GrailsPlugin.groovy`; println version")
 echo "# Extracted plugin version as $pluginVersion"
 rm plugin.xml || echo "# no plugin.xml present"
