@@ -28,7 +28,7 @@
 						</select>
 					</li>
 					<li>
-						<fsms:popup class="btn" controller="settings" action="logsWizard" id="downloadLogs" method="launchSmallPopup(i18n('logs.download.title'), data, i18n('logs.download.continue'))">
+						<fsms:popup class="btn" controller="settings" action="logsWizard" id="downloadLogs" popupCall="launchSmallPopup(i18n('logs.download.title'), data, i18n('logs.download.continue'))">
 							<g:message code="logs.download.buttontext"/>
 						</fsms:popup>
 					</li>

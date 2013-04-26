@@ -513,8 +513,8 @@ class FsmsTagLib {
 	}
 	
 	def popup = { att, body ->
-		att << [onLoading:"showThinking();",onSuccess:"hideThinking(); ${att.method}"]
-		att.remove('method')
+		att << [onLoading:"showThinking();",onSuccess:"hideThinking(); ${att.popupCall}"]
+		att.remove('popupCall')
 		out << g.remoteLink(att,body)
 	}
 	private def getFields(att) {
