@@ -35,6 +35,7 @@
 		$('#inbox-indicator').html(data);
 	});
 
+
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {};
@@ -59,5 +60,11 @@
 			newFeatures.showPopup();
 		});
 	</fsms:ifAppSetting>
+
+	// add moreOptions js to dropdowns
+	$(function() {
+		console.log("CORE MOREACTIONS INIT");
+		more_actions.init();
+	});
 </r:script>
 
