@@ -63,7 +63,6 @@
 
 	// add moreOptions js to dropdowns
 	$(function() {
-		console.log("CORE MOREACTIONS INIT");
 		more_actions.init();
 	});
 </r:script>
