@@ -136,7 +136,7 @@ jQuery(document).ajaxError(function(request, data, settings, error) {
 		// remove loading screen just in case it is there
 		hideThinking();
 		// display details of the error page
-		launchSmallPopup(data.status + ": " + data.statusText, data.responseText, i18n("action.ok"), function() { console.log("Error dialog closed."); });
+		launchSmallPopup(data.status + ": " + data.statusText, data.responseText, i18n("action.ok"), cancel);
 	}
 });
 
