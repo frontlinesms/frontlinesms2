@@ -63,7 +63,9 @@
 
 	// add moreOptions js to dropdowns
 	$(function() {
-		more_actions.init();
+		if(typeof more_actions !== 'undefined') {
+			more_actions.init();
+		}
 	});
 </r:script>
 
