@@ -16,7 +16,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to PageConnection
 		then:
 			btnNewConnection.displayed
-			noContent?.text().contains('You have no connections configured.')
+			noContent?.text()?.contains('You have no connections configured.')
 	}
 
 	def 'There is a Failed label shown for failed connection'() {
@@ -55,7 +55,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { notifications.flashMessageText.contains("Connection test email connection was deleted.") }
 			noContent.displayed
-			noContent.text().contains('You have no connections configured.')
+			noContent.text()?.contains('You have no connections configured.')
 	}
 
 	def 'Send test message button for particular connection displayed on a successfully created route'() {

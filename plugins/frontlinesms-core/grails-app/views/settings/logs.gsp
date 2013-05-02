@@ -15,8 +15,8 @@
 		<div id="body-content-head" class="logs">
 			<div class="content">
 				<h1><g:message code="settings.logs.header"/></h1>
-			    <fsms:render template="/settings/log_buttons" />
-            </div>
+				<fsms:render template="/settings/log_buttons"/>
+			</div>
 		</div>
 		<table id="body-content" class="logs">
 			<thead>
