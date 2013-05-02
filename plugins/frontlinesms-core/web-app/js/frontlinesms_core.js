@@ -132,7 +132,7 @@ jQuery(document).ajaxError(function(request, data, settings, error) {
 	var title;
 	// Ignore errors with AppInfo as they should already be handled.  If status is zero, the
 	// server is likely down, or an auth error.  AppInfo should update this page anyway shortly
-	if(!settings.url.match(/^.*\/w\/[0-9]+\/appInfo.*$/) && data.status !== 0) {
+	if(!settings.url.match(/^.*\/appInfo$/) && data.status !== 0) {
 		// remove loading screen just in case it is there
 		hideThinking();
 		// display details of the error page
