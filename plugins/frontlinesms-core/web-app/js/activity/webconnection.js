@@ -33,14 +33,14 @@ var webconnectionDialog = (function () {
 		if(testRouteBtn.length === 0) {
 			testRouteBtn = mediumPopup.appendButton("testRoute", "submit", i18n('webconnection.testroute.label'));
 			testRouteBtn.bind({
-				click: testRouteStatus
+				click:initiateRouteStatusCheck
 			});
 		} else {
 			testRouteBtn.show();
 		}
 		buttonSet.append(testRouteBtn);
 	},
-	testRouteStatus = function() {
+	initiateRouteStatusCheck = function() {
 		var params = {};
 		if(mediumPopup.tabValidates(mediumPopup.getCurrentTab())) {
 			params.ownerId = $("#activityId").val();
@@ -49,7 +49,7 @@ var webconnectionDialog = (function () {
 				type:"POST",
 				data:$("#new-webconnection-form").serialize() + "&" + $.param(params),
 				url:url_root + "webconnection/testRoute",
-				success:checkRouteStatus
+				success:processInitiateTestResponse
 			});
 		} else {
 			$('.error-panel').show();
@@ -71,14 +71,19 @@ var webconnectionDialog = (function () {
 	},
 	processCheckRouteResponse = function(response) {
 		if(!response) { return; }
-		if(response.webconnection_status !== "success" && response.webconnection_status  !== "failed") {
+		response = response.webconnection_status;
+		if(!response.ok) {
+			// Not sure how we get here.
+			return;
+		}
+		if(response.status !== "success" && response.status  !== "failed") {
 			// checking still in progress...
 			return;
 		}
-		$(".error-panel").text(i18n('webconnection.popup.'+ response.webconnection_status  + '.label'));
+		$(".error-panel").text(i18n('webconnection.popup.'+ response.status  + '.label'));
 		$(".error-panel").show();
 		toggleWizardButtons();
-		if(response.webconnection_status  === "success") {
+		if(response.status  === "success") {
 			loadSummaryTab(response, i18n('webconnection.label'));
 		} else {
 			$("#testRoute").children().remove();
@@ -86,7 +91,7 @@ var webconnectionDialog = (function () {
 		}
 		app_info.stopListening("webconnection_status");
 	},
-	checkRouteStatus = function(response) {
+	processInitiateTestResponse = function(response) {
 		if(response.ok) {
 			$("#testRoute").children().remove();
 			$("#testRoute").append("<span>"+i18n('webconnection.testing.label')+"</span>");
