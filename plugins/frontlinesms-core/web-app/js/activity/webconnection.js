@@ -70,16 +70,15 @@ var webconnectionDialog = (function () {
 		}
 	},
 	processCheckRouteResponse = function(response) {
-		response = response.webconnection_status;
 		if(!response) { return; }
-		if(response.status !== "success" && response.status !== "failed") {
+		if(response.webconnection_status !== "success" && response.webconnection_status  !== "failed") {
 			// checking still in progress...
 			return;
 		}
-		$(".error-panel").text(i18n('webconnection.popup.'+ response.status + '.label'));
+		$(".error-panel").text(i18n('webconnection.popup.'+ response.webconnection_status  + '.label'));
 		$(".error-panel").show();
 		toggleWizardButtons();
-		if(response.status === "success") {
+		if(response.webconnection_status  === "success") {
 			loadSummaryTab(response, i18n('webconnection.label'));
 		} else {
 			$("#testRoute").children().remove();
