@@ -29,8 +29,10 @@ class SmssyncFconnectionQueuedDispatch implements Serializable {
 	}
 
 	static void delete(SmssyncFconnection c, dispatches) {
-		executeUpdate "DELETE FROM SmssyncFconnectionQueuedDispatch WHERE connectionId=:connectionId AND dispatchId in :dispatchIds",
-				[connectionId:c.id, dispatchIds:dispatches*.id]
+		if(dispatches) {
+			executeUpdate "DELETE FROM SmssyncFconnectionQueuedDispatch WHERE connectionId=:connectionId AND dispatchId in :dispatchIds",
+					[connectionId:c.id, dispatchIds:dispatches*.id]
+		}
 	}
 
 	static getDispatches(connection) {
