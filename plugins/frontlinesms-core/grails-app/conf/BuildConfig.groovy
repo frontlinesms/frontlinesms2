@@ -96,7 +96,7 @@ grails.project.dependency.resolution = {
 
 		compile ':platform-core:1.0.RC3-frontlinesms'
 
-		test ":code-coverage:1.2.5"
+		test ":code-coverage:1.2.6"
 		test ":codenarc:0.18.1"
 		test ":spock:0.6"
 		test ":geb:$gebVersion"
@@ -119,6 +119,9 @@ grails.project.dependency.resolution = {
 }
 
 coverage {
+	enabledByDefault = false
+	exclusions = ["**/*Spec"]
+	xml = true
 }
 
 codenarc {
