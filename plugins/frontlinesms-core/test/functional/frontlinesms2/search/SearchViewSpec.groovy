@@ -299,11 +299,11 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearchResult, ""
 		then:
-			tabs.unreadcount == 2
+			tabs.unreadcount == 3
 		when:
 			Fmessage.build(src:'+254999999', text:'message count')
 		then:
-			waitFor('very slow') { tabs.unreadcount == 3 }
+			waitFor('very slow') { tabs.unreadcount == 4 }
 	}
 
 	def "moveaction drop down should not be visible if only one archived message is seleted"(){
