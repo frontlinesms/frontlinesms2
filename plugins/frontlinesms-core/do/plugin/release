@@ -1,0 +1,45 @@
+#!/bin/bash
+set -e
+
+previousVersion=$(groovy -e "$(grep version *CoreGrailsPlugin.groovy); println version")
+echo "# Got old plugin version as: $previousVersion"
+
+releaseVersion=$(echo $previousVersion | sed s/-SNAPSHOT//)
+read -p "# Enter version for release [$releaseVersion]: " manualReleaseVersion
+if [ -n "$manualReleaseVersion" ]; then
+	releaseVersion="$manualReleaseVersion"
+fi
+echo "# Using new version: $releaseVersion"
+
+nextVersion=$(expr $releaseVersion)
+nextVersionHead=$(echo $nextVersion | sed -E 's/^(.*)\.[0-9]+$/\1/')
+nextVersionTail=$(echo $nextVersion | sed -E 's/^.*\.([0-9]+)$/\1/')
+nextVersionTail=$(($nextVersionTail + 1))
+nextVersion="${nextVersionHead}.${nextVersionTail}-SNAPSHOT"
+read -p "# Enter new version for development [$nextVersion]: " manualNextVersion
+if [ -n "$manualNextVersion" ]; then
+	nextVersion="$manualNextVersion"
+fi
+echo "# Next SNAPSHOT version: $nextVersion"
+
+function grails_change_plugin_version {
+	# TODO
+	exit 1
+}
+
+function git_commit_all_changes {
+	_commitMessage="$1"
+	git status
+	read -p "# Committing all changes with message: $_commitMessage [enter] "
+	git commit -a -m"$_commitMessage"
+}
+
+grails_change_plugin_version $previousVersion $releaseVersion
+# TODO do build_deploy
+git_commit_all_changes "[RELEASE: $releaseVersion]"
+git tag "v$releaseVersion"
+changeVersion $releaseVersion $nextVersion
+git_commit_all_changes "[POST-RELEASE: $releaseVersion -> $nextVersion]"
+git push
+git push --tags
+
