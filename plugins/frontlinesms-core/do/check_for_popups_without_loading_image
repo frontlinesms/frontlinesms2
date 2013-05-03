@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#check for onSuccess attributes whose values are the popups; any results being printed means fsms:popup isn't being used
+echo "# Checking for popups that dont have loading image"
+grep -r "onSuccess=" grails-app/views/ | grep -vn "formRemote\|fsms:wizard" | grep "launch.*Popup\|launch.*Wizard"
+VIEW_OUTPUT=$?
+if [ "$VIEW_OUTPUT" -eq 1 ]; then
+	echo "# No popups without loading image detected"
+	exit 0
+else
+	echo "# Popups without loading image detected"
+	exit 1
+fi
