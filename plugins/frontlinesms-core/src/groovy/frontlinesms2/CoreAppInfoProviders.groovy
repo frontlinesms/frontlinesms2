@@ -70,7 +70,10 @@ class CoreAppInfoProviders {
 			if(c) {
 				def message = Fmessage.findByMessageOwnerAndText(c, Fmessage.TEST_MESSAGE_TEXT)
 				response.status = message?.ownerDetail
+			} else {
+				response.ok = false
 			}
+			return response
 		}
 
 		s.registerProvider('poll_stats') { app, controller, data ->

@@ -22,7 +22,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			go 'connection/list'
 		then:
 			at PageConnectionSettings
-			connectionNames*.text().containsAll(["'Miriam's Clickatell account'", "'MTN Dongle'"])
+			connectionNames*.text()?.containsAll(["'Miriam's Clickatell account'", "'MTN Dongle'"])
 	}
 
 	def 'smsssync connection should display connection url'(){
