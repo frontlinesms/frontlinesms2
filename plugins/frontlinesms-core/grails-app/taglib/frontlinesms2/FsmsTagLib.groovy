@@ -511,7 +511,7 @@ class FsmsTagLib {
 	def step = { att, body ->
 		out << render(template:'/customactivity/step', model:[stepId:att.stepId, type:att.type, body:body])
 	}
-	
+
 	def popup = { att, body ->
 		att << [onLoading:"showThinking();", onSuccess:"hideThinking(); ${att.popupCall}"]
 		att.remove('popupCall')
