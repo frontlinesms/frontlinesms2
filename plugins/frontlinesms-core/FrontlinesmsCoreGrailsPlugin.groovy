@@ -1,5 +1,5 @@
 class FrontlinesmsCoreGrailsPlugin {
-	def version = "3.1-SNAPSHOT"
+	def version = '3.1'
 	def grailsVersion = "2.0.3"
 	def pluginExcludes = ["grails-app/views/error.gsp",
 			"grails-app/conf/CoreBootStrap.groovy"]
