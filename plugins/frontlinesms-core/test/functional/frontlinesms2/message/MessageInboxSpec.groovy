@@ -259,11 +259,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox, Fmessage.findBySrc('Alice').id
 		then:
-			tabs.unreadcount == 1
+			tabs.unreadcount == 3
 		when:
 			Fmessage.build().save(flush:true, failOnError:true)
 		then:
-			waitFor { tabs.unreadcount == 2 }
+			waitFor { tabs.unreadcount == 4 }
 	}
 
 	def "should show create contact link for a recipient that is not in the contact list"() {
