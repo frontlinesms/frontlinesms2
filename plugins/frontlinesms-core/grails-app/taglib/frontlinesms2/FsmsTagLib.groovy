@@ -513,10 +513,11 @@ class FsmsTagLib {
 	}
 	
 	def popup = { att, body ->
-		att << [onLoading:"showThinking();",onSuccess:"hideThinking(); ${att.popupCall}"]
+		att << [onLoading:"showThinking();", onSuccess:"hideThinking(); ${att.popupCall}"]
 		att.remove('popupCall')
-		out << g.remoteLink(att,body)
+		out << g.remoteLink(att, body)
 	}
+
 	private def getFields(att) {
 		def fields = att.remove('fields')
 		if(!fields) fields = att.instanceClass?.configFields
