@@ -24,7 +24,11 @@ class ConnectionController extends ControllerUtils {
 		appSettings['routing.use'] = appSettingsService.get("routing.use")
 		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
 
-		def model = [connectionInstanceList:fconnectionInstanceList,
+		def model = [:]
+		withFconnection {
+			model << [connectionInstance: it]
+		}
+		model << [connectionInstanceList:fconnectionInstanceList,
 				fconnectionInstanceTotal:fconnectionInstanceTotal,
 				fconnectionRoutingMap:fconnectionRoutingMap,
 				appSettings:appSettings,
@@ -34,20 +38,6 @@ class ConnectionController extends ControllerUtils {
 		} else {
 			params.id = fconnectionInstanceList[0]?.id
 			render view:'show', model:model
-		}
-	}
-	
-	def show() {
-		def appSettings = [:]
-		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
-		appSettings['routing.use'] = appSettingsService.get("routing.use")
-		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
-
-		withFconnection {
-			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
-					fconnectionInstanceTotal: Fconnection.list(params),
-					fconnectionRoutingMap:fconnectionRoutingMap,
-					appSettings:appSettings]
 		}
 	}
 
