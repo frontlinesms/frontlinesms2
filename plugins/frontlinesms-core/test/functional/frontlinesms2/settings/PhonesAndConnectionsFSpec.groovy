@@ -32,7 +32,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			go 'connection/list'
 		then:
 			at PageConnectionSettings
-			connections[2].text()?.contains("http://<your-ip-address>/frontlinesms-core/api/1")
+			connections[2].text()?.contains("http://<your-ip-address>")
 	}
 
 	def 'Saving routing preferences persists the changes'(){
