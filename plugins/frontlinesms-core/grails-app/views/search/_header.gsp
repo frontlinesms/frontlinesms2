@@ -13,7 +13,7 @@
 			<g:if test="${messageInstanceTotal > 0}">
 				<fsms:popup class="btn" controller="export" action="messageWizard"
 						params="[messageSection:messageSection, searchId:search.id]"
-						method="launchSmallPopup(i18n('smallpopup.messages.export.title', '${messageInstanceTotal}'), data, i18n('action.export'));">
+						popupCall="launchSmallPopup(i18n('smallpopup.messages.export.title', '${messageInstanceTotal}'), data, i18n('action.export'));">
 					<g:message code="search.export"/>
 				</fsms:popup>
 			</g:if>

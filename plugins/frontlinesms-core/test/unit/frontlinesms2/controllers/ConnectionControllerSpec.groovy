@@ -5,7 +5,7 @@ import frontlinesms2.*
 import spock.lang.*
 
 @TestFor(ConnectionController)
-@Mock([Fconnection, FconnectionService, SystemNotification, AppSettingsService, Fconnection, SmslibFconnection])
+@Mock([Fconnection, FconnectionService, LogEntry, SmslibFconnection, SystemNotification])
 class ConnectionControllerSpec extends Specification {
 	def appSettingsService
 
@@ -14,7 +14,7 @@ class ConnectionControllerSpec extends Specification {
 		controller.appSettingsService = appSettingsService
 	}
 
-	def "test that createRoute actually calls FconnectionService"() {
+	def 'createRoute should call FconnectionService'() {
 		setup:
 			def routesTriggered = []
 			EnableFconnectionJob.metaClass.static.triggerNow = { LinkedHashMap map -> routesTriggered << map.connectionId }
@@ -37,9 +37,10 @@ class ConnectionControllerSpec extends Specification {
 			SmslibFconnection.findAll() == []
 	}
 
-	def "delete should throw an exception for an active fconnection"() {
+	@Unroll
+	def 'delete should throw an exception for an active fconnection'() {
 		given:
-			def c = buildTestConnection(ConnectionStatus.CONNECTED)
+			def c = buildTestConnection(status)
 			params.id = c.id
 		when:
 			controller.delete()
@@ -51,7 +52,7 @@ class ConnectionControllerSpec extends Specification {
 					ConnectionStatus.CONNECTING, ConnectionStatus.FAILED]
 	}
 
-	def 'can set the routing preferences'(){
+	def 'can set the routing preferences'() {
 		given:
 			params.routingUseOrder = "uselastreceiver"
 		when:
@@ -92,6 +93,29 @@ class ConnectionControllerSpec extends Specification {
 			controller.list()
 		then:
 			model.fconnectionRoutingMap*.key*.toString() == ['uselastreceiver', conn2, conn1]*.toString()
+	}
+
+	@Unroll
+	def 'creating a connection should add it to the enabled routes list'() {
+		given: 'TODO set up request vars'
+			def ass = ['routing.use':initialSetting]
+			controller.appSettingsService = ass
+			params.connectionType = 'smssync'
+			params.smssyncname = 'test-connection'
+			params.smssyncreceiveEnabled = true
+			params.smssyncsecret = ''
+			params.smssyncsendEnabled = true
+			params.smssynctimeout = '60'
+		when: 'new connection is saved'
+			controller.save()
+		then: 'the is enabled at the end of the enabled connections list'
+			ass['routing.use'] ==~ finalSetting
+		where:
+			initialSetting | finalSetting
+			null|/^fconnection-\d+$/
+			''|/^fconnection-\d+$/
+			'fconnection-C'|/^fconnection-C,fconnection-\d+$/
+			'fconnection-C,fconnection-A'|/^fconnection-C,fconnection-A,fconnection-\d+$/
 	}
 
 	private def buildTestConnection(status) {

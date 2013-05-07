@@ -3,7 +3,7 @@
 		<h1><g:message code="connection.header"/></h1>
 		<ul class="buttons">
 			<li>
-				<fsms:popup class="btn" name="addConnection" controller='connection' action="wizard" method="mediumPopup.launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
+				<fsms:popup class="btn" name="addConnection" controller='connection' action="wizard" popupCall="mediumPopup.launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
 					<g:message code="connection.add" />
 				</fsms:popup>
 			</li>

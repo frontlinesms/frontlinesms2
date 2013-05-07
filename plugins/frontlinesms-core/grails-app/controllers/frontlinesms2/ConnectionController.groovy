@@ -202,7 +202,11 @@ class ConnectionController extends ControllerUtils {
 		fconnectionInstance.validate()
 		println fconnectionInstance.errors.allErrors
 		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
-		if (fconnectionInstance.save()) {
+		if (fconnectionInstance.save(flush:true)) {
+			def connectionUseSetting = appSettingsService['routing.use']
+			appSettingsService['routing.use'] = connectionUseSetting?
+					"$connectionUseSetting,fconnection-$fconnectionInstance.id":
+					"fconnection-$fconnectionInstance.id"
 			withFormat {
 				html {
 					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))

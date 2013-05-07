@@ -511,12 +511,13 @@ class FsmsTagLib {
 	def step = { att, body ->
 		out << render(template:'/customactivity/step', model:[stepId:att.stepId, type:att.type, body:body])
 	}
-	
+
 	def popup = { att, body ->
-		att << [onLoading:"showThinking();",onSuccess:"hideThinking(); ${att.method}"]
-		att.remove('method')
-		out << g.remoteLink(att,body)
+		att << [onLoading:"showThinking();", onSuccess:"hideThinking(); ${att.popupCall}"]
+		att.remove('popupCall')
+		out << g.remoteLink(att, body)
 	}
+
 	private def getFields(att) {
 		def fields = att.remove('fields')
 		if(!fields) fields = att.instanceClass?.configFields
