@@ -400,14 +400,9 @@ class FsmsTagLib {
 	}
 
 	def quickMessage = { att ->
-		att.controller = "quickMessage"
-		att.action = "create"
-		att.id = "quick_message"
-		att.onLoading = "showThinking();"
-		// FIXME activity-specific code should not be inside this file
-		att.onSuccess = "hideThinking(); mediumPopup.launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); mediumPopup.selectSubscriptionGroup(${att.groupId});"
+		att << [controller:"quickMessage", action:"create", id:"quick_message", popupCall:"mediumPopup.launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); mediumPopup.selectSubscriptionGroup(${att.groupId});"]
 		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
-		out << g.remoteLink(att, body)
+		out << fsms.popup(att,body)
 	}
 
 	def menu = { att, body ->
