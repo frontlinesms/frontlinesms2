@@ -18,7 +18,7 @@
 			</fsms:menuitem>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<fsms:popup class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" method="mediumPopup.launchMediumPopup(i18n('popup.activity.create'), data, (i18n('action.next')), chooseActivity);">
+			<fsms:popup class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" popupCall="mediumPopup.launchMediumPopup(i18n('popup.activity.create'), data, (i18n('action.next')), chooseActivity);">
 				<g:message code="activities.create"/>
 			</fsms:popup>
 		</fsms:menuitem>
@@ -30,7 +30,7 @@
 			</fsms:menuitem>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<fsms:popup class="btn create" controller="folder" action="create" method="launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('action.create'),'validate')">
+			<fsms:popup class="btn create" controller="folder" action="create" popupCall="launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('action.create'),'validate')">
 				<g:message code="folder.create"/>
 			</fsms:popup>
 		</fsms:menuitem>

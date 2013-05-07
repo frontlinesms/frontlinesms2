@@ -14,7 +14,7 @@
 			<fsms:menuitem selected="${contactsSection instanceof frontlinesms2.Group && contactsSection.id==g.id}" controller="group" action="show" string="${g.name}" id="${g.id}" />
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<fsms:popup  class="btn create" controller="group" action="create" method="launchSmallPopup(i18n('smallpopup.group.title'), data, i18n('action.create'))">
+			<fsms:popup  class="btn create" controller="group" action="create" popupCall="launchSmallPopup(i18n('smallpopup.group.title'), data, i18n('action.create'))">
 				<g:message code="contact.create.group"/>
 			</fsms:popup >
 		</fsms:menuitem>
@@ -24,7 +24,7 @@
 			<fsms:menuitem selected="${contactsSection instanceof frontlinesms2.SmartGroup && contactsSection.id==g.id}" controller="smartGroup" action="show" string="${g.name}" id="${g.id}" />
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<fsms:popup  class="create btn" controller="smartGroup" action="create" method="mediumPopup.launchMediumPopup(i18n('popup.smartgroup.create'), data, (i18n('action.create')), createSmartGroup)">
+			<fsms:popup  class="create btn" controller="smartGroup" action="create" popupCall="mediumPopup.launchMediumPopup(i18n('popup.smartgroup.create'), data, (i18n('action.create')), createSmartGroup)">
 				<g:message code="contact.create.smartgroup"/>
 			</fsms:popup >
 		</fsms:menuitem>

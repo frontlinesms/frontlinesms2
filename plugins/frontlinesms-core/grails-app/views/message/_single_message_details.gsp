@@ -7,9 +7,9 @@
 			<p id="message-detail-sender">
 				<span>
 					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
-						<g:remoteLink controller="message" action="listRecipients" params="[messageId: messageInstance.id]" onSuccess="showRecipientList(data)" class="btn">
+						<fsms:popup controller="message" action="listRecipients" params="[messageId: messageInstance.id]" popupCall="showRecipientList(data)" class="btn">
 							<g:message code="fmessage.to.multiple" args="${[messageInstance.displayName]}" />
-						</g:remoteLink>
+						</fsms:popup>
 					</g:if>
 					<g:else>
 						${messageInstance.displayName}

@@ -6,7 +6,7 @@
 		</g:link>
 	</li>
 	<li class="nav ${params.controller=='help' ? 'selected' : ''}">
-		<fsms:popup controller="help" method="mediumPopup.launchHelpWizard(data);">
+		<fsms:popup controller="help" popupCall="mediumPopup.launchHelpWizard(data);">
 			<g:message code="common.help"/>
 		</fsms:popup>
 	</li>
