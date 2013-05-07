@@ -28,9 +28,10 @@ class CoreAppInfoProviders {
 			app.mainContext.deviceDetectionService.detected
 		}
 
-		s.registerProvider('connection_show') { app, controller, data ->
-			def c = Fconnection.get(data.id)
-			if(c) [id:c.id , status:c.status.toString()]
+		s.registerProvider('fconnection_statuses') { app, controller, data ->
+			Fconnection.findAll().collect { c ->
+				[id:c.id, status:c.status.toString()]
+			}
 		}
 
 		s.registerProvider 'contact_message_stats', contactMessageStats

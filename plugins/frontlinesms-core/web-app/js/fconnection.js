@@ -1,4 +1,4 @@
-fconnection_show = (function() {
+fconnection_list = (function() {
 	var update = function(status, id) {
 		var containerSelecter = "#connection-" + id;
 		$(containerSelecter + " .connection-status").attr("class", "connection-status " + status);

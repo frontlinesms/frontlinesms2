@@ -1,4 +1,10 @@
 <%@ page import="frontlinesms2.ConnectionStatus" %>
+<html>
+<head>
+	<meta name="layout" content="settings"/>
+	<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
+</head>
+<body>
 <div id="body-content-head">
 	<div class="content">
 		<h1><g:message code="connection.header"/></h1>
@@ -77,8 +83,18 @@
 <g:javascript>
 $(function() {
 	<g:each in="${connectionInstanceList}" status="i" var="c">
-		fconnection_show.update("${c.status}", ${c.id});
+		fconnection_list.update("${c.status}", ${c.id});
 	</g:each>
+	app_info.listen("fconnection_statuses", function(data) {
+		var i;
+		data = data.fconnection_statuses;
+		if(!data) { return; }
+		for(i=data.length-1; i>=0; --i) {
+			fconnection_list.update(data[i].status, data[i].id);
+		}
+	});
 });
 </g:javascript>
+</body>
+</html>
 

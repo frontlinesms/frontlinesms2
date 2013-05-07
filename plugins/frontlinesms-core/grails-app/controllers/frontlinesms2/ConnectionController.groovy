@@ -28,17 +28,11 @@ class ConnectionController extends ControllerUtils {
 		withFconnection {
 			model << [connectionInstance: it]
 		}
-		model << [connectionInstanceList:fconnectionInstanceList,
+		[connectionInstanceList:fconnectionInstanceList,
 				fconnectionInstanceTotal:fconnectionInstanceTotal,
 				fconnectionRoutingMap:fconnectionRoutingMap,
 				appSettings:appSettings,
 				serverUrl:"${url}"]
-		if(params?.id) {
-			render view:'show', model:model
-		} else {
-			params.id = fconnectionInstanceList[0]?.id
-			render view:'show', model:model
-		}
 	}
 
 	def wizard() {
