@@ -160,8 +160,6 @@ class ConnectionController extends ControllerUtils {
 	
 	def enable() {
 		EnableFconnectionJob.triggerNow([connectionId:params.id])
-		params.connecting = true
-		flash.message = message(code: 'connection.route.connecting')
 		def connectionInstance = Fconnection.get(params.id)
 		if(connectionInstance?.shortName == 'smssync') { // FIXME should not be connection-specific code here
 			smssyncService.startTimeoutCounter(connectionInstance)
@@ -172,7 +170,6 @@ class ConnectionController extends ControllerUtils {
 	def disable() {
 		withFconnection { c ->
 			fconnectionService.disableFconnection(c)
-			flash.message = message(code: 'connection.route.disconnecting')
 			redirect(action:'list', id:c.id)
 		}
 	}
