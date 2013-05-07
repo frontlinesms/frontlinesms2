@@ -131,7 +131,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = Fmessage.build(src:'+254999999', text:'test')
 		when:
 			to PageMessageInbox, message.id
-			waitFor{ singleMessageDetails.forward.displayed }
+			waitFor { singleMessageDetails.forward.displayed }
 			singleMessageDetails.forward.click()
 			waitFor { at QuickMessageDialog }
 		then:
@@ -146,7 +146,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			con.save(flush:true)
 		when:
 			to PageMessageInbox, message.id
-			waitFor{ singleMessageDetails.receivedOn.displayed }
+			waitFor { singleMessageDetails.receivedOn.displayed }
 		then:
 			singleMessageDetails.receivedOn.text() == "Received on: MTN Dongle"
 	}
