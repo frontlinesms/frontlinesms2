@@ -163,8 +163,9 @@ class ConnectionController extends ControllerUtils {
 		params.connecting = true
 		flash.message = message(code: 'connection.route.connecting')
 		def connectionInstance = Fconnection.get(params.id)
-		if(connectionInstance?.shortName == 'smssync')
+		if(connectionInstance?.shortName == 'smssync') { // FIXME should not be connection-specific code here
 			smssyncService.startTimeoutCounter(connectionInstance)
+		}
 		redirect(action:'list', params:params)
 	}
   
