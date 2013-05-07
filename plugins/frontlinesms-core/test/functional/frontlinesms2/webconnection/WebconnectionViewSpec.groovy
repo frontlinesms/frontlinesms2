@@ -156,7 +156,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { singleMessageDetails.displayed }
 			messageList.hasClass(3, "selected")
-			singleMessageDetails.text == "Test message 3"
+			waitFor { singleMessageDetails.text == "Test message 3" }
 	}
 
 	def "delete single message action works "() {

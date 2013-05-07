@@ -290,7 +290,7 @@ class FsmsTagLib {
 		if(att.list) out << "<div class='input-item'>"
 		else if(att.table) out << '<tr><td class="label">'
 		else out << '<div class="field">'
-		if(att.instanceClass.configFields && !groovyKey.startsWith("info-")) {
+		if((att.instanceClass?.configFields && !groovyKey.startsWith("info-")) || (!att.instanceClass?.configFields && att.field)) {
 			def val
 			if(att.val) {
 				val = att.val
@@ -323,7 +323,7 @@ class FsmsTagLib {
 				out << g.checkBox(att)
 			} else out << g.textField(att)
 			out << body()
-		} else if(att.instanceClass.configFields) {
+		} else if(att.instanceClass?.configFields) {
 			out << "<div class='connection-info'>${g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}").markdownToHtml()}</div>"
 		}
 		if(att.list) out << "</div>"
