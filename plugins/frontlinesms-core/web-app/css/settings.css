@@ -28,9 +28,8 @@
 #body-content.connections .connection > * { white-space:nowrap; padding:5px 10px 5px 10px; }
 #body-content.connections .connection .connection-status { background-repeat:no-repeat; background-position:center; padding-left:30px; }
 #body-content.connections .connection .connection-name p { font-size:10px; }
-#body-content.connections .controls-container { width:100%; }
-#body-content.connections .controls { display:none; text-align:right; }
-#body-content.connections .connection:hover > .controls-container .controls { display:block; }
+#body-content.connections .controls { visibility:hidden; text-align:right; }
+#body-content.connections .connection:hover > .controls { visibility:visible; }
 #body-content.connections p.no-content { border-bottom:1px solid #9e9e9e; }
 
 #body-content.logs th.content { width:100%; }
