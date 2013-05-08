@@ -2,13 +2,9 @@ var StatusIndicator = function() {
 	var _failureCount = 0,
 	_updateLight = function(color) {
 		var statusIndicator = $('#status-indicator');
-		if (color) {
-			statusIndicator.removeClass('green');
-			statusIndicator.removeClass('red');
-			statusIndicator.addClass(color);
-		} else {
-			statusIndicator.removeClass().addClass('indicator red');
-		}
+		statusIndicator.removeClass('green');
+		statusIndicator.removeClass('red');
+		statusIndicator.addClass(color);
 		statusIndicator.show();
 	},
 	_getConnectionLostNotification = function() {
