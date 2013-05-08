@@ -28,7 +28,7 @@ echo "# Extracted plugin name as $pluginName"
 echo "# extract version from application.properties..."
 if $buildBinary; then
 	echo "# Changing plugin version to include binary and grails version in the name."
-	sed -E -i -e "s/^\s*def\s+version\s*=\s*['\"](.*?)(-SNAPSHOT)['\"]\s*$/\tdef version = \"\1-binary-$grailsVersion\2\"/g" *GrailsPlugin.groovy
+	sed -E -i -e "s/^\s*def\s+version\s*=\s*['\"](.*?)(-SNAPSHOT)?['\"]\s*$/\tdef version = \"\1-binary-$grailsVersion\2\"/g" *GrailsPlugin.groovy
 fi
 pluginVersion=$(env groovy -e "`grep -E '^\s*def\s+version' *GrailsPlugin.groovy`; println version")
 echo "# Extracted plugin version as $pluginVersion"

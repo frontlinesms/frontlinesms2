@@ -128,6 +128,18 @@ function insertAtCaret(areaId, text) {
 	txtarea.scrollTop = scrollPos;
 }
 
+jQuery(document).ajaxError(function(request, data, settings, error) {
+	var title;
+	// Ignore errors with AppInfo as they should already be handled.  If status is zero, the
+	// server is likely down, or an auth error.  AppInfo should update this page anyway shortly
+	if(!settings.url.match(/^.*\/appInfo$/) && data.status !== 0) {
+		// remove loading screen just in case it is there
+		hideThinking();
+		// display details of the error page
+		launchSmallPopup(data.status + ": " + data.statusText, data.responseText, i18n("action.ok"), cancel);
+	}
+});
+
 $(function() {
 	$.extend($.validator.messages, {
 		required: i18n("jquery.validation.required"),
