@@ -7,6 +7,6 @@
 				<p class="smssync-url">${serverUrl + createLink(uri: '/') + "api/1/smssync/" + c.id + "/"}</p>
 			</g:if>
 	</td>
-	<td class="controls"></td>
+	<td><div class="controls"></div></td>
 </tr>
 
