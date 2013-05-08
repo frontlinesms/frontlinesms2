@@ -16,8 +16,7 @@
 	var console = console || {};
 	console.log = console.log || function() {};
 
-	var nextImage = new Image();
-	nextImage.src = "${resource(dir:'images', file:'status/red.png')}";
+	new Image().src= "${resource(dir:'images', file:'status/red.png')}";
 
 	<fsms:render template="/i18n"/>
 
