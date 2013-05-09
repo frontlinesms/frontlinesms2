@@ -58,8 +58,7 @@ echo "# renaming $oldPackageName to $newPackageName"
 mv $oldPackageName $newPackageName
 
 if $buildBinary; then
-	echo "# Building pom file..."
-	grails generate-pom $binaryFlag
+	echo "..."
 else
 	ivyCacheDir=~/.grails/ivy-cache/org.grails.plugins/$pluginName/zips
 	mkdir -p $ivyCacheDir
@@ -81,14 +80,14 @@ echo "# Deploying to ${mavenRepoDir}$mavenFileName"
 cp $mavenFileName $mavenRepoDir
 echo "# Deployed to local maven repository."
 
-if $buildBinary; then
-	echo "# Deploying POM file to local maven repository..."
-	pomFileName="$pluginName-$pluginVersion.pom"
-	cp target/pom.xml $pomFileName
-	echo "# Deploying to ${mavenRepoDir}$pomFileName"
-	cp $pomFileName ${mavenRepoDir}$pomFileName
-	echo "# POM deployed"
-fi
+echo "# Building pom file..."
+grails generate-pom $binaryFlag
+echo "# Deploying POM file to local maven repository..."
+pomFileName="$pluginName-$pluginVersion.pom"
+cp target/pom.xml $pomFileName
+echo "# Deploying to ${mavenRepoDir}$pomFileName"
+cp $pomFileName ${mavenRepoDir}$pomFileName
+echo "# POM deployed"
 
 if [ -n "$m2deploy" ]; then
 	echo "# Deploy core plugin to remote plugin repo..."
