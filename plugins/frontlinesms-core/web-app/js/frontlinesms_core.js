@@ -14,6 +14,18 @@ if(!String.prototype.trim) {
 	};
 }
 
+if(!String.prototype.startsWith) {
+	String.prototype.startsWith = function(prefix) {
+		return this.slice(0, prefix.length) === prefix;
+	};
+}
+
+if(!String.prototype.endsWith) {
+	String.prototype.endsWith = function(suffix) {
+		return this.indexOf(suffix, this.length - suffix.length) !== -1;
+	};
+}
+
 if(!String.prototype.htmlEncode) {
 	String.prototype.htmlEncode = function() {
 		return this
@@ -27,22 +39,22 @@ if(!String.prototype.htmlEncode) {
 
 // Standardise the onclick/onchange firing in IE before IE9
 function addChangeHandlersForRadiosAndCheckboxes() {
-	$('input:radio, input:checkbox').click(function() {
+	jQuery('input:radio, input:checkbox').click(function() {
 		this.blur();
 		this.focus();
 	});
 }
-if(jQuery.browser.msie) { $(function() {
+if(jQuery.browser.msie) { jQuery(function() {
 	addChangeHandlersForRadiosAndCheckboxes();
 });}
 
-(function($) {
-	$.fn.disableField = function(){
+(function(jQuery) {
+	jQuery.fn.disableField = function(){
 	    return this.each(function(){
 	        this.disabled = true;
 	    });
 	};
-	$.fn.enableField = function(){
+	jQuery.fn.enableField = function(){
 	    return this.each(function(){
 	        this.disabled = false;
 	    });
@@ -50,35 +62,35 @@ if(jQuery.browser.msie) { $(function() {
 }(jQuery));
 
 function getSelectedGroupElements(groupName) {
-	return $('input[name=' + groupName + ']:checked');
+	return jQuery('input[name=' + groupName + ']:checked');
 }
 
 function isGroupChecked(groupName) {
 	return getSelectedGroupElements(groupName).length > 0;
 }
 
-$('.check-bound-text-area').live('focus', function() {
-	var checkBoxId = $(this).attr('checkbox_id');
-	$('#' + checkBoxId).attr('checked', true);
+jQuery('.check-bound-text-area').live('focus', function() {
+	var checkBoxId = jQuery(this).attr('checkbox_id');
+	jQuery('#' + checkBoxId).attr('checked', true);
 });
 
-$.fn.renderDefaultText = function() {
+jQuery.fn.renderDefaultText = function() {
 	return this.focus(function() {
-			$(this).toggleClass('default-text-input', false);
-			var element = $(this).val();
-			$(this).val(element === this.defaultValue ? '' : element);
+			jQuery(this).toggleClass('default-text-input', false);
+			var element = jQuery(this).val();
+			jQuery(this).val(element === this.defaultValue ? '' : element);
 		}).blur(function() {
-			var element = $(this).val();
-			$(this).val(element.match(/^\s+$|^$/) ? this.defaultValue : element);
-			$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue); });
+			var element = jQuery(this).val();
+			jQuery(this).val(element.match(/^\s+$|^$/) ? this.defaultValue : element);
+			jQuery(this).toggleClass('default-text-input', jQuery(this).val() === this.defaultValue); });
 };
 
 function showThinking() {
-	$('#thinking').fadeIn();
+	jQuery('#thinking').fadeIn();
 }
 
 function hideThinking() {
-	$('#thinking').fadeOut();
+	jQuery('#thinking').fadeOut();
 }
 
 function insertAtCaret(areaId, text) {
@@ -116,8 +128,20 @@ function insertAtCaret(areaId, text) {
 	txtarea.scrollTop = scrollPos;
 }
 
-$(function() {
-	$.extend($.validator.messages, {
+jQuery(document).ajaxError(function(request, data, settings, error) {
+	var title;
+	// Ignore errors with AppInfo as they should already be handled.  If status is zero, the
+	// server is likely down, or an auth error.  AppInfo should update this page anyway shortly
+	if(!settings.url.match(/^.*\/appInfo$/) && data.status !== 0) {
+		// remove loading screen just in case it is there
+		hideThinking();
+		// display details of the error page
+		launchSmallPopup(data.status + ": " + data.statusText, data.responseText, i18n("action.ok"), cancel);
+	}
+});
+
+jQuery(function() {
+	jQuery.extend(jQuery.validator.messages, {
 		required: i18n("jquery.validation.required"),
 		remote: i18n("jquery.validation.remote"),
 		email: i18n("jquery.validation.email"),

@@ -99,7 +99,3 @@ var more_actions = (function() {
 	};
 	return { init:init, getOwnerId:getOwnerId };
 }());
-
-$(document).ready(function() {
-	more_actions.init();
-});

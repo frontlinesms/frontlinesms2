@@ -105,13 +105,15 @@ class MessageController extends ControllerUtils {
 	def activity() {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
+			if (params.starred == null) params.starred = false
+			if (params.failed == null) params.failed = false
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
 			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
 				sentDispatchCount += it.dispatches.size()
-				sentMessageCount++
+				sentMessageCount++				
 			}
 			render view:"/activity/${activityInstance.shortName}/show",
 				model:[messageInstanceList: messageInstanceList,
@@ -132,6 +134,7 @@ class MessageController extends ControllerUtils {
 	def folder() {
 		def folderInstance = Folder.get(params.ownerId)
 		if (folderInstance) {
+			if (params.starred == null) params.starred = false
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
 			def messageInstanceList = folderInstance?.getFolderMessages(params.starred, getSent)
 			if (params.flashMessage) { flash.message = params.flashMessage }
@@ -267,7 +270,7 @@ class MessageController extends ControllerUtils {
 
 	private def withFmessage = withDomainObject Fmessage, { params.messageId }
 
-	private def getShowModel(messageInstanceList) {
+	private def getShowModel() {
 		def messageInstance = params.messageId? Fmessage.get(params.messageId): null
 		messageInstance?.read = true
 		messageInstance?.save()
@@ -277,7 +280,7 @@ class MessageController extends ControllerUtils {
 				checkedMessageCount: checkedMessageCount,
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
-				messageCount: Fmessage.countAllMessages(params),
+				messageCount: Fmessage.countAllMessages(),
 				hasFailedMessages: Fmessage.hasFailedMessages(),
 				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}

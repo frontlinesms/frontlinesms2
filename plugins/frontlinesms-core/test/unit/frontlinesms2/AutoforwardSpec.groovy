@@ -89,8 +89,6 @@ class AutoforwardSpec extends Specification {
 			22                     | 2        | 2      | 5            | 5           | 2
 	}
 
-	private def mockContact() { Contact.build() }
-
 	private def mockGroup(int memberCount) {
 		mockMembers(Group, memberCount)
 	}

@@ -8,12 +8,13 @@ import geb.Module
 class PageConnection extends PageBase {
 	String convertToPath(Object[] args) {
 		if(!args) 'connection/list'
-		else if(args[0] instanceof Number) 'connection/show/' + args[0]
-		else 'connection/show/' + args[0].id
+		else if(args[0] instanceof Number) 'connection/list/' + args[0]
+		else 'connection/list/' + args[0].id
 	}
 
 	static content = {
 		connectionList { module ConnectionList }
+		noContent { $("div#body-content p.no-content") }
 		btnNewConnection(wait:true) { $(".btn", text: 'Add new connection') }
 		connectionFailedFlashMessageEditButton { // technically not tied to this page - could be defined elsewhere if useful
 			notifications.systemNotification.find('a', text:'edit')
@@ -22,16 +23,18 @@ class PageConnection extends PageBase {
 }
 
 class ConnectionList extends Module {
-	static base = { $('div#body-content.connections') }
+	static base = { $('div#body-content .connection-list') }
 	static content = {
-		connection(required:false) { $("li.connection") }
-		selectedConnection(required:false) { $("li.connection.selected") }
-		btnEnableRoute(wait:true) {  $(".btn", text:'Enable') }
-		btnRetryConnection(wait:true) {  $(".btn", text:'Retry Connection') }
-		btnDisableRoute(wait:true) {  $(".btn", text:'Disable') }
-		btnDelete(required:false) { $('.btn', text:'Delete Connection') }
-		btnTestRoute(required:false) {  $('.btn', text:'Send test message') }
-		status { $('p.connection-status').text() }
+		listSize { $("tbody tr.connection").size() }
+		connection { i=0 -> $('tbody tr.connection', i) }
+		hoverOn { i -> connection(i).find(".controls").jquery.show() }
+		connectionName { i-> connection(i).find("td.connection-name").text() }
+		btnEnableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'Enable') }
+		btnRetryConnection(wait:true) { i ->  hoverOn(i) ; connection(i).find(".btn", text:'Retry') }
+		btnDisableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'Disable') }
+		btnDelete(required:false) { i -> hoverOn(i) ; connection(i).find('.btn', text:'Delete') }
+		btnTestRoute(required:false) { i -> hoverOn(i) ; connection(i).find('.btn', text:'Send test message') }
+		status { i -> connection(i).find('td.connection-status') }
 	}
 }
 

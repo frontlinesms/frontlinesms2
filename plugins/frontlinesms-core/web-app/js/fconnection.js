@@ -1,7 +1,8 @@
-fconnection_show = (function() {
+fconnection_list = (function() {
 	var update = function(status, id) {
-		$("#body-content.connections .selected .connection-status").text(i18n("connectionstatus." + status.toLowerCase()));
-		sanchez.replaceContent("#body-content.connections .selected .controls", "fconnection-controls-" + status, { connectionId:id });
+		var containerSelecter = "#connection-" + id;
+		$(containerSelecter + " .connection-status").attr("class", "connection-status " + status);
+		sanchez.replaceContent(containerSelecter + " .controls", "fconnection-controls-" + status, { connectionId:id });
 	};
 	return {
 		update:update
@@ -28,6 +29,7 @@ fconnection = (function() {
 	};
 
 	isSubsection = function(fieldName) {
+		if(new RegExp(/info\-.*/).test(fieldName)) { return false; }
 		return $('#' + fieldName + '-subsection').length > 0;
 	};
 

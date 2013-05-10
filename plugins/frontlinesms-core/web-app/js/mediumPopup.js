@@ -45,6 +45,7 @@ var mediumPopup = (function() {
 		});
 		addChangeHandlersForRadiosAndCheckboxes();
 		initializePopup(modalBox);
+		selectmenuTools.initAll("select");
 	};
 	launchNewFeaturePopup = function(title, html, btnFinishedText, submitAction) {
 		var modalBox = createModalBox(html);

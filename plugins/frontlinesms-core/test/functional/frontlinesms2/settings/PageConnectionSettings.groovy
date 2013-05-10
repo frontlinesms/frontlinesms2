@@ -12,5 +12,18 @@ class PageConnectionSettings extends PageSettings {
 		btnNewConnection { $('a', name:'addConnection') }
 		connectionNames { $('.connection-header').find('h2') }
 		connections { $('.connection') }
+		routing { module RoutingConnections }
+	}
+}
+
+class RoutingConnections extends geb.Module {
+	static base = { $('#routing-preferences') }
+
+	static content = {
+		routingForm { $('form#routing-form') }
+		useLastReceivedConnection { $('input[type=checkbox]', value:'uselastreceiver') }
+		useAnyAvailableConnection { $('input[name=otherwise]', value:'any') }
+		dontSend { $('input[name=otherwise]', value:'dontsend') }
+		save { $("input#saveRoutingDetails") }
 	}
 }

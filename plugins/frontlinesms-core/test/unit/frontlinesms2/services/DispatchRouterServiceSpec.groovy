@@ -107,7 +107,7 @@ class DispatchRouterServiceSpec extends Specification {
 			mockAppSettingsService(false, 'dontsend')
 			mockRoutes(1, 2, 3)
 		when:
-			def routedTo = service.slip(mockExchange(), null, null)
+			service.slip(mockExchange(), null, null)
 		then:
 			thrown NoRouteAvailableException
 	}
@@ -116,7 +116,7 @@ class DispatchRouterServiceSpec extends Specification {
 		given:
 			mockAppSettingsService(false, 'dontsend')
 		when:
-			def routedTo = service.slip(mockExchange(), null, null)
+			service.slip(mockExchange(), null, null)
 		then:
 			thrown NoRouteAvailableException
 	}

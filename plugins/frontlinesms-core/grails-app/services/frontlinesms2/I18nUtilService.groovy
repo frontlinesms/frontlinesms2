@@ -70,14 +70,14 @@ class I18nUtilService {
 	def getMessage(args) {
 		// maybe we need Locale.setDefault(new Locale("en","US"))
 		try {
-			def text = messageSource.getMessage(args.code, args.args as Object[], null)
+			return messageSource.getMessage(args.code, args.args as Object[], null)
 		} catch(org.springframework.context.NoSuchMessageException _) {
 			return args.code
 		}
 	}
 
 	private String getRootDirectory() {
-		def fileURL = new File('web-app/WEB-INF/grails-app/i18n').path
+		return new File('web-app/WEB-INF/grails-app/i18n').path
 	}
 }
 

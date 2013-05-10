@@ -5,7 +5,6 @@ import frontlinesms2.*
 import frontlinesms2.camel.*
 
 import org.apache.camel.Exchange
-import org.apache.camel.Message
 import grails.buildtestdata.mixin.Build
 
 @Mock([IntelliSmsFconnection, Dispatch])
@@ -14,7 +13,7 @@ class IntelliSmsPreProcessorSpec extends CamelUnitSpecification {
 	IntelliSmsPreProcessor p
 	
 	def setup() {
-		def c = IntelliSmsFconnection.build(username:'bob', password:'secret')
+		IntelliSmsFconnection.build(username:'bob', password:'secret')
 		p = new IntelliSmsPreProcessor()
 	}
 	

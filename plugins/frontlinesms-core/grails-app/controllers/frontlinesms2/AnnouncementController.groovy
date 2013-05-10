@@ -14,9 +14,7 @@ class AnnouncementController extends ActivityController {
 
 	def save() {
 		def announcementInstance = Announcement.get(params.ownerId)?: new Announcement()
-		doSave('announcement', announcementService, announcementInstance)
+		doSave(announcementService, announcementInstance)
 	}
-
-	private def withAnnouncement = withDomainObject Announcement
 }
 

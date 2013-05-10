@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import org.apache.camel.Exchange
-
 class UshahidiWebconnection extends Webconnection {
 	static String getType() { 'ushahidi' }
 	static constraints = {

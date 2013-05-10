@@ -18,6 +18,7 @@ modules = {
 		resource url:[dir:'css', file:'wizard.css']
 		resource url:[dir:'css', file:'chosen.css']
 		resource url:[dir:'css', file:'color.css']
+		resource url:[dir:'css', file:'unreviewed-core.css']
 
 
 		resource url:[dir:'js/layout', file:'resizer.js'], disposition:'head'
@@ -33,6 +34,7 @@ modules = {
 		resource url:[dir:'js', file:'activity/poll/poll.js'], disposition:'head'
 		resource url:[dir:'js', file:'activity/poll/poll_graph.js'], disposition:'head'
 		resource url:[dir:'js', file:'activity/webconnection.js'], disposition:'head'
+		resource url:[dir:'js', file:'activity/subscription.js'], disposition:'head'
 		resource url:[dir:'js', file:'button.js'], disposition:'head'
 		resource url:[dir:'js', file:'characterSMS-count.js'], disposition:'head'
 		resource url:[dir:'js', file:'check_list.js'], disposition:'head'
@@ -70,7 +72,13 @@ modules = {
 		dependsOn 'jquery'
 		resource url:[dir:'js', file:'message/check_for_new_messages.js']
 	}
-	
+
+	newMessageSummary {
+		dependsOn 'jquery'
+		resource url:[dir:'js', file:'message/new_message_summary.js']
+		resource url:[dir:'js', file:'jquery.pulse.js']
+	}
+
 	archive {
 		dependsOn 'messages'
 	}

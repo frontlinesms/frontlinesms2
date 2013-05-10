@@ -22,7 +22,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			go 'connection/list'
 		then:
 			at PageConnectionSettings
-			connectionNames*.text().containsAll(["'Miriam's Clickatell account'", "'MTN Dongle'"])
+			connectionNames*.text()?.containsAll(["'Miriam's Clickatell account'", "'MTN Dongle'"])
 	}
 
 	def 'smsssync connection should display connection url'(){
@@ -32,7 +32,20 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			go 'connection/list'
 		then:
 			at PageConnectionSettings
-			(/http:\/\/you-ip-address\/frontlinesms-core\/api\/.*\/smssync\// =~ connections[2].children().text()[2])
+			connections[2].text()?.contains("http://<your-ip-address>")
+	}
+
+	def 'Saving routing preferences persists the changes'(){
+		when:
+			to PageConnectionSettings
+		then:
+			routing.useLastReceivedConnection.@checked
+		when:
+			routing.useLastReceivedConnection.click()
+			routing.save.click()
+		then:
+			waitFor { at PageConnectionSettings }
+			!routing.useLastReceivedConnection.@checked
 	}
 
 	def createTestConnections() {

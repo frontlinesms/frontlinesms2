@@ -10,6 +10,8 @@ class FconnectionService {
 	def deviceDetectionService
 	def i18nUtilService
 	def smssyncService
+	def logService
+	def systemNotificationService
 	def connectingIds = [].asSynchronized()
 
 	def createRoutes(Fconnection c) {
@@ -29,8 +31,8 @@ class FconnectionService {
 			connectingIds << c.id
 			def routes = c.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
-			createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
-			LogEntry.log("Created routes: ${routes*.id}")
+			systemNotificationService.createSystemNotification('connection.route.successNotification', [c?.name?: c?.id], [connection:c])
+			logService.handleRouteCreated(c)
 		} catch(FailedToCreateProducerException ex) {
 			logFail(c, ex.cause)
 		} catch(Exception ex) {
@@ -44,7 +46,7 @@ class FconnectionService {
 
 	def destroyRoutes(Fconnection c) {
 		destroyRoutes(c.id as long)
-		createSystemNotification('connection.route.destroyNotification', [c?.name?: c?.id])
+		systemNotificationService.createSystemNotification('connection.route.disableNotification', [c?.name?: c?.id], [connection:c])
 	}
 
 	def destroyRoutes(long id) {
@@ -63,9 +65,7 @@ class FconnectionService {
 				ex.printStackTrace()
 			}
 		}
-		def connection = Fconnection.get(id)
-		if (connection.shortName == 'smssync')
-			smssyncService.handleRouteDestroyed(connection)
+		// TODO fire event to announce that route was destroyed
 		println "fconnectionService.destroyRoutes : EXIT"
 	}
 
@@ -100,7 +100,7 @@ class FconnectionService {
 			log.warn("Caught exception for route: $ex.fromRouteId", caughtException)
 			def routeId = (ex.fromRouteId =~ /(?:(?:in)|(?:out))-(?:[a-z]+-)?(\d+)/)[0][1]
 			println "FconnectionService.handleDisconnection() : Looking to stop route: $routeId"
-			createSystemNotification('connection.route.exception', [routeId], caughtException)
+			systemNotificationService.createSystemNotification('connection.route.exception', [routeId], [exception:caughtException])
 			RouteDestroyJob.triggerNow([routeId:routeId as long])
 		} catch(Exception e) {
 			e.printStackTrace()
@@ -122,19 +122,12 @@ class FconnectionService {
 	private def logFail(c, ex) {
 		ex.printStackTrace()
 		log.warn("Error creating routes to fconnection with id $c?.id", ex)
-		LogEntry.log("Error creating routes to fconnection with name ${c?.name?: c?.id}")
-		createSystemNotification('connection.route.failNotification', [c?.id, c?.name?:c?.id], ex)
-	}
-
-	private def createSystemNotification(code, args, exception=null) {
-		if(exception) args += [i18nUtilService.getMessage(code:'connection.error.'+exception.class.name.toLowerCase(), args:[exception.message])]
-		def text = i18nUtilService.getMessage(code:code, args:args)
-		def notification = SystemNotification.findOrCreateByText(text)
-		notification.read = false
-		notification.save(failOnError:true, flush:true)
+		logService.handleRouteCreationFailed(c)
+		systemNotificationService.createSystemNotification('connection.route.failNotification', [c?.id, c?.name?:c?.id], [exception: ex, connection: c])
 	}
 
 	private def isFailed(Fconnection c) {
+		// TODO I rather suspect that this method needs implementing
 		false
 	}
 }

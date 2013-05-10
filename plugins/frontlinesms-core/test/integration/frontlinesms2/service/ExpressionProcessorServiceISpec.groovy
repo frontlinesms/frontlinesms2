@@ -10,7 +10,7 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 	@Unroll
 	def 'process should return message content with no expressions in it, unless some expressions are not recognised'() {
 		setup:
-			def contact = new Contact(name:'Gedi', mobile:'10983').save(failOnError:true, flush:true)
+			new Contact(name:'Gedi', mobile:'10983').save(failOnError:true, flush:true)
 			def m = new Fmessage(src:'10983', inbound:false)
 			m.text = messageText
 			def d = new Dispatch(dst:'10983', status:DispatchStatus.FAILED)
@@ -33,7 +33,7 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 	@Unroll
 	def 'process should work for autoforward expressions which require further context from the message and its owner'() {
 		setup:
-			def source = new Contact(name:'Source', mobile:'112233').save(failOnError:true, flush:true)
+			new Contact(name:'Source', mobile:'112233').save(failOnError:true, flush:true)
 			def destination = new Contact(name:'Destination', mobile:'445566').save(failOnError:true, flush:true)
 			def autoforward = new Autoforward(name:'I forward stuff', sentMessageText:'This is not too relevant as we are manually setting message text')
 				.addToKeywords(value:'INCOMING')

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "# Checking for popups that dont have loading image..."
+grep -Er 'launch.*Popup|launch.*Wizard' grails-app/views/ | grep onSuccess
+if [[ "$?" == "1" ]]; then
+	echo "# No popups without loading image detected."
+	exit 0
+else
+	echo "# VIOLATION: Popups without loading image detected, or there was a problem with the search."
+	exit 1
+fi
+

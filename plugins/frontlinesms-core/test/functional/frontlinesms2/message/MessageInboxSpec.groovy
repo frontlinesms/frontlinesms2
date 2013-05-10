@@ -131,7 +131,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = Fmessage.build(src:'+254999999', text:'test')
 		when:
 			to PageMessageInbox, message.id
-			waitFor{ singleMessageDetails.forward.displayed }
+			waitFor { singleMessageDetails.forward.displayed }
 			singleMessageDetails.forward.click()
 			waitFor { at QuickMessageDialog }
 		then:
@@ -146,7 +146,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			con.save(flush:true)
 		when:
 			to PageMessageInbox, message.id
-			waitFor{ singleMessageDetails.receivedOn.displayed }
+			waitFor { singleMessageDetails.receivedOn.displayed }
 		then:
 			singleMessageDetails.receivedOn.text() == "Received on: MTN Dongle"
 	}
@@ -259,11 +259,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox, Fmessage.findBySrc('Alice').id
 		then:
-			tabs.unreadcount == 1
+			tabs.unreadcount == 3
 		when:
 			Fmessage.build().save(flush:true, failOnError:true)
 		then:
-			waitFor { tabs.unreadcount == 2 }
+			waitFor { tabs.unreadcount == 4 }
 	}
 
 	def "should show create contact link for a recipient that is not in the contact list"() {
@@ -298,6 +298,30 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'outgoing message to Pedro' }
 			!singleMessageDetails.addToContacts.displayed
+	}
+
+	def "messageCount is shown in left-hand menu next to inbox indicator and is updated asynchronously"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to PageMessageInbox
+		then:
+			bodyMenu.inboxNewMessageCount == 2
+		when:
+			messageList.toggleSelect(0)
+		then:
+			waitFor('veryslow') {
+				bodyMenu.inboxNewMessageCount == 1
+			}
+	}
+
+	def "pending message count is shown in left-hand menu next to pending indicator"() {
+		given:
+			createPendingTestMessages()
+		when:
+			to PageMessageInbox
+		then:
+			bodyMenu.pendingMessageCount == 2
 	}
 
 	String dateToString(Date date) {

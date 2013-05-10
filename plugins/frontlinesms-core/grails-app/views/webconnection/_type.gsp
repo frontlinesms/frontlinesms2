@@ -6,6 +6,7 @@
 			values="${Webconnection.implementations*.type}"
 			labelPrefix="webconnection." labelSuffix=".label"
 			descriptionPrefix="webconnection." descriptionSuffix=".description"
+			useImages="true"
 			onchange="webconnectionDialog.setType(this.value)"/>
 </g:if>
 

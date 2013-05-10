@@ -13,7 +13,7 @@ class WebconnectionController extends ActivityController {
 	def save() {
 		if(params.activityId) params.ownerId = params.activityId
 		withWebconnection { webconnectionInstance ->
-			doSave('webconnection', webconnectionService, webconnectionInstance)
+			doSave(webconnectionService, webconnectionInstance)
 		}
 	}
 
@@ -36,7 +36,7 @@ class WebconnectionController extends ActivityController {
 
 	def testRoute() {
 		withWebconnection { webconnectionInstance ->
-			doSave('webconnection', webconnectionService, webconnectionInstance, false)
+			doSave(webconnectionService, webconnectionInstance, false)
 			TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
 		}
 	}

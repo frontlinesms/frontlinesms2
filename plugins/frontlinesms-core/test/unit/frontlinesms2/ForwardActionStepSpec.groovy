@@ -1,8 +1,6 @@
 package frontlinesms2
 
-import grails.test.mixin.*
 import spock.lang.*
-import grails.buildtestdata.mixin.Build
 
 @Mock([CustomActivity, Fmessage, Group, MessageSendService])
 @TestFor(ForwardActionStep)
@@ -40,11 +38,5 @@ class ForwardActionStepSpec extends Specification {
 		then:
 			1 * forwardService.doForward(forwardActionStep, message)
 	}
-
-	private createMockOutgoingMessage() {
-		def m = Mock(Fmessage)
-		m.id >> 1
-		m.setOwnerDetail(_,_) >> "setting the owner detail"
-		return m
-	}
 }
+

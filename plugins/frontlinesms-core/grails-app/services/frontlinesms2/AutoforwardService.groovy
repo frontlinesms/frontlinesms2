@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.*
 import grails.events.Listener
 import groovy.sql.Sql
 

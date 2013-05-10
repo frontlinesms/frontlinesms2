@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.*
-
 class AutoreplyService {
 	def messageSendService
 	def saveInstance(Autoreply autoreply, params) {

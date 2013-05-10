@@ -2,10 +2,7 @@ package frontlinesms2.controller
 
 import spock.lang.*
 import grails.plugin.spock.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import frontlinesms2.*
-import grails.converters.JSON
 
 class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -162,7 +159,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createTestMessageFromContact(text, Contact c) {
-		def m = new Fmessage(text:text, src:c.mobile, inbound:true).save(failOnError:true)
+		new Fmessage(text:text, src:c.mobile, inbound:true).save(failOnError:true)
 	}
 
 }

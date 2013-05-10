@@ -2,6 +2,7 @@ grails.servlet.version = "2.5" // Change depending on target container complianc
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
+grails.project.work.dir = 'target'
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
@@ -49,7 +50,7 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
 		// runtime 'mysql:mysql-connector-java:5.1.16'
-		def seleniumVersion = '2.30.0'
+		def seleniumVersion = '2.32.0'
 		def camel = {
 			def camelVersion = "2.9.4"
 			"org.apache.camel:camel-$it:$camelVersion"
@@ -95,8 +96,8 @@ grails.project.dependency.resolution = {
 
 		compile ':platform-core:1.0.RC3-frontlinesms'
 
-		test ":code-coverage:1.2.5"
-		test ":codenarc:0.17"
+		test ":code-coverage:1.2.6"
+		test ":codenarc:0.18.1"
 		test ":spock:0.6"
 		test ":geb:$gebVersion"
 
@@ -111,25 +112,43 @@ grails.project.dependency.resolution = {
 		//runtime ":cached-resources:1.0"
 		//runtime ":yui-minify-resources:0.1.4"
 
-		build(":tomcat:$grailsVersion") {
+		build ":tomcat:$grailsVersion", ':release:2.0.0', {
 			export = false
 		}
 	}
 }
 
 coverage {
+	enabledByDefault = false
+	exclusions = ["**/*Spec"]
+	xml = true
 }
 
 codenarc {
-	reportName = 'target/analysis-reports/codenarc.xml'
-	reportType = 'xml'
+	reports = {
+		xmlReport('xml') {
+			outputFile = 'target/analysis-reports/codenarc.xml'
+			title = 'CodeNarc Report'
+		}
+		htmlReport('html') {
+			outputFile = 'target/analysis-reports/codenarc.html'
+			title = 'CodeNarc Report'
+		}
+	}
 	systemExitOnBuildException = false
 	// NB these numbers should be LOWERED over time as code quality should be INCREASING
 	maxPriority1Violations = 0
-	maxPriority2Violations = 250
+	maxPriority2Violations = 260
 	maxPriority3Violations = 500
 
 	properties = {
 		GrailsPublicControllerMethod.enabled = false
+		GrailsDomainHasToString.enabled = false
+		GrailsDomainHasEquals.enabled = false
+		ThrowRuntimeException.enabled = false
+		CatchException.enabled = false
+		MisorderedStaticImports.enabled = false
+		EmptyMethod.doNotApplyToClassNames = '*Controller'
 	}
 }
+

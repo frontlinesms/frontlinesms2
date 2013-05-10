@@ -5,8 +5,6 @@ import frontlinesms2.dev.MockModemUtils
 
 import serial.mock.*
 
-import org.hibernate.FlushMode
-
 class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 	static transactional = false
 	def fconnectionService

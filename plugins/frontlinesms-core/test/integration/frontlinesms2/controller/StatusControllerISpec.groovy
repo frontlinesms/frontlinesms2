@@ -32,7 +32,7 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "message start dates should be inclusive"() {
 		given:
 			def sentDate = createDate(2011, 10, 18, 23, 58, 59)
-			def m1 = new Fmessage(text:'', src:"src1", date:createDate(2011, 10, 18, 0, 0, 1), inbound:true).save(flush:true, failOnError:true)
+			new Fmessage(text:'', src:"src1", date:createDate(2011, 10, 18, 0, 0, 1), inbound:true).save(flush:true, failOnError:true)
 			def m2 = new Fmessage(text:'', src:"src2", date:sentDate, hasSent:true, inbound: false)
 			def d = new Dispatch(dst:'123', status:DispatchStatus.SENT, dateSent:sentDate)
 			m2.addToDispatches(d)
@@ -110,7 +110,7 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		PollResponse.findByValue('Barcelona').addToMessages(Fmessage.build(src:'Jim', text:'hi Bob'))
 		p.save(failOnError:true, flush:true)
 		
-		def f = Folder.build(name:'test-folder')
+		Folder.build(name:'test-folder')
 				.addToMessages(Fmessage.build(src:'src'))
 				.save(failOnError:true, flush:true)
 		

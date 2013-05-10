@@ -157,8 +157,9 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def createTestAnnouncement() {
-		def m = Fmessage.build(src: "Bob", inbound: true, date: new Date())
+		Fmessage.build(src: "Bob", inbound: true, date: new Date())
 		def a = new Announcement(name:'Free Food')
 		a.addToMessages(Fmessage.build(src:"Alice", inbound:true, date:new Date())).save(failOnError:true, flush:true)
 	}
 }
+

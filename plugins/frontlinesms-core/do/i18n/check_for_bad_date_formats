@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+i18nDirectory=grails-app/i18n
+echo "# Checking for bad date formats in $i18nDirectory..."
+pushd $i18nDirectory
+grep 'default\.date\.format' `ls *.properties` | groovy -e '
+	System.in.text.eachLine {
+		parts = it.split(":default.date.format=")
+		file = parts[0]; dateFormat = parts[1]
+		try {
+			new java.text.SimpleDateFormat(dateFormat)
+		} catch(IllegalArgumentException) {
+			println "# Illegal date format in $file"
+			System.exit(1)
+		}
+	}
+'
+popd
+

@@ -4,11 +4,7 @@ echo "# Checking views..."
 grep -rn "render.*template" grails-app/views/ | grep -v "fsms:render"
 VIEW_OUTPUT=$?
 
-echo "# Checking controllers"
-grep -rn "render.*template" grails-app/controllers/ | grep -v "fsms\.render"
-CONTROLLER_OUTPUT=$?
-
-if [ "$CONTROLLER_OUTPUT" -eq 1 ] && [ "$VIEW_OUTPUT" -eq 1 ]; then
+if [ "$VIEW_OUTPUT" -eq 1 ]; then
 	echo "# No bad template renders detected"
 	exit 0
 else

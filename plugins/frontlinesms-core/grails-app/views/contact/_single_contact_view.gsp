@@ -22,9 +22,9 @@
 					<a class="remove-command not-custom-field" id="remove-mobile">
 						<g:message code="contact.remove.mobile"/>
 					</a>
-					<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+					<fsms:popup class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 						&nbsp;
-					</g:remoteLink>
+					</fsms:popup>
 				</g:if>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
@@ -104,9 +104,9 @@
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
-			<a id="btn_delete" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
+			<fsms:popup id="btn_delete" popupCall="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
 				<g:message code="action.delete"/>
-			</a>
+			</fsms:popup>
 		</g:if>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
