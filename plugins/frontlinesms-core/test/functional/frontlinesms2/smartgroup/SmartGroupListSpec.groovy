@@ -31,7 +31,9 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 
 	def 'CREATE NEW SMARTGROUP button is available when there are smart groups'() {
 		given:
-			new SmartGroup(name:'Test Group 1', contactName:'Jeremiah').save(failOnError:true, flush:true)
+			remote {
+				new SmartGroup(name:'Test Group 1', contactName:'Jeremiah').save(failOnError:true, flush:true)
+			}
 		when:
 			to PageSmartGroup
 		then:
@@ -40,10 +42,10 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 	
 	def 'selected smartgroup should be highlighted in the smartgroup menu'() {
 		given:
-			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)
-			def b = new SmartGroup(name:'Test Group B', contactName:'B').save(failOnError:true, flush:true)
+			def a = remote { new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true) }
+			def	b = remote { new SmartGroup(name:'Test Group B', contactName:'B').save(failOnError:true, flush:true) }
 		when:
-			goToSmartGroupPage(a)
+			remote { goToSmartGroupPage(a) }
 		then:
 			menuItemHighlighted(a)
 			!menuItemHighlighted(b)
@@ -56,9 +58,9 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 
 	def "renaming a smart group displays a confirmation popup"() {
 		given:
-			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)
+			def a =  remote { new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true) }
 		when:
-			goToSmartGroupPage(a)
+			remote { goToSmartGroupPage(a) }
 		then:
 			header.moreGroupActions.displayed
 		when:
@@ -71,10 +73,11 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		then:
 			!SmartGroup.findByName("Test Group A")
 	}
-	
+
+	@spock.lang.IgnoreRest
 	def "deleting a smart group displays a confirmation popup"() {
 		given:
-			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)
+			def a = remote { new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true) }
 		when:
 			goToSmartGroupPage(a)
 		then:
@@ -90,6 +93,6 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 	}
 	
 	private def goToSmartGroupPage(SmartGroup g) {
-		to PageSmartGroupShow, g
+		to PageSmartGroupShow, remote g
 	}
 }
