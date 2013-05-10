@@ -16,6 +16,8 @@
 	var console = console || {};
 	console.log = console.log || function() {};
 
+	new Image().src = "${resource(dir:'images', file:'status/red.png')}";
+
 	<fsms:render template="/i18n"/>
 
 	<g:if env="test">
@@ -34,6 +36,7 @@
 		if(!data) { return; }
 		$('#inbox-indicator').html(data);
 	});
+
 
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
@@ -59,5 +62,12 @@
 			newFeatures.showPopup();
 		});
 	</fsms:ifAppSetting>
+
+	// add moreOptions js to dropdowns
+	$(function() {
+		if(typeof more_actions !== 'undefined') {
+			more_actions.init();
+		}
+	});
 </r:script>
 

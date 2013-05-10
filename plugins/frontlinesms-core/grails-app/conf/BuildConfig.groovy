@@ -96,7 +96,7 @@ grails.project.dependency.resolution = {
 
 		compile ':platform-core:1.0.RC3-frontlinesms'
 
-		test ":code-coverage:1.2.5"
+		test ":code-coverage:1.2.6"
 		test ":codenarc:0.18.1"
 		test ":spock:0.6"
 		test ":geb:$gebVersion"
@@ -112,13 +112,16 @@ grails.project.dependency.resolution = {
 		//runtime ":cached-resources:1.0"
 		//runtime ":yui-minify-resources:0.1.4"
 
-		build(":tomcat:$grailsVersion") {
+		build ":tomcat:$grailsVersion", ':release:2.0.0', {
 			export = false
 		}
 	}
 }
 
 coverage {
+	enabledByDefault = false
+	exclusions = ["**/*Spec"]
+	xml = true
 }
 
 codenarc {

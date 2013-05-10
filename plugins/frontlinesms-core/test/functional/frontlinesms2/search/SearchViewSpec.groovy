@@ -130,7 +130,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor{ searchsidebar.searchBtn.displayed }
+			waitFor { searchsidebar.searchBtn.displayed }
 			searchsidebar.messageStatus == 'outbound'
 			messageList.messageCount() == 3
 	}
@@ -141,7 +141,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.searchBtn.displayed
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor{ searchsidebar.searchBtn.displayed }
+			waitFor { searchsidebar.searchBtn.displayed }
 		when:
 			searchsidebar.clearSearchLink.click()
 		then:
@@ -249,7 +249,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			!searchsidebar.addTownCustomFieldLink.displayed
 	}
 
-	def "should show the contact name that has been filled in after a search"(){
+	def "should show the contact name that has been filled in after a search"() {
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
@@ -299,14 +299,14 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearchResult, ""
 		then:
-			tabs.unreadcount == 2
+			tabs.unreadcount == 3
 		when:
 			Fmessage.build(src:'+254999999', text:'message count')
 		then:
-			waitFor('very slow') { tabs.unreadcount == 3 }
+			waitFor('very slow') { tabs.unreadcount == 4 }
 	}
 
-	def "moveaction drop down should not be visible if only one archived message is seleted"(){
+	def "moveaction drop down should not be visible if only one archived message is seleted"() {
 		when:
 			def m2 = Fmessage.build(src:'+25499934', text:'archived2')
 			def m1 = Fmessage.build(src:'+25499912', text:'archived1', archived:true)
@@ -339,7 +339,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor{ searchsidebar.searchBtn.displayed }
+			waitFor { searchsidebar.searchBtn.displayed }
 			messageList.messageCount() == 2
 			messageList.messageText(0) == 'experiment'
 			messageList.messageSource(0) == 'To: 3 recipients'
