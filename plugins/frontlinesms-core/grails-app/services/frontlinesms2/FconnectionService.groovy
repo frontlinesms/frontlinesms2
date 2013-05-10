@@ -46,7 +46,7 @@ class FconnectionService {
 
 	def destroyRoutes(Fconnection c) {
 		destroyRoutes(c.id as long)
-		systemNotificationService.createSystemNotification('connection.route.destroyNotification', [c?.name?: c?.id], [connection:c])
+		systemNotificationService.createSystemNotification('connection.route.disableNotification', [c?.name?: c?.id], [connection:c])
 	}
 
 	def destroyRoutes(long id) {

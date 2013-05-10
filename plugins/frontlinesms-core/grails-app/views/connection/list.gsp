@@ -1,42 +1,53 @@
 <%@ page import="frontlinesms2.ConnectionStatus" %>
-<div class="controls">
-	<g:if test="${c.status in [ConnectionStatus.FAILED, ConnectionStatus.DISABLED, ConnectionStatus.NOT_CONNECTED]}">
-		<g:link controller="connection" action="enable" class="btn route" id="${c.id}">
-			<g:if test="${c.status  == ConnectionStatus.FAILED}">
-				<g:message code="connection.route.retryconnection"/>
-			</g:if>
-			<g:else>
-				<g:message code="connection.route.enable"/>
-			</g:else>
-		</g:link>
+<html>
+<head>
+	<meta name="layout" content="settings"/>
+	<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
+</head>
+<body>
+<div id="body-content-head">
+	<div class="content">
+		<h1><g:message code="connection.header"/></h1>
+		<ul class="buttons">
+			<li>
+				<fsms:popup class="btn" name="addConnection" controller='connection' action="wizard" popupCall="mediumPopup.launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
+					<g:message code="connection.add"/>
+				</fsms:popup>
+			</li>
+		</ul>
+	</div>
+</div>
+<div id="body-content" class="connections">
+	<g:if test="${fconnectionInstanceTotal==0}">
+		<p class="no-content"><g:message code="connection.list.none"/></p>
 	</g:if>
-	<g:if test="${c.status in [ConnectionStatus.FAILED, ConnectionStatus.DISABLED, ConnectionStatus.NOT_CONNECTED]}">
-		<fsms:popup controller="connection" action="wizard" class="btn route" id="${c.id}" popupCall="mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
-			<g:message code="connection.edit"/>
-		</fsms:popup>
-	</g:if>
-	<g:if test="${c.status in [ConnectionStatus.FAILED,ConnectionStatus.DISABLED, ConnectionStatus.NOT_CONNECTED]}">
-		<g:link controller="connection" action="delete" class="btn route" id="${c.id}">
-			<g:message code="connection.delete"/>
-		</g:link>
-	</g:if>
-	<g:if test="${c.status in [ConnectionStatus.CONNECTED]}">
-		<fsms:popup controller="connection" action="createTest" class="btn test" id="${c.id}"
-				popupCall="launchSmallPopup(i18n('smallpopup.test.message.title'), data, i18n('action.send'))">
-			<g:message code="connection.send.test.message"/>
-		</fsms:popup>
-	</g:if>
-	<g:if test="${c.status in [ConnectionStatus.FAILED, ConnectionStatus.CONNECTED]}">
-		<g:link controller="connection" action="disable" class="btn" id="${c.id}">
-			<g:message code="connection.route.destroy"/>
-		</g:link>
-	</g:if>
+	<g:else>
+		<table class="connection-list">
+			<g:each in="${connectionInstanceList}" status="i" var="c">
+				<fsms:render template="connection" model="[c:c]"/>
+			</g:each>
+		</table>
+	</g:else>
+	<fsms:render template="routing"/>
 </div>
 
 <script id="fconnection-controls-FAILED" type="text/x-sanchez-template">
 	<g:link controller="connection" action="enable" class="btn route" id="{{connectionId}}"><g:message code="connection.route.retryconnection"/></g:link>
 	<g:link controller="connection" action="disable" class="btn" id="{{connectionId}}">
-		<g:message code="connection.route.destroy"/>
+		<g:message code="connection.route.disable"/>
+	</g:link>
+	<fsms:popup controller="connection" action="wizard" class="btn route" id="{{connectionId}}" popupCall="mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
+		<g:message code="connection.edit"/>
+	</fsms:popup>
+	<g:link controller="connection" action="delete" class="btn route" id="{{connectionId}}">
+		<g:message code="connection.delete"/>
+	</g:link>
+</script>
+
+<script id="fconnection-controls-NOT_CONNECTED" type="text/x-sanchez-template">
+	<g:link controller="connection" action="enable" class="btn route" id="{{connectionId}}"><g:message code="connection.route.retryconnection"/></g:link>
+	<g:link controller="connection" action="disable" class="btn" id="{{connectionId}}">
+		<g:message code="connection.route.disable"/>
 	</g:link>
 	<fsms:popup controller="connection" action="wizard" class="btn route" id="{{connectionId}}" popupCall="mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
 		<g:message code="connection.edit"/>
@@ -56,22 +67,12 @@
 	</g:link>
 </script>
 
-<script id="fconnection-controls-NOT_CONNECTED" type="text/x-sanchez-template">
-	<g:link controller="connection" action="enable" class="btn route" id="{{connectionId}}"><g:message code="connection.route.enable"/></g:link>
-	<fsms:popup controller="connection" action="wizard" class="btn route" id="{{connectionId}}" popupCall="mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
-		<g:message code="connection.edit"/>
-	</fsms:popup>
-	<g:link controller="connection" action="delete" class="btn route" id="{{connectionId}}">
-		<g:message code="connection.delete"/>
-	</g:link>
-</script>
-
 <script id="fconnection-controls-CONNECTED" type="text/x-sanchez-template">
 	<fsms:popup controller="connection" action="createTest" class="btn test" id="{{connectionId}}" popupCall="launchSmallPopup(i18n('smallpopup.test.message.title'), data, i18n('action.send'))">
 		<g:message code="connection.send.test.message"/>
 	</fsms:popup>
 	<g:link controller="connection" action="disable" class="btn" id="{{connectionId}}">
-		<g:message code="connection.route.destroy"/>
+		<g:message code="connection.route.disable"/>
 	</g:link>
 </script>
 
@@ -81,7 +82,19 @@
 
 <g:javascript>
 $(function() {
-	fconnection_show.update("${c.status}", ${c.id});
+	<g:each in="${connectionInstanceList}" status="i" var="c">
+		fconnection_list.update("${c.status}", ${c.id});
+	</g:each>
+	app_info.listen("fconnection_statuses", function(data) {
+		var i;
+		data = data.fconnection_statuses;
+		if(!data) { return; }
+		for(i=data.length-1; i>=0; --i) {
+			fconnection_list.update(data[i].status, data[i].id);
+		}
+	});
 });
 </g:javascript>
+</body>
+</html>
 

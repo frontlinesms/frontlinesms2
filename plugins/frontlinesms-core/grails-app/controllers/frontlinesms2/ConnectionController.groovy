@@ -14,7 +14,7 @@ class ConnectionController extends ControllerUtils {
 	def index() {
 		redirect action:'list'
 	}
-	
+
 	def list() {
 		def url = "http://${request.serverName == 'localhost' ? '&lt;your-ip-address&gt;' : request.serverName}${request.serverPort? (':' + request.serverPort) : ''}"
 		def fconnectionInstanceList = Fconnection.list(params)
@@ -28,17 +28,11 @@ class ConnectionController extends ControllerUtils {
 		withFconnection {
 			model << [connectionInstance: it]
 		}
-		model << [connectionInstanceList:fconnectionInstanceList,
+		[connectionInstanceList:fconnectionInstanceList,
 				fconnectionInstanceTotal:fconnectionInstanceTotal,
 				fconnectionRoutingMap:fconnectionRoutingMap,
 				appSettings:appSettings,
 				serverUrl:"${url}"]
-		if(params?.id) {
-			render view:'show', model:model
-		} else {
-			params.id = fconnectionInstanceList[0]?.id
-			render view:'show', model:model
-		}
 	}
 
 	def wizard() {
@@ -50,7 +44,7 @@ class ConnectionController extends ControllerUtils {
 			return [action:'save']
 		}
 	}
-	
+
 	def save() {
 		remapFormParams()
 		doSave(Fconnection.implementations.find { it.shortName == params.connectionType })
@@ -66,7 +60,7 @@ class ConnectionController extends ControllerUtils {
 		else
 			redirect action:'list'
 	}
-	
+
 	def update() {
 		remapFormParams()
 		withFconnection { fconnectionInstance ->
@@ -138,7 +132,7 @@ class ConnectionController extends ControllerUtils {
 
 		fconnectionRoutingMap
 	}
-	
+
 	private def remapFormParams() {
 		def cType = params.connectionType
 		if(!(cType in Fconnection.implementations*.shortName)) {
@@ -157,22 +151,20 @@ class ConnectionController extends ControllerUtils {
 		}
 		params << newParams
 	}
-	
+
 	def enable() {
 		EnableFconnectionJob.triggerNow([connectionId:params.id])
-		params.connecting = true
-		flash.message = message(code: 'connection.route.connecting')
+		sleep 100 // This horrible hack allows enough time for the job to start before we try to get the status of the connection we're enabling
 		def connectionInstance = Fconnection.get(params.id)
 		if(connectionInstance?.shortName == 'smssync') { // FIXME should not be connection-specific code here
 			smssyncService.startTimeoutCounter(connectionInstance)
 		}
 		redirect(action:'list', params:params)
 	}
-  
+
 	def disable() {
 		withFconnection { c ->
 			fconnectionService.disableFconnection(c)
-			flash.message = message(code: 'connection.route.disconnecting')
 			redirect(action:'list', id:c.id)
 		}
 	}
@@ -186,7 +178,7 @@ class ConnectionController extends ControllerUtils {
 		def connectionInstance = Fconnection.get(params.id)
 		[connectionInstance:connectionInstance]
 	}
-	
+
 	def sendTest() {
 		withFconnection { connection ->
 			def m = messageSendService.createOutgoingMessage(params)
@@ -195,7 +187,7 @@ class ConnectionController extends ControllerUtils {
 			redirect action:'list', id:params.id
 		}
 	}
-	
+
 	private def doSave(Class<Fconnection> clazz) {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
