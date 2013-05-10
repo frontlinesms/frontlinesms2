@@ -120,7 +120,6 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
 			to PageContactShow, remote { Contact.findByName('Bob')}
-			println "TEST:::::: GROUP::" + remote { Group.findByName('Test')}
 			remote {
 				GroupMembership.countMembers(Group.findByName('Test')) == 1
 			}
