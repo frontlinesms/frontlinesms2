@@ -9,23 +9,25 @@ class GroupCedSpec extends GroupBaseSpec {
 	def 'button to save new group is displayed and works'() {
 		when:
 			to PageContactShow
-			def initNumGroups = Group.count()
+			def initNumGroups = remote { Group.count() }
 			bodyMenu.newGroup.click()
+		then:
 			waitFor { at GroupPopup }
+		when:
 			groupName.value('People')
 			ok.jquery.trigger("click")
 		then:
 			at PageContactShow
 			waitFor { bodyMenu.getGroupLink "People" }
-			assert Group.count() == (initNumGroups + 1)
+			assert remote { Group.count() } == (initNumGroups + 1)
 	}
 
 	def 'More action dropdown has option to rename the group and it works'() {
 		given:
 			createTestGroupsAndContacts()
-			def friendsGroup = Group.findByName("Friends")
+			def friendsGroupId = remote { Group.findByName("Friends").id }
 		when:
-			to PageContactShow, friendsGroup
+			to PageGroupShow, friendsGroupId
 		then:
 			waitFor { header.groupHeaderSection.displayed }
 		when:
@@ -40,19 +42,19 @@ class GroupCedSpec extends GroupBaseSpec {
 			waitFor { bodyMenu.getGroupLink "Renamed Group" }
 			header.groupHeaderTitle.text()?.equalsIgnoreCase('Renamed Group (2)')
 	}
-	
-	def 'More action dropdown has option to delete the group and opens a confirmation popup'(){
+
+	def 'More action dropdown has option to delete the group and opens a confirmation popup'() {
 		given:
 			createTestGroupsAndContacts()
-			def friendsGroup = Group.findByName("Friends")
+			def friendsGroupId = remote { Group.findByName("Friends").id }
 		when:
-			to PageContactShow, friendsGroup
+			to PageGroupShow, friendsGroupId
 		then:
 			waitFor { header.groupHeaderSection.displayed }
 		when:
 			header.moreGroupActions.value("delete").click()
 		then:
-			waitFor{ at DeleteGroupPopup }
+			waitFor { at DeleteGroupPopup }
 		when:
 			warningMessage == 'Are you sure you want to delete Friends? WARNING: This cannot be undone'
 			ok.jquery.trigger("click")

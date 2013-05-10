@@ -102,7 +102,7 @@ grails.project.dependency.resolution = {
 		test ":geb:$gebVersion"
 
 		test ':build-test-data:2.0.3'
-		compile ':remote-control:1.4'
+		test ':remote-control:1.4'
 		compile(':functional-test-development:0.9.3') {
 			exclude 'hibernate'
 		}
@@ -112,7 +112,7 @@ grails.project.dependency.resolution = {
 		//runtime ":cached-resources:1.0"
 		//runtime ":yui-minify-resources:0.1.4"
 
-		build(":tomcat:$grailsVersion") {
+		build ":tomcat:$grailsVersion", ':release:2.0.0', {
 			export = false
 		}
 	}

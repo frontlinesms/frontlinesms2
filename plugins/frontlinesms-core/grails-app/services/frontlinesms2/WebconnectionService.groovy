@@ -64,7 +64,7 @@ class WebconnectionService {
 		return val
 	}
 	
-	def preProcess(Exchange x) {
+	void preProcess(Exchange x) {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
@@ -72,7 +72,7 @@ class WebconnectionService {
 		webConn.preProcess(x)
 	}
 
-	def postProcess(Exchange x) {
+	void postProcess(Exchange x) {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"

@@ -217,6 +217,16 @@ class WebconnectionServiceSpec extends Specification {
 			[secret:"secret", message:"test", recipients: [[type:'address', value:'+123457890'], [type:'address', value:'213']]] | ['+123457890', '213']
 	}
 
+	def 'preProcess should have no return type'() {
+		expect:
+			service.class.getMethod('preProcess', [Exchange] as Class[]).returnType == void.class
+	}
+
+	def 'postProcess should have no return type'() {
+		expect:
+			service.class.getMethod('postProcess', [Exchange] as Class[]).returnType == void.class
+	}
+
 	Exchange mockExchange(body, Map headers) {
 		Exchange x = Mock()
 		def inMessage = Mock(Message)
@@ -226,3 +236,4 @@ class WebconnectionServiceSpec extends Specification {
 		return x
 	}
 }
+
