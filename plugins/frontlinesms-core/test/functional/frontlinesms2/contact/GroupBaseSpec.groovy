@@ -2,19 +2,19 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-abstract class GroupBaseSpec extends grails.plugin.geb.GebSpec {
-	def createTestGroups() {
+class GroupBaseSpec extends grails.plugin.geb.GebSpec {
+	static createTestGroups() {
 		remote {
-			new Group(name:'Listeners').save(failOnError:true, flush:true)
-			new Group(name:'Friends').save(failOnError:true, flush:true)
+			Group.build(name:'Listeners')
+			Group.build(name:'Friends')
 		}
 	}
 
-	def createTestContacts() {
+	static createTestContacts() {
 		remote {
 			def friendsGroup = Group.findByName('Friends')
-			def bobby = new Contact(name:'Bobby').save(failOnError:true, flush:true)
-			def duchamps = new Contact(name:'Duchamps').save(failOnError:true, flush:true)
+			def bobby = Contact.build(name:'Bobby').save(failOnError:true, flush:true)
+			def duchamps = Contact.build(name:'Duchamps').save(failOnError:true, flush:true)
 			[bobby, duchamps].each() { friendsGroup.addToMembers(it) }
 		}
 	}
@@ -24,11 +24,11 @@ abstract class GroupBaseSpec extends grails.plugin.geb.GebSpec {
 		createTestContacts()
 	}
 
-	def createManyContactsAddToGroups() {
+	static createManyContactsAddToGroups() {
 		remote {
 			def lastGroupMembership
 			(11..90).each {
-				def c = new Contact(name: "Contact${it}", mobile: "987654321${it}", notes: 'notes').save(failOnError:true, flush:true)
+				def c = Contact.build(name: "Contact${it}", mobile: "987654321${it}", notes: 'notes').save(failOnError:true, flush:true)
 				lastGroupMembership = c.addToGroup(Group.findByName('Friends'))
 			}
 			lastGroupMembership.save(failOnError:true, flush:true)
