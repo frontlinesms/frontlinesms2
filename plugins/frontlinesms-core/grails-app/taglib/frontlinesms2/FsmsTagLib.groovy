@@ -519,9 +519,11 @@ class FsmsTagLib {
 	}
 
 	def fieldErrors = { att, body ->
-		if (g.hasErrors(bean:att.bean, field:att.field)) {
-			out << "<label class='errors'>"
-			out << g.renderErrors(bean:"${book}", field:att.field, as:"list")
+		def errors = att.bean?.errors?.allErrors.findAll{ it.field.contains(att.field) }
+		def errorMessages = errors.collect { message(error:it) }.join(att.delimeter?:" ")
+		if (errors && errorMessages) {
+			out << "<label for='${att.field}' generated='true' class='error'>"
+			out << errorMessages
 			out << "</label>"
 		}
 	}
