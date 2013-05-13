@@ -47,7 +47,6 @@
 		var fsmsButton = new FsmsButton();
 		$(function() {
 			// make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
-			// TODO reintroduce dropdown when the CSS is fixed
 			selectmenuTools.initAll("select");
 			fsmsButton.findAndApply("input[type='submit'], input[type='button']");
 

@@ -18,14 +18,14 @@ class ContactCreateSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			bodyMenu.newContact.@href == "/contact/createContact"
+			bodyMenu.newContact.@href.contains "/contact/createContact"
 	}
 
 	def 'button to create new group exists and goes to NEW GROUP page'() {
 		when:
 			to PageContactShow
 		then:
-			bodyMenu.newGroup.@href == "/group/create"
+			bodyMenu.newGroup.@href.contains "/group/create"
 	}
 	
 }
