@@ -518,6 +518,14 @@ class FsmsTagLib {
 		out << g.remoteLink(att, body)
 	}
 
+	def fieldErrors = { att, body ->
+		if (g.hasErrors(bean:att.bean, field:att.field)) {
+			out << "<label class='errors'>"
+			out << g.renderErrors(bean:"${book}", field:att.field, as:"list")
+			out << "</label>"
+		}
+	}
+
 	private def getFields(att) {
 		def fields = att.remove('fields')
 		if(!fields) fields = att.instanceClass?.configFields
