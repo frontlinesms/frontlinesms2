@@ -9,7 +9,7 @@ class FsmsTagLib {
 	def appSettingsService
 	def expressionProcessorService
 	def grailsApplication
-	def i18nUtilService 
+	def i18nUtilService
 
 	def info = { att ->
 		def cssClass = 'info'
@@ -191,7 +191,7 @@ class FsmsTagLib {
 			}
 		}
 	}
-	
+
 	def confirmTable = { att ->
 		def fields = getFields(att)
 		if (fields) {
@@ -205,7 +205,7 @@ class FsmsTagLib {
 			out << '</table>'
 		}
 	}
-	
+
 	def confirmTypeRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
@@ -214,7 +214,7 @@ class FsmsTagLib {
 		out << '<td id="confirm-type"></td>'
 		out << '</tr>'
 	}
-	
+
 	def confirmTableRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
@@ -240,7 +240,7 @@ class FsmsTagLib {
 		out << '<td id="confirm-' + att.field + '"></td>'
 		out << '</tr>'
 	}
-	
+
 	def inputs = { att ->
 		if(att.table) out << '<table>'
 		if(att.list) out << "<div class='field-list'>"
@@ -276,7 +276,7 @@ class FsmsTagLib {
 		if(att.table) out << '</table>'
 		if(att.list) out << '</div>'
 	}
-	
+
 	def input = { att, body ->
 		def groovyKey = att.field
 		// TODO remove references to att.instanceClass and make sure that all forms in app
@@ -400,13 +400,15 @@ class FsmsTagLib {
 	}
 
 	def quickMessage = { att ->
-		att.controller = "quickMessage"
-		att.action = "create"
-		att.id = "quick_message"
-		att.onLoading = "showThinking();"
-		// FIXME activity-specific code should not be inside this file
-		att.onSuccess = "hideThinking(); mediumPopup.launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); mediumPopup.selectSubscriptionGroup(${att.groupId});"
+		def popupCall = "mediumPopup.launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); mediumPopup.selectSubscriptionGroup(${att.groupId});"
+		att << [controller:'quickMessage', action:'create', id:'quick_message', popupCall:popupCall]
 		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
+		out << fsms.popup(att, body)
+	}
+
+	def popup = { att, body ->
+		att << [onLoading:"showThinking();", onSuccess:"hideThinking(); ${att.popupCall}"]
+		att.remove('popupCall')
 		out << g.remoteLink(att, body)
 	}
 
@@ -512,12 +514,6 @@ class FsmsTagLib {
 		out << render(template:'/customactivity/step', model:[stepId:att.stepId, type:att.type, body:body])
 	}
 
-	def popup = { att, body ->
-		att << [onLoading:"showThinking();", onSuccess:"hideThinking(); ${att.popupCall}"]
-		att.remove('popupCall')
-		out << g.remoteLink(att, body)
-	}
-
 	def fieldErrors = { att, body ->
 		def errors = att.bean?.errors?.allErrors.findAll{ it.field == att.field }
 		def errorMessages = errors.collect { message(error:it) }.join(att.delimeter?:" ")
@@ -534,7 +530,7 @@ class FsmsTagLib {
 		if(fields instanceof String) fields = fields.tokenize(',')*.trim()
 		return fields
 	}
-	
+
 	private def getFieldLabel(clazz, fieldName) {
 		g.message(code:"${clazz.shortName}.${fieldName}.label")
 	}
@@ -542,12 +538,12 @@ class FsmsTagLib {
 	private def getActivityFieldLabel(att) {
 		g.message(code:"${att.instanceClass.shortName}.${att.type}.${att.field}.label")
 	}
-	
+
 	private def isPassword(instanceClass, groovyKey) {
 		return getMetaClassProperty(instanceClass, 'passwords') &&
 				groovyKey in instanceClass.passwords
 	}
-	
+
 	private def isBooleanField(instanceClass, groovyKey) {
 		return getMetaClassProperty(instanceClass, groovyKey)?.type in [Boolean, boolean]
 	}
@@ -557,7 +553,7 @@ class FsmsTagLib {
 			return clazz.metaClass.hasProperty(null, groovyKey)
 		}
 	}
-	
+
 	private def generateSection(att, fields) {
 		def keys = fields.keySet()
 		keys.each { key ->
@@ -568,7 +564,7 @@ class FsmsTagLib {
 				out << "<legend>"
 				out << input(att + [field:key])
 				out << "</legend>"
-				
+
 				//handle subsections within a subsection
 				if(fields[key] instanceof LinkedHashMap) {
 					generateSection(att, fields[key])
@@ -584,17 +580,16 @@ class FsmsTagLib {
 			} else {
 				out << input(att + [field:key])
 			}
-			
 		}
 	}
-	
+
 	private def generateConfirmSection(att, fields) {
 		def keys = fields.keySet()
 		keys.each { key ->
 			if(fields[key]) {
 				out << "<div class=\"confirm-$key-subsection\">"
 				if(!key.startsWith("info-")) out << confirmTableRow(att + [field:key])
-				
+
 				//handle subsections within a subsection
 				if(fields[key] instanceof LinkedHashMap) {
 					generateConfirmSection(att, fields[key])
@@ -609,7 +604,6 @@ class FsmsTagLib {
 			} else {
 				out << confirmTableRow(att + [field:key])
 			}
-			
 		}
 	}
 
