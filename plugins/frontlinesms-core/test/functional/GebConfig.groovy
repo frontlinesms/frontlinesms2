@@ -3,6 +3,7 @@ import org.openqa.selenium.firefox.*
 import org.openqa.selenium.remote.*
 
 def jenkins = Boolean.parseBoolean(System.properties.jenkins)
+baseUrl = System.properties['geb.build.baseUrl']
 
 waiting {
 	timeout = jenkins? 20: 5
@@ -40,17 +41,13 @@ driver = {
 	} else {
 		DesiredCapabilities capabilities = new DesiredCapabilities()
 		capabilities.javascriptEnabled = true
-		driver = new RemoteWebDriver(new URL("http://localhost:8083"), capabilities)
+		driver = new RemoteWebDriver(new URL(baseUrl), capabilities)
 		actualCapabilities = ((RemoteWebDriver) driver).getCapabilities();
 		assert actualCapabilities.javascriptEnabled
 	}
 
 	println "Configured WebDriver: ${driver.class}"
 
-	3.times { try {
-		driver.navigate().to('http://localhost:8080/frontlinesms-core') // TODO should read this url from grails settings
-		driver.navigate().to('http://localhost:8080/frontlinesms-core/activity/create')
-	} catch(TimeoutException ex) { sleep 10000 } }
 	def width = 1366
 	def height = 768
 	driver.manage().window().setSize(new Dimension(width, height))

@@ -518,6 +518,16 @@ class FsmsTagLib {
 		out << g.remoteLink(att, body)
 	}
 
+	def fieldErrors = { att, body ->
+		def errors = att.bean?.errors?.allErrors.findAll{ it.field == att.field }
+		def errorMessages = errors.collect { message(error:it) }.join(att.delimeter?:" ")
+		if (errors && errorMessages) {
+			out << "<label for='${att.field}' generated='true' class='error'>"
+			out << errorMessages
+			out << "</label>"
+		}
+	}
+
 	private def getFields(att) {
 		def fields = att.remove('fields')
 		if(!fields) fields = att.instanceClass?.configFields
