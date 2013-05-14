@@ -9,7 +9,7 @@ class FsmsTagLib {
 	def appSettingsService
 	def expressionProcessorService
 	def grailsApplication
-	def i18nUtilService 
+	def i18nUtilService
 
 	def info = { att ->
 		def cssClass = 'info'
@@ -191,7 +191,7 @@ class FsmsTagLib {
 			}
 		}
 	}
-	
+
 	def confirmTable = { att ->
 		def fields = getFields(att)
 		if (fields) {
@@ -205,7 +205,7 @@ class FsmsTagLib {
 			out << '</table>'
 		}
 	}
-	
+
 	def confirmTypeRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
@@ -214,7 +214,7 @@ class FsmsTagLib {
 		out << '<td id="confirm-type"></td>'
 		out << '</tr>'
 	}
-	
+
 	def confirmTableRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
@@ -240,7 +240,7 @@ class FsmsTagLib {
 		out << '<td id="confirm-' + att.field + '"></td>'
 		out << '</tr>'
 	}
-	
+
 	def inputs = { att ->
 		if(att.table) out << '<table>'
 		if(att.list) out << "<div class='field-list'>"
@@ -276,7 +276,7 @@ class FsmsTagLib {
 		if(att.table) out << '</table>'
 		if(att.list) out << '</div>'
 	}
-	
+
 	def input = { att, body ->
 		def groovyKey = att.field
 		// TODO remove references to att.instanceClass and make sure that all forms in app
@@ -514,13 +514,23 @@ class FsmsTagLib {
 		out << render(template:'/customactivity/step', model:[stepId:att.stepId, type:att.type, body:body])
 	}
 
+	def fieldErrors = { att, body ->
+		def errors = att.bean?.errors?.allErrors.findAll{ it.field == att.field }
+		def errorMessages = errors.collect { message(error:it) }.join(att.delimeter?:" ")
+		if (errors && errorMessages) {
+			out << "<label for='${att.field}' generated='true' class='error'>"
+			out << errorMessages
+			out << "</label>"
+		}
+	}
+
 	private def getFields(att) {
 		def fields = att.remove('fields')
 		if(!fields) fields = att.instanceClass?.configFields
 		if(fields instanceof String) fields = fields.tokenize(',')*.trim()
 		return fields
 	}
-	
+
 	private def getFieldLabel(clazz, fieldName) {
 		g.message(code:"${clazz.shortName}.${fieldName}.label")
 	}
@@ -528,12 +538,12 @@ class FsmsTagLib {
 	private def getActivityFieldLabel(att) {
 		g.message(code:"${att.instanceClass.shortName}.${att.type}.${att.field}.label")
 	}
-	
+
 	private def isPassword(instanceClass, groovyKey) {
 		return getMetaClassProperty(instanceClass, 'passwords') &&
 				groovyKey in instanceClass.passwords
 	}
-	
+
 	private def isBooleanField(instanceClass, groovyKey) {
 		return getMetaClassProperty(instanceClass, groovyKey)?.type in [Boolean, boolean]
 	}
@@ -543,7 +553,7 @@ class FsmsTagLib {
 			return clazz.metaClass.hasProperty(null, groovyKey)
 		}
 	}
-	
+
 	private def generateSection(att, fields) {
 		def keys = fields.keySet()
 		keys.each { key ->
@@ -554,7 +564,7 @@ class FsmsTagLib {
 				out << "<legend>"
 				out << input(att + [field:key])
 				out << "</legend>"
-				
+
 				//handle subsections within a subsection
 				if(fields[key] instanceof LinkedHashMap) {
 					generateSection(att, fields[key])
@@ -570,17 +580,16 @@ class FsmsTagLib {
 			} else {
 				out << input(att + [field:key])
 			}
-			
 		}
 	}
-	
+
 	private def generateConfirmSection(att, fields) {
 		def keys = fields.keySet()
 		keys.each { key ->
 			if(fields[key]) {
 				out << "<div class=\"confirm-$key-subsection\">"
 				if(!key.startsWith("info-")) out << confirmTableRow(att + [field:key])
-				
+
 				//handle subsections within a subsection
 				if(fields[key] instanceof LinkedHashMap) {
 					generateConfirmSection(att, fields[key])
@@ -595,7 +604,6 @@ class FsmsTagLib {
 			} else {
 				out << confirmTableRow(att + [field:key])
 			}
-			
 		}
 	}
 
