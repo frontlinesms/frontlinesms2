@@ -401,9 +401,9 @@ class FsmsTagLib {
 
 	def quickMessage = { att ->
 		def popupCall = "mediumPopup.launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); mediumPopup.selectSubscriptionGroup(${att.groupId});"
-		att << [controller:"quickMessage", action:"create", id:"quick_message", popupCall: popupCall]
+		att << [controller:'quickMessage', action:'create', id:'quick_message', popupCall:popupCall]
 		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
-		out << fsms.popup(att,body)
+		out << fsms.popup(att, body)
 	}
 
 	def popup = { att, body ->
