@@ -10,7 +10,6 @@ class GebSpec extends geb.spock.GebReportingSpec {
 		remoteControl = new RemoteControl()
 	}
 	static remote(Closure c) { remoteControl.exec(c) }
-	static vanillaRemote(Closure c) { remoteControl.exec(c) }
 
 	def cleanupSpec() {
 		// CLearing the hibernate session should improve performance of tests over time

@@ -7,6 +7,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			Contact.build(name:'Alice', mobile:'2541234567', notes:'notes')
 			Contact.build(name:'Bob', mobile:'+254987654', email:"bob@bob.com")
+			null
 		}
 	}
 	
@@ -14,6 +15,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			Fmessage.build(src:'Bob', dst:'MyNumber', text:'hi Bob')
 			Fmessage.build(src:'Alice', dst:'MyNumber', text:'hi Alice')
+			null
 		}
 	}
 
@@ -29,6 +31,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 			groupTest.save(failOnError:true, flush:true)
 			groupThree.save(failOnError:true, flush:true)
 			bob.save(failOnError:true, flush:true)
+			null
 		}
 	}
 
@@ -41,6 +44,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 			Contact.findByName('Alice')
 					.addToCustomFields(name:'lake', value:'Victoria')
 					.save(failOnError:true, flush:true)
+			null
 		}
 	}
 
@@ -59,6 +63,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 			(11..90).each {
 				Contact.build(name:"Contact${it}", mobile:"987654321${it}", notes:'notes')
 			}
+			null
 		}
 	}	
 }

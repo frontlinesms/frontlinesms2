@@ -7,6 +7,7 @@ class GroupBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			Group.build(name:'Listeners')
 			Group.build(name:'Friends')
+			null
 		}
 	}
 
@@ -16,6 +17,7 @@ class GroupBaseSpec extends grails.plugin.geb.GebSpec {
 			def bobby = Contact.build(name:'Bobby').save(failOnError:true, flush:true)
 			def duchamps = Contact.build(name:'Duchamps').save(failOnError:true, flush:true)
 			[bobby, duchamps].each() { friendsGroup.addToMembers(it) }
+			null
 		}
 	}
 
@@ -32,6 +34,7 @@ class GroupBaseSpec extends grails.plugin.geb.GebSpec {
 				lastGroupMembership = c.addToGroup(Group.findByName('Friends'))
 			}
 			lastGroupMembership.save(failOnError:true, flush:true)
+			null
 		}
 	}
 }
