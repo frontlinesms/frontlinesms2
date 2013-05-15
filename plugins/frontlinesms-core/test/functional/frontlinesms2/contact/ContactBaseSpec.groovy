@@ -54,7 +54,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 		true
 	}
 	
-	def createManyContacts() {
+	static createManyContacts() {
 		remote {
 			(11..90).each {
 				Contact.build(name:"Contact${it}", mobile:"987654321${it}", notes:'notes')
