@@ -11,3 +11,4 @@ function i18n(key) {
 	}
 	return translated;
 }
+

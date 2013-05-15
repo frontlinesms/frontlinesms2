@@ -9,14 +9,14 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		createTestContacts()
 		createTestGroups()
 	}
-	
+
 	def 'groups that selected contact belongs to are shown in contact details'() {
 		when:
 			to PageContactShow, remote { Contact.findByName('Bob') }
 		then:
 			singleContactDetails.groupList == ['Test', 'three']
 	}
-	
+
 	def 'existing groups that contact is not a member of can be selected from dropdown and are then added to list'() {
 		setup:
 			def bob = remote { Contact.findByName('Bob') }
@@ -30,7 +30,6 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			waitFor { singleContactDetails.groupList.sort() == ['Others', 'Test', 'three'] }
 			singleContactDetails.otherGroupOptions == ['Add to group...', 'four']
-	         
 	}
 
 	def 'clicking X next to group in list removes group from visible list, but does not change database if no other action is taken'() {
@@ -66,7 +65,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			at PageContactShow
 			bob.refresh() in otherGroup.refresh().members
 	}
-	
+
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
 			to PageContactShow
@@ -79,16 +78,15 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			waitFor { multipleContactDetails.otherMultiGroupOptions.size() > 1 }
 		when:
 			multipleContactDetails.addToGroup remote { Group.findByName('Others').id.toString() }
-			multipleContactDetails.update.jquery.trigger("click")	
+			multipleContactDetails.update.jquery.trigger("click")
 		then:
-			waitFor { 
+			waitFor {
 				remote {
-						Group.findByName('Others').members*.name.containsAll(['Bob', 'Alice']) 
+						Group.findByName('Others').members*.name.containsAll(['Bob', 'Alice'])
 					}
 				}
-				
 	}
-	
+
 	def 'clicking save removes multiple contacts from selected groups'() {
 		given:
 			remote {
@@ -116,7 +114,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			waitFor { notifications.flashMessage.displayed }
 			remote { Group.findByName('Others').members == [] }
 	}
-	
+
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
 			to PageContactShow, remote { Contact.findByName('Bob')}
@@ -132,7 +130,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 				GroupMembership.countMembers(testGroup) == 0
 			}
 	}
-	
+
 	def "should enable save and cancel buttons when new group is added"() {
 		when:
 			to PageContactShow, Contact.findByName('Bob')
@@ -143,6 +141,6 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			waitFor { !singleContactDetails.save.disabled }
 			!singleContactDetails.cancel.disabled
-			
 	}
 }
+
