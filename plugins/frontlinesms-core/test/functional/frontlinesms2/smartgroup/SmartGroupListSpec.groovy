@@ -86,7 +86,7 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		when:
 			ok.click()
 		then:
-			!SmartGroup.findByName("Test Group A")
+			remote { !SmartGroup.findByName("Test Group A") }
 	}
 
 	private def goToSmartGroupPage(Long gId) {
