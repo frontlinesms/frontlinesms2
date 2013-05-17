@@ -19,7 +19,7 @@ class GroupCedSpec extends GroupBaseSpec {
 		then:
 			at PageContactShow
 			waitFor { bodyMenu.getGroupLink "People" }
-			assert remote { Group.count() } == (initNumGroups + 1)
+			remote { Group.count() } == initNumGroups + 1
 	}
 
 	def 'More action dropdown has option to rename the group and it works'() {

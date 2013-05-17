@@ -5,13 +5,11 @@ import grails.plugin.remotecontrol.RemoteControl
 /** TODO you should directly extend geb.spock.GebReportingSpec instead of this class */
 @Deprecated
 class GebSpec extends geb.spock.GebReportingSpec {
-	static final remote
-	static final vanillaRemote
+	static final remoteControl
 	static {
-		remote = new RemoteControl()
-		remote.useNullIfResultWasUnserializable = true
-		vanillaRemote = remote
+		remoteControl = new RemoteControl()
 	}
+	static remote(Closure c) { remoteControl.exec(c) }
 
 	def cleanupSpec() {
 		// CLearing the hibernate session should improve performance of tests over time

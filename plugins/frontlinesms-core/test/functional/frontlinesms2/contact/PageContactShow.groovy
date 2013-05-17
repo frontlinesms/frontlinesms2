@@ -13,6 +13,8 @@ class PageContactShow extends frontlinesms2.page.PageContact {
 			return "group/show/${(args[0] as Group).id}/contact/show/${(args[1] as Contact).id}"
 		if (args[0] instanceof Group && args.length == 1)
 			return "group/show/${(args[0] as Group).id}"
+		if (args[0] instanceof Number || args[0] instanceof String)
+			return "contact/show/${args[0]}"
 	}
 
 	static at = {

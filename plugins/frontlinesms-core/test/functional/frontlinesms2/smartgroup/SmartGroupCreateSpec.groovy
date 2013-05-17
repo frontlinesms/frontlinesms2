@@ -10,7 +10,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			addRuleButton.displayed
 	}
-	
+
 	def 'One rule is created by default'() {
 		when:
 			launchCreateDialog()
@@ -31,21 +31,21 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			!previous.displayed
 	}
-	
+
 	def 'SMART GROUP NAME FIELD is displayed'() {
 		when:
 			launchCreateDialog(null)
 		then:
 			smartGroupNameField.displayed
 	}
-	
+
 	def 'error message is not displayed by default'() {
 		when:
 			launchCreateDialog(null)
 		then:
 			!error
 	}
-	
+
 	def 'Clicking FINISH when no name is defined should display validation error'() {
 		when:
 			launchCreateDialog(null)
@@ -53,13 +53,13 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			waitFor { error }
 	}
-	
+
 	def 'ADD MORE RULES button should add one more rule'() {
 		when:
 			launchCreateDialog()
 		then:
 			rules.size() == 1
-		when:		
+		when:
 			addRule()
 		then:
 			rules.size() == 2
@@ -68,7 +68,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			rules.size() == 3
 	}
-	
+
 	def 'can add new rule when previous rule does not validate'() {
 		when:
 			launchCreateDialog()
@@ -102,7 +102,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			rules.size() == 1
 	}
-	
+
 	def "can remove first rule if there are other rules"() {
 		when:
 			launchCreateDialog()
@@ -114,7 +114,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			rules.size() == 1
 	}
-	
+
 	def "cannot remove lone first rule even if it was previously not first rule"() {
 		when:
 			launchCreateDialog()
@@ -130,7 +130,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			rules.size() == 1
 	}
-	
+
 	def 'selecting PHONE NUMBER should set matcher text to STARTS WITH'() {
 		when:
 			launchCreateDialog()
@@ -138,7 +138,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			ruleField[0].value() == 'mobile'
 			ruleMatchText[0] == 'starts with'
 	}
-	
+
 	def 'selecting fields other than PHONE NUMBER should set matcher text to CONTAINS'() {
 		when:
 			launchCreateDialog()
@@ -154,7 +154,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			ruleMatchText[0] == 'starts with'
 	}
-	
+
 	def 'adding multiple rules on the same field should fail validation'() {
 		when:
 			launchCreateDialog()
@@ -195,7 +195,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			waitFor { error }
 	}
-	
+
 	def 'successfully creating a smart group should show a flash message'() {
 		when:
 			launchCreateDialog()
@@ -216,19 +216,19 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			at PageSmartGroup
 			waitFor { bodyMenu.getSmartGroupLink('All the bobs!').displayed }
 	}
-	
+
 	def 'rules should include custom fields'() {
 		given:
-			['Town', 'Height'].each { CustomField.build(name:it) }
+			remote { ['Town', 'Height'].each { CustomField.build(name:it) }; null }
 		when:
 			launchCreateDialog('Field Dwellers')
 		then:
 			ruleField[0].find('option')*.text().containsAll(['Town', 'Height'])
 	}
-	
+
 	def 'setting a custom field rule should persist to the smartgroup instance'() {
 		given:
-			['Town'].each { CustomField.build(name:it) }
+			remote { ['Town'].each { CustomField.build(name:it) }; null }
 		when:
 			launchCreateDialog('Field Dwellers')
 			ruleField[0].value('Town')
@@ -237,11 +237,8 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			at PageSmartGroup
 			waitFor { bodyMenu.getSmartGroupLink('Field Dwellers') }
-		when:
-			def g = SmartGroup.findByName('Field Dwellers')
-			println([g.name, g.contactName, g.mobile, g.email, g.notes, g.customFields])
-		then:
-			SmartGroup.findByName('Field Dwellers').customFields.size() == 1
-			SmartGroup.findByName('Field Dwellers').customFields.every { it.name=='Town' && it.value=='field' }
+			remote { SmartGroup.findByName('Field Dwellers').customFields.size() } == 1
+			remote { SmartGroup.findByName('Field Dwellers').customFields.every { it.name=='Town' && it.value=='field' } }
 	}
 }
+

@@ -6,22 +6,17 @@ import geb.Browser
 import grails.plugin.geb.GebSpec
 
 class CustomFieldCedSpec extends ContactBaseSpec {
-	
 	def "selecting add custom field from dropdown opens the popup"() {
-		given:
-			Contact bob = Contact.build(name:'Bob')
 		when:
-			to PageContactShow, bob
+			to PageContactShow, remote { Contact.build(name:'Bob').id }
 			singleContactDetails.addMoreInfomation
 		then:
 			waitFor { at CustomFieldPopup }
 	}
 
 	def "should add the manually entered custom fields to the list "() {
-		given:
-			Contact bob = Contact.build(name:'Bob')
 		when:
-			to PageContactShow, bob
+			to PageContactShow, remote { Contact.build(name:'Bob').id }
 			singleContactDetails.addMoreInfomation
 		then:
 			waitFor { at CustomFieldPopup }

@@ -12,11 +12,11 @@ abstract class SmartGroupBaseSpec extends grails.plugin.geb.GebSpec {
 			waitFor { rules.size() == ruleCount-1 }
 		}
 	}
-	
+
 	def setRuleValue(i, val) {
 		ruleValues[i].value(val)
 	}
-	
+
 	def launchCreateDialog(smartGroupName='English Contacts') {
 		to PageSmartGroup
 		bodyMenu.createSmartGroupButton.click()
