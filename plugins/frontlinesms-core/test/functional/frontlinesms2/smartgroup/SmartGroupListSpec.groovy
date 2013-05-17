@@ -21,7 +21,7 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 			at PageSmartGroup
 			waitFor { bodyMenu.smartGroupSubmenuLinks.size() == 1 }
 	}
-	
+
 	def 'CREATE NEW SMARTGROUP button is available when there are no smart groups'() {
 		when:
 			to PageSmartGroup
@@ -31,65 +31,66 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 
 	def 'CREATE NEW SMARTGROUP button is available when there are smart groups'() {
 		given:
-			new SmartGroup(name:'Test Group 1', contactName:'Jeremiah').save(failOnError:true, flush:true)
+			remote { new SmartGroup(name:'Test Group 1', contactName:'Jeremiah').save(failOnError:true, flush:true); null }
 		when:
 			to PageSmartGroup
 		then:
 			bodyMenu.createSmartGroupButton.displayed
 	}
-	
+
 	def 'selected smartgroup should be highlighted in the smartgroup menu'() {
 		given:
-			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)
-			def	b = new SmartGroup(name:'Test Group B', contactName:'B').save(failOnError:true, flush:true)
+			def a = remote { def g = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true); [id:g.id, name:g.name] }
+			def b = remote { def g = new SmartGroup(name:'Test Group B', contactName:'B').save(failOnError:true, flush:true); [id:g.id, name:g.name] }
 		when:
-			goToSmartGroupPage(a)
+			goToSmartGroupPage(a.id)
 		then:
-			menuItemHighlighted(a)
-			!menuItemHighlighted(b)
+			menuItemHighlighted(a.name)
+			!menuItemHighlighted(b.name)
 		when:
-			goToSmartGroupPage(b)
+			goToSmartGroupPage(b.id)
 		then:
-			!menuItemHighlighted(a)
-			menuItemHighlighted(b)
+			!menuItemHighlighted(a.name)
+			menuItemHighlighted(b.name)
 	}
 
 	def "renaming a smart group displays a confirmation popup"() {
 		given:
-			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)
+			def aId = remote { new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true).id }
 		when:
-			goToSmartGroupPage(a)
+			goToSmartGroupPage(aId)
 		then:
 			header.moreGroupActions.displayed
 		when:
 			header.moreGroupActions.value("rename")
 		then:
-			waitFor{ at RenameSmartGroupPopup }
+			waitFor { at RenameSmartGroupPopup }
 		when:
 			smartGroupName.value('Renamed smart group')
 			ok.click()
 		then:
-			!SmartGroup.findByName("Test Group A")
+			remote { !SmartGroup.findByName("Test Group A") }
 	}
 
 	def "deleting a smart group displays a confirmation popup"() {
 		given:
-			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)
+			def aId = remote { new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true).id }
 		when:
-			goToSmartGroupPage(a)
+			goToSmartGroupPage(aId)
 		then:
 			header.moreGroupActions.displayed
 		when:
 			header.moreGroupActions.value("delete")
 		then:
-			waitFor{ at DeleteGroupPopup }
+			waitFor { at DeleteGroupPopup }
 		when:
 			ok.click()
 		then:
 			!SmartGroup.findByName("Test Group A")
 	}
-	
-	private def goToSmartGroupPage(SmartGroup g) {
-		to PageSmartGroupShow, g
+
+	private def goToSmartGroupPage(Long gId) {
+		to PageSmartGroupShow, gId
 	}
 }
+
