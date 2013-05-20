@@ -23,3 +23,4 @@ class PageSearchResult extends PageSearch {
 	    return restOfPath
 	}
 }
+

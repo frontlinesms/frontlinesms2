@@ -5,7 +5,6 @@ import frontlinesms2.*
 import spock.lang.*
 
 class BasicAuthenticationSpec extends grails.plugin.geb.GebSpec {
-
 	def url = "${this.config.properties.'grails.testing.functional.baseUrl'}${PageGeneralSettings.url}".replace("http://", "http://test:pass@")
 
 	def 'can add basic application authentication details'() {

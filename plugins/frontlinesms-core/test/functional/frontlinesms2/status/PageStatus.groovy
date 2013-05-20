@@ -23,3 +23,4 @@ class PageStatus extends PageBase {
 		detectionTitle { $("#detection-title").text() }
 	}
 }
+

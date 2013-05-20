@@ -8,8 +8,7 @@ import geb.Module
 class PageConnection extends PageBase {
 	String convertToPath(Object[] args) {
 		if(!args) 'connection/list'
-		else if(args[0] instanceof Number) 'connection/list/' + args[0]
-		else 'connection/list/' + args[0].id
+		else 'connection/list/' + args[0]
 	}
 
 	static content = {
