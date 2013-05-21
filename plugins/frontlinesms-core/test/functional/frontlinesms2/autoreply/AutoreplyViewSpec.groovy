@@ -214,7 +214,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
-			singleMessageDetails.moveTo(autoreply.id)
+			singleMessageDetails.moveTo(autoreplyId)
 		then:
 			waitFor { flashMessage.displayed }
 	}

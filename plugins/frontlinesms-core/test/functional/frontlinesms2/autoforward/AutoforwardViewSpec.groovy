@@ -214,11 +214,11 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			def m = remote { Fmessage.findBySrc("announce").id }
 			def autoforward = remote { Autoforward.findByName('News').id }
 		when:
-			to PageMessageAnnouncement, activity.id, m.id
+			to PageMessageAnnouncement, activity, m
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
-			singleMessageDetails.moveTo(autoforward.id)
+			singleMessageDetails.moveTo(autoforward)
 		then:
 			waitFor { flashMessage.displayed }
 	}
@@ -249,16 +249,19 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			waitFor { messageList.messageCount() == 3 }
 	}
 
-	private Autoforward createInAndOutTestMessages() {
-		def a = new Autoforward(name:"Vegetables")
-		a.addToContacts(new Contact(name:"name"))
-		a.addToKeywords(value:"VEGS")
-		a.sentMessageText = 'Message is \${message_text}'
-		3.times { a.addToMessages(Fmessage.build()) }
-		2.times {
-			def sentMessage = new Fmessage(text:'this is a sent message',inbound:false)
-			sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
-			a.addToMessages(sentMessage) }
-		a.save(flush:true, failOnError:true)
+	private createInAndOutTestMessages() {
+		remote {
+			def a = new Autoforward(name:"Vegetables")
+			a.addToContacts(new Contact(name:"name"))
+			a.addToKeywords(value:"VEGS")
+			a.sentMessageText = 'Message is \${message_text}'
+			3.times { a.addToMessages(Fmessage.build()) }
+			2.times {
+				def sentMessage = new Fmessage(text:'this is a sent message',inbound:false)
+				sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
+				a.addToMessages(sentMessage) }
+			a.save(flush:true, failOnError:true)
+			return a.id
+		}
 	}
 }

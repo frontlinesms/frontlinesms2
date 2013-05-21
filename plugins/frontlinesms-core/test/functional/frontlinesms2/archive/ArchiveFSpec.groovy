@@ -27,7 +27,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestMessages2()
 		when:
-			to PageArchiveInbox, Fmessage.findBySrc('Max')
+			to PageArchiveInbox, remote { Fmessage.findBySrc('Max').id }
 		then:
 			messageList.messageCount == 2
 			messageList.messageSource(0) == 'Jane'
