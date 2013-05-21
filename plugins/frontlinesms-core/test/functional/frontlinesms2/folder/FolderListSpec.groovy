@@ -7,7 +7,6 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class FolderListSpec extends FolderBaseSpec {
-	def trashService = new TrashService()
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 
 	def 'folder message list is displayed'() {
@@ -253,7 +252,7 @@ class FolderListSpec extends FolderBaseSpec {
 		createTestMessages()
 		remote {
 			def folder = Folder.findByName("Work")
-			trashService.sendToTrash(folder)
+			new TrashService().sendToTrash(folder)
 			folder.id
 		}
 	}
