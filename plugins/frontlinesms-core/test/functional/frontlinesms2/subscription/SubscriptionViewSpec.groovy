@@ -12,15 +12,13 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	def setup() {
 		createTestSubscriptions()
 		createTestActivities()
-		createTestMessages(Subscription.findByName("Camping Subscription"))
+		createTestMessages('Camping Subscription')
 	}
 
 	@Unroll
 	def "subscription page should show the details of the subscription in the header"() {
-		setup:
-			def subscription  = Subscription.findByName("Camping Subscription")
 		when:
-			to PageMessageSubscription, subscription
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { title?.toLowerCase().contains("subscription") }
 			header[item] == value
@@ -36,21 +34,18 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the group link shoud redirect to the group page"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { header.displayed }
 		when:
 			header.groupLink.click()
 		then:
-			waitFor {
-				// TODO when this is supported by Geb, we want to do:
-				//at PageGroupShow, Group.findByName("Camping")
-				title.contains("Camping") }
+			waitFor { title.contains("Camping") }
 	}
 
 	def "clicking the archive button archives the subscription and redirects to inbox "() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -62,7 +57,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the edit option opens the Subscription Dialog for editing"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -73,7 +68,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog with the group prepopulated as recipients"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
@@ -84,13 +79,16 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			next.click()
 		then:
 			waitFor { recipients.displayed }
-			waitFor { recipients.groupCheckboxesChecked*.value().contains("group-${Group.findByName('Camping').id}".toString()) }
+			waitFor { recipients.groupCheckboxesChecked*.value().contains("group-${remote { Group.findByName('Camping').id }}".toString()) }
 	}
 
 	def 'Deleting a group that is used in a subscription should fail with an appropriate error'() {
 		given:
-			def friendsGroup = Group.build(name: "Friends")
-			def subscription = Subscription.build(group:friendsGroup)
+			def friendsGroup = remote {
+				def g = Group.build(name: "Friends")
+				Subscription.build(group:g)
+				return g.id
+			}
 		when:
 			to PageContactShow, friendsGroup
 		then:
@@ -110,32 +108,38 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def 'Moving a message to a subscription launches the categorize dialog'() {
 		given:
-			def g = Group.findByName("Camping")
-			def c1 = Contact.build(name:'prudence', mobile:'+12321')
-			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
-			g.addToMembers(c1)
-			def m1 = Fmessage.build(text:'I want to leave', src:'prudence', read:true)
-			def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
-			def subscription = Subscription.findByName('Camping Subscription')
+			def data = remote { 
+				def g = Group.findByName("Camping")
+				def c1 = Contact.build(name:'prudence', mobile:'+12321')
+				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+				g.addToMembers(c1)
+				def m1 = Fmessage.build(text:'I want to leave', src:'prudence', read:true)
+				def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
+				def s = Subscription.findByName('Camping Subscription')
+				[s:s.id, m:m1.id]
+			}
 		when:
-			to PageMessageInbox, m1
-			singleMessageDetails.moveTo(subscription.id)
+			to PageMessageInbox, data.m
+			singleMessageDetails.moveTo(data.s)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 	}
 
 	def 'When a message is categorised as a join with the dialog, it appears in the correct category and the contact membership is updated'() {
 		given:
-			def g = Group.findByName("Camping")
-			def c1 = Contact.build(name:'prudence', mobile:'+12321')
-			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
-			g.addToMembers(c1)
-			def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
-			def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
-			def subscription = Subscription.findByName('Camping Subscription')
+			def data = remote {
+				def g = Group.findByName("Camping")
+				def c1 = Contact.build(name:'prudence', mobile:'+12321')
+				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+				g.addToMembers(c1)
+				def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
+				def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
+				def s = Subscription.findByName('Camping Subscription')
+				[s:s.id, m1:m1.id, m2:m2.id]
+			}
 		when:
-			to PageMessageInbox, m1
-			singleMessageDetails.moveTo(subscription.id)
+			to PageMessageInbox, data.m1
+			singleMessageDetails.moveTo(data.s)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
@@ -144,8 +148,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
-			to PageMessageInbox, m2
-			singleMessageDetails.moveTo(subscription.id)
+			to PageMessageInbox, data.m2
+			singleMessageDetails.moveTo(data.s)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
@@ -154,7 +158,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
-			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { at PageMessageSubscription }
 			messageList.messageSource(0) == 'wilburforce'
@@ -170,16 +174,19 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def 'When a message is categorised as a leave with the dialog, it appears in the correct category and the contact membership is updated'() {
 		given:
-			def g = Group.findByName("Camping")
-			def c1 = Contact.build(name:'prudence', mobile:'+12321')
-			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
-			g.addToMembers(c1)
-			def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
-			def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
-			def subscription = Subscription.findByName('Camping Subscription')
+			def data = remote {
+				def g = Group.findByName("Camping")
+				def c1 = Contact.build(name:'prudence', mobile:'+12321')
+				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+				g.addToMembers(c1)
+				def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
+				def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
+				def subscription = Subscription.findByName('Camping Subscription')
+				[m1:m1.id, m2:m2.id, s:subscription.id]
+			}
 		when:
-			to PageMessageInbox, m1
-			singleMessageDetails.moveTo(subscription.id)
+			to PageMessageInbox, data.m1
+			singleMessageDetails.moveTo(data.s)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
@@ -188,8 +195,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
-			to PageMessageInbox, m2
-			singleMessageDetails.moveTo(subscription.id)
+			to PageMessageInbox, data.m2
+			singleMessageDetails.moveTo(data.s)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
@@ -198,7 +205,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
-			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { at PageMessageSubscription }
 			messageList.messageSource(0) == 'wilburforce'
@@ -215,16 +222,19 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def 'When a message is categorised as a toggle with the dialog, it appears in the correct category and the contact membership is updated'() {
 		given:
-			def g = Group.findByName("Camping")
-			def c1 = Contact.build(name:'prudence', mobile:'+12321')
-			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
-			g.addToMembers(c1)
-			def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
-			def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
-			def subscription = Subscription.findByName('Camping Subscription')
+			def data = remote {
+				def g = Group.findByName("Camping")
+				def c1 = Contact.build(name:'prudence', mobile:'+12321')
+				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+				g.addToMembers(c1)
+				def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
+				def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
+				def subscription = Subscription.findByName('Camping Subscription')
+				[m1:m1.id, m2:m2.id, s:subscription.id]
+			}
 		when:
-			to PageMessageInbox, m1
-			singleMessageDetails.moveTo(subscription.id)
+			to PageMessageInbox, data.m1
+			singleMessageDetails.moveTo(data.s)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
@@ -233,8 +243,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
-			to PageMessageInbox, m2
-			singleMessageDetails.moveTo(subscription.id)
+			to PageMessageInbox, data.m2
+			singleMessageDetails.moveTo(data.s)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
@@ -243,7 +253,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
-			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { at PageMessageSubscription }
 			messageList.messageSource(0) == 'wilburforce'
@@ -261,16 +271,19 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def 'Categorisation with the dialog works for sent messages as well, adding/removing the recipients to/from the group'() {
 		given:
-			def g = Group.findByName("Camping")
-			def c1 = Contact.build(name:'prudence', mobile:'+12321')
-			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
-			g.addToMembers(c1)
-			def m1 = new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi prudence and wilburforce! You are signed up by force').addToDispatches(dst:"+12321", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
-			m1.addToDispatches(dst:"+1232123", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
-			def subscription = Subscription.findByName('Camping Subscription')
+			def data = remote {
+				def g = Group.findByName("Camping")
+				def c1 = Contact.build(name:'prudence', mobile:'+12321')
+				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+				g.addToMembers(c1)
+				def m1 = new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi prudence and wilburforce! You are signed up by force').addToDispatches(dst:"+12321", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
+				m1.addToDispatches(dst:"+1232123", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
+				def subscription = Subscription.findByName('Camping Subscription')
+				[m1:m1.id, s:subscription.id]
+			}
 		when:
-			to PageMessageSent, m1
-			singleMessageDetails.moveTo(subscription.id)
+			to PageMessageSent, data.m1
+			singleMessageDetails.moveTo(data.s)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
@@ -279,7 +292,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
-			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { at PageMessageSubscription }
 			["join", "prudence", "wilburforce"].each {
@@ -295,7 +308,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the rename option opens the rename small popup"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -307,7 +320,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the delete option opens the confirm delete small popup"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -318,7 +331,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the export option opens the export dialog"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -329,7 +342,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "selecting a single message reveals the single message view"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -341,7 +354,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "selecting multiple messages reveals the multiple message view"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -355,7 +368,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking on a message reveals the single message view with clicked message"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -368,7 +381,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "delete single message action works"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -384,12 +397,12 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "delete multiple message action works for multiple select"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { messageList.displayed }
 		when:
 			messageList.toggleSelect(0)
-			waitFor {singleMessageDetails.displayed }
+			waitFor { singleMessageDetails.displayed }
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
@@ -402,7 +415,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "move single message action works"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -411,13 +424,13 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
 		when:
-			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			singleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { at PageMessageSubscription }
 			waitFor { notifications.flashMessageText.contains("updated") }
 			messageList.messageText(0) != 'Test message 0'
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, 'Sample Announcement'
 		then:
 			waitFor { messageList.displayed }
 			messageList.messageText(0) == 'Test message 0'
@@ -425,7 +438,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "move multiple message action works"() {
 		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
+			to PageMessageSubscription, 'Camping Subscription'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -435,13 +448,13 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
-			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			multipleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
 			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
 			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, remote { Activity.findByName("Sample Announcement").id }
 		then:
 			waitFor { messageList.displayed }
 			messageList.messageText(0) == 'Test message 0'
@@ -450,16 +463,17 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "moving a message from another activity to a subscription opens the categorise popup for the chosen subscription"() {
 		setup:
-			def activity = Activity.findByName("Sample Announcement")
-			def m = Fmessage.findBySrc("announce")
-			def subscription = Subscription.findByName('Camping Subscription')
+			def activity = remote { Activity.findByName("Sample Announcement").id }
+			def m = remote { Fmessage.findBySrc("announce").id }
+			def subscription = remote { Subscription.findByName('Camping Subscription').id }
 		when:
-			to PageMessageAnnouncement, activity.id, m.id
+			to PageMessageAnnouncement, activity, m
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
-			singleMessageDetails.moveTo(subscription.id)
+			singleMessageDetails.moveTo(subscription)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 	}
 }
+

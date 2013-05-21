@@ -55,18 +55,9 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 
-	static createTestMembers(Group g) {
+	static createTestMessages(String subscriptionName) {
 		remote {
-			(1..90).each {
-				def c = Contact.build(mobile:"987654321${it}")
-				c.addToGroups(g)
-			}
-			null
-		}
-	}
-
-	static createTestMessages(Subscription s) {
-		remote {
+			def s = Subscription.findByName(subscriptionName)
 			(0..90).each {
 				def m = Fmessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
 				s.addToMessages(m) // TODO correct this to sort messages into either join or leave

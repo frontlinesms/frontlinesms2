@@ -31,7 +31,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor {at SubscriptionCreateDialog}
 		when:
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 		then:
 			waitFor { keywords.displayed }
@@ -75,8 +75,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor { at SubscriptionCreateDialog }
 		when:
-			println "***"+group.text()
-			group.addToGroup Group.findByName("Camping").id.toString()
+			group.addToGroup(remote { Group.findByName("Camping").id })
 			next.click()
 		then:
 			waitFor {keywords.displayed}
@@ -103,7 +102,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id.toString()
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 			keywords.keywordText = 'FRIENDS'
 			keywords.joinKeywords = 'join, start'
@@ -140,7 +139,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 			keywords.keywordText = 'FRIENDS'
 			keywords.joinKeywords = 'team'
@@ -158,14 +157,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 			keywords.keywordText = 'FRIENDS'
 			keywords.joinKeywords = 'team'
 			keywords.leaveKeywords = 'team%^&%^%&'
 			next.click()
 		then:
-			waitFor {validationError.text()?.contains('Invalid keyword. Try a, name, word')}
+			waitFor { validationError.text()?.contains('Invalid keyword. Try a, name, word') }
 			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
@@ -176,7 +175,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 			keywords.keywordText = 'FRIENDS'
 			keywords.joinKeywords = 'join, start'
@@ -200,7 +199,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 		then:
 			waitFor { keywords.displayed }
