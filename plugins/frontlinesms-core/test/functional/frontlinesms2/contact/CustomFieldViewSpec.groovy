@@ -11,37 +11,29 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	}
 	
 	def "'add new custom field' is shown in dropdown and redirects to create page"() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactShow, bob
+			to PageContactShow, 'Bob'
 		then:
 			singleContactDetails.customFields == ['na', 'lake', 'add-new']
 	}
 
 	def 'custom fields with no value for that contact are shown in dropdown'() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactShow, bob
+			to PageContactShow, 'Bob'
 		then:
 			singleContactDetails.customFields == ['na', 'lake', 'add-new']
 	}
 
 	def 'custom fields with value for that contact are shown in list of details'() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactShow, bob
+			to PageContactShow, 'Bob'
 		then:
 			singleContactDetails.contactsCustomFields == ['town']
 	}
 
 	def 'clicking an existing custom field in dropdown adds it to list with blank value'() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactShow, bob
+			to PageContactShow, 'Bob'
 		then:
 			singleContactDetails.addCustomField 'lake'
 			def customFeild = singleContactDetails.customField 'lake'
@@ -51,10 +43,13 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 
 	def 'clicking X next to custom field in list removes it from visible list, but does not change database if no other action is taken'() {
 		given:
-			def bob = Contact.findByName("Bob")
-			bob.addToCustomFields(name:'lake', value: 'Erie').save(failOnError:true, flush:true)
+			remote {
+				Contact.findByName("Bob")
+						.addToCustomFields(name:'lake', value:'Erie')
+						.save(failOnError:true, flush:true)
+			}
 		when:
-			to PageContactShow, bob
+			to PageContactShow, 'Bob'
 			singleContactDetails.contactsCustomFields.size() == 2
 			singleContactDetails.removeCustomFeild CustomField.findByName("town").id
 		then:
@@ -64,10 +59,8 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	}
 
 	def 'clicking X next to custom field in list then saving removes it from  database'() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactShow, bob
+			to PageContactShow, 'Bob'
 			singleContactDetails.removeCustomFeild CustomField.findByName("town").id
 			singleContactDetails.save.click()
 		then:
@@ -75,10 +68,8 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	}
 
 	def 'clicking save actually adds field to contact in database if value is filled in'() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactShow, bob
+			to PageContactShow, 'Bob'
 			singleContactDetails.addCustomField 'lake'
 			def customFeild = singleContactDetails.customField 'lake'
 			customFeild.value('erie')
@@ -88,10 +79,8 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	}
 
 	def "clicking save doesn't add field to contact in database if there is a blank value for field"() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactShow, bob
+			to PageContactShow, 'Bob'
 			singleContactDetails.addCustomField 'lake'
 			singleContactDetails.save.click()
 		then:
