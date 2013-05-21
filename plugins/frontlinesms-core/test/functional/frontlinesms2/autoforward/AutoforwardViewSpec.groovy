@@ -12,15 +12,14 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 	def setup() {
 		createTestAutoforward()
 		createTestActivities()
-		createTestMessages(Autoforward.findByName("News"))
+
+		createTestMessages("News")
 	}
 
 	@Unroll
 	def "autoforward page should show the details of the autoforward in the header"() {
-		setup:
-			def autoforward  = Autoforward.findByName("News")
 		when:
-			to PageMessageAutoforward, autoforward
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.title?.toLowerCase().contains("autoforward") }
 			header[item] == value
@@ -34,7 +33,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking the edit option opens the Autoforward Dialog for editing"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -45,7 +44,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
@@ -55,7 +54,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking the rename option opens the rename small popup"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -67,7 +66,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking the delete option opens the confirm delete small popup"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -78,7 +77,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking the export option opens the export dialog"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -89,7 +88,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "selecting a single message reveals the single message view"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -101,7 +100,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "selecting multiple messages reveals the multiple message view"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -115,7 +114,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking on a message reveals the single message view with clicked message"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -128,7 +127,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "delete single message action works "() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -144,7 +143,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "delete multiple message action works for multiple select"(){
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -163,7 +162,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "move single message action works"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -172,13 +171,13 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Sudden shock 0" }
 		when:
-			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			singleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { at PageMessageAutoforward }
 			waitFor { notifications.flashMessageText.contains("updated") }
 			messageList.messageText(0) != 'Sudden shock 0'
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, 'Sample Announcement'
 		then:
 			waitFor { messageList.displayed }
 			messageList.messageText(0) == 'Sudden shock 0'
@@ -186,23 +185,23 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "move multiple message action works"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
 			messageList.toggleSelect(0)
-			waitFor {singleMessageDetails.displayed }
+			waitFor { singleMessageDetails.displayed }
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
-			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			multipleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
 			!(messageList.messageText(0) in ['Sudden shock 0', 'Sudden shock 1'])
 			!(messageList.messageText(1) in ['Sudden shock 0', 'Sudden shock 1'])
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, 'Sample Announcement'
 		then:
 			waitFor { messageList.displayed }
 			messageList.messageText(0) in ['Sudden shock 0', 'Sudden shock 1']
@@ -211,16 +210,16 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "moving a message from another activity to a autoforward displays an update message"() {
 		setup:
-			def activity = Activity.findByName("Sample Announcement")
-			def m = Fmessage.findBySrc("announce")
-			def autoforward = Autoforward.findByName('News')
+			def activity = remote { Activity.findByName("Sample Announcement").id }
+			def m = remote { Fmessage.findBySrc("announce").id }
+			def autoforward = remote { Autoforward.findByName('News').id }
 		when:
 			to PageMessageAnnouncement, activity.id, m.id
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
 			singleMessageDetails.moveTo(autoforward.id)
-		then:		
+		then:
 			waitFor { flashMessage.displayed }
 	}
 

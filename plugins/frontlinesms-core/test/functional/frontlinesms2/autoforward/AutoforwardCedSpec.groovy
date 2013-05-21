@@ -22,7 +22,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 
 	def "Can create a new autoforward" () {
 		given: 'Create Autoforward wizard is open'
-			 launchAutoforwardPopup()
+			launchAutoforwardPopup()
 		when: 'Message tab is open'
 			message.displayed
 			message.messageText.value('message to send')
@@ -200,3 +200,4 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		}
 	}
 }
+
