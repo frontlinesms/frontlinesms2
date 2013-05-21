@@ -14,7 +14,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, 'Work'
 		then:
 			messageList.messageCount() == 2
 			messageList.messageSource(0) == 'Jane'
@@ -26,7 +26,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, 'Work'
 		then:
 			singleMessageDetails.noneSelected
 	}
@@ -35,9 +35,8 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 			createTestMessages()
-			def folderId = remote { Folder.findByName("Work").id }
 		when:
-			to PageMessageFolder, folderId
+			to PageMessageFolder, 'Work'
 		then:
 			messageList.messageSource(1) == 'Max'
 			messageList.messageText(1) == 'I will be late'
@@ -48,7 +47,7 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 		when:
-			to PageMessageFolder, remote { Folder.findByName('Work').id }
+			to PageMessageFolder, 'Work'
 		then:
 			bodyMenu.selected == 'work'
 	}
@@ -59,7 +58,8 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 			def data = remote {
 				def f = Folder.findByName("Work")
-				[folder:f.id, message:f.messages[0].id] }
+				def m = (f.messages as List)[0]
+				[folder:f.id, message:m.id] }
 		when:
 			to PageMessageFolder, data.folder, data.message
 			singleMessageDetails.reply.jquery.trigger("click")

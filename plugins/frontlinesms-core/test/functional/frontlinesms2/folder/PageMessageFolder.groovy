@@ -15,6 +15,10 @@ class PageMessageFolder extends PageMessage {
 		if (args[0] instanceof Number) {
 			path += '/' + args[0]
 		}
+		if (args[0] instanceof String) {
+			def folderId = remote { Folder.findByName(args[0]).id }
+			path += '/' + folderId
+		}
 		if(args.length > 1) {
 			path += '/show/' + args[1]
 		}
