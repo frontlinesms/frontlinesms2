@@ -7,7 +7,6 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class FolderListSpec extends FolderBaseSpec {
-	def trashService = new TrashService()
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 
 	def 'folder message list is displayed'() {
@@ -36,9 +35,9 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 			createTestMessages()
-			def folder = Folder.findByName("Work")
+			def folderId = remote { Folder.findByName("Work").id }
 		when:
-			to PageMessageFolder, folder
+			to PageMessageFolder, folderId
 		then:
 			messageList.messageSource(1) == 'Max'
 			messageList.messageText(1) == 'I will be late'
@@ -49,7 +48,7 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, remote { Folder.findByName('Work').id }
 		then:
 			bodyMenu.selected == 'work'
 	}
@@ -58,11 +57,11 @@ class FolderListSpec extends FolderBaseSpec {
 		setup:
 			createTestFolders()
 			createTestMessages()
-			def folder = Folder.findByName("Work")
-			def messages = folder.getMessages() as List
-			def message = messages[0]
+			def data = remote {
+				def f = Folder.findByName("Work")
+				[folder:f.id, message:f.messages[0].id] }
 		when:
-			to PageMessageFolder, folder, message
+			to PageMessageFolder, data.folder, data.message
 			singleMessageDetails.reply.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
@@ -73,7 +72,8 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work'), Fmessage.findBySrc('Max')
+			to PageMessageFolder, remote { Folder.findByName('Work').id },
+					remote { Fmessage.findBySrc('Max').id }
 		then:
 			messageList.messageCount() == 2
 		when:
@@ -94,7 +94,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work'), Fmessage.findBySrc('Max')
+			to PageMessageFolder, remote { Folder.findByName('Work').id }, remote { Fmessage.findBySrc('Max').id }
 			singleMessageDetails.forward.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
@@ -107,7 +107,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, remote { Folder.findByName('Work').id }
 			messageList.toggleSelect(0)
 			waitFor("slow") { singleMessageDetails.displayed }
 			messageList.toggleSelect(1)
@@ -120,10 +120,12 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 			createTestMessages()
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true, flush:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
+			remote {
+				new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true, flush:true)
+				new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
+				null }
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, remote { Folder.findByName('Work').id }
 			messageList.toggleSelect(0)
 			messageList.toggleSelect(1)
 			multipleMessageDetails.replyAll.jquery.trigger("click")
@@ -136,7 +138,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, remote { Folder.findByName('Work').id }
 			folderMoreActions.value("rename")
 			waitFor { at RenameFolderDialog }
 			folderName.equals("Work")
@@ -169,7 +171,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, remote { Folder.findByName('Work').id } 
 			folderMoreActions.value("rename")
 			waitFor { at RenameFolderDialog }
 			folderName.equals("Work")
@@ -183,7 +185,7 @@ class FolderListSpec extends FolderBaseSpec {
 		setup:
 			createTestFolders()
 		when:
-			to PageMessageFolder, Folder.findByName("Work")
+			to PageMessageFolder, remote { Folder.findByName("Work").id }
 			folderMoreActions.value("delete")
 			waitFor { at DeleteFolderPopup }
 			popupTitle.equals("delete folder")
@@ -199,13 +201,13 @@ class FolderListSpec extends FolderBaseSpec {
 			def folderId = deleteFolder()
 		when:
 			at PageMessageFolder
-			to PageMessageTrash, Trash.findByObjectId(folderId).id
+			to PageMessageTrash, remote { Trash.findByObjectId(folderId).id }
 		then:
 			messageList.messageSource(0) == 'Work'
 			messageList.messageText(0) == '2 message(s)'
-			DATE_FORMAT.format(messageList.messageDate(0)) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
+			DATE_FORMAT.format(messageList.messageDate(0)) == DATE_FORMAT.format(remote { Trash.findByObjectId(folderId).dateCreated })
 			senderDetails == 'Work folder'
-			DATE_FORMAT.format(date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
+			DATE_FORMAT.format(date) == DATE_FORMAT.format(remote { Trash.findByObjectId(folderId).dateCreated })
 	}
 
 	def "clicking on empty trash permanently deletes a folder"() {
@@ -213,7 +215,7 @@ class FolderListSpec extends FolderBaseSpec {
 			def folderId = deleteFolder()
 		when:
 			at PageMessageFolder
-			to PageMessageTrash, Trash.findByObjectId(folderId).id
+			to PageMessageTrash, remote { Trash.findByObjectId(folderId).id }
 			trashMoreActions.value("empty-trash")
 			waitFor { at EmptyTrashPopup }
 		then:
@@ -232,7 +234,9 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 			createOutgoingMessage()
 		when:
-			to PageMessageFolder, Folder.findByName('Projects'), Fmessage.findBySrc('Patrick')
+			to PageMessageFolder,
+					remote { Folder.findByName('Projects').id },
+					remote { Fmessage.findBySrc('Patrick').id }
 		then:
 			messageList.messageCount() == 3
 		when:
@@ -246,9 +250,11 @@ class FolderListSpec extends FolderBaseSpec {
 	def deleteFolder() {
 		createTestFolders()
 		createTestMessages()
-		def folder = Folder.findByName("Work")
-		trashService.sendToTrash(folder)
-		folder.id
+		remote {
+			def folder = Folder.findByName("Work")
+			new TrashService().sendToTrash(folder)
+			folder.id
+		}
 	}
 }
 

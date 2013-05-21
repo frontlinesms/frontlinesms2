@@ -46,3 +46,4 @@ class DetailSideBar extends geb.Module {
 		messageContent { $('#message-detail-content p').jquery.text() }
 	}
 }
+

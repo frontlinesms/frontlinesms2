@@ -224,13 +224,15 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	private def createBadConnection() {
-		MockModemUtils.initialiseMockSerial([
-				MOCK97:new CommPortIdentifier('MOCK97', MockModemUtils.createMockPortHandler_badPort())])
-		SmslibFconnection.build(name:'Bad Port', port:'MOCK97')
+		remote {
+			MockModemUtils.initialiseMockSerial([
+					MOCK97:new CommPortIdentifier('MOCK97', MockModemUtils.createMockPortHandler_badPort())])
+			SmslibFconnection.build(name:'Bad Port', port:'MOCK97').id
+		}
 	}
 
 	private def startBadConnection() {
-		def connectionId = SmslibFconnection.findByName('Bad Port').id
+		def connectionId = remote { SmslibFconnection.findByName('Bad Port').id }
 		to PageConnection, connectionId
 		waitFor { connectionList.btnEnableRoute(0).displayed }
 		connectionList.btnEnableRoute(0).click()
@@ -254,24 +256,27 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def createTestEmailConnection() {
-		EmailFconnection.build(name:'test email connection',
-				receiveProtocol:EmailReceiveProtocol.IMAPS,
-				serverName:'imap.zoho.com', serverPort:993,
-				username:'mr.testy@zoho.com', password:'mter',
-				enabled:false)
+		remote {
+			EmailFconnection.build(name:'test email connection',
+					receiveProtocol:EmailReceiveProtocol.IMAPS,
+					serverName:'imap.zoho.com', serverPort:993,
+					username:'mr.testy@zoho.com', password:'mter',
+					enabled:false).id }
 	}
 
 	def createSecondTestEmailConnection() {
-		EmailFconnection.build(name:'test email connection',
-				receiveProtocol:EmailReceiveProtocol.IMAPS,
-				serverName:'imap.zoho.com', serverPort:993,
-				username:'mr.testy@zoho.com', password:'mter')
+		remote {
+			EmailFconnection.build(name:'test email connection',
+					receiveProtocol:EmailReceiveProtocol.IMAPS,
+					serverName:'imap.zoho.com', serverPort:993,
+					username:'mr.testy@zoho.com', password:'mter').id }
 	}
 
 	def createTestSmsConnection() {
-		MockModemUtils.initialiseMockSerial([
-				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
-		SmslibFconnection.build(name:'MTN Dongle', port:'COM99', enabled:true)
+		remote {
+			MockModemUtils.initialiseMockSerial([
+					COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
+			SmslibFconnection.build(name:'MTN Dongle', port:'COM99', enabled:true).id }
 	}
 
 }

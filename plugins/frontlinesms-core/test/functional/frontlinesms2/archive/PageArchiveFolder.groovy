@@ -11,3 +11,4 @@ class PageArchiveFolder extends PageArchive {
 		folderNames(required:false) { $(".folder-name-cell a") }
 	}
 }
+

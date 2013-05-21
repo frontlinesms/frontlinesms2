@@ -4,7 +4,6 @@ import frontlinesms2.*
 import spock.lang.*
 
 class SystemLogSpec extends grails.plugin.geb.GebSpec {
-
 	def 'Can access user support from export logs dialog'() {
 		given:
 			createTestLogs()

@@ -13,3 +13,4 @@ class PageImportExportSettings extends PageSettings {
 		title.contains('Settings') || title.contains('Mazingira')
 	}
 }
+

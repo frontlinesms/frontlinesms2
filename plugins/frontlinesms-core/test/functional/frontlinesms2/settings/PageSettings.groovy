@@ -8,3 +8,4 @@ class PageSettings extends frontlinesms2.page.PageBase {
 		title.contains('Settings')
 	}
 }
+
