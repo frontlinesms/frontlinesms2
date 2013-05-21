@@ -47,11 +47,12 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 				Contact.findByName("Bob")
 						.addToCustomFields(name:'lake', value:'Erie')
 						.save(failOnError:true, flush:true)
+				null
 			}
 		when:
 			to PageContactShow, 'Bob'
 			singleContactDetails.contactsCustomFields.size() == 2
-			singleContactDetails.removeCustomFeild CustomField.findByName("town").id
+			singleContactDetails.removeCustomFeild(remote { CustomField.findByName("town").id })
 		then:
 			singleContactDetails.contactsCustomFields.size() == 1
 			singleContactDetails.contactsCustomFields == ['lake']
@@ -61,10 +62,10 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	def 'clicking X next to custom field in list then saving removes it from  database'() {
 		when:
 			to PageContactShow, 'Bob'
-			singleContactDetails.removeCustomFeild CustomField.findByName("town").id
+			singleContactDetails.removeCustomFeild(remote { CustomField.findByName("town").id })
 			singleContactDetails.save.click()
 		then:
-			waitFor { !CustomField.findByContact(bob) }
+			waitFor { remote { !CustomField.findByContact(bob) } }
 	}
 
 	def 'clicking save actually adds field to contact in database if value is filled in'() {
@@ -84,8 +85,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			singleContactDetails.addCustomField 'lake'
 			singleContactDetails.save.click()
 		then:
-			bob.refresh()
-			bob.customFields.name == ['town']
+			remote { Contact.findByName('Bob').customFields*.name } == ['town']
 	}
 }
 

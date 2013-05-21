@@ -70,11 +70,14 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createTestData() {
-		Fmessage.build(src:'Bob', text:'hi Bob')
-		Fmessage.build(src:'Alice', text:'hi Alice')
-		Fmessage.build(src:'+254778899', text:'test')
-		Fmessage.build(src:'Mary', text:'hi Mary')
-		Fmessage.build(src:'+254445566', text:'test')
+		remote {
+			Fmessage.build(src:'Bob', text:'hi Bob')
+			Fmessage.build(src:'Alice', text:'hi Alice')
+			Fmessage.build(src:'+254778899', text:'test')
+			Fmessage.build(src:'Mary', text:'hi Mary')
+			Fmessage.build(src:'+254445566', text:'test')
+			null
+		}
 	}
 }
 
