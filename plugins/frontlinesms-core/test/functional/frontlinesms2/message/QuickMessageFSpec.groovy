@@ -220,16 +220,19 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	private def createData() {
-		def group = Group.build(name:"group1")
-		def group2 = Group.build(name:"group2")
-		def alice = Contact.build(name:"alice", mobile:"12345678")
-		def bob = Contact.build(name:"bob", mobile:"567812445")
-		group.addToMembers(alice)
-		group2.addToMembers(alice)
-		group.addToMembers(bob)
-		group2.addToMembers(bob)
-		group.save(flush:true)
-		group2.save(flush:true)
+		remote {
+			def group = Group.build(name:"group1")
+			def group2 = Group.build(name:"group2")
+			def alice = Contact.build(name:"alice", mobile:"12345678")
+			def bob = Contact.build(name:"bob", mobile:"567812445")
+			group.addToMembers(alice)
+			group2.addToMembers(alice)
+			group.addToMembers(bob)
+			group2.addToMembers(bob)
+			group.save(flush:true)
+			group2.save(flush:true)
+			null
+		}
 	}
 	
 	def launchQuickMessageDialog() {

@@ -120,50 +120,64 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 
 	private def setupPendingMessages() {
-		(1..51).each { i ->
-			new Fmessage(src:"src${i}", text:"pending ${i}")
-					.addToDispatches(dst:"345678", status: DispatchStatus.PENDING)
-					.save(flush:true, failOnError:true)
+		remote {
+			(1..51).each { i ->
+				new Fmessage(src:"src${i}", text:"pending ${i}")
+						.addToDispatches(dst:"345678", status: DispatchStatus.PENDING)
+						.save(flush:true, failOnError:true)
+			}
+			null
 		}
 	}
 
 
 	private def setupDeletedMessages() {
-		(1..51).each { i ->
-			deleteMessage(Fmessage.build(src:"src${i}", text:"deleted ${i}"))
+		remote {
+			(1..51).each { i ->
+				deleteMessage(Fmessage.build(src:"src${i}", text:"deleted ${i}"))
+			}
+			null
 		}
 	}
 
 	private def deleteMessage(Fmessage message) {
-		message.isDeleted = true
-		message.save(failOnError:true, flush:true)
-		Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class.name, objectId:message.id)
+		remote {
+			message.isDeleted = true
+			message.save(failOnError:true, flush:true)
+			Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class.name, objectId:message.id)
+			null
+		}
 	}
 
 	private def setupFolderAndItsMessages() {
-		def folder = Folder.build(name:'folder')
-		(1..51).each { i ->
-			folder.addToMessages(Fmessage.build(src:"src${i}", text:"folder ${i}"))
+		remote {
+			def folder = Folder.build(name:'folder')
+			(1..51).each { i ->
+				folder.addToMessages(Fmessage.build(src:"src${i}", text:"folder ${i}"))
+			}
+			folder.save(failOnError:true, flush:true)
+			null
 		}
-		folder.save(failOnError:true, flush:true)
 	}
 
-
 	private def setupPollAndItsMessages() {
-		def yes = new PollResponse(key:'A', value:"Yes")
-		def no = new PollResponse(key:'B', value:"No")
-		def poll = new Poll(name:'poll')
-				.addToResponses(yes)
-				.addToResponses(no)
-				.addToResponses(PollResponse.createUnknown())
-				.save(flush:true, failOnError:true)
-		(1..25).each { i ->
-			yes.addToMessages(Fmessage.build(src:"src${i}", text:"yes ${i}"))
+		remote {
+			def yes = new PollResponse(key:'A', value:"Yes")
+			def no = new PollResponse(key:'B', value:"No")
+			def poll = new Poll(name:'poll')
+					.addToResponses(yes)
+					.addToResponses(no)
+					.addToResponses(PollResponse.createUnknown())
+					.save(flush:true, failOnError:true)
+			(1..25).each { i ->
+				yes.addToMessages(Fmessage.build(src:"src${i}", text:"yes ${i}"))
+			}
+			(1..26).each { i ->
+				no.addToMessages(Fmessage.build(src:"src${i}", text:"no ${i}"))
+			}
+			poll.save(flush:true, failOnError:true)
+			null
 		}
-		(1..26).each { i ->
-			no.addToMessages(Fmessage.build(src:"src${i}", text:"no ${i}"))
-		}
-		poll.save(flush:true, failOnError:true)
 	}
 }
 

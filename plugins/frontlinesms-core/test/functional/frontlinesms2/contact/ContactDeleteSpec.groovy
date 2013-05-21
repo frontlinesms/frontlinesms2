@@ -45,6 +45,6 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		then:
 			at PageContactShow
 			waitFor { notifications.flashMessage.displayed }
-			Contact.count() == 0
+			remote { Contact.count() } == 0
 	}
 }

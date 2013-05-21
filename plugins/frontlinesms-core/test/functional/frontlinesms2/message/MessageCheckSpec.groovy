@@ -31,9 +31,9 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "checked message details are displayed when message is checked"() {
 		given:
 			createInboxTestMessages()
-			def m = Fmessage.findBySrc('Bob')
+			def m = remote { Fmessage.findBySrc('Bob').id }
 		when:
-			to PageMessageInbox, m.id
+			to PageMessageInbox, m
 			messageList.toggleSelect(1)
 		then:
 			waitFor('veryslow') { singleMessageDetails.sender == messageList.displayedNameFor(m) }
@@ -46,8 +46,11 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "'Reply All' button appears for multiple selected messages and works"() {
 		given:
 			createInboxTestMessages()
-			Contact.build(name:'Alice', mobile:'Alice')
-			Contact.build(name:'June', mobile:'+254778899')
+			remote {
+				Contact.build(name:'Alice', mobile:'Alice')
+				Contact.build(name:'June', mobile:'+254778899')
+				null
+			}
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)
@@ -64,8 +67,11 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "the count of messages being sent is updated even in 'Reply all'"() {
 		given:
 			createInboxTestMessages()
-			Contact.build(name:'Alice', mobile:'Alice')
-			Contact.build(name:'June', mobile:'+254778899')
+			remote {
+				Contact.build(name:'Alice', mobile:'Alice')
+				Contact.build(name:'June', mobile:'+254778899')
+				null
+			}
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)
@@ -85,9 +91,12 @@ class MessageCheckSpec extends MessageBaseSpec {
 
 	def "Should show the contact's name when replying to multiple messages from the same contact"() {
 		given:
-			Fmessage.build(src:'Alice', text:'hi Alice')
-			Fmessage.build(src:'Alice', text:'test')
-			Contact.build(name:'Alice', mobile:'Alice')
+			remote {
+				Fmessage.build(src:'Alice', text:'hi Alice')
+				Fmessage.build(src:'Alice', text:'test')
+				Contact.build(name:'Alice', mobile:'Alice')
+				null
+			}
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)
@@ -146,7 +155,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "select all should update the total message count when messages are checked"() {
 		given:
 			createInboxTestMessages()
-			Fmessage.build()
+			remote { Fmessage.build(); null }
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)
@@ -178,6 +187,6 @@ class MessageCheckSpec extends MessageBaseSpec {
 		then:
 			waitFor { at PageMessageInbox }
 			singleMessageDetails.noneSelected
-
 	}
 }
+

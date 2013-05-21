@@ -94,7 +94,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			configure.stepActions.jquery.val("reply").jquery.trigger('change')
 			configure.stepActions.jquery.val("join").jquery.trigger('change')
 			configure.steps[0].jquery.find("textarea[name=autoreplyText]").value("Sample Text")
-			configure.steps[1].jquery.find("#group").value(Group.findByName("Camping").id)
+			configure.steps[1].jquery.find("#group").value(remote { Group.findByName("Camping").id })
 			next.click()
 			confirm.name.value("Wewe wacha hakuna haja")
 		then:
@@ -109,7 +109,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			createTestGroups()
 			createTestCustomActivities()
 		when:
-			to PageMessageCustomActivity, CustomActivity.findByName("Do it all")
+			to PageMessageCustomActivity, remote { CustomActivity.findByName("Do it all").id }
 		then:
 			waitFor { title?.toLowerCase().contains("custom activity") }
 			moreActions.value("edit").jquery.click()
@@ -124,7 +124,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			configure.stepActions.jquery.val("reply").jquery.trigger('change')
 			configure.stepActions.jquery.val("join").jquery.trigger('change')
 			configure.steps[2].jquery.find("textarea[name=autoreplyText]").value("Sample Text")
-			configure.steps[3].jquery.find("#group").value(Group.findByName("Camping").id)
+			configure.steps[3].jquery.find("#group").value(remote { Group.findByName("Camping").id })
 			next.click()
 			confirm.name.value("ni hivyo hivyo tu")
 		then:

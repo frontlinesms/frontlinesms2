@@ -12,8 +12,10 @@ class ContactEditSpec extends ContactBaseSpec {
 	}
 	
 	def 'selected contact details can be edited and saved'() {
+		given:
+			def aliceId = remote { Contact.findByName('Alice').id }
 		when:
-			to PageContactShow, remote { Contact.findByName('Alice').id }
+			to PageContactShow, aliceId
 
 			singleContactDetails.name.value('Kate')
 			singleContactDetails.mobile.value('+2541234567')
@@ -22,8 +24,7 @@ class ContactEditSpec extends ContactBaseSpec {
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
-			changingContact.refresh()
-			remote { Contact.findByName('Alice').name } == 'Kate'
+			remote { Contact.findById(aliceId).name } == 'Kate'
 	}
 
 	def "Updating a contact within a group keeps the view inside the group"() {
