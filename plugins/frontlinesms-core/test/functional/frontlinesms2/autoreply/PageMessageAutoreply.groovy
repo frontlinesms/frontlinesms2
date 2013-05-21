@@ -6,6 +6,7 @@ class PageMessageAutoreply extends frontlinesms2.page.PageMessageActivity {
 	static content = {
 		header { module AutoreplyHeaderModule }
 	}
+
 	static at = {
 		title.contains("autoreply")
 	}

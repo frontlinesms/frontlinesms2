@@ -8,19 +8,16 @@ import frontlinesms2.announcement.PageMessageAnnouncement
 import spock.lang.*
 
 class AutoreplyViewSpec extends AutoreplyBaseSpec {
-
 	def setup() {
 		createTestAutoreply()
 		createTestActivities()
-		createTestMessages(Autoreply.findByName("Fruits"))
+		createTestMessages('Fruits')
 	}
 
 	@Unroll
 	def "autoreply page should show the details of the autoreply in the header"() {
-		setup:
-			def autoreply  = Autoreply.findByName("Fruits")
 		when:
-			to PageMessageAutoreply, autoreply
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { header.title?.toLowerCase().contains("autoreply") }
 
@@ -33,7 +30,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "clicking the edit option opens the Autoreply Dialog for editing"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -44,7 +41,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
@@ -54,7 +51,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "clicking the rename option opens the rename small popup"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -66,7 +63,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "clicking the delete option opens the confirm delete small popup"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -77,7 +74,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "clicking the export option opens the export dialog"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -88,7 +85,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "selecting a single message reveals the single message view"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -100,7 +97,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "selecting multiple messages reveals the multiple message view"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -114,7 +111,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "clicking on a message reveals the single message view with clicked message"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -127,7 +124,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "delete single message action works "() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -143,7 +140,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "delete multiple message action works for multiple select"(){
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -162,7 +159,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "move single message action works"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -171,20 +168,20 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
 		when:
-			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			singleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { at PageMessageAutoreply }
 			waitFor { notifications.flashMessageText.contains("updated") }
 			messageList.messageText(0) != 'Test message 0'
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, 'Sample Announcement'
 		then:
 			messageList.messageText(0) == 'Test message 0'
 	}
 
 	def "move multiple message action works"() {
 		when:
-			to PageMessageAutoreply, Autoreply.findByName("Fruits")
+			to PageMessageAutoreply, 'Fruits'
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -194,13 +191,13 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
-			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			multipleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
 			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
 			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, 'Sample Announcement'
 		then:
 			waitFor { messageList.displayed }
 			messageList.messageText(0) in ['Test message 0', 'Test message 1']
@@ -209,11 +206,11 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 
 	def "moving a message from another activity to a autoreply displays an update message"() {
 		setup:
-			def activity = Activity.findByName("Sample Announcement")
-			def m = Fmessage.findBySrc("announce")
-			def autoreply = Autoreply.findByName('Fruits')
+			def activityId = remote { Activity.findByName("Sample Announcement").id }
+			def mId = remote { Fmessage.findBySrc("announce").id }
+			def autoreplyId = remote { Autoreply.findByName('Fruits').id }
 		when:
-			to PageMessageAnnouncement, activity.id, m.id
+			to PageMessageAnnouncement, activityId, mId
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -248,16 +245,18 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			waitFor { messageList.messageCount() == 3 }
 	}
 
-	private Autoreply createInAndOutTestMessages() {
-		Autoreply a = Autoreply.build(name:'Vegetables')
-		3.times { a.addToMessages(Fmessage.build()) }
-		2.times {
-			def sentMessage = Fmessage.buildWithoutSave(inbound:false)
-			sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
-			sentMessage.save(failOnError:true, flush:true)
-			a.addToMessages(sentMessage) }
-		a.save(failOnError:true, flush:true)
-		return a
+	private createInAndOutTestMessages() {
+		remote {
+			Autoreply a = Autoreply.build(name:'Vegetables')
+			3.times { a.addToMessages(Fmessage.build()) }
+			2.times {
+				def sentMessage = Fmessage.buildWithoutSave(inbound:false)
+				sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
+				sentMessage.save(failOnError:true, flush:true)
+				a.addToMessages(sentMessage) }
+			a.save(failOnError:true, flush:true)
+			return a.id
+		}
 	}
 }
 
