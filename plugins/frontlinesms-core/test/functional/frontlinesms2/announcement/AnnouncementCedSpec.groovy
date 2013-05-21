@@ -11,7 +11,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
 		then:
-			waitFor { at CreateActivityDialog}
+			waitFor { at CreateActivityDialog }
 		when:
 			announcement.click()
 		then:
@@ -32,7 +32,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			composeAnnouncement.textArea.value("announcing this new announcement!")
 			next.click()
 		then:
-			waitFor {recipients.addField.displayed}
+			waitFor { recipients.addField.displayed }
 		when:
 			recipients.addField.value("+919544426000")
 			recipients.addButton.click()
@@ -59,12 +59,15 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 
 	def "should display errors when announcement validation fails"() {
 		setup:
-			def announcementNewbie = new Announcement(name: "newbie", messageText: "announcing this new announcement!", messages:[]).save(failOnError:true, flush:true)
+			remote {
+				new Announcement(name: "newbie", messageText: "announcing this new announcement!", messages:[]).save(failOnError:true, flush:true)
+				null
+			}
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
 		then:
-			waitFor { at CreateActivityDialog}
+			waitFor { at CreateActivityDialog }
 		when:
 			announcement.click()
 		then:
@@ -73,7 +76,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			composeAnnouncement.textArea.value("announcing this new announcement!")
 			next.click()
 		then:
-			waitFor {recipients.addField.displayed}
+			waitFor { recipients.addField.displayed }
 		when:
 			recipients.addField.value("+919544426000")
 			recipients.addButton.click()
@@ -89,3 +92,4 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			at AnnouncementDialog
 	}
 }
+
