@@ -3,8 +3,6 @@ package frontlinesms2.archive
 import frontlinesms2.*
 
 class ArchiveBaseSpec extends grails.plugin.geb.GebSpec {
-	final Date TEST_DATE = new Date()
-
 	def createTestFolders() {
 		remote {
 			['Work', 'Projects'].each() { Folder.build(name:it) }
@@ -14,6 +12,8 @@ class ArchiveBaseSpec extends grails.plugin.geb.GebSpec {
 
 	def createTestMessages() {
 		remote {
+			Date TEST_DATE = new Date()
+
 			def max = Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4, starred:true)
 			def jane = Fmessage.build(src:'Jane', text:'Meeting at 10 am', date:TEST_DATE-3)
 			def patrick = Fmessage.build(src:'Patrick', text:'Project has started', date:TEST_DATE-2)
@@ -30,6 +30,8 @@ class ArchiveBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	def createTestMessages2() {
 		remote {
+			Date TEST_DATE = new Date()
+
 			Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4, archived:true)
 			Fmessage.build(src:'Jane', text:'Meeting at 10 am', date:TEST_DATE-3, archived:true)
 			null

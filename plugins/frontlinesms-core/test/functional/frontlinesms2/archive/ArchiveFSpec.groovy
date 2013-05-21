@@ -53,6 +53,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 	def '"Delete All" button appears when multiple messages are selected in an archived activity'() {
 		given:
 			remote {
+				Date TEST_DATE = new Date()
 				def poll = new Poll(name:'thingy')
 				poll.addToResponses(key:'A', value:'One')
 				poll.addToResponses(key:'B', value:'Other')
