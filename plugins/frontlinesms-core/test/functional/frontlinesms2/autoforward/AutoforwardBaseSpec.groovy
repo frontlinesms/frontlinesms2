@@ -6,20 +6,13 @@ class AutoforwardBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestAutoforward(){
 		remote {
 			def a = new Autoforward(name:"News")
-			a.contacts = createContacts()
+			a.contacts = (1..10).collect {
+				Contact.build(name:"generated-contact-$it", mobile:it)
+			}
 			a.addToKeywords(value:"BREAKING")
 			a.addToKeywords(value:"ALERT")
 			a.sentMessageText = 'Message is \${message_text}'
 			a.save(flush:true, failOnError:true)
-			null
-		}
-	}
-
-	static createContacts() {
-		remote {
-			(1..10).collect {
-				Contact.build(name:"generated-contact-$it", mobile:it)
-			}
 			null
 		}
 	}
