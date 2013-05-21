@@ -75,10 +75,10 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-2)
 			Fmessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
-
-			frontlinesms2.message.MessageBaseSpec.createMiaouwMixPoll()
 			null
 		}
+
+		frontlinesms2.message.MessageBaseSpec.createMiaouwMixPoll()
 	}
 
 	static createSearchTestMessages() {
@@ -86,10 +86,10 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 			Fmessage.build(src:'Alex', text:'meeting at 11.00', date:new Date()-1)
 			Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-1)
 			Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes')
-
-			frontlinesms2.message.MessageBaseSpec.createMiaouwMixPoll()
 			null
 		}
+
+		frontlinesms2.message.MessageBaseSpec.createMiaouwMixPoll()
 	}
 
 	static createTestContacts() {
