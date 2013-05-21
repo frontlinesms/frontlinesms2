@@ -56,7 +56,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 					serverPort:993,
 					username:'mr.testy@zoho.com',
 					password:'mister')
-			SmssyncFconnection.build(name:'SmsSync to Bobs Android', secret:'trial')
+			SmssyncFconnection.build(name:'SmsSync to Bobs Android', secret:'trial').id
 		}
 	}
 }
