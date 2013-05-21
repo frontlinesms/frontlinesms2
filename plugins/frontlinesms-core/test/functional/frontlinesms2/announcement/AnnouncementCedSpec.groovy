@@ -87,7 +87,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			confirm.announcementName.value("newbie")
 			submit.click()
 		then:
-			assert Announcement.count() == 1
+			remote { Announcement.count() == 1 }
 			waitFor { error }
 			at AnnouncementDialog
 	}
