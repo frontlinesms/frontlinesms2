@@ -8,3 +8,4 @@ class GebUtil {
 		return $("#$tableId tr td:nth-child(${columnIndex+1})")*.text()
 	}
 }
+

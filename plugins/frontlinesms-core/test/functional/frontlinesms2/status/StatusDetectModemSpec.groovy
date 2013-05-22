@@ -27,8 +27,10 @@ class StatusDetectModemSpec extends grails.plugin.geb.GebSpec {
 
 	def 'DETECTED DEVICES list should appear when a device has been detected'() {
 		setup:
-			MockSerial.reset()
-			MockSerial.setIdentifier('COM1', new serial.mock.PermanentlyOwnedCommPortIdentifier('COM1', 'a naughty windows application'))
+			remote {
+				MockSerial.reset()
+				MockSerial.setIdentifier('COM1', new serial.mock.PermanentlyOwnedCommPortIdentifier('COM1', 'a naughty windows application'))
+			}
 		when:
 			to PageStatus
 		then:
@@ -42,6 +44,7 @@ class StatusDetectModemSpec extends grails.plugin.geb.GebSpec {
 		then:
 			noDevicesDetectedNotification.displayed
 		cleanup:
-			MockSerial.reset()
+			remote { MockSerial.reset() }
 	}
 }
+

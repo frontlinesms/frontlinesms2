@@ -37,3 +37,4 @@ class BasicAuthentication extends geb.Module {
 		save { $('input#submit') }
 	}
 }
+

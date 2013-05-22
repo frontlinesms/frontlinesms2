@@ -6,7 +6,6 @@ import frontlinesms2.popup.*
 import frontlinesms2.message.PageMessageInbox
 
 class AutoforwardCedSpec extends AutoforwardBaseSpec{
-
 	def "can launch autoforward wizard from create new activity link" () {
 		given: ' the inbox is opened'
 			to PageMessageInbox
@@ -22,7 +21,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 
 	def "Can create a new autoforward" () {
 		given: 'Create Autoforward wizard is open'
-			 launchAutoforwardPopup()
+			launchAutoforwardPopup()
 		when: 'Message tab is open'
 			message.displayed
 			message.messageText.value('message to send')
@@ -157,7 +156,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			next.click()
 		then: 'Contacts should be selected'
 			println "############# ${recipients.contactCheckboxesChecked*.value()}"
-			recipients.contactCheckboxesChecked*.value().containsAll((1..10).collect{ Contact.findByMobile(it).mobile })
+			recipients.contactCheckboxesChecked*.value().containsAll((1..10).collect { mob -> remote { Contact.findByMobile(mob).mobile } })
 	}
 
 	def "comfirm page should have correct data listed" () {
@@ -200,3 +199,4 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		}
 	}
 }
+

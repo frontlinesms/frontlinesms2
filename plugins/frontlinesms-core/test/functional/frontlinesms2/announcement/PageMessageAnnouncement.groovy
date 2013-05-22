@@ -13,3 +13,4 @@ class PageMessageAnnouncement extends frontlinesms2.page.PageMessageActivity {
 		messagesSelect(wait: true) { $(".message-select") }
 	}
 }
+

@@ -6,7 +6,6 @@ import frontlinesms2.popup.*
 import frontlinesms2.message.PageMessageInbox
 
 class AutoreplyCedSpec extends AutoreplyBaseSpec{
-
 	def "can launch autoreply wizard from create new activity link" () {
 		given: ' the inbox is opened'
 			to PageMessageInbox
@@ -128,12 +127,14 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 
 	def launchAutoreplyPopup(String tab = ''){
 		to PageMessageInbox
-			bodyMenu.newActivity.click()
-			waitFor { at CreateActivityDialog }
-			autoreply.click()
-			waitFor { at AutoreplyCreateDialog }
-		if(tab == 'keyword')
+		bodyMenu.newActivity.click()
+		waitFor { at CreateActivityDialog }
+		autoreply.click()
+		waitFor { at AutoreplyCreateDialog }
+		if(tab == 'keyword') {
 			messageText = "Welcome Sir/Madam. This is an autoreply response!"
-			next.click()
+		}
+		next.click()
 	}
 }
+

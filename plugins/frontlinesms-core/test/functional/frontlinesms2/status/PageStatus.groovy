@@ -13,7 +13,10 @@ class PageStatus extends PageBase {
 		detectModems { $('#device-detection a') }
 		detectedDevicesSection { $('div#device-detection') }
 		noConnections { $("div#connection-status p.no-content") }
-		connectionByName { connName -> $("#connection-${SmslibFconnection.findByName(connName).id}") }
+		connectionByName { connName ->
+			def id = remote { SmslibFconnection.findByName(connName).id }
+			$("#connection-${id}")
+		}
 		noDevicesDetectedNotification(required:false) { detectedDevicesSection.find('tr.no-content') }
 		detectedDevicesTable(required:false) { detectedDevicesSection.find('table') }
 		detectedDevicesRows { detectedDevicesTable.find('tbody tr') }
@@ -23,3 +26,4 @@ class PageStatus extends PageBase {
 		detectionTitle { $("#detection-title").text() }
 	}
 }
+

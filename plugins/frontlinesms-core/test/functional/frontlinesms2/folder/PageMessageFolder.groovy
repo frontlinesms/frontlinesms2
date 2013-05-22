@@ -7,27 +7,26 @@ class PageMessageFolder extends PageMessage {
 	static url = 'message/folder'
 
 	String convertToPath(Object[] args) {
-		def restOfPath = ""
-
-		if (args.equals(null) || args.length == 0)
+		if (!args) {
 			return ""
+		}
 
-	    if (args[0] instanceof Folder)
-	    	restOfPath += "/"+(args[0] as Folder).id
-	    else if (args[0] instanceof Number)
-	    	restOfPath += "/"+args[0]	
-
-	    if (args.length >1 )
-	    {
-		    if (args[1] instanceof Fmessage)
-		    	restOfPath += "/show/"+(args[1] as Fmessage).id
-		    else if (args[1] instanceof Number)
-		    	restOfPath += "/show/"+args[1]	    
-	    }    
-	    return restOfPath
+		def path = ''
+		if (args[0] instanceof Number) {
+			path += '/' + args[0]
+		}
+		if (args[0] instanceof String) {
+			def folderId = remote { Folder.findByName(args[0]).id }
+			path += '/' + folderId
+		}
+		if(args.length > 1) {
+			path += '/show/' + args[1]
+		}
+		return path
 	}
 	static content = {
 		folderLinks { $('ul li.folders ul.submenu li a') }
 		folderMoreActions { $(".header-buttons #more-actions") }
 	}
 }
+

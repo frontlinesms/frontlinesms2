@@ -43,7 +43,6 @@ class CoreBootStrap {
 
 		if(Environment.current == Environment.TEST) {
 			quartzScheduler.start()
-			test_initGeb(servletContext)
 			dev_disableSecurityFilter()
 			// never show new popup during tests
 			appSettingsService['newfeatures.popup.show.immediately'] = false
@@ -586,51 +585,6 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 	
 	private def dev_initMockPortMessages() {
 		return ["AUTOREPLY", "autorely", "auToreply", "colorz", "color z", ""];
-	}
-	
-	private def test_initGeb(def servletContext) {
-		// N.B. this setup uses undocumented features of Geb which could be subject
-		// to unnanounced changes in the future - take care when upgrading Geb!
-		def emptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.EmptyNavigator))
-		def nonEmptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.NonEmptyNavigator))
-		
-		final String contextPath = servletContext.contextPath
-		// FIXME in grails 2, serverURL appears to be not set, so hard-coding it here
-		//final String baseUrl = grailsApplication.config.grails.serverURL
-		final String serverPort = grailsApplication.config.grails.serverPort?:System.properties['server.port']?: '8080'
-		final String baseUrl = "http://localhost:${serverPort}/frontlinesms-core"
-		nonEmptyMc.'get@href' = {
-			def val = getAttribute('href')
-			if(val.startsWith(contextPath)) val = val.substring(contextPath.size())
-			// check for baseUrl second, as it includes the context path
-			else if(val.startsWith(baseUrl)) val = val.substring(baseUrl.size())
-			return val
-		}
-		
-		/** list of boolean vars from https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#getAttribute(java.lang.String) */
-		final def BOOLEAN_PROPERTIES = ['async', 'autofocus', 'autoplay', 'checked', 'compact', 'complete', 'controls', 'declare', 'defaultchecked', 'defaultselected', 'defer', 'disabled', 'draggable', 'ended', 'formnovalidate', 'hidden', 'indeterminate', 'iscontenteditable', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nohref', 'noresize', 'noshade', 'novalidate', 'nowrap', 'open', 'paused', 'pubdate', 'readonly', 'required', 'reversed', 'scoped', 'seamless', 'seeking', 'selected', 'spellcheck', 'truespeed', 'willvalidate']
-		BOOLEAN_PROPERTIES.each { name ->
-			def getterName = "is${name.capitalize()}"
-			emptyMc."$getterName" = { false }
-			nonEmptyMc."$getterName" = {
-				def v = delegate.getAttribute(name)
-				!(v == null || v.length()==0 || v.equalsIgnoreCase('false'))
-			}
-		}
-
-		def oldMethod = nonEmptyMc.getMetaMethod("setInputValue", [Object] as Class[])
-		nonEmptyMc.setInputValue = { value ->
-			if(input.tagName == 'selected') {
-				throw new RuntimeException("OMG youre playing with selecters!")
-			} else {
-				oldMethod.invoke(value)
-			}
-		}
-
-		emptyMc.initialize()
-		geb.navigator.EmptyNavigator.metaClass = emptyMc
-		nonEmptyMc.initialize()
-		geb.navigator.NonEmptyNavigator.metaClass = nonEmptyMc
 	}
 
 	private def dev_disableSecurityFilter() {

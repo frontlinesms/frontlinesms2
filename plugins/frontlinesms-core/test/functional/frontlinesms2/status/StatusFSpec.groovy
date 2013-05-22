@@ -35,3 +35,4 @@ class StatusFSpec extends StatusBaseSpec {
 			waitFor { tabs.unreadcount == 16 }
 	}
 }
+
