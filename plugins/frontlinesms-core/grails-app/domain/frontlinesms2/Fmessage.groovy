@@ -15,7 +15,6 @@ class Fmessage {
 	
 	String src
 	String text
-	String inboundContactName
 	String outboundContactName
 	
 	boolean read
@@ -27,9 +26,12 @@ class Fmessage {
 
 	static hasMany = [dispatches:Dispatch, details:MessageDetail]
 
+	def getInboundContactName () {
+		Contact.findByMobile(src)?.name?:null
+	}
+
 	static mapping = {
 		sort date:'desc'
-		inboundContactName formula:'(SELECT c.name FROM contact c WHERE c.mobile=src)'
 		outboundContactName formula:'(SELECT MAX(c.name) FROM contact c, dispatch d WHERE c.mobile=d.dst AND d.message_id=id)'
 		version false
 
@@ -41,7 +43,6 @@ class Fmessage {
 				val || !obj.inbound
 		})
 		text maxSize:MAX_TEXT_LENGTH
-		inboundContactName nullable:true
 		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->
 				obj.messageOwner == null || obj.messageOwner.archived == val
