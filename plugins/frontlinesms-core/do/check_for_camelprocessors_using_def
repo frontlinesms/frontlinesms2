@@ -1,0 +1,17 @@
+#!/bin/bash
+echo "# Checking for any CamelProcessors using 'def' instead of 'void'..."
+grep "def *process" -r src/groovy/frontlinesms2/camel/
+result="$?"
+
+if [[ "$result" == "1" ]]; then
+	echo "# No CamelProcessor using 'def' found."
+	exit 0
+fi
+
+if [[ "$result" == "0" ]]; then
+	echo "# CamelProcessors using 'def' found."
+	exit 1
+fi
+
+echo "# There was a problem checking for camel processors using 'def' instead of 'void'."
+exit $?
