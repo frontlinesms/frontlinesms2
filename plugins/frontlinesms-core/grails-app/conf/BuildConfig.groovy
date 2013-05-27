@@ -113,7 +113,7 @@ grails.project.dependency.resolution = {
 		//runtime ":yui-minify-resources:0.1.4"
 
 		build ":release:$grailsVersion", {
-			excludes 'http-client'
+			excludes 'http-builder'
 			export = false
 		}
 		build ":tomcat:$grailsVersion", {
