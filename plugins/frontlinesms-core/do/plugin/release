@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-previousVersion=$(groovy -e "$(grep version *CoreGrailsPlugin.groovy); println version")
+previousVersion=$(groovy -e "$(grep version *GrailsPlugin.groovy); println version")
 echo "# Got old plugin version as: $previousVersion"
 
 releaseVersion=$(echo $previousVersion | sed s/-SNAPSHOT//)
@@ -23,8 +23,9 @@ fi
 echo "# Next SNAPSHOT version: $nextVersion"
 
 function grails_change_plugin_version {
-	# TODO
-	exit 1
+	_prev="$1"
+	_next="$2"
+	sed -i -E -e "s/def\s+version\s*=\s*['\"]$_prev['\"]/def version = '$_next'/g" *GrailsPlugin.groovy
 }
 
 function git_commit_all_changes {
@@ -35,10 +36,10 @@ function git_commit_all_changes {
 }
 
 grails_change_plugin_version $previousVersion $releaseVersion
-# TODO do build_deploy
+${0%/*}/../build_deploy_plugin --m2-deploy # TODO should support binary here too
 git_commit_all_changes "[RELEASE: $releaseVersion]"
 git tag "v$releaseVersion"
-changeVersion $releaseVersion $nextVersion
+grails_change_plugin_version $releaseVersion $nextVersion
 git_commit_all_changes "[POST-RELEASE: $releaseVersion -> $nextVersion]"
 git push
 git push --tags
