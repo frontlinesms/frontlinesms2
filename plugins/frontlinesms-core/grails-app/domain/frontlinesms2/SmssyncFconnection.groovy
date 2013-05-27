@@ -60,7 +60,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	String getFullApiUrl() {
-		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
+		return apiEnabled? "api/1/${shortName}/$id/" : ""
 	}
 }
 
