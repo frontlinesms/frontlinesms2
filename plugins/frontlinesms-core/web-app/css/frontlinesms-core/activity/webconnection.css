@@ -1,0 +1,12 @@
+#tabs div.info { padding:4px 0 5px 25px; margin:15px 0;
+	background-position:top left; background-repeat:no-repeat; background-image:url("../../images/icons/help.png"); }#web-connection-param-table { margin-bottom:10px; margin-left:20px; }
+.web-connection-param-table td { padding:2px; }
+.web-connection-param-table td .ui-selectmenu-wrapper > a { margin:0 !important; }
+.web-connection-param-table td .ui-selectmenu-wrapper > a > span { padding:2px; }
+#new-webconnection-form a.btn.addNew { margin-left:20px; }
+
+#webconnection-config input#url { display:inline-block; }
+#webconnection-config label.crowdmap:nth-child(4) { display:inline-block; text-indent:25px; margin-bottom:0; }
+#webconnection-config input#displayed_url { display:inline-block; }
+#webconnection-config label[for=displayed_url].error { visibility:hidden; position:fixed; }
+#webconnection-config label.crowdmap.suffix { display:inline-block; padding-left:25px; }

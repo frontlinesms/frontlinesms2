@@ -37,10 +37,10 @@ class NexmoFconnection extends Fconnection implements FrontlineApi {
 	
 	String getSecret(){ return "" } // No Secret for Nexmo
 
-	boolean isApiEnabled() { this.receivedEnabled }
+	boolean isApiEnabled() { this.receiveEnabled }
 
 	String getFullApiUrl() {
-		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
+		return apiEnabled? "api/1/${shortName}/$id/" : ""
 	}
 	
 	List<RouteDefinition> getRouteDefinitions() {
