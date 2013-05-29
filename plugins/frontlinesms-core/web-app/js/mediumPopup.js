@@ -12,6 +12,7 @@ var mediumPopup = (function() {
 		messageResponseClick, moveToRelativeTab,
 		___end___;
 	cancel = function() {
+		$(this).trigger("dialogCancelClicked");
 		$(this).dialog('close');
 	};
 	createModalBox = function(html) {
