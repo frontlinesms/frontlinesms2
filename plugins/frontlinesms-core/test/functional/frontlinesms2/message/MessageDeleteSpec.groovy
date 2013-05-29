@@ -4,31 +4,35 @@ import frontlinesms2.*
 import frontlinesms2.popup.*
 
 class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
-	def trashService = new TrashService()
-	
 	def setup() {
 		createTestData()
 	}
 
 	def 'delete button does not show up for messages in trash view'() {
 		when:
-			def bobMessage = Fmessage.findBySrc('Bob')
-			deleteMessage(bobMessage)
+			remote {
+				def message = Fmessage.findBySrc('Bob')
+				new TrashService().sendToTrash(message)
+				null
+			}
 			to PageMessageTrash
 			messageList.clickLink()
 		then:
 			waitFor { singleMessageDetails.displayed }
-			Fmessage.deleted(false).count() == 1
-			singleMessageDetails.sender == bobMessage.displayName
+			remote { Fmessage.deleted(false).count() == 1 }
+			singleMessageDetails.sender == 'Bob'
 			!singleMessageDetails.delete.displayed
 	}
 
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
-			def message = Fmessage.build()
-			deleteMessage(message)
+			remote {
+				def message = Fmessage.build()
+				new TrashService().sendToTrash(message)
+				assert Fmessage.findAllByIsDeleted(true).size == 1
+				null
+			}
 			to PageMessageTrash
-			assert Fmessage.findAllByIsDeleted(true).size == 1
 		when:
 			trashMoreActions.value("empty-trash")
 		then:
@@ -37,7 +41,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			done.click()
 		then:
 			waitFor { at PageMessageInbox }
-			Fmessage.findAllByIsDeleted(true).size == 0
+			remote { Fmessage.findAllByIsDeleted(true).size } == 0
 	}
 	
 	def "'Delete All' button appears for multiple selected messages and works"() {
@@ -54,7 +58,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Delete' button appears for individual messages and works"() {
 		when:
-			to PageMessageInbox, Fmessage.findBySrc('Bob').id
+			to PageMessageInbox, remote { Fmessage.findBySrc('Bob').id }
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.delete.displayed }
@@ -65,10 +69,6 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			waitFor{ notifications.flashMessageText.contains("trash") }
 	}
 
-	def deleteMessage(Fmessage message) {
-		trashService.sendToTrash(message)
-	}
-	
 	static createTestData() {
 		remote {
 			Fmessage.build(src:'Bob', text:'hi Bob')

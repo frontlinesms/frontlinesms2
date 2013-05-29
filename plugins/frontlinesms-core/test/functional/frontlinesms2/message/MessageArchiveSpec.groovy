@@ -30,10 +30,13 @@ class MessageArchiveSpec extends MessageBaseSpec {
 
 	def 'archived messages do not show up in sent view'() {
 		setup:
-			def d = new Dispatch(dst:"34567890", dateSent: new Date(), status: DispatchStatus.SENT)
-			new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush:true, failOnError:true)
+			remote {
+				def d = new Dispatch(dst:"34567890", dateSent: new Date(), status: DispatchStatus.SENT)
+				new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush:true, failOnError:true)
+				null
+			}
 		when:
-		    to PageArchiveSent
+			to PageArchiveSent
 		then:
 			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
@@ -43,7 +46,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			singleMessageDetails.archive.click()
 			to PageArchiveSent
 		then:
-	        waitFor { messageList.messageText(0) == "hi Mary" }
+			waitFor { messageList.messageText(0) == "hi Mary" }
 		when:
 			to PageMessageSent
 		then:
@@ -52,7 +55,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 
 	 def 'should not be able to archive activity messages'() {
 		when:
-			to PageMessagePoll, Poll.findByName('Miauow Mix').id, Fmessage.findBySrc('Barnabus')
+			to PageMessagePoll, 'Miauow Mix', remote { Fmessage.findBySrc('Barnabus').id }
 		then:
 			waitFor { singleMessageDetails.displayed }
 			messageList.toggleSelect(0)
@@ -60,5 +63,5 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		 then:
 			waitFor { !multipleMessageDetails.archiveAll.displayed }
 	 }
-
 }
+
