@@ -141,6 +141,9 @@ jQuery(document).ajaxError(function(request, data, settings, error) {
 });
 
 jQuery(function() {
+	if(!jQuery.validator) {
+		return;
+	}
 	jQuery.extend(jQuery.validator.messages, {
 		required: i18n("jquery.validation.required"),
 		remote: i18n("jquery.validation.remote"),
