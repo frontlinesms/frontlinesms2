@@ -26,10 +26,8 @@ class PollViewSpec extends PollBaseSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			def message = Fmessage.findBySrc('Bob')
-			def poll = Poll.findByName('Football Teams')
 		when:
-			to PageMessagePoll, 'Football Teams', message.id
+			to PageMessagePoll, 'Football Teams', remote { Fmessage.findBySrc('Bob').id }
 		then:
 			messageList.messageSource(1) == 'Bob'
 	}
@@ -38,11 +36,10 @@ class PollViewSpec extends PollBaseSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			def message = Fmessage.findBySrc('Alice')
 		when:
-			to PageMessagePoll, 'Football Teams', message.id
+			to PageMessagePoll, 'Football Teams', remote { Fmessage.findBySrc('Alice').id }
 		then:
-			messageList.messageSource(0) == message.src
+			messageList.messageSource(0) == 'Alice'
 			messageList.messageDate(0)
 			messageList.messageText(0) == 'manchester ("go manchester")'
 	}
@@ -51,16 +48,13 @@ class PollViewSpec extends PollBaseSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			def poll = Poll.findByName('Football Teams')
-			def aliceMessage = Fmessage.findBySrc('Alice')
-			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
-			to PageMessagePoll, 'Football Teams', aliceMessage.id
+			to PageMessagePoll, 'Football Teams', remote { Fmessage.findBySrc('Alice').id }
 		then:
 			messageList.selectedMessageCount == 1
 			messageList.selectedMessageText == 'manchester ("go manchester")'
 		when:
-			to PageMessagePoll, 'Football Teams', bobMessage.id
+			to PageMessagePoll, 'Football Teams', remote { Fmessage.findBySrc('Bob').id }
 		then:
 			messageList.selectedMessageCount == 1
 			messageList.selectedMessageText == 'manchester ("I like manchester")'
