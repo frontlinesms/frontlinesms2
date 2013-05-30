@@ -43,7 +43,10 @@ class MessageInboxSpec extends MessageBaseSpec {
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
-			def messageId = remote { Fmessage.findBySrc('Alice').id }
+			def message = remote {
+				def m = Fmessage.findBySrc('Alice')
+				[id:m.id, src:m.src, text:m.text, date:m.date]
+			}
 		when:
 			to PageMessageInbox, message.id
 		then:
@@ -61,11 +64,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox, aliceMessageId
 		then:
-			messageList.selectedMessageLinkUrl == "/message/inbox/show/${aliceMessage.id}"
+			messageList.selectedMessageLinkUrl == "/message/inbox/show/${aliceMessageId}"
 		when:
 			to PageMessageInbox, bobMessageId
 		then:
-			messageList.selectedMessageLinkUrl == "/message/inbox/show/${bobMessage.id}"
+			messageList.selectedMessageLinkUrl == "/message/inbox/show/${bobMessageId}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
@@ -191,7 +194,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, Fmessage.findBySrc('Bob').id
+			to PageMessageInbox, remote { Fmessage.findBySrc('Bob').id }
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
@@ -203,9 +206,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should show the address of the contact in the confirm screen"() {
 		given:
-			def message = remote { new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true).id }
+			def message = remote {
+				def m = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
+				[id:m.id, src:m.src]
+			}
 		when:
-			to PageMessageInbox, message
+			to PageMessageInbox, message.id
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
@@ -220,10 +226,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		given:
 			def message = remote {
 				new Contact(name: "Tom", mobile: "+254999999").save(failOnError:true, flush:true)
-				new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true).id
+				def m = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
+				[id:m.id, srcName:Contact.findByMobile(m.src).name]
 			}
 		when:
-			to PageMessageInbox, message
+			to PageMessageInbox, message.id
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
@@ -231,7 +238,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			next.jquery.trigger('click')
 			waitFor { confirm.displayed }
 		then:
-			confirm.recipientName == "${Contact.findByMobile(message.src).name}"
+			confirm.recipientName == message.srcName
 	}
 
 	def "should skip recipients tab for reply-all option"() {
@@ -259,8 +266,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 				null
 			}
 		when:
-			to PageMessageInbox, Fmessage.findByText('hello').id
-			singleMessageDetails.moveTo(Folder.findByName('my-folder').id)
+			to PageMessageInbox, remote { Fmessage.findByText('hello').id }
+			singleMessageDetails.moveTo(remote { Folder.findByName('my-folder').id })
 		then:
 			waitFor("veryslow") { messageList.noContent.text() == "No messages here, yet." }
 			bodyMenu.selected == "inbox"
@@ -270,11 +277,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, Fmessage.findBySrc('Alice').id
+			to PageMessageInbox, remote { Fmessage.findBySrc('Alice').id }
 		then:
 			tabs.unreadcount == 3
 		when:
-			Fmessage.build().save(flush:true, failOnError:true)
+			remote { Fmessage.build().save(flush:true, failOnError:true); null }
 		then:
 			waitFor { tabs.unreadcount == 4 }
 	}
@@ -283,7 +290,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		given: 'test message is created'
 			remote { Fmessage.build(src:'369258147', text:'A sent message'); null }
 		when : 'test message is selected'
-			to PageMessageSent, Fmessage.findBySrc('369258147').id
+			to PageMessageSent, remote { Fmessage.findBySrc('369258147').id }
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'A sent message' }
 			singleMessageDetails.addToContacts.displayed
@@ -293,7 +300,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		given: 'test message is created'
 			remote { Fmessage.build(src:'Donald', text:'A sent message'); null }
 		when : 'test message is selected'
-			to PageMessageSent, Fmessage.findBySrc('Donald').id
+			to PageMessageSent, remote { Fmessage.findBySrc('Donald').id }
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'A sent message' }
 			!singleMessageDetails.addToContacts.displayed
