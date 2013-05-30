@@ -12,7 +12,7 @@ var mediumPopup = (function() {
 		messageResponseClick, moveToRelativeTab,
 		___end___;
 	cancel = function() {
-		$(this).trigger("dialogCancelClicked");
+		$("#cancel").trigger("dialogCancelClicked");
 		$(this).dialog('close');
 	};
 	createModalBox = function(html) {
@@ -25,6 +25,11 @@ var mediumPopup = (function() {
 		return $("#tabs").find('.ui-tabs-panel').eq(selected);
 	};
 	getCurrentTabDom = function() {
+		$('#tabs').tabs({
+			select: function(event, ui){
+				$(this).trigger("tabActivated");
+			}
+		});
 		return $('#tabs').tabs('option', 'selected');
 	};
 	getCurrentTabIndex = function() {
