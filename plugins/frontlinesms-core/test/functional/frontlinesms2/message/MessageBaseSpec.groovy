@@ -25,9 +25,13 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 	static createPendingTestMessages() {
 		remote {
 			def a = Fmessage.buildWithoutSave(inbound:false)
-			a.addToDispatches(Dispatch.build(status: DispatchStatus.PENDING))
+			a.addToDispatches(Dispatch.buildWithoutSave(status: DispatchStatus.PENDING))
+			a.save()
+
 			def b = Fmessage.buildWithoutSave(inbound:false)
-			b.addToDispatches(Dispatch.build(status: DispatchStatus.PENDING))
+			b.addToDispatches(Dispatch.buildWithoutSave(status: DispatchStatus.PENDING))
+			b.save()
+
 			null
 		}
 	}

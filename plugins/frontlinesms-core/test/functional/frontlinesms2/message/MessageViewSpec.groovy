@@ -7,7 +7,7 @@ class MessageViewSpec extends grails.plugin.geb.GebSpec {
 
 	def "message with special html characters should display in list"(){
 		given: 'a test message has been created'
-			Fmessage.build(src:'Bob', text:'<hello>')
+			remote { Fmessage.build(src:'Bob', text:'<hello>'); null }
 		when: 'Inbox is open'
 			to PageMessageInbox
 		then: 'message column should display the appropriate text'

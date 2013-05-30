@@ -40,7 +40,7 @@ class MessagesReceivedSpec extends MessageBaseSpec {
 	def 'when clicking the new message notification, the view stays at the current page and details'() {
 		when:
 			createInboxTestMessages()
-			to PageMessageInbox, Fmessage.findBySrc('Bob').id
+			to PageMessageInbox, remote { Fmessage.findBySrc('Bob').id }
 		then:
 			messageList.messageCount() == 2
 		when:
