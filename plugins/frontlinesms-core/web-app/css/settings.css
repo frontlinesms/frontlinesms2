@@ -46,7 +46,7 @@ ul.select.sortable.checklist.no-description.ui-sortable li label { margin: 2px; 
 
 .grabber { background-image:url("../images/icons/draggable.png"); background-repeat: no-repeat; background-position: 3px 7px; }
 .warning_message { color:#a61b1b; padding:8px; background-color:#FEF1EC; border:1px solid #CD0A0A; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px;
-	-o-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; margin-left: 27px; margin-right: 27px;}
+	-o-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; visibility:hidden; border-radius: 5px 5px 5px 5px; margin-left: 27px; margin-right: 27px;}
 #routing-preferences div.input ul.select.checklist label input[type="checkbox"] { top: 8px; vertical-align: middle; }
 
 .connection-status.CONNECTED { background-image:url('../images/status/green.png'); }
