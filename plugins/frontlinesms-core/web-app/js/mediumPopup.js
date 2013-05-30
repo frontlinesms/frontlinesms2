@@ -25,11 +25,6 @@ var mediumPopup = (function() {
 		return $("#tabs").find('.ui-tabs-panel').eq(selected);
 	};
 	getCurrentTabDom = function() {
-		$('#tabs').tabs({
-			select: function(event, ui){
-				$(this).trigger("tabActivated");
-			}
-		});
 		return $('#tabs').tabs('option', 'selected');
 	};
 	getCurrentTabIndex = function() {
