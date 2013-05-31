@@ -39,7 +39,6 @@ $(function() {
 	checkedValues = 0;
 	chkboxSelector = 'input[name^="routeRule"]';
 	warningObject = $(".warning_message");
-	warningObject.hide();
 
 	$(chkboxSelector).each(function() {
 		if ($(this).is(':checked')) { checkedValues++; }
