@@ -12,10 +12,10 @@ class MessageSendService {
 		}
 	}
 	
-	def retry(Fmessage m) {
+	def retry(Fmessage m, status = DispatchStatus.FAILED) {
 		def dispatchCount = 0
 		m.dispatches.each { dispatch ->
-			if(dispatch.status == DispatchStatus.FAILED) {
+			if(dispatch.status == status) {
 				sendMessage('seda:dispatches', dispatch)
 				++dispatchCount
 			}
