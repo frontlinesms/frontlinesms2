@@ -37,7 +37,7 @@ class MessageSendService {
 	}
 
 	def queue(dispatch, headers=null) {
-		queueName = "seda:dispatches"
+		def queueName = "seda:dispatches"
 		if(headers) {
 			sendMessageAndHeaders(queueName, dispatch, headers)
 		} else {
