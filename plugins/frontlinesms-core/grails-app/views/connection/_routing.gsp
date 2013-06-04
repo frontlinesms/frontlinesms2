@@ -1,7 +1,7 @@
 <div id="routing-preferences">
 	<h2><g:message code="routing.title"/></h2>
 	<fsms:info message="routing.info"/>
-	<div class="input"><p class="warning_message"></p></div>
+	<div class="input"><p class="warning_message"><g:message code="routing.rules.none-selected.warning"/></p></div>
 	<g:form name="routing-form" url="[controller:'connection', action:'changeRoutingPreferences']">
 		<g:hiddenField name="routingUseOrder" value=""/>
 		<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable checklist no-description">
@@ -59,10 +59,8 @@ $(function() {
 
 	function checkboxChecker(checkedValues, warningObject) {
 		if (checkedValues === 0) {
-			warningObject.html(i18n("routing.rules.none-selected.warning"));
 			warningObject.show( "drop", { direction: "up" }, "slow");
 		} else {
-			warningObject.html("");
 			warningObject.hide();
 		}
 	}
