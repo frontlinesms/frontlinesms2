@@ -26,6 +26,7 @@ class Fmessage {
 
 	static hasMany = [dispatches:Dispatch, details:MessageDetail]
 
+/** FIXME This introduces horrible N+1 SELECTs FIXME git revert -- dc86bad3bbe5ac08ed385807e77018ce56b18d13 FIXME */
 	def getInboundContactName () {
 		Contact.findByMobile(src)?.name?:null
 	}

@@ -32,7 +32,10 @@ function git_commit_all_changes {
 	_commitMessage="$1"
 	git status
 	read -p "# Committing all changes with message: $_commitMessage [enter] "
-	git commit -a -m"$_commitMessage"
+	# Add new files to git
+	git add .
+	# --all will also remove deleted files
+	git commit --all -m"$_commitMessage"
 }
 
 grails_change_plugin_version $previousVersion $releaseVersion
