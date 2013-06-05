@@ -6,3 +6,8 @@ web-app/i18n/
 
 # NodeJS local modules
 node_modules/
+
+# temp files when built as a plugin
+web-app/css/frontlinesms-core
+*.pom
+

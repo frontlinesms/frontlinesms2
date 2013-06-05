@@ -6,7 +6,7 @@ import frontlinesms2.message.*
 import frontlinesms2.poll.*
 import frontlinesms2.folder.*
 
-class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
+class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 	def "should paginate inbox messages"() {
 		setup:
 			setupInboxMessages()
@@ -72,9 +72,8 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	def "should paginate folder messages"() {
 		setup:
 			setupFolderAndItsMessages()
-			def folderId = Folder.findByName("folder").id
 		when:
-			to PageMessageFolder, folderId
+			to PageMessageFolder, 'folder'
 		then:
 			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
@@ -89,9 +88,8 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	def "should paginate poll messages"() {
 		setup:
 			setupPollAndItsMessages()
-			def pollId = Poll.findByName("poll").id
 		when:
-			to PageMessagePoll, pollId
+			to PageMessagePoll, 'poll'
 		then:
 			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
@@ -104,17 +102,23 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	}
 
 	private def setupInboxMessages() {
-		(1..51).each { i ->
-			Fmessage.build(src:"src${i}", text:"inbox ${i}", date:new Date()-i)
+		remote {
+			(1..51).each { i ->
+				Fmessage.build(src:"src${i}", text:"inbox ${i}", date:new Date()-i)
+			}
+			null
 		}
 	}
 
 
 	private def setupSentMessages() {
-		(1..51).each { i ->
-			new Fmessage(src:"src${i}", text:"sent ${i}")
-					.addToDispatches(dst:"345678", status:DispatchStatus.SENT, dateSent:new Date())
-					.save(flush:true, failOnError:true)
+		remote {
+			(1..51).each { i ->
+				new Fmessage(src:"src${i}", text:"sent ${i}")
+						.addToDispatches(dst:"345678", status:DispatchStatus.SENT, dateSent:new Date())
+						.save(flush:true, failOnError:true)
+			}
+			null
 		}
 	}
 
@@ -133,18 +137,14 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	private def setupDeletedMessages() {
 		remote {
+			def deleteMessage = { Fmessage message ->
+				message.isDeleted = true
+				message.save(failOnError:true, flush:true)
+				Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class.name, objectId:message.id)
+			}
 			(1..51).each { i ->
 				deleteMessage(Fmessage.build(src:"src${i}", text:"deleted ${i}"))
 			}
-			null
-		}
-	}
-
-	private def deleteMessage(Fmessage message) {
-		remote {
-			message.isDeleted = true
-			message.save(failOnError:true, flush:true)
-			Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class.name, objectId:message.id)
 			null
 		}
 	}

@@ -2,6 +2,7 @@ package frontlinesms2
 
 import org.springframework.web.servlet.support.RequestContextUtils
 import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
+import frontlinesms2.CoreAppInfoProviders as CAIP
 
 class FsmsTagLib {
 	static namespace = 'fsms'
@@ -10,6 +11,7 @@ class FsmsTagLib {
 	def expressionProcessorService
 	def grailsApplication
 	def i18nUtilService
+	def statusIndicatorService
 
 	def info = { att ->
 		def cssClass = 'info'
@@ -376,8 +378,7 @@ class FsmsTagLib {
 	def trafficLightStatus = { att ->
 		out << '<span id="status-indicator" class="indicator '
 		def connections = Fconnection.list()
-		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
-		out << color
+		out << statusIndicatorService.color
 		out << '"></span>'
 	}
 

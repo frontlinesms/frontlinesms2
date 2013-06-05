@@ -8,15 +8,15 @@ class MessageSendService {
 		if(c) headers['requested-fconnection-id'] = c.id
 		m.save()
 		m.dispatches.each {
-			sendMessageAndHeaders('seda:dispatches', it, headers)
+			queue(it, headers)
 		}
 	}
 	
-	def retry(Fmessage m) {
+	def retry(Fmessage m, status = DispatchStatus.FAILED) {
 		def dispatchCount = 0
 		m.dispatches.each { dispatch ->
-			if(dispatch.status == DispatchStatus.FAILED) {
-				sendMessage('seda:dispatches', dispatch)
+			if(dispatch.status == status) {
+				queue(dispatch)
 				++dispatchCount
 			}
 		}
@@ -34,6 +34,15 @@ class MessageSendService {
 			message.addToDispatches(it)
 		}
 		return message
+	}
+
+	def queue(dispatch, headers=null) {
+		def queueName = "seda:dispatches"
+		if(headers) {
+			sendMessageAndHeaders(queueName, dispatch, headers)
+		} else {
+			sendMessage(queueName, dispatch)
+		}
 	}
 
 	private def getAddressesForContacts(contacts) {

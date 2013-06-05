@@ -119,7 +119,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, Fmessage.findBySrc('Alice').id
+			to PageMessageInbox, remote { Fmessage.findBySrc('Alice').id }
 			messageList.selectAll.click()
 		then:
 			waitFor { messageList.selectedMessageCount() == 2 }

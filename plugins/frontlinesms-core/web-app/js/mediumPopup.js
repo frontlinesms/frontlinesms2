@@ -12,6 +12,7 @@ var mediumPopup = (function() {
 		messageResponseClick, moveToRelativeTab,
 		___end___;
 	cancel = function() {
+		$("#cancel").trigger("dialogCancelClicked");
 		$(this).dialog('close');
 	};
 	createModalBox = function(html) {
@@ -161,6 +162,7 @@ var mediumPopup = (function() {
 	};
 	validateTabSelections = function(dialog) {
 		dialog.find('#tabs').tabs({select: function(event, ui) {
+			$(this).trigger("tabSelected");
 			if(ui.index > getCurrentTabIndex()) {
 				validateAllPreviousTabs(ui.index);
 				var thisTabValidates = tabValidates(getCurrentTab());
