@@ -1,5 +1,6 @@
 $(function() {
 	$('#group-actions').bind('change', function() {
+		selectmenuTools.snapback(this);
 		var selected = $(this).find('option:selected').val();
 		if(selected) {
 			groupActions[selected].call();
