@@ -15,6 +15,7 @@ class SettingsControllerSpec extends Specification {
 
 	def setup() {
 		controller.i18nUtilService = Mock(I18nUtilService)
+		controller.metaClass.setFlashMessage = { String msg -> msg }
 		appSettingsService = Mock(AppSettingsService)
 		controller.appSettingsService = appSettingsService
 	}

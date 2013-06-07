@@ -15,6 +15,7 @@ class MessageControllerSpec extends Specification {
 
 	def setup() {
 		controller.metaClass.message = { Map args -> args.code }
+		controller.metaClass.setFlashMessage = { String msg -> msg }
 		controller.metaClass.getPaginationCount = { -> 10 }
 		Contact.metaClass.static.withNewSession = {closure -> closure.call()}
 		params.messageText = "text"
@@ -83,7 +84,7 @@ class MessageControllerSpec extends Specification {
 		when:
 			controller.archive()
 		then:
-			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId=&flashMessage=default.archived"
+			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId="
 	}
 
 	def "archiving a message IN SEARCH should redirect to the calling action without a messageId"() {
@@ -95,7 +96,7 @@ class MessageControllerSpec extends Specification {
 		when:
 			controller.archive()
 		then:
-			controller.response.redirectUrl == "/search/result?searchId=1&flashMessage=default.archived"
+			controller.response.redirectUrl == "/search/result?searchId=1"
 	}
 	
 	def "archiving pending messages from the result screen should fail"(){

@@ -12,6 +12,7 @@ class ConnectionControllerSpec extends Specification {
 	def setup() {
 		appSettingsService = Mock(AppSettingsService)
 		controller.appSettingsService = appSettingsService
+		controller.metaClass.setFlashMessage = { String msg -> msg }
 	}
 
 	def 'createRoute should call FconnectionService'() {
