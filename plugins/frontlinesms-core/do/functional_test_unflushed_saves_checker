@@ -8,11 +8,9 @@ if [[ "$searchResult" == "0" ]]; then
 	exit 1
 elif [[ "$searchResult" == "1" ]]; then
 	echo "# No bad saves found."
-	exit 1
+	exit 0
 fi
 
 echo "# Error with search.  Terminating script."
 exit 1
-
-echo "# There were no violations"
 
