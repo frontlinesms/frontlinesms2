@@ -30,7 +30,7 @@ class ActivityController extends ControllerUtils {
 	}
 
 	def show() {
-		flash.message = flash.message
+		flashMessage = flash.message
 		redirect controller:'message', action:'activity', params:params
 	}
 
@@ -40,7 +40,7 @@ class ActivityController extends ControllerUtils {
 		withActivity { activity ->
 			activity.properties = params
 			if (activity.save()) {
-				flash.message = defaultMessage 'updated'
+				flashMessage = defaultMessage 'updated'
 		
 				withFormat {
 					json {
@@ -61,10 +61,10 @@ class ActivityController extends ControllerUtils {
 		withActivity { activity ->
 			activity.archive()
 			if(activity.save(flush:true)) {
-				flash.message = defaultMessage 'archived'
+				flashMessage = defaultMessage 'archived'
 				activity.deactivate()
 			} else {
-				flash.message = defaultMessage 'archive.failed', activity.id
+				flashMessage = defaultMessage 'archive.failed', activity.id
 			}
 			redirect controller:"message", action:"inbox"
 		}
@@ -74,13 +74,13 @@ class ActivityController extends ControllerUtils {
 		withActivity { activity ->
 			activity.unarchive()
 			if(activity.save()) {
-				flash.message = defaultMessage 'unarchived'
+				flashMessage = defaultMessage 'unarchived'
 				activity.activate()
 			} else {
 				if (activity instanceof Announcement)
-					flash.message = defaultMessage 'unarchive.failed', activity.id
+					flashMessage = defaultMessage 'unarchive.failed', activity.id
 				else
-					flash.message = defaultMessage 'unarchive.keyword.failed', activity.id
+					flashMessage = defaultMessage 'unarchive.keyword.failed', activity.id
 			}
 			redirect controller:"archive", action:"activityList"
 		}
@@ -96,7 +96,7 @@ class ActivityController extends ControllerUtils {
 		withActivity { activity ->
 			trashService.sendToTrash(activity)
 			activity.deactivate()
-			flash.message = defaultMessage 'trashed'
+			flashMessage = defaultMessage 'trashed'
 			redirect controller:"message", action:"inbox"
 		}
 	}
@@ -104,10 +104,10 @@ class ActivityController extends ControllerUtils {
 	def restore() {
 		withActivity { activity ->
 			if(trashService.restore(activity)) {
-				flash.message = defaultMessage 'restored'
+				flashMessage = defaultMessage 'restored'
 				activity.activate()
 			} else {
-				flash.message = defaultMessage 'restore.failed', activity.id
+				flashMessage = defaultMessage 'restore.failed', activity.id
 			}
 			redirect controller:"message", action:"trash"
 		}
@@ -133,7 +133,7 @@ class ActivityController extends ControllerUtils {
 		try {
 			service.saveInstance(instance, params)
 			if(activate) instance.activate()
-			flash.message = message([code:"${instance.class.shortName}.save.success", args:[instance.name]])
+			flashMessage = message([code:"${instance.class.shortName}.save.success", args:[instance.name]])
 			params.activityId = instance.id
 			withFormat {
 				json { render([ok:true, ownerId:instance.id] as JSON) }

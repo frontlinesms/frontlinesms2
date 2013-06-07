@@ -47,7 +47,6 @@ class SearchController extends MessageController {
 		def rawSearchResults = Fmessage.search(search)
 		int offset = params.offset?.toInteger()?:0
 		int max = params.max?.toInteger()?:50
-		flash.message = params.flashMessage
 		[searchDescription:getSearchDescription(search), search:search,
 				checkedMessageCount:params.checkedMessageList?.tokenize(',')?.size(),
 				messageInstanceList:rawSearchResults.listDistinct(sort:'date', order:'desc', offset:offset, max:max),

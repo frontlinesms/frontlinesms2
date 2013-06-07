@@ -47,7 +47,6 @@ class MessageController extends ControllerUtils {
 	def inbox() {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		// check for flash message in parameters if there is none in flash.message
-		flash.message = flash.message?:params.flashMessage
 		render view:'../message/standard',
 				model:[messageInstanceList: messageInstanceList.list(params),
 						messageSection:'inbox',
@@ -126,7 +125,7 @@ class MessageController extends ControllerUtils {
 						sentMessageCount: sentMessageCount,
 						sentDispatchCount: sentDispatchCount] << getShowModel()
 		} else {
-			flash.message = message(code: 'flash.message.activity.found.not')
+			flashMessage = message(code: 'flash.message.activity.found.not')
 			redirect(action: 'inbox')
 		}
 	}
@@ -137,14 +136,13 @@ class MessageController extends ControllerUtils {
 			if (params.starred == null) params.starred = false
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
 			def messageInstanceList = folderInstance?.getFolderMessages(params.starred, getSent)
-			if (params.flashMessage) { flash.message = params.flashMessage }
 			render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
 						messageSection:'folder',
 						messageInstanceTotal: messageInstanceList.count(),
 						ownerInstance: folderInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
 		} else {
-			flash.message = message(code: 'flash.message.folder.found.not')
+			flashMessage = message(code: 'flash.message.folder.found.not')
 			redirect(action: 'inbox')
 		}
 	}
@@ -152,7 +150,7 @@ class MessageController extends ControllerUtils {
 	def send() {
 		def fmessage = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(fmessage)
-		flash.message = dispatchMessage 'queued', fmessage
+		flashMessage = dispatchMessage 'queued', fmessage
 		render(text: flash.message)
 	}
 	
@@ -162,7 +160,7 @@ class MessageController extends ControllerUtils {
 		messages.each { m ->
 			dispatchCount += messageSendService.retry(m)
 		}
-		flash.message = message code:'fmessage.retry.success.multiple', args:[dispatchCount]
+		flashMessage = message code:'fmessage.retry.success.multiple', args:[dispatchCount]
 		redirect controller:'message', action:'pending'
 	}
 	
@@ -171,16 +169,15 @@ class MessageController extends ControllerUtils {
 		messages.each { m ->
 			trashService.sendToTrash(m)
 		}
-		params.flashMessage = dynamicMessage 'trashed', messages
+		flashMessage = dynamicMessage 'trashed', messages
 		if (params.messageSection == 'result') {
 			redirect(controller:'search', action:'result', params:
-					[searchId:params.searchId, flashMessage:params.flashMessage])
+					[searchId:params.searchId]
 		} else {
 			println "Forwarding to action: $params.messageSection"
 			redirect(controller:params.controller, action:params.messageSection, params:
 					[ownerId:params.ownerId, starred:params.starred,
-							failed:params.failed, searchId:params.searchId,
-							flashMessage:params.flashMessage])
+							failed:params.failed, searchId:params.searchId])
 		}
 	}
 	
@@ -190,11 +187,11 @@ class MessageController extends ControllerUtils {
 			messageInstance.archived = true
 			messageInstance.save()
 		}
-		params.flashMessage = dynamicMessage 'archived', messages
+		flashMessage = dynamicMessage 'archived', messages
 		if(params.messageSection == 'result') {
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, flashMessage: params.flashMessage])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		} else {
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId, flashMessage: params.flashMessage])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId])
 		}
 	}
 	
@@ -206,18 +203,18 @@ class MessageController extends ControllerUtils {
 				messageInstance.save(failOnError: true)
 			}
 		}
-		params.flashMessage = dynamicMessage 'unarchived', messages
+		flashMessage = dynamicMessage 'unarchived', messages
 		if(params.controller == 'search')
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId, flashMessage:params.flashMessage])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		else
-			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId, flashMessage:params.flashMessage])
+			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
 
 	def move() {
 		def activity = params.messageSection == 'activity'? Activity.get(params.ownerId): null
 		def messageList = getCheckedMessages()
 		fmessageService.move(messageList, activity, params)
-		flash.message = dynamicMessage 'updated', messageList
+		flashMessage = dynamicMessage 'updated', messageList
 		render 'OK'
 	}
 
@@ -228,7 +225,7 @@ class MessageController extends ControllerUtils {
 			responseInstance.addToMessages(messageInstance)
 		}
 		responseInstance.poll.save()
-		flash.message = dynamicMessage 'updated', checkedMessages
+		flashMessage = dynamicMessage 'updated', checkedMessages
 		render 'OK'
 	}
 

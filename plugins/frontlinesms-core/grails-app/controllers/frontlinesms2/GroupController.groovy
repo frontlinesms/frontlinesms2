@@ -13,7 +13,7 @@ class GroupController extends ControllerUtils {
 		def group = Group.get(params.id.toLong())
 		group.properties = params
 		if(group.save(flush:true)) {
-			flash.message = message(code:'group.update.success')
+			flashMessage = message(code:'group.update.success')
 			withFormat {
 				json {
 					render([ok:true] as JSON)
@@ -42,7 +42,7 @@ class GroupController extends ControllerUtils {
 	def save() {
 		def groupInstance = new Group(params)
 		if (groupInstance.save(flush:true)) {
-			flash.message = message(code:'default.created.message', args:[message(code:'group.label'), groupInstance.name])
+			flashMessage = message(code:'default.created.message', args:[message(code:'group.label'), groupInstance.name])
 			withFormat {
 				json {
 					render([ok:true] as JSON)
@@ -66,10 +66,10 @@ class GroupController extends ControllerUtils {
 	def delete() {
 		try {
 			Group.get(params.id)?.delete(flush: true)
-			flash.message = message(code:'default.deleted.message', args:[message(code:'group.label')])
+			flashMessage = message(code:'default.deleted.message', args:[message(code:'group.label')])
 		}
 		catch (org.springframework.dao.DataIntegrityViolationException e) {
-			flash.message = message(code:'group.delete.fail')
+			flashMessage = message(code:'group.delete.fail')
 		}
 		redirect controller:'contact', action: "show"
 	}

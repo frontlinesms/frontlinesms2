@@ -59,9 +59,6 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def show() {
-		if(params.flashMessage) {
-			flash.message = params.flashMessage
-		}
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = Contact.count()
@@ -79,15 +76,15 @@ class ContactController extends ControllerUtils {
 		}
 		def contactGroupInstanceList = contactInstance?.groups ?: []
 		if(params.contactId && !contactInstance) {
-			flash.message = message(code:'contact.not.found')
+			flashMessage = message(code:'contact.not.found')
 			redirect(action: 'show')
 			return false
 		} else if(params.groupId && !contactList.contactsSection) {
-			flash.message = message(code:'group.not.found')
+			flashMessage = message(code:'group.not.found')
 			redirect(action: 'show')
 			return false
 		} else if(params.smartGroupId && !contactList.contactsSection) {
-			flash.message = message(code:'smartgroup.not.found')
+			flashMessage = message(code:'smartgroup.not.found')
 			redirect(action: 'show')
 			return false
 		}
@@ -156,7 +153,7 @@ class ContactController extends ControllerUtils {
 	
 	def delete() {
 		getCheckedContacts()*.delete()
-		flash.message = message(code:'default.deleted', args:[message(code:'contact.label')])
+		flashMessage = message(code:'default.deleted', args:[message(code:'contact.label')])
 		redirect(action: "show")		
 	}
 
@@ -187,11 +184,11 @@ class ContactController extends ControllerUtils {
 		if(params.mobile && params.mobile[0] == '+') mobile = '+' + mobile
 		def existingContact = mobile ? Contact.findByMobileLike(mobile) : null
 		if (existingContact && existingContact != contactInstance) {
-			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
+			flashMessage = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
 			return false
 		}
 		if (contactInstance.save()) {
-			flash.message = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
+			flashMessage = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true

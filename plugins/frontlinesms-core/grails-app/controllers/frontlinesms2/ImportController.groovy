@@ -65,7 +65,7 @@ class ImportController extends ControllerUtils {
 				} finally { try { writer.close() } catch(Exception ex) {} }
 			}
 			
-			flash.message = g.message(code:'import.contact.complete',
+			flashMessage = g.message(code:'import.contact.complete',
 							args:[savedCount, failedLines.size()])
 			if(failedLines) flash.message += '\n' + g.link(action:'failedContacts',
 							params:[jobId:params.jobId],
@@ -152,7 +152,7 @@ println "The errors are $fm.errors"
 					++failedCount
 				}
 			}
-			flash.message = message(code: 'import.message.complete', args:[savedCount, failedCount])
+			flashMessage = message(code: 'import.message.complete', args:[savedCount, failedCount])
 			redirect controller:'settings', action:'general'
 		}
 	}
