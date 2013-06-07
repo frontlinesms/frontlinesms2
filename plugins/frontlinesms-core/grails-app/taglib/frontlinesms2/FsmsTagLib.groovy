@@ -17,10 +17,14 @@ class FsmsTagLib {
 	def flashMessage = { att ->
 		def msg = oneTimeDataService.getOneTimeData('message', request)?.text
 		if (msg) {
-			out << '<div class="flash message">'
+			if(!att?.textOnly) {
+				out << '<div class="flash message">'
+			}
 			out << msg
-			out << '<a class="hider hide-flash">x</a>'
-			out << '</div>'
+			if(!att?.textOnly) {
+				out << '<a class="hider hide-flash">x</a>'
+				out << '</div>'
+			}
 		}
 	}
 
