@@ -65,11 +65,12 @@ class ImportController extends ControllerUtils {
 				} finally { try { writer.close() } catch(Exception ex) {} }
 			}
 			
-			flashMessage = g.message(code:'import.contact.complete',
+			def flMsg = g.message(code:'import.contact.complete',
 							args:[savedCount, failedLines.size()])
-			if(failedLines) flash.message += '\n' + g.link(action:'failedContacts',
+			if(failedLines) flMsg += '\n' + g.link(action:'failedContacts',
 							params:[jobId:params.jobId],
 					g.message(code:'import.contact.failed.download'))
+			flashMessage = flMsg
 			
 			redirect controller:'settings', action:'general'
 		} else throw new RuntimeException(message(code:'import.upload.failed'))

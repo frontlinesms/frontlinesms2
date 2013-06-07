@@ -1,4 +1,4 @@
-<fsms:flashMessage/>
+<fsms:flashMessage addHider="true"/>
 <g:hasErrors bean="${contactInstance}">
 	<div class="flash errors">
 		<fsms:renderErrors bean="${contactInstance}" as="list"/>

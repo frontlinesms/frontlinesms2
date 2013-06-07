@@ -30,7 +30,6 @@ class ActivityController extends ControllerUtils {
 	}
 
 	def show() {
-		flashMessage = flash.message
 		redirect controller:'message', action:'activity', params:params
 	}
 

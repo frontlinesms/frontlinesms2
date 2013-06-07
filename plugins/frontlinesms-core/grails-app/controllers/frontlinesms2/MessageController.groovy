@@ -46,7 +46,6 @@ class MessageController extends ControllerUtils {
 
 	def inbox() {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
-		// check for flash message in parameters if there is none in flash.message
 		render view:'../message/standard',
 				model:[messageInstanceList: messageInstanceList.list(params),
 						messageSection:'inbox',
@@ -150,8 +149,7 @@ class MessageController extends ControllerUtils {
 	def send() {
 		def fmessage = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(fmessage)
-		flashMessage = dispatchMessage 'queued', fmessage
-		render(text: flash.message)
+		render(text: dispatchMessage('queued', fmessage))
 	}
 	
 	def retry() {
