@@ -107,7 +107,7 @@ grails.project.dependency.resolution = {
 			exclude 'hibernate'
 		}
 
-		compile ":one-time-data:1.0"
+		compile ":one-time-data:1.1-frontlinesms-SNAPSHOT"
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0"
 		//runtime ":cached-resources:1.0"

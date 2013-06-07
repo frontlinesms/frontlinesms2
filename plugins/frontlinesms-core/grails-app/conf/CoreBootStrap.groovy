@@ -38,6 +38,7 @@ class CoreBootStrap {
 		println "BootStrap.init() : Env=${Environment.current}"
 		initialiseSerial()
 		MetaClassModifiers.addAll()
+		addFlashMessageMethodsToControllers()
 
 		initAppSettings()
 
@@ -630,6 +631,15 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 			def fconnectionIdList = fconnectionInstanceList.collect {"fconnection-${it.id}"}.join(",")
 			appSettingsService.set('routing.use', fconnectionIdList)
 		}
+	}
+
+	private addFlashMessageMethodsToControllers() {
+		grailsApplication.controllerClasses.each { controller ->
+			controller.clazz.metaClass.setFlashMessage = { message ->
+				delegate.oneTimeData('message') { text = message }
+			}
+		}
+
 	}
 }
 
