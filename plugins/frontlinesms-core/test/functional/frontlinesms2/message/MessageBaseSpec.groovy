@@ -26,11 +26,11 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			def a = Fmessage.buildWithoutSave(inbound:false)
 			a.addToDispatches(Dispatch.buildWithoutSave(status: DispatchStatus.PENDING))
-			a.save()
+			a.save() // no-flush-deliberate
 
 			def b = Fmessage.buildWithoutSave(inbound:false)
 			b.addToDispatches(Dispatch.buildWithoutSave(status: DispatchStatus.PENDING))
-			b.save()
+			b.save() // no-flush-deliberate
 
 			null
 		}
