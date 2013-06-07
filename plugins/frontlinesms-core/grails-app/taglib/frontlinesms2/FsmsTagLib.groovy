@@ -12,6 +12,17 @@ class FsmsTagLib {
 	def grailsApplication
 	def i18nUtilService
 	def statusIndicatorService
+	def oneTimeDataService
+
+	def flashMessage = { att ->
+		def msg = oneTimeDataService.getOneTimeData('message', request)?.text
+		if (msg) {
+			out << '<div class="flash message">'
+			out << msg
+			out << '<a class="hider hide-flash">x</a>'
+			out << '</div>'
+		}
+	}
 
 	def info = { att ->
 		def cssClass = 'info'

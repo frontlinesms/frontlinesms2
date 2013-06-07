@@ -172,7 +172,7 @@ class MessageController extends ControllerUtils {
 		flashMessage = dynamicMessage 'trashed', messages
 		if (params.messageSection == 'result') {
 			redirect(controller:'search', action:'result', params:
-					[searchId:params.searchId]
+					[searchId:params.searchId])
 		} else {
 			println "Forwarding to action: $params.messageSection"
 			redirect(controller:params.controller, action:params.messageSection, params:

@@ -1,10 +1,4 @@
-<g:if test="${flash.message}">
-	<div class="flash message">
-		${flash.message}
-		<a class="hider hide-flash">x</a>
-	</div>
-</g:if>
-
+<fsms:flashMessage/>
 <g:hasErrors bean="${contactInstance}">
 	<div class="flash errors">
 		<fsms:renderErrors bean="${contactInstance}" as="list"/>
