@@ -5,12 +5,14 @@
 			<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 				<g:select class="dropdown" name="group-actions" from="${[message(code: 'group.rename'), message(code: 'group.delete')]}"
 							keys="${['rename', 'delete']}"
-							noSelection="${['': g.message(code:'group.moreactions')]}"/>
+							noSelection="${['': g.message(code:'group.moreactions')]}"
+							onchange="selectmenuTools.snapback(this)"/>
 			</g:if>
 			<g:else>
 				<g:select class="dropdown" name="group-actions" from="${[message(code: 'group.rename'), message(code: 'group.edit'), message(code: 'group.delete')]}"
 							keys="${['rename', 'edit', 'delete']}"
-							noSelection="${['': g.message(code:'group.moreactions')]}"/>
+							noSelection="${['': g.message(code:'group.moreactions')]}"
+							onchange="selectmenuTools.snapback(this)"/>
 			</g:else>
 			<fsms:popup class="btn" controller="export" action="contactWizard" params="[groupId:contactsSection?.id, contactsSection:contactsSection.shortName]" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="action.export"/></fsms:popup>
 		</div>
