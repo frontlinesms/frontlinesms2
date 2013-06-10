@@ -59,8 +59,8 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def show() {
-		if(params.flashMessage) {
-			flash.message = params.flashMessage
+		if(flash.message) {
+			flash.message = flash.message
 		}
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
