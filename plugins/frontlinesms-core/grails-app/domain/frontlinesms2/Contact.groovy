@@ -80,10 +80,6 @@ class Contact {
 		if(mobile && mobile[0] == '+') n = '+' + n
 		mobile = n
 	}
-
-	def delete() {
-		Contact.executeUpdate("DELETE FROM Contact WHERE id=:id", [id:this.id])
-	}
 	
 	static findByCustomFields(fields) {
 		def matches = []
