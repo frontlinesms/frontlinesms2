@@ -25,6 +25,7 @@ class Contact {
 	static mapping = {
 		sort name:'asc'
 		customFields cascade:'all', sort:'name'
+		version false
 	}
 
 //> EVENT METHODS
@@ -79,7 +80,6 @@ class Contact {
 		if(mobile && mobile[0] == '+') n = '+' + n
 		mobile = n
 	}
-
 	
 	static findByCustomFields(fields) {
 		def matches = []
