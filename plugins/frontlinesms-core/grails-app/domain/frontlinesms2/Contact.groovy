@@ -25,6 +25,7 @@ class Contact {
 	static mapping = {
 		sort name:'asc'
 		customFields cascade:'all', sort:'name'
+		version false
 	}
 
 //> EVENT METHODS
@@ -80,6 +81,9 @@ class Contact {
 		mobile = n
 	}
 
+	def delete() {
+		Contact.executeUpdate("DELETE FROM Contact WHERE id=:id", [id:this.id])
+	}
 	
 	static findByCustomFields(fields) {
 		def matches = []
