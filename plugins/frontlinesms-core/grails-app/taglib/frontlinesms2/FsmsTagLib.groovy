@@ -164,8 +164,9 @@ class FsmsTagLib {
 					out << g.render(att)
 					if(type == 'sanchez') out << '</script>'
 					rendered = true
-				} catch(GrailsTagException ex) {
-					if(ex.message.startsWith("Template not found")) {
+				} catch(Exception ex) {
+					if((ex instanceof GrailsTagException && ex.message.startsWith('Template not found')) ||
+							(ex instanceof IllegalArgumentException && ex.message == 'Argument [txt] cannot be null or blank')) {
 						// Thanks for not subclassing your exceptions, guys!
 						log.debug "Could not render $plugin:$att.template", ex
 					} else {
