@@ -9,6 +9,7 @@ do/i18n/check_for_bad_date_formats
 do/check_for_metaclass_in_non-unit_tests
 do/functional_test_unsafe_text_calls_checker
 do/functional_test_unflushed_saves_checker
+do/check_for_bad_flash_message_calls
 do/jslint_report
 do/csslint_report
 do/simian_report --xml
