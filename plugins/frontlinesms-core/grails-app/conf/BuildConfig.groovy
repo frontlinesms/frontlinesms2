@@ -74,8 +74,8 @@ grails.project.dependency.resolution = {
 		['mail', 'http', 'smpp'].each { compile camel(it) }
 		compile 'net.frontlinesms.core:serial:1.0.1'
 		compile 'net.frontlinesms.core:at-modem-detector:0.8'
-		runtime 'org.rxtx:rxtx:2.1.7'
-		runtime 'javax.comm:comm:2.0.3'
+		compile 'org.rxtx:rxtx:2.1.7'
+		compile 'javax.comm:comm:2.0.3'
 		compile('org.codehaus.groovy.modules.http-builder:http-builder:0.6') {
 			excludes "commons-logging", "xml-apis", "groovy"
 		}
@@ -83,15 +83,15 @@ grails.project.dependency.resolution = {
 
 	plugins {
 		compile ":hibernate:$grailsVersion"
-		runtime ":database-migration:1.0"
-		runtime ":jquery:1.7.1"
-		runtime ':jquery-ui:1.8.15'
+		compile ":database-migration:1.0"
+		compile ":jquery:1.7.1"
+		compile ':jquery-ui:1.8.15'
 		compile ':resources:1.2'
 
-		runtime ":export:1.1"
-		runtime ":markdown:1.0.0.RC1"
-		runtime ':routing:1.2.2-camel-2.9.4'
-		runtime ":csv:0.3.1"
+		compile ":export:1.1"
+		compile ":markdown:1.0.0.RC1"
+		compile ':routing:1.2.2-camel-2.9.4'
+		compile ":csv:0.3.1"
 		compile ":quartz2:2.1.6.2"
 
 		compile ':platform-core:1.0.RC3-frontlinesms'
