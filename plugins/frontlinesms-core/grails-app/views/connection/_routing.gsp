@@ -1,7 +1,7 @@
 <div id="routing-preferences">
 	<h2><g:message code="routing.title"/></h2>
 	<fsms:info message="routing.info"/>
-	<div class="input"><p class="warning_message"><g:message code="routing.rules.none-selected.warning"/></p></div>
+	<div class="input"><p class="warning_message hidden"><g:message code="routing.rules.none-selected.warning"/></p></div>
 	<g:form name="routing-form" url="[controller:'connection', action:'changeRoutingPreferences']">
 		<g:hiddenField name="routingUseOrder" value=""/>
 		<fsms:checkboxGroup label="routing.rule" title="routing.rules.sending" listClass="sortable checklist no-description">
@@ -31,39 +31,8 @@
 		<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}" />
 	</g:form>
 </div>
-<r:script>
-// FIXME please move this javascript to where it should be
+<g:javascript>
 $(function() {
-	var checkedValues, warningObject, chkboxSelector;
-
-	checkedValues = 0;
-	chkboxSelector = 'input[name^="routeRule"]';
-	warningObject = $(".warning_message");
-
-	$(chkboxSelector).each(function() {
-		if ($(this).is(':checked')) { checkedValues++; }
-	});
-
-	checkboxChecker(checkedValues, warningObject);
-
-	$(chkboxSelector).change(function() {
-		$($(this)).each(function() {
-			if ($(this).is(':checked')) {
-				checkedValues++;
-			} else {
-				checkedValues--;
-			}
-		});
-		checkboxChecker(checkedValues, warningObject);
-	});
-
-	function checkboxChecker(checkedValues, warningObject) {
-		if (checkedValues === 0) {
-			warningObject.show( "drop", { direction: "up" }, "slow");
-		} else {
-			warningObject.hide();
-		}
-	}
+	routing.init();
 });
-</r:script>
-
+</g:javascript>

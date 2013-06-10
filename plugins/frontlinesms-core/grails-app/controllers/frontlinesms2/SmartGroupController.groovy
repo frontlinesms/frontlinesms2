@@ -66,7 +66,7 @@ class SmartGroupController extends ControllerUtils {
 				flashMessage = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
 		else
 			flashMessage =  message(code: 'flash.smartgroup.delete.unable')
-		redirect(controller: "contact")
+		redirect(controller: "contact", action:"show")
 	}
 	
 	private def getRuleText() {
