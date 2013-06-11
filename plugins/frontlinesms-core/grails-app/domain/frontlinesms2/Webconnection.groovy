@@ -145,7 +145,6 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		switch(this.httpMethod) {
 			case 'GET':
 				x.in.headers[Exchange.HTTP_QUERY] = encodedParameters
-				x.in.body = ""
 				break;
 			case 'POST':
 				x.in.body = encodedParameters
