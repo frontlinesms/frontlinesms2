@@ -152,7 +152,10 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def delete() {
-		getCheckedContacts()*.delete()
+		// FIXME looks like someone doesn't know what's going wrong here and clutching at straws
+		Contact.withTransaction { status ->
+			getCheckedContacts()*.delete()
+		}
 		flashMessage = message(code:'default.deleted', args:[message(code:'contact.label')])
 		redirect(action: "show")		
 	}

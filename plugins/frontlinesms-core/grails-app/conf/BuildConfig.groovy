@@ -31,8 +31,6 @@ grails.project.dependency.resolution = {
 		grailsPlugins()
 
 		mavenLocal()
-		mavenRepo "http://192.168.0.200:8081/artifactory/simple/super-repo/"
-		grailsRepo "http://192.168.0.200:8081/artifactory/simple/super-repo/"
 		mavenRepo 'http://dev.frontlinesms.com/m2repo/'
 		mavenCentral()
 
