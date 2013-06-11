@@ -48,8 +48,10 @@ eventTestStart = { testName ->
 	}
 
 	if(currentTestPhase == 'unit') {
-		println 'Adding standard FrontlineSMS metaclass modifications...'
+		println 'Events.eventTestStart(unit) :: Adding standard FrontlineSMS metaclass modifications...'
 		frontlinesms2.MetaClassModifiers.addAll()
+		println 'Events.eventTestStart(unit) :: testing string truncate...'
+		println "Events.eventTestStart(unit) :: ${('a' * 100).truncate(20)}"
 	}
 }
 
