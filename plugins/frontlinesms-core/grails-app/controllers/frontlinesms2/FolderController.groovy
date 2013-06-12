@@ -25,7 +25,7 @@ class FolderController extends ControllerUtils {
 	def save() {
 		def folderInstance = new Folder(params)
 		if (folderInstance.save(flush:true)) {
-			flashMessage = message(code: 'folder.create.success')
+			flash.message = message(code: 'folder.create.success')
 
 			withFormat {
 				json {
@@ -33,7 +33,7 @@ class FolderController extends ControllerUtils {
 				}
 			}
 		} else {
-			flashMessage = message(code: 'folder.create.failed')
+			flash.message = message(code: 'folder.create.failed')
 			withFormat {
 				json {
 					render([ok:false, text:message(code: folderInstance.errors.allErrors[0].codes[7])] as JSON)
@@ -46,7 +46,7 @@ class FolderController extends ControllerUtils {
 		def folderInstance = Folder.get(params.id)
 		folderInstance.name = params.name
 		if (folderInstance.save(flush:true)) {
-			flashMessage = message(code: 'folder.renamed')
+			flash.message = message(code: 'folder.renamed')
 			
 			withFormat {
 				json {
@@ -66,9 +66,9 @@ class FolderController extends ControllerUtils {
 		withFolder { folder ->
 			folder.archive()
 			if(folder.save()) {
-				flashMessage = defaultMessage 'archived'
+				flash.message = defaultMessage 'archived'
 			} else {
-				flashMessage = defaultMessage 'archive.failed'
+				flash.message = defaultMessage 'archive.failed'
 			}
 			redirect controller:"message", action:"inbox"
 		}
@@ -78,9 +78,9 @@ class FolderController extends ControllerUtils {
 		withFolder { folder ->
 			folder.unarchive()
 			if(folder.save()) {
-				flashMessage = defaultMessage 'unarchived'
+				flash.message = defaultMessage 'unarchived'
 			} else {
-				flashMessage = defaultMessage 'unarchive.failed'
+				flash.message = defaultMessage 'unarchive.failed'
 			}
 			redirect controller:"archive", action:"folderList"
 		}
@@ -94,7 +94,7 @@ class FolderController extends ControllerUtils {
 	def delete() {
 		withFolder { folder ->
 			trashService.sendToTrash(folder)
-			flashMessage = defaultMessage 'trashed'
+			flash.message = defaultMessage 'trashed'
 			redirect controller:"message", action:"inbox"
 		}
 	}
@@ -102,9 +102,9 @@ class FolderController extends ControllerUtils {
 	def restore() {
 		withFolder { folder ->
 			if(trashService.restore(folder)) {
-				flashMessage = defaultMessage 'restored'
+				flash.message = defaultMessage 'restored'
 			} else {
-				flashMessage = defaultMessage 'restore.failed', folder.id
+				flash.message = defaultMessage 'restore.failed', folder.id
 			}
 			redirect controller:"message", action:"trash"
 		}

@@ -76,15 +76,15 @@ class ContactController extends ControllerUtils {
 		}
 		def contactGroupInstanceList = contactInstance?.groups ?: []
 		if(params.contactId && !contactInstance) {
-			flashMessage = message(code:'contact.not.found')
+			flash.message = message(code:'contact.not.found')
 			redirect(action: 'show')
 			return false
 		} else if(params.groupId && !contactList.contactsSection) {
-			flashMessage = message(code:'group.not.found')
+			flash.message = message(code:'group.not.found')
 			redirect(action: 'show')
 			return false
 		} else if(params.smartGroupId && !contactList.contactsSection) {
-			flashMessage = message(code:'smartgroup.not.found')
+			flash.message = message(code:'smartgroup.not.found')
 			redirect(action: 'show')
 			return false
 		}
@@ -156,7 +156,7 @@ class ContactController extends ControllerUtils {
 		Contact.withTransaction { status ->
 			getCheckedContacts()*.delete()
 		}
-		flashMessage = message(code:'default.deleted', args:[message(code:'contact.label')])
+		flash.message = message(code:'default.deleted', args:[message(code:'contact.label')])
 		redirect(action: "show")		
 	}
 
@@ -187,11 +187,11 @@ class ContactController extends ControllerUtils {
 		if(params.mobile && params.mobile[0] == '+') mobile = '+' + mobile
 		def existingContact = mobile ? Contact.findByMobileLike(mobile) : null
 		if (existingContact && existingContact != contactInstance) {
-			flashMessage = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
+			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
 			return false
 		}
 		if (contactInstance.save()) {
-			flashMessage = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
+			flash.message = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true

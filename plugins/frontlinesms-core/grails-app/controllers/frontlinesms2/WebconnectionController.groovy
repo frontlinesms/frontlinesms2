@@ -29,7 +29,7 @@ class WebconnectionController extends ActivityController {
 	def retryFailed() {
 		withWebconnection { c ->
 			webconnectionService.retryFailed(c)
-			flashMessage = g.message(code: 'webconnection.failed.retried')
+			flash.message = g.message(code: 'webconnection.failed.retried')
 			redirect action:'show', params:[ownerId:c.id]
 		}
 	}

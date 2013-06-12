@@ -70,7 +70,7 @@ class ImportController extends ControllerUtils {
 			if(failedLines) flMsg += '\n' + g.link(action:'failedContacts',
 							params:[jobId:params.jobId],
 					g.message(code:'import.contact.failed.download'))
-			flashMessage = flMsg
+			flash.message = flMsg
 			
 			redirect controller:'settings', action:'general'
 		} else throw new RuntimeException(message(code:'import.upload.failed'))
@@ -153,7 +153,7 @@ println "The errors are $fm.errors"
 					++failedCount
 				}
 			}
-			flashMessage = message(code: 'import.message.complete', args:[savedCount, failedCount])
+			flash.message = message(code: 'import.message.complete', args:[savedCount, failedCount])
 			redirect controller:'settings', action:'general'
 		}
 	}

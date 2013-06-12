@@ -52,7 +52,7 @@ class SettingsController extends ControllerUtils {
 			appSettingsService.set('auth.basic.username', params.username.bytes.encodeBase64().toString())
 			appSettingsService.set('auth.basic.password', params.password.bytes.encodeBase64().toString())
 		} else if(params.password != params.confirmPassword) {
-			flashMessage = message(code:"auth.basic.password.mismatch")
+			flash.message = message(code:"auth.basic.password.mismatch")
 		}
 		// render general rather than redirecting so that auth is not immediately asked for
 		render view:'general', model:general()

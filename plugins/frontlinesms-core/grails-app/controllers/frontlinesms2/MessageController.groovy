@@ -124,7 +124,7 @@ class MessageController extends ControllerUtils {
 						sentMessageCount: sentMessageCount,
 						sentDispatchCount: sentDispatchCount] << getShowModel()
 		} else {
-			flashMessage = message(code: 'flash.message.activity.found.not')
+			flash.message = message(code: 'flash.message.activity.found.not')
 			redirect(action: 'inbox')
 		}
 	}
@@ -141,7 +141,7 @@ class MessageController extends ControllerUtils {
 						ownerInstance: folderInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
 		} else {
-			flashMessage = message(code: 'flash.message.folder.found.not')
+			flash.message = message(code: 'flash.message.folder.found.not')
 			redirect(action: 'inbox')
 		}
 	}
@@ -158,7 +158,7 @@ class MessageController extends ControllerUtils {
 		messages.each { m ->
 			dispatchCount += messageSendService.retry(m)
 		}
-		flashMessage = message code:'fmessage.retry.success.multiple', args:[dispatchCount]
+		flash.message = message code:'fmessage.retry.success.multiple', args:[dispatchCount]
 		redirect controller:'message', action:'pending'
 	}
 	
@@ -167,7 +167,7 @@ class MessageController extends ControllerUtils {
 		messages.each { m ->
 			trashService.sendToTrash(m)
 		}
-		flashMessage = dynamicMessage 'trashed', messages
+		flash.message = dynamicMessage 'trashed', messages
 		if (params.messageSection == 'result') {
 			redirect(controller:'search', action:'result', params:
 					[searchId:params.searchId])
@@ -185,7 +185,7 @@ class MessageController extends ControllerUtils {
 			messageInstance.archived = true
 			messageInstance.save()
 		}
-		flashMessage = dynamicMessage 'archived', messages
+		flash.message = dynamicMessage 'archived', messages
 		if(params.messageSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		} else {
@@ -201,7 +201,7 @@ class MessageController extends ControllerUtils {
 				messageInstance.save(failOnError: true)
 			}
 		}
-		flashMessage = dynamicMessage 'unarchived', messages
+		flash.message = dynamicMessage 'unarchived', messages
 		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		else
@@ -212,7 +212,7 @@ class MessageController extends ControllerUtils {
 		def activity = params.messageSection == 'activity'? Activity.get(params.ownerId): null
 		def messageList = getCheckedMessages()
 		fmessageService.move(messageList, activity, params)
-		flashMessage = dynamicMessage 'updated', messageList
+		flash.message = dynamicMessage 'updated', messageList
 		render 'OK'
 	}
 
@@ -223,7 +223,7 @@ class MessageController extends ControllerUtils {
 			responseInstance.addToMessages(messageInstance)
 		}
 		responseInstance.poll.save()
-		flashMessage = dynamicMessage 'updated', checkedMessages
+		flash.message = dynamicMessage 'updated', checkedMessages
 		render 'OK'
 	}
 

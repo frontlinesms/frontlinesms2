@@ -54,7 +54,7 @@ class ConnectionController extends ControllerUtils {
 		def connection = Fconnection.get(params.id)
 		if(connection.status != ConnectionStatus.CONNECTING && connection.status != ConnectionStatus.CONNECTED) {
 			connection.delete()
-			flashMessage = message code:'connection.deleted', args:[connection.name]
+			flash.message = message code:'connection.deleted', args:[connection.name]
 			redirect action:'list'
 		}
 		else
@@ -70,7 +70,7 @@ class ConnectionController extends ControllerUtils {
 			if (fconnectionInstance.save()) {
 			withFormat {
 				html {
-					flashMessage = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name'), fconnectionInstance.id]))
+					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name'), fconnectionInstance.id]))
 					redirect(controller:'connection', action: 'enable', id: fconnectionInstance.id)
 				}
 				json {
@@ -80,7 +80,7 @@ class ConnectionController extends ControllerUtils {
 		} else {
 			withFormat {
 				html {
-					flashMessage = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
+					flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
 					redirect(controller:'connection', action:"list")
 				}
 				json {
@@ -183,7 +183,7 @@ class ConnectionController extends ControllerUtils {
 		withFconnection { connection ->
 			def m = messageSendService.createOutgoingMessage(params)
 			messageSendService.send(m, connection)
-			flashMessage = LogEntry.log(message(code:'fconnection.test.message.sent'))
+			flash.message = LogEntry.log(message(code:'fconnection.test.message.sent'))
 			redirect action:'list', id:params.id
 		}
 	}
@@ -201,7 +201,7 @@ class ConnectionController extends ControllerUtils {
 					"fconnection-$fconnectionInstance.id"
 			withFormat {
 				html {
-					flashMessage = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
+					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
 					forward action:'enable', id:fconnectionInstance.id
 				}
 				json {
@@ -211,7 +211,7 @@ class ConnectionController extends ControllerUtils {
 		} else {
 			withFormat {
 				html {
-					flashMessage = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
+					flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
 					redirect(controller:'connection', action:"list")
 				}
 				json {

@@ -23,7 +23,7 @@ class SmartGroupController extends ControllerUtils {
 				addSmartGroupRules(smartGroupInstance)
 			}
 			if(smartGroupInstance.save(flush:true)) {
-				flashMessage =  message(code: 'flash.smartgroup.saved', args: [smartGroupInstance.name])
+				flash.message =  message(code: 'flash.smartgroup.saved', args: [smartGroupInstance.name])
 				redirect(controller: "contact", action: "show", params:[smartGroupId : smartGroupInstance.id])
 			} else {
 				flash.error =  message(code: 'flash.smartgroup.save.failed', args: [smartGroupInstance.errors])
@@ -63,9 +63,9 @@ class SmartGroupController extends ControllerUtils {
 	
 	def delete() {
 		if (SmartGroup.get(params.id)?.delete(flush: true))
-				flashMessage = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
+				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
 		else
-			flashMessage =  message(code: 'flash.smartgroup.delete.unable')
+			flash.message =  message(code: 'flash.smartgroup.delete.unable')
 		redirect(controller: "contact", action:"show")
 	}
 	
