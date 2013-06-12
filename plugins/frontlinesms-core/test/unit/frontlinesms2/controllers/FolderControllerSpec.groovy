@@ -1,4 +1,3 @@
-package frontlinesms2.controllers
 
 import frontlinesms2.*
 
@@ -8,10 +7,6 @@ import spock.lang.*
 @TestFor(FolderController)
 @Mock([Folder, Fmessage])
 class FolderControllerSpec extends Specification {
-	def setup() {
-		controller.metaClass.setFlashMessage = { String msg -> msg }
-	}
-
 	def "can archive a folder"() {
 		given:
 			def folder = new Folder(name: 'rain').save(failOnError:true)

@@ -15,7 +15,6 @@ class MessageControllerSpec extends Specification {
 
 	def setup() {
 		controller.metaClass.message = { Map args -> args.code }
-		controller.metaClass.setFlashMessage = { String msg -> msg }
 		controller.metaClass.getPaginationCount = { -> 10 }
 		Contact.metaClass.static.withNewSession = {closure -> closure.call()}
 		params.messageText = "text"

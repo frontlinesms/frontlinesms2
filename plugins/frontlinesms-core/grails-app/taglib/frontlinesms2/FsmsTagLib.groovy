@@ -12,7 +12,6 @@ class FsmsTagLib {
 	def grailsApplication
 	def i18nUtilService
 	def statusIndicatorService
-	def oneTimeDataService
 
 	def info = { att ->
 		def cssClass = 'info'

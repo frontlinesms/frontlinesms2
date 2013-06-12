@@ -24,7 +24,6 @@ class PollControllerSpec extends Specification {
 			if(delegate.messages) delegate.messages -= m
 			return delegate
 		}
-		controller.metaClass.setFlashMessage = { String msg -> msg }
 	}
 
 	def "create action should provide groups and contacts for recipients list"() {
