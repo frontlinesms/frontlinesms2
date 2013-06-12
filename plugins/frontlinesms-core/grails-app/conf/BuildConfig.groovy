@@ -106,7 +106,7 @@ grails.project.dependency.resolution = {
 		}
 
 		compile ":one-time-data:1.1-frontlinesms-SNAPSHOT"
-		compile ":grails-flashier-messages:0.1-SNAPSHOT"
+		compile ":grails-flashier-messages:1.0-SNAPSHOT"
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0"
 		//runtime ":cached-resources:1.0"
