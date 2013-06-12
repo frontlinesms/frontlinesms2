@@ -35,7 +35,7 @@ class GroupMembership implements Serializable {
 		return contactGroup ? contactGroup.delete(flush: flush) : false
 	}
 
-	static void deleteFor(Contact c, boolean flush=false) {
+	static void deleteFor(Contact c) {
 		executeUpdate("DELETE FROM GroupMembership WHERE contact=:contact", [contact: c])
 	}
 
