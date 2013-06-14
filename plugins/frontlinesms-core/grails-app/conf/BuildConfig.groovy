@@ -105,7 +105,7 @@ grails.project.dependency.resolution = {
 			exclude 'hibernate'
 		}
 
-		compile ":flashier-messages:1.0-SNAPSHOT"
+		compile ":flashier-messages:1.0"
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0"
 		//runtime ":cached-resources:1.0"
