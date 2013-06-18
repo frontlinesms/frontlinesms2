@@ -104,9 +104,9 @@
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
-			<fsms:popup id="btn_delete" popupCall="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
+			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
 				<g:message code="action.delete"/>
-			</fsms:popup>
+			</g:link>
 		</g:if>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">

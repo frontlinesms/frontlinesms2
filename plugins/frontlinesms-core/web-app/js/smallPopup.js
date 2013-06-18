@@ -27,6 +27,7 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 function launchConfirmationPopup(title) {
 	var contactList, contactIdList, message, count;
 	contactList = getCheckedList('contact');
+	console.log("contactList:"+contactList);
 	if (contactList === ',') {
 		contactIdList = $("#contactId").val();
 		message = i18n("smallpopup.delete.prompt", $('#name').val());
@@ -39,8 +40,13 @@ function launchConfirmationPopup(title) {
 		type:'POST',
 		data: { checkedContactList:contactIdList, message:message },
 		url: url_root + 'contact/confirmDelete',
-		success: function(data, textStatus) { launchSmallPopup(title, data, i18n('action.ok')); }
+		beforeSend : function() { showThinking(); },
+		success: function(data, textStatus) {
+			hideThinking();
+			launchSmallPopup(title, data, i18n('action.ok'));
+		}
 	});
+	return false;
 }
 
 function launchEmptyTrashConfirmation() {
