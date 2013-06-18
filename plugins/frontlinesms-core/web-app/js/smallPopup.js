@@ -27,7 +27,6 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 function launchConfirmationPopup(title) {
 	var contactList, contactIdList, message, count;
 	contactList = getCheckedList('contact');
-	console.log("contactList:"+contactList);
 	if (contactList === ',') {
 		contactIdList = $("#contactId").val();
 		message = i18n("smallpopup.delete.prompt", $('#name').val());
