@@ -49,7 +49,7 @@ class NexmoFconnection extends Fconnection implements FrontlineApi {
 			List getRouteDefinitions() {
 				return [from("seda:out-${NexmoFconnection.this.id}")
 						.onException(AuthenticationException, InvalidApiIdException, InsufficientCreditException)
-									.handled(true)
+									.handled(false)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
 						.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(NexmoFconnection.this.id.toString()))
