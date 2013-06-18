@@ -11,6 +11,6 @@ class SystemNotificationService {
 	private def getOrCreate(text) {
 		def notification = SystemNotification.findOrCreateByText(text)
 		notification.read = false
-		notification.save(failOnError:true, flush:true)
+		notification.save(flush:true)
 	}
 }
