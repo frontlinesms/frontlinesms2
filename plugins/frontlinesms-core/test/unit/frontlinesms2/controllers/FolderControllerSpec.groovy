@@ -1,4 +1,4 @@
-
+package frontlinesms2.controllers
 import frontlinesms2.*
 
 import grails.test.mixin.*
