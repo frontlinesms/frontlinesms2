@@ -289,7 +289,11 @@ var mediumPopup = (function() {
 			type:'POST',
 			data: {recipients: src, messageText: text, configureTabs: configureTabs},
 			url: url_root + 'quickMessage/create',
-			success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('action.send')); }
+			beforeSend : function() { showThinking(); },
+			success: function(data, textStatus){
+				hideThinking();
+				launchMediumWizard(messageType, data, i18n('action.send'));
+			}
 		});
 	};
 
