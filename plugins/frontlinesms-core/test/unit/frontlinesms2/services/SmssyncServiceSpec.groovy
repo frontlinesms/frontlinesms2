@@ -44,6 +44,7 @@ class SmssyncServiceSpec extends Specification {
 
 	def setupDefaultConnection(boolean sendEnabled=true) {
 		connection.receiveEnabled >> true
+		connection.enabled >> true
 		if(sendEnabled) {
 			connection.sendEnabled >> true
 			mockDispatchQueue(connection, [1, 2, 3])
@@ -84,6 +85,7 @@ class SmssyncServiceSpec extends Specification {
 			connection.receiveEnabled >> receiveEnabled
 			connection.sendEnabled >> sendEnabled
 			connection.secret >> secret
+			connection.enabled >> true
 			controller.params.secret = secret
 			if(sendMode) controller.params.task = 'send'
 			else {
@@ -183,6 +185,13 @@ class SmssyncServiceSpec extends Specification {
 			'123'| null | true
 			'123'| ''   | false
 			'123'| 'hi' | false
+	}
+
+	def "generateApiResponse for disabled connection should respond with connection not enabled error"() {
+		when:
+			connection.receiveEnabled >> true
+		then:
+			service.generateApiResponse(connection, controller) == [payload:[success:'false', error:'Connection not enabled']]
 	}
 
 	private def testMessageList(times) {
