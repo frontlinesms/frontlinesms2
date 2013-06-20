@@ -116,7 +116,7 @@ class CoreBootStrap {
 	
 	private def createWelcomeNote() {
 		if(!SystemNotification.count()) {
-			systemNotificationService.createSystemNotification('frontlinesms.welcome')
+			systemNotificationService.create(code:'frontlinesms.welcome')
 		}
 	}
 	

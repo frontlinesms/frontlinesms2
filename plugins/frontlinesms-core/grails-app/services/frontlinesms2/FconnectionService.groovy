@@ -31,7 +31,7 @@ class FconnectionService {
 			connectingIds << c.id
 			def routes = c.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
-			systemNotificationService.createSystemNotification('connection.route.successNotification', [c?.name?: c?.id], [connection:c])
+			systemNotificationService.create(code:'connection.route.successNotification', args:[c?.name?: c?.id], kwargs:[connection:c])
 			logService.handleRouteCreated(c)
 		} catch(FailedToCreateProducerException ex) {
 			logFail(c, ex.cause)
@@ -46,7 +46,7 @@ class FconnectionService {
 
 	def destroyRoutes(Fconnection c) {
 		destroyRoutes(c.id as long)
-		systemNotificationService.createSystemNotification('connection.route.disableNotification', [c?.name?: c?.id], [connection:c])
+		systemNotificationService.create(code:'connection.route.disableNotification', args:[c?.name?: c?.id], kwargs:[connection:c])
 	}
 
 	def destroyRoutes(long id) {
@@ -100,7 +100,7 @@ class FconnectionService {
 			log.warn("Caught exception for route: $ex.fromRouteId", caughtException)
 			def routeId = (ex.fromRouteId =~ /(?:(?:in)|(?:out))-(?:[a-z]+-)?(\d+)/)[0][1]
 			println "FconnectionService.handleDisconnection() : Looking to stop route: $routeId"
-			systemNotificationService.createSystemNotification('connection.route.exception', [routeId], [exception:caughtException])
+			systemNotificationService.create(code:'connection.route.exception', args:[routeId], kwargs:[exception:caughtException])
 			RouteDestroyJob.triggerNow([routeId:routeId as long])
 		} catch(Exception e) {
 			e.printStackTrace()
@@ -123,7 +123,7 @@ class FconnectionService {
 		ex.printStackTrace()
 		log.warn("Error creating routes to fconnection with id $c?.id", ex)
 		logService.handleRouteCreationFailed(c)
-		systemNotificationService.createSystemNotification('connection.route.failNotification', [c?.id, c?.name?:c?.id], [exception: ex, connection: c])
+		systemNotificationService.create(code:'connection.route.failNotification', args:[c?.id, c?.name?:c?.id], kwargs:[exception: ex, connection: c])
 	}
 
 	private def isFailed(Fconnection c) {

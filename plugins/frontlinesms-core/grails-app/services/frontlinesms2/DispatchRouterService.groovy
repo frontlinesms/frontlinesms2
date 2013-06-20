@@ -10,7 +10,7 @@ class DispatchRouterService {
 	static final String RULE_PREFIX = "fconnection-"
 	def appSettingsService
 	def camelContext
-	def i18nUtilService
+	def systemNotificationService
 
 	int counter = -1
 
@@ -96,19 +96,12 @@ class DispatchRouterService {
 
 	def handleNoRoutes(Exchange x) {
 		println "DispatchRouterService.handleNoRoutes() : NoRouteAvailableException handling..."
-		createSystemNotification('no-available-route')
+		systemNotificationService.create(code:"routing.notification.no-available-route")
 		x.out.body = x.in.body
 		x.out.headers = x.in.headers
 		println "DispatchRouterService.handleNoRoutes() : EXIT"
 	}
 
-	private def createSystemNotification(def code) {
-		def text = i18nUtilService.getMessage(code:"routing.notification.$code")
-		def notification = SystemNotification.findOrCreateWhere(text:text)
-		notification.read = false
-		notification.save()
-	}
-	
 	private Dispatch updateDispatch(Exchange x, s) {
 		def id = x.in.getHeader('frontlinesms.dispatch.id')
 		Dispatch d

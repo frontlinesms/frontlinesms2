@@ -147,7 +147,7 @@ class FconnectionServiceSpec extends Specification {
 		when:
 			service.handleDisconnection(exchange)
 		then:
-			1 * systemNotificationService.createSystemNotification(_,_,_)
+			1 * systemNotificationService.create(_ as Map)
 			jobRouteId == connectionId
 		where:
 			routeId          | connectionId
