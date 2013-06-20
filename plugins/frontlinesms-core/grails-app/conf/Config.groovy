@@ -123,3 +123,5 @@ jqueryValidation.cdn = false  // false or "microsoft"
 jqueryValidation.additionalMethods = false
 
 frontlinesms.plugins=['frontlinesms-core']
+frontlinesms.blockedNotificationList = []
+
