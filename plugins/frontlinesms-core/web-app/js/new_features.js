@@ -19,7 +19,12 @@ var newFeatures = (function() {
 	showPopup = function() {
 		jQuery.ajax({
 			url:url_root + "help/newfeatures",
-			success:_doPopupDisplay });
+			beforeSend : function() { showThinking(); },
+			success: function() {
+				hideThinking();
+				_doPopupDisplay;
+			}
+		});
 	};
 	_handlePopupClose = function(data) {
 		$("#modalBox").remove();
