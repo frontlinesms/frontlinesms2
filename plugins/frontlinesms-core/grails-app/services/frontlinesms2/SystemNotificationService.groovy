@@ -17,16 +17,13 @@ class SystemNotificationService {
 	}
 
 	private def getOrCreate(text, topic=null) {
-		def notification
+		def notification = SystemNotification.findOrCreateByText(text)
 		if(topic) {
 			SystemNotification.findAllByTopic(topic).each {
 				it.read = true
 				it.save()
 			}
-			notification = new SystemNotification(topic:topic)
-			notification.text = text
-		} else {
-			notification = SystemNotification.findOrCreateByText(text)
+			notification.topic = topic
 		}
 		notification.read = false
 		notification.save(flush:true)
