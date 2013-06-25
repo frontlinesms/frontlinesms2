@@ -7,7 +7,7 @@
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && messageInstanceTotal != 0}">
 		<li class="trash">
-			<select class="dropdown" id="trash-actions" onchange="launchEmptyTrashConfirmation();">
+			<select class="dropdown" id="trash-actions" onchange="launchEmptyTrashConfirmation(); selectmenuTools.snapback(this)">
 				<option value="na" class="na"><g:message code="fmessage.trash.actions"/></option>
 				<option id="empty-trash" value="empty-trash" ><g:message code="fmessage.trash.empty"/></option>
 			</select>

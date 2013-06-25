@@ -53,7 +53,11 @@ function launchEmptyTrashConfirmation() {
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/confirmEmptyTrash',
-		success: function(data, textStatus){ launchSmallPopup(i18n("smallpopup.empty.trash.prompt"), data, i18n('action.ok')); }
+		beforeSend : function() { showThinking(); },
+		success: function(data, textStatus){
+			hideThinking();
+			launchSmallPopup(i18n("smallpopup.empty.trash.prompt"), data, i18n('action.ok'));
+		}
 	});
 }
 
