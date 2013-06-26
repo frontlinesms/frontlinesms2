@@ -1,3 +1,4 @@
+package frontlinesms2.controllers
 
 import frontlinesms2.*
 
