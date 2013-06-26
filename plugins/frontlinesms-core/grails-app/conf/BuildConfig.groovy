@@ -70,7 +70,7 @@ grails.project.dependency.resolution = {
 	}
 
 	plugins {
-		test ':frontlinesms-grails-test:0.1-SNAPSHOT'
+		test ':frontlinesms-grails-test:0.1'
 
 		compile ":hibernate:$grailsVersion"
 		compile ":database-migration:1.0"
