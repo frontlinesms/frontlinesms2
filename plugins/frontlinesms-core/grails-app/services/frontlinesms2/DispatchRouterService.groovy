@@ -13,7 +13,6 @@ class DispatchRouterService {
 	def systemNotificationService
 
 	int counter = -1
-
 	/**
 	 * Slip should return the list of ______ to forward to, or <code>null</code> if
 	 * we've done with it.
@@ -52,7 +51,14 @@ class DispatchRouterService {
 						routeId = getCamelRouteId(Fconnection.get(route))
 					}
 					log "Route Id selected: $routeId"
-					if(routeId) break
+					if(routeId) {
+						if(exchange.in.body instanceof Dispatch) {
+							def dispatch = exchange.in.body
+							dispatch.fconnectionId = route as long
+							dispatch.save(failOnError:true, flush:true)
+						}
+						break
+					}
 				}
 			}
 
