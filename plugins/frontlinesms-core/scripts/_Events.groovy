@@ -30,7 +30,6 @@ eventDefaultStart = {
 String currentTestPhase
 eventTestPhaseStart = { phaseName ->
 	currentTestPhase = phaseName
-	junitReportStyleDir = "test/conf"
 }
 
 eventTestStart = { testName ->

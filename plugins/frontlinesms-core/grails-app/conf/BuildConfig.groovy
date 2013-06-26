@@ -29,8 +29,8 @@ grails.project.dependency.resolution = {
 		grailsPlugins()
 
 		mavenLocal()
-		mavenRepo 'http://dev.frontlinesms.com/m2repo/'
 		mavenCentral()
+		mavenRepo 'http://dev.frontlinesms.com/m2repo/'
 
 		grailsCentral()
 
@@ -70,7 +70,7 @@ grails.project.dependency.resolution = {
 	}
 
 	plugins {
-		test ':frontlinesms-grails-test:0.1'
+		test ':frontlinesms-grails-test:0.3-SNAPSHOT'
 
 		compile ":hibernate:$grailsVersion"
 		compile ":database-migration:1.0"
