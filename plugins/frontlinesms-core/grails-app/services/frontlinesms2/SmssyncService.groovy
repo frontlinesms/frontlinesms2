@@ -60,6 +60,7 @@ class SmssyncService {
 	}
 
 	private def handleIncoming(connection, params) {
+		if(!connection.enabled) throw new FrontlineApiException("Connection not enabled")
 		if(!connection.receiveEnabled) throw new FrontlineApiException("Receive not enabled for this connection")
 
 		if(!params.from || params.message==null) throw new FrontlineApiException('Missing one or both of `from` and `message` parameters');

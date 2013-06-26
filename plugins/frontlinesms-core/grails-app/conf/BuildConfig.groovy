@@ -86,9 +86,10 @@ grails.project.dependency.resolution = {
 
 		compile ':platform-core:1.0.RC3-frontlinesms'
 
-		compile ":flashier-messages:1.0-SNAPSHOT", {
+		compile ":flashier-messages:1.0", {
 			excludes 'spock'
 		}
+
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0"
 		//runtime ":cached-resources:1.0"

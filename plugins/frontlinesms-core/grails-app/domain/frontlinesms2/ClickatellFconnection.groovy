@@ -43,7 +43,7 @@ class ClickatellFconnection extends Fconnection {
 			List getRouteDefinitions() {
 				return [from("seda:out-${ClickatellFconnection.this.id}")
 						.onException(AuthenticationException, InvalidApiIdException, InsufficientCreditException)
-									.handled(true)
+									.handled(false)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
 						.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(ClickatellFconnection.this.id.toString()))

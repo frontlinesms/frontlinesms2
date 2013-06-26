@@ -32,8 +32,8 @@ class DispatchRouterServiceSpec extends Specification {
 			return d
 		}
 
-		service.i18nUtilService = Mock(I18nUtilService)
-		service.i18nUtilService.getMessage(_) >> 'blah blah blah'
+		service.systemNotificationService= Mock(SystemNotificationService)
+		service.systemNotificationService.create(_ as Map) >> 'blah blah blah'
 
 		appSettingsService = Mock(AppSettingsService)
 		service.appSettingsService = appSettingsService

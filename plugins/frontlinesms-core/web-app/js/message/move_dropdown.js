@@ -46,16 +46,20 @@ function moveAction() {
 function launchCategorisePopup(moveTargetType,messagesToMove,moveTargetId){
 	$.ajax({
 		type:'POST',
+		beforeSend : function() { showThinking(); },
 		url: url_root + 'subscription/categoriseSubscriptionPopup',
 		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
-		success: function(data) { launchSmallPopup(i18n('subscription.categorise.title'), data, i18n('wizard.ok'), function() {
-			var action, action_url, form;
-			form = $("form#categorize_subscription");
-			action = form.find("input[type=radio]:checked").val();
-			action_url = url_root + "subscription/" + action;
-			form.attr('action', action_url);
-			form.submit();
-		}); }
+		success: function(data) {
+			hideThinking();
+			launchSmallPopup(i18n('subscription.categorise.title'), data, i18n('wizard.ok'), function() {
+				var action, action_url, form;
+				form = $("form#categorize_subscription");
+				action = form.find("input[type=radio]:checked").val();
+				action_url = url_root + "subscription/" + action;
+				form.attr('action', action_url);
+				form.submit();
+			});
+		}
 	});
 }
 

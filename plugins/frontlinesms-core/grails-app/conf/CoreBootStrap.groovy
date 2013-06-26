@@ -30,6 +30,7 @@ class CoreBootStrap {
 	def camelContext
 	def messageSource
 	def quartzScheduler
+	def systemNotificationService
 
 	def bootstrapData = System.properties['frontlinesms2.bootstrap.data']? Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']):
 			Environment.current == Environment.DEVELOPMENT
@@ -115,7 +116,7 @@ class CoreBootStrap {
 	
 	private def createWelcomeNote() {
 		if(!SystemNotification.count()) {
-			new SystemNotification(text: messageSource.getMessage('frontlinesms.welcome', null, Locale.getDefault())).save(failOnError:true)
+			systemNotificationService.create(code:'frontlinesms.welcome')
 		}
 	}
 	
