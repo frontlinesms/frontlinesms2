@@ -21,7 +21,8 @@ class Fconnection {
 			IntelliSmsFconnection,
 			NexmoFconnection,
 			SmssyncFconnection,
-			SmppFconnection]
+			SmppFconnection,
+			ShujaaSmsFconnection]
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
