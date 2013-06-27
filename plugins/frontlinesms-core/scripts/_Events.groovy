@@ -1,32 +1,6 @@
 import groovy.sql.Sql
 import grails.util.Environment
 
-eventDefaultStart = {
-	createUnitTest = { Map args = [:] ->
-		createSpec('unit', args)
-	}
-	createIntegrationTest = { Map args = [:] ->
-		createSpec('integration', args)
-	}
-	createSpec = { String type, Map args ->
-		def superClass
-		// map test superclass to Spock equivalent
-		switch (args["superClass"]) {
-			case "Controller${type.capitalize()}TestCase":
-				superClass = "ControllerSpec"
-				break
-			case "TagLibUnitTestCase":
-				superClass = "TagLibSpec"
-				break
-		// TODO add a case for Camel Route integration test case
-			default:
-				superClass = "${type.capitalize()}Spec"
-		}
-		createArtifact name: args["name"], suffix: "${args['suffix']}Spec", type: "Spec", path: "test/${type}", superClass: superClass
-	}
-
-}
-
 String currentTestPhase
 eventTestPhaseStart = { phaseName ->
 	currentTestPhase = phaseName
@@ -44,13 +18,6 @@ eventTestStart = { testName ->
 		sql.execute "SET REFERENTIAL_INTEGRITY FALSE"
 		sql.eachRow("SHOW TABLES") { table -> sql.execute('DELETE FROM ' + table.TABLE_NAME) } 
 		sql.execute "SET REFERENTIAL_INTEGRITY TRUE"
-	}
-
-	if(currentTestPhase == 'unit') {
-		println 'Events.eventTestStart(unit) :: Adding standard FrontlineSMS metaclass modifications...'
-		frontlinesms2.MetaClassModifiers.addAll()
-		println 'Events.eventTestStart(unit) :: testing string truncate...'
-		println "Events.eventTestStart(unit) :: ${('a' * 100).truncate(20)}"
 	}
 }
 
