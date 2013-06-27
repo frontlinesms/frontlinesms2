@@ -1,25 +1,4 @@
-import groovy.sql.Sql
 import grails.util.Environment
-
-String currentTestPhase
-eventTestPhaseStart = { phaseName ->
-	currentTestPhase = phaseName
-}
-
-eventTestStart = { testName ->
-	if (currentTestPhase == 'functional' || currentTestPhase == 'integration') {
-		// Need to generate appInstanceId here as StaticApplicationInstance may not be
-		// on the classpath at this point (i.e. after `grails clean`)
-		def appInstanceId = System.properties['frontlinesms.appInstanceId']
-		if(!appInstanceId) appInstanceId = "${new Random().nextLong()}"
-		System.properties['frontlinesms.appInstanceId'] = appInstanceId
-
-		def sql = Sql.newInstance("jdbc:h2:mem:testDb$appInstanceId", 'sa', '', 'org.h2.Driver')
-		sql.execute "SET REFERENTIAL_INTEGRITY FALSE"
-		sql.eachRow("SHOW TABLES") { table -> sql.execute('DELETE FROM ' + table.TABLE_NAME) } 
-		sql.execute "SET REFERENTIAL_INTEGRITY TRUE"
-	}
-}
 
 def getApplicationProperty(key) {
 	def MATCHER = key.replace('.', /\./) + /=(.*)/
