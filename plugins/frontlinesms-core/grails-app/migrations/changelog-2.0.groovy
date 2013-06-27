@@ -317,4 +317,25 @@ databaseChangeLog = {
 			}
 		}
 	}
+	
+	changeSet(author: "geoffrey (generated)", id: "11355230052153-40") {
+		createTable(tableName: "shujaa_sms_fconnection") {
+			column(autoIncrement: "true", name: "id", type: "bigint") {
+				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "shujaa_sms_fconnectionPK")
+			}
+
+			column(name: "username", type: "varchar(255)")
+
+			column(name: "shujaa_password", type: "varchar(255)")
+			
+			column(name: "account", type: "varchar(255)")
+			
+			column(name: "source", type: "varchar(255)")
+			
+			column(name: "network", type: "varchar(255)")			
+			
+			
+		}
+	}
+	
 }
