@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
-		<r:script library="jquery" plugin="jquery"/>
-		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
 		<r:script>
 			function initializePopup() {
 				$("#submit").attr('disabled', 'disabled');
