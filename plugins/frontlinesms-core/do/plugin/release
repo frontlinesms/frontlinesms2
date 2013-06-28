@@ -51,6 +51,7 @@ function git_commit_all_changes {
 	git commit --all -m"$_commitMessage"
 }
 
+orphanBranchName=
 if $orphanBranch; then
 	orphanBranchName="release-${tagPrefix}${releaseVersion}"
 	echo "# Creating new orphaned branch: $orphanBranchName"
