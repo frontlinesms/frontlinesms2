@@ -1,6 +1,19 @@
 #!/bin/bash
 set -e
 
+tagPrefix="v"
+orphanBranch=false
+while [[ $1 == "--"* ]]; do
+	if [[ $1 == "--orphan" ]]; then
+		orphanBranch=true
+	fi
+	if [[ $1 == "--tag-prefix" ]]; then
+		shift
+		tagPrefix=$1
+	fi
+	shift
+done
+
 previousVersion=$(groovy -e "$(grep version *GrailsPlugin.groovy); println version")
 echo "# Got old plugin version as: $previousVersion"
 
@@ -38,12 +51,25 @@ function git_commit_all_changes {
 	git commit --all -m"$_commitMessage"
 }
 
+if $orphanBranch; then
+	orphanBranchName="release-${tagPrefix}{$releaseVersion}"
+	echo "# Creating new orphaned branch: $orphanBranchName"
+	git checkout --orphan $orphanBranchName
+	git commit
+fi
+
 grails_change_plugin_version $previousVersion $releaseVersion
 ${0%/*}/../build_deploy_plugin --m2-deploy # TODO should support binary here too
 git_commit_all_changes "[RELEASE: $releaseVersion]"
-git tag "v$releaseVersion"
+git tag "${tagPrefix}${releaseVersion}"
 grails_change_plugin_version $releaseVersion $nextVersion
 git_commit_all_changes "[POST-RELEASE: $releaseVersion -> $nextVersion]"
-git push
+if $orphanBranch; then
+	echo "# Pushing changes to remote for orhan branch: $orhpanBranchName"
+	git push origin $orphanBranchName
+	git checkout master
+else
+	git push
+fi
 git push --tags
 
