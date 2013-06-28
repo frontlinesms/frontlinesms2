@@ -52,10 +52,10 @@ function git_commit_all_changes {
 }
 
 if $orphanBranch; then
-	orphanBranchName="release-${tagPrefix}{$releaseVersion}"
+	orphanBranchName="release-${tagPrefix}${releaseVersion}"
 	echo "# Creating new orphaned branch: $orphanBranchName"
 	git checkout --orphan $orphanBranchName
-	git commit
+	git commit -m"Branch for release of ${tagPrefix}${releaseVersion}"
 fi
 
 grails_change_plugin_version $previousVersion $releaseVersion
