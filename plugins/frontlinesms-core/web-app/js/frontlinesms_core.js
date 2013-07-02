@@ -89,8 +89,12 @@ function showThinking() {
 	jQuery('#thinking').fadeIn();
 }
 
-function hideThinking() {
+function fadeThinking() {
 	jQuery('#thinking').fadeOut();
+}
+
+function hideThinking() {
+	jQuery('#thinking').hide();
 }
 
 function insertAtCaret(areaId, text) {

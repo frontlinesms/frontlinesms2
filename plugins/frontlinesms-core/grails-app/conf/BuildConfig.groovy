@@ -14,8 +14,6 @@ environments {
 }
 
 grails.project.dependency.resolution = {
-	def gebVersion = '0.7.2'
-
 	// inherit Grails' default dependencies
 	inherits("global") {
 		// uncomment to disable ehcache
@@ -31,8 +29,8 @@ grails.project.dependency.resolution = {
 		grailsPlugins()
 
 		mavenLocal()
-		mavenRepo 'http://dev.frontlinesms.com/m2repo/'
 		mavenCentral()
+		mavenRepo 'http://dev.frontlinesms.com/m2repo/'
 
 		grailsCentral()
 
@@ -45,10 +43,6 @@ grails.project.dependency.resolution = {
 	}
 
 	dependencies {
-		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
-		// runtime 'mysql:mysql-connector-java:5.1.16'
-		def seleniumVersion = '2.32.0'
 		def camel = {
 			def camelVersion = "2.9.4"
 			"org.apache.camel:camel-$it:$camelVersion"
@@ -56,10 +50,6 @@ grails.project.dependency.resolution = {
 
 		// TEST
 		test camel('test')
-		test "org.codehaus.geb:geb-spock:$gebVersion"
-		test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
-		test "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
-		test "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
 
 		// TODO this should be included in compile for TEST and DEV scopes, and excluded for PRODUCTION
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
@@ -80,6 +70,8 @@ grails.project.dependency.resolution = {
 	}
 
 	plugins {
+		test ':frontlinesms-grails-test:0.5'
+
 		compile ":hibernate:$grailsVersion"
 		compile ":database-migration:1.0"
 		compile ":jquery:1.7.1"
@@ -94,18 +86,10 @@ grails.project.dependency.resolution = {
 
 		compile ':platform-core:1.0.RC3-frontlinesms'
 
-		test ":code-coverage:1.2.6"
-		test ":codenarc:0.18.1"
-		test ":spock:0.6"
-		test ":geb:$gebVersion"
-
-		test ':build-test-data:2.0.5'
-		test ':remote-control:1.4'
-		compile(':functional-test-development:0.9.3') {
-			exclude 'hibernate'
+		compile ":flashier-messages:1.0", {
+			excludes 'spock'
 		}
 
-		compile ":flashier-messages:1.0"
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0"
 		//runtime ":cached-resources:1.0"
