@@ -61,7 +61,7 @@ grails.project.dependency.resolution = {
 		}
 		['mail', 'http', 'smpp'].each { compile camel(it) }
 		compile 'net.frontlinesms.core:serial:1.0.1'
-		compile 'net.frontlinesms.core:at-modem-detector:0.8'
+		compile 'net.frontlinesms.core:at-modem-detector:0.10'
 		compile 'org.rxtx:rxtx:2.1.7'
 		compile 'javax.comm:comm:2.0.3'
 		compile('org.codehaus.groovy.modules.http-builder:http-builder:0.6') {
