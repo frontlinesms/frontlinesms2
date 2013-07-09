@@ -6,6 +6,7 @@ class Dispatch {
 	DispatchStatus status
 	Date dateSent
 	def expressionProcessorService
+	long fconnectionId
 	
 	boolean isDeleted
 
@@ -15,6 +16,7 @@ class Dispatch {
 	
 	static constraints = {
 		dst(nullable:false)
+		fconnectionId(nullable:true)
 		status(nullable: false, validator: { val, obj ->
 				if(val == DispatchStatus.SENT)
 					obj.dateSent != null
