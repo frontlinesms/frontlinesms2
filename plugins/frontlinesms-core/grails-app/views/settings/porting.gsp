@@ -36,33 +36,30 @@
 </html>
 <r:script>
 	$("#exportSubmit").click(function(e){
-		var exportData = $("input[name=exportData]:checked");
+		var exportData = $("input[name=exportData]:checked"),
+			ajaxData, urlTarget;
 		switch(exportData.val()) {
 			case "allcontacts":
-				$.ajax({
-					type: "POST",
-					url : url_root + "export/contactWizard",
-					beforeSend : function() { showThinking(); },
-					success : function(data){
-						hideThinking();
-						launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'));
-					}
-				});
+				urlTarget = "contactWizard";
+				popupTitle = "smallpopup.contact.export.title";
 				break;
 			case "inboxmessages":
-				$.ajax({
-					type: "POST",
-					url : url_root +"export/messageWizard",
-					beforeSend : function() { showThinking(); },
-					data : { 'messageSection':'inbox' },
-					success : function(data){
-						hideThinking();
-						launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("action.export"));
-					}
-				});
-
+				urlTarget = "messageWizard";
+				ajaxData = { messageSection:"inbox" };
+				popupTitle = "smallpopup.fmessage.export.title";
 				break;
-			default:
+		}
+		if(urlTarget) {
+			$.ajax({
+				type: "POST",
+				url: url_root + "export/" + urlTarget,
+				beforeSend : function() { showThinking(); },
+				data: ajaxData,
+				success: function(data){
+					hideThinking();
+					launchSmallPopup(i18n(popupTitle), data, i18n("action.export"));
+				}
+			});
 		}
 		e.preventDefault();
 	});
