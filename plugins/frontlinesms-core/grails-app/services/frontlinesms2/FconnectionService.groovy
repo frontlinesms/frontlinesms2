@@ -13,6 +13,7 @@ class FconnectionService {
 	def logService
 	def systemNotificationService
 	def connectingIds = [].asSynchronized()
+	def messageSource
 
 	def createRoutes(Fconnection c) {
 		println "FconnectionService.createRoutes() :: ENTRY :: $c"
@@ -109,7 +110,9 @@ class FconnectionService {
 
 	def enableFconnection(Fconnection c) {
 		c.enabled = true
-		c.save(failOnError:true)
+		if(!c.save(failOnError:true)) {
+			generateErrorSystemNotifications(c)
+		}
 		createRoutes(c)
 	}
 
@@ -117,6 +120,14 @@ class FconnectionService {
 		destroyRoutes(c)
 		c.enabled = false
 		c.save(failOnError:true)
+	}
+
+	private def generateErrorSystemNotifications(connectionInstance){
+		def notificationText
+		connectionInstance.errors.allErrors.collect { error ->
+			notificationText = messageSource(error, null)
+			systemNotificationService.create(code:'connection.error.onsave', args:[notificationText])
+		}.join('\n')
 	}
 
 	private def logFail(c, ex) {
