@@ -110,7 +110,7 @@ class FconnectionService {
 
 	def enableFconnection(Fconnection c) {
 		c.enabled = true
-		if(!c.save(failOnError:true)) {
+		if(!c.save()) {
 			generateErrorSystemNotifications(c)
 		}
 		createRoutes(c)
@@ -125,7 +125,7 @@ class FconnectionService {
 	private def generateErrorSystemNotifications(connectionInstance){
 		def notificationText
 		connectionInstance.errors.allErrors.collect { error ->
-			notificationText = messageSource(error, null)
+			notificationText = messageSource.getMessage(error, null)
 			systemNotificationService.create(code:'connection.error.onsave', args:[notificationText])
 		}.join('\n')
 	}
