@@ -10,3 +10,5 @@ fieldset.table { display:table; }
 #connection-header > li { display:inline; }
 #connection-header > li:last-child { display:inline; position:absolute;	right:17px; }
 #manage-connection > a:hover { text-decoration:underline; }
+
+#connectionForm div.info { margin-top:0px; }
