@@ -127,5 +127,10 @@ modules = {
 			resource id: 'theme', url:[dir:'jquery-ui', file:'themes/medium/jquery-ui-1.8.11.custom.css']
 		}
 	}
+
+	'internet-explorer-css' {
+		resource url:[dir:'css', file:'ie7.css'], bundle:'ie7'
+		resource url:[dir:'css', file:'ie8.css'], bundle:'ie8'
+	}
 }
 
