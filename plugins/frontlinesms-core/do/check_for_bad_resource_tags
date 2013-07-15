@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "# Checking for calls to g.resource instead of r.resource..."
+if grep -Er '(g:|g\.|\{|<)resource' grails-app/views/; then
+	echo "# Bad calls to g.resource found.  Please change these to use r.resource."
+	exit 1
+else
+	echo "# No bad calls to g.resource found."
+	exit 0
+fi
+
