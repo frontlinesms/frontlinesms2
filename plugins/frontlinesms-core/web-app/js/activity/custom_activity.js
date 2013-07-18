@@ -13,8 +13,8 @@ var custom_activity = (function() {
 	initSteps = function() {
 		var titles, widths, maxWidth;
 		$(CONFIG_CONTAINER + " .step > .remove-command").click(removeStep);
-		selectmenuTools.initAll(CONFIG_CONTAINER + " select");
-		selectmenuTools.initAll("#custom-activity-actions-container select");
+		selectmenuTools.initAll(CONFIG_CONTAINER + " select:not([name=recipients])");
+		selectmenuTools.initAll("#custom-activity-actions-container select:not([name=recipients])");
 		magicwand.init($(CONFIG_CONTAINER + " select[id^='magicwand-select']"));
 
 		// calculate the length of the longest title here
@@ -181,7 +181,7 @@ var customActivityDialog = (function(){
 		} else if (sortingType === "global") {
 			keywords = i18n("autoreply.blank.keyword");
 		} else {
-			alert("please define i18n message for this sorting option"); // FIXME
+			keywords = i18n("customactivity.manual.sorting");
 		}
 		$("#keyword-confirm").html("<p>" + keywords  + "</p>");
 	};
