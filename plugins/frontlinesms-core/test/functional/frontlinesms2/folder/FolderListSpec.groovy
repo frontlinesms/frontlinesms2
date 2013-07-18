@@ -7,7 +7,6 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class FolderListSpec extends FolderBaseSpec {
-	def trashService = new TrashService()
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 
 	def 'folder message list is displayed'() {
@@ -15,9 +14,11 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, 'Work'
 		then:
-			messageList.sources.containsAll(['Jane', 'Max'])
+			messageList.messageCount() == 2
+			messageList.messageSource(0) == 'Jane'
+			messageList.messageSource(1) == 'Max'
 	}
 
 	def 'no message is selected when a folder is first loaded'() {
@@ -25,7 +26,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, 'Work'
 		then:
 			singleMessageDetails.noneSelected
 	}
@@ -34,20 +35,19 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 			createTestMessages()
-			def folder = Folder.findByName("Work")
 		when:
-			to PageMessageFolder, folder
+			to PageMessageFolder, 'Work'
 		then:
-			messageList.messages[1].source == 'Max'
-			messageList.messages[1].text == 'I will be late'
-			DATE_FORMAT.format(messageList.messages[1].date) ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messageSource(1) == 'Max'
+			messageList.messageText(1) == 'I will be late'
+			messageList.messageDate(1)
 	}
 
 	def 'selected folder is highlighted'() {
 		given:
 			createTestFolders()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, 'Work'
 		then:
 			bodyMenu.selected == 'work'
 	}
@@ -56,11 +56,12 @@ class FolderListSpec extends FolderBaseSpec {
 		setup:
 			createTestFolders()
 			createTestMessages()
-			def folder = Folder.findByName("Work")
-			def messages = folder.getMessages() as List
-			def message = messages[0]
+			def data = remote {
+				def f = Folder.findByName("Work")
+				def m = (f.messages as List)[0]
+				[folder:f.id, message:m.id] }
 		when:
-			to PageMessageFolder, folder, message
+			to PageMessageFolder, data.folder, data.message
 			singleMessageDetails.reply.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
@@ -71,19 +72,21 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work'), Fmessage.findBySrc('Max')
+			to PageMessageFolder, remote { Folder.findByName('Work').id },
+					remote { Fmessage.findBySrc('Max').id }
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.jquery.trigger("click")
 		then:
-			waitFor { messageList.messages.size() == 2 }
-			messageList.messages[1].source == 'Max'
+			waitFor { messageList.messageCount() == 2 }
+			messageList.messageSource(1) == 'Max'
 		when:
 			footer.showAll.jquery.trigger("click")
 		then:
-			waitFor { messageList.messages.size() == 2 }
-			messageList.sources.containsAll(['Jane', 'Max'])
+			waitFor { messageList.messageCount() == 2 }
+			messageList.messageSource(0) == 'Jane'
+			messageList.messageSource(1) == 'Max'
 	}
 
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -91,7 +94,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work'), Fmessage.findBySrc('Max')
+			to PageMessageFolder, remote { Folder.findByName('Work').id }, remote { Fmessage.findBySrc('Max').id }
 			singleMessageDetails.forward.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
@@ -104,10 +107,10 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
-			messageList.messages[0].checkbox.click()
+			to PageMessageFolder, remote { Folder.findByName('Work').id }
+			messageList.toggleSelect(0)
 			waitFor("slow") { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
@@ -117,12 +120,14 @@ class FolderListSpec extends FolderBaseSpec {
 		given:
 			createTestFolders()
 			createTestMessages()
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true, flush:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
+			remote {
+				new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true, flush:true)
+				new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
+				null }
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			to PageMessageFolder, remote { Folder.findByName('Work').id }
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 			multipleMessageDetails.replyAll.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
@@ -133,7 +138,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, remote { Folder.findByName('Work').id }
 			folderMoreActions.value("rename")
 			waitFor { at RenameFolderDialog }
 			folderName.equals("Work")
@@ -141,7 +146,7 @@ class FolderListSpec extends FolderBaseSpec {
 			ok.jquery.trigger("click")
 			to PageMessageFolder
 		then:
-			folderLinks*.text().containsAll('New Work', 'Projects')
+			folderLinks*.text().every { it.startsWith('New Work') || it.startsWith('Projects') || it == "Create new folder" }
 	}
 
 	def 'Errors are displayed when creating a folder with an already existing folders name'() {
@@ -166,7 +171,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, Folder.findByName('Work')
+			to PageMessageFolder, remote { Folder.findByName('Work').id } 
 			folderMoreActions.value("rename")
 			waitFor { at RenameFolderDialog }
 			folderName.equals("Work")
@@ -180,7 +185,7 @@ class FolderListSpec extends FolderBaseSpec {
 		setup:
 			createTestFolders()
 		when:
-			to PageMessageFolder, Folder.findByName("Work")
+			to PageMessageFolder, remote { Folder.findByName("Work").id }
 			folderMoreActions.value("delete")
 			waitFor { at DeleteFolderPopup }
 			popupTitle.equals("delete folder")
@@ -196,13 +201,13 @@ class FolderListSpec extends FolderBaseSpec {
 			def folderId = deleteFolder()
 		when:
 			at PageMessageFolder
-			to PageMessageTrash, Trash.findByObjectId(folderId).id
+			to PageMessageTrash, remote { Trash.findByObjectId(folderId).id }
 		then:
-			messageList.messages[0].source == 'Work'
-			messageList.messages[0].text == '2 message(s)'
-			DATE_FORMAT.format(messageList.messages[0].date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
+			messageList.messageSource(0) == 'Work'
+			messageList.messageText(0) == '2 message(s)'
+			DATE_FORMAT.format(messageList.messageDate(0)) == DATE_FORMAT.format(remote { Trash.findByObjectId(folderId).dateCreated })
 			senderDetails == 'Work folder'
-			DATE_FORMAT.format(date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
+			DATE_FORMAT.format(date) == DATE_FORMAT.format(remote { Trash.findByObjectId(folderId).dateCreated })
 	}
 
 	def "clicking on empty trash permanently deletes a folder"() {
@@ -210,7 +215,7 @@ class FolderListSpec extends FolderBaseSpec {
 			def folderId = deleteFolder()
 		when:
 			at PageMessageFolder
-			to PageMessageTrash, Trash.findByObjectId(folderId).id
+			to PageMessageTrash, remote { Trash.findByObjectId(folderId).id }
 			trashMoreActions.value("empty-trash")
 			waitFor { at EmptyTrashPopup }
 		then:
@@ -220,7 +225,7 @@ class FolderListSpec extends FolderBaseSpec {
 			waitFor { title.toLowerCase().contains("inbox") }
 		then:
 			at PageMessageInbox
-			bodyMenu.folderLinks*.text().containsAll('Projects')
+			bodyMenu.folderLinks*.text().any { it.startsWith "Projects" }
 	}
 
 	def "filter folder messages by incoming messages should not show new outgoing messages"() {
@@ -229,15 +234,15 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 			createOutgoingMessage()
 		when:
-			to PageMessageFolder, Folder.findByName('Projects'), Fmessage.findBySrc('Patrick')
+			to PageMessageFolder,
+					remote { Folder.findByName('Projects').id },
+					remote { Fmessage.findBySrc('Patrick').id }
 		then:
-			messageList.messages.size() == 3
+			messageList.messageCount() == 3
 		when:
 			footer.showIncoming.click()
 		then:
-			waitFor { messageList.messages.size() == 2 }
-		when:
-			sleep 11000
+			waitFor { messageList.messageCount() == 2 }
 		then:
 			!messageList.newMessageNotification.displayed
 	}
@@ -245,9 +250,11 @@ class FolderListSpec extends FolderBaseSpec {
 	def deleteFolder() {
 		createTestFolders()
 		createTestMessages()
-		def folder = Folder.findByName("Work")
-		trashService.sendToTrash(folder)
-		folder.id
+		remote {
+			def folder = Folder.findByName("Work")
+			new TrashService().sendToTrash(folder)
+			folder.id
+		}
 	}
 }
 

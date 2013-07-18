@@ -89,8 +89,6 @@ class AutoforwardSpec extends Specification {
 			22                     | 2        | 2      | 5            | 5           | 2
 	}
 
-	private def mockContact() { Contact.build() }
-
 	private def mockGroup(int memberCount) {
 		mockMembers(Group, memberCount)
 	}
@@ -120,7 +118,7 @@ class AutoforwardSpec extends Specification {
 		m.src >> src
 		m.setOwnerDetail >> ownerDetail
 		def owner = Mock(CustomActivity)
-		owner.addToMessages(_) >> { ms -> return "added message to messageOwner" }
+		owner.addToMessages = { ms -> return "added message to messageOwner" }
 		m.messageOwner >> owner
 		return m
 	}

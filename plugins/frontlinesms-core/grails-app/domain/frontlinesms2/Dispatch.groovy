@@ -6,6 +6,7 @@ class Dispatch {
 	DispatchStatus status
 	Date dateSent
 	def expressionProcessorService
+	Long fconnectionId
 	
 	boolean isDeleted
 
@@ -15,6 +16,7 @@ class Dispatch {
 	
 	static constraints = {
 		dst(nullable:false)
+		fconnectionId(nullable:true)
 		status(nullable: false, validator: { val, obj ->
 				if(val == DispatchStatus.SENT)
 					obj.dateSent != null
@@ -43,7 +45,6 @@ class Dispatch {
 			def messageOwner = params.messageOwner
 			def startDate = params.startDate.startOfDay
 			def endDate = params.endDate.endOfDay
-			def statuses = params.messageStatus.collect { it.toLowerCase() }
 			
 			and {
 				eq('isDeleted', false)

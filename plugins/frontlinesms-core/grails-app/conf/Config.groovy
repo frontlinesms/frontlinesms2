@@ -69,7 +69,6 @@ grails.plugin.databasemigration.updateOnStart = System.properties['db.migrations
 environments {
     development {
         grails.logging.jul.usebridge = true
-
     }
     production {
         grails.logging.jul.usebridge = false
@@ -96,7 +95,7 @@ log4j = {
 					threshold:org.apache.log4j.Level.WARN
 		}
 		development { console name:'dev', threshold:org.apache.log4j.Level.INFO }
-		test { console name:'test', threshold:org.apache.log4j.Level.WARN }
+		test { console name:'test', threshold:org.apache.log4j.Level.ERROR }
 	}
 
 	root {
@@ -124,3 +123,5 @@ jqueryValidation.cdn = false  // false or "microsoft"
 jqueryValidation.additionalMethods = false
 
 frontlinesms.plugins=['frontlinesms-core']
+frontlinesms.blockedNotificationList = []
+

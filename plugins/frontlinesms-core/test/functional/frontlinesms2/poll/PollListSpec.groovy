@@ -6,7 +6,6 @@ import frontlinesms2.message.PageMessage
 import frontlinesms2.page.PageMessageActivity
 
 class PollListSpec extends PollBaseSpec {
-
 	def "poll message list is displayed"() {
 		given:
 			createTestPolls()
@@ -14,7 +13,8 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			messageList.sources.containsAll('Alice', 'Bob')
+			messageList.messageSource(0) == 'Alice'
+			messageList.messageSource(1) == 'Bob'
 	}
 
 	def "message's poll details are shown in list"() {
@@ -24,9 +24,9 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc('Bob').id
 		then:
-			messageList.messages[1].source == 'Bob'
-			messageList.messages[1].text == 'manchester ("I like manchester")'
-			messageList.messages[1].dateCell ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messageSource(1) == 'Bob'
+			messageList.messageText(1) == 'manchester ("I like manchester")'
+			messageList.messageDate(1)
 	}
 
 	def "poll details are shown in header and graph is displayed"() {
@@ -53,7 +53,7 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			bodyMenu.selected == 'football teams poll'
+			bodyMenu.selected.contains('football teams poll')
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {
@@ -63,17 +63,18 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.click()
-			waitFor { messageList.messages.size() == 1 }
+			waitFor { messageList.messageCount() == 1 }
 		then:
-			messageList.sources == ['Bob']
+			messageList.messageSource(0) == 'Bob'
 		when:
 			footer.showAll.click()
-			waitFor {messageList.messages.size() == 2}
+			waitFor { messageList.messageCount() == 2 }
 		then:
-			messageList.sources == ['Alice', 'Bob']
+			messageList.messageSource(0) == 'Alice'
+			messageList.messageSource(1) == 'Bob'
 	}
 
 	def "should display message details when message is checked"() {
@@ -82,15 +83,15 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessagePoll, 'Football Teams'
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { singleMessageDetails.text == "I like manchester" }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 			def message = Fmessage.findBySrc('Alice')
 		then:
 			waitFor { singleMessageDetails.sender == message.src }
@@ -132,21 +133,12 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 			to PageMessagePoll, 'Football Teams'
 		then:
-			messageList.messages.size == 2
-		when:
-			sleep 11000
-		then:
-			messageList.messages.size == 2
+			messageList.messageCount == 2
 			!messageList.newMessageNotification.displayed
 		when:
 			createMoreTestMessages()
-			sleep 5000
 		then:
-			messageList.messages.size == 2
-			!messageList.newMessageNotification.displayed
-		when:
-			sleep 7000
-		then:
-			waitFor { messageList.newMessageNotification.displayed }
+			waitFor('very slow') { messageList.newMessageNotification.displayed }
 	}
 }
+

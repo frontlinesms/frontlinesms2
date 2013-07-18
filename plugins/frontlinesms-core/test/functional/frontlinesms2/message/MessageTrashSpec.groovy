@@ -8,25 +8,28 @@ class MessageTrashSpec extends grails.plugin.geb.GebSpec {
 
 	def "should filter inbox messages for starred and unstarred messages"() {
 		setup:
-			trashService = new TrashService()
-			Fmessage.build(src:"src1", starred:true, isDeleted:true)
-			Fmessage.build(src:"src2", isDeleted:true)
-			Fmessage.findAll().each { trashService.sendToTrash(it) }
+			remote {
+				trashService = new TrashService()
+				Fmessage.build(src:"src1", starred:true, isDeleted:true)
+				Fmessage.build(src:"src2", isDeleted:true)
+				Fmessage.findAll().each { trashService.sendToTrash(it) }
+				null
+			}
 		when:
 			to PageMessageTrash
 		then:
-			messageList.messages.size() == 2
+			messageList.messageCount() == 2
 		when:
 			footer.showStarred.click()
-			waitFor { messageList.messages.size() == 1 }
+			waitFor { messageList.messageCount() == 1 }
 		then:
-			messageList.messages[0].source == "src1"
+			messageList.messageSource(0) == "src1"
 		when:
 			footer.showAll.click()
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 		then:
-			messageList.messages[0].source == "src1"
-			messageList.messages[1].source == "src2"
+			messageList.messageSource(0) == 'src1'
+			messageList.messageSource(1) == 'src2'
 	}
 	
 	def "should not contain export button" () {

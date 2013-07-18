@@ -21,14 +21,14 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		then:
 			at PageContactShow
 			waitFor { notifications.flashMessage.displayed }
-			!Contact.findByName('Alice')
+			remote { !Contact.findByName('Alice') }
 	}
 	
 	def 'should delete multiple selected contacts'() {
 		given:
 			createTestContacts()
 		when:
-			to PageContactShow, Contact.findByName('Alice')
+			to PageContactShow, 'Alice'
 			contactList.selectContact 1
 		then:
 			waitFor { singleContactDetails.name.value() == 'Bob' }
@@ -45,6 +45,6 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		then:
 			at PageContactShow
 			waitFor { notifications.flashMessage.displayed }
-			Contact.count() == 0
+			remote { Contact.count() } == 0
 	}
 }

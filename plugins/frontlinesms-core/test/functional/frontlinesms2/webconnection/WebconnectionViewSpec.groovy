@@ -14,7 +14,6 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		createTestMessages(Webconnection.findByName("Sync"))
 	}
 
-	@Unroll
 	def "Webconnection page should show the details of a generic Webconnection in the header"() {
 		setup:
 			def webconnection  = Webconnection.findByName("Sync")
@@ -22,14 +21,11 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			to PageMessageWebconnection, webconnection
 		then:
 			waitFor { title?.toLowerCase().contains("web connection") }
-			header[item] == value
-		where:
-			item        | value
-			'name'      | "sync web connection"
-			'url'       | 'http://www.frontlinesms.com/sync'
-			'sendMethod'| 'get'
-			'subtitle'  | 'http web connection'
-			'api'       | 'api url : (api disabled)'
+			header.name == 'sync web connection'
+			header.url == 'http://www.frontlinesms.com/sync'
+			header.sendMethod == 'get'
+			header.subtitle == 'http web connection'
+			header.api == 'api url : (api disabled)'
 	}
 
 	@Unroll
@@ -44,7 +40,6 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			secret << [null, 'imagine']
 	}
 
-	@Unroll
 	def "Webconnection page should show the details of an Ushahidi Webconnection in the header"() {
 		setup:
 			def webconnection  = Webconnection.findByName("Ush")
@@ -52,13 +47,10 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			to PageMessageWebconnection, webconnection
 		then:
 			waitFor { title?.toLowerCase().contains("web connection") }
-			header[item] == value
-		where:
-			item        | value
-			'name'      | 'ush web connection'
-			'url'       | 'http://www.ushahidi.com/frontlinesms'
-			'sendMethod'| 'get'
-			'subtitle'  | 'web connection to ushahidi'
+			header.name == 'ush web connection'
+			header.url == 'http://www.ushahidi.com/frontlinesms'
+			header.sendMethod == 'get'
+			header.subtitle == 'web connection to ushahidi'
 	}
 
 	def "clicking the archive button archives the Webconnection and redirects to inbox "() {
@@ -134,7 +126,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -146,9 +138,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()		
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			multipleMessageDetails.checkedMessageCount == "2 messages selected"
@@ -160,11 +152,11 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].checkbox.click()
+			messageList.toggleSelect(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[3].hasClass("selected")
-			singleMessageDetails.text == "Test message 3"
+			messageList.hasClass(3, "selected")
+			waitFor { singleMessageDetails.text == "Test message 3" }
 	}
 
 	def "delete single message action works "() {
@@ -173,14 +165,14 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
 			singleMessageDetails.delete.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) != 'Test message 0'
 	}
 
 	def "delete multiple message action works for multiple select"(){
@@ -189,16 +181,17 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
-			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			waitFor { singleMessageDetails.displayed }
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
 			multipleMessageDetails.deleteAll.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
+			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 	}
 
 	def "move single message action works"() {
@@ -207,7 +200,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
@@ -216,12 +209,12 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor("veryslow") { at PageMessageWebconnection }
 			waitFor { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) != 'Test message 0'
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.contains("Test message 0")
+			messageList.messageText(0) == 'Test message 0'
 	}
 
 	def "move multiple message action works"() {
@@ -230,21 +223,23 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
-			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			waitFor { singleMessageDetails.displayed }
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
+			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.containsAll("Test message 0", "Test message 1")
+			messageList.messageText(0) in ['Test message 0', 'Test message 1']
+			messageList.messageText(1) in ['Test message 0', 'Test message 1']
 	}
 
 	def "should display SENT message status for successfully forwarded messages"() {
@@ -252,7 +247,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			to PageMessageWebconnection, Webconnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.any { it.hasStatus("sent")}
+			js.exec '''
+				return $("#main-list tbody tr.ownerdetail-webconnection-SENT").size() > 0
+			'''
 	}
 
 	def "retry failed uploads option should be present in more actions dropdown, and should redirect to same view"() {

@@ -1,43 +1,125 @@
 #!/bin/bash
 set -e
 
-echo "# extract app name from application.properties..."
-APP_NAME=`grep '^app.name=' application.properties | cut -d= -f2 | sed -E 's/(([^^])([A-Z]))/\2-\3/g' | tr [:upper:] [:lower:]`
+# Extract flags
+binaryFlag=""
+buildBinary=false
+offlineFlag=""
+while [[ $1 == "--"* ]]; do
+	if [ "$1" == "--m2-deploy" ]; then
+		echo "# Maven deployment enabled."
+		m2deploy=true
+	fi
+	if [[ "$1" == "--binary" ]]; then
+		echo "# Building plugin as binary."
+		binaryFlag="--binary"
+		buildBinary=true
+	fi
+	if [[ "$1" == "--offline" ]]; then
+		echo "# Building plugin offline"
+		offlineFlag="--offline"
+	fi
+	shift
+done
 
-echo "# extract version from application.properties..."
-PLUGIN_VERSION=$(env groovy -e "`grep -E '^\s*def\s+version' *GrailsPlugin.groovy`; println version")
-echo "# Extracted plugin version as $PLUGIN_VERSION"
+echo "# Extracting grails version from application.properties..."
+grailsVersion=$(grep 'app\.grails\.version=' application.properties | cut -d= -f2)
+echo "# Grails version is $grailsVersion"
+
+echo "# Extracting app name from application.properties..."
+pluginName=`ls *GrailsPlugin.groovy | cut -d. -f1 | sed -E -e 's/^(.*)GrailsPlugin$/\1/' | sed -E 's/(([^^])([A-Z]))/\2-\3/g' | tr [:upper:] [:lower:]`
+echo "# Extracted plugin name as $pluginName"
+
+echo "# Extracting version from application.properties..."
+set +e; grep -q 'version.*binary' *GrailsPlugin.groovy
+binaryVersionSet=$?
+set -e
+if $buildBinary; then
+	if [[ "$binaryVersionSet" == "1" ]]; then
+		echo "# Changing plugin version to include binary and grails version in the name."
+		sed -E -i -e "s/^\s*def\s+version\s*=\s*['\"](.*?)(-SNAPSHOT)?['\"]\s*$/\tdef version = \"\1-binary-$grailsVersion\2\"/g" *GrailsPlugin.groovy
+	elif [[ "$binaryVersionSet" == "0" ]]; then
+		echo "# Version is already set for binary."
+	else
+		echo "# Error checking if binary version set."
+		exit 1
+	fi
+else
+	if [[ "$binaryVersionSet" == "0" ]]; then
+		echo "# Removing binary info from plugin version..."
+		sed -E -i -e "s/^\s*def\s+version\s*=\s*['\"](.*?)(-binary-$grailsVersion)(-SNAPSHOT)?['\"]\s*$/\tdef version = '\1\3'/" *GrailsPlugin.groovy
+	elif [[ "$binaryVersionSet" != "1" ]]; then
+		echo "# Error checking if binary version set."
+		exit 1
+	fi
+fi
+pluginVersion=$(env groovy -e "`grep -E '^\s*def\s+version' *GrailsPlugin.groovy`; println version")
+echo "# Extracted plugin version as $pluginVersion"
 rm plugin.xml || echo "# no plugin.xml present"
-grails clean
-grails package-plugin
-NEW_PLUGIN_ZIP_NAME=$APP_NAME-$PLUGIN_VERSION.zip
-OLD_PLUGIN_ZIP_NAME=grails-$NEW_PLUGIN_ZIP_NAME
-echo "# renaming $OLD_PLUGIN_ZIP_NAME to $NEW_PLUGIN_ZIP_NAME"
-mv $OLD_PLUGIN_ZIP_NAME $NEW_PLUGIN_ZIP_NAME
+grails --non-interactive clean
+grails --non-interactive --stacktrace $binaryFlag $offlineFlag package-plugin
 
-IVY_CACHE_DIR=~/.grails/ivy-cache/org.grails.plugins/$APP_NAME/zips
-mkdir -p $IVY_CACHE_DIR
-IVY_CACHED_ZIP=$IVY_CACHE_DIR/$NEW_PLUGIN_ZIP_NAME
-echo "# Removing old plugin from local ivy cache at $IVY_CACHED_ZIP..."
-rm $IVY_CACHED_ZIP || echo "# Old plugin was not found in ivy cache."
+if $buildBinary; then
+	oldPackageName=target/grails-plugin-$pluginName-$pluginVersion.jar
+	newPackageName=$pluginName-$pluginVersion.jar
+else
+	newPackageName=$pluginName-$pluginVersion.zip
+	oldPackageName=grails-$newPackageName
+fi
 
-echo "# Deploying to local ivy cache..."
-cp $NEW_PLUGIN_ZIP_NAME $IVY_CACHED_ZIP
+echo "# renaming $oldPackageName to $newPackageName"
+mv $oldPackageName $newPackageName
 
-echo "# deploy core plugin to remote plugin repo"
-echo "# TODO skip maven deploy for non-SNAPSHOT builds"
-echo "# Using maven password: $FRONTLINESMS_MAVEN_PASSWORD"
-ftp -nv dev.frontlinesms.com << EOF
+if $buildBinary; then
+	echo "..."
+else
+	ivyCacheDir=~/.grails/ivy-cache/org.grails.plugins/$pluginName/zips
+	mkdir -p $ivyCacheDir
+	ivyCachedZip=$ivyCacheDir/$newPackageName
+	echo "# Removing old plugin from local ivy cache at $ivyCachedZip..."
+	rm $ivyCachedZip || echo "# Old plugin was not found in ivy cache."
+	echo "# Deploying to local ivy cache..."
+	cp $newPackageName $ivyCachedZip
+	echo "# Plugin built and deployed to local ivy cache."
+
+fi
+mavenFileName="$newPackageName"
+
+echo "# Deploying to local maven repository..."
+mavenRepoDir=~/.m2/repository/org/grails/plugins/$pluginName/$pluginVersion/
+echo "# Creating maven repo dir at $mavenRepoDir..."
+mkdir -p $mavenRepoDir
+echo "# Deploying to ${mavenRepoDir}$mavenFileName"
+cp $mavenFileName $mavenRepoDir
+echo "# Deployed to local maven repository."
+
+echo "# Building pom file..."
+grails generate-pom $binaryFlag
+echo "# Deploying POM file to local maven repository..."
+pomFileName="$pluginName-$pluginVersion.pom"
+cp target/pom.xml $pomFileName
+echo "# Deploying to ${mavenRepoDir}$pomFileName"
+cp $pomFileName ${mavenRepoDir}$pomFileName
+echo "# POM deployed"
+
+if [ -n "$m2deploy" ]; then
+	echo "# Deploy core plugin to remote plugin repo..."
+	echo "# Using maven password: $FRONTLINESMS_MAVEN_PASSWORD"
+	ftp -nv dev.frontlinesms.com << EOF
 hash
 user m2repo $FRONTLINESMS_MAVEN_PASSWORD
 mkdir org
 mkdir org/grails/plugins
-mkdir org/grails/plugins/$APP_NAME
-cd org/grails/plugins/$APP_NAME
-mkdir $PLUGIN_VERSION
-cd $PLUGIN_VERSION
-put $NEW_PLUGIN_ZIP_NAME
+mkdir org/grails/plugins/$pluginName
+cd org/grails/plugins/$pluginName
+mkdir $pluginVersion
+cd $pluginVersion
+put $mavenFileName
+put $pomFileName
 exit
 EOF
+	echo "# Plugin deployed to remote maven repo."
+fi
 
-echo "# Plugin built and deployed to remote maven repo."
+echo "# Deployment complete."
+

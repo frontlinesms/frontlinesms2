@@ -5,49 +5,56 @@ import frontlinesms2.*
 class MessageStarSpec extends grails.plugin.geb.GebSpec{
 		
 	def setup() {
-		new Fmessage(src:'+254287645', dst:'+254112233', text:'css test', inbound:true, read:false).save(failOnError:true, flush:true)
+		remote {
+			new Fmessage(src:'+254287645', dst:'+254112233', text:'css test', inbound:true, read:false).save(failOnError:true, flush:true)
+			null
+		}
 	}
 	
 	def 'clicking on an unstarred message changes its CSS to starred'() {
 		setup:
-			def m = Fmessage.findBySrc('+254287645')
+			def m = remote { Fmessage.findBySrc('+254287645').id }
 		when:
 			to PageMessageInbox
 			messageList.starFor(m).click()
 		then:
-			waitFor {messageList.starFor(m).hasClass("starred")}
-			Fmessage.findBySrc('+254287645').refresh()
-			Fmessage.findBySrc('+254287645').starred
+			waitFor { messageList.starFor(m).hasClass("starred") }
+			remote { Fmessage.findBySrc('+254287645').starred }
 	}
 	
 	def 'clicking on a starred messages removes the starred CSS'() {
 		given:
-			def message = Fmessage.findBySrc('+254287645')
-			message.starred = true
-			message.save(flush:true)
+			def message = remote {
+				def m = Fmessage.findBySrc('+254287645')
+				m.starred = true
+				m.save(flush:true)
+				m.id
+			}
 		when:
-			to PageMessageInbox, message.id
+			to PageMessageInbox, message
 			messageList.starFor(message).click()
 		then:
-			waitFor {messageList.starFor(message).hasClass("unstarred")}
-			message.refresh()
-			!message.starred
+			waitFor { messageList.starFor(message).hasClass("unstarred") }
+			remote { !Fmessage.get(message).starred }
 			
 	}
 	
 	def 'starring one message does not affect other messages'() {
 		when:
-			def m1 = new Fmessage(src:'+254556677', dst:'+254112233', text:'css test 2', inbound:true, read:false).save(failOnError:true, flush:true)
-			def m2 = Fmessage.findBySrc('+254287645')
-			to PageMessageInbox, m2.id
-			messageList.starFor(m2).click()
+			def ids = remote {
+				[new Fmessage(src:'+254556677', dst:'+254112233', text:'css test 2', inbound:true, read:false).save(failOnError:true, flush:true),
+					Fmessage.findBySrc('+254287645')]*.id
+			}
+			def id0 = ids[0]
+			def id1 = ids[1]
+			to PageMessageInbox, id1
+			messageList.starFor(id1).click()
 		then:
-			waitFor {messageList.starFor(m2).hasClass("starred")}
-			Fmessage.findBySrc('+254287645').refresh()
-			Fmessage.findBySrc('+254287645').starred
-			!messageList.starFor(m1).hasClass('starred')	
-			!m1.starred
-	
+			waitFor { messageList.starFor(id1).hasClass("starred") }
+			remote { Fmessage.findBySrc('+254287645').starred }
+			!messageList.starFor(id0).hasClass('starred')
+			remote { !Fmessage.get(id0).starred }
+			remote { !Fmessage.findBySrc('+254556677').starred }
 	}
 }
 

@@ -31,8 +31,8 @@ class StatusFSpec extends StatusBaseSpec {
 			tabs.unreadcount == 15
 		when:
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush:true, failOnError:true)
-			js.refreshMessageCount()
 		then:
 			waitFor { tabs.unreadcount == 16 }
 	}
 }
+

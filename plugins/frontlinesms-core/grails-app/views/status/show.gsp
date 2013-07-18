@@ -14,15 +14,8 @@
 			
 		</div>
 		<r:script>
-			setInterval(refreshDevices, 10000);
-			
-			function refreshDevices() {
-				$.get(url_root + 'status/listDetected', function(data) {
-					$('#device-detection').replaceWith($(data));
-				});
-			}
-			
-			$("#time-filters").delegate("select", "change", function(){
+			// TODO should this be bind()/on() instead of delegate?
+			$("#time-filters").delegate("select", "change", function() {
 				$('input[name="rangeOption"]').prop('checked', true);
 			});
 		</r:script>

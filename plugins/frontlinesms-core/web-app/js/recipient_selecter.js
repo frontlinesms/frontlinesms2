@@ -125,6 +125,11 @@ recipientSelecter = (function() {
 		var valid, addressListener;
 		addAddressHandler();
 
+		// TODO This is just a workaround for TOOLS-611, this whole js file is all over the place.
+		$("input[type=checkbox][name=addresses]").each(function() {
+			setContact(this, $(this).val());
+		});
+
 		valid = getMobileNumbersArray().length > 0;
 
 		// TODO why is there listener setup here?

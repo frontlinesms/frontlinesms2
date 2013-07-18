@@ -1,15 +1,12 @@
 package frontlinesms2
 
-import grails.converters.JSON
-
-
 class PollController extends ActivityController {
 	def pollService
 
 	def save() {
 		params.keywords = params.topLevelKeyword?: "$params.keywordsA,$params.keywordsB,$params.keywordsC,$params.keywordsD,$params.keywordsE"
 		withPoll { poll ->
-			doSave('poll', pollService, poll)
+			doSave(pollService, poll)
 		}
 	}
 
@@ -25,12 +22,6 @@ class PollController extends ActivityController {
 			poll.save()
 		}
 		render ''
-	}
-
-	def pollStats() {
-		withPoll { pollInstance ->
-			render (pollInstance.responseStats as JSON)
-		}
 	}
 
 	private def withPoll = withDomainObject Poll, { params.ownerId }

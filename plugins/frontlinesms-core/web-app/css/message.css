@@ -1,7 +1,39 @@
 #body-menu li.messages h3 { background-image:url("../images/icons/message.png"); }
 #body-menu li.activities h3 { background-image:url("../images/icons/activity.png"); }
 #body-menu li.folders h3 { background-image:url("../images/icons/folder.png"); }
-
+#body-menu span.menu-item-label { width: 80%; display: inline-block; }
+#body-menu li { position: relative; }
+#body-menu span.unread_message_count {
+	position:absolute;
+	top:50%;
+	float: right;
+	font-size: 7pt;
+	display: inline-block;
+	background-color: #aaa;
+	color: white;
+	padding: 4px 5px;
+	text-align: center;
+	border-radius: 3px;
+	right:12px;
+	margin-top: -9px;
+}
+#body-menu span.pending_message_count {
+	position:absolute;
+	top:50%;
+	float: right;
+	font-size: 8pt;
+	display: inline-block;
+	color: #aaa;
+	padding: 4px 18px 4px 5px;
+	text-align: right;
+	right:12px;
+	min-width:18px;
+	margin-top: -9px;
+	background:url('../images/message/gray-ajax-spinner.gif') 25px 1px no-repeat;
+}
+#body-menu span.unread_message_count.zero,#body-menu span.pending_message_count.zero {
+	display:none;
+}
 #body.messages #main-list-container > * { width:auto; }
 
 #body.messages #main-list-head { padding:0 17px; background-color:white; }

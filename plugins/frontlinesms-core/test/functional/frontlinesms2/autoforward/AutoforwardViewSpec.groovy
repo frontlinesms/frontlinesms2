@@ -12,15 +12,14 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 	def setup() {
 		createTestAutoforward()
 		createTestActivities()
-		createTestMessages(Autoforward.findByName("News"))
+
+		createTestMessages("News")
 	}
 
 	@Unroll
 	def "autoforward page should show the details of the autoforward in the header"() {
-		setup:
-			def autoforward  = Autoforward.findByName("News")
 		when:
-			to PageMessageAutoforward, autoforward
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.title?.toLowerCase().contains("autoforward") }
 			header[item] == value
@@ -34,7 +33,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking the edit option opens the Autoforward Dialog for editing"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -45,7 +44,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
@@ -55,7 +54,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking the rename option opens the rename small popup"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -67,7 +66,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking the delete option opens the confirm delete small popup"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -78,7 +77,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking the export option opens the export dialog"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { header.displayed }
 		when:
@@ -89,11 +88,11 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "selecting a single message reveals the single message view"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == 'Sudden shock 0' }
@@ -101,13 +100,13 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "selecting multiple messages reveals the multiple message view"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
@@ -115,109 +114,112 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 
 	def "clicking on a message reveals the single message view with clicked message"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].checkbox.click()
+			messageList.toggleSelect(3)
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[3].hasClass("selected")
+			messageList.hasClass(3, "selected")
 			singleMessageDetails.text == "Sudden shock 3"
 	}
 
 	def "delete single message action works "() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
 			singleMessageDetails.delete.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.contains("Sudden shock 0")
+			messageList.messageText(0) != 'Sudden shock 0'
 	}
 
 	def "delete multiple message action works for multiple select"(){
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
 			multipleMessageDetails.deleteAll.click()
 		then:
 			waitFor { messageList.displayed }
-			!messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
+			!(messageList.messageText(0) in ['Sudden shock 0', 'Sudden shock 1'])
+			!(messageList.messageText(1) in ['Sudden shock 0', 'Sudden shock 1'])
 	}
 
 	def "move single message action works"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Sudden shock 0" }
 		when:
-			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			singleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { at PageMessageAutoforward }
 			waitFor { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.contains("Sudden shock 0")
+			messageList.messageText(0) != 'Sudden shock 0'
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, 'Sample Announcement'
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.contains("Sudden shock 0")
+			messageList.messageText(0) == 'Sudden shock 0'
 	}
 
 	def "move multiple message action works"() {
 		when:
-			to PageMessageAutoforward, Autoforward.findByName("News")
+			to PageMessageAutoforward, 'News'
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].checkbox.click()
-			waitFor {singleMessageDetails.displayed }
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			waitFor { singleMessageDetails.displayed }
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
-			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			multipleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
-			!messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
+			!(messageList.messageText(0) in ['Sudden shock 0', 'Sudden shock 1'])
+			!(messageList.messageText(1) in ['Sudden shock 0', 'Sudden shock 1'])
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, 'Sample Announcement'
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.containsAll("Sudden shock 0", "Sudden shock 1")
+			messageList.messageText(0) in ['Sudden shock 0', 'Sudden shock 1']
+			messageList.messageText(1) in ['Sudden shock 0', 'Sudden shock 1']
 	}
 
 	def "moving a message from another activity to a autoforward displays an update message"() {
 		setup:
-			def activity = Activity.findByName("Sample Announcement")
-			def m = Fmessage.findBySrc("announce")
-			def autoforward = Autoforward.findByName('News')
+			def activity = remote { Activity.findByName("Sample Announcement").id }
+			def m = remote { Fmessage.findBySrc("announce").id }
+			def autoforward = remote { Autoforward.findByName('News').id }
 		when:
-			to PageMessageAnnouncement, activity.id, m.id
+			to PageMessageAnnouncement, activity, m
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
-			singleMessageDetails.moveTo(autoforward.id)
-		then:		
+			singleMessageDetails.moveTo(autoforward)
+		then:
 			waitFor { flashMessage.displayed }
 	}
 
@@ -227,11 +229,11 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		when:
 			to PageMessageAutoforward, a
 		then:
-			messageList.messages.size() == 5
+			messageList.messageCount() == 5
 		when:
 			footer.showOutgoing.click()
 		then:
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messageCount() == 2 }
 	}
 
 	def "clicking on the received message filter should display incoming messages only"() {
@@ -240,23 +242,26 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 		when:
 			to PageMessageAutoforward, a
 		then:
-			messageList.messages.size() == 5
+			messageList.messageCount() == 5
 		when:
 			footer.showIncoming.click()
 		then:
-			waitFor { messageList.messages.size() == 3 }
+			waitFor { messageList.messageCount() == 3 }
 	}
 
-	private Autoforward createInAndOutTestMessages() {
-		def a = new Autoforward(name:"Vegetables")
-		a.addToContacts(new Contact(name:"name"))
-		a.addToKeywords(value:"VEGS")
-		a.sentMessageText = 'Message is \${message_text}'
-		3.times { a.addToMessages(Fmessage.build()) }
-		2.times {
-			def sentMessage = new Fmessage(text:'this is a sent message',inbound:false)
-			sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
-			a.addToMessages(sentMessage) }
-		a.save(flush:true, failOnError:true)
+	private createInAndOutTestMessages() {
+		remote {
+			def a = new Autoforward(name:"Vegetables")
+			a.addToContacts(new Contact(name:"name"))
+			a.addToKeywords(value:"VEGS")
+			a.sentMessageText = 'Message is \${message_text}'
+			3.times { a.addToMessages(Fmessage.build()) }
+			2.times {
+				def sentMessage = new Fmessage(text:'this is a sent message',inbound:false)
+				sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
+				a.addToMessages(sentMessage) }
+			a.save(flush:true, failOnError:true)
+			return a.id
+		}
 	}
 }

@@ -6,6 +6,7 @@ class PageMessageAutoforward extends frontlinesms2.page.PageMessageActivity {
 	static content = {
 		header { module AutoforwardHeaderModule }
 	}
+
 	static at = {
 		title.contains("autoforward")
 	}
@@ -19,3 +20,4 @@ class AutoforwardHeaderModule extends frontlinesms2.message.ContentHeader {
 		recipients { infoListItems[3] }
 	}
 }
+

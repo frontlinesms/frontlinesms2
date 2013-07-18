@@ -24,6 +24,8 @@ class BodyMenu extends geb.Module {
 		messageSection { section ->
 			$("a", text: "${section}")
 		}
+		inboxNewMessageCount { $('#body-menu span.unread_message_count')[0].text() as Integer }
+		pendingMessageCount { $('#body-menu span.pending_message_count')[0].text() as Integer }
 		selected { $('#body-menu .selected').text()?.toLowerCase() }
 		activityList { $('#body-menu li.activities ul.submenu li') }
 		activityLinks { $('#body-menu li.activities ul.submenu li a') }
@@ -31,7 +33,10 @@ class BodyMenu extends geb.Module {
 		newFolder { $('#body-menu li.folders a.btn.create') }
 		folderLinks { $('ul li.folders ul.submenu li a') }
 		activityLink { activityName ->
-			$('#body-menu li.activities ul.submenu li a', text: activityName + " " + Activity.findByName(activityName)?.shortName)
+			$('#body-menu li.activities ul.submenu li a', text: startsWith(activityName + " " + Activity.findByName(activityName)?.shortName))
+		}
+		sectionLink { sectionName ->
+			$('#body-menu li.messages ul.submenu li a', text: startsWith(sectionName))
 		}
 	}
 }
@@ -72,43 +77,39 @@ class MessageList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
 		selectAll { $("input#message-select-all") }
-		sources { $('td.message-sender-cell')*.text() }
-		messages { moduleList MessageListRow, $('tbody tr') }
-		selectedMessages { moduleList MessageListRow, $('tr.selected') }
+		messageSource { i=0 -> message(i).find('td.message-sender-cell').text() }
+		message { i=0, onlySelected=false -> onlySelected? $('tbody tr.selected', i): $("tbody tr:nth-of-type(${i+1})") }
+		messageCount { js.exec('return jQuery("#main-list tbody tr").size()') as Integer }
+		selectedMessageCount { js.exec('return jQuery("#main-list tbody tr.selected").size()') as Integer }
+		clickLink { i=0 -> message(i).find('td.message-text-cell a').click(); true }
+		selectedMessageLinkUrl { i=0 -> message(i, true).find('td.message-text-cell a').@href }
+		getCheckbox { i -> message(i).find('input[type=checkbox]') }
+		isChecked { i -> getCheckbox(i).checked }
+		isRead { i -> hasClass(i, 'read') }
+		toggleSelect { i -> getCheckbox(i).click(); true }
+		hasClass { i, cssClass -> message(i).hasClass(cssClass) }
+		getDateCell { i -> message(i).find('td.message-date-cell') }
+		messageDate { i=0 ->
+			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse(getDateCell(i).text())
+		}
+		messageText { i=0, onlySelected=false -> message(i, onlySelected).find('td.message-text-cell').text() }
+		selectedMessageText { i=0 -> messageText(i, true) }
 		noContent { $('tr.no-content') }
 		starFor { message ->
 			if (message instanceof Fmessage) {
-					return $("tr #star-${message.id} a")
+				return $("tr #star-${message.id} a")
 			} else if(message instanceof Number) {
 				return $("tr #star-${message} a")
 			}
 		}
-		displayedNameFor { message->
-			if (message instanceof Fmessage){
-					return $(".displayName-${message.id}").text()
-			}else if(message instanceof Number){
+		displayedNameFor { message ->
+			if(message instanceof Fmessage) {
+				return $(".displayName-${message.id}").text()
+			} else if(message instanceof Number) {
 				return $(".displayName-${message.id}").text()
 			}
 		}
-		newMessageNotification(required: false) { $("#new-message-notification") }
-	}
-}
-
-class MessageListRow extends geb.Module {
-	static content = {
-		checkbox { $('td.message-select-cell input[type="checkbox"]') }
-		star { $('a.starred, a.unstarred') }
-		isStarred { $('a.starred').count() == 1 }
-		isRead { $(':first-child').parent().hasClass('read') } //TODO: replace with a more sensible selector for base
-		source { $('td.message-sender-cell').text() }
-		text { $('td.message-text-cell').text() }
-		textLink { $('td.message-text-cell a')}
-		dateCell {$('td.message-date-cell').text()}
-		date {
-			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse($('td.message-date-cell').text())
-		}
-		linkUrl { $('td.message-text-cell a').@href }
-		hasStatus { status -> $(':first-child').parent().hasClass(status) }
+		newMessageNotification(required:false) { $("#new-message-notification") }
 	}
 }
 
@@ -156,3 +157,4 @@ class MultipleMessageDetails extends geb.Module {
 		moveActions { $('select#move-actions option')*.text() }
 	}
 }
+

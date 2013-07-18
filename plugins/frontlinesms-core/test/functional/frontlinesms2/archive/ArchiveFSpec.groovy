@@ -11,10 +11,13 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestFolders()
 			createTestMessages()
+			remote {
+				def folder = Folder.findByName('Work')
+				folder.archive()
+				folder.save(flush:true, failOnError:true)
+				null
+			}
 		when:
-			def folder = Folder.findByName('Work')
-			folder.archive()
-			folder.save(flush:true, failOnError:true)
 			to PageArchiveFolder
 		then:
 			folderNames*.text() == ["Work"]
@@ -24,21 +27,24 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestMessages2()
 		when:
-			to PageArchiveInbox, Fmessage.findBySrc('Max')
+			to PageArchiveInbox, remote { Fmessage.findBySrc('Max').id }
 		then:
-			messageList.sources.sort() == ['Jane', 'Max']
+			messageList.messageCount == 2
+			messageList.messageSource(0) == 'Jane'
+			messageList.messageSource(1) == 'Max'
 		when:
-			to PageArchiveInbox, Fmessage.findBySrc('Max')
+			to PageArchiveInbox, remote { Fmessage.findBySrc('Max').id }
 			singleMessageDetails.delete.click()
 		then:
-			messageList.sources == ['Jane']
+			messageList.messageCount == 1
+			messageList.messageSource == 'Jane'
 	}
 
 	def '"Archive All" button does not appear in archive section'() {
 		given:
 			createTestMessages2()
 		when:
-			to PageArchiveInbox, Fmessage.findBySrc('Max')
+			to PageArchiveInbox, remote { Fmessage.findBySrc('Max').id }
 			messageList.selectAll.click()
 		then:
 			!multipleMessageDetails.archiveAll.displayed
@@ -46,21 +52,24 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 
 	def '"Delete All" button appears when multiple messages are selected in an archived activity'() {
 		given:
-			def poll = new Poll(name:'thingy')
-			poll.addToResponses(key:'A', value:'One')
-			poll.addToResponses(key:'B', value:'Other')
-			poll.addToResponses(PollResponse.createUnknown())
-			poll.save(failOnError:true, flush:true)
-			def messages = [Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4),
-					Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4)] 
-			println messages
-			poll.addToMessages(messages[0])
-			poll.addToMessages(messages[1])
-			poll.save(failOnError:true, flush:true)
-			poll.archive()
-			poll.save(flush:true)
-			poll.refresh()
-			assert poll.activityMessages.every { it.archived }
+			remote {
+				Date TEST_DATE = new Date()
+				def poll = new Poll(name:'thingy')
+				poll.addToResponses(key:'A', value:'One')
+				poll.addToResponses(key:'B', value:'Other')
+				poll.addToResponses(PollResponse.createUnknown())
+				poll.save(failOnError:true, flush:true)
+				def messages = [Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4),
+						Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4)] 
+				println messages
+				poll.addToMessages(messages[0])
+				poll.addToMessages(messages[1])
+				poll.save(failOnError:true, flush:true)
+				poll.archive()
+				poll.save(flush:true)
+				poll.refresh()
+				assert poll.activityMessages.every { it.archived }
+			}
 		when:
 			to PageMessagePoll, 'thingy'
 			messageList.selectAll.click()
@@ -68,3 +77,4 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			waitFor { multipleMessageDetails.deleteAll.displayed }
 	}
 }
+

@@ -8,9 +8,9 @@ import frontlinesms2.api.*
 @FrontlineApiAnnotations(apiUrl="smssync")
 class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	static String getShortName() { 'smssync' }
-	static final configFields = ['name', 'receiveEnabled', 'sendEnabled', 'secret', 'timeout']
+	static final configFields = ['info-setup': ['secret'], 'info-timeout':['timeout'], 'info-name':['name']]
 	static final passwords = ['secret']
-	static final defaultValues = [sendEnabled:true, receiveEnabled:true]
+	static final defaultValues = [timeout:60]
 
 	def smssyncService
 	def appSettingsService
@@ -60,7 +60,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	String getFullApiUrl() {
-		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/$apiUrl/$id/" : ""
+		return apiEnabled? "api/1/${shortName}/$id/" : ""
 	}
 }
 

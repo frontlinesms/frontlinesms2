@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title><g:message code="poll.title" args="${[ownerInstance.name]}"/></title>
-		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}"/>
+		<meta name="layout" content="${params.controller=='message' || params.controller=='search' ? 'messages' : 'archive'}"/>
 		<r:require module="graph"/>
 	</head>
 	<body>
@@ -15,9 +15,7 @@
 
 <r:script>
 $(function() {
-	var pollGraph = new PollGraph(${pollResponse}, "${ownerInstance.id}", "${createLink(controller:'poll', action:'pollStats')}");
-	$("#poll-graph-btn").live("click", pollGraph.show);
-	setInterval(pollGraph.updateStats, 5000);
+	new PollGraph(${pollResponse}, "${ownerInstance.id}", "${createLink(controller:'poll', action:'pollStats')}");
 });
 </r:script>
 

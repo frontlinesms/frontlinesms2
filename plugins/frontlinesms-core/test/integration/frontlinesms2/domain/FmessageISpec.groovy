@@ -116,7 +116,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpMessages()
 		when:
-			def messageCounts = Fmessage.countAllMessages(['archived':false, 'starred': false])
+			def messageCounts = Fmessage.countAllMessages()
 		then:
 			messageCounts['inbox'] == 2
 			messageCounts['sent'] == 4
@@ -331,16 +331,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.owned(owner, false, true).list(sort:'date', order:'desc') == [received]
 	}
 
-	def 'search page should display distinct messages'(){
+	def 'search page should display distinct messages'() {
 		setup:
-			def message
-			(1..60).each{
-				message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
-				(0..10).each { num ->
-					message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
-				}
-				message.save(failOnError:true)
-			}
+			createMessagesForSearch(60)
 			def controller = new SearchController()
 			controller.params.searchString = "sample"
 			controller.params.max = 50
@@ -351,17 +344,11 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			dataModel.messageInstanceList.size() == dataModel.messageInstanceList*.id.unique().size() &&
 					dataModel.messageInstanceList.size() == 50
 	}
-@Unroll
-	def 'pagination navigation should still work in search page'(){
+
+	@Unroll
+	def 'pagination navigation should still work in search page'() {
 		setup:
-			def message
-			(1..80).each{
-				message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
-				(0..10).each { num ->
-					message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
-				}
-				message.save(failOnError:true)
-			}
+			createMessagesForSearch(80)
 			def controller = new SearchController()
 			controller.params.searchString = "sample"
 			controller.params.max = max
@@ -372,9 +359,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			dataModel.messageInstanceList.size() == dataModel.messageInstanceList*.id.unique().size()
 			dataModel.messageInstanceList*.id.containsAll(Fmessage.list(offset : offset,max : max,sort:"date", order:"desc")*.id)
 		where:
-			offset|max
-			0|50
-			50|50
+			offset | max
+			0      | 50
+			50     | 50
 	}
 
 	def "if an FMessage's receivedOn connection is deleted, the field should update to null"() {
@@ -403,11 +390,30 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 				.save(failOnError:true, flush:true)
  
 			def incomingMessage = Fmessage.build(text:"incoming message", messageOwner: customActivity)
-			def outgoingMessage = new Fmessage(text:'sending this message', inbound:false, date:new Date(), messageOwner:customActivity)
+			def outgoingMessage = new Fmessage(text:'sending this message', inbound:false, date:TEST_DATE, messageOwner:customActivity)
 							.addToDispatches(new Dispatch(dst:'234', status:DispatchStatus.PENDING)).save(failOnError:true)
 			outgoingMessage.setMessageDetail(replyStep, incomingMessage.id)
 		then:
 			outgoingMessage.ownerDetail == incomingMessage.id.toString()
+	}
+
+	def "Setting the owner detail for webconnection" (){
+		when:
+			def uploadStep = new WebconnectionActionStep().addToStepProperties(new StepProperty(key:"url", value:"http://192.168.0.200"))
+				.addToStepProperties(new StepProperty(key:"httpMethod", value:"GET"))
+				.addToStepProperties(new StepProperty(key:"message", value:"I will upload you"))
+				.addToStepProperties(new StepProperty(key:"source", value:"123123"))
+			def customActivity = new CustomActivity(name:'Do it all')
+				.addToSteps(uploadStep)
+				.addToKeywords(value:"CUSTOM")
+				.save(failOnError:true, flush:true)
+ 
+			def incomingMessage = Fmessage.build(text:"incoming message", messageOwner: customActivity)
+			incomingMessage.setMessageDetail(uploadStep, 'success')
+			incomingMessage.save(failOnError:true)
+			incomingMessage.refresh()
+		then:
+			incomingMessage.getOwnerDetail() == "success"
 	}
 
 	def 'doing a Fmessage.findBySrc should give me youngest message'() {
@@ -425,6 +431,33 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def message = Fmessage.build()
 		then:
 			message.getOwnerType(customActivity) == MessageDetail.OwnerType.ACTIVITY
+	}
+
+	def "countUnreadMessages with an owner argument limits the count to only that owner's messages"() {
+		setup:
+			Fmessage.build(read:true)
+			Fmessage.build()
+			def autoReply = Autoreply.build()
+			3.times { autoReply.addToMessages(Fmessage.build()) }
+			Fmessage.build(archived:true)
+		when:
+			def inboxUnread = Fmessage.countUnreadMessages()
+			def autoreplyUnread = Fmessage.countUnreadMessages(autoReply)
+		then:
+			inboxUnread == 1
+			autoreplyUnread == 3
+	}
+
+	def "pendingAndNotFailed returns count of dispatches with PENDING status"() {
+		setup:
+			def m1 = Fmessage.buildWithoutSave(inbound:false, date: TEST_DATE - 10)
+			4.times { m1.addToDispatches(Dispatch.build(status: DispatchStatus.PENDING)) }
+			m1.addToDispatches(Dispatch.build(status: DispatchStatus.SENT, dateSent:TEST_DATE))
+			m1.addToDispatches(Dispatch.build(status: DispatchStatus.FAILED))
+		when:
+			def pendingCount = Fmessage.pendingAndNotFailed.count()
+		then:
+			pendingCount == 4
 	}
 	
 	private Folder getTestFolder(params=[]) {
@@ -482,6 +515,17 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		buildOutgoing(text:'This msg will not show up in inbox view', dispatches:dispatch())
 		buildWithDispatches(failedDispatch())
 		buildWithDispatches(pendingDispatch())
+	}
+
+	private def createMessagesForSearch(int messageCount) {
+		def message
+		(1..messageCount).each {
+			message = new Fmessage(src:'me', inbound:false, text:"sample message-${it}")
+			(0..10).each { num ->
+				message.addToDispatches(dst:"+25411663${num}", status:DispatchStatus.SENT, dateSent:TEST_DATE)
+			}
+			message.save(failOnError:true)
+		}
 	}
 
 	private def dispatch() { sentDispatch() }

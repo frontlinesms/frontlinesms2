@@ -16,7 +16,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			waitFor("veryslow") { searchsidebar.searchBtn.displayed }
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 3 }
+			waitFor("veryslow") { messageList.messageCount() == 3 }
 	}
 	
 	def "can toggle between viewing all results and viewing only starred"() {
@@ -25,15 +25,15 @@ class SearchViewSpec extends SearchBaseSpec {
 			waitFor("veryslow") { searchsidebar.searchBtn.displayed }
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 3 }
+			waitFor("veryslow") { messageList.messageCount() == 3 }
 		when:
 			footer.showStarred.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 1 }
+			waitFor("veryslow") { messageList.messageCount() == 1 }
 		when:
 			footer.showAll.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 3 }
+			waitFor("veryslow") { messageList.messageCount() == 3 }
 	}
 
 	def "group list and activity lists are displayed when they exist"() {
@@ -67,12 +67,12 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "selected activity is still selected on form submit and consequent page reload"() {
 		given:
 			to PageNewSearch
-			def a = Folder.findByName("Work")
-			searchsidebar.activityId = "folder-$a.id"
+			def a = remote { Folder.findByName("Work").id }
+			searchsidebar.activityId = "folder-$a"
 		when:
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor("veryslow") { searchsidebar.activityId.jquery.val() == "folder-$a.id" }
+			waitFor("veryslow") { searchsidebar.activityId.jquery.val() == "folder-$a" }
 	}
 
 	def "can search in archive or not, is enabled by default"() {
@@ -103,33 +103,39 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:	
 			waitFor { searchsidebar.searchBtn.displayed }
 			searchsidebar.messageStatus == 'inbound'
-			messageList.messages.text.containsAll(['hi alex', 'meeting at 11.00'])
+			messageList.messageCount() == 3
+			messageList.messageText(0) == 'chicken ("eat more cow")'
+			messageList.messageText(1) == 'hi alex'
+			messageList.messageText(2) == 'meeting at 11.00'
 	}
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			def m1 = new Fmessage(src:"src", text:"sent", date:new Date()-1)
-			m1.addToDispatches(dst:'123', status: DispatchStatus.SENT, dateSent:new Date())
-			m1.save(failOnError:true, flush:true)
+			remote {
+				def m1 = new Fmessage(src:"src", text:"sent", date:new Date()-1)
+				m1.addToDispatches(dst:'123', status: DispatchStatus.SENT, dateSent:new Date())
+				m1.save(failOnError:true, flush:true)
 
-			def m2 = new Fmessage(src: "src", text:"send_pending", date:new Date()-1)
-			m2.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
-			m2.save(failOnError:true, flush:true)
+				def m2 = new Fmessage(src: "src", text:"send_pending", date:new Date()-1)
+				m2.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+				m2.save(failOnError:true, flush:true)
 
-			def m3 = new Fmessage(src: "src", text:"send_failed", date:new Date()-1)
-			m3.addToDispatches(dst:'123', status:DispatchStatus.FAILED)
-			m3.save(failOnError:true, flush:true)
+				def m3 = new Fmessage(src: "src", text:"send_failed", date:new Date()-1)
+				m3.addToDispatches(dst:'123', status:DispatchStatus.FAILED)
+				m3.save(failOnError:true, flush:true)
 
-			Fmessage.build(text:"received", date:new Date()-1)
+				Fmessage.build(text:"received", date:new Date()-1)
+				null
+			}
 			
 			to PageNewSearch
 			searchsidebar.messageStatus = "outbound"
 		when:
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor{ searchsidebar.searchBtn.displayed }
+			waitFor { searchsidebar.searchBtn.displayed }
 			searchsidebar.messageStatus == 'outbound'
-			messageList.messages.size() == 3
+			messageList.messageCount() == 3
 	}
 
 	def "should clear search results" () {
@@ -138,7 +144,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.searchBtn.displayed
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor{ searchsidebar.searchBtn.displayed }
+			waitFor { searchsidebar.searchBtn.displayed }
 		when:
 			searchsidebar.clearSearchLink.click()
 		then:
@@ -147,20 +153,23 @@ class SearchViewSpec extends SearchBaseSpec {
 
 	def "should return to the same search results when message is deleted" () {
 		setup:
-			Fmessage.build(src:"src", text:"received1")
-			Fmessage.build(src:"src", text:"received2", date:new Date()-1)
-			Fmessage.build(src:"src3", text:"send_failed", date:new Date()-2)
+			remote {
+				Fmessage.build(src:"src", text:"received1")
+				Fmessage.build(src:"src", text:"received2", date:new Date()-1)
+				Fmessage.build(src:"src3", text:"send_failed", date:new Date()-2)
+				null
+			}
 		when:
 			to PageNewSearch
 			searchsidebar.searchBtn.displayed
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor { messageList.messages.size() == 6 }
-			messageList.messages[0].checkbox.click()
+			waitFor { messageList.messageCount() == 6 }
+			messageList.toggleSelect(0)
 			waitFor("veryslow") { singleMessageDetails.text == "received1" }
 			singleMessageDetails.delete.click()
 		then:
-			waitFor("veryslow") { messageList.messages.size() == 5 }
+			waitFor("veryslow") { messageList.messageCount() == 5 }
 			notifications.flashMessage.text()?.contains("Message moved to trash")
 	}
 
@@ -194,12 +203,24 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearchResult, "alex"
 		then:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.text == "hi alex" }
 		when:
 			singleMessageDetails.archive.click()
 		then:
 			waitFor { searchsidebar.searchString == "alex" }
+	}
+
+	def "when message owner link is clicked it should redirect to the message owner page where no message is selected"() {
+		when:
+			to PageSearchResult, "cow"
+		then:
+			messageList.toggleSelect(0)
+			waitFor { singleMessageDetails.text == 'eat more cow' }
+		when:
+			detailsidebar.messageOwnerLink.click()
+		then:
+			waitFor { at frontlinesms2.poll.PageMessagePoll }
 	}
 
 	def "should expand the more option and select a contactName then the link to add contactName is hidden"() {
@@ -234,7 +255,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			!searchsidebar.addTownCustomFieldLink.displayed
 	}
 
-	def "should show the contact name that has been filled in after a search"(){
+	def "should show the contact name that has been filled in after a search"() {
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
@@ -283,51 +304,57 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "should update message count when in search tab"() {
 		when:
 			to PageSearchResult, ""
-			def message = Fmessage.build(src:'+254999999', text:'message count')
 		then:
-			tabs.unreadcount == 2
+			tabs.unreadcount == 3
 		when:
-			js.refreshMessageCount()
+			remote { Fmessage.build(src:'+254999999', text:'message count'); null }
 		then:
-			waitFor('very slow') { tabs.unreadcount == 3 }
+			waitFor('very slow') { tabs.unreadcount == 4 }
 	}
 
-	def "moveaction drop down should not be visible if only one archived message is seleted"(){
+	def "moveaction drop down should not be visible if only one archived message is seleted"() {
 		when:
-			def m2 = Fmessage.build(src:'+25499934', text:'archived2')
-			def m1 = Fmessage.build(src:'+25499912', text:'archived1', archived:true)
+			remote {
+				Fmessage.build(src:'+25499934', text:'archived2')
+				Fmessage.build(src:'+25499912', text:'archived1', archived:true)
+				null
+			}
 			to PageSearchResult, "archived", "inArchive=true"
 		then:
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		when:
 			waitFor { singleMessageDetails.text == "archived1" }
 		then:
 			!singleMessageDetails.single_moveActions.displayed
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			multipleMessageDetails.multiple_moveActions.displayed
 	}
 
 	def "ensure dispatch count in message results is correct"() {
 		given:
-			Fmessage.build(src:'3333333')
-			Fmessage.build()
+			remote {
+				Fmessage.build(src:'3333333')
+				Fmessage.build()
 
-			def message = new Fmessage(text:"experiment")
-			message.addToDispatches(dst:'333', status:DispatchStatus.PENDING)
-			message.addToDispatches(dst:'332', status:DispatchStatus.PENDING)
-			message.addToDispatches(dst:'222', status:DispatchStatus.PENDING)
-			message.save(flush:true, failOnError:true)
+				def message = new Fmessage(text:"experiment")
+				message.addToDispatches(dst:'333', status:DispatchStatus.PENDING)
+				message.addToDispatches(dst:'332', status:DispatchStatus.PENDING)
+				message.addToDispatches(dst:'222', status:DispatchStatus.PENDING)
+				message.save(flush:true, failOnError:true)
+				null
+			}
 
 			to PageNewSearch
 			searchsidebar.searchField = '33'
 		when:
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor{ searchsidebar.searchBtn.displayed }
-			messageList.messages.size() == 2
-			messageList.messages[0].text == 'experiment'
-			messageList.messages[0].source == 'To: 3 recipients'
+			waitFor { searchsidebar.searchBtn.displayed }
+			messageList.messageCount() == 2
+			messageList.messageText(0) == 'experiment'
+			messageList.messageSource(0) == 'To: 3 recipients'
 	}
 }
+

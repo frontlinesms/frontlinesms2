@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+echo "# Checking for bad calls to setInterval..."
+VIOLATIONS=`grep -lr setInterval grails-app/views/ web-app/js/ | grep -v app_info | grep -v timer | wc -l | tr -d ' '`
+
+if [[ "$VIOLATIONS" != "0" ]]; then
+	echo "# Violations found:"
+	grep -lr setInterval grails-app/views/ web-app/js/ | grep -v app_info | grep -v timer
+	exit 1
+fi
+
+echo "# No bad calls to setInterval found."
+

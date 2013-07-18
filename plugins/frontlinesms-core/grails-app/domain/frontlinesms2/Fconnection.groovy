@@ -20,15 +20,20 @@ class Fconnection {
 			ClickatellFconnection,
 			IntelliSmsFconnection,
 			NexmoFconnection,
-			SmssyncFconnection]
+			SmssyncFconnection,
+			SmppFconnection]
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
-		if(fields instanceof Map) return fields.getAllValues()?.findAll { field -> !clazz.constraints[field].blank }
-		else return fields.findAll { field ->
-			if(!(clazz.metaClass.hasProperty(null, field).type in [Boolean, boolean])) {
-				!clazz.constraints[field].nullable
+		if (fields) {
+			if(fields instanceof Map) return fields.getAllValues()?.findAll { field -> !clazz.constraints[field].blank }
+			else return fields.findAll { field ->
+				if(!(clazz.metaClass.hasProperty(null, field).type in [Boolean, boolean])) {
+					!clazz.constraints[field].nullable
+				}
 			}
+		} else {
+			return fields
 		}
 	}
 
@@ -78,4 +83,3 @@ class Fconnection {
 		}.routeDefinitions
 	}
 }
-

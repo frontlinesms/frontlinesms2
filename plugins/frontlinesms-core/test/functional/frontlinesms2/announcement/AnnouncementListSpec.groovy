@@ -46,13 +46,10 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			def announcement = Announcement.findByName("New Office")
-			def messages = announcement.getMessages() as List
-			def message = messages[0]
-			to PageMessageAnnouncement, 'New Office', Fmessage.findBySrc('Max')
+			to PageMessageAnnouncement, 'New Office', remote { Fmessage.findBySrc('Max').id }
 			singleMessageDetails.reply.click()
 		then:
-			waitFor {at QuickMessageDialog}
+			waitFor { at QuickMessageDialog }
 	}
 
 	def "should filter announcement messages for starred and unstarred messages"() {
@@ -76,7 +73,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			footer.showAll.click()
 		then:
 			waitFor { messagesList.size() == 3 }
-			messagesList.collect {it.find(".message-sender-cell").text()}.containsAll(['Jane', 'Max'])
+			messagesList.collect { it.find(".message-sender-cell").text() }.containsAll(['Jane', 'Max'])
 			footer.showAll.hasClass('active')
 			!footer.showStarred.hasClass('active')
 	}
@@ -86,7 +83,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			to PageMessageAnnouncement, 'New Office', Fmessage.findBySrc('Max')
+			to PageMessageAnnouncement, 'New Office', remote { Fmessage.findBySrc('Max').id }
 			singleMessageDetails.forward.click()
 		then:
 			waitFor { at QuickMessageDialog }
@@ -99,11 +96,11 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageAnnouncement, 'New Office'
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 		then:
 			waitFor { singleMessageDetails.sender.contains("Jane") }
 		when:
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
@@ -113,12 +110,15 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		given:
 			createTestAnnouncements()
 			createTestMessages()
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true, flush:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
+			remote {
+				new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true, flush:true)
+				new Contact(name: 'June', mobile: '+254778899').save(failOnError:true, flush:true)
+				null
+			}
 		when:
 			to PageMessageAnnouncement, 'New Office'
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.replyAll.displayed }

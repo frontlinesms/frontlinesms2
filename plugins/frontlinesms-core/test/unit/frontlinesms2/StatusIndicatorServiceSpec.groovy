@@ -1,24 +1,19 @@
-package frontlinesms2.controllers
-
-import frontlinesms2.*
+package frontlinesms2
 
 import spock.lang.*
-import grails.test.mixin.*
+import static ConnectionStatus.*
 
-import static frontlinesms2.ConnectionStatus.*
-
-@TestFor(StatusController)
-class StatusControllerSpec extends Specification {
+class StatusIndicatorServiceSpec extends Specification {
 	@Unroll
-	def 'test traffic lights'() {
+	def 'getColour() returns the appropriate colour when given a list of connection statuses'() {
 		setup:
 			Fconnection.metaClass.static.list = {
 				statuses.collect { [status:it] }
 			}
 		when:
-			controller.trafficLightIndicator()
+			def color = service.getColor()
 		then:
-			controller.response.contentAsString == expectedColor
+			color == expectedColor
 		where:
 			expectedColor | statuses
 			'grey'        | []
@@ -28,7 +23,7 @@ class StatusControllerSpec extends Specification {
 			'orange'      | [CONNECTING]
 			'orange'      | [CONNECTING, NOT_CONNECTED]
 			'orange'      | [CONNECTING, NOT_CONNECTED, DISABLED]
-			'orange'      | [CONNECTING, NOT_CONNECTED, DISABLED, CONNECTED]
+			'green'       | [CONNECTING, NOT_CONNECTED, DISABLED, CONNECTED]
 			'green'       | [NOT_CONNECTED, CONNECTED, NOT_CONNECTED]
 			'green'       | [DISABLED, NOT_CONNECTED, CONNECTED, NOT_CONNECTED]
 			'green'       | [CONNECTED]
@@ -38,7 +33,6 @@ class StatusControllerSpec extends Specification {
 			'red'         | [FAILED]
 			'red'         | [FAILED, DISABLED]
 			'red'         | [FAILED, NOT_CONNECTED]
-			'red'         | [FAILED, CONNECTED]
 	}
 }
 

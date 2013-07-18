@@ -7,19 +7,12 @@ import org.apache.camel.Exchange
 
 class MetaClassModifiers {
 	static void addAll() {
-		MetaClassModifiers.addTodoConstantToSpecifications()
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
 		MetaClassModifiers.addEscapeForJavascriptToStrings()
-	}
-
-	static def addTodoConstantToSpecifications() {
-		try {
-			Class.forName("spock.lang.Specification")?.metaClass.static.getTODO = { false }
-		} catch(Exception ex) { /* presumably we are in prod mode and spock is not on the classpath */ }
 	}
 
 	static def addZipMethodToFile() {

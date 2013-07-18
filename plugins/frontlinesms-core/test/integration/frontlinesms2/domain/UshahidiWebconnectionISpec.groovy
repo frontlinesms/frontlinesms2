@@ -2,7 +2,6 @@ package frontlinesms2.domain
 
 import spock.lang.*
 import frontlinesms2.*
-import grails.converters.JSON
 
 class UshahidiWebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def webCService = Mock(WebconnectionService)
@@ -17,7 +16,7 @@ class UshahidiWebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			webconnection.processKeyword(incomingMessage, k)
 		then:
-			1 * webCService.send(incomingMessage)
+			1 * webCService.doUpload(webconnection, incomingMessage)
 	}
 
 	def 'incoming message should match if keyword is blank and exactmatch == false'() {
@@ -31,6 +30,6 @@ class UshahidiWebconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			webconnection.processKeyword(incomingMessage, k)
 		then:
-			1 * webCService.send(incomingMessage)
+			1 * webCService.doUpload(webconnection, incomingMessage)
 	}
 }

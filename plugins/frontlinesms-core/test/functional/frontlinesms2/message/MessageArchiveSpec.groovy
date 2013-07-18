@@ -16,34 +16,37 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
 			to PageMessageInbox
-			messageList.messages[0].checkbox.click()
-			waitFor { singleMessageDetails.text == "test2" }
+			messageList.toggleSelect(0)
+			waitFor { singleMessageDetails.text == 'test2' }
 			singleMessageDetails.archive.click()
 			to PageArchiveInbox
 		then:
-			messageList.messages[0].text == "test2"
+			messageList.messageText(0) == 'test2'
 		when:
 			to PageMessageInbox
 		then:
-			!messageList.messages.text.contains("test2")
+			messageList.messageText(0) != 'test2'
 	}
 
 	def 'archived messages do not show up in sent view'() {
 		setup:
-			def d = new Dispatch(dst:"34567890", dateSent: new Date(), status: DispatchStatus.SENT)
-			new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush:true, failOnError:true)
+			remote {
+				def d = new Dispatch(dst:"34567890", dateSent: new Date(), status: DispatchStatus.SENT)
+				new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush:true, failOnError:true)
+				null
+			}
 		when:
-		    to PageArchiveSent
+			to PageArchiveSent
 		then:
 			waitFor() { messageList.noContent.text() == "No messages here, yet." }
 		when:
 			to PageMessageSent
-			messageList.messages[0].checkbox.click()
+			messageList.toggleSelect(0)
 			waitFor { singleMessageDetails.text == "hi Mary" }
 			singleMessageDetails.archive.click()
 			to PageArchiveSent
 		then:
-	        waitFor { messageList.messages[0].text == "hi Mary" }
+			waitFor { messageList.messageText(0) == "hi Mary" }
 		when:
 			to PageMessageSent
 		then:
@@ -52,13 +55,13 @@ class MessageArchiveSpec extends MessageBaseSpec {
 
 	 def 'should not be able to archive activity messages'() {
 		when:
-			to PageMessagePoll, Poll.findByName('Miauow Mix').id, Fmessage.findBySrc('Barnabus')
+			to PageMessagePoll, 'Miauow Mix', remote { Fmessage.findBySrc('Barnabus').id }
 		then:
 			waitFor { singleMessageDetails.displayed }
-			messageList.messages[0].checkbox.click()
-			messageList.messages[1].checkbox.click()
+			messageList.toggleSelect(0)
+			messageList.toggleSelect(1)
 		 then:
 			waitFor { !multipleMessageDetails.archiveAll.displayed }
 	 }
-
 }
+

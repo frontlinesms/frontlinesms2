@@ -30,8 +30,8 @@
 	<div id="action-buttons" class="buttons">
 		<g:actionSubmit class="btn" id="update-all" action="updateMultipleContacts" value="${g.message(code:'action.save.all')}" disabled="disabled" />
 		<g:link class="cancel btn" disabled="disabled"><g:message code="action.cancel"/></g:link>
-		<a class="btn" id="btn_delete_all" onclick="launchConfirmationPopup(i18n('action.delete.all'));">
+		<g:link elementId="btn_delete_all" url="#" onclick="launchConfirmationPopup(i18n('action.delete.all'));" class="btn">
 			<g:message code="action.delete.all"/>
-		</a>
+		</g:link>
 	</div>
 </div>

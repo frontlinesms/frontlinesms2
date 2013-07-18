@@ -19,12 +19,14 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 			at PageSmartGroup
 			header.title.startsWith("english contacts")
 	}
-	
+
 	def 'changing contact selection in a smartgroup should keep user in smartgroup view'() {
 		given:
-			def c = 0
-			['Algernon', 'Bertie'].each {
-				new Contact(name:it, mobile:"+44789012345${++c}").save(failOnError:true, flush:true)
+			remote {
+				def c = 0
+				['Algernon', 'Bertie'].each {
+					new Contact(name:it, mobile:"+44789012345${++c}").save(failOnError:true, flush:true)
+				}
 			}
 		when:
 			launchCreateDialog()
@@ -44,12 +46,12 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		then:
 			bodyMenu.getSmartGroupLink('English Contacts').click()
 	}
-	
-	def 'user can edit an existing smartGroup'(){
+
+	def 'user can edit an existing smartGroup'() {
 		setup:
-			def englishContacts = new SmartGroup(name:'English Contacts', mobile:'+254').save(flush:true, failOnError:true)
+			remote { new SmartGroup(name:'English Contacts', mobile:'+254').save(flush:true, failOnError:true); null }
 		when:
-			to PageSmartGroupShow, SmartGroup.findByName("English Contacts")
+			to PageSmartGroupShow, remote { SmartGroup.findByName("English Contacts").id }
 			bodyMenu.getSmartGroupLink('English Contacts').click()
 		then:
 			at PageSmartGroup
@@ -57,13 +59,12 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		when:
 			header.moreGroupActions.value('edit')
 			waitFor { at SmartGroupEditDialog}
-			smartGroupNameField.value(smartGroupNameField.value() == englishContacts.name)
+			smartGroupNameField.value(smartGroupNameField.value() == 'English Contacts')
 			setRuleValue(0, "+44")
 			editButton.click()
-			englishContacts.refresh()
 		then:
-			SmartGroup.count() == 1
-			waitFor {englishContacts.mobile == "+44"}
+			remote { SmartGroup.count() == 1 }
+			waitFor { remote { SmartGroup.findByName('English Contacts')?.mobile == '+44' } }
 	}
 }
 

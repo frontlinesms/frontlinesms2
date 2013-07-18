@@ -10,10 +10,9 @@ class DispatchRouterService {
 	static final String RULE_PREFIX = "fconnection-"
 	def appSettingsService
 	def camelContext
-	def i18nUtilService
+	def systemNotificationService
 
 	int counter = -1
-
 	/**
 	 * Slip should return the list of ______ to forward to, or <code>null</code> if
 	 * we've done with it.
@@ -52,7 +51,14 @@ class DispatchRouterService {
 						routeId = getCamelRouteId(Fconnection.get(route))
 					}
 					log "Route Id selected: $routeId"
-					if(routeId) break
+					if(routeId) {
+						if(exchange.in.body instanceof Dispatch) {
+							def dispatch = exchange.in.body
+							dispatch.fconnectionId = route as long
+							dispatch.save(failOnError:true, flush:true)
+						}
+						break
+					}
 				}
 			}
 
@@ -96,21 +102,12 @@ class DispatchRouterService {
 
 	def handleNoRoutes(Exchange x) {
 		println "DispatchRouterService.handleNoRoutes() : NoRouteAvailableException handling..."
-		createSystemNotification('no-available-route')
-		def id = x.in.getHeader('frontlinesms.dispatch.id')
-		def body = x.in.body
+		systemNotificationService.create(code:"routing.notification.no-available-route")
 		x.out.body = x.in.body
 		x.out.headers = x.in.headers
 		println "DispatchRouterService.handleNoRoutes() : EXIT"
 	}
 
-	private def createSystemNotification(def code) {
-		def text = i18nUtilService.getMessage(code:"routing.notification.$code")
-		def notification = SystemNotification.findOrCreateWhere(text:text)
-		notification.read = false
-		notification.save()
-	}
-	
 	private Dispatch updateDispatch(Exchange x, s) {
 		def id = x.in.getHeader('frontlinesms.dispatch.id')
 		Dispatch d

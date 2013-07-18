@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
 
 class CustomActivityService {
 	/* TODO if you do insist on committing printlns, please make sure they are neat and make sense when
@@ -17,7 +16,6 @@ class CustomActivityService {
 		customActivity.name = params.name
 		//TODO DRY the functionality of creating and editing keywords
 		customActivity.keywords?.clear()
-		println "# Removing existing steps if any"
 				
 		//Removing Steps
 		def storedSteps = customActivity.steps

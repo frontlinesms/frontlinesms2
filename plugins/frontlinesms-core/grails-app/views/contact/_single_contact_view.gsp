@@ -22,9 +22,9 @@
 					<a class="remove-command not-custom-field" id="remove-mobile">
 						<g:message code="contact.remove.mobile"/>
 					</a>
-					<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+					<fsms:popup class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 						&nbsp;
-					</g:remoteLink>
+					</fsms:popup>
 				</g:if>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
@@ -104,16 +104,16 @@
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
-			<a id="btn_delete" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
+			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
 				<g:message code="action.delete"/>
-			</a>
+			</g:link>
 		</g:if>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
 		<div id="message-stats">
 			<h2><g:message code="contact.messages.label"/></h2>
 			<ul>
-				<li class="sent"><g:message code="contact.sent.messages" args="${[contactInstance?.outboundMessagesCount]}"/></li>
+				<li class="sent"><g:message code="contact.messages.sent" args="${[contactInstance?.outboundMessagesCount]}"/></li>
 				<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
 			</ul>
 			<g:link class="btn search" controller='search' action='result'
@@ -124,19 +124,14 @@
 	</g:if>
 </div>
 <r:script>
-function refreshMessageStats(data) {
-	var url, numSent, numRecieved;
-	url = "contact/messageStats";
-	numSent = $('#num-sent');
-	numRecieved = $('#num-recieved');
-	$.getJSON(url_root + url, { id: "${contactInstance?.id}" }, function(data) {
-		numSent.text(numSent.text().replace(/\d{1,}/, data.outboundMessagesCount));
-		numRecieved.text(numRecieved.text().replace(/\d{1,}/, data.inboundMessagesCount));
-	});
-}
-
 $(function() {
-	setInterval(refreshMessageStats, 15000);
+	app_info.listen("contact_message_stats", { id: "${contactInstance?.id}" }, function(data) {
+		data = data.contact_message_stats;
+		if(!data) { return; }
+		$("#message-stats .sent").text(i18n("contact.messages.sent", data.outbound));
+		$("#message-stats .recieved").text(i18n("contact.messages.received", data.inbound));
+	});
+
 	$("td > input[type=text]").each(function(index) {
 		var clear = $(this).next();
 		if($(this).val() === "") {

@@ -36,6 +36,7 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'postprocess call is handed back to the relevant domain object'() {
 		given:
+			service.metaClass.private.changeMessageOwnerDetail = {Fmessage a, String b -> b}
 			def m = Mock(Fmessage)
 			m.messageOwner >> mockConnection
 			Fmessage.metaClass.static.get = { Serializable id -> return m }
@@ -56,7 +57,7 @@ class WebconnectionServiceSpec extends Specification {
 			def controller = [request:[:], render: { renderedArgs = it }]
 			controller.request = [JSON:requestBody]
 		when:
-			def responseBody = service.apiProcess(webcon, controller)
+			service.apiProcess(webcon, controller)
 		then:
 			renderedArgs.status == 401
 			renderedArgs.text == expectedResponse
@@ -80,7 +81,7 @@ class WebconnectionServiceSpec extends Specification {
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
 		when:
-			def responseBody = service.apiProcess(webcon, controller)
+			service.apiProcess(webcon, controller)
 		then:
 			renderedArgs.status == 400
 			renderedArgs.text == expectedResponse
@@ -216,6 +217,16 @@ class WebconnectionServiceSpec extends Specification {
 			[secret:"secret", message:"test", recipients: [[type:'address', value:'+123457890'], [type:'address', value:'213']]] | ['+123457890', '213']
 	}
 
+	def 'preProcess should have no return type'() {
+		expect:
+			service.class.getMethod('preProcess', [Exchange] as Class[]).returnType == void.class
+	}
+
+	def 'postProcess should have no return type'() {
+		expect:
+			service.class.getMethod('postProcess', [Exchange] as Class[]).returnType == void.class
+	}
+
 	Exchange mockExchange(body, Map headers) {
 		Exchange x = Mock()
 		def inMessage = Mock(Message)
@@ -225,3 +236,4 @@ class WebconnectionServiceSpec extends Specification {
 		return x
 	}
 }
+

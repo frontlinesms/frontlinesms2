@@ -4,7 +4,7 @@ import frontlinesms2.popup.MediumPopup
 
 class ConnectionDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains('connection')
+		popupTitle.contains('connection') || popupTitle.contains("edit")
 	}
 	static content = {
 		connectionType { $("input[name=connectionType]") }

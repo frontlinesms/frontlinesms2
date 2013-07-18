@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import grails.converters.JSON
-
 class SubscriptionController extends ActivityController {
 	def subscriptionService
 
@@ -54,7 +52,7 @@ class SubscriptionController extends ActivityController {
 		//TODO Should use the withDefault subscription closure
 		def subscriptionInstance = Subscription.get(params.ownerId)?: new Subscription()
 		params.keywords = (params.topLevelKeywords?.trim()?.length() > 0) ? params.topLevelKeywords:("${params.joinKeywords},${params.leaveKeywords}")
-		doSave('subscription', subscriptionService, subscriptionInstance)
+		doSave(subscriptionService, subscriptionInstance)
 	}
 
 	def categoriseSubscriptionPopup() {

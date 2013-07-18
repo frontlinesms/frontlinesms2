@@ -14,6 +14,18 @@ if(!String.prototype.trim) {
 	};
 }
 
+if(!String.prototype.startsWith) {
+	String.prototype.startsWith = function(prefix) {
+		return this.slice(0, prefix.length) === prefix;
+	};
+}
+
+if(!String.prototype.endsWith) {
+	String.prototype.endsWith = function(suffix) {
+		return this.indexOf(suffix, this.length - suffix.length) !== -1;
+	};
+}
+
 if(!String.prototype.htmlEncode) {
 	String.prototype.htmlEncode = function() {
 		return this
@@ -27,87 +39,67 @@ if(!String.prototype.htmlEncode) {
 
 // Standardise the onclick/onchange firing in IE before IE9
 function addChangeHandlersForRadiosAndCheckboxes() {
-	$('input:radio, input:checkbox').click(function() {
+	jQuery('input:radio, input:checkbox').click(function() {
 		this.blur();
 		this.focus();
 	});
 }
-if(jQuery.browser.msie) { $(function() {
+if(jQuery.browser.msie) { jQuery(function() {
 	addChangeHandlersForRadiosAndCheckboxes();
 });}
 
-(function($) {
-	$.fn.disableField = function(){
+(function(jQuery) {
+	jQuery.fn.disableField = function(){
 	    return this.each(function(){
 	        this.disabled = true;
 	    });
 	};
-	$.fn.enableField = function(){
+	jQuery.fn.enableField = function(){
 	    return this.each(function(){
 	        this.disabled = false;
 	    });
 	};
 }(jQuery));
 
-function refreshMessageCount() {
-	$.ajax({
-			url: url_root + 'message/unreadMessageCount',
-			cache: false,
-			success: function(data) { $('#inbox-indicator').html(data); }
-	});
-}
-
-function isEmpty(val) {
-	return val.trim().length === 0;
-}
-
-function isElementEmpty(selector) {
-	return isEmpty($(selector).val());
-}
-
 function getSelectedGroupElements(groupName) {
-	return $('input[name=' + groupName + ']:checked');
+	return jQuery('input[name=' + groupName + ']:checked');
 }
 
 function isGroupChecked(groupName) {
 	return getSelectedGroupElements(groupName).length > 0;
 }
 
-function isDropDownSelected(id) {
-	var selectedOptions = $("#" + id + " option:selected");
-	return selectedOptions.length > 0  && (!isEmpty(selectedOptions[0].value));
-}
-
-$('.check-bound-text-area').live('focus', function() {
-	var checkBoxId = $(this).attr('checkbox_id');
-	$('#' + checkBoxId).attr('checked', true);
+jQuery('.check-bound-text-area').live('focus', function() {
+	var checkBoxId = jQuery(this).attr('checkbox_id');
+	jQuery('#' + checkBoxId).attr('checked', true);
 });
 
-function findInputWithValue(value) {
-	return $('input[value=' + "'" + value + "'" + ']');
-}
-
-function isCheckboxSelected(value) {
-	return findInputWithValue(value).is(':checked');
-}
-
-$.fn.renderDefaultText = function() {
+jQuery.fn.renderDefaultText = function() {
 	return this.focus(function() {
-			$(this).toggleClass('default-text-input', false);
-			var element = $(this).val();
-			$(this).val(element === this.defaultValue ? '' : element);
+			jQuery(this).toggleClass('default-text-input', false);
+			var element = jQuery(this).val();
+			jQuery(this).val(element === this.defaultValue ? '' : element);
 		}).blur(function() {
-			var element = $(this).val();
-			$(this).val(element.match(/^\s+$|^$/) ? this.defaultValue : element);
-			$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue); });
+			var element = jQuery(this).val();
+			jQuery(this).val(element.match(/^\s+$|^$/) ? this.defaultValue : element);
+			jQuery(this).toggleClass('default-text-input', jQuery(this).val() === this.defaultValue); });
 };
 
 function showThinking() {
-	$('#thinking').fadeIn();
+	var thinking = jQuery('#thinking'),
+	widgetOverlay = jQuery("div.ui-widget-overlay");
+	if(widgetOverlay) {
+		thinking.zIndex(widgetOverlay.zIndex() + 2);
+	}
+	thinking.fadeIn();
+}
+
+function fadeThinking() {
+	jQuery('#thinking').fadeOut();
 }
 
 function hideThinking() {
-	$('#thinking').fadeOut();
+	jQuery('#thinking').hide();
 }
 
 function insertAtCaret(areaId, text) {
@@ -145,10 +137,23 @@ function insertAtCaret(areaId, text) {
 	txtarea.scrollTop = scrollPos;
 }
 
-$(function() {
-	// FIXME no binding to events should take place in this file
-	setInterval(refreshMessageCount, 30000);
-	$.extend($.validator.messages, {
+jQuery(document).ajaxError(function(request, data, settings, error) {
+	var title;
+	// Ignore errors with AppInfo as they should already be handled.  If status is zero, the
+	// server is likely down, or an auth error.  AppInfo should update this page anyway shortly
+	if(!settings.url.match(/^.*\/appInfo$/) && data.status !== 0) {
+		// remove loading screen just in case it is there
+		hideThinking();
+		// display details of the error page
+		launchSmallPopup(data.status + ": " + data.statusText, data.responseText, i18n("action.ok"), cancel);
+	}
+});
+
+jQuery(function() {
+	if(!jQuery.validator) {
+		return;
+	}
+	jQuery.extend(jQuery.validator.messages, {
 		required: i18n("jquery.validation.required"),
 		remote: i18n("jquery.validation.remote"),
 		email: i18n("jquery.validation.email"),

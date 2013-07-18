@@ -85,12 +85,5 @@ abstract class Activity extends MessageOwner {
 		messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
 		this.processKeyword(messageInstance, null)
 	}
-
-	private def logFail(c, ex) {
-		ex.printStackTrace()
-		log.warn("Error creating routes of webconnection with id $c?.id", ex)
-		LogEntry.log("Error creating routes to webconnection with name ${c?.name?: c?.id}")
-		//createSystemNotification('connection.route.failNotification', [c.id, c?.name?:c?.id], ex)
-	}
 }
 

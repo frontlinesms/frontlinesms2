@@ -8,7 +8,7 @@ function chooseActivity() {
 		type:'GET',
 		dataType: "html",
 		url: url_root + activityUrl,
-		beforeSend: function(){ showThinking(); },
+		beforeSend: function() { showThinking(); },
 		success: function(data, textStatus) { hideThinking(); mediumPopup.launchMediumWizard(title, data, i18n('wizard.save'), 675, 500, false); }
 	});
 }

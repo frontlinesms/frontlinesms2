@@ -2,6 +2,7 @@ package frontlinesms2
 
 import org.springframework.web.servlet.support.RequestContextUtils
 import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
+import frontlinesms2.CoreAppInfoProviders as CAIP
 
 class FsmsTagLib {
 	static namespace = 'fsms'
@@ -9,7 +10,8 @@ class FsmsTagLib {
 	def appSettingsService
 	def expressionProcessorService
 	def grailsApplication
-	def i18nUtilService 
+	def i18nUtilService
+	def statusIndicatorService
 
 	def info = { att ->
 		def cssClass = 'info'
@@ -108,6 +110,7 @@ class FsmsTagLib {
 		def descriptionPrefix = att.remove('descriptionPrefix')?: ''
 		def descriptionSuffix = att.remove('descriptionSuffix')?: ''
 		def hasDescription = descriptionPrefix || descriptionSuffix
+		def useImages = att.remove('useImages')
 		def cssClasses = ['select', 'radio']
 		if(!hasDescription) cssClasses << 'no-description'
 		out << "<div class='input'>"
@@ -118,8 +121,13 @@ class FsmsTagLib {
 			def id = att.name + '-' + i
 			def itemAttributes = att + [value:value, checked:isChecked(value), id:id]
 			out << '<li><label>'
+			def imagePath = "images/icons/${value}.png"
 			if(hasDescription) {
-				out << "<h3>$label</h3>"
+				if(useImages && grailsApplication.parentContext.getResource(imagePath)?.exists()) {
+					out << "<img src='${g.resource(file: imagePath)}' />"
+				}
+				else
+					out << "<h3>$label</h3>"
 				out << info(message:descriptionPrefix + value + descriptionSuffix)
 			} else {
 				out << label
@@ -156,8 +164,9 @@ class FsmsTagLib {
 					out << g.render(att)
 					if(type == 'sanchez') out << '</script>'
 					rendered = true
-				} catch(GrailsTagException ex) {
-					if(ex.message.startsWith("Template not found")) {
+				} catch(Exception ex) {
+					if((ex instanceof GrailsTagException && ex.message.startsWith('Template not found')) ||
+							(ex instanceof IllegalArgumentException && ex.message == 'Argument [txt] cannot be null or blank')) {
 						// Thanks for not subclassing your exceptions, guys!
 						log.debug "Could not render $plugin:$att.template", ex
 					} else {
@@ -169,13 +178,6 @@ class FsmsTagLib {
 		if(!rendered) throw new GrailsTagException("Failed to render [att=$att, plugins=${grailsApplication.config.frontlinesms.plugins}]")
 	}
 
-	private def templateExists(name, plugin) {
-		// FIXME need to use `plugin` variable when checking for resource
-		def fullUri = grailsAttributes.getTemplateUri(name, request)
-		def resource = grailsAttributes.pagesTemplateEngine.getResourceForUri(fullUri)
-		return resource && resource.file && resource.exists()
-	}
-
 	def i18nBundle = {
 		def locale = RequestContextUtils.getLocale(request)
 		// Always include English in case their locale is not available.  The most accurate
@@ -185,23 +187,28 @@ class FsmsTagLib {
 			['', "_${locale.language}",
 					"_${locale.language}_${locale.country}",
 					"_${locale.language}_${locale.country}_${locale.variant}"].each { localeSuffix ->
-				def link = g.resource plugin:bundle, dir:'i18n', file:"messages${localeSuffix}.js"
-				out << "<script type=\"text/javascript\" src=\"$link\" charset=\"UTF-8\"></script>\n" }
+				if(i18nUtilService.allTranslations.containsKey(localeSuffix - '_')) {
+					def link = g.resource plugin:bundle, dir:'i18n', file:"messages${localeSuffix}.js"
+					out << "<script type=\"text/javascript\" src=\"$link\" charset=\"UTF-8\"></script>\n"
+				}
+			}
 		}
 	}
-	
+
 	def confirmTable = { att ->
-		out << '<table id="' + (att.instanceClass.shortName) + '-confirm" class="connection-confirm-table">'
-		out << confirmTypeRow(att)
 		def fields = getFields(att)
-		if(fields instanceof Map) {
-			generateConfirmSection(att, fields)
-		} else {
-			fields.each { out << confirmTableRow(att + [field:it.trim()]) }
+		if (fields) {
+			out << '<table id="' + (att.instanceClass.shortName) + '-confirm" class="connection-confirm-table">'
+			out << confirmTypeRow(att)
+			if(fields instanceof Map) {
+				generateConfirmSection(att, fields)
+			} else {
+				fields.each { out << confirmTableRow(att + [field:it.trim()]) }
+			}
+			out << '</table>'
 		}
-		out << '</table>'
 	}
-	
+
 	def confirmTypeRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
@@ -210,7 +217,7 @@ class FsmsTagLib {
 		out << '<td id="confirm-type"></td>'
 		out << '</tr>'
 	}
-	
+
 	def confirmTableRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
@@ -236,35 +243,43 @@ class FsmsTagLib {
 		out << '<td id="confirm-' + att.field + '"></td>'
 		out << '</tr>'
 	}
-	
+
 	def inputs = { att ->
 		if(att.table) out << '<table>'
+		if(att.list) out << "<div class='field-list'>"
 		def fields = getFields(att)
-		if(fields instanceof Map) {
-			generateSection(att, fields)
-		} else {
-			def values = att.values
-			def types = att.types
-			['values', 'types'].each { att.remove(it) }
-			fields.eachWithIndex { field, i ->
-				def extraAttributes = [field:field]
-				if(values) {
-					extraAttributes.val = values[i]
-					if(types && types[i]) {
-						extraAttributes[types[i]] = true
+		if(fields) {
+			if(fields instanceof Map) {
+				generateSection(att, fields)
+			} else {
+				def values = att.values
+				def types = att.types
+				['values', 'types'].each { att.remove(it) }
+				fields.eachWithIndex { field, i ->
+					def extraAttributes = [field:field]
+					if(values) {
+						extraAttributes.val = values[i]
+						if(types && types[i]) {
+							extraAttributes[types[i]] = true
+						}
 					}
+					out << input(att + extraAttributes)
 				}
-				out << input(att + extraAttributes)
 			}
-		}
-		if(att.submit) {
-			if(att.table) out << '<tr><td></td><td>'
-			out << g.submitButton(class:'btn', value:g.message(code:att.submit), name:att.submitName?:'submit')
-			if(att.table) out << '</td></tr>'
+			if(att.submit) {
+				if(att.table) out << '<tr><td></td><td>'
+				if(att.list) out << "<div class='input-item'>"
+				out << g.submitButton(class:'btn', value:g.message(code:att.submit), name:att.submitName?:'submit')
+				if(att.list) out << '</div>'
+				if(att.table) out << '</td></tr>'
+			}
+		} else {
+			out << render(template: "/fconnection/${att.instanceClass?.shortName}/custom")
 		}
 		if(att.table) out << '</table>'
+		if(att.list) out << '</div>'
 	}
-	
+
 	def input = { att, body ->
 		def groovyKey = att.field
 		// TODO remove references to att.instanceClass and make sure that all forms in app
@@ -274,41 +289,48 @@ class FsmsTagLib {
 		def htmlKey = (att.fieldPrefix!=null? att.fieldPrefix: instanceClass?instanceClass.shortName:'') + att.field
 		def labelKey = (att.labelPrefix!=null? att.labelPrefix: instanceClass?instanceClass.shortName+'.':'') + att.field + '.label'
 		def validationRequired = instanceClass != null
-		def val
-		if(att.val) {
-			val = att.val
-		} else if(att.instance) {
-			val = att.instance?."$groovyKey"
-		} else {
-			val = instanceClass?.defaultValues?."$groovyKey"?:null
-		}
 
-		['instance', 'instanceClass'].each { att.remove(it) }
-		att += [name:htmlKey, value:val]
-		if(att.table) out << '<tr><td class="label">'
+		if(att.list) out << "<div class='input-item'>"
+		else if(att.table) out << '<tr><td class="label">'
 		else out << '<div class="field">'
-		out << '<label for="' + htmlKey + '">'
-		out << '' + g.message(code:labelKey)
-		if(validationRequired && isRequired(instanceClass, att.field) && !att.isBoolean && !isBooleanField(instanceClass, att.field)) {
-			out << '<span class="required-indicator">*</span>'
+		if((att.instanceClass?.configFields && !groovyKey.startsWith("info-")) || (!att.instanceClass?.configFields && att.field)) {
+			def val
+			if(att.val) {
+				val = att.val
+			} else if(att.instance) {
+				val = att.instance?."$groovyKey"
+			} else {
+				val = instanceClass?.defaultValues?."$groovyKey"?:null
+			}
+
+			['instance', 'instanceClass'].each { att.remove(it) }
+			att += [name:htmlKey, value:val]
+			out << '<label for="' + htmlKey + '">'
+			out << '' + g.message(code:labelKey)
+			if(validationRequired && isRequired(instanceClass, att.field) && !att.isBoolean && !isBooleanField(instanceClass, att.field)) {
+				out << '<span class="required-indicator">*</span>'
+			}
+			out << '</label>'
+			if(att.table) out << '</td><td>'
+			if(validationRequired) {
+				if(att.class) att.class += addValidationCss(instanceClass, att.field)
+				else att.class = addValidationCss(instanceClass, att.field)
+			}
+
+			if(att.password || isPassword(instanceClass, groovyKey)) {
+				out << g.passwordField(att)
+			} else if(getMetaClassProperty(instanceClass, groovyKey)?.type?.enum) {
+				out << g.select(att + [from:getMetaClassProperty(instanceClass, groovyKey).type.values(),
+							noSelection:[null:'- Select -']])
+			} else if(att.isBoolean || isBooleanField(instanceClass, groovyKey)) {
+				out << g.checkBox(att)
+			} else out << g.textField(att)
+			out << body()
+		} else if(att.instanceClass?.configFields) {
+			out << "<div class='connection-info'>${g.message(code:"${att.instance?.class?.shortName?:instanceClass?.shortName?:'connection'}.${groovyKey}").markdownToHtml()}</div>"
 		}
-		out << '</label>'
-		if(att.table) out << '</td><td>'
-		if(validationRequired) {
-			if(att.class) att.class += addValidationCss(instanceClass, att.field)
-			else att.class = addValidationCss(instanceClass, att.field)
-		}
-		
-		if(att.password || isPassword(instanceClass, groovyKey)) {	
-			out << g.passwordField(att)
-		} else if(getMetaClassProperty(instanceClass, groovyKey)?.type?.enum) {
-			out << g.select(att + [from:getMetaClassProperty(instanceClass, groovyKey).type.values(),
-						noSelection:[null:'- Select -']])
-		} else if(att.isBoolean || isBooleanField(instanceClass, groovyKey)) {
-			out << g.checkBox(att)
-		} else out << g.textField(att)
-		out << body()
-		if(att.table) {
+		if(att.list) out << "</div>"
+		else if(att.table) {
 			out << '</td></tr>'
 		} else {
 			out << '<div style="clear:both" class="clearfix"></div>'
@@ -375,8 +397,7 @@ class FsmsTagLib {
 	def trafficLightStatus = { att ->
 		out << '<span id="status-indicator" class="indicator '
 		def connections = Fconnection.list()
-		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
-		out << color
+		out << statusIndicatorService.color
 		out << '"></span>'
 	}
 
@@ -399,13 +420,15 @@ class FsmsTagLib {
 	}
 
 	def quickMessage = { att ->
-		att.controller = "quickMessage"
-		att.action = "create"
-		att.id = "quick_message"
-		att.onLoading = "showThinking();"
-		// FIXME activity-specific code should not be inside this file
-		att.onSuccess = "hideThinking(); mediumPopup.launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); mediumPopup.selectSubscriptionGroup(${att.groupId});"
+		def popupCall = "mediumPopup.launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); mediumPopup.selectSubscriptionGroup(${att.groupId});"
+		att << [controller:'quickMessage', action:'create', id:'quick_message', popupCall:popupCall]
 		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
+		out << fsms.popup(att, body)
+	}
+
+	def popup = { att, body ->
+		att << [onLoading:"showThinking();", onSuccess:"hideThinking(); ${att.popupCall}"]
+		att.remove('popupCall')
 		out << g.remoteLink(att, body)
 	}
 
@@ -433,7 +456,12 @@ class FsmsTagLib {
 	def menuitem = { att, body ->
 		def classlist = att.class?:""
 		classlist += att.selected ? " selected" : ""
-		out << '<li class="' + classlist + '" >'
+		out << '<li class="' + classlist + '" '
+		if(att?.entitytype)
+			out << "entitytype='${att.entitytype}' "
+		if(att?.entityid)
+			out << "entityid='${att.entityid}' "
+		out << '>'
 		if (att?.bodyOnly)
 		{
 			out << body()
@@ -443,10 +471,23 @@ class FsmsTagLib {
 			def msgargs = att.msgargs
 			def p = att.params
 			out << g.link(controller:att.controller, action:att.action, params:p, id:att.id) {
-				out << (att.string ? att.string : g.message(code:msg, args:msgargs))
+				out << "<span class='menu-item-label'>${(att.string ? att.string : g.message(code:msg, args:msgargs))}</span>"
+				if (body) {
+					out << body()
+				}
 			}
 		}
 		out << '</li>'
+	}
+
+	def unreadCount = { att, body ->
+		def val = att.unreadCount
+		out << "<span class='unread_message_count ${val == 0 ? 'zero' : ''}'>" + val + "</span>"
+	}
+
+	def pendingCount = { att, body ->
+		def val = att.pendingCount
+		out << "<span class='pending_message_count ${val == 0 ? 'zero' : ''}'>" + val + "</span>"
 	}
 
 	def select = { att, body ->
@@ -492,14 +533,24 @@ class FsmsTagLib {
 	def step = { att, body ->
 		out << render(template:'/customactivity/step', model:[stepId:att.stepId, type:att.type, body:body])
 	}
-	
+
+	def fieldErrors = { att, body ->
+		def errors = att.bean?.errors?.allErrors.findAll{ it.field == att.field }
+		def errorMessages = errors.collect { message(error:it) }.join(att.delimeter?:" ")
+		if (errors && errorMessages) {
+			out << "<label for='${att.field}' generated='true' class='error'>"
+			out << errorMessages
+			out << "</label>"
+		}
+	}
+
 	private def getFields(att) {
 		def fields = att.remove('fields')
 		if(!fields) fields = att.instanceClass?.configFields
 		if(fields instanceof String) fields = fields.tokenize(',')*.trim()
 		return fields
 	}
-	
+
 	private def getFieldLabel(clazz, fieldName) {
 		g.message(code:"${clazz.shortName}.${fieldName}.label")
 	}
@@ -507,12 +558,12 @@ class FsmsTagLib {
 	private def getActivityFieldLabel(att) {
 		g.message(code:"${att.instanceClass.shortName}.${att.type}.${att.field}.label")
 	}
-	
+
 	private def isPassword(instanceClass, groovyKey) {
 		return getMetaClassProperty(instanceClass, 'passwords') &&
 				groovyKey in instanceClass.passwords
 	}
-	
+
 	private def isBooleanField(instanceClass, groovyKey) {
 		return getMetaClassProperty(instanceClass, groovyKey)?.type in [Boolean, boolean]
 	}
@@ -522,24 +573,25 @@ class FsmsTagLib {
 			return clazz.metaClass.hasProperty(null, groovyKey)
 		}
 	}
-	
+
 	private def generateSection(att, fields) {
 		def keys = fields.keySet()
 		keys.each { key ->
 			if(fields[key]) {
 				out << "<div id=\"$key-subsection\">"
-				out << "<fieldset>"
+				if(att.list) out << "<fieldset class='table'>"
+				else out << "<fieldset>"
 				out << "<legend>"
 				out << input(att + [field:key])
 				out << "</legend>"
-				
+
 				//handle subsections within a subsection
 				if(fields[key] instanceof LinkedHashMap) {
 					generateSection(att, fields[key])
 				} else {
 					fields[key].each {field ->
 						if(field instanceof String) {
-							 out << input(att + [field:field] + [class:"$key-subsection-member"])
+							out << input(att + [field:field] + [class:"$key-subsection-member"])
 						}
 					}
 				}
@@ -548,17 +600,16 @@ class FsmsTagLib {
 			} else {
 				out << input(att + [field:key])
 			}
-			
 		}
 	}
-	
+
 	private def generateConfirmSection(att, fields) {
 		def keys = fields.keySet()
 		keys.each { key ->
 			if(fields[key]) {
 				out << "<div class=\"confirm-$key-subsection\">"
-				out << confirmTableRow(att + [field:key])
-				
+				if(!key.startsWith("info-")) out << confirmTableRow(att + [field:key])
+
 				//handle subsections within a subsection
 				if(fields[key] instanceof LinkedHashMap) {
 					generateConfirmSection(att, fields[key])
@@ -573,7 +624,6 @@ class FsmsTagLib {
 			} else {
 				out << confirmTableRow(att + [field:key])
 			}
-			
 		}
 	}
 

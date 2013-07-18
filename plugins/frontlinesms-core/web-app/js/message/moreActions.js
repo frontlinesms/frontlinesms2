@@ -11,7 +11,7 @@ var more_actions = (function() {
 		return $("#messageSection").val();
 	},
 	getActivityType = function() {
-		return $("#activityType").val()
+		return $("#activityType").val();
 	},
 	buildUrl = function(action) {
 		return url_root + getController() + "/" + action;
@@ -20,8 +20,10 @@ var more_actions = (function() {
 		$.ajax({
 			type:'GET',
 			url: buildUrl("confirmDelete"),
+			beforeSend: function() { showThinking(); },
 			data: { id:getOwnerId() },
 			success: function(data) {
+				hideThinking();
 				launchSmallPopup(i18n("smallpopup.fmessage.delete.title", (getActivityType() || getController())), data, i18n("action.delete")); }
 		});
 	},

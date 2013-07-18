@@ -15,7 +15,6 @@ class PageGeneralSettings extends PageSettings {
 		errors(required:false) { $('label.error') }
 		basicAuthentication { module BasicAuthentication }
 		databaseBackup { module DatabaseBackup }
-		routing { module RoutingConnections }
 	}
 	static at = {
 		title.contains('Settings') || title.contains('Mazingira')
@@ -39,14 +38,3 @@ class BasicAuthentication extends geb.Module {
 	}
 }
 
-class RoutingConnections extends geb.Module {
-	static base = { $('#routing-preferences') }
-
-	static content = {
-		routingForm { $('form#routing-form') }
-		useLastReceivedConnection { $('input[type=checkbox]', value:'uselastreceiver') }
-		useAnyAvailableConnection { $('input[name=otherwise]', value:'any') }
-		dontSend { $('input[name=otherwise]', value:'dontsend') }
-		save { $("input#saveRoutingDetails") }
-	}
-}

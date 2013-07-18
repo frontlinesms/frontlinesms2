@@ -13,7 +13,7 @@ class WebconnectionController extends ActivityController {
 	def save() {
 		if(params.activityId) params.ownerId = params.activityId
 		withWebconnection { webconnectionInstance ->
-			doSave('webconnection', webconnectionService, webconnectionInstance)
+			doSave(webconnectionService, webconnectionInstance)
 		}
 	}
 
@@ -36,20 +36,9 @@ class WebconnectionController extends ActivityController {
 
 	def testRoute() {
 		withWebconnection { webconnectionInstance ->
-			doSave('webconnection', webconnectionService, webconnectionInstance, false)
-			if(webconnectionService) TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
+			doSave(webconnectionService, webconnectionInstance, false)
+			TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
 		}
-	}
-
-	def checkRouteStatus() {
-		def webconnectionInstance = Webconnection.get(params.ownerId)
-		def response = [ownerId:params.ownerId, ok:true]
-		if(webconnectionInstance) {
-			def message = Fmessage.findByMessageOwnerAndText(webconnectionInstance, Fmessage.TEST_MESSAGE_TEXT)
-			response.status = message?.ownerDetail
-		}
-
-		render response as JSON
 	}
 
 	private def withWebconnection = withDomainObject({ WEB_CONNECTION_TYPE_MAP[params.webconnectionType?:params.imp]?: Webconnection }, { params.ownerId })
