@@ -32,3 +32,4 @@ class JoinActionStepSpec extends Specification {
 			1 * i18nUtilService.getMessage(_)
 	}
 }
+

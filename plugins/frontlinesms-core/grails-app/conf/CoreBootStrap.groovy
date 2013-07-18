@@ -450,7 +450,7 @@ class CoreBootStrap {
 			.setPropertyValue('myMessage', 'i will upload forever')
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
 		def forwardStep = new ForwardActionStep()
-				.addToStepProperties(new StepProperty(key:'sentMessageText',value:"sending forward \${message_text}"))
+				.addToStepProperties(new StepProperty(key:'sentMessageText',value:'sending forward ${message_text}'))
 				.addToStepProperties(new StepProperty(key:'recipient',value:'Address-123123'))
 		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
 		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"I will send you forever"))

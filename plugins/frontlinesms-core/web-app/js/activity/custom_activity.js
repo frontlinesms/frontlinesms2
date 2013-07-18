@@ -101,6 +101,7 @@ var customActivityDialog = (function(){
 				valid = valid && validator.element($(element));
 			});
 			$(".chzn-select").live("change", function() { validator.element($(this)); });
+
 			$.each($("input[name='url']"), function(index, element) {
 				valid = valid && validator.element($(element));
 			});

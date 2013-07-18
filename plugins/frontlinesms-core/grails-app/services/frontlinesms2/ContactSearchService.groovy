@@ -24,7 +24,21 @@ class ContactSearchService {
 		} else if(params.smartGroupId) {
 			return SmartGroup.getMembersByNameIlike(asLong(params.smartGroupId), searchString, [max:params.max, offset:params.offset])
 		}
-		return Contact.findAllByNameIlikeOrMobileIlike(searchString, searchString, params)
+		if(params.exclude) {
+			return Contact.withCriteria {
+				not {
+					'in' 'id', params.exclude
+				}
+				or {
+					ilike 'name', searchString
+					ilike 'mobile', searchString
+				}
+				if(params.max) maxResults(params.max)
+				if(params.order && params.sort) order params.sort, params.order
+			}
+		} else {
+			return Contact.findAllByNameIlikeOrMobileIlike(searchString, searchString, params)
+		}
 	}
 	
 	private def countContacts(params) {

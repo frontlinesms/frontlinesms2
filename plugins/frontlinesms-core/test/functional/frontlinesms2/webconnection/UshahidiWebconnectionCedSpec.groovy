@@ -6,7 +6,7 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
-	def setup(){
+	def setup() {
 		createWebconnections()
 	}
 

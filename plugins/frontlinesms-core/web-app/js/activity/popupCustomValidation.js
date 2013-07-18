@@ -99,3 +99,4 @@ function customValidationForRecipientSelector(){
 		return ($(element).val() != null);
 	}, i18n("validation.recipients.notnull"));
 }
+

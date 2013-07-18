@@ -44,10 +44,6 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		webconnection.click()
 		at WebconnectionWizard
 
-		// TODO sort this out so we don't need ugly sleep calls
-		// sleep here because otherwise option() calls are either very slow or timeout completely
-		sleep 1000
-
 		if(!webconnectionType) {
 			waitFor { option('generic').displayed }
 			return true

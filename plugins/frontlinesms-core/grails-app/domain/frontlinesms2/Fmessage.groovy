@@ -375,7 +375,6 @@ class Fmessage {
 	}
 
 	def setMessageDetail(activityOrStep, val) {
-		println "# Fmessage.setMessageDetail # ${activityOrStep} # ${val}"
 		if (activityOrStep instanceof Activity) {
 			this.setMessageDetailValue(activityOrStep, val)
 		} else {
@@ -385,7 +384,6 @@ class Fmessage {
 	}
 
 	private def setMessageDetailValue(owner, value) {
-		println "# Fmessage.setMessageDetailValue # ${owner} # ${value} #"
 		def ownerType = getOwnerType(owner)
 		def messageDetailInstance = this.details.find { it.ownerType == ownerType && it.ownerId == owner.id }
 		if(!messageDetailInstance) {
