@@ -1,7 +1,7 @@
 var mediumPopup = (function() {
 	var ___start___,
 		cancel, submit, submitWithoutClose, range,
-		selectSubscriptionGroup, editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
+		selectSubscriptionGroup, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
 		createModalBox,
 		launchMediumPopup, launchNewFeaturePopup, launchMediumWizard, launchHelpWizard,
 		getCurrentTab, getCurrentTabDom, getCurrentTabIndex, getTabLength,
@@ -12,6 +12,7 @@ var mediumPopup = (function() {
 		messageResponseClick, moveToRelativeTab,
 		___end___;
 	cancel = function() {
+		$("#cancel").trigger("dialogCancelClicked");
 		$(this).dialog('close');
 	};
 	createModalBox = function(html) {
@@ -45,6 +46,7 @@ var mediumPopup = (function() {
 		});
 		addChangeHandlersForRadiosAndCheckboxes();
 		initializePopup(modalBox);
+		selectmenuTools.initAll("select");
 	};
 	launchNewFeaturePopup = function(title, html, btnFinishedText, submitAction) {
 		var modalBox = createModalBox(html);
@@ -160,6 +162,7 @@ var mediumPopup = (function() {
 	};
 	validateTabSelections = function(dialog) {
 		dialog.find('#tabs').tabs({select: function(event, ui) {
+			$(this).trigger("tabSelected");
 			if(ui.index > getCurrentTabIndex()) {
 				validateAllPreviousTabs(ui.index);
 				var thisTabValidates = tabValidates(getCurrentTab());
@@ -286,15 +289,10 @@ var mediumPopup = (function() {
 			type:'POST',
 			data: {recipients: src, messageText: text, configureTabs: configureTabs},
 			url: url_root + 'quickMessage/create',
-			success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('action.send')); }
-		});
-	};
-
-	editConnection = function(id) {
-		$.ajax({
-			url: url_root + "connection/wizard/" + id,
-			success: function(data){
-				launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false);
+			beforeSend : function() { showThinking(); },
+			success: function(data, textStatus){
+				hideThinking();
+				launchMediumWizard(messageType, data, i18n('action.send'));
 			}
 		});
 	};
@@ -308,7 +306,6 @@ var mediumPopup = (function() {
 		addValidation:addValidation,
 		appendButton:appendButton,
 		disableTab:disableTab,
-		editConnection:editConnection, // TODO move this somewhere more suitable
 		enableTab:enableTab,
 		launchMediumPopup:launchMediumPopup,
 		launchNewFeaturePopup:launchNewFeaturePopup,

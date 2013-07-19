@@ -58,11 +58,14 @@ class MessageNavigationSpec extends MessageBaseSpec {
 
 	def "first message row should be highlighted when up key is pressed in Trash Page"() {
 		given:
-			def trashService = new TrashService()
 			createInboxTestMessages()
-			def announcement= Announcement.build(name:'test-announcement')
-			Fmessage.getAll().each { trashService.sendToTrash(it) }
-			trashService.sendToTrash(announcement)
+			remote {
+				def trashService = new TrashService()
+				def announcement = Announcement.build(name:'test-announcement')
+				Fmessage.getAll().each { trashService.sendToTrash(it) }
+				trashService.sendToTrash(announcement)
+				null
+			}
 		when:
 			to PageMessageTrash
 			messageList << Keys.chord(Keys.ARROW_UP)
@@ -72,11 +75,14 @@ class MessageNavigationSpec extends MessageBaseSpec {
 
 	def "single message shoould not be updated when navigating in the Trash Page"() {
 		given:
-			def trashService = new TrashService()
 			createInboxTestMessages()
-			def announcement= Announcement.build(name:'test-announcement')
-			Fmessage.getAll().each { trashService.sendToTrash(it) }
-			trashService.sendToTrash(announcement)
+			remote {
+				def trashService = new TrashService()
+				def announcement = Announcement.build(name:'test-announcement')
+				Fmessage.getAll().each { trashService.sendToTrash(it) }
+				trashService.sendToTrash(announcement)
+				null
+			}
 		when:
 			to PageMessageTrash
 			messageList << Keys.chord(Keys.ARROW_DOWN)
@@ -87,7 +93,8 @@ class MessageNavigationSpec extends MessageBaseSpec {
 		when:
 			messageList << Keys.chord(Keys.ARROW_DOWN)
 		then:
-			 waitFor { messageList.messageText(0) != currrentText }
-			 waitFor { singleMessageDetails.text == currrentText }
+			waitFor { messageList.messageText(0) != currrentText }
+			waitFor { singleMessageDetails.text == currrentText }
 	}
 }
+

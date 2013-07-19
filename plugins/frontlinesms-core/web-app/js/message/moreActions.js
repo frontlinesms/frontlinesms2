@@ -20,8 +20,10 @@ var more_actions = (function() {
 		$.ajax({
 			type:'GET',
 			url: buildUrl("confirmDelete"),
+			beforeSend: function() { showThinking(); },
 			data: { id:getOwnerId() },
 			success: function(data) {
+				hideThinking();
 				launchSmallPopup(i18n("smallpopup.fmessage.delete.title", (getActivityType() || getController())), data, i18n("action.delete")); }
 		});
 	},
@@ -99,7 +101,3 @@ var more_actions = (function() {
 	};
 	return { init:init, getOwnerId:getOwnerId };
 }());
-
-$(document).ready(function() {
-	more_actions.init();
-});

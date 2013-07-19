@@ -84,13 +84,14 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 .magicwand-icon { background-image:url('../images/icons/magic_wand.png'); background-repeat:no-repeat; background-position:left top;
 	display:block; width:16px; height:18px; }
 
-#server-connection-lost-notification, #thinking { position:absolute; top:0; bottom:0; left:0; right:0; opacity:0.8; }
+#server-connection-lost-notification, #thinking { position:absolute; top:0; bottom:0; left:0; right:0; opacity:0.6; }
 #server-connection-lost-notification { background-color:black; padding-top:40px; text-align:center; z-index:9999; }
 #server-connection-lost-notification .content { background-color:white; border-radius:8px; padding:17px; display:inline-block; }
 #server-connection-lost-notification .content p { text-align:center; font-size:180%; font-weight:bold; margin-bottom:17px; }
 #server-connection-lost-notification .content p:last-child { margin-bottom:0; }
-#thinking { background-color:transparent; z-index:99;
-	display:none; background-image:url('../images/thinking.gif'); background-position:center; background-repeat:no-repeat; }
+#thinking { z-index:99; background-color:#333; display:none; }
+#thinking img { background-color:white; padding:5px; border-radius:5px;
+	position:absolute; left:50%; width:40px; margin-left:-20px; top:50%; height:40px; margin-top:-20px; }
 
 .remove-command { background-image:url('../images/icons/remove.png'); background-repeat:no-repeat;
 	display:inline-block; height:14px; text-indent:-999999px; display:ltr; width:14px; margin-left:3px; }

@@ -30,8 +30,10 @@ class CoreBootStrap {
 	def camelContext
 	def messageSource
 	def quartzScheduler
+	def systemNotificationService
 
-	def bootstrapData = Environment.current == Environment.DEVELOPMENT || Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']?:'')
+	def bootstrapData = System.properties['frontlinesms2.bootstrap.data']? Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']):
+			Environment.current == Environment.DEVELOPMENT
 	
 	def init = { servletContext ->
 		println "BootStrap.init() : Env=${Environment.current}"
@@ -42,7 +44,6 @@ class CoreBootStrap {
 
 		if(Environment.current == Environment.TEST) {
 			quartzScheduler.start()
-			test_initGeb(servletContext)
 			dev_disableSecurityFilter()
 			// never show new popup during tests
 			appSettingsService['newfeatures.popup.show.immediately'] = false
@@ -115,7 +116,7 @@ class CoreBootStrap {
 	
 	private def createWelcomeNote() {
 		if(!SystemNotification.count()) {
-			new SystemNotification(text: messageSource.getMessage('frontlinesms.welcome', null, Locale.getDefault())).save(failOnError:true)
+			systemNotificationService.create(code:'frontlinesms.welcome')
 		}
 	}
 	
@@ -220,7 +221,7 @@ class CoreBootStrap {
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
 		new IntelliSmsFconnection(name:"IntelliSms Mock connection", sendEnabled:true, username:"johnmark", password:"pass_word").save(failOnError:true)
 	}
-	
+
 	private def dev_initRealSmslibFconnections() {
 		if(!bootstrapData) return
 		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234', enabled:false).save(failOnError:true)
@@ -231,8 +232,7 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 		
 	}
-	
-	
+
 	private def dev_initMockSmslibFconnections() {
 		if(!bootstrapData) return
 		new SmslibFconnection(name:"MOCK95: rejects all pins", pin:'1234', port:'MOCK95', baud:9600).save(failOnError:true)
@@ -242,9 +242,7 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"MOCK99: incoming messages, and can send", port:'MOCK99', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK100: incoming messages for autoreplies", port:'MOCK100', baud:9600).save(failOnError:true)	
 	}
-	
-	
-	
+
 	private def dev_initPolls() {
 		if(!bootstrapData) return
 		def keyword1 = new Keyword(value: 'FOOTBALL')
@@ -358,7 +356,6 @@ class CoreBootStrap {
 		}
 	}
 
-
 	private def dev_initWebconnections() {
 		if(!bootstrapData) return
 		[	new Fmessage(src:'Wanyama', text:'forward me to the server'),
@@ -410,7 +407,6 @@ class CoreBootStrap {
 		ushahidiWebconnection.addToMessages(Fmessage.findBySrc('James'))
 		ushahidiWebconnection.save(failOnError:true, flush:true)
 	}
-
 
 	private def dev_initSubscriptions() {
 		if(!bootstrapData) return
@@ -489,7 +485,7 @@ class CoreBootStrap {
 		def c = new Contact(name: n, mobile: a)
 		c.save(failOnError: true)
 	}
-	
+
 	private def initialiseSerial() {
 		if(Environment.current == Environment.TEST
 				|| Boolean.parseBoolean(System.properties['serial.mock'])) {
@@ -511,7 +507,7 @@ ARE A MEMBER OF THE APPROPRIATE GROUP (e.g. "dialout").  OTHERWISE MAKE SURE THA
 YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		}
 	}
-	
+
 	private def initialiseRealSerial() {
 		dev_initRealSmslibFconnections()
 		
@@ -594,51 +590,6 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 	
 	private def dev_initMockPortMessages() {
 		return ["AUTOREPLY", "autorely", "auToreply", "colorz", "color z", ""];
-	}
-	
-	private def test_initGeb(def servletContext) {
-		// N.B. this setup uses undocumented features of Geb which could be subject
-		// to unnanounced changes in the future - take care when upgrading Geb!
-		def emptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.EmptyNavigator))
-		def nonEmptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.NonEmptyNavigator))
-		
-		final String contextPath = servletContext.contextPath
-		// FIXME in grails 2, serverURL appears to be not set, so hard-coding it here
-		//final String baseUrl = grailsApplication.config.grails.serverURL
-		final String serverPort = grailsApplication.config.grails.serverPort?:System.properties['server.port']?: '8080'
-		final String baseUrl = "http://localhost:${serverPort}/frontlinesms-core"
-		nonEmptyMc.'get@href' = {
-			def val = getAttribute('href')
-			if(val.startsWith(contextPath)) val = val.substring(contextPath.size())
-			// check for baseUrl second, as it includes the context path
-			else if(val.startsWith(baseUrl)) val = val.substring(baseUrl.size())
-			return val
-		}
-		
-		/** list of boolean vars from https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#getAttribute(java.lang.String) */
-		final def BOOLEAN_PROPERTIES = ['async', 'autofocus', 'autoplay', 'checked', 'compact', 'complete', 'controls', 'declare', 'defaultchecked', 'defaultselected', 'defer', 'disabled', 'draggable', 'ended', 'formnovalidate', 'hidden', 'indeterminate', 'iscontenteditable', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nohref', 'noresize', 'noshade', 'novalidate', 'nowrap', 'open', 'paused', 'pubdate', 'readonly', 'required', 'reversed', 'scoped', 'seamless', 'seeking', 'selected', 'spellcheck', 'truespeed', 'willvalidate']
-		BOOLEAN_PROPERTIES.each { name ->
-			def getterName = "is${name.capitalize()}"
-			emptyMc."$getterName" = { false }
-			nonEmptyMc."$getterName" = {
-				def v = delegate.getAttribute(name)
-				!(v == null || v.length()==0 || v.equalsIgnoreCase('false'))
-			}
-		}
-
-		def oldMethod = nonEmptyMc.getMetaMethod("setInputValue", [Object] as Class[])
-		nonEmptyMc.setInputValue = { value ->
-			if(input.tagName == 'selected') {
-				throw new RuntimeException("OMG youre playing with selecters!")
-			} else {
-				oldMethod.invoke(value)
-			}
-		}
-
-		emptyMc.initialize()
-		geb.navigator.EmptyNavigator.metaClass = emptyMc
-		nonEmptyMc.initialize()
-		geb.navigator.NonEmptyNavigator.metaClass = nonEmptyMc
 	}
 
 	private def dev_disableSecurityFilter() {

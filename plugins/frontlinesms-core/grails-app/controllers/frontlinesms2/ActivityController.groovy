@@ -30,7 +30,6 @@ class ActivityController extends ControllerUtils {
 	}
 
 	def show() {
-		flash.message = flash.message
 		redirect controller:'message', action:'activity', params:params
 	}
 
@@ -129,7 +128,7 @@ class ActivityController extends ControllerUtils {
 		return collidingKeywords
 	}
 
-	protected void doSave(classShortname, service, instance, activate=true) {
+	protected void doSave(service, instance, activate=true) {
 		try {
 			service.saveInstance(instance, params)
 			if(activate) instance.activate()

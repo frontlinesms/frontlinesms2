@@ -49,8 +49,11 @@ class SearchCheckSpec extends SearchBaseSpec {
 	def "'Reply All' button appears for multiple selected messages and works"() {
 		given:
 			createInboxTestMessages()
-			Contact.build(name:'Alice', mobile:'Alice')
-			Contact.build(name:'June', mobile:'+254778899')
+			remote {
+				Contact.build(name:'Alice', mobile:'Alice')
+				Contact.build(name:'June', mobile:'+254778899')
+				null
+			}
 		when:
 			to PageSearchResult, "hi"
 			messageList.toggleSelect(0)
@@ -88,7 +91,6 @@ class SearchCheckSpec extends SearchBaseSpec {
 	def "should set row as selected when a message is checked"() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Bob')
 		when:
 			to PageSearchResult, "hi"
 			messageList.toggleSelect(1)
@@ -100,7 +102,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 	def "select all should update the total message count when messages are checked"() {
 		given:
 			createInboxTestMessages()
-			Fmessage.build()
+			remote { Fmessage.build(); null }
 		when:
 			to PageSearchResult, "hi"
 			messageList.selectAll.click()
@@ -116,3 +118,4 @@ class SearchCheckSpec extends SearchBaseSpec {
 			waitFor { messageList.selectedMessageCount() == 1 }
 	}
 }
+

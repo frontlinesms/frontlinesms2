@@ -15,15 +15,8 @@ class GroupViewSpec extends GroupBaseSpec {
 	def 'Group menu item is highlighted when viewing corresponding group'() {
 		given:
 			createTestGroups()
-			def friendsGroup = Group.findByName("Friends")
 		when:
-			to PageContactShow, friendsGroup
-		then:
-			bodyMenu.selectedMenuItem == 'friends'
-		when:
-			Contact c = new Contact(name:'Mildred').save(failOnError:true, flush:true)
-			c.addToGroups(friendsGroup)
-			c.save(failOnError:true, flush:true)
+			to PageContactShow, remote { Group.findByName("Friends").id }
 		then:
 			bodyMenu.selectedMenuItem == 'friends'
 	}
@@ -31,9 +24,8 @@ class GroupViewSpec extends GroupBaseSpec {
 	def 'Group members list is displayed when viewing corresponding group'() {
 		given:
 			createTestGroupsAndContacts()
-			def friendsGroup = Group.findByName("Friends")
 		when:
-			to PageContactShow, friendsGroup
+			to PageContactShow, remote { Group.findByName("Friends").id }
 		then:
 			contactList.contacts.containsAll(['Bobby', 'Duchamps'])
 	}
@@ -41,9 +33,8 @@ class GroupViewSpec extends GroupBaseSpec {
 	def 'Group members list has correct href when viewing corresponding group'() {
 		given:
 			createTestGroupsAndContacts()
-			def friendsGroup = Group.findByName("Friends")
 		when:
-			to PageContactShow, friendsGroup
+			to PageContactShow, remote { Group.findByName("Friends").id }
 			def links = contactList.contactsLink
 		then:
 			links.size() == 2
@@ -54,9 +45,8 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroups()
 			createManyContactsAddToGroups()
-			def friendsGroup = Group.findByName("Friends")
 		when:
-			to PageContactShow, friendsGroup 
+			to PageContactShow, remote { Group.findByName("Friends").id }
 		then:
 			def contactNames = contactList.contacts - "Select All"
 			def expectedNames = (11..60).collect{ "Contact${it}" }
@@ -67,9 +57,8 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroups()
 			createManyContactsAddToGroups()
-			def friendsGroup = Group.findByName("Friends")
 		when:
-			to PageContactShow, friendsGroup 
+			to PageContactShow, remote { Group.findByName("Friends").id }
 			footer.prevPage.disabled
 			footer.nextPage.click()
 		then:

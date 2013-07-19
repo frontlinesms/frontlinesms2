@@ -48,10 +48,6 @@ class AutoreplySpec extends Specification {
 			1 * autoreplyService.doReply(autoreply, inMessage)
 	}
 
-	private def mockKeyword(String value) {
-		return Mock(Keyword)
-	}
-
 	private def mockFmessage(String messageText, String src=null) {
 		Fmessage m = Mock()
 		m.text >> messageText

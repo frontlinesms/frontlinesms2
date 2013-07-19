@@ -20,19 +20,16 @@
 #body.settings #body-content #import label[for='importCsvFile'] { font-style:italic; }
 
 #body.settings #body-content-container { background-color:white; border-left:1px solid #9e9e9e; }
-#body-content.connections .connection { display:table; width:100%; border-bottom:1px solid #9e9e9e; }
-#body-content.connections .connection h2 { font-weight:bold;
-	background-image:url("../images/icons/toggle_plus.png"); background-position:17px center;
-	background-repeat:no-repeat; padding-left:38px; }
-#body-content.connections .connection.selected h2 { background-image:none; }
-#body-content.connections .connection.selected .controls { padding:0 17px 17px 17px; text-align:right; }
-#body-content.connections .connection .connection-status { font-style:italic; }
-#body-content.connections .connection.selected { background-color:#d8e8ef; }
+#body-content.connections .connection { width:100%; height:34px; border-bottom:1px solid #dedede; }
+#body-content.connections .connection:last-child { border-bottom:0px; }
+#body-content.connections .connection-list { width:100%; border-bottom: 1px solid #9e9e9e; }
+#body-content.connections .connection h2 { font-weight:bold; line-height: 24px; }
 #body-content.connections .connection:hover { background-color:#e5eff3; }
-#body-content.connections .connection-header { display:table-row; }
-#body-content.connections .connection-header > * { display:table-cell; white-space:nowrap; padding:17px; }
-#body-content.connections .connection-header > .connection-type { width:100%; }
-#body-content.connections .controls { padding:17px; }
+#body-content.connections .connection > * { white-space:nowrap; padding:5px 10px 5px 10px; }
+#body-content.connections .connection .connection-status { background-repeat:no-repeat; background-position:center; padding-left:30px; }
+#body-content.connections .connection .connection-name p { font-size:10px; }
+#body-content.connections .controls { visibility:hidden; text-align:right; }
+#body-content.connections .connection:hover .controls { visibility:visible; }
 #body-content.connections p.no-content { border-bottom:1px solid #9e9e9e; }
 
 #body-content.logs th.content { width:100%; }
@@ -50,4 +47,11 @@ ul.select.sortable.checklist.no-description.ui-sortable li label { margin: 2px; 
 .grabber { background-image:url("../images/icons/draggable.png"); background-repeat: no-repeat; background-position: 3px 7px; }
 .warning_message { color:#a61b1b; padding:8px; background-color:#FEF1EC; border:1px solid #CD0A0A; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px;
 	-o-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; margin-left: 27px; margin-right: 27px;}
+.warning_message.hidden { display: none; }
 #routing-preferences div.input ul.select.checklist label input[type="checkbox"] { top: 8px; vertical-align: middle; }
+
+.connection-status.CONNECTED { background-image:url('../images/status/green.png'); }
+.connection-status.FAILED { background-image: url('../images/status/red.png'); }
+.connection-status.NOT_CONNECTED { background-image: url('../images/status/red.png'); }
+.connection-status.CONNECTING { background-image: url('../images/status/orange.png'); }
+.connection-status.DISABLED { background-image: url('../images/status/grey.png'); }

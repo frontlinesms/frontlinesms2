@@ -6,7 +6,7 @@ import frontlinesms2.message.*
 import frontlinesms2.poll.*
 import frontlinesms2.folder.*
 
-class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
+class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 	def "should paginate inbox messages"() {
 		setup:
 			setupInboxMessages()
@@ -72,9 +72,8 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	def "should paginate folder messages"() {
 		setup:
 			setupFolderAndItsMessages()
-			def folderId = Folder.findByName("folder").id
 		when:
-			to PageMessageFolder, folderId
+			to PageMessageFolder, 'folder'
 		then:
 			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
@@ -89,9 +88,8 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	def "should paginate poll messages"() {
 		setup:
 			setupPollAndItsMessages()
-			def pollId = Poll.findByName("poll").id
 		when:
-			to PageMessagePoll, pollId
+			to PageMessagePoll, 'poll'
 		then:
 			messageList.messageCount() == 50
 			footer.prevPage.hasClass("disabled")
@@ -104,66 +102,82 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	}
 
 	private def setupInboxMessages() {
-		(1..51).each { i ->
-			Fmessage.build(src:"src${i}", text:"inbox ${i}", date:new Date()-i)
+		remote {
+			(1..51).each { i ->
+				Fmessage.build(src:"src${i}", text:"inbox ${i}", date:new Date()-i)
+			}
+			null
 		}
 	}
 
 
 	private def setupSentMessages() {
-		(1..51).each { i ->
-			new Fmessage(src:"src${i}", text:"sent ${i}")
-					.addToDispatches(dst:"345678", status:DispatchStatus.SENT, dateSent:new Date())
-					.save(flush:true, failOnError:true)
+		remote {
+			(1..51).each { i ->
+				new Fmessage(src:"src${i}", text:"sent ${i}")
+						.addToDispatches(dst:"345678", status:DispatchStatus.SENT, dateSent:new Date())
+						.save(flush:true, failOnError:true)
+			}
+			null
 		}
 	}
 
 
 	private def setupPendingMessages() {
-		(1..51).each { i ->
-			new Fmessage(src:"src${i}", text:"pending ${i}")
-					.addToDispatches(dst:"345678", status: DispatchStatus.PENDING)
-					.save(flush:true, failOnError:true)
+		remote {
+			(1..51).each { i ->
+				new Fmessage(src:"src${i}", text:"pending ${i}")
+						.addToDispatches(dst:"345678", status: DispatchStatus.PENDING)
+						.save(flush:true, failOnError:true)
+			}
+			null
 		}
 	}
 
 
 	private def setupDeletedMessages() {
-		(1..51).each { i ->
-			deleteMessage(Fmessage.build(src:"src${i}", text:"deleted ${i}"))
+		remote {
+			def deleteMessage = { Fmessage message ->
+				message.isDeleted = true
+				message.save(failOnError:true, flush:true)
+				Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class.name, objectId:message.id)
+			}
+			(1..51).each { i ->
+				deleteMessage(Fmessage.build(src:"src${i}", text:"deleted ${i}"))
+			}
+			null
 		}
-	}
-
-	private def deleteMessage(Fmessage message) {
-		message.isDeleted = true
-		message.save(failOnError:true, flush:true)
-		Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class.name, objectId:message.id)
 	}
 
 	private def setupFolderAndItsMessages() {
-		def folder = Folder.build(name:'folder')
-		(1..51).each { i ->
-			folder.addToMessages(Fmessage.build(src:"src${i}", text:"folder ${i}"))
+		remote {
+			def folder = Folder.build(name:'folder')
+			(1..51).each { i ->
+				folder.addToMessages(Fmessage.build(src:"src${i}", text:"folder ${i}"))
+			}
+			folder.save(failOnError:true, flush:true)
+			null
 		}
-		folder.save(failOnError:true, flush:true)
 	}
 
-
 	private def setupPollAndItsMessages() {
-		def yes = new PollResponse(key:'A', value:"Yes")
-		def no = new PollResponse(key:'B', value:"No")
-		def poll = new Poll(name:'poll')
-				.addToResponses(yes)
-				.addToResponses(no)
-				.addToResponses(PollResponse.createUnknown())
-				.save(flush:true, failOnError:true)
-		(1..25).each { i ->
-			yes.addToMessages(Fmessage.build(src:"src${i}", text:"yes ${i}"))
+		remote {
+			def yes = new PollResponse(key:'A', value:"Yes")
+			def no = new PollResponse(key:'B', value:"No")
+			def poll = new Poll(name:'poll')
+					.addToResponses(yes)
+					.addToResponses(no)
+					.addToResponses(PollResponse.createUnknown())
+					.save(flush:true, failOnError:true)
+			(1..25).each { i ->
+				yes.addToMessages(Fmessage.build(src:"src${i}", text:"yes ${i}"))
+			}
+			(1..26).each { i ->
+				no.addToMessages(Fmessage.build(src:"src${i}", text:"no ${i}"))
+			}
+			poll.save(flush:true, failOnError:true)
+			null
 		}
-		(1..26).each { i ->
-			no.addToMessages(Fmessage.build(src:"src${i}", text:"no ${i}"))
-		}
-		poll.save(flush:true, failOnError:true)
 	}
 }
 

@@ -6,26 +6,35 @@ import frontlinesms2.popup.*
 
 abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 	static createWebconnections() {
-		def syncKeyword = new Keyword(value:"SYNC")
-		def ushKeyword = new Keyword(value:"USH")
-		def keyword = new Keyword(value:"TRIAL")
-		new GenericWebconnection(name:"Sync", url:"http://www.frontlinesms.com/sync", httpMethod:Webconnection.HttpMethod.GET).addToKeywords(syncKeyword).save(failOnError:true, flush:true)
-		new UshahidiWebconnection(name:"Trial", url:"https://trial.crowdmap.com/frontlinesms/", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword).save(failOnError:true, flush:true)
-		new UshahidiWebconnection(name:"Ush", url:"http://www.ushahidi.com/frontlinesms", httpMethod:Webconnection.HttpMethod.GET).addToKeywords(ushKeyword).save(failOnError:true, flush:true)
+		remote {
+			def syncKeyword = new Keyword(value:"SYNC")
+			def ushKeyword = new Keyword(value:"USH")
+			def keyword = new Keyword(value:"TRIAL")
+			new GenericWebconnection(name:"Sync", url:"http://www.frontlinesms.com/sync", httpMethod:Webconnection.HttpMethod.GET).addToKeywords(syncKeyword).save(failOnError:true, flush:true)
+			new UshahidiWebconnection(name:"Trial", url:"https://trial.crowdmap.com/frontlinesms/", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword).save(failOnError:true, flush:true)
+			new UshahidiWebconnection(name:"Ush", url:"http://www.ushahidi.com/frontlinesms", httpMethod:Webconnection.HttpMethod.GET).addToKeywords(ushKeyword).save(failOnError:true, flush:true)
+			null
+		}
 	}
 
 	static createTestActivities() {
-		Announcement.build(name:"Sample Announcement", sentMessageText:"Message to send")
-		Fmessage.build(src:'announce')
+		remote {
+			Announcement.build(name:"Sample Announcement", sentMessageText:"Message to send")
+			Fmessage.build(src:'announce')
+			null
+		}
 	}
 
 	static createTestMessages(Webconnection wc) {
-		(0..90).each {
-			def m = Fmessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
-			it % 5 == 0 ? (m.setMessageDetail(wc, DispatchStatus.SENT)) : (m.setMessageDetail(wc, DispatchStatus.FAILED))
-			wc.addToMessages(m)
+		remote {
+			(0..90).each {
+				def m = Fmessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
+				it % 5 == 0 ? (m.setMessageDetail(wc, DispatchStatus.SENT)) : (m.setMessageDetail(wc, DispatchStatus.FAILED))
+				wc.addToMessages(m)
+			}
+			wc.save(flush:true, failOnError:true)
+			null
 		}
-		wc.save(flush:true, failOnError:true)
 	}
 
 	protected def launchWizard(webconnectionType=null) {
@@ -52,3 +61,4 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		return true
 	}
 }
+

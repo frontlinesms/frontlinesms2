@@ -59,9 +59,6 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def show() {
-		if(params.flashMessage) {
-			flash.message = params.flashMessage
-		}
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = Contact.count()
@@ -155,7 +152,10 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def delete() {
-		getCheckedContacts()*.delete()
+		// FIXME looks like someone doesn't know what's going wrong here and clutching at straws
+		Contact.withTransaction { status ->
+			getCheckedContacts()*.delete()
+		}
 		flash.message = message(code:'default.deleted', args:[message(code:'contact.label')])
 		redirect(action: "show")		
 	}
@@ -169,7 +169,7 @@ class ContactController extends ControllerUtils {
 	}
 
 	def search() {
-		fsms.render template:'search_results', model:contactSearchService.contactList(params)
+		render(template:'search_results', model:contactSearchService.contactList(params))
 	}
 	
 	def checkForDuplicates() {

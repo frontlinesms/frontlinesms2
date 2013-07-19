@@ -9,7 +9,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "activity.processKeyword should be called with most specific keyword match"() {
 		given:
-			Poll p = createTestPoll()
+			createTestPoll()
 			def m = createFmessage(messageText).save(failOnError:true)
 		when:
 			keywordProcessorService.process(m)
@@ -35,7 +35,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "no activity should be processed if no keyword matches"() {
 		given:
-			Poll p = createTestPoll()
+			createTestPoll()
 			def m = createFmessage(messageText)
 		when:
 			keywordProcessorService.process(m)
@@ -48,7 +48,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "archived and deleted activities should not be matched"() {
 		given:
-			Poll p = createTestPoll(archived, deleted)
+			createTestPoll(archived, deleted)
 			def m = createFmessage(messageText)
 		when:
 			keywordProcessorService.process(m)
@@ -71,11 +71,6 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			Autoreply a = new Autoreply(name:"test", autoreplyText:"testing")
 			a.addToKeywords(new Keyword(value:"", isTopLevel:true))
-			Autoreply.metaClass.processKeyword = { Fmessage m, Keyword k -> 
-				println "processing keyword $k, value: ${k.value}"
-				k.ownerDetail = "PROCESSED"
-				k.save(failOnError:true)
-			}
 			a.save(failOnError:true)
 		when:
 			keywordProcessorService.process(createFmessage("I'm just an innocent FMessage"))

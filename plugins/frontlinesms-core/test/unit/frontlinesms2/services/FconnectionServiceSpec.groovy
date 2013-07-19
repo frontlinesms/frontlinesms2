@@ -11,6 +11,7 @@ import org.apache.camel.Exchange
 @Mock([LogEntry, Dispatch, Fmessage, SystemNotification])
 class FconnectionServiceSpec extends Specification {
 	def context
+	def systemNotificationService = Mock(SystemNotificationService)
 
 	def setup() {
 		context = Mock(CamelContext)
@@ -18,7 +19,12 @@ class FconnectionServiceSpec extends Specification {
 		def i18nUtilService = Mock(I18nUtilService)
 		i18nUtilService.getMessage(_) >> { args -> args.code[0] }
 		service.i18nUtilService = i18nUtilService
+		service.systemNotificationService = systemNotificationService
 		Fconnection.metaClass.static.get = { Serializable id -> println "overrided 'get()' called"; return [] }
+		def logService = Mock(LogService)
+		logService.handleRouteCreated = {/* Impostor! */}
+		logService.handleRouteCreationFailed = {/* Another impostor! */}
+		service.logService = logService
 
 		service.deviceDetectionService = Mock(DeviceDetectionService)
 	}
@@ -141,7 +147,7 @@ class FconnectionServiceSpec extends Specification {
 		when:
 			service.handleDisconnection(exchange)
 		then:
-			SystemNotification.count()
+			1 * systemNotificationService.create(_ as Map)
 			jobRouteId == connectionId
 		where:
 			routeId          | connectionId

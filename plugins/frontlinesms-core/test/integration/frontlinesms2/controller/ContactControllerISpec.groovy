@@ -2,7 +2,6 @@ package frontlinesms2.controller
 
 import frontlinesms2.*
 import spock.lang.*
-import grails.converters.JSON
 
 class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller

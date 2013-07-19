@@ -5,6 +5,7 @@ import frontlinesms2.message.*
 abstract class PageSearch extends frontlinesms2.page.PageBase {
 	static content = {
 		searchsidebar { module SearchSideBar }
+		detailsidebar { module DetailSideBar }
 		bodyMenu { module BodyMenu }
 		header { module ContentHeader }
 		footer { module ContentFooter }
@@ -37,3 +38,12 @@ class SearchSideBar extends geb.Module {
 		expandedSearchOption(required:false) {$('#extra-options-list')}
 	}
 }
+
+class DetailSideBar extends geb.Module {
+	static base = { $('#detail') }
+	static content = {
+		messageOwnerLink { $('#message-detail-owner a')}
+		messageContent { $('#message-detail-content p').jquery.text() }
+	}
+}
+

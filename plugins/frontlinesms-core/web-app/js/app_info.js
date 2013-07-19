@@ -24,8 +24,8 @@ app_info = (function() {
 		}
 	},
 	failureProcessor = function(data) {
-		if(typeof failureProcessor !== "undefined") {
-			failureProcessor.call();
+		if(typeof failCallback !== "undefined") {
+			failCallback.call();
 		}
 	},
 	requester = function() {
@@ -46,14 +46,15 @@ app_info = (function() {
 		}
 		if(!jQuery.isEmptyObject(requestData)) {
 			console.log("requester() :: requestData=" + JSON.stringify(requestData));
+			//FIXME Should fix type to GET but POST is set to prevent rendering of blank pages
 			jQuery.ajax({ type:"POST",
 				url:url_root + "appInfo",
 				cache:false,
 				contentType:"application/json",
 				data:JSON.stringify(requestData),
 				processData:false,
-				success:callbackProcessor,
-				fail:failureProcessor });
+				success:callbackProcessor })
+			.fail(failureProcessor);
 		}
 	},
 	listen = function(interest, f, data, callback) {

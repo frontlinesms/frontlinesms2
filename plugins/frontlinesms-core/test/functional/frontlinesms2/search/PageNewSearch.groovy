@@ -8,3 +8,4 @@ class PageNewSearch extends PageSearch {
 		title.startsWith("Search")
 	}
 }
+

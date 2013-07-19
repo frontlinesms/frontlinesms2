@@ -2,10 +2,7 @@ package frontlinesms2.controller
 
 import spock.lang.*
 import grails.plugin.spock.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import frontlinesms2.*
-import grails.converters.JSON
 
 class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller

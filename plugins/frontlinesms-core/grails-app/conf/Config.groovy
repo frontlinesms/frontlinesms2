@@ -69,7 +69,6 @@ grails.plugin.databasemigration.updateOnStart = System.properties['db.migrations
 environments {
     development {
         grails.logging.jul.usebridge = true
-
     }
     production {
         grails.logging.jul.usebridge = false
@@ -124,3 +123,5 @@ jqueryValidation.cdn = false  // false or "microsoft"
 jqueryValidation.additionalMethods = false
 
 frontlinesms.plugins=['frontlinesms-core']
+frontlinesms.blockedNotificationList = []
+

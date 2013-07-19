@@ -67,7 +67,7 @@ class IntelliSmsFconnection extends Fconnection {
 				if(isSendEnabled()) {
 					definitions << from("seda:out-${IntelliSmsFconnection.this.id}")
 							.onException(AuthenticationException)
-									.handled(true)
+									.handled(false)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
 							.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(IntelliSmsFconnection.this.id.toString()))

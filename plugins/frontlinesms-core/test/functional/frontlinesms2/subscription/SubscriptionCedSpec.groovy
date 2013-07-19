@@ -20,7 +20,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "Can create a new subscription" () {
 		setup:
-			new Group(name:"Friends").save(failOnError:true, flush:true)
+			remote { new Group(name:"Friends").save(failOnError:true, flush:true); null }
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
@@ -31,7 +31,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor {at SubscriptionCreateDialog}
 		when:
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 		then:
 			waitFor { keywords.displayed }
@@ -42,7 +42,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.defaultAction = "join"
 			next.click()
 		then:
-			waitFor {autoreply.displayed}
+			waitFor { autoreply.displayed }
 		when:
 			autoreply.enableJoinAutoreply.click()
 			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
@@ -75,8 +75,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor { at SubscriptionCreateDialog }
 		when:
-			println "***"+group.text()
-			group.addToGroup Group.findByName("Camping").id.toString()
+			group.addToGroup(remote { Group.findByName("Camping").id })
 			next.click()
 		then:
 			waitFor {keywords.displayed}
@@ -99,11 +98,11 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "Should not proceed if subscription not named"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true, flush:true)
+			remote { new Group(name:"Friends").save(failOnError:true, flush:true); null }
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id.toString()
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 			keywords.keywordText = 'FRIENDS'
 			keywords.joinKeywords = 'join, start'
@@ -136,11 +135,11 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "keyword aliases must be unique if provided"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true, flush:true)
+			remote { new Group(name:"Friends").save(failOnError:true, flush:true); null }
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 			keywords.keywordText = 'FRIENDS'
 			keywords.joinKeywords = 'team'
@@ -154,29 +153,29 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "keyword aliases must have valid commas seperated values if provided"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true, flush:true)
+			remote { new Group(name:"Friends").save(failOnError:true, flush:true); null }
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 			keywords.keywordText = 'FRIENDS'
 			keywords.joinKeywords = 'team'
 			keywords.leaveKeywords = 'team%^&%^%&'
 			next.click()
 		then:
-			waitFor {validationError.text()?.contains('Invalid keyword. Try a, name, word')}
+			waitFor { validationError.text()?.contains('Invalid keyword. Try a, name, word') }
 			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
 
 	def "autoreply text must be provided if join/leave autoreply is enabled"() {
 		setup:
-			new Group(name:"Friends").save(failOnError:true, flush:true)
+			remote { new Group(name:"Friends").save(failOnError:true, flush:true); null }
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 			keywords.keywordText = 'FRIENDS'
 			keywords.joinKeywords = 'join, start'
@@ -196,11 +195,11 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 
 	def "Confirm screen should display all the necessary data" () {
 		setup:
-			new Group(name:"Friends").save(failOnError:true, flush:true)
+			remote { new Group(name:"Friends").save(failOnError:true, flush:true); null }
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup Group.findByName('Friends').id
+			group.addToGroup(remote { Group.findByName('Friends').id })
 			next.click()
 		then:
 			waitFor { keywords.displayed }
@@ -236,3 +235,4 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		waitFor('slow') { at SubscriptionCreateDialog }
 	}
 }
+

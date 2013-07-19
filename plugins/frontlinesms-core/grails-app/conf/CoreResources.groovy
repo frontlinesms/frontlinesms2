@@ -18,6 +18,7 @@ modules = {
 		resource url:[dir:'css', file:'wizard.css']
 		resource url:[dir:'css', file:'chosen.css']
 		resource url:[dir:'css', file:'color.css']
+		resource url:[dir:'css', file:'unreviewed-core.css']
 
 
 		resource url:[dir:'js/layout', file:'resizer.js'], disposition:'head'
@@ -33,10 +34,12 @@ modules = {
 		resource url:[dir:'js', file:'activity/poll/poll.js'], disposition:'head'
 		resource url:[dir:'js', file:'activity/poll/poll_graph.js'], disposition:'head'
 		resource url:[dir:'js', file:'activity/webconnection.js'], disposition:'head'
+		resource url:[dir:'js', file:'activity/subscription.js'], disposition:'head'
 		resource url:[dir:'js', file:'button.js'], disposition:'head'
 		resource url:[dir:'js', file:'characterSMS-count.js'], disposition:'head'
 		resource url:[dir:'js', file:'check_list.js'], disposition:'head'
 		resource url:[dir:'js', file:'fconnection.js'], disposition:'head'
+		resource url:[dir:'js', file:'routing.js'], disposition:'head'
 		resource url:[dir:'js', file:'jquery.ui.selectmenu.js'], disposition:'head'
 		resource url:[dir:'js', file:'jquery.validate.min.js'], disposition:'head'
 		resource url:[dir:'js', file:'mediumPopup.js'], disposition:'head'
@@ -70,7 +73,13 @@ modules = {
 		dependsOn 'jquery'
 		resource url:[dir:'js', file:'message/check_for_new_messages.js']
 	}
-	
+
+	newMessageSummary {
+		dependsOn 'jquery'
+		resource url:[dir:'js', file:'message/new_message_summary.js']
+		resource url:[dir:'js', file:'jquery.pulse.js']
+	}
+
 	archive {
 		dependsOn 'messages'
 	}
@@ -117,6 +126,11 @@ modules = {
 		'jquery-theme' {
 			resource id: 'theme', url:[dir:'jquery-ui', file:'themes/medium/jquery-ui-1.8.11.custom.css']
 		}
+	}
+
+	'internet-explorer-css' {
+		resource url:[dir:'css', file:'ie7.css'], bundle:'ie7'
+		resource url:[dir:'css', file:'ie8.css'], bundle:'ie8'
 	}
 }
 

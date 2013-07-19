@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+do/codenarc_report_postprocess
+do/js_unit_test_xml
+

@@ -53,7 +53,7 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			bodyMenu.selected == 'football teams poll'
+			bodyMenu.selected.contains('football teams poll')
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {

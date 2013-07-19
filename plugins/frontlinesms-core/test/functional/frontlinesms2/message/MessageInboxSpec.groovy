@@ -43,7 +43,10 @@ class MessageInboxSpec extends MessageBaseSpec {
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
+			def message = remote {
+				def m = Fmessage.findBySrc('Alice')
+				[id:m.id, src:m.src, text:m.text, date:m.date]
+			}
 		when:
 			to PageMessageInbox, message.id
 		then:
@@ -56,26 +59,26 @@ class MessageInboxSpec extends MessageBaseSpec {
 	def 'selected message is highlighted'() {
 		given:
 			createInboxTestMessages()
-			def aliceMessage = Fmessage.findBySrc('Alice')
-			def bobMessage = Fmessage.findBySrc('Bob')
+			def aliceMessageId = remote { Fmessage.findBySrc('Alice').id }
+			def bobMessageId = remote { Fmessage.findBySrc('Bob').id }
 		when:
-			to PageMessageInbox, aliceMessage.id
+			to PageMessageInbox, aliceMessageId
 		then:
-			messageList.selectedMessageLinkUrl == "/message/inbox/show/${aliceMessage.id}"
+			messageList.selectedMessageLinkUrl == "/message/inbox/show/${aliceMessageId}"
 		when:
-			to PageMessageInbox, bobMessage.id
+			to PageMessageInbox, bobMessageId
 		then:
-			messageList.selectedMessageLinkUrl == "/message/inbox/show/${bobMessage.id}"
+			messageList.selectedMessageLinkUrl == "/message/inbox/show/${bobMessageId}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
-			def m1 = Fmessage.build(read:false)
-			def m2 = Fmessage.build(read:true)
-			assert !m1.read
-			assert m2.read
+			def mId = remote {
+				Fmessage.build(read:false)
+				Fmessage.build(read:true).id
+			}
 		when:
-			to PageMessageInbox, m2.id
+			to PageMessageInbox, mId
 		then:
 			messageList.isRead(0)
 			!messageList.isRead(1)
@@ -83,8 +86,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
-			Fmessage.build(src:'+254778899')
-			Contact.build(name:'June', mobile:'+254778899')
+			remote {
+				Fmessage.build(src:'+254778899')
+				Contact.build(name:'June', mobile:'+254778899')
+				null
+			}
 		when:
 			to PageMessageInbox
 		then:
@@ -93,11 +99,13 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
 		given:
-			Fmessage.build(src:'+254778899', text:'test')
-			Contact.build(name:'June', mobile:'+254778899')
-			def message = Fmessage.build(src:'+254999999')
+			def message = remote {
+				Fmessage.build(src:'+254778899', text:'test')
+				Contact.build(name:'June', mobile:'+254778899')
+				Fmessage.build(src:'+254999999').id
+			}
 		when:
-			to PageMessageInbox, message.id
+			to PageMessageInbox, message
 			singleMessageDetails.reply.click()
 		then:
 			//FIXME: does this test really check what the title suggests?
@@ -109,7 +117,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		setup:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, Fmessage.list()[0].id
+			to PageMessageInbox, remote { Fmessage.list()[0].id }
 		then:
 			messageList.messageCount() == 2
 		when:
@@ -127,11 +135,13 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should autopopulate the message body  when 'forward' is clicked"() {
 		given:
-			Fmessage.build(src:'+254778899', text:'test')
-			def message = Fmessage.build(src:'+254999999', text:'test')
+			def message = remote {
+				Fmessage.build(src:'+254778899', text:'test')
+				Fmessage.build(src:'+254999999', text:'test').id
+			}
 		when:
-			to PageMessageInbox, message.id
-			waitFor{ singleMessageDetails.forward.displayed }
+			to PageMessageInbox, message
+			waitFor { singleMessageDetails.forward.displayed }
 			singleMessageDetails.forward.click()
 			waitFor { at QuickMessageDialog }
 		then:
@@ -140,22 +150,25 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "message details should show the name of the route the message was received through"() {
 		given:
-			def con = SmslibFconnection.build(name:'MTN Dongle', port:'stormyPort')
-			def message = Fmessage.build(src:'+254778899', text:'test')
-			con.addToMessages(message)
-			con.save(flush:true)
+			def messageId = remote {
+				def con = SmslibFconnection.build(name:'MTN Dongle', port:'stormyPort')
+				def message = Fmessage.build(src:'+254778899', text:'test')
+				con.addToMessages(message)
+				con.save(flush:true)
+				message.id
+			}
 		when:
-			to PageMessageInbox, message.id
-			waitFor{ singleMessageDetails.receivedOn.displayed }
+			to PageMessageInbox, messageId
+			waitFor { singleMessageDetails.receivedOn.displayed }
 		then:
 			singleMessageDetails.receivedOn.text() == "Received on: MTN Dongle"
 	}
 
 	def "message details should not show the name of the route if none can be found"() {
 		given:
-			def message = Fmessage.build(src:'+254778899', text:'test')
+			def message = remote { Fmessage.build(src:'+254778899', text:'test').id }
 		when:
-			to PageMessageInbox, message.id
+			to PageMessageInbox, message
 		then:
 			!singleMessageDetails.receivedOn.displayed
 	}
@@ -181,7 +194,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, Fmessage.findBySrc('Bob').id
+			to PageMessageInbox, remote { Fmessage.findBySrc('Bob').id }
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
@@ -193,8 +206,10 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should show the address of the contact in the confirm screen"() {
 		given:
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
-			
+			def message = remote {
+				def m = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
+				[id:m.id, src:m.src]
+			}
 		when:
 			to PageMessageInbox, message.id
 		then:
@@ -209,9 +224,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
 		given:
-			new Contact(name: "Tom", mobile: "+254999999").save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
-			
+			def message = remote {
+				new Contact(name: "Tom", mobile: "+254999999").save(failOnError:true, flush:true)
+				def m = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
+				[id:m.id, srcName:Contact.findByMobile(m.src).name]
+			}
 		when:
 			to PageMessageInbox, message.id
 		then:
@@ -221,7 +238,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			next.jquery.trigger('click')
 			waitFor { confirm.displayed }
 		then:
-			confirm.recipientName == "${Contact.findByMobile(message.src).name}"
+			confirm.recipientName == message.srcName
 	}
 
 	def "should skip recipients tab for reply-all option"() {
@@ -243,11 +260,14 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true, flush:true)
-			new Folder(name: "my-folder").save(failOnError:true, flush:true)
+			remote {
+				new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true, flush:true)
+				new Folder(name: "my-folder").save(failOnError:true, flush:true)
+				null
+			}
 		when:
-			to PageMessageInbox, Fmessage.findByText('hello').id
-			singleMessageDetails.moveTo(Folder.findByName('my-folder').id)
+			to PageMessageInbox, remote { Fmessage.findByText('hello').id }
+			singleMessageDetails.moveTo(remote { Folder.findByName('my-folder').id })
 		then:
 			waitFor("veryslow") { messageList.noContent.text() == "No messages here, yet." }
 			bodyMenu.selected == "inbox"
@@ -257,20 +277,20 @@ class MessageInboxSpec extends MessageBaseSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, Fmessage.findBySrc('Alice').id
+			to PageMessageInbox, remote { Fmessage.findBySrc('Alice').id }
 		then:
-			tabs.unreadcount == 1
+			tabs.unreadcount == 3
 		when:
-			Fmessage.build().save(flush:true, failOnError:true)
+			remote { Fmessage.build().save(flush:true, failOnError:true); null }
 		then:
-			waitFor { tabs.unreadcount == 2 }
+			waitFor { tabs.unreadcount == 4 }
 	}
 
 	def "should show create contact link for a recipient that is not in the contact list"() {
 		given: 'test message is created'
-			Fmessage.build(src:'369258147', text:'A sent message')
+			remote { Fmessage.build(src:'369258147', text:'A sent message'); null }
 		when : 'test message is selected'
-			to PageMessageSent, Fmessage.findBySrc('369258147').id
+			to PageMessageSent, remote { Fmessage.findBySrc('369258147').id }
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'A sent message' }
 			singleMessageDetails.addToContacts.displayed
@@ -278,9 +298,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should not show create contact link for a recipient that is in the contact list"() {
 		given: 'test message is created'
-			Fmessage.build(src:'Donald', text:'A sent message')
+			remote { Fmessage.build(src:'Donald', text:'A sent message'); null }
 		when : 'test message is selected'
-			to PageMessageSent, Fmessage.findBySrc('Donald').id
+			to PageMessageSent, remote { Fmessage.findBySrc('Donald').id }
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'A sent message' }
 			!singleMessageDetails.addToContacts.displayed
@@ -288,16 +308,40 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should not show create contact link for multiple recipients that are not in the contact list"() {
 		given: 'test message is created'
-			def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
-				.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
-				.addToDispatches(dst:"+222", status:DispatchStatus.SENT, dateSent:new Date())
-				.addToDispatches(dst:"+333", status:DispatchStatus.SENT, dateSent:new Date())
-				.save(failOnError:true, flush:true)
+			def message = remote { new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
+					.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
+					.addToDispatches(dst:"+222", status:DispatchStatus.SENT, dateSent:new Date())
+					.addToDispatches(dst:"+333", status:DispatchStatus.SENT, dateSent:new Date())
+					.save(failOnError:true, flush:true).id }
 		when : 'test message is selected'
-			to PageMessageSent, Fmessage.findBySrc('000').id
+			to PageMessageSent, message
 		then : 'add contact icon is displayed'
 			waitFor { singleMessageDetails.text == 'outgoing message to Pedro' }
 			!singleMessageDetails.addToContacts.displayed
+	}
+
+	def "messageCount is shown in left-hand menu next to inbox indicator and is updated asynchronously"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to PageMessageInbox
+		then:
+			bodyMenu.inboxNewMessageCount == 2
+		when:
+			messageList.toggleSelect(0)
+		then:
+			waitFor('veryslow') {
+				bodyMenu.inboxNewMessageCount == 1
+			}
+	}
+
+	def "pending message count is shown in left-hand menu next to pending indicator"() {
+		given:
+			createPendingTestMessages()
+		when:
+			to PageMessageInbox
+		then:
+			bodyMenu.pendingMessageCount == 2
 	}
 
 	String dateToString(Date date) {
@@ -308,3 +352,4 @@ class MessageInboxSpec extends MessageBaseSpec {
 		dateToString(a) == dateToString(b)
 	}
 }
+

@@ -42,19 +42,19 @@ class SmartGroupController extends ControllerUtils {
 	
 	def edit() {
 		def smartGroupInstance = SmartGroup.get(params.id)
-		def smartGroupRuleFields = getSmartGroupRuleFields()
 		def currentRules = [:]
-		
-		for(def prop in smartGroupRuleFields) {
-			if(smartGroupInstance."$prop") 
-				currentRules."$prop" = smartGroupInstance."$prop"
-		}
+	    
+        SmartGroup.configFields.each { field ->
+            if(smartGroupInstance."$field") 
+                currentRules."$field" = smartGroupInstance."$field"
+        }
+	
 		def customFieldNames = CustomField.allUniquelyNamed
 
 		render view: "../smartGroup/create", model: [smartGroupInstance:smartGroupInstance,
 				currentRules:currentRules,
-				fieldNames:[message(code: 'contact.phonenumber.label') , message(code: 'contact.name.label'), message(code: 'contact.email.label'), message(code: 'contact.notes.label')]+customFieldNames,
-				fieldIds:['mobile', 'contactName', 'email', 'notes']+customFieldNames.collect { CUSTOM_FIELD_ID_PREFIX+it }]
+				fieldNames:[message(code: 'contact.phonenumber.label') , message(code: 'contact.name.label'), message(code: 'contact.email.label'), message(code: 'contact.notes.label')] + customFieldNames,
+				fieldIds: SmartGroup.configFields+customFieldNames.collect { CUSTOM_FIELD_ID_PREFIX+it }]
 	}
 	
 	def confirmDelete() {
@@ -66,7 +66,7 @@ class SmartGroupController extends ControllerUtils {
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
 		else
 			flash.message =  message(code: 'flash.smartgroup.delete.unable')
-		redirect(controller: "contact")
+		redirect(controller: "contact", action:"show")
 	}
 	
 	private def getRuleText() {
@@ -98,8 +98,7 @@ class SmartGroupController extends ControllerUtils {
 	}
 	
 	private def removeSmartGroupRules(smartGroupInstance) {
-		def smartGroupRuleFields = getSmartGroupRuleFields()
-		def fieldsToNullify = smartGroupRuleFields - params['rule-field']
+		def fieldsToNullify = SmartGroup.configFields - params['rule-field']
 		for(def field in fieldsToNullify) {
 			if(field == "customFields") {
 				smartGroupInstance.customFields.each {it.smartGroup = null}
@@ -109,9 +108,5 @@ class SmartGroupController extends ControllerUtils {
 		}
 	}
 	
-	private def getSmartGroupRuleFields() {
-		def smartGroupRuleFields = (new DefaultGrailsDomainClass(SmartGroup.class)).persistentProperties*.name - "name"
-		smartGroupRuleFields
-	}
 }
 

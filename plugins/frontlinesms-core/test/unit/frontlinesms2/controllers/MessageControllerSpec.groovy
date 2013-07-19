@@ -1,12 +1,11 @@
 package frontlinesms2.controllers
 
+import static frontlinesms2.DispatchStatus.*
 import frontlinesms2.*
 
 import spock.lang.*
 import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
-import frontlinesms2.*
-import static frontlinesms2.DispatchStatus.*
 
 @TestFor(MessageController)
 @Mock([Contact, Fmessage, Group, GroupMembership, Poll, Trash])
@@ -84,7 +83,7 @@ class MessageControllerSpec extends Specification {
 		when:
 			controller.archive()
 		then:
-			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId=&flashMessage=default.archived"
+			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId="
 	}
 
 	def "archiving a message IN SEARCH should redirect to the calling action without a messageId"() {
@@ -96,7 +95,7 @@ class MessageControllerSpec extends Specification {
 		when:
 			controller.archive()
 		then:
-			controller.response.redirectUrl == "/search/result?searchId=1&flashMessage=default.archived"
+			controller.response.redirectUrl == "/search/result?searchId=1"
 	}
 	
 	def "archiving pending messages from the result screen should fail"(){

@@ -2,11 +2,9 @@ package frontlinesms2.services
 
 import frontlinesms2.*
 import spock.lang.*
-import grails.test.mixin.*
 
 @TestFor(AutoreplyService)
 class AutoreplyServiceSpec extends Specification {
-
 	@Unroll
 	def "doReply will create an outgoing message"() {
 		setup:
@@ -14,8 +12,7 @@ class AutoreplyServiceSpec extends Specification {
 			def messageSendService = Mock(MessageSendService)
 			def incoming = Mock(Fmessage)
 			def owner = Mock(CustomActivity)
-			
-			owner.addToMessages(_) >> { ms-> return "" }
+			owner.addToMessages >> { m -> }
 			incoming.messageOwner >> owner
 			incoming.src >> "123"
 			incoming.messageOwner >> Mock(Activity)
@@ -35,3 +32,4 @@ class AutoreplyServiceSpec extends Specification {
 			invokerType << [Autoreply, ReplyActionStep]
 	}
 }
+

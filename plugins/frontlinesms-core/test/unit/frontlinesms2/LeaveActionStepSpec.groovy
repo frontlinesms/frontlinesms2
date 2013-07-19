@@ -1,8 +1,6 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
-import frontlinesms2.*
 
 @TestFor(LeaveActionStep)
 @Mock([CustomActivity])
@@ -21,3 +19,4 @@ class LeaveActionStepSpec extends Specification {
 			true            | 'group'         | true
 	}
 }
+

@@ -1,11 +1,6 @@
 package frontlinesms2
 
 class ArchiveController extends MessageController {
-//> SERVICES
-
-//> INTERCEPTORS
-	 
-//> ACTIONS
 	def index() {
 		def action = params.messageSection ?: 'inbox'
 		redirect action:action, params:params
@@ -24,10 +19,5 @@ class ArchiveController extends MessageController {
 				itemInstanceTotal: folderInstanceList.size(),
 				messageSection: "folder"]
 	}
-	
-//> PRIVATE HELPERS
-	private def getShowModel(messageInstanceList) {
-		def model = super.getShowModel(messageInstanceList)
-		return model
-	}
 }
+

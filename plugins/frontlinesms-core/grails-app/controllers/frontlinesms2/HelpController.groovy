@@ -1,8 +1,6 @@
 package frontlinesms2
 
-import frontlinesms2.*
 import grails.converters.JSON
-import org.codehaus.groovy.grails.plugins.PluginManagerHolder
 
 class HelpController extends ControllerUtils {
 	def appSettingsService
@@ -16,7 +14,8 @@ class HelpController extends ControllerUtils {
 	}
 
 	def image() {
-		def uri = r.resource(uri:"/images/${params.imagePath}.png")
+		def uri = r.resource(uri:"/images/help/${params.imagePath}.png")
+		println "HelpController.image()::::$uri"
 		uri = uri.substring(request.contextPath.size())
 		redirect(uri:uri, absolute:true)
 	}

@@ -2,7 +2,6 @@ package frontlinesms2
 
 import frontlinesms2.camel.smpp.*
 
-import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
@@ -44,7 +43,7 @@ class SmppFconnection extends Fconnection {
 					definitions << from("seda:out-${SmppFconnection.this.id}")
 								.setHeader("CamelSmppSourceAddr", simple(SmppFconnection.this.fromNumber))
 								.onException(RuntimeException)
-											.handled(true)
+											.handled(false)
 											.beanRef('fconnectionService', 'handleDisconnection')
 											.end()
 								.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(SmppFconnection.this.id.toString()))

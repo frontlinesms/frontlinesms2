@@ -1,0 +1,76 @@
+#!/bin/bash
+set -e
+
+tagPrefix="v"
+orphanBranch=false
+while [[ $1 == "--"* ]]; do
+	if [[ $1 == "--orphan" ]]; then
+		orphanBranch=true
+	fi
+	if [[ $1 == "--tag-prefix" ]]; then
+		shift
+		tagPrefix=$1
+	fi
+	shift
+done
+
+previousVersion=$(groovy -e "$(grep version *GrailsPlugin.groovy); println version")
+echo "# Got old plugin version as: $previousVersion"
+
+releaseVersion=$(echo $previousVersion | sed s/-SNAPSHOT//)
+read -p "# Enter version for release [$releaseVersion]: " manualReleaseVersion
+if [ -n "$manualReleaseVersion" ]; then
+	releaseVersion="$manualReleaseVersion"
+fi
+echo "# Using new version: $releaseVersion"
+
+nextVersion=$(expr $releaseVersion)
+nextVersionHead=$(echo $nextVersion | sed -E 's/^(.*)\.[0-9]+$/\1/')
+nextVersionTail=$(echo $nextVersion | sed -E 's/^.*\.([0-9]+)$/\1/')
+nextVersionTail=$(($nextVersionTail + 1))
+nextVersion="${nextVersionHead}.${nextVersionTail}-SNAPSHOT"
+read -p "# Enter new version for development [$nextVersion]: " manualNextVersion
+if [ -n "$manualNextVersion" ]; then
+	nextVersion="$manualNextVersion"
+fi
+echo "# Next SNAPSHOT version: $nextVersion"
+
+function grails_change_plugin_version {
+	_prev="$1"
+	_next="$2"
+	sed -i -E -e "s/def\s+version\s*=\s*['\"]$_prev['\"]/def version = '$_next'/g" *GrailsPlugin.groovy
+}
+
+function git_commit_all_changes {
+	_commitMessage="$1"
+	git status
+	read -p "# Committing all changes with message: $_commitMessage [enter] "
+	# Add new files to git
+	git add .
+	# --all will also remove deleted files
+	git commit --all -m"$_commitMessage"
+}
+
+orphanBranchName=
+if $orphanBranch; then
+	orphanBranchName="release-${tagPrefix}${releaseVersion}"
+	echo "# Creating new orphaned branch: $orphanBranchName"
+	git checkout --orphan $orphanBranchName
+	git commit -m"Branch for release of ${tagPrefix}${releaseVersion}"
+fi
+
+grails_change_plugin_version $previousVersion $releaseVersion
+${0%/*}/../build_deploy_plugin --m2-deploy # TODO should support binary here too
+git_commit_all_changes "[RELEASE: $releaseVersion]"
+git tag "${tagPrefix}${releaseVersion}"
+grails_change_plugin_version $releaseVersion $nextVersion
+git_commit_all_changes "[POST-RELEASE: $releaseVersion -> $nextVersion]"
+if $orphanBranch; then
+	echo "# Pushing changes to remote for orhan branch: $orhpanBranchName"
+	git push origin $orphanBranchName
+	git checkout master
+else
+	git push
+fi
+git push --tags
+

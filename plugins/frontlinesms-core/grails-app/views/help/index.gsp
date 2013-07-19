@@ -38,7 +38,7 @@ function _goToSection(menuItem, prefixTrimLength) {
 			// action URLs TODO long-term solution is to fix help generation/iframe it
 			$("#help-content img").each(function(i, e) {
 				e = $(e);
-				e.attr("src", url_root + "static/" + e.attr("src").substring(3));
+				e.attr("src", url_root + e.attr("src").substring(3));
 			});
 		}
 		$("#help-content").scrollTop(0);

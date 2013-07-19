@@ -6,6 +6,7 @@ import grails.plugin.quartz2.TriggerHelper
 import org.apache.camel.Exchange
 import frontlinesms2.api.*
 
+// TODO handle unscheduling of ReportSmssyncTimeoutJob as an event listener.
 class SmssyncService {
 	def i18nUtilService
 	def processSend(Exchange x) {
@@ -59,6 +60,7 @@ class SmssyncService {
 	}
 
 	private def handleIncoming(connection, params) {
+		if(!connection.enabled) throw new FrontlineApiException("Connection not enabled")
 		if(!connection.receiveEnabled) throw new FrontlineApiException("Receive not enabled for this connection")
 
 		if(!params.from || params.message==null) throw new FrontlineApiException('Missing one or both of `from` and `message` parameters');
@@ -82,10 +84,6 @@ class SmssyncService {
 		if(!connection.sendEnabled) throw new FrontlineApiException("Send not enabled for this connection")
 
 		return success(generateOutgoingResponse(connection, true))
-	}
-
-	private def handleRouteDestroyed(connection) {
-		ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
 	}
 
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {

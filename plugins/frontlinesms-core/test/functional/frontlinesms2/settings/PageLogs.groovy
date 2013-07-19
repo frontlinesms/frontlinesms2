@@ -24,3 +24,4 @@ class SendLogsDialog extends PageLogs {
 		continueButton { $("#done") }
 	}
 }
+

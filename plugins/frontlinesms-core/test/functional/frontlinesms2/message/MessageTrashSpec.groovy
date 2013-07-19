@@ -8,10 +8,13 @@ class MessageTrashSpec extends grails.plugin.geb.GebSpec {
 
 	def "should filter inbox messages for starred and unstarred messages"() {
 		setup:
-			trashService = new TrashService()
-			Fmessage.build(src:"src1", starred:true, isDeleted:true)
-			Fmessage.build(src:"src2", isDeleted:true)
-			Fmessage.findAll().each { trashService.sendToTrash(it) }
+			remote {
+				trashService = new TrashService()
+				Fmessage.build(src:"src1", starred:true, isDeleted:true)
+				Fmessage.build(src:"src2", isDeleted:true)
+				Fmessage.findAll().each { trashService.sendToTrash(it) }
+				null
+			}
 		when:
 			to PageMessageTrash
 		then:

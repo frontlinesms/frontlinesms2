@@ -17,8 +17,7 @@ class SmppTranslationService implements Processor {
 		log ("in.getHeaders: ${i.getHeaders()}")
 		
 		//TODO allow messages is source is set
-		//if(i.headers['CamelSmppSourceAddr']) {
-		if(true) {
+		if(i.headers['CamelSmppSourceAddr']) {
 			Fmessage message = new Fmessage(inbound:true)
 			def messageBody = i.body
 			def messageSource = i.headers['CamelSmppSourceAddr']

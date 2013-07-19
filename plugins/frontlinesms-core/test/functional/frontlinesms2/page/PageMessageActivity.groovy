@@ -11,12 +11,11 @@ abstract class PageMessageActivity extends frontlinesms2.message.PageMessage {
 			return ""// will give 'activity not found' & redirect to inbox
 
 		// find the activity
-	    if (args[0] instanceof Activity)
-	    	restOfPath += "/"+(args[0] as Activity).id
-	    else if (args[0] instanceof Number)
-	    	restOfPath += "/"+args[0]
-	    else
-	    	restOfPath += "/"+Activity.findByName(args[0])?.id
+		if (args[0] instanceof Number) {
+			restOfPath += '/' + args[0]
+		} else {
+			restOfPath += '/' + remote { Activity.findByName(args[0])?.id }
+		}
 
 	    // find the message
 	    if (args.length > 1)

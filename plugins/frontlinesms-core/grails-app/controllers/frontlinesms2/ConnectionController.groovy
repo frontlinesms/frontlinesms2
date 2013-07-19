@@ -3,36 +3,36 @@ package frontlinesms2
 import grails.converters.JSON
 class ConnectionController extends ControllerUtils {
 	static allowedMethods = [save: "POST", update: "POST", delete:'GET']
+	static final String RULE_PREFIX = "fconnection-"
 
 	def fconnectionService
 	def messageSendService
 	def smssyncService
+	def appSettingsService
+	def grailsApplication
 
 	def index() {
 		redirect action:'list'
 	}
-	
+
 	def list() {
+		def url = "http://${request.serverName == 'localhost' ? '&lt;your-ip-address&gt;' : request.serverName}${request.serverPort? (':' + request.serverPort) : ''}"
 		def fconnectionInstanceList = Fconnection.list(params)
 		def fconnectionInstanceTotal = Fconnection.count()
+		def appSettings = [:]
+		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
+		appSettings['routing.use'] = appSettingsService.get("routing.use")
+		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
 
-		def model = [connectionInstanceList:fconnectionInstanceList,
-				fconnectionInstanceTotal:fconnectionInstanceTotal]
-		if(params?.id) {
-			model << show()
-			def connectionInstance = model.connectionInstance
-			render view:'show', model:model
-		} else {
-			params.id = fconnectionInstanceList[0]?.id
-			render view:'show', model:model
-		}
-	}
-	
-	def show() {
+		def model = [:]
 		withFconnection {
-			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
-					fconnectionInstanceTotal: Fconnection.list(params)]
+			model << [connectionInstance: it]
 		}
+		[connectionInstanceList:fconnectionInstanceList,
+				fconnectionInstanceTotal:fconnectionInstanceTotal,
+				fconnectionRoutingMap:fconnectionRoutingMap,
+				appSettings:appSettings,
+				serverUrl:"${url}"]
 	}
 
 	def wizard() {
@@ -44,7 +44,7 @@ class ConnectionController extends ControllerUtils {
 			return [action:'save']
 		}
 	}
-	
+
 	def save() {
 		remapFormParams()
 		doSave(Fconnection.implementations.find { it.shortName == params.connectionType })
@@ -52,13 +52,15 @@ class ConnectionController extends ControllerUtils {
 
 	def delete() {
 		def connection = Fconnection.get(params.id)
-		if(connection.status == ConnectionStatus.DISABLED) {
+		if(connection.status != ConnectionStatus.CONNECTING && connection.status != ConnectionStatus.CONNECTED) {
 			connection.delete()
 			flash.message = message code:'connection.deleted', args:[connection.name]
 			redirect action:'list'
-		} else throw new RuntimeException()
+		}
+		else
+			redirect action:'list'
 	}
-	
+
 	def update() {
 		remapFormParams()
 		withFconnection { fconnectionInstance ->
@@ -88,7 +90,49 @@ class ConnectionController extends ControllerUtils {
 		}
 		}
 	}
-	
+
+	def changeRoutingPreferences() {
+		println "params:: $params"
+
+		appSettingsService.set('routing.use', params.routingUseOrder)
+		redirect action:'list'
+	}
+
+	private getRoutingRules(routingRules) {
+		def fconnectionRoutingList = []
+		def fconnectionRoutingMap = [:]
+		def connectionInstanceList = Fconnection.findAllBySendEnabled(true)
+
+		if(routingRules) {
+			fconnectionRoutingList = routingRules.split(/\s*,\s*/)
+			println "Routing Rules before refinement:::: $routingRules"
+
+			// Replacing fconnection rules with fconnection instances
+			fconnectionRoutingList = fconnectionRoutingList.collect { rule ->
+				if(rule.startsWith(RULE_PREFIX)) {
+					connectionInstanceList.find {
+						println "Comparing rule:: $rule with id:: $it ::  ${it.id == ((rule - RULE_PREFIX) as Integer)}"
+						it.id == ((rule - RULE_PREFIX) as Integer)
+					}
+				} else rule
+			}
+
+			if(fconnectionRoutingList) {
+				def length = fconnectionRoutingList.size()
+				if(!fconnectionRoutingList.contains("uselastreceiver")) fconnectionRoutingList << "uselastreceiver"
+				((fconnectionRoutingList += connectionInstanceList) - null as Set).eachWithIndex { it, index ->
+					fconnectionRoutingMap[it] = index < length
+				}
+			}
+
+		 } else {
+		 	fconnectionRoutingList << "uselastreceiver"
+			((fconnectionRoutingList + connectionInstanceList) as Set).findAll{ fconnectionRoutingMap[it] = false }
+		}
+
+		fconnectionRoutingMap
+	}
+
 	private def remapFormParams() {
 		def cType = params.connectionType
 		if(!(cType in Fconnection.implementations*.shortName)) {
@@ -107,21 +151,20 @@ class ConnectionController extends ControllerUtils {
 		}
 		params << newParams
 	}
-	
+
 	def enable() {
 		EnableFconnectionJob.triggerNow([connectionId:params.id])
-		params.connecting = true
-		flash.message = message(code: 'connection.route.connecting')
+		sleep 100 // This horrible hack allows enough time for the job to start before we try to get the status of the connection we're enabling
 		def connectionInstance = Fconnection.get(params.id)
-		if(connectionInstance?.shortName == 'smssync')
+		if(connectionInstance?.shortName == 'smssync') { // FIXME should not be connection-specific code here
 			smssyncService.startTimeoutCounter(connectionInstance)
+		}
 		redirect(action:'list', params:params)
 	}
-  
+
 	def disable() {
 		withFconnection { c ->
 			fconnectionService.disableFconnection(c)
-			flash.message = message(code: 'connection.route.disconnecting')
 			redirect(action:'list', id:c.id)
 		}
 	}
@@ -135,7 +178,7 @@ class ConnectionController extends ControllerUtils {
 		def connectionInstance = Fconnection.get(params.id)
 		[connectionInstance:connectionInstance]
 	}
-	
+
 	def sendTest() {
 		withFconnection { connection ->
 			def m = messageSendService.createOutgoingMessage(params)
@@ -144,14 +187,18 @@ class ConnectionController extends ControllerUtils {
 			redirect action:'list', id:params.id
 		}
 	}
-	
+
 	private def doSave(Class<Fconnection> clazz) {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
 		fconnectionInstance.validate()
 		println fconnectionInstance.errors.allErrors
 		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
-		if (fconnectionInstance.save()) {
+		if (fconnectionInstance.save(flush:true)) {
+			def connectionUseSetting = appSettingsService['routing.use']
+			appSettingsService['routing.use'] = connectionUseSetting?
+					"$connectionUseSetting,fconnection-$fconnectionInstance.id":
+					"fconnection-$fconnectionInstance.id"
 			withFormat {
 				html {
 					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))

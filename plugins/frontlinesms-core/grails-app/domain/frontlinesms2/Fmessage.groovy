@@ -15,9 +15,8 @@ class Fmessage {
 	
 	String src
 	String text
-	String inboundContactName
 	String outboundContactName
-	
+	String inboundContactName
 	boolean read
 	boolean starred
 	boolean archived
@@ -112,6 +111,24 @@ class Fmessage {
 				property 'id'
 			}
 		}
+
+		pendingAndNotFailed {
+			and {
+				eq("isDeleted", false)
+				eq("archived", false)
+				projections {
+					dispatches {
+						eq('status', DispatchStatus.PENDING)
+					}
+				}
+			}
+			projections {
+				distinct 'id'
+				property 'date'
+				property 'id'
+			}
+		}
+
 		deleted { getOnlyStarred=false ->
 			and {
 				eq("isDeleted", true)
@@ -130,13 +147,24 @@ class Fmessage {
 					eq("inbound", getSent)
 			}
 		}
-		unread {
+		unread { MessageOwner owner=null ->
 			and {
 				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
 				eq("read", false)
-				isNull("messageOwner")
+				if(owner == null)
+					isNull("messageOwner")
+				else
+					eq("messageOwner", owner)
+			}
+		}
+		totalUnread {
+			and {
+				eq("isDeleted", false)
+				eq("archived", false)
+				eq("inbound", true)
+				eq("read", false)
 			}
 		}
 
@@ -234,19 +262,17 @@ class Fmessage {
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
 	def getHasFailed() { areAnyDispatches(DispatchStatus.FAILED) }
 	def getHasPending() { areAnyDispatches(DispatchStatus.PENDING) }
-	def getOutboundContactList(){ 
-		def contactlist = []
-		dispatches.each{ contactlist << Contact.findByMobile(it.dst)?.name }
-		contactlist?contactlist:""
+	def getOutboundContactList() {
+		dispatches.collect { Contact.findByMobile(it.dst)?.name } - null
 	}
 
-	private boolean isMoveAllowed(){
+	private boolean isMoveAllowed() {
 		if(this.messageOwner){
 			return !(this.messageOwner?.archived)
 		} else {
 			return (!this.isDeleted && !this.archived)
 		}
-    }
+	}
 
 	private def areAnyDispatches(status) {
 		dispatches?.any { it.status == status }
@@ -257,7 +283,8 @@ class Fmessage {
 	}
 
 	static def listPending(onlyFailed, params=[:]) {
-		Fmessage.getAll(pending(onlyFailed).list(params) as List)
+		def ids = pending(onlyFailed).list(params) as List
+		(!ids) ? [] : Fmessage.getAll(ids)
 	}
 
 	static def countPending(onlyFailed) {
@@ -271,13 +298,17 @@ class Fmessage {
 	static def countUnreadMessages() {
 		Fmessage.unread.count()
 	}
+
+	static def countUnreadMessages(owner) {
+		Fmessage.unread(owner).count()
+	}
+
+	static def countTotalUnreadMessages() {
+		Fmessage.totalUnread.count()
+	}
 	
-	static def countAllMessages(params) {
-		def inboxCount = Fmessage.inbox.count()
-		def sentCount = Fmessage.sent.count()
-		def pendingCount = Fmessage.pending.count()
-		def deletedCount = Fmessage.deleted.count()
-		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
+	static def countAllMessages() {
+		['inbox', 'sent', 'pending', 'deleted'].collectEntries { [it, Fmessage[it].count()] }
 	}
 
 	// TODO should this be in a service?
