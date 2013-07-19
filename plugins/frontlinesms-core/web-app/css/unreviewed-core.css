@@ -12,3 +12,6 @@ fieldset.table { display:table; }
 #manage-connection > a:hover { text-decoration:underline; }
 
 #connectionForm div.info { margin-top:0px; }
+
+.forward.step div.input { margin: 0; }
+.message-composer { background-color: #fff; }
