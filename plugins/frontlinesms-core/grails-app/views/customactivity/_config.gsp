@@ -2,11 +2,15 @@
 	<p><g:message code="customactivity.config.description"/></p>
 </div>
 
-<div id="custom-activity-actions-container" class="button-bar">
-	<g:each var="type" in="${['join', 'leave', 'reply', 'forward', 'webconnectionStep']}">
-		<a class="btn" onclick="custom_activity.addStep('${type}')"><g:message code="customactivity.step.${type}.add"/></a>
-		<fsms:render template="/customactivity/steps/${type}" type="sanchez" id="step-${type}" runtimeVars="random"/>
-	</g:each>
+<div id="custom-activity-actions-container">
+	<label>
+		<h4>Add a step:</h4>
+		<fsms:select class="dropdown" name="custom_activity_select" from="${['reply', 'join', 'leave', 'webconnectionStep', 'forward']}" noSelecti    312 on="${['':'Select an action']}" onchange="selectmenuTools.snapback(this);" optionValue="${{g.message(code:'customactivity.step.' + it + '.add')}}">
+			<g:each var="type" in="${['join', 'leave', 'reply', 'forward', 'webconnectionStep']}">
+				<fsms:render template="/customactivity/steps/${type}" type="sanchez" id="step-${type}" runtimeVars="random"/>
+			</g:each>
+		</fsms:select>
+	</label>	
 </div>
 
 <g:hiddenField name="jsonToSubmit" />

@@ -14,6 +14,8 @@ var custom_activity = (function() {
 		var titles, widths, maxWidth;
 		$(CONFIG_CONTAINER + " .step .remove-command").click(removeStep);
 		selectmenuTools.initAll(CONFIG_CONTAINER + " select:not([name=recipients])");
+		selectmenuTools.initAll("#custom-activity-actions-container select");
+
 		magicwand.init($(CONFIG_CONTAINER + " select[id^='magicwand-select']"));
 
 		// calculate the length of the longest title here
