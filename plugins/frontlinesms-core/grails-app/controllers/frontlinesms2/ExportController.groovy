@@ -39,7 +39,7 @@ class ExportController extends ControllerUtils {
 				messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
 				break
 			case 'pending':
-				messageInstanceList = Fmessage.listPending(params.failed?:false, [:])
+				messageInstanceList = Fmessage.listPending(params.failed, params)
 				break
 			case 'trash':
 				messageInstanceList = Fmessage.trash().list()
@@ -90,6 +90,9 @@ class ExportController extends ControllerUtils {
 		List fields = ["id", "inboundContactName", "src", "outboundContactList", "dispatches.dst", "text", "date"]
 		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dispatches.dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
 		Map parameters = [title: message(code: 'export.message.title')]
+		if(params.format == 'pdf') {
+			parameters << ["pdf.encoding":"UniGB-UCS2-H", "font.family": "STSong-Light"]
+		}
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try {
 			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:], parameters)
