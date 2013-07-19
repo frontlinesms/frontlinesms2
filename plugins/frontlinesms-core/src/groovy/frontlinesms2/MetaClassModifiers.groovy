@@ -39,6 +39,15 @@ class MetaClassModifiers {
 		String.metaClass.truncate = { max=16 ->
 			delegate.size() <= max? delegate: delegate.substring(0, max-1) + '…'
 		}
+		String.metaClass.decapitalize = {
+			if(delegate) {
+				if(delegate.size() == 1) {
+					return delegate.toLowerCase()
+				} else {
+					return delegate[0].toLowerCase() + delegate[1..-1]
+				}
+			}
+		}
 	}
 
 	static def addRoundingMethodsToDates() {
