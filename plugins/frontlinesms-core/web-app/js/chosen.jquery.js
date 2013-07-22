@@ -375,7 +375,7 @@ Copyright (c) 2011 by Harvest
       container_props = {
         id: this.container_id,
         "class": container_classes.join(' '),
-        style: 'width: ' + this.f_width + 'px;',
+        style: 'width: 100%;',
         title: this.form_field.title
       };
       container_div = $("<div />", container_props);
