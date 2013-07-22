@@ -4,6 +4,8 @@ import java.util.zip.ZipOutputStream
 import java.util.zip.ZipEntry
 
 import org.apache.camel.Exchange
+import org.smslib.util.GsmAlphabet
+
 
 class MetaClassModifiers {
 	static void addAll() {
@@ -13,6 +15,7 @@ class MetaClassModifiers {
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
 		MetaClassModifiers.addEscapeForJavascriptToStrings()
+		MetaClassModifiers.addAreCharactersValidGSMToStrings()
 	}
 
 	static def addZipMethodToFile() {
@@ -112,6 +115,12 @@ println "MetaClassModifiers.addCamelMethods()"
 			delegate.replaceAll(/(\r\n)|[\r\n]/, '\\\\n')
 		}
 
+	}
+
+	static def addAreCharactersValidGSMToStrings() {
+		String.metaClass.areAllCharactersValidGSM = {
+			GsmAlphabet.areAllCharactersValidGSM(delegate)
+		}
 	}
 }
 
