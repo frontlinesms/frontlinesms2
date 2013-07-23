@@ -56,7 +56,10 @@
             return $(this).remove();
           });
           select.find('optgroup:empty').each(function() {
-            return $(this).remove();
+			var optgroup = this
+			var fauxOptgroup = select.siblings('.chzn-container').find('.group-result').filter(function() { console.warn(this); return ($(this).html() == $(optgroup).attr('label')) });
+		  	console.warn(fauxOptgroup);
+			return $(fauxOptgroup).remove();
           });
           items = callback? callback(data): data;
           nbItems = 0;
