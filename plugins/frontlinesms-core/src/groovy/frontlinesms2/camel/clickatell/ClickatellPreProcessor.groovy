@@ -8,10 +8,18 @@ class ClickatellPreProcessor implements Processor {
 		def log = { println "ClickatellPreProcessor.process() : $it" }
 		log 'ENTRY'
 		
-		// URL-encode body
+		// URL-encode body, and set as hex-encoded unicode if necessary
 		def d = x.in.body
+		def text = d.text
 		x.out.headers['frontlinesms.dispatch.id'] = d.id
-		x.out.body = urlEncode(d.text)
+		if (!text.areAllCharactersValidGSM()) {
+			text = text.getBytes('utf-16').encodeHex().toString()
+			set x, 'unicode', '1'
+		}
+		else {
+			set x, 'unicode', '0'
+		}
+		x.out.body = urlEncode(text)
 		
 		def destination = d.dst
 		if(destination && destination.charAt(0)=='+') destination = destination.substring(1)
@@ -39,5 +47,6 @@ class ClickatellPreProcessor implements Processor {
 		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
 		return URLEncoder.encode(s, "UTF-8");
 	}
+
 }
 
