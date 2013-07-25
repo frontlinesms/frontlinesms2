@@ -6,7 +6,7 @@ class Dispatch {
 	DispatchStatus status
 	Date dateSent
 	def expressionProcessorService
-	long fconnectionId
+	Long fconnectionId
 	
 	boolean isDeleted
 
