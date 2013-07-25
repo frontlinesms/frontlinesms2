@@ -9,15 +9,11 @@ import frontlinesms2.api.*
 // TODO handle unscheduling of ReportSmssyncTimeoutJob as an event listener.
 class SmssyncService {
 	def i18nUtilService
-	def processSend(Exchange x) {
-		println "SmssyncService.processSend() :: ENTRY"
-		println "SmssyncService.processSend() :: x=$x"
-		println "SmssyncService.processSend() :: x.in.body=$x.in.body"
-		println "SmssyncService.processSend() :: x.in.headers=${x.in?.headers}"
+
+	void processSend(Exchange x) {
 		def connection = SmssyncFconnection.get(x.in.headers['fconnection-id'])
 		connection.addToQueuedDispatches(x.in.body)
 		connection.save(failOnError:true)
-		println "SmssyncService.processSend() :: EXIT"
 	}
 
 	def reportTimeout(connection) {
