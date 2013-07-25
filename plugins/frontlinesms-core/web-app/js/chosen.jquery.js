@@ -966,7 +966,7 @@ Copyright (c) 2011 by Harvest
       var no_results_html;
       no_results_html = $('<li class="no-results">' + this.results_none_found + ' "<span></span>"</li>');
       no_results_html.find("span").first().html(terms);
-      return this.search_results.append(no_results_html);
+      return this.search_results.html(no_results_html);
     };
 
     Chosen.prototype.no_results_clear = function() {
