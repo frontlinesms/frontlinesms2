@@ -5,9 +5,6 @@ import frontlinesms2.api.*
 class ApiController extends ControllerUtils {
 	def grailsApplication
 	def index() {
-		println "entityClassApiUrl = $params?.entityClassApiUrl"
-		println "entityId = $params?.entityId"
-		println "params = $params"
 		def entityClass = grailsApplication.domainClasses*.clazz.find {
 			FrontlineApi.isAssignableFrom(it) && (it.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl() == params.entityClassApiUrl)
 		}
