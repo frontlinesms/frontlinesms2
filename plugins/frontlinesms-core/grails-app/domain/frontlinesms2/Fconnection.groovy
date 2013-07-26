@@ -4,11 +4,13 @@ import grails.util.Environment
 
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
+import org.apache.camel.Exchange
 
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
 	def fconnectionService
+	def dispatchRouterService
 	
 	static final String HEADER_FCONNECTION_ID = 'fconnection-id'
 	static transients = ['status', 'routeDefinitions']
@@ -63,6 +65,10 @@ class Fconnection {
 		fconnectionService.getConnectionStatus(this)
 	}
 	
+	def updateDispatch(Exchange x) {
+		dispatchRouterService.updateDispatch(x, DispatchStatus.SENT)
+	}
+
 	List<RouteDefinition> getRouteDefinitions() {
 		if(Environment.current != Environment.TEST) {
 			throw new IllegalStateException("Do not know how to create routes for Fconnection of class: ${this.class}")
