@@ -17,8 +17,14 @@ class RecipientLookupService {
 	}
 
 	private def values(selectedList, shortName) {
-		selectedList.findAll { it.startsWith "$shortName-" }.collect {
-			it.split('-', 2)[1]
+		if(selectedList instanceof String) {
+			if(selectedList.startsWith("$shortName-") ) {
+				return selectedList.split('-', 2)[1]
+			}
+		} else {
+			selectedList.findAll { it.startsWith "$shortName-" }.collect {
+				it.split('-', 2)[1]
+			}
 		}
 	}
 
