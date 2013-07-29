@@ -2,6 +2,7 @@ package frontlinesms2
 
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
+import org.apache.camel.Exchange
 
 import frontlinesms2.api.*
 
@@ -14,6 +15,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 
 	def smssyncService
 	def appSettingsService
+	def dispatchRouterService
 
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
@@ -38,6 +40,10 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 
 	def getQueuedDispatches() {
 		SmssyncFconnectionQueuedDispatch.getDispatches(this)
+	}
+
+	def updateDispatch(Exchange x) {
+		// Dispatch is already in PENDING state so no need to change the status
 	}
 
 	boolean isApiEnabled() { return this.sendEnabled || this.receiveEnabled }

@@ -90,7 +90,8 @@ class DispatchRouterService {
 
 	def handleCompleted(Exchange x) {
 		println "DispatchRouterService.handleCompleted() : ENTRY"
-		updateDispatch(x, DispatchStatus.SENT)
+		def connection = Fconnection.get(x.in.getHeader('fconnection-id'))
+		connection?.updateDispatch(x)
 		println "DispatchRouterService.handleCompleted() : EXIT"
 	}
 
