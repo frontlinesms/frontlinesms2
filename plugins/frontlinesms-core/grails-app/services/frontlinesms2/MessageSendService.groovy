@@ -2,8 +2,6 @@ package frontlinesms2
 
 class MessageSendService {
 	static transactional = false
-
-	def recipientLookupService
 	
 	def send(Fmessage m, Fconnection c=null) {
 		def headers = [:]
@@ -27,16 +25,10 @@ class MessageSendService {
 	
 	def createOutgoingMessage(params) {
 		def message = new Fmessage(text:(params.messageText), inbound:false)
-		def recipients = recipientLookupService.contactSearchResults([recipients:params.recipients])
+		def addresses = [params.addresses].flatten() - null
+		addresses += getAddressesForContacts(params.contacts)
+		addresses += getAddressesForGroups([params.groups].flatten())
 
-		println "recipients = $recipients"
-		def addresses = [recipients?.addresses] - null
-		addresses += recipients.groups?.collect{ it.addresses }?.flatten()
-		addresses += recipients.smartgroups?.collect{ it.addresses }?.flatten()
-		addresses += recipients.contacts*.mobile?.flatten()
-
-		println "createOutgoingMessage() :: addresses = $addresses"
-		addresses = addresses.flatten() - null
 		def dispatches = generateDispatches(addresses)
 		dispatches.each {
 			message.addToDispatches(it)

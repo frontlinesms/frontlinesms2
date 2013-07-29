@@ -36,14 +36,15 @@
 	function initializePopup() {
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				//recipientSelecter.updateRecipientCount();
+				recipientSelecter.updateRecipientCount();
 				return true;
 			}
 		});
 		
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				return ($("select[name=recipients]").find('option').size() > 0);
+				recipientSelecter.addAddressHandler();
+				return ($("#recipient-count").html() > 0);
 			}
 		});
 	}
