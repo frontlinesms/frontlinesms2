@@ -5,7 +5,9 @@ import frontlinesms2.*
 import spock.lang.*
 
 class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
-	private static final def SIMPLE_ACTIVITY = Announcement.build(name:'whatever')
+	def setup() {
+		Announcement.build(name:'whatever')
+	}
 	
 	@Unroll
 	def "Keyword must have a value and an Activity"() {
