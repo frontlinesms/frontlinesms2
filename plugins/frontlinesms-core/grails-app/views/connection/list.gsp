@@ -39,9 +39,6 @@
 	<fsms:popup controller="connection" action="wizard" class="btn route" id="{{connectionId}}" popupCall="mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
 		<g:message code="connection.edit"/>
 	</fsms:popup>
-	<g:link controller="connection" action="delete" class="btn route" id="{{connectionId}}">
-		<g:message code="connection.delete"/>
-	</g:link>
 </script>
 
 <script id="fconnection-controls-NOT_CONNECTED" type="text/x-sanchez-template">
@@ -52,9 +49,6 @@
 	<fsms:popup controller="connection" action="wizard" class="btn route" id="{{connectionId}}" popupCall="mediumPopup.launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
 		<g:message code="connection.edit"/>
 	</fsms:popup>
-	<g:link controller="connection" action="delete" class="btn route" id="{{connectionId}}">
-		<g:message code="connection.delete"/>
-	</g:link>
 </script>
 
 <script id="fconnection-controls-DISABLED" type="text/x-sanchez-template">
