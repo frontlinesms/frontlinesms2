@@ -16,7 +16,7 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroups()
 		when:
-			to PageContactShow, remote { Group.findByName("Friends").id }
+			to PageGroupShow, 'Friends'
 		then:
 			bodyMenu.selectedMenuItem == 'friends'
 	}
@@ -25,7 +25,7 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to PageContactShow, remote { Group.findByName("Friends").id }
+			to PageGroupShow, 'Friends'
 		then:
 			contactList.contacts.containsAll(['Bobby', 'Duchamps'])
 	}
@@ -34,31 +34,31 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to PageContactShow, remote { Group.findByName("Friends").id }
+			to PageGroupShow, 'Friends'
 			def links = contactList.contactsLink
 		then:
 			links.size() == 2
 			links.every() { it ==~ '/group/show/\\d+/contact/show/\\d+\\?.+' }
 	}
-	
+
 	def 'group members list is paginated'() {
 		given:
 			createTestGroups()
 			createManyContactsAddToGroups()
 		when:
-			to PageContactShow, remote { Group.findByName("Friends").id }
+			to PageGroupShow, 'Friends'
 		then:
 			def contactNames = contactList.contacts - "Select All"
 			def expectedNames = (11..60).collect{ "Contact${it}" }
 			contactNames == expectedNames
 	}
-	
+
 	def "should remain on the same page when a contact is selected from a group"() {
 		given:
 			createTestGroups()
 			createManyContactsAddToGroups()
 		when:
-			to PageContactShow, remote { Group.findByName("Friends").id }
+			to PageGroupShow, 'Friends'
 			footer.prevPage.disabled
 			footer.nextPage.click()
 		then:
@@ -67,6 +67,6 @@ class GroupViewSpec extends GroupBaseSpec {
 			contactList.selectContact 1
 		then:
 			waitFor { !footer.prevPage.disabled }
-	}	
+	}
 }
 
