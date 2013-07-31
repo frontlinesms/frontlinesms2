@@ -52,6 +52,7 @@ class AutoforwardSpec extends Specification {
 			autoforward.autoforwardService = forwardService
 
 			def inMessage = mockFmessage("message text", '+123457890')
+			inMessage.messageOwner >> autoforward
 		when:
 			autoforward.processKeyword(inMessage, Mock(Keyword))
 		then:
