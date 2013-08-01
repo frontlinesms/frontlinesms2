@@ -13,15 +13,17 @@ class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "Keyword must have a value and an Activity"() {
 		given:
-			def k = new Keyword(value:word, activity:activity, isTopLevel:true)
+			def k = new Keyword(value:word, isTopLevel:true)
+			if(hasActivity)
+				simpleActivity.addToKeywords(k)
 		expect:
 			k.validate() == valid
 		where:
-			word   | activity       | valid
-			null   | null           | false
-			null   | simpleActivity | false
-			'TEST' | null           | false
-			'T3ST' | simpleActivity | true
+			word   | hasActivity     | valid
+			null   | false           | false
+			null   | true            | false
+			'TEST' | false           | false
+			'T3ST' | true            | true
 	}
 
 	@Unroll
