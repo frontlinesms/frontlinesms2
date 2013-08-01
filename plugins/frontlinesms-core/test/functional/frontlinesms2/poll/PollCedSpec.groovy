@@ -19,7 +19,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			header.title == 'football teams poll'
 		when:
-			to PageMessagePoll, Poll.findByName('Football Teams'), Fmessage.findBySrc('Alice')
+			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc('Alice').id
 		then:
 			header.title == 'football teams poll'
 		when:
@@ -455,7 +455,7 @@ class PollCedSpec extends PollBaseSpec {
 			poll.save(failOnError:true, flush:true)
 			poll.refresh()
 		when:
-			to PageMessagePoll, poll
+			to PageMessagePoll, poll.id
 		then:
 			moreActions.value("edit").click()
 		when:
@@ -477,7 +477,7 @@ class PollCedSpec extends PollBaseSpec {
 		poll.addToResponses(key: 'B', value: 'Chuck-Norris')
 		poll.addToResponses(key: 'Unknown', value: 'Unknown')
 		poll.save(failOnError:true, flush:true)
-		to PageMessagePoll, poll
+		to PageMessagePoll, poll.id
 		moreActions.value("delete")
 		waitFor { at DeleteActivity }
 		ok.click()
