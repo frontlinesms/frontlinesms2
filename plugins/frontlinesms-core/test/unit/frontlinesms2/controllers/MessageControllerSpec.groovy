@@ -111,3 +111,4 @@ class MessageControllerSpec extends Specification {
 			assert message.archived == false
 	}
 }
+

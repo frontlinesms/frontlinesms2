@@ -25,8 +25,10 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 
-	static createTestMessages(Webconnection wc) {
+	static createTestMessages(Webconnection wcLocal) {
+		def wcId = wcLocal.id
 		remote {
+			def wc = Webconnection.get(wcId)
 			(0..90).each {
 				def m = Fmessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
 				it % 5 == 0 ? (m.setMessageDetail(wc, DispatchStatus.SENT)) : (m.setMessageDetail(wc, DispatchStatus.FAILED))
