@@ -37,7 +37,7 @@ class ContactEditSpec extends ContactBaseSpec {
 				g.id
 			}
 		when:
-			to PageContactShow, groupId, remote { Contact.findByName('Alice').id }
+			to PageGroupShow, groupId, remote { Contact.findByName('Alice').id }
 			singleContactDetails.name.value('Kate')
 			singleContactDetails.mobile.value('+2541234567') 
 			singleContactDetails.email.value('gaga@gmail.com')
