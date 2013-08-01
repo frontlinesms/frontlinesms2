@@ -5,8 +5,9 @@ import frontlinesms2.*
 import spock.lang.*
 
 class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
+	private static simpleActivity
 	def setup() {
-		Announcement.build(name:'whatever')
+		simpleActivity = Announcement.build(name:'whatever', deleted: false, archived: false)
 	}
 	
 	@Unroll
@@ -16,11 +17,11 @@ class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
 		expect:
 			k.validate() == valid
 		where:
-			word   | activity        | valid
-			null   | null            | false
-			null   | SIMPLE_ACTIVITY | false
-			'TEST' | null            | false
-			'TEST' | SIMPLE_ACTIVITY | true
+			word   | activity       | valid
+			null   | null           | false
+			null   | simpleActivity | false
+			'TEST' | null           | false
+			'T3ST' | simpleActivity | true
 	}
 
 	@Unroll
