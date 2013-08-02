@@ -26,7 +26,7 @@ class ConnectionList extends Module {
 	static content = {
 		listSize { $("tbody tr.connection").size() }
 		connection { i=0 -> $('tbody tr.connection', i) }
-		hoverOn { i -> connection(i).find(".controls").jquery.show() }
+		hoverOn { i -> connection(i).find('div.controls').jquery.css("visibility", "visible") }
 		connectionName { i-> connection(i).find("td.connection-name").text() }
 		btnEnableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'Enable') }
 		btnRetryConnection(wait:true) { i ->  hoverOn(i) ; connection(i).find(".btn", text:'Retry') }

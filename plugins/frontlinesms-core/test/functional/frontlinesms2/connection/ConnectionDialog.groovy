@@ -23,8 +23,6 @@ class ConnectionDialog extends MediumPopup {
 
 		confirmSmssyncName { $('#smssync-confirm #confirm-name') }
 		confirmSmssyncSecret { $('#smssync-confirm #confirm-secret') }
-		confirmSmssyncReceiveEnabled { $('#smssync-confirm #confirm-receiveEnabled') }
-		confirmSmssyncSendEnabled { $('#smssync-confirm #confirm-sendEnabled') }
 
 		error { $('label', class:'error') }
 	}
