@@ -69,6 +69,7 @@ if $orphanBranch; then
 	echo "# Pushing changes to remote for orhan branch: $orhpanBranchName"
 	git push origin $orphanBranchName
 	git checkout master
+	git merge $orphanBranchName
 else
 	git push
 fi
