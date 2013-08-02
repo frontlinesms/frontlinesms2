@@ -70,7 +70,7 @@ if $orphanBranch; then
 	git push origin $orphanBranchName
 	git checkout master
 	grails_change_plugin_version $previousVersion $nextVersion
-	git_commit_all_changes "[Roled up version: $releaseVersion -> $nextVersion]"
+	git_commit_all_changes "[POST-$releaseVersion-RELEASE: $previousVersion -> $nextVersion]"
 else
 	git push
 fi
