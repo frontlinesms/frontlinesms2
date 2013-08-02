@@ -14,7 +14,6 @@ abstract class Step {
 	static configFields = [:]
 
 	static constraints = {
-		// the following assumes all configFields are mandatory
 		stepProperties(nullable: true)
 	}
 	
