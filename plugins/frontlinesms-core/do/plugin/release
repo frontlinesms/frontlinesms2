@@ -69,7 +69,8 @@ if $orphanBranch; then
 	echo "# Pushing changes to remote for orhan branch: $orhpanBranchName"
 	git push origin $orphanBranchName
 	git checkout master
-	git merge $orphanBranchName
+	grails_change_plugin_version $previousVersion $nextVersion
+	git_commit_all_changes "[Roled up version: $releaseVersion -> $nextVersion]"
 else
 	git push
 fi
