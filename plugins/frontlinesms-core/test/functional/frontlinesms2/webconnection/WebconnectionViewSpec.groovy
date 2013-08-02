@@ -18,7 +18,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		setup:
 			def webconnection  = Webconnection.findByName("Sync")
 		when:
-			to PageMessageWebconnection, webconnection
+			to PageMessageWebconnection, webconnection.name
 		then:
 			waitFor { title?.toLowerCase().contains("web connection") }
 			header.name == 'sync web connection'
@@ -31,9 +31,9 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 	@Unroll
 	def 'Webconnection page should show API url, excluding secret, iff API is enabled'() {
 		setup:
-			def c = GenericWebconnection.build(apiEnabled:true, secret:secret, url:'http://test.com')
+			def c = GenericWebconnection.build(name:'me', apiEnabled:true, secret:secret, url:'http://test.com')
 		when:
-			to PageMessageWebconnection, c
+			to PageMessageWebconnection, c.name
 		then:
 			header.api.endsWith "/api/1/webconnection/$c.id/"
 		where:
@@ -44,7 +44,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		setup:
 			def webconnection  = Webconnection.findByName("Ush")
 		when:
-			to PageMessageWebconnection, webconnection
+			to PageMessageWebconnection, "Ush"
 		then:
 			waitFor { title?.toLowerCase().contains("web connection") }
 			header.name == 'ush web connection'
@@ -55,7 +55,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "clicking the archive button archives the Webconnection and redirects to inbox "() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { header.displayed }
 		when:
@@ -67,7 +67,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "clicking the edit option opens the Webconnection Dialog for editing"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { header.displayed }
 		when:
@@ -78,7 +78,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
@@ -88,7 +88,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "clicking the rename option opens the rename small popup"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { header.displayed }
 		when:
@@ -100,7 +100,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "clicking the delete option opens the confirm delete small popup"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { header.displayed }
 		when:
@@ -111,7 +111,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "clicking the export option opens the export dialog"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { header.displayed }
 		when:
@@ -122,7 +122,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "selecting a single message reveals the single message view"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -134,7 +134,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "selecting multiple messages reveals the multiple message view"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -148,7 +148,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "clicking on a message reveals the single message view with clicked message"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -161,7 +161,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "delete single message action works "() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -177,7 +177,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "delete multiple message action works for multiple select"(){
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -196,7 +196,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "move single message action works"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -211,7 +211,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor { notifications.flashMessageText.contains("updated") }
 			messageList.messageText(0) != 'Test message 0'
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, "Sample Announcement"
 		then:
 			waitFor { messageList.displayed }
 			messageList.messageText(0) == 'Test message 0'
@@ -219,7 +219,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "move multiple message action works"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -235,7 +235,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])
 			!(messageList.messageText(1) in ['Test message 0', 'Test message 1'])
 		when:
-			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, "Sample Announcement"
 		then:
 			waitFor { messageList.displayed }
 			messageList.messageText(0) in ['Test message 0', 'Test message 1']
@@ -244,7 +244,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "should display SENT message status for successfully forwarded messages"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { messageList.displayed }
 			js.exec '''
@@ -254,7 +254,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 
 	def "retry failed uploads option should be present in more actions dropdown, and should redirect to same view"() {
 		when:
-			to PageMessageWebconnection, Webconnection.findByName("Sync")
+			to PageMessageWebconnection, "Sync"
 		then:
 			waitFor { header.displayed }
 		when:

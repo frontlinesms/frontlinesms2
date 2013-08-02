@@ -20,7 +20,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		controller.params.max = 10
 		controller.params.offset = 0
 		controller.params.starred = false
-		
+
 		new Group(name: "Sahara").save(flush: true)
 		new Group(name: "Thar").save(flush: true)
 
@@ -31,35 +31,32 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			controller.params.addresses = "+919544426000"
 		when:
-			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			controller.flash.message == "Message has been queued to send to +919544426000"
+			Fmessage.count() == 1
+			(Fmessage.getAll() as List)[0].dispatches*.dst == ['+919544426000']
 	}
 
 	def "should send message to each recipient in the list of address"() {
 		setup:
 			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
 			controller.params.addresses = addresses
-		when:
 			assert Fmessage.count() == 0
+		when:
 			controller.send()
-			controller.flash.message 
 		then:
-			assert Fmessage.count() == 1
+			Fmessage.count() == 1
 			(Fmessage.getAll() as List)[0].dispatches*.dst.sort() == addresses.sort()
 	}
 
-	def "should display flash message on successful message sending"() {
+	def 'should render message on successful message sending'() {
 		setup:
 			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
 			controller.params.addresses = addresses
 		when:
-			assert Fmessage.count() == 0
 			controller.send()
-			def flashMessage = controller.flash.message 
 		then:
-			 flashMessage.contains("Message has been queued to send to 3 recipients")
+			controller.response.contentAsString == 'Message has been queued to send to 3 recipients'
 	}
 
 	def 'Messages are sorted by date' () {
@@ -98,7 +95,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Fmessage.get(id).read
 	}
-	
+
 	def 'calling "starMessage" action leads to unstarred message becoming starred'() {
 		setup:
 			def id = Fmessage.build().id
@@ -122,7 +119,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Fmessage.get(id).starred == false
 	}
-	
+
 	def 'calling "sendMessageCount" returns the number of messages to be sent'() {
 		when:
 			controller.params.message = "!@:%^&*(){" * 30
@@ -130,7 +127,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			controller.response.contentAsString == '{"charCount":300,"partCount":3,"remaining":105}'
 	}
-	
+
 	def 'calling "sendMessageCount" returns the number of characters remaining'() {
 		when:
 			controller.params.message = "abc123"
@@ -186,7 +183,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 			def Keyword k = new Keyword(value:'ASDF')
 			def newOwner = new Autoreply(name:"Toothpaste", autoreplyText: "Thanks for the input").addToKeywords(k).save(failOnError:true)
-			
+
 			// TODO move this test to MessageController
 			controller.params.messageId = m.id
 			controller.params.ownerId = newOwner.id
@@ -196,7 +193,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			!responseA.messages.contains(m)
 	}
-	
+
 	def 'archived messages should not be allowed to move'(){
 		setup:
 			def announcement = Announcement.build(name:"Archived activity",sentMessageText:"text message",archived:true)

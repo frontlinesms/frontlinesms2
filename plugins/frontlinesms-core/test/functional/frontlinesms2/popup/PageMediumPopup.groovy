@@ -264,7 +264,7 @@ class SmartGroupCreateDialog extends MediumPopup {
 		removeRuleButtons(required:false) { $('tr.smart-group-criteria a.remove-command') }
 		smartGroupNameField { $('input', type:'text', name:'smartgroupname') }
 		addRuleButton { $('.btn', text:"Add another rule") }
-		editButton { $('button', text:'Edit')}
+		editButton { $('button', text:'Update')}
 		flashMessage(required:false) { $('div.flash') }
 	}
 }
