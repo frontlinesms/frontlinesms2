@@ -374,7 +374,7 @@ class FsmsTagLib {
 		def smartGroups = att?.smartGroups
 		def addresses = att?.addresses
 
-		["contact":contacts, "group":groups, "smartGroup":smartGroups, "address":addresses].each { typeKey, typeValue ->
+		["contact":contacts, "group":groups, "smartgroup":smartGroups, "address":addresses].each { typeKey, typeValue ->
 			if ( typeValue ) {
 				def optgroupLabel, optionValue, optionLabel
 				optgroupLabel = g.message(code:'contact.search.'+typeKey)
