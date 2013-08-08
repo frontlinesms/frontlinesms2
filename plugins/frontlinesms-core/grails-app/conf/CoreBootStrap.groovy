@@ -449,11 +449,11 @@ class CoreBootStrap {
 			.setPropertyValue('myNumber', '23123123')
 			.setPropertyValue('myMessage', 'i will upload forever')
 		def joinStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"1"))
-		def leaveStep = new LeaveActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
-		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:'autoreplyText', value:'reply to you all'))
 		def forwardStep = new ForwardActionStep()
 				.addToStepProperties(new StepProperty(key:'sentMessageText',value:'sending forward ${message_text}'))
 				.addToStepProperties(new StepProperty(key:'recipient',value:'Address-123123'))
+		def leaveStep = new JoinActionStep().addToStepProperties(new StepProperty(key:"group", value:"2"))
+		def replyStep = new ReplyActionStep().addToStepProperties(new StepProperty(key:"autoreplyText", value:"I will send you forever"))
 
 		new CustomActivity(name:'Do it all')
 				.addToSteps(joinStep)
