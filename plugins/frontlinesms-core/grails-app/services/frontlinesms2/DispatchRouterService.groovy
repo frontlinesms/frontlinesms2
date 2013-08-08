@@ -43,10 +43,12 @@ class DispatchRouterService {
 				fconnectionRoutingList = fconnectionRoutingList.collect { route ->
 					route.startsWith(RULE_PREFIX)? route.substring(RULE_PREFIX.size()): route
 				}
-				println "fconnectionRoutingList::: $fconnectionRoutingList"
+				log "fconnectionRoutingList::: $fconnectionRoutingList"
 				for(route in fconnectionRoutingList) {
 					if(route == 'uselastreceiver') {
-						routeId = getLastReceiverId(exchange)
+						def fconnection = getLastReceiverConnection(exchange)
+						route = fconnection?.id
+						routeId = fconnection ? getCamelRouteId(fconnection) : null
 					} else {
 						routeId = getCamelRouteId(Fconnection.get(route))
 					}
@@ -54,7 +56,8 @@ class DispatchRouterService {
 					if(routeId) {
 						if(exchange.in.body instanceof Dispatch) {
 							def dispatch = exchange.in.body
-							dispatch.fconnectionId = route as long
+							log " dispatch.fconnectionId:::: $route"
+							dispatch.fconnectionId = route as Long
 							dispatch.save(failOnError:true, flush:true)
 						}
 						break
@@ -90,7 +93,8 @@ class DispatchRouterService {
 
 	def handleCompleted(Exchange x) {
 		println "DispatchRouterService.handleCompleted() : ENTRY"
-		updateDispatch(x, DispatchStatus.SENT)
+		def connection = Fconnection.get(x.in.getHeader('fconnection-id'))
+		connection?.updateDispatch(x)
 		println "DispatchRouterService.handleCompleted() : EXIT"
 	}
 
@@ -132,14 +136,14 @@ class DispatchRouterService {
 		} else log.info("No dispatch found for id: $id")
 	}
 
-	private getLastReceiverId(exchange) {
+	private getLastReceiverConnection(exchange) {
 		def log = { println "DispatchRouterService.slip() : $it" }
 		log "Dispatch is ${exchange.in.getBody()}"
 		def d = exchange.in.getBody()
 		log "dispatch to send # $d ### d.dst # $d?.dst"
 		def latestReceivedMessage = Fmessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
 		log "## latestReceivedMessage ## is $latestReceivedMessage"
-		latestReceivedMessage?.receivedOn ? getCamelRouteId(latestReceivedMessage.receivedOn) : null
+		latestReceivedMessage?.receivedOn
 	}
 
 	private getCamelRouteId(connection) {

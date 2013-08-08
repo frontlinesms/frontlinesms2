@@ -1,6 +1,6 @@
 import spock.lang.*
 
-@TestFor(ApiUrlMappings)
+@TestFor(CoreUrlMappings)
 @Mock(frontlinesms2.ApiController)
 class ApiUrlMappingSpec extends Specification {
 	def testApiUrlMappingWithoutSecret() {

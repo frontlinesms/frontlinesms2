@@ -41,6 +41,7 @@
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {};
+		selectmenuTools.snapback = function() {};
 		var fsmsButton = { apply:function(){}, findAndApply:function(){}, find:function(){} };
 	</g:if>
 	<g:else>

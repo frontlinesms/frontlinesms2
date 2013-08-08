@@ -2,6 +2,7 @@ package frontlinesms2
 
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
+import org.apache.camel.Exchange
 
 import frontlinesms2.api.*
 
@@ -14,6 +15,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 
 	def smssyncService
 	def appSettingsService
+	def dispatchRouterService
 
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
@@ -40,6 +42,10 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		SmssyncFconnectionQueuedDispatch.getDispatches(this)
 	}
 
+	def updateDispatch(Exchange x) {
+		// Dispatch is already in PENDING state so no need to change the status
+	}
+
 	boolean isApiEnabled() { return this.sendEnabled || this.receiveEnabled }
 
 	List<RouteDefinition> getRouteDefinitions() {
@@ -60,7 +66,12 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	String getFullApiUrl() {
-		return apiEnabled? "api/1/${shortName}/$id/" : ""
+		// Secret is included here because it's required for SMSSync's 'send' task.
+		// For incoming messages, we are already provided the secret in the GET params,
+		// so a secret mismatch might cause confusion.  In future, SMSSync should
+		// secret in task requests as well, so eventually $secret can be dropped from
+		// this URL.
+		return apiEnabled? "api/1/${shortName}/$id/${secret?:''}" : ''
 	}
 }
 

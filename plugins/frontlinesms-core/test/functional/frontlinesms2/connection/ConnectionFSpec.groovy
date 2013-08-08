@@ -60,10 +60,12 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 
 	def 'Send test message button for particular connection displayed on a successfully created route'() {
 		given:
-			def testConnection = createTestSmsConnection()
+			def testConnection = createTestEmailConnection()
 		when:
 			to PageConnection, testConnection
 			waitFor { connectionList.displayed }
+			$('div.controls').jquery.css("visibility", "visible")
+
 			connectionList.btnEnableRoute(0).click()
 		then:
 			waitFor('slow') { connectionList.btnTestRoute(0).displayed }
@@ -133,8 +135,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			next.click()
 		then:
 			confirmSmssyncSecret.text() == '****'
-			confirmSmssyncReceiveEnabled.text() == 'Yes'
-			confirmSmssyncSendEnabled.text() == 'Yes'
 	}
 
 	def 'Smslib connection has a description under its name'() {
@@ -169,14 +169,10 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchCreateWizard('smssync')
 			smssyncname = 'Henry\'s SMSSync Connection'
-			connectionForm.smssyncreceiveEnabled = false
-			connectionForm.smssyncsendEnabled = false
 			next.click()
 		then:
 			confirmSmssyncName.text() == 'Henry\'s SMSSync Connection'
 			confirmSmssyncSecret.text() == 'None'
-			confirmSmssyncReceiveEnabled.text() == 'No'
-			confirmSmssyncSendEnabled.text() == 'No'
 		when:
 			submit.click()
 		then:
@@ -252,8 +248,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	private def startBadConnection() {
 		def connectionId = remote { SmslibFconnection.findByName('Bad Port').id }
 		to PageConnection, connectionId
-		waitFor { connectionList.btnEnableRoute(0).displayed }
-		connectionList.btnEnableRoute(0).click()
+		waitFor { connectionList.btnRetryConnection(0).displayed }
+		connectionList.btnRetryConnection(0).click()
 	}
 
 	private def launchCreateWizard(def type=null) {

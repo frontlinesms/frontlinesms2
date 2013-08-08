@@ -5,20 +5,25 @@ import frontlinesms2.*
 import spock.lang.*
 
 class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
-	private static final def SIMPLE_ACTIVITY = Announcement.build(name:'whatever')
+	private static simpleActivity
+	def setup() {
+		simpleActivity = Announcement.build(name:'whatever', deleted: false, archived: false)
+	}
 	
 	@Unroll
 	def "Keyword must have a value and an Activity"() {
 		given:
-			def k = new Keyword(value:word, activity:activity, isTopLevel:true)
+			def k = new Keyword(value:word, isTopLevel:true)
+			if(hasActivity)
+				simpleActivity.addToKeywords(k)
 		expect:
 			k.validate() == valid
 		where:
-			word   | activity        | valid
-			null   | null            | false
-			null   | SIMPLE_ACTIVITY | false
-			'TEST' | null            | false
-			'TEST' | SIMPLE_ACTIVITY | true
+			word   | hasActivity     | valid
+			null   | false           | false
+			null   | true            | false
+			'TEST' | false           | false
+			'T3ST' | true            | true
 	}
 
 	@Unroll

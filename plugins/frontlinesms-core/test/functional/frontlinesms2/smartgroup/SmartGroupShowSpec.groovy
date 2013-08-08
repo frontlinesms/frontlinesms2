@@ -59,12 +59,11 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		when:
 			header.moreGroupActions.value('edit')
 			waitFor { at SmartGroupEditDialog}
-			smartGroupNameField.value(smartGroupNameField.value() == 'English Contacts')
 			setRuleValue(0, "+44")
 			editButton.click()
 		then:
 			remote { SmartGroup.count() == 1 }
-			waitFor { remote { SmartGroup.findByName('English Contacts')?.mobile == '+44' } }
+			waitFor { '+44' == remote { SmartGroup.findByName('English Contacts')?.mobile } }
 	}
 }
 

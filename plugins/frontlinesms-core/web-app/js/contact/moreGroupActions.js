@@ -1,5 +1,5 @@
 $(function() {
-	$('#group-actions').bind('change', function() {
+	$('#group-actions').change(function() {
 		var selected = $(this).find('option:selected').val();
 		if(selected) {
 			groupActions[selected].call();
@@ -49,3 +49,4 @@ function getContactSection() {
 	var contactSection = $("#contactsSection").val();
 	return contactSection;
 }
+
