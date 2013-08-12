@@ -63,16 +63,14 @@ grails_change_plugin_version $previousVersion $releaseVersion
 ${0%/*}/../build_deploy_plugin --m2-deploy # TODO should support binary here too
 git_commit_all_changes "[RELEASE: $releaseVersion]"
 git tag "${tagPrefix}${releaseVersion}"
-grails_change_plugin_version $releaseVersion $nextVersion
-git_commit_all_changes "[POST-RELEASE: $releaseVersion -> $nextVersion]"
 if $orphanBranch; then
 	echo "# Pushing changes to remote for orhan branch: $orhpanBranchName"
 	git push origin $orphanBranchName
+	echo "# Checking out master so SNAPSHOT version rolling happens there instead of on orphan branch..."
 	git checkout master
-	grails_change_plugin_version $previousVersion $nextVersion
-	git_commit_all_changes "[POST-$releaseVersion-RELEASE: $previousVersion -> $nextVersion]"
-else
-	git push
 fi
+grails_change_plugin_version $previousVersion $nextVersion
+git_commit_all_changes "[POST-RELEASE: $releaseVersion -> $nextVersion]"
+git push
 git push --tags
 
