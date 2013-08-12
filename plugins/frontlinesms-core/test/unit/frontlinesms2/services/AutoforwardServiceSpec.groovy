@@ -7,7 +7,7 @@ import grails.test.mixin.*
 @Mock([ForwardActionStep, StepProperty, Fmessage, MessageSendService])
 @TestFor(AutoforwardService)
 class AutoforwardServiceSpec extends Specification {
-	def 'calling autoforwardService.doForward from a forward step should result in message sent'() {
+	def 'doForward() for a Step should send a message'() {
 		setup:
 			def forwardStep = Mock(ForwardActionStep)
 			def sendService = Mock(MessageSendService)
@@ -31,4 +31,10 @@ class AutoforwardServiceSpec extends Specification {
 		then:
 			1 * sendService.send(outgoingMessage)
 	}
+
+	def 'doForward() for a standard Activity should send a message'() {
+		expect:
+			false // TODO implement
+	}
 }
+
