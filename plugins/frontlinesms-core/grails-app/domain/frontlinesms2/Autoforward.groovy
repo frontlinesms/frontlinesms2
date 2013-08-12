@@ -38,6 +38,7 @@ class Autoforward extends Activity {
 
 	// FIXME declare this as `boolean` return type, remove `.size() > 0` check, rename to follow standard naming conventions
 	// FIXME can also be simplified by ORing results together
+	// FIXME this method also looks like it could be rewritten: `return getRecipientCount()`
 	private def addressesAvailable() {
 		println "## All Contacts ## ${((contacts?:[] + groups*.members?:[] + smartGroups*.members?:[]).flatten() - null)}"
 		((contacts?:[] + groups*.members?:[] + smartGroups*.members?:[]).flatten() - null).size() > 0
