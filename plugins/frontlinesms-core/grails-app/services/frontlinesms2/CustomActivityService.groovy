@@ -47,6 +47,7 @@ class CustomActivityService {
 
 		// FIXME please add spaces before braces
 		if(params.sorting == 'global'){
+			// FIXME should not need to explivitly invoke `new Keyword()` when calling addToKeywords
 			customActivity.addToKeywords(new Keyword(value:''))
 		// FIXME please add spaces before braces
 		} else if(params.sorting == 'enabled'){
