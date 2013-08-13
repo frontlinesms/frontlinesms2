@@ -1,5 +1,6 @@
 package frontlinesms2
 
+// TODO please clean up this code's formatting
 class ForwardActionStep extends Step {
 	def grailsApplication
 	def autoforwardService
@@ -9,9 +10,6 @@ class ForwardActionStep extends Step {
 	static String getShortName() { 'forward' }
 
 	static configFields = [sentMessageText: 'textarea', recipients: '']
-
-	static constraints = {
-	}
 
 	Map getConfig() {
 		def config = [stepId:id, sentMessageText:sentMessageText]
@@ -49,6 +47,7 @@ class ForwardActionStep extends Step {
 			return addresses - null
 		}
 
+		// FIXME WTF is this doing?  Is this a dumb way of doing Class.forName(), or just passing the class to the method in the first place?
 		def domain = grailsApplication.domainClasses*.clazz.find { (it.name - "frontlinesms2.") == domainName }
 		def domainInstances = stepProperties.collect { step->
 			if(step.value.startsWith(domainName)) {

@@ -3,29 +3,36 @@ package frontlinesms2.services
 import frontlinesms2.*
 import spock.lang.*
 import grails.test.mixin.*
+import grails.buildtestdata.mixin.Build
 
-@Mock([ForwardActionStep, StepProperty, Fmessage, MessageSendService])
+@Mock([Autoforward, CustomActivity, Fmessage, ForwardActionStep, MessageDetail])
 @TestFor(AutoforwardService)
+@Build([Autoforward, CustomActivity, Fmessage, ForwardActionStep])
 class AutoforwardServiceSpec extends Specification {
-	def 'doForward() for a Step should send a message'() {
-		setup:
-			def forwardStep = Mock(ForwardActionStep)
-			def sendService = Mock(MessageSendService)
-			def owner = Mock(CustomActivity)
-			
-			def message = Mock(Fmessage)
-			message.id >> 1
-			owner.addToMessages(_) >> "adding message to messageOwner"
-			message.messageOwner >> owner
-			
-			def outgoingMessage = Mock(Fmessage)
-			outgoingMessage.setOwnerDetail(_,_) >> "setting the owner detail"
-			
-			sendService.createOutgoingMessage(_) >> outgoingMessage
+	def outgoingMessage
+	def sendService
 
-			forwardStep.getSentMessageText >> "sent this message"
-			forwardStep.getRecipients() >> ["12345"]
-			service.messageSendService = sendService
+	def setup() {
+		CustomActivity.metaClass.addToSteps = { s -> if(!steps) steps = []; steps << s }
+		CustomActivity.metaClass.addToMessages = { m -> if(!messages) messages = []; messages << m; m.messageOwner = delegate }
+		Autoforward.metaClass.addToMessages = { m -> if(!messages) messages = []; messages << m; m.messageOwner = delegate }
+		outgoingMessage = Fmessage.build()
+
+		sendService = Mock(MessageSendService)
+		sendService.createOutgoingMessage(_) >> outgoingMessage
+		service.messageSendService = sendService
+	}
+
+	def 'doForward() for a Step should send a message'() {
+		given:
+			def forwardStep = ForwardActionStep.build()
+			forwardStep.grailsApplication = [domainClasses:[]]
+			forwardStep.addToStepProperties(key:'recipient', value:'Address-12345')
+			forwardStep.addToStepProperties(key:'sentMessageText', value:'sent this message')
+			def owner = CustomActivity.build()
+
+			def message = Fmessage.build()
+			owner.addToMessages(message)
 		when:
 			service.doForward(forwardStep, message)
 		then:
@@ -33,8 +40,13 @@ class AutoforwardServiceSpec extends Specification {
 	}
 
 	def 'doForward() for a standard Activity should send a message'() {
-		expect:
-			false // TODO implement
+		given:
+			def a = Autoforward.build()
+			def m = Fmessage.build(messageOwner:a)
+		when:
+			service.doForward(a, m)
+		then:
+			1 * sendService.send(outgoingMessage)
 	}
 }
 
