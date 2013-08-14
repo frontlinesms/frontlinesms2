@@ -39,13 +39,31 @@ class AutoforwardSpec extends Specification {
 	}
 
 	def 'processKeyword should call autoforwardService if addresses are available'() {
-		expect:
-			false // TODO implement me
+		given:
+			def a = Autoforward.build()
+			a.contacts = ['a contact']
+			def m = Mock(Fmessage)
+			def k = Mock(Keyword)
+			def s = Mock(AutoforwardService)
+			a.autoforwardService = s
+		when:
+			a.processKeyword(m, k)
+		then:
+			1 * s.doForward(_, _)
+			0 * s._
 	}
 
 	def 'processKeyword should not call autoforwardService if no addresses are available'() {
-		expect:
-			false // TODO implement me
+		given:
+			def a = Autoforward.build()
+			def m = Mock(Fmessage)
+			def k = Mock(Keyword)
+			def s = Mock(AutoforwardService)
+			a.autoforwardService = s
+		when:
+			a.processKeyword(m, k)
+		then:
+			0 * s._
 	}
 
 	@Unroll
