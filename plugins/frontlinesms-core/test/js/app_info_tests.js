@@ -176,7 +176,7 @@ test("Calling stopListening when there is no registered listener should not thro
 });
 
 test("Calling stopListening when there is a registered listener will prevent it from being called", function() {
-	//given
+	// given
 	app_info.listen("a", counter.func);
 
 	// when
@@ -191,5 +191,25 @@ test("Calling stopListening when there is a registered listener will prevent it 
 
 	// then there's no change in the count
 	equal(counter.called(), 1);
+});
+
+test("Fail callback should be called on ERROR if it's set", function() {
+	// given
+	var failureLogged, failureListener;
+	failureLogged = false;
+	failureListener = function() {
+		failureLogged = true;
+	};
+
+	app_info.listenForFailures(failureListener);
+	ajax_spy.addResponse(function() { return true; },
+			function() { throw "Forced failure of Ajax request"; });
+	app_info.listen("a", counter.func);
+
+	// when
+	timer.tick();
+
+	// then
+	ok(failureLogged, "AJAX failure should have been logged.");
 });
 
