@@ -24,18 +24,11 @@
 </div>
 
 <r:script>
-	$("#messageText").live("blur", function() {
-		var value = $(this).val().htmlEncode();
-		if(value) {
-			$("#confirm-message-text").html(value);
-		} else {
-			$("#confirm-message-text").html("none"); // FIXME i18n
-		}
-	});
-
 	function initializePopup() {
 		$("#tabs-1").contentWidget({
 			validate: function() {
+				var value = $("#messageText").val().htmlEncode();
+				$("#confirm-message-text").html(value || "none"); // FIXME i18n
 				recipientSelecter.updateRecipientCount();
 				return true;
 			}

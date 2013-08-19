@@ -286,21 +286,21 @@ var mediumPopup = (function() {
 		messageSection = $("input:hidden[name=messageSection]").val();
 		
 		$.ajax({
-			type:'POST',
-			data: {recipients: src, messageText: text, configureTabs: configureTabs},
-			url: url_root + 'quickMessage/create',
-			beforeSend : function() { showThinking(); },
-			success: function(data, textStatus){
+			type:"POST",
+			data:{ recipients:src, messageText:text, configureTabs:configureTabs },
+			url:url_root + "quickMessage/create",
+			beforeSend:showThinking,
+			success:function(data, textStatus) {
 				hideThinking();
-				launchMediumWizard(messageType, data, i18n('action.send'));
+				launchMediumWizard(messageType, data, i18n("action.send"));
 			}
 		});
 	};
 
 	editConnection = function(id) {
 		$.ajax({
-			url: url_root + "connection/wizard/" + id,
-			success: function(data){
+			url:url_root + "connection/wizard/" + id,
+			success:function(data) {
 				launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false);
 			}
 		});
