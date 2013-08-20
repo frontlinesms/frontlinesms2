@@ -7,15 +7,14 @@ import org.apache.camel.Exchange
 
 class MetaClassModifiers {
 	static void addAll() {
-		MetaClassModifiers.addTruncateMethodToStrings()
-		MetaClassModifiers.addRoundingMethodsToDates()
-		MetaClassModifiers.addZipMethodToFile()
-		MetaClassModifiers.addCamelMethods()
-		MetaClassModifiers.addMapMethods()
-		MetaClassModifiers.addEscapeForJavascriptToStrings()
+		MetaClassModifiers.augmentStrings()
+		MetaClassModifiers.augmentDates()
+		MetaClassModifiers.augmentFiles()
+		MetaClassModifiers.augmentCamelClasses()
+		MetaClassModifiers.augmentMaps()
 	}
 
-	static def addZipMethodToFile() {
+	static void augmentFiles() {
 		File.metaClass.zip = { output, filter=null ->
 			new ZipOutputStream(output).withStream { zipOutStream ->
 				delegate.eachFileRecurse { f ->
@@ -34,8 +33,8 @@ class MetaClassModifiers {
 			}
 		}
 	}
-	
-	static def addTruncateMethodToStrings() {
+
+	static void augmentStrings() {
 		String.metaClass.truncate = { max=16 ->
 			delegate.size() <= max? delegate: delegate.substring(0, max-1) + '…'
 		}
@@ -48,9 +47,15 @@ class MetaClassModifiers {
 				}
 			}
 		}
+		String.metaClass.escapeForJavascript = {
+			delegate.replaceAll(/(\r\n)|[\r\n]/, '\\\\n')
+		}
+		String.metaClass.urlEncode = {
+			URLEncoder.encode(delegate, 'UTF-8')
+		}
 	}
 
-	static def addRoundingMethodsToDates() {
+	static void augmentDates() {
 		def setTime = { Date d, int h, int m, int s ->
 			def calc = Calendar.getInstance()
 			calc.setTime(d)
@@ -59,7 +64,7 @@ class MetaClassModifiers {
 			calc.set(Calendar.SECOND, s)
 			calc.getTime()
 		}
-		
+
 		Date.metaClass.getStartOfDay = {
 			setTime(delegate, 0, 0, 0)
 		}
@@ -68,10 +73,9 @@ class MetaClassModifiers {
 			setTime(delegate, 23, 59, 59)
 		}
 	}
-	
-	static def addCamelMethods() {
+
+	static void augmentCamelClasses() {
 		Exchange.metaClass.getFconnectionId = {
-println "MetaClassModifiers.addCamelMethods()"
 			def routeId = delegate.unitOfWork?.routeContext?.route?.id
 			final def ID_REGEX = /.*-(\d+)$/
 			if(routeId && routeId==~ID_REGEX) {
@@ -79,8 +83,8 @@ println "MetaClassModifiers.addCamelMethods()"
 			}
 		}
 	}
-	
-	static def addMapMethods() {
+
+	static void augmentMaps() {
 		LinkedHashMap.metaClass.getAllKeys = {
 		   def c
 		   c = { map ->
@@ -97,7 +101,7 @@ println "MetaClassModifiers.addCamelMethods()"
 		   }
 		   c(delegate)
 		}
-		
+
 		LinkedHashMap.metaClass.getAllValues = {
 		   def c
 		   c = { map ->
@@ -112,13 +116,6 @@ println "MetaClassModifiers.addCamelMethods()"
 				return values.flatten() - null
 		   }
 		   c(delegate)
-		}
-		
-	}
-
-	static def addEscapeForJavascriptToStrings() {
-		String.metaClass.escapeForJavascript = { 
-			delegate.replaceAll(/(\r\n)|[\r\n]/, '\\\\n')
 		}
 
 	}
