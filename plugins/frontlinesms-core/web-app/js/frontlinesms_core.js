@@ -86,12 +86,7 @@ jQuery.fn.renderDefaultText = function() {
 };
 
 function showThinking() {
-	var thinking = jQuery('#thinking'),
-	widgetOverlay = jQuery("div.ui-widget-overlay");
-	if(widgetOverlay) {
-		thinking.zIndex(widgetOverlay.zIndex() + 2);
-	}
-	thinking.fadeIn();
+	jQuery('#thinking').fadeIn();
 }
 
 function fadeThinking() {
