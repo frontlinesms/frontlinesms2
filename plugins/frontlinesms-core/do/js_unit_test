@@ -33,7 +33,7 @@ function check_npm_module_available {
 	fi
 	err "# NPM Module found: $MODULE_NAME"
 }
-if checkRequiredNpmLibs; then
+if $checkRequiredNpmLibs; then
 	check_npm_module_available fs
 	check_npm_module_available jquery
 	check_npm_module_available jsdom
