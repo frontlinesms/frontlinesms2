@@ -10,8 +10,8 @@ class ClickatellPreProcessor implements Processor {
 		
 		// URL-encode body
 		def d = x.in.body
-		x.out.headers['frontlinesms.dispatch.id'] = d.id
-		x.out.body = urlEncode(d.text)
+		x.in.headers['frontlinesms.dispatch.id'] = d.id
+		x.in.body = urlEncode(d.text)
 		
 		def destination = d.dst
 		if(destination && destination.charAt(0)=='+') destination = destination.substring(1)
@@ -32,7 +32,7 @@ class ClickatellPreProcessor implements Processor {
 	
 	private def set(Exchange x, String header, String value) {
 		println "PreProcessor.set() : header=$header; value=$value"
-		x.out.headers["clickatell.$header"] = urlEncode(value)
+		x.in.headers["clickatell.$header"] = urlEncode(value)
 	}
 	
 	private String urlEncode(String s) throws UnsupportedEncodingException {
