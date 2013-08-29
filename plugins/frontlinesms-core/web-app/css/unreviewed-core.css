@@ -17,3 +17,5 @@ fieldset.table { display:table; }
 .forward.step div.input { margin: 0; }
 .message-composer { background-color: #fff; }
 .chzn-container-multi .chzn-choices .search-choice { -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;  }
+#failed-contacts h2 { margin:5px 0;}
+#failed-contacts textarea { display:block; width: 50%; height:100px; margin:10px 0;}

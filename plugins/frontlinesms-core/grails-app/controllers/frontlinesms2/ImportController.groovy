@@ -1,7 +1,8 @@
 package frontlinesms2
 
-import java.text.DateFormat;
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.io.StringWriter
 
 import au.com.bytecode.opencsv.CSVWriter
 
@@ -56,29 +57,25 @@ class ImportController extends ControllerUtils {
 				}		
 			}
 
+			def failedLineWriter = new StringWriter()
 			if(failedLines) {
 				def writer
 				try {
-					writer = new CSVWriter(new OutputStreamWriter(failedContactsFile.newOutputStream(), 'UTF-8'))
+					writer = new CSVWriter(failedLineWriter)
 					writer.writeNext(headers)
 					failedLines.each { writer.writeNext(it) }
 				} finally { try { writer.close() } catch(Exception ex) {} }
 			}
-			
-			def flMsg = g.message(code:'import.contact.complete',
+
+			flash.message = g.message(code:'import.contact.complete',
 							args:[savedCount, failedLines.size()])
-			if(failedLines) flMsg += '\n' + g.link(action:'failedContacts',
-							params:[jobId:params.jobId],
-					g.message(code:'import.contact.failed.download'))
-			flash.message = flMsg
-			
-			redirect controller:'settings', action:'general'
+			redirect controller:'settings', action:'porting', params:[failedContacts:failedLineWriter.toString()]
 		} else throw new RuntimeException(message(code:'import.upload.failed'))
 	}
 
 	def failedContacts() { 
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
-		failedContactsFile.eachLine { response.outputStream << it << '\n' }
+		params.failedContacts.eachLine { response.outputStream << it << '\n' }
 		response.outputStream.flush()
 	}
 	
