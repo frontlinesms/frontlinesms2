@@ -56,14 +56,32 @@ class ImportController extends ControllerUtils {
 				}		
 			}
 
+			if(failedLines) {
+				def writer
+				try {
+					writer = new CSVWriter(new OutputStreamWriter(failedContactsFile.newOutputStream(), 'UTF-8'))
+					writer.writeNext(headers)
+					failedLines.each { writer.writeNext(it) }
+				} finally { try { writer.close() } catch(Exception ex) {} }
+			}
+			
 			def flMsg = g.message(code:'import.contact.complete',
 							args:[savedCount, failedLines.size()])
+			if(failedLines) flMsg += '\n' + g.link(action:'failedContacts',
+							params:[jobId:params.jobId],
+					g.message(code:'import.contact.failed.download'))
 			flash.message = flMsg
 			
 			redirect controller:'settings', action:'general'
 		} else throw new RuntimeException(message(code:'import.upload.failed'))
 	}
 
+	def failedContacts() { 
+		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
+		failedContactsFile.eachLine { response.outputStream << it << '\n' }
+		response.outputStream.flush()
+	}
+	
 	def importMessages() {
 		def savedCount = 0
 		def failedCount = 0
