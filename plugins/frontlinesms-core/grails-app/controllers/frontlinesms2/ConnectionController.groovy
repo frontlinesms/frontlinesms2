@@ -19,7 +19,7 @@ class ConnectionController extends ControllerUtils {
 		def scheme = request.scheme.toLowerCase()
 		def port = request.serverPort
 		if(request.getHeader('x-forwarded-proto') == 'https') {
-			scheme = https
+			scheme = 'https'
 			port = 443
 		}
 		def explicitPort = (scheme == 'http' && port != 80) || (scheme == 'https' && port != 443)
