@@ -69,7 +69,8 @@ class ImportController extends ControllerUtils {
 
 			flash.message = g.message(code:'import.contact.complete',
 							args:[savedCount, failedLines.size()])
-			redirect controller:'settings', action:'porting', params:[failedContacts:failedLineWriter.toString()]
+			flash.failedContacts = failedLineWriter.toString()
+			redirect controller:'settings', action:'porting'
 		} else throw new RuntimeException(message(code:'import.upload.failed'))
 	}
 

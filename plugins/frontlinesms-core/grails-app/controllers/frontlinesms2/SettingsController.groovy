@@ -37,7 +37,7 @@ class SettingsController extends ControllerUtils {
 	}
 
 	def porting() {	
-		[failedContacts: params.failedContacts]	
+		[failedContacts: flash.failedContacts]	
 	}
 
 	def selectLocale() {
