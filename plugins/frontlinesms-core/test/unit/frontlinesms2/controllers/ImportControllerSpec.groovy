@@ -41,5 +41,23 @@ class ImportControllerSpec extends Specification {
 			['group 1', 'group 2'] | ['group 2']
 			['group 1', 'group 2'] | ['group 1', 'group 2']
 	}
+
+	def 'failedContacts should trigger a download for a file named failedContacts.csv'() {
+		given:
+			controller.params.failedContacts = '''\
+			"Name","Mobile Number","E-mail Address","Notes","Group(s)","lake","town"
+			"Alice","+123456789","","","Friends\\Not Cats","Victoria",""
+			"Bob","+198765432","","","Friends\\Not Cats","","Kusumu"
+			"Kate","+198730948","","","","",""
+			"Bobby","987654321","","","Camping Group\\Football Updates","",""
+			"Sam","987654322","","","Camping Group","",""
+			"Ron","987654323","","","Football Updates","",""
+			'''
+		when:
+			controller.failedContacts()
+		then:
+			
+			controller.response.getHeader('Content-disposition') == "attachment; filename=failedContacts.csv"
+	}
 }
 
