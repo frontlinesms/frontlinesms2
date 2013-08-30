@@ -25,9 +25,9 @@
 				<g:if test="${failedContacts}">
 					<div id="failed-contacts">
 						<h2><g:message code="import.contact.failed.label"/></h2>
-						<g:message code="import.contact.failed.info"/>
+						<p class='info'><g:message code="import.contact.failed.info" args="[numberOfFailedLines]"/></p>
 						<g:form controller="import" action="failedContacts">
-							<textarea name="failedContacts">${failedContacts.trim()}</textarea>
+							<input type='hidden' name="failedContacts" value="${failedContacts.trim()}"/>
 							<g:submitButton name="failedContactSubmit" value="${message(code:'import.contact.failed.download')}" class="btn"/>
 						</g:form>
 					</div>
