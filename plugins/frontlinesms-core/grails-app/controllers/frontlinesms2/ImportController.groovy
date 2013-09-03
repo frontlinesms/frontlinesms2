@@ -67,8 +67,11 @@ class ImportController extends ControllerUtils {
 				} finally { try { writer.close() } catch(Exception ex) {} }
 			}
 
-			flash.message = g.message(code:'import.contact.complete',
-							args:[savedCount, failedLines.size()])
+			if(failedLines) {
+				flash.message = g.message(code:'import.contact.incomplete')
+			} else (savedCount > 0) {
+				flash.message = g.message(code:'import.contact.complete', args:[savedCount])
+			}
 			flash.failedContacts = failedLineWriter.toString()
 			flash.numberOfFailedLines = failedLines.size()
 			redirect controller:'settings', action:'porting'

@@ -24,11 +24,10 @@
 				</g:uploadForm>
 				<g:if test="${failedContacts}">
 					<div id="failed-contacts">
-						<h2><g:message code="import.contact.failed.label"/></h2>
-						<p class='error'><g:message code="import.contact.failed.info" args="[numberOfFailedLines]"/></p>
 						<g:form controller="import" action="failedContacts">
+							<p class='warning_message'><g:message code="import.contact.failed.info" args="[numberOfFailedLines]"/></p>
 							<g:hiddenField name='failedContacts' value='${failedContacts.trim()}'/>
-							<g:submitButton name="failedContactSubmit" value="${message(code:'import.contact.failed.download')}" class="btn"/>
+							<g:submitButton name="failedContactSubmit" value="${message(code:'import.download.failed.contacts')}" class="btn"/>
 						</g:form>
 					</div>
 				</g:if>
