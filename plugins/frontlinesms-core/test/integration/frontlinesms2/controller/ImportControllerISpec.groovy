@@ -32,6 +32,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 ''')
 		when:
 			// failed contacts file is downloaded
+			controller.params.failedContacts = controller.flash.failedContacts
 			controller.failedContacts()
 		then:
 			// check that headers are correctly set

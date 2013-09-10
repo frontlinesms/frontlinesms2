@@ -36,7 +36,9 @@ class SettingsController extends ControllerUtils {
 				languageList:i18nUtilService.allTranslations]
 	}
 
-	def porting() {	}
+	def porting() {	
+		[failedContacts: flash.failedContacts, numberOfFailedLines: flash.numberOfFailedLines]	
+	}
 
 	def selectLocale() {
 		i18nUtilService.setLocale(request, response, params.language?:'en')
