@@ -35,7 +35,7 @@ class FmessageService {
 		}
     }
 
-    def search(Search search) {
+    def search(search) {
     	def fmessageInstanceList = fmessageFilter(search)
     	def rawSearchResults = []
     	if(fmessageInstanceList) {
