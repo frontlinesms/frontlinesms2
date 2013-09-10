@@ -6,6 +6,8 @@ import grails.util.GrailsConfig
 class SearchController extends MessageController {
 	def recipientLookupService
 	def contactSearchService
+	def fmessageService
+
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
@@ -44,13 +46,21 @@ class SearchController extends MessageController {
 			searchInstance.save(failOnError:true, flush:true)
 		}
 
-		def rawSearchResults = Fmessage.search(search)
-		int offset = params.offset?.toInteger()?:0
-		int max = params.max?.toInteger()?:50
+		def rawSearchResults = fmessageService.search(search)
+		def distinctResults = []
+		def messageInstanceTotal = 0
+
+		if(rawSearchResults) {
+			int offset = params.offset?.toInteger()?:0
+			int max = params.max?.toInteger()?:50
+			distinctResults = rawSearchResults?.listDistinct(sort:'date', order:'desc', offset:offset, max:max)
+			messageInstanceTotal = rawSearchResults?.count()
+		}
+
 		[searchDescription:getSearchDescription(search), search:search,
 				checkedMessageCount:params.checkedMessageList?.tokenize(',')?.size(),
-				messageInstanceList:rawSearchResults.listDistinct(sort:'date', order:'desc', offset:offset, max:max),
-				messageInstanceTotal:rawSearchResults.count()] << show() << no_search()
+				messageInstanceList:distinctResults,
+				messageInstanceTotal:messageInstanceTotal] << show() << no_search()
 	}
 
 	def show() {
