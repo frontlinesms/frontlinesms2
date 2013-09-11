@@ -11,6 +11,10 @@ var PollGraph = function(pollResponse, ownerId, statsUrl) {
 		return _stats;
 	},
 	_processUpdate = function(data) {
+		data = data.poll_stats;
+		if(!data) {
+			return;
+		}
 		_refresh = true;
 		_stats.id = $.map(data, function(a) { return a.id; });
 		_stats.count = $.map(data, function(a) { return a.count; });
