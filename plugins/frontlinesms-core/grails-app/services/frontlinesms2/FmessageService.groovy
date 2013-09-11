@@ -5,12 +5,12 @@ import org.hibernate.criterion.CriteriaSpecification
 class FmessageService {
 	def messageSendService
 	
-    def move(messageList, activity, params) {
-    	def messagesToSend = []
-    	messageList.each { messageInstance ->
-    		if(messageInstance.isMoveAllowed()){
-    			messageInstance.clearAllDetails()
-    			messageInstance.isDeleted = false
+	def move(messageList, activity, params) {
+		def messagesToSend = []
+		messageList.each { messageInstance ->
+			if(messageInstance.isMoveAllowed()){
+				messageInstance.clearAllDetails()
+				messageInstance.isDeleted = false
 				Trash.findByObject(messageInstance)?.delete(failOnError:true)
 				if (params.messageSection == 'activity') {
 					activity.move(messageInstance)
@@ -33,19 +33,29 @@ class FmessageService {
 		if(messagesToSend) {
 			MessageSendJob.defer(messagesToSend)
 		}
-    }
+	}
 
-    def search(search) {
-    	def fmessageInstanceList = fmessageFilter(search)
-    	def rawSearchResults = []
-    	if(fmessageInstanceList) {
-    		rawSearchResults = Fmessage.search(fmessageInstanceList*.id)
-    	}
-    	rawSearchResults
-    }
+	def search(search, params=[:]) {
+		def fmessageInstanceList = fmessageFilter(search)
+		def rawSearchResults = []
+		def searchMessageInstanceTotal = 0
+		def searchMessageInstanceList = []
 
-    private def fmessageFilter(search) {
-    	def ids = Fmessage.withCriteria {
+		if(fmessageInstanceList) {
+			rawSearchResults = Fmessage.search(fmessageInstanceList*.id)
+		}
+
+		if(rawSearchResults) {
+			int offset = params.offset?.toInteger()?:0
+			int max = params.max?.toInteger()?:50
+			searchMessageInstanceList = rawSearchResults?.listDistinct(sort:'date', order:'desc', offset:offset, max:max)
+			searchMessageInstanceTotal = rawSearchResults?.count()
+		}
+		[messageInstanceList:searchMessageInstanceList, messageInstanceTotal:searchMessageInstanceTotal]
+	}
+
+	private def fmessageFilter(search) {
+		def ids = Fmessage.withCriteria {
 			createAlias('dispatches', 'disp', CriteriaSpecification.LEFT_JOIN)
 			if(search.searchString) {
 				or {
@@ -99,5 +109,5 @@ class FmessageService {
 			eq('isDeleted', false)
 			// order('date', 'desc') removed due to http://jira.grails.org/browse/GRAILS-8162; please reinstate when possible
 		}*.refresh() // TODO this is ugly ugly, but it fixes issues with loading incomplete dispatches.  Feel free to sort it out
-    }
+	}
 }
