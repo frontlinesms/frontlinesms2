@@ -10,7 +10,7 @@ import frontlinesms2.api.*
 class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	static String getShortName() { 'smssync' }
 	static final configFields = ['info-setup': ['secret'], 'info-timeout':['timeout'], 'info-name':['name']]
-	static final passwords = ['secret']
+	static final passwords = []
 	static final defaultValues = [timeout:60]
 
 	def smssyncService
