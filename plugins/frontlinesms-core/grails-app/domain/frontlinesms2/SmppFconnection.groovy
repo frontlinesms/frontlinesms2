@@ -27,7 +27,7 @@ class SmppFconnection extends Fconnection {
 		fromNumber blank:true
 	}
 
-	static passwords = ['password']
+	static passwords = []
 
 	static mapping = {
 		password column: 'smpp_password'
