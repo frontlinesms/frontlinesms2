@@ -44,7 +44,7 @@ class RecipientLookupService {
 					items:[[value: "address-$strippedNumber",
 							text: "\"$strippedNumber\""]]]
 		}
-		return results
+		return [query: params.term, results: results]
 	}
 
 	private def getSelectedSoFar(params) {

@@ -43,7 +43,7 @@ ajaxChosen = (function() {
 					}
 					success = options.success;
 					options.success = function(data) {
-						var items, nbItems, selected_values;
+						var requestString, items, nbItems, selected_values;
 						if(!data) {
 							return;
 						}
@@ -57,6 +57,14 @@ ajaxChosen = (function() {
 						select.find('optgroup:empty').each(function() {
 							$(this).remove();
 						});
+						requestString = data.query;
+						data = data.results;
+						if (requestString !== field.attr('value')) {
+							console.log("NOT EQUAL, should quit");
+							console.log("select's value is currently " + field.attr('value'));
+							console.log("query's value was " + requestString);
+							return false;
+						}
 						items = callback? callback(data): data;
 						nbItems = 0;
 						$.each(items, function(i, element) {
@@ -100,10 +108,7 @@ ajaxChosen = (function() {
 							select.data().chosen.no_results_clear();
 							select.data().chosen.no_results(field.attr('value'));
 						}
-						if (success) {
-							success(data);
-						}
-						return field.attr('value', untrimmed_val);
+						return true;
 					};
 					return (this.timer = setTimeout(function() {
 						if (chosenXhr) {
