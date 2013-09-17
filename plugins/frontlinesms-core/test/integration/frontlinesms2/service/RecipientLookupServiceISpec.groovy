@@ -24,6 +24,13 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			getLookupResultFor(results, 'contact') == ['test-contact-10', 'test-contact-11', 'test-contact-12']
 	}
 
+	def 'lookup should echo back the search term'() {
+		when:
+			def results = recipientLookupService.lookup([term:"12"])
+		then:
+			results.query == '12'
+	}
+
 	def "lookup should return matching contacts, groups and smartgroups, as well as the raw contact name"() {
 		when:
 			def results = recipientLookupService.lookup([term:"12"])
@@ -59,7 +66,7 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def getLookupResultFor(lookupResult, section) {
-		return lookupResult.find { it.text == i18ns."$section" }?.items*.text
+		return lookupResult.results.find { it.text == i18ns."$section" }?.items*.text
 	}
 }
 
