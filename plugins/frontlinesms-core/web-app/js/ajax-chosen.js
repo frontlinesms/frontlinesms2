@@ -60,9 +60,6 @@ ajaxChosen = (function() {
 						requestString = data.query;
 						data = data.results;
 						if (requestString !== field.attr('value')) {
-							console.log("NOT EQUAL, should quit");
-							console.log("select's value is currently " + field.attr('value'));
-							console.log("query's value was " + requestString);
 							return false;
 						}
 						items = callback? callback(data): data;
