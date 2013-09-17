@@ -1,5 +1,6 @@
 var contactsearch = {
 	init: function(searchWidgets) {
+		ajaxChosen.init();
 		$.each(searchWidgets, function(index, element) {
 			$(element).ajaxChosen({
 				url:url_root+"search/contactSearch",
