@@ -1,4 +1,4 @@
-var contactsearch = {
+contactsearch = {
 	init: function(searchWidgets) {
 		ajaxChosen.init();
 		$.each(searchWidgets, function(index, element) {
