@@ -6,10 +6,10 @@ ajaxChosen = (function() {
 			chosenOptions = chosenOptions || function() {};
 			defaultOptions = {
 				minTermLength: 3,
-		       afterTypeDelay: 500,
-		       jsonTermKey: "term",
-		       keepTypingMsg: "Keep typing...",
-		       lookingForMsg: "Looking for"
+				afterTypeDelay: 500,
+				jsonTermKey: "term",
+				keepTypingMsg: "Keep typing...",
+				lookingForMsg: "Looking for"
 			};
 			select = this;
 			chosenXhr = null;
