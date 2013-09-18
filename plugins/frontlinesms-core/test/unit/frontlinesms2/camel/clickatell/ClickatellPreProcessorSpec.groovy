@@ -90,8 +90,8 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			x.out.headers.'clickatell.unicode' == (expectUnicode? '1' : '0')
-			1 * x.out.setBody(expectedBody)
+			x.in.headers.'clickatell.unicode' == (expectUnicode? '1' : '0')
+			1 * x.in.setBody(expectedBody)
 		where:
 			messageText                 | expectUnicode | expectedBody
 			'simple'                    | false         | 'simple'
