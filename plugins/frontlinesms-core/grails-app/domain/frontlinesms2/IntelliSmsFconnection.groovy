@@ -12,7 +12,7 @@ class IntelliSmsFconnection extends Fconnection {
 	static configFields = [name:null,
 				sendEnabled: ['username', 'password'], 
 				receiveEnabled: ['receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
-	static passwords = ['password', 'emailPassword']
+	static passwords = []
 	static defaultValues = []
 	static String getShortName() { 'intellisms' }
 	
