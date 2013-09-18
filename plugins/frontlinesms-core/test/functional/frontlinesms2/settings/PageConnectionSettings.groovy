@@ -9,7 +9,7 @@ class PageConnectionSettings extends PageSettings {
 	}
 	
 	static content = {
-		btnNewConnection { $('a', name:'addConnection') }
+		btnNewConnection { $('ul.buttons').find('a', name:'addConnection') }
 		connectionNames { $('.connection-header').find('h2') }
 		connections { $('.connection') }
 		routing { module RoutingConnections }

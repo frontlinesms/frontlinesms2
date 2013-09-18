@@ -16,7 +16,15 @@ class ConnectionController extends ControllerUtils {
 	}
 
 	def list() {
-		def url = "http://${request.serverName == 'localhost' ? '&lt;your-ip-address&gt;' : request.serverName}${request.serverPort? (':' + request.serverPort) : ''}"
+		def scheme = request.scheme.toLowerCase()
+		def port = request.serverPort
+		if(request.getHeader('x-forwarded-proto') == 'https') {
+			scheme = 'https'
+			port = 443
+		}
+		def explicitPort = (scheme == 'http' && port != 80) || (scheme == 'https' && port != 443)
+		def domain = (request.serverName == 'localhost' ? '&lt;your-ip-address&gt;' : request.serverName)
+		def url = "${scheme}://${domain}${explicitPort ? (':' + port ):''}"
 		def fconnectionInstanceList = Fconnection.list(params)
 		def fconnectionInstanceTotal = Fconnection.count()
 		def appSettings = [:]
@@ -52,13 +60,13 @@ class ConnectionController extends ControllerUtils {
 
 	def delete() {
 		def connection = Fconnection.get(params.id)
-		if(connection.status != ConnectionStatus.CONNECTING && connection.status != ConnectionStatus.CONNECTED) {
+		if(connection.status == ConnectionStatus.DISABLED) {
 			connection.delete()
 			flash.message = message code:'connection.deleted', args:[connection.name]
-			redirect action:'list'
+		} else { 
+			throw new RuntimeException()
 		}
-		else
-			redirect action:'list'
+		redirect action:'list'
 	}
 
 	def update() {

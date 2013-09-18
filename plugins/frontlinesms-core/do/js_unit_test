@@ -1,6 +1,14 @@
 #!/bin/bash
 ERROR_FILE=target/js_unit_test.log.err
 
+checkRequiredNpmLibs=true
+while [[ $1 == "--"* ]]; do
+	if [[ $1 == "--no-npm-check" ]]; then
+		checkRequiredNpmLibs=false
+	fi
+	shift
+done
+
 if [ -z "$@" ]; then
 	pushd test/js
 	TESTS=`ls *_tests.js | sed -e "s/_tests.js//"`
@@ -25,10 +33,12 @@ function check_npm_module_available {
 	fi
 	err "# NPM Module found: $MODULE_NAME"
 }
-check_npm_module_available fs
-check_npm_module_available jquery
-check_npm_module_available jsdom
-check_npm_module_available qunit
+if $checkRequiredNpmLibs; then
+	check_npm_module_available fs
+	check_npm_module_available jquery
+	check_npm_module_available jsdom
+	check_npm_module_available qunit
+fi
 
 function run_test() {
 	TARGET=$1

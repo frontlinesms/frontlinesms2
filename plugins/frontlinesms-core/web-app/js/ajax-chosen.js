@@ -56,7 +56,7 @@
             return $(this).remove();
           });
           select.find('optgroup:empty').each(function() {
-            return $(this).remove();
+			$(this).remove();
           });
           items = callback? callback(data): data;
           nbItems = 0;

@@ -1,7 +1,8 @@
 modules = {
 	common { dependsOn 'frontlinesms-core' }
+
 	'frontlinesms-core' {
-		dependsOn 'jquery, jquery-ui'
+		dependsOn 'jquery-ui'
 		resource url:[dir:'css', file:'reset.css']
 		resource url:[dir:'css', file:'layout.css']
 		resource url:[dir:'css', file:'head.css']
@@ -61,21 +62,13 @@ modules = {
 	}
 	
 	messages {
-		dependsOn 'jquery, jquery-ui, common'
+		dependsOn 'common'
 		resource url:[dir:'js', file:'message/arrow_navigation.js'], disposition:'head'
 		resource url:[dir:'js', file:'message/star_message.js'], disposition:'head'
 		resource url:[dir:'js', file:'message/categorize_dropdown.js'], disposition:'head'
 		resource url:[dir:'js', file:'message/move_dropdown.js'], disposition:'head'
 		resource url:[dir:'js', file:'message/moreActions.js'], disposition:'head'
-	}
-	
-	newMessagesCount {
-		dependsOn 'jquery'
 		resource url:[dir:'js', file:'message/check_for_new_messages.js']
-	}
-
-	newMessageSummary {
-		dependsOn 'jquery'
 		resource url:[dir:'js', file:'message/new_message_summary.js']
 		resource url:[dir:'js', file:'jquery.pulse.js']
 	}
@@ -124,8 +117,22 @@ modules = {
 	
 	overrides {
 		'jquery-theme' {
-			resource id: 'theme', url:[dir:'jquery-ui', file:'themes/medium/jquery-ui-1.8.11.custom.css']
+			dependsOn 'jquery-ui-base-imports'
+			resource id:'theme', url:[dir:'jquery-ui', file:'themes/medium/jquery-ui.custom.css'], bundle:'frontlinesms-core'
 		}
+	}
+
+	'jquery-ui-base-imports' {
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.core.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.autocomplete.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.datepicker.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.dialog.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.progressbar.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.resizable.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.selectable.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.selectmenu.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.slider.css'], bundle:'frontlinesms-core'
+		resource url:[dir:'jquery-ui/themes/medium', file:'jquery.ui.tabs.css'], bundle:'frontlinesms-core'
 	}
 
 	'internet-explorer-css' {

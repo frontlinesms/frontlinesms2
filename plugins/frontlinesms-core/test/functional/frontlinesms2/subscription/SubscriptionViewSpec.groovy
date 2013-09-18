@@ -90,7 +90,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				return g.id
 			}
 		when:
-			to PageContactShow, friendsGroup
+			to PageGroupShow, "Friends"
 		then:
 			waitFor { header.groupHeaderSection.displayed }
 		when:

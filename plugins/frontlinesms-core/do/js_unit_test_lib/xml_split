@@ -5,7 +5,7 @@ TARGET_DIRECTORY=target/test-reports
 
 OUTPUT_FILE="discard.me"
 function output {
-	echo "Output -> $OUTPUT_FILE: $@"
+	#echo "Output -> $OUTPUT_FILE: $@"
 	echo "$@" >> $TARGET_DIRECTORY/$OUTPUT_FILE
 }
 

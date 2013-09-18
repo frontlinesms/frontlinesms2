@@ -22,6 +22,15 @@
 					<input type="file" name="importCsvFile" onchange="this.form.submit();"/>
 					<label for="importCsvFile"><g:message code="import.prompt"/></label>
 				</g:uploadForm>
+				<g:if test="${failedContacts}">
+					<div id="failed-contacts">
+						<g:form controller="import" action="failedContacts">
+							<p class='warning_message'><g:message code="import.contact.failed.info" args="[numberOfFailedLines]"/></p>
+							<g:hiddenField name='failedContacts' value='${failedContacts.trim()}'/>
+							<g:submitButton name="failedContactSubmit" value="${message(code:'import.download.failed.contacts')}" class="btn"/>
+						</g:form>
+					</div>
+				</g:if>
 			</div>
 			<div id="export">
 				<h2><g:message code="export.label"/></h2>

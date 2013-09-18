@@ -3,16 +3,31 @@ ajax_spy = (function() {
 	requests,
 	responses,
 	defaultResponse,
+	log = function(message, methodName) {
+		var root = "# ajax_spy";
+		if(typeof methodName !== "undefined") {
+			root += "." + methodName + "()";
+		}
+		console.log(root + " :: " + message);
+	},
 	init = function(_defaultResponse) {
-		requests = [],
-		responses = [],
+		requests = [];
+		responses = [];
 		defaultResponse = _defaultResponse || function() {
 			return {};
 		};
 		$.ajax = processAjax;
 		$.getJSON = processGetJson;
 	},
+	assertType = function(obj, types) {
+		var t = typeof obj;
+		if(types.indexOf(t) === -1) {
+			throw "Bad type: " + t;
+		}
+	},
 	addResponse = function(request, response) {
+		assertType(request, ["string", "function"]);
+		assertType(response, ["string", "function"]);
 		responses.push({ rq:request, res:response });
 	},
 	processAjax = function(url, settings) {
@@ -28,28 +43,42 @@ ajax_spy = (function() {
 			requestData = JSON.parse(requestData);
 		}
 
-		// TODO map args to jQuery.ajax args
-		// TODO attempt to match request to response
-		responseData = responseData || processResponse(defaultResponse);
-		requests.push({ url:settings.url, data:requestData, response:responseData });
-		settings.success(responseData);
+		try {
+			responseData = processRequest(url, requestData);
+			requests.push({ url:settings.url, data:requestData, response:responseData });
+			settings.success(responseData);
+		} catch(ex) {
+			settings.error(null, null, ex);
+		}
 	},
 	processGetJson = function(url, data, callback) {
 		var responseData;
 		// TODO map args to jQuery.ajax args
 		// TODO attempt to match request to response
-		responseData = responseData || processResponse(defaultResponse);
+		responseData = processRequest(url, data);
 		requests.push({ url:url, data:data, response:responseData });
 		callback(responseData);
 	},
-	processResponse = function(r) {
-		if(typeof r === "function") {
-			return r();
+	processRequest = function(url, data) {
+		var r, t;
+		for(i=0; i<responses.length; ++i) {
+			r = responses[i];
+			t = typeof r.rq;
+			if((t === "string" && r.rq === url) ||
+					(t === "function" && r.rq(url, data))) {
+				return triggerResponder(r.res, url, data);
+			}
 		}
-		if(typeof r === "string") {
-			return JSON.stringify(r);
+		return triggerResponder(defaultResponse, url, data);
+	},
+	triggerResponder = function(responder, url, data) {
+		if(typeof responder === "function") {
+			return responder(url, data);
 		}
-		return r;
+		if(typeof responder === "string") {
+			return JSON.stringify(responder);
+		}
+		return responder;
 	},
 	requestCount = function() {
 		return requests.length;

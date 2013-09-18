@@ -5,7 +5,6 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class GroupCedSpec extends GroupBaseSpec {
-	
 	def 'button to save new group is displayed and works'() {
 		when:
 			to PageContactShow

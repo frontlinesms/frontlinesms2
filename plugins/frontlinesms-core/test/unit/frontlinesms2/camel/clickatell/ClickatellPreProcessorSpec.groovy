@@ -22,7 +22,7 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			1 * x.out.setBody("simple")
+			1 * x.in.setBody("simple")
 	}
 	
 	def 'out_body should be URL-encoded'() {
@@ -32,7 +32,7 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			1 * x.out.setBody("more+complex")
+			1 * x.in.setBody("more+complex")
 	}
 	
 	def 'dispatch ID should be set in header'() {
@@ -42,7 +42,7 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			x.out.headers.'frontlinesms.dispatch.id' == '45678'
+			x.in.headers.'frontlinesms.dispatch.id' == '45678'
 	}
 	
 	def 'message destination should be set and stripped of leading plus'() {
@@ -52,7 +52,7 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			x.out.headers.'clickatell.dst' == '1234567890'
+			x.in.headers.'clickatell.dst' == '1234567890'
 	}
 	
 	def 'clickatell auth details should be set in header'() {
@@ -62,11 +62,10 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			println "x.out.headers :: ${x.out.headers}"
-			x.out.headers.'clickatell.apiId' == '11111'
-			x.out.headers.'clickatell.username' == 'bob'
-			x.out.headers.'clickatell.password' == 'secret'
-			x.out.headers.'clickatell.fromNumber' == null
+			x.in.headers.'clickatell.apiId' == '11111'
+			x.in.headers.'clickatell.username' == 'bob'
+			x.in.headers.'clickatell.password' == 'secret'
+			x.in.headers.'clickatell.fromNumber' == null
 		
 	}
 
@@ -77,11 +76,10 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			println "x.out.headers :: ${x.out.headers}"
-			x.out.headers.'clickatell.apiId' == '11111'
-			x.out.headers.'clickatell.username' == 'bob'
-			x.out.headers.'clickatell.password' == 'secret'
-			x.out.headers.'clickatell.fromNumber' == '%2B123321'
+			x.in.headers.'clickatell.apiId' == '11111'
+			x.in.headers.'clickatell.username' == 'bob'
+			x.in.headers.'clickatell.password' == 'secret'
+			x.in.headers.'clickatell.fromNumber' == '%2B123321'
 	}
 
 	@Unroll
@@ -102,8 +100,6 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 			'香川真司'                  | true          | 'feff99995ddd771f53f8'
 			'Στυλιανός Γιαννακόπουλος'  | true          | 'feff03a303c403c503bb03b903b103bd03cc03c20020039303b903b103bd03bd03b103ba03cc03c003bf03c503bb03bf03c2'
 			'박지성'                    | true          | 'feffbc15c9c0c131'
-
-
 	}
 
 	private ClickatellFconnection buildTestConnection(sendToUsa=false) {

@@ -32,4 +32,3 @@ class AutoreplyServiceSpec extends Specification {
 			invokerType << [Autoreply, ReplyActionStep]
 	}
 }
-

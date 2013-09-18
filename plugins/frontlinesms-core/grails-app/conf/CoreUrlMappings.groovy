@@ -58,6 +58,8 @@ class CoreUrlMappings {
 		"/help/$helpSection**"(controller:'help', action:'section') {}
 		"/help"(controller:'help', action:'index') {}
 
+		"/api/1/$entityClassApiUrl/$entityId/$secret?" controller:'api'
+
 		"/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here

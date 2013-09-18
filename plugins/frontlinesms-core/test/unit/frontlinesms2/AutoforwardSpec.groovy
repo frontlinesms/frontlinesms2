@@ -38,24 +38,32 @@ class AutoforwardSpec extends Specification {
 			true  | [name:"name", contacts:[new Contact(name:"name")], groups:[new Group(name:"test")], smartGroups:[new SmartGroup(name:"SmartGroup", contactName:"contactName")], keywords:[new Keyword(value:"keyword")]]
 	}
 
-	def 'processKeyword should send a message if exact match is found and activity'() {
+	def 'processKeyword should call autoforwardService if addresses are available'() {
 		given:
-			def autoforward = Autoforward.build(contacts:[Contact.build(mobile:TEST_NUMBER)], sentMessageText:'some forward text')
-			def forwardMessage = mockFmessage("message text")
-			def sendService = Mock(MessageSendService)
-			sendService.createOutgoingMessage({ params ->
-				params.contacts*.mobile==[TEST_NUMBER] && params.messageText=='some forward text'
-			}) >> forwardMessage
-
-			def forwardService =  new AutoforwardService()
-			forwardService.messageSendService = sendService
-			autoforward.autoforwardService = forwardService
-
-			def inMessage = mockFmessage("message text", '+123457890')
+			def a = Autoforward.build()
+			a.contacts = ['a contact']
+			def m = Mock(Fmessage)
+			def k = Mock(Keyword)
+			def s = Mock(AutoforwardService)
+			a.autoforwardService = s
 		when:
-			autoforward.processKeyword(inMessage, Mock(Keyword))
+			a.processKeyword(m, k)
 		then:
-			1 * sendService.send(forwardMessage)
+			1 * s.doForward(_, _)
+			0 * s._
+	}
+
+	def 'processKeyword should not call autoforwardService if no addresses are available'() {
+		given:
+			def a = Autoforward.build()
+			def m = Mock(Fmessage)
+			def k = Mock(Keyword)
+			def s = Mock(AutoforwardService)
+			a.autoforwardService = s
+		when:
+			a.processKeyword(m, k)
+		then:
+			0 * s._
 	}
 
 	@Unroll

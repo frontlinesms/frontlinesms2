@@ -5,6 +5,7 @@ fieldset.table { display:table; }
 
 .connection-info { padding:7px 0px 7px 0px; }
 .connection-info a { color:blue; }
+.connection-info ol { list-style:decimal; list-style-position:inside; padding:5px 0; }
 
 #connection-status > ul {padding:17px 25px;	font-weight:bold; text-transform:uppercase;	border-bottom: 1px solid #EEEEEE; }
 #connection-header > li { display:inline; }
@@ -12,3 +13,9 @@ fieldset.table { display:table; }
 #manage-connection > a:hover { text-decoration:underline; }
 
 #connectionForm div.info { margin-top:0px; }
+
+.forward.step div.input { margin: 0; }
+.message-composer { background-color: #fff; }
+.chzn-container-multi .chzn-choices .search-choice { -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;  }
+
+#failed-contacts p.warning_message { margin:10px 0 8px; }

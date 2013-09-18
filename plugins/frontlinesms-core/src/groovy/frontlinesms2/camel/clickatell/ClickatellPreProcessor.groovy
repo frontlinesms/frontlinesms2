@@ -11,7 +11,7 @@ class ClickatellPreProcessor implements Processor {
 		// URL-encode body, and set as hex-encoded unicode if necessary
 		def d = x.in.body
 		def text = d.text
-		x.out.headers['frontlinesms.dispatch.id'] = d.id
+		x.in.headers['frontlinesms.dispatch.id'] = d.id
 		if (!text.areAllCharactersValidGSM()) {
 			text = text.getBytes('utf-16').encodeHex().toString()
 			set x, 'unicode', '1'
@@ -19,7 +19,7 @@ class ClickatellPreProcessor implements Processor {
 		else {
 			set x, 'unicode', '0'
 		}
-		x.out.body = urlEncode(text)
+		x.in.body = urlEncode(text)
 		
 		def destination = d.dst
 		if(destination && destination.charAt(0)=='+') destination = destination.substring(1)
@@ -40,7 +40,7 @@ class ClickatellPreProcessor implements Processor {
 	
 	private def set(Exchange x, String header, String value) {
 		println "PreProcessor.set() : header=$header; value=$value"
-		x.out.headers["clickatell.$header"] = urlEncode(value)
+		x.in.headers["clickatell.$header"] = urlEncode(value)
 	}
 	
 	private String urlEncode(String s) throws UnsupportedEncodingException {

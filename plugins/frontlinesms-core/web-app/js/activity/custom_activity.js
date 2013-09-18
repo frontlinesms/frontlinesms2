@@ -13,7 +13,7 @@ var custom_activity = (function() {
 	initSteps = function() {
 		var titles, widths, maxWidth;
 		$(CONFIG_CONTAINER + " .step > .remove-command").click(removeStep);
-		selectmenuTools.initAll(CONFIG_CONTAINER + " select");
+		selectmenuTools.initAll(CONFIG_CONTAINER + " select:not([name=recipients])");
 		selectmenuTools.initAll("#custom-activity-actions-container select");
 		magicwand.init($(CONFIG_CONTAINER + " select[id^='magicwand-select']"));
 
@@ -26,6 +26,7 @@ var custom_activity = (function() {
 		$.each($('.message-composer'), function(index, value) {
 			messageComposerUtils.updateCharacterCount($(value));	
 		});
+		contactsearch.init($('select.chzn-select'));
 	},
 	init = function() {
 		//$(CONFIG_CONTAINER).sortable();
@@ -96,6 +97,11 @@ var customActivityDialog = (function(){
 				valid = valid && validator.element($(element));
 			});
 
+			$.each($(".chzn-select"), function(index, element) {
+				valid = valid && validator.element($(element));
+			});
+			$(".chzn-select").live("change", function() { validator.element($(this)); });
+
 			$.each($("input[name='url']"), function(index, element) {
 				valid = valid && validator.element($(element));
 			});
@@ -110,6 +116,7 @@ var customActivityDialog = (function(){
 			setJsonToSend();
 			return validator.element("input[name=name]");
 		};
+		customValidationForRecipientSelector();
 		customValidationForGroups();
 
 		mediumPopup.addValidation("activity-generic-sorting", keyWordTabValidation);
@@ -157,6 +164,8 @@ var customActivityDialog = (function(){
 				detail = element.find("select[name=group] option:selected").text();
 			} else if(stepType === "reply") {
 				detail = element.find("textarea[name=autoreplyText]").val();
+			} else if(stepType === "forward") {
+				detail = element.find("textarea[name=sentMessageText]").val();
 			} else if(stepType === "webconnectionStep") {
 				detail = element.find("input[name=url]").val();
 			} 
@@ -172,7 +181,7 @@ var customActivityDialog = (function(){
 		} else if (sortingType === "global") {
 			keywords = i18n("autoreply.blank.keyword");
 		} else {
-			alert("please define i18n message for this sorting option"); // FIXME
+			keywords = i18n("customactivity.manual.sorting");
 		}
 		$("#keyword-confirm").html("<p>" + keywords  + "</p>");
 	};

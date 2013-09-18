@@ -327,6 +327,28 @@ Copyright (c) 2011 by Harvest
       return Chosen.__super__.constructor.apply(this, arguments);
     }
 
+	function calculateDropTop(self, offset) {
+		var dd_top, scrollTop, top, dropdownHeight, windowHeight;
+		offset = offset || self.container.offset();
+		dd_top = self.is_multiple ? self.container.height() : self.container.height() - 1;
+		scrollTop = Math.max(parseInt($(window).scrollTop(), 10), 0);
+		dropdownHeight = self.dropdown.height();
+		windowHeight = $(window).height();
+		top = offset.top + dd_top - scrollTop;
+		if(top + dropdownHeight > windowHeight) {
+			return top - dropdownHeight - dd_top;
+		} else {
+			return top;
+		}
+	}
+
+	function calculateDropLeft(container, offset) {
+		var scrollLeft;
+		offset = offset || container.offset();
+		scrollLeft = Math.max(parseInt($(window).scrollLeft(), 10), 0);
+		return offset.left - scrollLeft;
+	}
+
     Chosen.prototype.setup = function() {
       this.form_field_jq = $(this.form_field);
       this.current_value = this.form_field_jq.val();
@@ -353,7 +375,7 @@ Copyright (c) 2011 by Harvest
       container_props = {
         id: this.container_id,
         "class": container_classes.join(' '),
-        style: 'width: ' + this.f_width + 'px;',
+        style: 'width: 100%;',
         title: this.form_field.title
       };
       container_div = $("<div />", container_props);
@@ -605,7 +627,14 @@ Copyright (c) 2011 by Harvest
     };
 
     Chosen.prototype.results_show = function() {
-      var dd_top;
+      var self = this;
+
+      // picked from robmcguinness on https://github.com/harvesthq/chosen/issues/86:
+      // hide .chzn-drop when the window resizes else it will stay fixed with previous top and left coordinates
+      $(window).resize(function() {
+        self.results_hide();
+      });
+
       if (!this.is_multiple) {
         this.selected_item.addClass("chzn-single-with-drop");
         if (this.result_single_selected) {
@@ -617,14 +646,17 @@ Copyright (c) 2011 by Harvest
         });
         return false;
       }
-      dd_top = this.is_multiple ? this.container.height() : this.container.height() - 1;
       this.form_field_jq.trigger("liszt:showing_dropdown", {
         chosen: this
       });
+
+      var offset = this.container.offset();
       this.dropdown.css({
-        "top": dd_top + "px",
-        "left": 0
+        "top": calculateDropTop(this, offset) + "px",
+        "left": calculateDropLeft(this.container, offset) + "px",
+        position:"fixed"
       });
+
       this.results_showing = true;
       this.search_field.focus();
       this.search_field.val(this.search_field.val());
@@ -882,6 +914,9 @@ Copyright (c) 2011 by Harvest
                 $("#" + this.results_data[option.group_array_index].dom_id).css('display', 'list-item');
               }
             } else {
+              return this.dropdown.css({
+                "top": calculateDropTop(this) + "px"
+              });
               if (this.result_highlight && result_id === this.result_highlight.attr('id')) {
                 this.result_clear_highlight();
               }
@@ -931,7 +966,7 @@ Copyright (c) 2011 by Harvest
       var no_results_html;
       no_results_html = $('<li class="no-results">' + this.results_none_found + ' "<span></span>"</li>');
       no_results_html.find("span").first().html(terms);
-      return this.search_results.append(no_results_html);
+      return this.search_results.html(no_results_html);
     };
 
     Chosen.prototype.no_results_clear = function() {
@@ -1052,9 +1087,8 @@ Copyright (c) 2011 by Harvest
         this.search_field.css({
           'width': w + 'px'
         });
-        dd_top = this.container.height();
         return this.dropdown.css({
-          "top": dd_top + "px"
+          "top": calculateDropTop(this) + "px"
         });
       }
     };

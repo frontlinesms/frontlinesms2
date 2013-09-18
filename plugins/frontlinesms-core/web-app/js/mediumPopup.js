@@ -1,7 +1,7 @@
 var mediumPopup = (function() {
 	var ___start___,
 		cancel, submit, submitWithoutClose, range,
-		selectSubscriptionGroup, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
+		selectSubscriptionGroup, editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
 		createModalBox,
 		launchMediumPopup, launchNewFeaturePopup, launchMediumWizard, launchHelpWizard,
 		getCurrentTab, getCurrentTabDom, getCurrentTabIndex, getTabLength,
@@ -68,7 +68,7 @@ var mediumPopup = (function() {
 		closeWhenDone = (typeof closeOnSubmit === 'undefined'? true: closeOnSubmit);
 		modalBox = createModalBox(html);
 		$("#messageText").keyup();
-		contactsearch.init(modalBox.find('select#contactsearch'));
+		contactsearch.init(modalBox.find('select.chzn-select'));
 		magicwand.init(modalBox.find('select[id^="magicwand-select"]'));
 		modalBox.dialog({
 			modal: true,
@@ -286,13 +286,22 @@ var mediumPopup = (function() {
 		messageSection = $("input:hidden[name=messageSection]").val();
 		
 		$.ajax({
-			type:'POST',
-			data: {recipients: src, messageText: text, configureTabs: configureTabs},
-			url: url_root + 'quickMessage/create',
-			beforeSend : function() { showThinking(); },
-			success: function(data, textStatus){
+			type:"POST",
+			data:{ recipients:src, messageText:text, configureTabs:configureTabs },
+			url:url_root + "quickMessage/create",
+			beforeSend:showThinking,
+			success:function(data, textStatus) {
 				hideThinking();
-				launchMediumWizard(messageType, data, i18n('action.send'));
+				launchMediumWizard(messageType, data, i18n("action.send"));
+			}
+		});
+	};
+
+	editConnection = function(id) {
+		$.ajax({
+			url:url_root + "connection/wizard/" + id,
+			success:function(data) {
+				launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false);
 			}
 		});
 	};
@@ -306,6 +315,7 @@ var mediumPopup = (function() {
 		addValidation:addValidation,
 		appendButton:appendButton,
 		disableTab:disableTab,
+		editConnection:editConnection, // TODO move this somewhere more suitable
 		enableTab:enableTab,
 		launchMediumPopup:launchMediumPopup,
 		launchNewFeaturePopup:launchNewFeaturePopup,

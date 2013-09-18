@@ -205,7 +205,6 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def webconnection = new GenericWebconnection(name:"Webconnection with failures", url:"http://www.frontlinesms.com/sync",httpMethod:Webconnection.HttpMethod.POST)
 			webconnection.addToKeywords(keyword)
 			webconnection.save(failOnError:true, flush:true)
-
 			def m
 			5.times { it ->
 				m = new Fmessage(text:"test", inbound:true, src:"+1234$it").save(failOnError:true)

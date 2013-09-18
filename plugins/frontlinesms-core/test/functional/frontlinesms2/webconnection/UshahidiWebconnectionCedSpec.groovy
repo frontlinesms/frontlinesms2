@@ -6,7 +6,7 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
-	def setup(){
+	def setup() {
 		createWebconnections()
 	}
 
@@ -111,7 +111,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 
 	def "editing a web connection should change values"() {
 		given:
-			to PageMessageWebconnection, UshahidiWebconnection.findByName('Trial')
+			to PageMessageWebconnection, UshahidiWebconnection.findByName('Trial').id
 		when:
 			header.moreActions.value("edit").jquery.click()
 			waitFor { at WebconnectionWizard }

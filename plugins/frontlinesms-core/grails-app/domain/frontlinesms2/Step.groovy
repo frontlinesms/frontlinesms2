@@ -8,13 +8,12 @@ abstract class Step {
 	
 	static belongsTo = [activity: CustomActivity]
 	static hasMany = [stepProperties: StepProperty]
-	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep, WebconnectionActionStep]
+	static def implementations = [JoinActionStep, LeaveActionStep, ReplyActionStep, WebconnectionActionStep, ForwardActionStep]
 
 	static transients = ['i18nUtilService']
 	static configFields = [:]
 
 	static constraints = {
-		// the following assumes all configFields are mandatory
 		stepProperties(nullable: true)
 	}
 	

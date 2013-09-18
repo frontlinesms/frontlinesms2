@@ -5,7 +5,6 @@ class ControllerUtils {
 		return { c ->
 			if(domainClass instanceof Closure) domainClass = domainClass.call()
 			def objectId = objectIdFetcher.call() 
-			println "domainClass::: $domainClass"
 			def o = objectId? domainClass.get(objectId): domainClass.newInstance()
 			if(o) c.call(o)
 			else {

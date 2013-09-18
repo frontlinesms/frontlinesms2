@@ -7,7 +7,7 @@ import org.apache.camel.model.RouteDefinition
 import org.smslib.NotConnectedException
 
 class SmslibFconnection extends Fconnection {
-	static passwords = ['pin']
+	static passwords = []
 	static configFields = ['name', 'manufacturer', 'model', 'port', 'baud', 'pin', 'imsi', 'serial', 'sendEnabled', 'receiveEnabled']
 	static defaultValues = [sendEnabled:true, receiveEnabled:true, baud:9600]
 	static String getShortName() { 'smslib' }

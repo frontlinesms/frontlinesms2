@@ -1,5 +1,7 @@
 package frontlinesms2.customactivity
 
+import spock.lang.*
+
 import frontlinesms2.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.popup.*
@@ -134,5 +136,25 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			waitFor("very slow") { summary.displayed }
 	}
 
+	def 'Foward action step is part of the options present for the Customactivity'() {
+			configure.forwardButton.present
+	}
+
+	def "stepTypes should be available in custom activity config"() {
+		when:
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
+		then:
+			waitFor { at CreateActivityDialog }
+		when:
+			customactivity.click()
+		then:
+			waitFor('slow') { at CustomActivityCreateDialog }
+		when:
+			keyword.keywordText.value("test")
+			next.click()
+		then:
+			$('#custom_activity_select option')*.value() == ['', 'reply', 'join', 'leave', 'webconnectionStep', 'forward']
+	}
 }
 

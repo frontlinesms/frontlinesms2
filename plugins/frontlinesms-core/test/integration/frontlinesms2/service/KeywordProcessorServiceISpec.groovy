@@ -71,6 +71,10 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			Autoreply a = new Autoreply(name:"test", autoreplyText:"testing")
 			a.addToKeywords(new Keyword(value:"", isTopLevel:true))
+			a.metaClass.processKeyword = { Fmessage m, Keyword k ->
+				k.ownerDetail = "PROCESSED"
+				k.save(failOnError:true, flush:true)
+			}
 			a.save(failOnError:true)
 		when:
 			keywordProcessorService.process(createFmessage("I'm just an innocent FMessage"))

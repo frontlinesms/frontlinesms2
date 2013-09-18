@@ -3,6 +3,7 @@ package frontlinesms2
 import grails.events.Listener
 import groovy.sql.Sql
 
+// TODO fix indentation of this class
 class AutoforwardService {
 	def messageSendService
 	def dataSource
@@ -80,9 +81,9 @@ class AutoforwardService {
 		} else {
 			m = messageSendService.createOutgoingMessage([addresses:autoforwardOrStep.recipients , messageText:autoforwardOrStep.sentMessageText])
 		}
-		m.setMessageDetail(autoforwardOrStep, message.id)
 		message.messageOwner.addToMessages(m)
 		message.messageOwner.save(failOnError:true)
+		m.setMessageDetail(autoforwardOrStep, message.id)
 		messageSendService.send(m)
 		
 		autoforwardOrStep.save(failOnError:true)

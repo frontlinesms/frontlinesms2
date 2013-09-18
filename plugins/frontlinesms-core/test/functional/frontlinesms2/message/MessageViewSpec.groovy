@@ -4,7 +4,6 @@ import frontlinesms2.popup.*
 import frontlinesms2.*
 
 class MessageViewSpec extends grails.plugin.geb.GebSpec {
-
 	def "message with special html characters should display in list"(){
 		given: 'a test message has been created'
 			remote { Fmessage.build(src:'Bob', text:'<hello>'); null }
@@ -33,3 +32,4 @@ class MessageViewSpec extends grails.plugin.geb.GebSpec {
 			confirm.messageText == '<hello>'
 	}
 }
+

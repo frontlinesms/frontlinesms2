@@ -20,6 +20,7 @@ class Autoforward extends Activity {
 	int getRecipientCount() {
 		def numbers = []
 		contacts.each { numbers << it.mobile }
+		// FIXME please fix spaces around braces
 		groups.each { it.members.each { numbers << it.mobile }}
 		smartGroups.each { it.members.each { numbers << it.mobile }}
 		numbers.unique().size()
@@ -29,11 +30,15 @@ class Autoforward extends Activity {
 	def processKeyword(Fmessage message, Keyword matchedKeyword) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
+		// FIXME please fix spaces around braces
 		if(addressesAvailable()){
 			autoforwardService.doForward(this, message)
 		}
 	}
 
+	// FIXME declare this as `boolean` return type, remove `.size() > 0` check, rename to follow standard naming conventions
+	// FIXME can also be simplified by ORing results together
+	// FIXME this method also looks like it could be rewritten: `return getRecipientCount()`
 	private def addressesAvailable() {
 		println "## All Contacts ## ${((contacts?:[] + groups*.members?:[] + smartGroups*.members?:[]).flatten() - null)}"
 		((contacts?:[] + groups*.members?:[] + smartGroups*.members?:[]).flatten() - null).size() > 0
