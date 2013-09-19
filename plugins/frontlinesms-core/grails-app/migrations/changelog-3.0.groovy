@@ -200,14 +200,6 @@ databaseChangeLog = {
 		dropForeignKeyConstraint(baseTableName: "POLL_RESPONSE_FMESSAGE", baseTableSchemaName: "PUBLIC", constraintName: "FK76CBE69F92DDC012")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-20") {
-		createIndex(indexName: "unique-object_id", tableName: "trash") {
-			column(name: "object_class")
-
-			column(name: "object_id")
-		}
-	}
-
 	changeSet(author: "sitati (generated)", id: "1379593412207-21") {
 		addForeignKeyConstraint(baseColumnNames: "message_id", baseTableName: "message_detail", constraintName: "FK21B74F893FBE872C", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "fmessage", referencesUniqueColumn: "false")
 	}
@@ -218,14 +210,6 @@ databaseChangeLog = {
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-23") {
 		addForeignKeyConstraint(baseColumnNames: "step_id", baseTableName: "step_property", constraintName: "FK9E9EDE8A35C3032", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "step", referencesUniqueColumn: "false")
-	}
-
-	changeSet(author: "sitati (generated)", id: "1379593412207-24") {
-		dropIndex(indexName: "CONSTRAINT_INDEX_2", tableName: "GRUP")
-	}
-
-	changeSet(author: "sitati (generated)", id: "1379593412207-25") {
-		dropIndex(indexName: "CONSTRAINT_INDEX_8", tableName: "SYSTEM_NOTIFICATION")
 	}
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-26") {
