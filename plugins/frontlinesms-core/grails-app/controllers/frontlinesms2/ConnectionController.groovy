@@ -196,13 +196,26 @@ class ConnectionController extends ControllerUtils {
 		}
 	}
 
+	private doAfterSaveOperations(fconnectionInstance) {
+		def serviceName = "${fconnectionInstance.shortName}Service"
+		def service = grailsApplication.mainContext.getBean(serviceName)
+		if(service){
+			def methodName = "afterSave"
+			if(service.metaClass.respondsTo(methodName)) {
+				println "### Calling the doAfterSaveOperations"
+				service."$methodName"(fconnectionInstance)
+			}
+		}
+	}
+
 	private def doSave(Class<Fconnection> clazz) {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
 		fconnectionInstance.validate()
 		println fconnectionInstance.errors.allErrors
 		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
-		if (fconnectionInstance.save(flush:true)) {
+		if (fconnectionInstance.save()) {
+			doAfterSaveOperations(fconnectionInstance)
 			def connectionUseSetting = appSettingsService['routing.use']
 			appSettingsService['routing.use'] = connectionUseSetting?
 					"$connectionUseSetting,fconnection-$fconnectionInstance.id":
