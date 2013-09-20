@@ -201,8 +201,10 @@ class ConnectionController extends ControllerUtils {
 		def service = grailsApplication.mainContext.getBean(serviceName)
 		if(service){
 			def methodName = "afterSave"
-			if(service.metaClass.respondsTo(methodName)) {
-				println "### Calling the doAfterSaveOperations"
+			if(service.respondsTo(methodName) as boolean) {
+				println "##########################################################"
+				println "##################                            ############"
+				println "##########################################################"
 				service."$methodName"(fconnectionInstance)
 			}
 		}
