@@ -53,6 +53,7 @@ class ClickatellFconnection extends Fconnection {
 										'user=${header.clickatell.username}&' + 
 										'password=${header.clickatell.password}&' + 
 										'to=${header.clickatell.dst}&' +
+										'unicode=${header.clickatell.unicode}&' +
 										'text=${body}' +
 										(ClickatellFconnection.this.sendToUsa ? '&mo=1&from=${header.clickatell.fromNumber}' : '')))
 						.to(CLICKATELL_URL)

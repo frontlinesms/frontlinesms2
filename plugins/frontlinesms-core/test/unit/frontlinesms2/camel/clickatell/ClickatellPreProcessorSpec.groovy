@@ -80,7 +80,26 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 			x.in.headers.'clickatell.username' == 'bob'
 			x.in.headers.'clickatell.password' == 'secret'
 			x.in.headers.'clickatell.fromNumber' == '%2B123321'
-		
+	}
+
+	@Unroll
+	def 'Messages containing characters that are not in the GSM Alphabet should be hex-encoded and sent with unicode=1'() {
+		setup:
+			buildTestConnection(true)
+			def x = mockExchange(messageText)
+		when:
+			p.process(x)
+		then:
+			x.in.headers.'clickatell.unicode' == (expectUnicode? '1' : '0')
+			1 * x.in.setBody(expectedBody)
+		where:
+			messageText                 | expectUnicode | expectedBody
+			'simple'                    | false         | 'simple'
+			'more complex'              | false         | 'more+complex'
+			'123@#.+_*^'                | false         | '123%40%23.%2B_*%5E'
+			'香川真司'                  | true          | 'feff99995ddd771f53f8'
+			'Στυλιανός Γιαννακόπουλος'  | true          | 'feff03a303c403c503bb03b903b103bd03cc03c20020039303b903b103bd03bd03b103ba03cc03c003bf03c503bb03bf03c2'
+			'박지성'                    | true          | 'feffbc15c9c0c131'
 	}
 
 	private ClickatellFconnection buildTestConnection(sendToUsa=false) {

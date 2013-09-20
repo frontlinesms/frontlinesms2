@@ -102,6 +102,7 @@ grails.project.dependency.resolution = {
 		build ":tomcat:$grailsVersion", {
 			export = false
 		}
+		build ':bails:0.3.1'
 	}
 }
 

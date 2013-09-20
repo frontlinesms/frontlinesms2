@@ -4,6 +4,8 @@ import java.util.zip.ZipOutputStream
 import java.util.zip.ZipEntry
 
 import org.apache.camel.Exchange
+import org.smslib.util.GsmAlphabet
+
 
 class MetaClassModifiers {
 	static void addAll() {
@@ -52,6 +54,9 @@ class MetaClassModifiers {
 		}
 		String.metaClass.urlEncode = {
 			URLEncoder.encode(delegate, 'UTF-8')
+		}
+		String.metaClass.areAllCharactersValidGSM = {
+			GsmAlphabet.areAllCharactersValidGSM(delegate)
 		}
 	}
 
