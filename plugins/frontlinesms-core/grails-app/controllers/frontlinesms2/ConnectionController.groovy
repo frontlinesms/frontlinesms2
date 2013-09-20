@@ -199,7 +199,7 @@ class ConnectionController extends ControllerUtils {
 		if(service) {
 			def methodName = 'afterSave'
 			if(service.respondsTo(methodName) as boolean) {
-				service[methodName](fconnectionInstance)
+				service."$methodName"(fconnectionInstance)
 			}
 		}
 	}
