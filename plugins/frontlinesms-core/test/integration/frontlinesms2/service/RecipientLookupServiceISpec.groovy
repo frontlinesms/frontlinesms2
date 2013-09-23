@@ -6,7 +6,7 @@ import spock.lang.*
 class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	@Shared
 	def recipientLookupService
-	private static final i18ns = [group:'Groups', smartGroup:'Smartgroups', contact:'Contacts', address:'Add phone number']
+	private static final i18ns = [group:'Groups', smartGroup:'Smart Groups', contact:'Contacts', address:'Add phone number']
 
 	def setup() {
 		20.times {
