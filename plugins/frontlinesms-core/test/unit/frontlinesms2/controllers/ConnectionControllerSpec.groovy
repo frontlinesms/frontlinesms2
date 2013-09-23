@@ -12,6 +12,7 @@ class ConnectionControllerSpec extends Specification {
 	def setup() {
 		appSettingsService = Mock(AppSettingsService)
 		controller.appSettingsService = appSettingsService
+		controller.grailsApplication = [mainContext: [:]]
 		controller.metaClass.setFlashMessage = { String msg -> msg }
 	}
 
