@@ -20,7 +20,7 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			contactList.noContent == 'No contacts here!'
+			contactList.noContent == 'No contacts have been added.'
 	}
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
