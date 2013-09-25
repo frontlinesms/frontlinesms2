@@ -168,12 +168,12 @@ databaseChangeLog = {
 		}
 	}
 
-	// Set default values for fconnection.send_enabled and fconnection.recieve_enabled
+	// Set default values for fconnection.send_enabled, fconnection.recieve_enabled and fconnection.enabled
 	changeSet(author: "sitati", id:"1379593412207-12") {
 		grailsChange{
 			change{
 				// prior to this, existing fconnection implementations are 2-way, except clickatell
-				sql.executeUpdate("UPDATE FCONNECTION SET send_enabled = true, receive_enabled = true")
+				sql.executeUpdate("UPDATE FCONNECTION SET send_enabled = true, receive_enabled = true, enabled = true")
 				sql.executeUpdate("UPDATE FCONNECTION SET receive_enabled = false where ID in (select ID from CLICKATELL_FCONNECTION)")
 			}
 		}
