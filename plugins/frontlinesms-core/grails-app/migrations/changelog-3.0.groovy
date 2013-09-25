@@ -168,7 +168,17 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-12") {
+	// Set default values for fconnection.send_enabled and fconnection.recieve_enabled
+	changeSet(author: "sitati", id:"1379593412207-12") {
+		grailsChange{
+			change{
+				// prior to this, existing fconnection implementations are 2-way, except clickatell
+				sql.executeUpdate("UPDATE FCONNECTION SET send_enabled = true, receive_enabled = true")
+				sql.executeUpdate("UPDATE FCONNECTION SET receive_enabled = false where ID in (select ID from CLICKATELL_FCONNECTION)")
+			}
+		}
+	}
+	changeSet(author: "sitati (generated)", id: "1379593412207-13") {
 		addColumn(tableName: "search") {
 			column(name: "starred_only", type: "boolean") {
 				constraints(nullable: "false")
@@ -176,7 +186,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-13") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-14") {
 		addColumn(tableName: "smssync_fconnection") {
 			column(name: "timeout", type: "integer") {
 				constraints(nullable: "false")
@@ -184,81 +194,81 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-14") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-15") {
 		addColumn(tableName: "system_notification") {
 			column(name: "topic", type: "varchar(255)")
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-15") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-16") {
 		addNotNullConstraint(columnDataType: "varchar(255)", columnName: "API_ID", tableName: "CLICKATELL_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-16") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-17") {
 		addNotNullConstraint(columnDataType: "varchar(255)", columnName: "CLICKATELL_PASSWORD", tableName: "CLICKATELL_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-17") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-18") {
 		addNotNullConstraint(columnDataType: "boolean", columnName: "SEND_TO_USA", tableName: "CLICKATELL_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-18") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-19") {
 		addNotNullConstraint(columnDataType: "varchar(255)", columnName: "USERNAME", tableName: "CLICKATELL_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-19") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-20") {
 		addNotNullConstraint(columnDataType: "varchar(255)", columnName: "KEY", tableName: "POLL_RESPONSE")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-20") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-21") {
 		dropForeignKeyConstraint(baseTableName: "POLL_RESPONSE_FMESSAGE", baseTableSchemaName: "PUBLIC", constraintName: "FK76CBE69F92DDC012")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-21") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-22") {
 		addForeignKeyConstraint(baseColumnNames: "message_id", baseTableName: "message_detail", constraintName: "FK21B74F893FBE872C", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "fmessage", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-22") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-23") {
 		addForeignKeyConstraint(baseColumnNames: "activity_id", baseTableName: "step", constraintName: "FK3606CC931DFDE3", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "custom_activity", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-23") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-24") {
 		addForeignKeyConstraint(baseColumnNames: "step_id", baseTableName: "step_property", constraintName: "FK9E9EDE8A35C3032", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "step", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-24") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-25") {
 		dropColumn(columnName: "OWNER_DETAIL", tableName: "FMESSAGE")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-25") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-26") {
 		dropColumn(columnName: "RECEIVE", tableName: "INTELLI_SMS_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-27") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-28") {
 		dropColumn(columnName: "SEND", tableName: "INTELLI_SMS_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-27") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-28") {
 		dropColumn(columnName: "RESPONSES_IDX", tableName: "POLL_RESPONSE")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-28") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-29") {
 		dropColumn(columnName: "RECEIVE", tableName: "SMSLIB_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-29") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-30") {
 		dropColumn(columnName: "SEND", tableName: "SMSLIB_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-30") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-31") {
 		dropColumn(columnName: "RECEIVE_ENABLED", tableName: "SMSSYNC_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-31") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-32") {
 		dropColumn(columnName: "SEND_ENABLED", tableName: "SMSSYNC_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-32") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-33") {
 		dropTable(tableName: "POLL_RESPONSE_FMESSAGE")
 	}
 }
