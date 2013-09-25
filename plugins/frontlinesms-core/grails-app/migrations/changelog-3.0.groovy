@@ -36,7 +36,21 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-3") {
+	// Migrate old Fmessage.ownerDetail entries to new Message Detail domain
+	changeSet(author: "sitati", id:"1379593412207-3") {
+		grailsChange{
+			change{
+				sql.eachRow("SELECT * FROM FMESSAGE") { fmessage ->
+					// can safely assume that all existing owners are ACTIVITY, not STEP, as custom activity not released yet
+					if(fmessage.OWNER_DETAIL and fmessage.MESSAGE_OWNER_ID) {
+						sql.execute("INSERT INTO message_detail (version, message_id, owner_id, owner_type, value) VALUES (0, ${fmessage.ID}, ${fmessage.MESSAGE_OWNER_ID}, 'ACTIVITY', '${fmessage.OWNER_DETAIL}')")
+					}
+				}
+			}
+		}
+	}
+
+	changeSet(author: "sitati (generated)", id: "1379593412207-4") {
 		createTable(tableName: "nexmo_fconnection") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "nexmo_fconnecPK")
@@ -56,7 +70,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-4") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-5") {
 		createTable(tableName: "smpp_fconnection") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "smpp_fconnectPK")
@@ -78,7 +92,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-5") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-6") {
 		createTable(tableName: "step") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "stepPK")
@@ -100,7 +114,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-6") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-7") {
 		createTable(tableName: "step_property") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "step_propertyPK")
@@ -124,13 +138,13 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-7") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-8") {
 		addColumn(tableName: "dispatch") {
 			column(name: "fconnection_id", type: "bigint")
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-8") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-9") {
 		addColumn(tableName: "fconnection") {
 			column(name: "enabled", type: "boolean") {
 				constraints(nullable: "false")
@@ -138,7 +152,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-9") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-10") {
 		addColumn(tableName: "fconnection") {
 			column(name: "receive_enabled", type: "boolean") {
 				constraints(nullable: "false")
@@ -146,7 +160,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-10") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-11") {
 		addColumn(tableName: "fconnection") {
 			column(name: "send_enabled", type: "boolean") {
 				constraints(nullable: "false")
@@ -154,7 +168,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-11") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-12") {
 		addColumn(tableName: "search") {
 			column(name: "starred_only", type: "boolean") {
 				constraints(nullable: "false")
@@ -162,7 +176,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-12") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-13") {
 		addColumn(tableName: "smssync_fconnection") {
 			column(name: "timeout", type: "integer") {
 				constraints(nullable: "false")
@@ -170,33 +184,33 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-13") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-14") {
 		addColumn(tableName: "system_notification") {
 			column(name: "topic", type: "varchar(255)")
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-14") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-15") {
 		addNotNullConstraint(columnDataType: "varchar(255)", columnName: "API_ID", tableName: "CLICKATELL_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-15") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-16") {
 		addNotNullConstraint(columnDataType: "varchar(255)", columnName: "CLICKATELL_PASSWORD", tableName: "CLICKATELL_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-16") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-17") {
 		addNotNullConstraint(columnDataType: "boolean", columnName: "SEND_TO_USA", tableName: "CLICKATELL_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-17") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-18") {
 		addNotNullConstraint(columnDataType: "varchar(255)", columnName: "USERNAME", tableName: "CLICKATELL_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-18") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-19") {
 		addNotNullConstraint(columnDataType: "varchar(255)", columnName: "KEY", tableName: "POLL_RESPONSE")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-19") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-20") {
 		dropForeignKeyConstraint(baseTableName: "POLL_RESPONSE_FMESSAGE", baseTableSchemaName: "PUBLIC", constraintName: "FK76CBE69F92DDC012")
 	}
 
@@ -212,39 +226,39 @@ databaseChangeLog = {
 		addForeignKeyConstraint(baseColumnNames: "step_id", baseTableName: "step_property", constraintName: "FK9E9EDE8A35C3032", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "step", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-26") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-24") {
 		dropColumn(columnName: "OWNER_DETAIL", tableName: "FMESSAGE")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-27") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-25") {
 		dropColumn(columnName: "RECEIVE", tableName: "INTELLI_SMS_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-28") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-27") {
 		dropColumn(columnName: "SEND", tableName: "INTELLI_SMS_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-29") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-27") {
 		dropColumn(columnName: "RESPONSES_IDX", tableName: "POLL_RESPONSE")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-30") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-28") {
 		dropColumn(columnName: "RECEIVE", tableName: "SMSLIB_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-31") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-29") {
 		dropColumn(columnName: "SEND", tableName: "SMSLIB_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-32") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-30") {
 		dropColumn(columnName: "RECEIVE_ENABLED", tableName: "SMSSYNC_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-33") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-31") {
 		dropColumn(columnName: "SEND_ENABLED", tableName: "SMSSYNC_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-34") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-32") {
 		dropTable(tableName: "POLL_RESPONSE_FMESSAGE")
 	}
 }
