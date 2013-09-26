@@ -37,12 +37,12 @@ databaseChangeLog = {
 	}
 
 	// Migrate old Fmessage.ownerDetail entries to new Message Detail domain
+	// can safely assume that all existing owners are ACTIVITY, not STEP, as custom activity not released yet
 	changeSet(author: "sitati", id:"1379593412207-3") {
 		grailsChange{
 			change{
 				sql.eachRow("SELECT * FROM FMESSAGE") { fmessage ->
-					// can safely assume that all existing owners are ACTIVITY, not STEP, as custom activity not released yet
-					if(fmessage.OWNER_DETAIL and fmessage.MESSAGE_OWNER_ID) {
+					if(fmessage.OWNER_DETAIL && fmessage.MESSAGE_OWNER_ID) {
 						sql.execute("INSERT INTO message_detail (version, message_id, owner_id, owner_type, value) VALUES (0, ${fmessage.ID}, ${fmessage.MESSAGE_OWNER_ID}, 'ACTIVITY', '${fmessage.OWNER_DETAIL}')")
 					}
 				}
@@ -255,28 +255,28 @@ databaseChangeLog = {
 		dropColumn(columnName: "SEND", tableName: "INTELLI_SMS_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-28") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-29") {
 		dropColumn(columnName: "RESPONSES_IDX", tableName: "POLL_RESPONSE")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-29") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-30") {
 		dropColumn(columnName: "RECEIVE", tableName: "SMSLIB_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-30") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-31") {
 		dropColumn(columnName: "SEND", tableName: "SMSLIB_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-31") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-32") {
 		dropColumn(columnName: "RECEIVE_ENABLED", tableName: "SMSSYNC_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-32") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-33") {
 		dropColumn(columnName: "SEND_ENABLED", tableName: "SMSSYNC_FCONNECTION")
 	}
 
 	// Migrate poll_response_fmessage data into message_detail 
-	changeSet(author: "sitati", id:"1379593412207-33") {
+	changeSet(author: "sitati", id:"1379593412207-34") {
 		grailsChange{
 			change{
 				sql.eachRow("SELECT * FROM POLL_RESPONSE_FMESSAGE") { prf ->
@@ -292,7 +292,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-34") {
+	changeSet(author: "sitati (generated)", id: "1379593412207-35") {
 		dropTable(tableName: "POLL_RESPONSE_FMESSAGE")
 	}
 
