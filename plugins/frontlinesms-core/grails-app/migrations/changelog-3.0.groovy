@@ -178,10 +178,17 @@ databaseChangeLog = {
 			}
 		}
 	}
+
 	changeSet(author: "sitati (generated)", id: "1379593412207-13") {
 		addColumn(tableName: "search") {
 			column(name: "starred_only", type: "boolean") {
 				constraints(nullable: "false")
+			}
+		}
+		grailsChange{
+			change{
+				// set any saved searches' starred_only to false
+				sql.executeUpdate("UPDATE SEARCH SET starred_only = false")
 			}
 		}
 	}
