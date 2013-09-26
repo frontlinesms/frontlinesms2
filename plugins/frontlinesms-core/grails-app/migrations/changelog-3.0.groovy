@@ -275,7 +275,25 @@ databaseChangeLog = {
 		dropColumn(columnName: "SEND_ENABLED", tableName: "SMSSYNC_FCONNECTION")
 	}
 
-	changeSet(author: "sitati (generated)", id: "1379593412207-33") {
+	// Migrate poll_response_fmessage data into message_detail 
+	changeSet(author: "sitati", id:"1379593412207-33") {
+		grailsChange{
+			change{
+				sql.eachRow("SELECT * FROM POLL_RESPONSE_FMESSAGE") { prf ->
+					def messageDetailValue
+					def pollId
+					sql.eachRow("SELECT * FROM POLL_RESPONSE where ID = ${prf.POLL_RESPONSE_ID}"){ pollResponse ->
+						messageDetailValue = (pollResponse.key == 'unknown') ? 'unknown' : pollResponse.id
+						pollId = pollResponse.POLL_ID
+					}
+					sql.execute("INSERT INTO message_detail (version, message_id, owner_id, owner_type, value) VALUES (0, ${pfr.FMESSAGE_ID}, ${pollId}, 'ACTIVITY', '${messageDetailValue}')")
+				}
+			}
+		}
+	}
+
+	changeSet(author: "sitati (generated)", id: "1379593412207-34") {
 		dropTable(tableName: "POLL_RESPONSE_FMESSAGE")
 	}
+
 }
