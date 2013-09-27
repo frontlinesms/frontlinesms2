@@ -147,7 +147,7 @@ databaseChangeLog = {
 	changeSet(author: "sitati (generated)", id: "1379593412207-9") {
 		addColumn(tableName: "fconnection") {
 			column(name: "enabled", type: "boolean") {
-				constraints(nullable: "false")
+				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
 			}
 		}
 	}
@@ -155,7 +155,7 @@ databaseChangeLog = {
 	changeSet(author: "sitati (generated)", id: "1379593412207-10") {
 		addColumn(tableName: "fconnection") {
 			column(name: "receive_enabled", type: "boolean") {
-				constraints(nullable: "false")
+				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
 			}
 		}
 	}
@@ -163,7 +163,7 @@ databaseChangeLog = {
 	changeSet(author: "sitati (generated)", id: "1379593412207-11") {
 		addColumn(tableName: "fconnection") {
 			column(name: "send_enabled", type: "boolean") {
-				constraints(nullable: "false")
+				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
 			}
 		}
 	}
@@ -182,7 +182,7 @@ databaseChangeLog = {
 	changeSet(author: "sitati (generated)", id: "1379593412207-13") {
 		addColumn(tableName: "search") {
 			column(name: "starred_only", type: "boolean") {
-				constraints(nullable: "false")
+				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
 			}
 		}
 		grailsChange{
@@ -196,7 +196,7 @@ databaseChangeLog = {
 	changeSet(author: "sitati (generated)", id: "1379593412207-14") {
 		addColumn(tableName: "smssync_fconnection") {
 			column(name: "timeout", type: "integer") {
-				constraints(nullable: "false")
+				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
 			}
 		}
 	}
