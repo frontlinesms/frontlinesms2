@@ -146,25 +146,19 @@ databaseChangeLog = {
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-9") {
 		addColumn(tableName: "fconnection") {
-			column(name: "enabled", type: "boolean") {
-				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
-			}
+			column(name: "enabled", type: "boolean")
 		}
 	}
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-10") {
 		addColumn(tableName: "fconnection") {
-			column(name: "receive_enabled", type: "boolean") {
-				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
-			}
+			column(name: "receive_enabled", type: "boolean")
 		}
 	}
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-11") {
 		addColumn(tableName: "fconnection") {
-			column(name: "send_enabled", type: "boolean") {
-				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
-			}
+			column(name: "send_enabled", type: "boolean")
 		}
 	}
 
@@ -181,13 +175,10 @@ databaseChangeLog = {
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-13") {
 		addColumn(tableName: "search") {
-			column(name: "starred_only", type: "boolean") {
-				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
-			}
+			column(name: "starred_only", type: "boolean")
 		}
 		grailsChange{
 			change{
-				// set any saved searches' starred_only to false
 				sql.executeUpdate("UPDATE SEARCH SET starred_only = false")
 			}
 		}
@@ -195,8 +186,11 @@ databaseChangeLog = {
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-14") {
 		addColumn(tableName: "smssync_fconnection") {
-			column(name: "timeout", type: "integer") {
-				constraints(nullable: "false") // TODO: Delay this constraint until after rows are populated with default values
+			column(name: "timeout", type: "integer")
+		}
+		grailsChange{
+			change{
+				sql.executeUpdate("UPDATE smssync_fconnection SET timeout = 360")
 			}
 		}
 	}
@@ -296,4 +290,23 @@ databaseChangeLog = {
 		dropTable(tableName: "POLL_RESPONSE_FMESSAGE")
 	}
 
+	changeSet(author: "sitati (generated)", id: "1379593412207-36") {
+		addNotNullConstraint(columnDataType: "boolean", columnName: "enabled", tableName: "fconnection")
+	}
+
+	changeSet(author: "sitati (generated)", id: "1379593412207-37") {
+		addNotNullConstraint(columnDataType: "boolean", columnName: "send_enabled", tableName: "fconnection")
+	}
+
+	changeSet(author: "sitati (generated)", id: "1379593412207-38") {
+		addNotNullConstraint(columnDataType: "boolean", columnName: "recieve_enabled", tableName: "fconnection")
+	}
+
+	changeSet(author: "sitati (generated)", id: "1379593412207-39") {
+		addNotNullConstraint(columnDataType: "boolean", columnName: "starred_only", tableName: "search")
+	}
+
+	changeSet(author: "sitati (generated)", id: "1379593412207-40") {
+		addNotNullConstraint(columnDataType: "integer", columnName: "timeout", tableName: "smssync_fconnection")
+	}
 }
