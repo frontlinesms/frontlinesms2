@@ -276,11 +276,11 @@ databaseChangeLog = {
 				sql.eachRow("SELECT * FROM POLL_RESPONSE_FMESSAGE") { prf ->
 					def messageDetailValue
 					def pollId
-					sql.eachRow("SELECT * FROM POLL_RESPONSE where ID = ${prf.POLL_RESPONSE_ID}"){ pollResponse ->
+					sql.eachRow("SELECT * FROM POLL_RESPONSE where ID = ${prf.POLL_RESPONSE_MESSAGES_ID}"){ pollResponse ->
 						messageDetailValue = (pollResponse.key == 'unknown') ? 'unknown' : pollResponse.id
 						pollId = pollResponse.POLL_ID
 					}
-					sql.execute("INSERT INTO message_detail (version, message_id, owner_id, owner_type, value) VALUES (0, ${pfr.FMESSAGE_ID}, ${pollId}, 'ACTIVITY', '${messageDetailValue}')")
+					sql.execute("INSERT INTO message_detail (version, message_id, owner_id, owner_type, value) VALUES (0, ${prf.FMESSAGE_ID}, ${pollId}, 'ACTIVITY', '${messageDetailValue}')")
 				}
 			}
 		}
