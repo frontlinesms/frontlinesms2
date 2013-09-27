@@ -162,7 +162,7 @@ databaseChangeLog = {
 		}
 	}
 
-	// Set default values for fconnection.send_enabled, fconnection.recieve_enabled and fconnection.enabled
+	// Set default values for fconnection.send_enabled, fconnection.receive_enabled and fconnection.enabled
 	changeSet(author: "sitati", id:"1379593412207-12") {
 		grailsChange{
 			change{
@@ -299,7 +299,7 @@ databaseChangeLog = {
 	}
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-38") {
-		addNotNullConstraint(columnDataType: "boolean", columnName: "recieve_enabled", tableName: "fconnection")
+		addNotNullConstraint(columnDataType: "boolean", columnName: "receive_enabled", tableName: "fconnection")
 	}
 
 	changeSet(author: "sitati (generated)", id: "1379593412207-39") {
