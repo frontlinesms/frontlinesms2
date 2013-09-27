@@ -75,33 +75,31 @@ class ConnectionController extends ControllerUtils {
 			fconnectionInstance.properties = params
 			fconnectionInstance.validate()
 			def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
-			if (fconnectionInstance.save()) {
-			withFormat {
-				html {
-					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name'), fconnectionInstance.id]))
-					redirect(controller:'connection', action: 'enable', id: fconnectionInstance.id)
+			if(fconnectionInstance.save()) {
+				withFormat {
+					html {
+						flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name'), fconnectionInstance.id]))
+						redirect(controller:'connection', action: 'enable', id: fconnectionInstance.id)
+					}
+					json {
+						render([ok:true, redirectUrl:createLink(action:'enable', id:fconnectionInstance.id)] as JSON)
+					}
 				}
-				json {
-					render([ok:true, redirectUrl:createLink(action:'enable', id:fconnectionInstance.id)] as JSON)
+			} else {
+				withFormat {
+					html {
+						flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
+						redirect(controller:'connection', action:"list")
+					}
+					json {
+						render([ok:false, text:connectionErrors.join().toString()] as JSON)
+					}
 				}
 			}
-		} else {
-			withFormat {
-				html {
-					flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
-					redirect(controller:'connection', action:"list")
-				}
-				json {
-					render([ok:false, text:connectionErrors.join().toString()] as JSON)
-				}
-			}
-		}
 		}
 	}
 
 	def changeRoutingPreferences() {
-		println "params:: $params"
-
 		appSettingsService.set('routing.use', params.routingUseOrder)
 		redirect action:'list'
 	}
@@ -113,7 +111,6 @@ class ConnectionController extends ControllerUtils {
 
 		if(routingRules) {
 			fconnectionRoutingList = routingRules.split(/\s*,\s*/)
-			println "Routing Rules before refinement:::: $routingRules"
 
 			// Replacing fconnection rules with fconnection instances
 			fconnectionRoutingList = fconnectionRoutingList.collect { rule ->
@@ -196,6 +193,17 @@ class ConnectionController extends ControllerUtils {
 		}
 	}
 
+	private doAfterSaveOperations(fconnectionInstance) {
+		def serviceName = "${fconnectionInstance.shortName}Service"
+		def service = grailsApplication.mainContext[serviceName]
+		if(service) {
+			def methodName = 'afterSave'
+			if(service.respondsTo(methodName) as boolean) {
+				service."$methodName"(fconnectionInstance)
+			}
+		}
+	}
+
 	private def doSave(Class<Fconnection> clazz) {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
@@ -203,6 +211,7 @@ class ConnectionController extends ControllerUtils {
 		println fconnectionInstance.errors.allErrors
 		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
 		if (fconnectionInstance.save(flush:true)) {
+			doAfterSaveOperations(fconnectionInstance)
 			def connectionUseSetting = appSettingsService['routing.use']
 			appSettingsService['routing.use'] = connectionUseSetting?
 					"$connectionUseSetting,fconnection-$fconnectionInstance.id":

@@ -28,7 +28,6 @@ class CoreBootStrap {
 	def fconnectionService
 	def localeResolver
 	def camelContext
-	def messageSource
 	def quartzScheduler
 	def systemNotificationService
 
