@@ -29,6 +29,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	def camelContext
 	def webconnectionService
 	def appSettingsService
+	def grailsLinkGenerator
 	enum HttpMethod { POST, GET }
 	static String shortName = 'webconnection'
 	static String getType() { '' }
@@ -176,7 +177,9 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	def getMoreActions() { ['retryFailed'] }
 
 	String getFullApiUrl() {
-		return apiEnabled? "http://[your-ip-address]:${appSettingsService.serverPort}/frontlinesms-core/api/1/${Webconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()}/$id/" : ""
+		def entityClassApiUrl = Webconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()
+ 		def fullApiUrl = grailsLinkGenerator.link(controller: 'api', params:[entityClassApiUrl: entityClassApiUrl, entityId: id, secret: secret], absolute: true)
+		return apiEnabled? fullApiUrl : ""
 	}
 }
 	
