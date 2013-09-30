@@ -143,26 +143,6 @@ class WebconnectionService {
 		webconnectionInstance.save(failOnError:true, flush:true)
 	}
 
-	def testRoute(Webconnection webconnectionInstance) {
-		def message = Fmessage.findByMessageOwnerAndText(webconnectionInstance, Fmessage.TEST_MESSAGE_TEXT)
-		println "testRoute::: $message"
-		if(!message) {
-			message = createTestMessage()
-			webconnectionInstance.addToMessages(message)
-			webconnectionInstance.save(failOnError:true)
-		}
-		createRoute(webconnectionInstance, webconnectionInstance.testRouteDefinitions)
-		if(getStatusOf(webconnectionInstance) == ConnectionStatus.CONNECTED) {
-			def headers = [:]
-			headers.'fmessage-id' = message.id
-			headers.'webconnection-id'= webconnectionInstance.id
-			sendMessageAndHeaders("seda:activity-${webconnectionInstance.shortName}-${webconnectionInstance.id}", null, headers)
-			changeMessageOwnerDetail(webconnectionInstance, message, Webconnection.OWNERDETAIL_PENDING)
-		} else {
-			changeMessageOwnerDetail(webconnectionInstance, message, Webconnection.OWNERDETAIL_FAILED)
-		}
-	}
-
 	def getStatusOf(Webconnection w) {
 		camelContext.routes.any { it.id ==~ /.*activity-${w.shortName}-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.FAILED
 	}

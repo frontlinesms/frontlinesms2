@@ -31,10 +31,6 @@
 				return i18n("webconnection.none.label");
 			}
 		})();
-
-		if(mediumPopup.getCurrentTabIndex() === mediumPopup.getTabLength()) {
-			webconnectionDialog.showTestRouteBtn();
-		}
 		
 		$("#confirm-service").html('<p style="text-transform:capitalize">' + $("input[name=serviceType]:checked").val() + '</p>');
 		$("#confirm-url").html('<p>' + $("input[name=url]").val()  + '</p>');

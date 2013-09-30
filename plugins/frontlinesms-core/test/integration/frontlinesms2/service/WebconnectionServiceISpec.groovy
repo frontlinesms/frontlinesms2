@@ -115,18 +115,6 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webconnectionService.getStatusOf(webconnection) == ConnectionStatus.CONNECTED
 	}
 
-	def 'testRoute should set message ownerDetail to failed when it fails'() {
-		setup:
-			def camelContext = Mock(CamelContext)
-			def webconnection =  Webconnection.findByName("Sync")
-			webconnection.camelContext = camelContext
-			webconnection.save(failOnError:true)
-		when:
-			webconnectionService.testRoute(webconnection)
-		then:
-			Fmessage.findByMessageOwnerAndText(webconnection, Fmessage.TEST_MESSAGE_TEXT).ownerDetail
-	}
-
 	Exchange mockExchange(messageText,method,messageOnly){
 		def webconnection =  Webconnection.findByName("Sync")
 		if(method ==  'get'){

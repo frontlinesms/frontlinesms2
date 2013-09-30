@@ -24,10 +24,6 @@
 				}
 			});
 		}
-
-		if(mediumPopup.getCurrentTabIndex() === mediumPopup.getTabLength()) {
-			webconnectionDialog.showTestRouteBtn();
-		}
 		
 		$("#confirm-url").html('<p>' + url  + '</p>');
 		$("#confirm-httpMethod").html('<p>' + httpMethod  + '</p>');

@@ -26,80 +26,15 @@ var webconnectionDialog = (function () {
 		i18nString = i18n(i18nKey);
 		return i18nKey === i18nString? "": i18nString;
 	},
-	showTestRouteBtn = function() {
-		var buttonSet, testRouteBtn; 
-		buttonSet = $('.ui-dialog-buttonset');
-		testRouteBtn = buttonSet.find("#testRoute");
-		if(testRouteBtn.length === 0) {
-			testRouteBtn = mediumPopup.appendButton("testRoute", "submit", i18n('webconnection.testroute.label'));
-			testRouteBtn.bind({
-				click:initiateRouteStatusCheck
-			});
-		} else {
-			testRouteBtn.show();
-		}
-		buttonSet.append(testRouteBtn);
-	},
-	initiateRouteStatusCheck = function() {
-		var params = {};
-		if(mediumPopup.tabValidates(mediumPopup.getCurrentTab())) {
-			params.ownerId = $("#activityId").val();
-			params.format = "json";
-			$.ajax({
-				type:"POST",
-				data:$("#new-webconnection-form").serialize() + "&" + $.param(params),
-				url:url_root + "webconnection/testRoute",
-				success:processInitiateTestResponse
-			});
-		} else {
-			$('.error-panel').show();
-		}
-		return false;
-	},
 	toggleWizardButtons = function() {
 		if($("#submit").is(":disabled")) {
-			$("#testRoute").attr('disabled', false);
 			$("#submit").attr('disabled', false);
 			$("#cancel").attr('disabled', false);
 			$("#prevPage").attr('disabled', false);
 		} else {
-			$("#testRoute").attr('disabled', "disabled");
 			$("#submit").attr('disabled', "disabled");
 			$("#cancel").attr('disabled', "disabled");
 			$("#prevPage").attr('disabled', "disabled");
-		}
-	},
-	processCheckRouteResponse = function(response) {
-		if(!response) { return; }
-		response = response.webconnection_status;
-		if(!response.ok) {
-			// Not sure how we get here.
-			return;
-		}
-		if(response.status !== "success" && response.status  !== "failed") {
-			// checking still in progress...
-			return;
-		}
-		$(".error-panel").text(i18n('webconnection.popup.'+ response.status  + '.label'));
-		$(".error-panel").show();
-		toggleWizardButtons();
-		if(response.status  === "success") {
-			loadSummaryTab(response, i18n('webconnection.label'));
-		} else {
-			$("#testRoute").children().remove();
-			$("#testRoute").append("<span>"+i18n('webconnection.testroute.label')+"</span>");
-		}
-		app_info.stopListening("webconnection_status");
-	},
-	processInitiateTestResponse = function(response) {
-		if(response.ok) {
-			$("#testRoute").children().remove();
-			$("#testRoute").append("<span>"+i18n('webconnection.testing.label')+"</span>");
-			$("#activityId").val(response.ownerId);
-			toggleWizardButtons();
-			app_info.listen("webconnection_status", { ownerId:response.ownerId }, processCheckRouteResponse);
-		} else {
-			displayErrors(response);
 		}
 	},
 	toggleApiTab = function() {
@@ -167,7 +102,6 @@ var webconnectionDialog = (function () {
 		updateConfirmationScreen:updateConfirmationScreen,
 		handlers:{},
 		setType:setType,
-		showTestRouteBtn:showTestRouteBtn,
 		toggleApiTab:toggleApiTab
 	}
 }());

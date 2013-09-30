@@ -34,13 +34,6 @@ class WebconnectionController extends ActivityController {
 		}
 	}
 
-	def testRoute() {
-		withWebconnection { webconnectionInstance ->
-			doSave(webconnectionService, webconnectionInstance, false)
-			TestWebconnectionJob.triggerNow([webconnectionId:webconnectionInstance.id])
-		}
-	}
-
 	private def withWebconnection = withDomainObject({ WEB_CONNECTION_TYPE_MAP[params.webconnectionType?:params.imp]?: Webconnection }, { params.ownerId })
 }
 

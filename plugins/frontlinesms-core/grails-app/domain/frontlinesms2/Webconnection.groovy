@@ -76,27 +76,6 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		webconnectionService.doUpload(this, message)
 	}
 
-	List<RouteDefinition> getTestRouteDefinitions() {
-		return new RouteBuilder() {
-			@Override void configure() {}
-			List getRouteDefinitions() {
-				return [from("seda:activity-${Webconnection.shortName}-${Webconnection.this.id}")
-						.beanRef('webconnectionService', 'preProcess')
-						.setHeader(Exchange.HTTP_PATH, simple('${header.url}'))
-						.onException(Exception)
-									.redeliveryDelay(0)
-									.handled(true)
-									.beanRef('webconnectionService', 'handleException')
-									.beanRef('webconnectionService', 'createStatusNotification')
-									.end()
-						.to(Webconnection.this.url)
-						.beanRef('webconnectionService', 'postProcess')
-						.beanRef('webconnectionService', 'createStatusNotification')
-						.routeId("activity-${Webconnection.shortName}-${Webconnection.this.id}")]
-			}
-		}.routeDefinitions
-	}
-
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
 			@Override void configure() {}
