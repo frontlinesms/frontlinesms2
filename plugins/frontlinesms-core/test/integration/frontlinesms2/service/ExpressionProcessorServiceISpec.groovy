@@ -16,6 +16,7 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 			def d = new Dispatch(dst:'10983', status:DispatchStatus.FAILED)
 			m.addToDispatches(d)
 			m.save(failOnError:true, flush:true)
+			m.refresh()
 			d.refresh()
 			def processedMessageText = expressionProcessorService.process(d)
 		expect:
@@ -49,6 +50,7 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 			outbound.text = outboundMessageText
 			autoforward.addToMessages(outbound).save(failOnError:true, flush:true)
 			inbound.refresh()
+			outbound.refresh()
 			def processedMessageText = expressionProcessorService.process(dis)
 		expect:
 			processedMessageText == expectedDispatchText

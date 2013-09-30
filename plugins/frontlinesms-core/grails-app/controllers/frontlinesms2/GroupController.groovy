@@ -5,6 +5,8 @@ import grails.converters.JSON
 class GroupController extends ControllerUtils {
 	static allowedMethods = [update: "POST"]
 
+	def groupService
+
 	def list() {
 		[groups:Group.list()]
 	}
@@ -64,11 +66,9 @@ class GroupController extends ControllerUtils {
 	}
 	
 	def delete() {
-		try {
-			Group.get(params.id)?.delete(flush: true)
+		if(groupService.delete(Group.get(params.id))) {
 			flash.message = message(code:'default.deleted.message', args:[message(code:'group.label')])
-		}
-		catch (org.springframework.dao.DataIntegrityViolationException e) {
+		} else {
 			flash.message = message(code:'group.delete.fail')
 		}
 		redirect controller:'contact', action: "show"
