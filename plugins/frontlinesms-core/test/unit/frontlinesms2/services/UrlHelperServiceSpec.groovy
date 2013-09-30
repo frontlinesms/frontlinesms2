@@ -3,8 +3,8 @@ package frontlinesms2.services
 import spock.lang.*
 import frontlinesms2.*
 
-@TestFor(URLBuilderService)
-class URLBuilderService extends Specification {
+@TestFor(UrlHelperService)
+class UrlHelperServiceSpec extends Specification {
 	def context
 
 	def setup() {
@@ -19,7 +19,7 @@ class URLBuilderService extends Specification {
 		when:
 			def url = service.getBaseUrl(request)
 		then:
-			url == 'http://example.com:1235'
+			url == 'http://example.com:12345'
 	}
 
 	@Unroll
@@ -42,7 +42,7 @@ class URLBuilderService extends Specification {
 		when:
 			def url = service.getBaseUrl(request)
 		then:
-			url == 'http://[localhost.ip.placeholder]:1235'
+			url == 'http://&lt;localhost.ip.placeholder&gt;:12345'
 	}
 
 }

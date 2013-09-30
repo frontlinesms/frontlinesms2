@@ -15,6 +15,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 
 	def smssyncService
 	def appSettingsService
+	def urlBuilderService
 	def dispatchRouterService
 
 	boolean sendEnabled = true
@@ -65,13 +66,8 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		return routeDefinitions
 	}
 
-	String getFullApiUrl() {
-		// Secret is included here because it's required for SMSSync's 'send' task.
-		// For incoming messages, we are already provided the secret in the GET params,
-		// so a secret mismatch might cause confusion.  In future, SMSSync should
-		// secret in task requests as well, so eventually $secret can be dropped from
-		// this URL.
-		return apiEnabled? "api/1/${shortName}/$id/${secret?:''}" : ''
+	String getFullApiUrl(request) {
+		return apiEnabled? "${urlBuilderService.getFullApiUrl()}/api/1/${shortName}/$id/${secret?:''}" : ''
 	}
 }
 
