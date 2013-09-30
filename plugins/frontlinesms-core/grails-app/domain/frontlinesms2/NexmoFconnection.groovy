@@ -42,8 +42,8 @@ class NexmoFconnection extends Fconnection implements FrontlineApi {
 	boolean isApiEnabled() { this.receiveEnabled }
 
 	String getFullApiUrl(request) {
-		def entityClassApiUrl = SmssyncFconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()
- 		def path = grailsLinkGenerator.link(controller: 'api', params:[entityClassApiUrl: entityClassApiUrl, entityId: id, secret: secret], absolute: false)
+		def entityClassApiUrl = NexmoFconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()
+ 		def path = grailsLinkGenerator.link(controller: 'api', params:[entityClassApiUrl: entityClassApiUrl, entityId: id], absolute: false)
 		return apiEnabled? "${urlHelperService.getBaseUrl(request)}$path" : ''
 	}
 	
