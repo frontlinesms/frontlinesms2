@@ -64,8 +64,8 @@ class ExpressionProcessorService {
 			if (expression == '${recipient_number}')
 				return dispatch.dst
 			if (expression == '${recipient_name}') {
-				def recipient = Contact.findByMobileLike(dispatch.dst)
-				return recipient? recipient.name: dispatch.dst
+				def recipientName = dispatch.message.outboundContactName
+				return recipientName ?: dispatch.dst
 			}
 			if (expression == '${keyword}')
 				return getKeyword()
