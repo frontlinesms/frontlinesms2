@@ -15,7 +15,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 
 	def smssyncService
 	def appSettingsService
-	def urlBuilderService
+	def urlHelperService
 	def dispatchRouterService
 
 	boolean sendEnabled = true
@@ -67,7 +67,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	String getFullApiUrl(request) {
-		return apiEnabled? "${urlBuilderService.getFullApiUrl()}/api/1/${shortName}/$id/${secret?:''}" : ''
+		return apiEnabled? "${urlHelperService.getBaseUrl(request)}/api/1/${shortName}/$id/${secret?:''}" : ''
 	}
 }
 

@@ -30,6 +30,7 @@ class NexmoFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	def nexmoService
+	def urlHelperService
 
 	def apiProcess(controller) {
 		nexmoService.apiProcess(this, controller)
@@ -39,8 +40,8 @@ class NexmoFconnection extends Fconnection implements FrontlineApi {
 
 	boolean isApiEnabled() { this.receiveEnabled }
 
-	String getFullApiUrl() {
-		return apiEnabled? "api/1/${shortName}/$id/" : ""
+	String getFullApiUrl(request) {
+		return apiEnabled? "${urlHelperService.getBaseUrl(request)}/api/1/${shortName}/$id/" : ""
 	}
 	
 	List<RouteDefinition> getRouteDefinitions() {
