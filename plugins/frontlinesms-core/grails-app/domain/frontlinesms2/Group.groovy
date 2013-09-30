@@ -19,10 +19,6 @@ class Group {
 		sort name:'asc'
 	}
 
-	def beforeDelete = {
-		GroupMembership.deleteFor(this)
-	}
-
 	def getMembers() {
 		// TODO shouldn't have to filter the GroupMemberships manually here
 		Contact.findAll("FROM Contact c, GroupMembership m WHERE m.group=? AND m.contact=c ORDER BY c.name", [this]).collect{ it[0] }
