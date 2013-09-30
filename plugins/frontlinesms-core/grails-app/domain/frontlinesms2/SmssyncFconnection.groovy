@@ -15,6 +15,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 
 	def smssyncService
 	def appSettingsService
+	def grailsLinkGenerator
 	def urlHelperService
 	def dispatchRouterService
 
@@ -67,7 +68,9 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	String getFullApiUrl(request) {
-		return apiEnabled? "${urlHelperService.getBaseUrl(request)}/api/1/${shortName}/$id/${secret?:''}" : ''
+		def entityClassApiUrl = SmssyncFconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()
+ 		def path = grailsLinkGenerator.link(controller: 'api', params:[entityClassApiUrl: entityClassApiUrl, entityId: id, secret: secret], absolute: false)
+		return apiEnabled? "${urlHelperService.getBaseUrl(request)}$path" : ''
 	}
 }
 

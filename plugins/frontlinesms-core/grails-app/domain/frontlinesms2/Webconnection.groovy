@@ -180,7 +180,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 	String getFullApiUrl(request) {
 		def entityClassApiUrl = Webconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()
  		def path = grailsLinkGenerator.link(controller: 'api', params:[entityClassApiUrl: entityClassApiUrl, entityId: id, secret: secret], absolute: false)
-		return apiEnabled? "${urlHelperService.getBaseUrl(request)}/$path" : ""
+		return apiEnabled? "${urlHelperService.getBaseUrl(request)}$path" : ""
 	}
 }
 	
