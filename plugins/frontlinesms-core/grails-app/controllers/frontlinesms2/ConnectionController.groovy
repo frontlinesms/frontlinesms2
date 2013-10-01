@@ -195,12 +195,25 @@ class ConnectionController extends ControllerUtils {
 	}
 
 	private def doSave(Class<Fconnection> clazz) {
-		def fconnectionInstance = clazz.newInstance()
-		fconnectionInstance.properties = params
-		fconnectionInstance.validate()
-		println fconnectionInstance.errors.allErrors
-		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
-		if (fconnectionInstance.save(flush:true)) {
+		def connectionService = grailsApplication.mainContext["${clazz.shortName}Service"]
+		def saveSuccessful
+		def connectionErrors
+		def fconnectionInstance
+		if (connectionService && connectionService.respondsTo('handleSave')) {
+			def handleSaveResponse = connectionService.handleSave(params)
+			saveSuccessful = handleSaveResponse.success
+			connectionErrors = handleSaveResponse.errors
+			fconnectionInstance = handleSaveResponse.connectionInstance
+		}
+		else {
+			fconnectionInstance = clazz.newInstance()
+			fconnectionInstance.properties = params
+			fconnectionInstance.validate()
+			println fconnectionInstance.errors.allErrors
+			connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
+			saveSuccessful = fconnectionInstance.save(flush:true)
+		}
+		if(saveSuccessful) {
 			doAfterSaveOperations(fconnectionInstance)
 			def connectionUseSetting = appSettingsService['routing.use']
 			appSettingsService['routing.use'] = connectionUseSetting?
