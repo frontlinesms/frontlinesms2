@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Remove unique lines (key and value are equal)
+sort $1 | uniq > temporary.tmp
+
+# Find keys that are not unique
+doubleKeys=`awk -F"=" '{print $1}' temporary.tmp | sort | uniq -d` 
+
+if [ -z "$doubleKeys" ] ; then
+	mv temporary.tmp $1
+	echo "Removed doubles, final file is $1"
+else
+	echo $doubleKeys > DoubleKeys.log
+	rm temporary.tmp
+	echo "Double keys found with different values, see DoubleKeys.log"
+fi
