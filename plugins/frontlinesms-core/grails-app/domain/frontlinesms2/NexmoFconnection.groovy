@@ -30,6 +30,8 @@ class NexmoFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	def nexmoService
+	def urlHelperService
+	def grailsLinkGenerator
 
 	def apiProcess(controller) {
 		nexmoService.apiProcess(this, controller)
@@ -39,8 +41,10 @@ class NexmoFconnection extends Fconnection implements FrontlineApi {
 
 	boolean isApiEnabled() { this.receiveEnabled }
 
-	String getFullApiUrl() {
-		return apiEnabled? "api/1/${shortName}/$id/" : ""
+	String getFullApiUrl(request) {
+		def entityClassApiUrl = NexmoFconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()
+ 		def path = grailsLinkGenerator.link(controller: 'api', params:[entityClassApiUrl: entityClassApiUrl, entityId: id], absolute: false)
+		return apiEnabled? "${urlHelperService.getBaseUrl(request)}$path" : ''
 	}
 	
 	List<RouteDefinition> getRouteDefinitions() {

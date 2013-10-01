@@ -11,6 +11,6 @@ interface FrontlineApi {
 	def apiProcess(controller);
 	boolean isApiEnabled();
 	Long getId();
-	String getFullApiUrl();
+	String getFullApiUrl(request);
 }
 

@@ -5,7 +5,7 @@
 	<td class="connection-name">
 		<h2>'${c.name}'</h2>
 			<g:if test="${FrontlineApi.isAssignableFrom(c.class)}">
-				<p class="api-url">${serverUrl + createLink(uri: '/') + c.fullApiUrl}</p>
+				<p class="api-url">${c.getFullApiUrl(request)}</p>
 			</g:if>
 	</td>
 	<td><div class="controls"></div></td>

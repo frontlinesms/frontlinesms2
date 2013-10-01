@@ -15,7 +15,7 @@
 		<span id="web_connection_method">(${ownerInstance.httpMethod?.toString()})</span>
 	</li>
 	<li>
-		<span id="api"><g:message code="webconnection.api.url"/> : ${ownerInstance.fullApiUrl ?: '('+g.message(code:'webconnection.api.disabled')+')'}</span>
+		<span id="api"><g:message code="webconnection.api.url"/> : ${ownerInstance.getFullApiUrl(request) ?: '('+g.message(code:'webconnection.api.disabled')+')'}</span>
 	</li>
 	<g:if test="${ownerInstance?.keywords}">
 		<li id="web_connection_keywords"><g:message code="poll.keywords"/> : ${ownerInstance?.keywords*.value.join(',')}</li>
