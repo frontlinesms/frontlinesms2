@@ -204,6 +204,16 @@ class ConnectionController extends ControllerUtils {
 			saveSuccessful = handleSaveResponse.success
 			connectionErrors = handleSaveResponse.errors
 			fconnectionInstance = handleSaveResponse.connectionInstance
+			withFormat {
+				html {
+					flash.message = LogEntry.log(saveSuccessful ? handleSaveResponse.successMessage : message(code: 'connection.creation.failed', args:[handleSaveResponse.errors]))
+					redirect(controller:'connection', action:"list")
+				}
+				json {
+					render(saveSuccessful ? [ok:true, redirectUrl:createLink(action:'list')] : [ok:false, text:handleSaveResponse.errors.join(", ").toString] as JSON)
+				}
+			}
+			return
 		}
 		else {
 			fconnectionInstance = clazz.newInstance()
