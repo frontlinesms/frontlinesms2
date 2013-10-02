@@ -210,7 +210,7 @@ class ConnectionController extends ControllerUtils {
 					redirect(controller:'connection', action:"list")
 				}
 				json {
-					render(saveSuccessful ? [ok:true, redirectUrl:createLink(action:'list')] : [ok:false, text:handleSaveResponse.errors.join(", ")] as JSON)
+					render(saveSuccessful ? [ok:true, redirectUrl:createLink(action:'list')] : [ok:false, text:handleSaveResponse.errors.join(", ")]) as JSON
 				}
 			}
 			return
