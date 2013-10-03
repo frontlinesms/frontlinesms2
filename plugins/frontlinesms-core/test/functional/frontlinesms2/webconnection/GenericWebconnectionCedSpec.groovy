@@ -11,9 +11,9 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			option('generic').displayed
 		and:
-			getTitle('generic') == "Other web service"
+			getTitle('generic') == "webconnection.generic.label"
 		and:
-			getDescription('generic') == 'Send messages to other web service'
+			getDescription('generic') == 'webconnection.generic.description'
 	}
 
 	def "can create and save a HTTP GET external command"() {
@@ -144,18 +144,6 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			nextTab(requestTab)
 			// N.B. there is no text displayed for this error
-	}
-
-	def "Test Webconnection button is displayed on the confirm tab"() {
-		given:
-			startAtTab('keyword')
-		when:
-			keywordTab.keyword = ""
-			keywordTab.useKeyword('disabled').click() // to disable
-			next.click()
-		then:
-			waitFor { confirmTab.displayed }
-			testConnectionButton.displayed
 	}
 
 	def 'secret is enabled when API is exposed'() {
