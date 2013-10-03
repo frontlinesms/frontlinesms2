@@ -16,7 +16,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			option('ushahidi').displayed
 		and:
-			getDescription('ushahidi') == 'Send messages to CrowdMap or to an Ushahidi server.'
+			getDescription('ushahidi') == 'webconnection.ushahidi.description'
 	}
 
 	def 'Configure page for Crowdmap should have info text at the top of page'() {
@@ -24,7 +24,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			launchWizard('ushahidi')
 		then:
 			configureUshahidi.subType('crowdmap').click()
-			$('.info p')[1].text() == 'The API key for either Crowdmap or Ushahidi can be found in the Settings on the Crowdmap or Ushahidi web site.'
+			$('.info p')[1].text() == 'webconnection.ushahidi.key.description'
 	}
 
 	def 'Api tab disabled when using ushahidi/crowdmap connection type'() {
@@ -41,7 +41,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.subType('crowdmap').click()
 		then:
 			configureUshahidi.urlSuffix.text() == '.crowdmap.com'
-			configureUshahidi.crowdmapKeyLabel.text() == 'Crowdmap API Key:'
+			configureUshahidi.crowdmapKeyLabel.text() == 'webconnection.crowdmap.key.label'
 	}
 
 	def 'when configuring for ushahidi, deploy address is free-form'() {
@@ -51,7 +51,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			configureUshahidi.subType('ushahidi').click()
 		then:
 			configureUshahidi.ushahidiDeployAddress.displayed
-			configureUshahidi.ushahidiKeyLabel.text() == 'Ushahidi API Key:'
+			configureUshahidi.ushahidiKeyLabel.text() == 'webconnection.ushahidi.key.label'
 	}
 
 	@Unroll
@@ -138,17 +138,6 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			waitFor('very slow') { at PageMessageWebconnection }
 			header['name'] == 'trial web connection'
 			header['url'] == 'https://frontlinecrowd.crowdmap.com/frontlinesms/'
-	}
-
-	def '"Test Connection" button is displayed on confirm screen'() {
-		given:
-			launchWizard('ushahidi')
-		and:
-			fillValidConfig()
-		when: 'skip past sorting page'
-			next.click()
-		then:
-			testConnectionButton.displayed
 	}
 
 	private def fillValidConfig() {
