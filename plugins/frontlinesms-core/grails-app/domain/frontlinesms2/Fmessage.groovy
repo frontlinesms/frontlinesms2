@@ -16,7 +16,7 @@ class Fmessage {
 	String text
 	String outboundContactName
 	String inboundContactName
-	boolean read
+	boolean rd
 	boolean starred
 	boolean archived
 	boolean isDeleted
@@ -226,6 +226,9 @@ class Fmessage {
 	public void setText(String text) {
 		this.text = text?.truncate(MAX_TEXT_LENGTH)
 	}
+
+	public boolean isRead() { return this.rd }
+	public boolean setRead(boolean read) { this.rd = read }
 
 	static def listPending(onlyFailed, params=[:]) {
 		def ids = pending(onlyFailed).list(params) as List
