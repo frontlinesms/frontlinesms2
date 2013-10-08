@@ -7,7 +7,7 @@ class Fmessage {
 	static final String TEST_MESSAGE_TEXT = "Test Message"
 
 	static belongsTo = [messageOwner:MessageOwner]
-	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'receivedOn']
+	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'read', 'receivedOn']
 	
 	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
 	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
