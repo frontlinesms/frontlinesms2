@@ -66,7 +66,7 @@ class MessageSendService {
 		}
 	}
 
-	private def getAddressesFromRecipientList(recipients) {
+	def getAddressesFromRecipientList(recipients) {
 		def addresses = []
 		def contactList
 		def groupAddressList
@@ -93,7 +93,7 @@ class MessageSendService {
 
 		addresses = contactList + groupAddressList + smartGroupAddressList + manualAddressList
 		println "addresses: $addresses"
-		addresses
+		addresses.unique()
 	}
 }
 
