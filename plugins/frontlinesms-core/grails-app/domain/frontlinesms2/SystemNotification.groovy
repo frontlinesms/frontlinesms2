@@ -10,6 +10,7 @@ class SystemNotification {
 	String topic
 
 //> DOMAIN SETUP
+	static transients = ['read']
 	static constraints = {
 		text blank:false, maxSize:MAX_TEXT_LENGTH
 		topic nullable:true
