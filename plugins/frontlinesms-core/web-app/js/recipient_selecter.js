@@ -168,7 +168,6 @@ recipientSelecter = (function() {
 		if(address === "") {
 			return true;
 		}
-		sanitizedAddress = address.replace(/\D/g, "");
 		if(address[0] === "+") {
 			sanitizedAddress = "+" + sanitizedAddress;
 		}

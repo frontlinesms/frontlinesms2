@@ -29,15 +29,20 @@
 			validate: function() {
 				var value = $("#messageText").val().htmlEncode();
 				$("#confirm-message-text").html(value || "none"); // FIXME i18n
-				recipientSelecter.updateRecipientCount();
+				/**
+				* TODO: updateRecipientCount using fancy new selector
+				* recipientSelecter.updateRecipientCount(); */
 				return true;
 			}
 		});
 		
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				recipientSelecter.addAddressHandler();
-				return ($("#recipient-count").html() > 0);
+				/**
+				* recipientSelecter.addAddressHandler();
+				* return ($("#recipient-count").html() > 0);
+				*/
+				return true;
 			}
 		});
 	}
