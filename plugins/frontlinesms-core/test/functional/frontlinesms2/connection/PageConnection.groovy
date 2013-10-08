@@ -14,7 +14,7 @@ class PageConnection extends PageBase {
 	static content = {
 		connectionList { module ConnectionList }
 		noContent { $("div#body-content p.no-content") }
-		btnNewConnection(wait:true) { $(".btn", text: 'Add new connection') }
+		btnNewConnection(wait:true) { $(".btn", text: 'connection.add') }
 		connectionFailedFlashMessageEditButton { // technically not tied to this page - could be defined elsewhere if useful
 			notifications.systemNotification.find('a', text:'edit')
 		}
@@ -28,11 +28,11 @@ class ConnectionList extends Module {
 		connection { i=0 -> $('tbody tr.connection', i) }
 		hoverOn { i -> connection(i).find('div.controls').jquery.css("visibility", "visible") }
 		connectionName { i-> connection(i).find("td.connection-name").text() }
-		btnEnableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'Enable') }
-		btnRetryConnection(wait:true) { i ->  hoverOn(i) ; connection(i).find(".btn", text:'Retry') }
-		btnDisableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'Disable') }
-		btnDelete(required:false) { i -> hoverOn(i) ; connection(i).find('.btn', text:'Delete') }
-		btnTestRoute(required:false) { i -> hoverOn(i) ; connection(i).find('.btn', text:'Send test message') }
+		btnEnableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'connection.route.enable') }
+		btnRetryConnection(wait:true) { i ->  hoverOn(i) ; connection(i).find(".btn", text:'connection.route.retryconnection') }
+		btnDisableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'connection.route.disable') }
+		btnDelete(required:false) { i -> hoverOn(i) ; connection(i).find('.btn', text:'connection.delete') }
+		btnTestRoute(required:false) { i -> hoverOn(i) ; connection(i).find('.btn', text:'connection.send.test.message') }
 		status { i -> connection(i).find('td.connection-status') }
 	}
 }
