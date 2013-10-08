@@ -1,6 +1,7 @@
 recipientSelecter = (function() {
-	var addAddressHandler, updateRecipientCount, searchForContacts, selectMembers, setContact, validateAddressEntry, validateImmediate, validateDeferred;
+	var recipientCount, fetchRecipientCount, getRecipientCount, updateRecipientCount, searchForContacts, selectMembers, setContact, validateAddressEntry, validateImmediate, validateDeferred;
 
+	recipientCount = 0
 	function inCheckedGroup(value) {
 		var checkedGroups, t;
 		checkedGroups = $("li.group input:checked");
@@ -92,16 +93,26 @@ recipientSelecter = (function() {
 		checkBox.change();
 	}
 
-	updateRecipientCount = function() {
-		var contactCount, mobileNumbersArray, mobileNumbersString;
-		mobileNumbersString = $("#mobileNumbers").val();
-		if(mobileNumbersString) {
-			mobileNumbersArray = mobileNumbersString.split(",");
-		}
-		contactCount = mobileNumbersArray? mobileNumbersArray.length: 0;
-		$("#contacts-count").html(contactCount);
-		$("#messages-count").html(contactCount);
-		$("#recipient-count").html(contactCount);
+	fetchRecipientCount = function() {
+		var postData;
+		postData = jQuery.param({recipients: jQuery('[name=recipients]').val()}, true);
+		console.log("Recipient Count 0: " + recipientCount);
+		jQuery.ajax({
+			type: "POST",
+			async: false,
+			data: postData,
+			url: url_root + "quickMessage/recipientCount",
+			success: updateRecipientCount
+		});
+	};
+
+	updateRecipientCount = function(data) {
+		console.log("Recipient Count 1: " + recipientCount);
+		recipientCount = data.recipientCount
+		console.log("Recipient Count 2: " + recipientCount);
+		$("#contacts-count").html(recipientCount);
+		$("#messages-count").html(recipientCount);
+		$("#recipient-count").html(recipientCount);
 	};
 
 	validateAddressEntry = function() {
@@ -123,7 +134,7 @@ recipientSelecter = (function() {
 	/** Validate that at least one contact or mobile number is selected NOW! */
 	validateImmediate = function() {
 		var valid, addressListener;
-		addAddressHandler();
+		fetchRecipientCount();
 
 		// TODO This is just a workaround for TOOLS-611, this whole js file is all over the place.
 		$("input[type=checkbox][name=addresses]").each(function() {
@@ -162,27 +173,7 @@ recipientSelecter = (function() {
 		return $("#groups li.group input[type='checkbox']:checked").size() || validateImmediate();
 	};
 
-	addAddressHandler = function() {
-		var address, checkbox, sanitizedAddress;
-		address = $("#address").val();
-		if(address === "") {
-			return true;
-		}
-		if(address[0] === "+") {
-			sanitizedAddress = "+" + sanitizedAddress;
-		}
-		checkbox = $("li.manual").find(":checkbox[value='" + sanitizedAddress + "']").val();
-		if(checkbox !== address) {
-			$("#contacts").prepend("<li class='manual contact' f-name='' f-number='" + sanitizedAddress + "'><input contacts='true' type='checkbox' onclick='recipientSelecter.setContact(this, \"" + sanitizedAddress + "\")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>");
-			$("li.manual.contact[f-number='"+sanitizedAddress+"'] input").trigger('click');
-			$("li.manual.contact[f-number='"+sanitizedAddress+"'] input").attr('checked','checked');
-			updateRecipientCount();
-		}
-		$("#address").val("");
-		$("#address").removeClass("error");
-		$("#manual-address").find("#address-error").remove();
-		return true;
-	};
+	getRecipientCount = function() { return recipientCount };
 
 	searchForContacts = function() {
 		var search = $("#searchbox").val().toLowerCase();
@@ -206,14 +197,14 @@ recipientSelecter = (function() {
 	};
 
 	return {
-		addAddressHandler:addAddressHandler,
-		updateRecipientCount:updateRecipientCount,
 		searchForContacts:searchForContacts,
 		selectMembers:selectMembers,
 		setContact:setContact,
 		validateAddressEntry:validateAddressEntry,
 		validateImmediate:validateImmediate,
-		validateDeferred:validateDeferred
+		validateDeferred:validateDeferred,
+		fetchRecipientCount:fetchRecipientCount,
+		getRecipientCount:getRecipientCount
 	};
 }());
 
