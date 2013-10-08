@@ -151,7 +151,7 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
-				eq("read", false)
+				eq('rd', false)
 				if(owner == null)
 					isNull("messageOwner")
 				else
@@ -163,7 +163,7 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
-				eq("read", false)
+				eq('rd', false)
 			}
 		}
 
