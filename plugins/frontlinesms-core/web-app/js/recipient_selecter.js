@@ -133,36 +133,8 @@ recipientSelecter = (function() {
 
 	/** Validate that at least one contact or mobile number is selected NOW! */
 	validateImmediate = function() {
-		var valid, addressListener;
 		fetchRecipientCount();
-
-		// TODO This is just a workaround for TOOLS-611, this whole js file is all over the place.
-		$("input[type=checkbox][name=addresses]").each(function() {
-			setContact(this, $(this).val());
-		});
-
-		valid = getMobileNumbersArray().length > 0;
-
-		// TODO why is there listener setup here?
-		addressListener = function() {
-// FIXME we need to pass the validator in here, otherwise we will never have access to it
-			if($('input[name=addresses]:checked').length > 0) {
-				if("undefined" !== typeof validator) {
-					validator.element($('#contacts').find("input[name=addresses]"));
-				}
-				$('#recipients-list').removeClass("error");
-			} else {
-				$('#recipients-list').addClass("error");
-				if("undefined" !== typeof validator) {
-					validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
-				}
-			}
-		};
-		if (!valid) {
-			$('input[name=addresses]').change(addressListener);
-			$('input[name=addresses]').trigger("change");
-		}
-		return valid;
+		return recipientCount > 0;
 	};
 
 	/**
