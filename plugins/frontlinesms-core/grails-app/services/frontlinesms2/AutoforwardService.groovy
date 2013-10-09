@@ -49,11 +49,11 @@ class AutoforwardService {
 
 			if (recipients) {
 				println "I got here, people."
-				newContacts = messageSendService.getContacts(recipients)
-				newContacts += messageSendService.getManualAddresses(recipients).collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
+				newContacts = recipientLookupService.getContacts(recipients)
+				newContacts += recipientLookupService.getManualAddresses(recipients).collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
 
-				messageSendService.getGroups(recipients).each { newGroups << it }
-				messageSendService.getSmartGroups(recipients).each { newSmartGroups << it }
+				recipientLookupService.getGroups(recipients).each { newGroups << it }
+				recipientLookupService.getSmartGroups(recipients).each { newSmartGroups << it }
 			}
 
 			(oldContacts - newContacts?:[]).each { autoforward.removeFromContacts(it) }

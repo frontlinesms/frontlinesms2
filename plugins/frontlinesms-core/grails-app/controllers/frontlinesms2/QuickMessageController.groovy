@@ -3,7 +3,7 @@ package frontlinesms2
 import grails.converters.JSON
 
 class QuickMessageController extends ControllerUtils {
-	def messageSendService
+	def recipientLookupService
 	def create() {
 		if( params.recipients?.contains(',')) {
 			def recipientList = []
@@ -40,7 +40,7 @@ class QuickMessageController extends ControllerUtils {
 	def recipientCount() {
 		println "Params.recipients: ${params["recipients"]}"
 		def recipients = [params.recipients].flatten()
-		def addresses = messageSendService.getAddressesFromRecipientList(recipients)
+		def addresses = recipientLookupService.getAddressesFromRecipientList(recipients)
 		render([recipientCount: addresses.size()] as JSON)
 	}
 

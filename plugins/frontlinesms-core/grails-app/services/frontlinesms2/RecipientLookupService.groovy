@@ -76,5 +76,46 @@ class RecipientLookupService {
 		SmartGroup.findAllByNameIlikeAndIdNotInList(query, alreadySelected, [max:MAX_PER_SECTION]).collect {
 			[value: "smartgroup-${it.id}", text: it.name] }
 	}
+
+	def stripPrefix = { it.tokenize('-')[1] }
+
+	def getContacts = { recipients ->
+		recipients.findAll { it.startsWith('contact') }.collect { Contact.get(stripPrefix(it)) }.findAll { it!=null }
+	}
+
+	def getGroups = { recipients ->
+		recipients.findAll { it.startsWith('group') }.collect { Group.get(stripPrefix(it)) }.flatten()
+	}
+
+	def getSmartGroups = { recipients ->
+		recipients.findAll { it.startsWith('smartgroup') }.collect { SmartGroup.get(stripPrefix(it)) }.flatten()
+	}
+
+	def getManualAddresses = { recipients ->
+		recipients.findAll { it.startsWith('address') }.collect { stripPrefix(it) }
+	}
+
+	def getAddressesFromRecipientList(rawRecipients) {
+		def recipients = [rawRecipients].flatten()
+		def addresses = []
+		def contactList = []
+		def groupAddressList = []
+		def smartGroupAddressList = []
+		def manualAddressList = []
+
+		contactList = getContacts(recipients)*.mobile.flatten() - null
+		groupAddressList = getGroups(recipients)*.addresses.flatten() - null
+		smartGroupAddressList = getSmartGroups(recipients)*.addresses.flatten() - null
+		manualAddressList = getManualAddresses(recipients).flatten()
+
+		println "contactList: $contactList"
+		println "groupAddressList: $groupAddressList"
+		println "smartGroupAddressList: $smartGroupAddressList"
+		println "manualAddressList: $manualAddressList"
+
+		addresses = contactList + groupAddressList + smartGroupAddressList + manualAddressList
+		println "Addresses: $addresses"
+		addresses.flatten().unique()
+	}
 }
 
