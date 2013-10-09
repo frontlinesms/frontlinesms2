@@ -24,10 +24,12 @@ class MessageSendService {
 	}
 	
 	def createOutgoingMessage(params) {
+		print "Outgoing params: $params"
 		def message = new Fmessage(text:(params.messageText), inbound:false)
 		def addresses = []
 		if (params.recipients) {
 			addresses = getAddressesFromRecipientList(params.recipients)
+			println "addresses: $addresses"
 		} else {
 			addresses = [params.addresses].flatten() - null
 			addresses += getAddressesForContacts(params.contacts)
@@ -66,25 +68,36 @@ class MessageSendService {
 		}
 	}
 
-	def getAddressesFromRecipientList(recipients) {
+	def stripPrefix = { it.tokenize('-')[1] }
+
+	def getContacts = { recipients ->
+		recipients.findAll { it.startsWith('contact') }.collect { Contact.get(stripPrefix(it)) }.findAll { it!=null }
+	}
+
+	def getGroups = { recipients ->
+		recipients.findAll { it.startsWith('group') }.collect { Group.get(stripPrefix(it)) }.flatten()
+	}
+
+	def getSmartGroups = { recipients ->
+		recipients.findAll { it.startsWith('smartgroup') }.collect { SmartGroup.get(stripPrefix(it)) }.flatten()
+	}
+
+	def getManualAddresses = { recipients ->
+		recipients.findAll { it.startsWith('address') }.collect { stripPrefix(it) }
+	}
+
+	def getAddressesFromRecipientList(rawRecipients) {
+		def recipients = [rawRecipients].flatten()
 		def addresses = []
-		def contactList
-		def groupAddressList
-		def smartGroupAddressList
-		def manualAddressList
-		def stripPrefix = { it.tokenize('-')[1] }
+		def contactList = []
+		def groupAddressList = []
+		def smartGroupAddressList = []
+		def manualAddressList = []
 
-		contactList = recipients.findAll { it.startsWith('contact') }.collect { Contact.get(stripPrefix(it))?.mobile }.findAll { it!=null }
-
-		groupAddressList = recipients.findAll { it.startsWith('group') }
-			.collect { Group.get(stripPrefix(it)).addresses }
-			.flatten()
-
-		smartGroupAddressList = recipients.findAll { it.startsWith('smartgroup') }
-			.collect { SmartGroup.get(stripPrefix(it)).addresses }
-			.flatten()
-
-		manualAddressList = recipients.findAll { it.startsWith('address') }.collect { stripPrefix(it) }
+		contactList = getContacts(recipients)*.mobile.flatten() - null
+		groupAddressList = getGroups(recipients)*.addresses.flatten() - null
+		smartGroupAddressList = getSmartGroups(recipients)*.addresses.flatten() - null
+		manualAddressList = getManualAddresses(recipients).flatten()
 
 		println "contactList: $contactList"
 		println "groupAddressList: $groupAddressList"
@@ -92,8 +105,8 @@ class MessageSendService {
 		println "manualAddressList: $manualAddressList"
 
 		addresses = contactList + groupAddressList + smartGroupAddressList + manualAddressList
-		println "addresses: $addresses"
-		addresses.unique()
+		println "Addresses: $addresses"
+		addresses.flatten().unique()
 	}
 }
 
