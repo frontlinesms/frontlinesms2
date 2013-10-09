@@ -22,10 +22,24 @@ class ActivityController extends ControllerUtils {
 		withActivity { activityInstance ->
 			// TODO groups should only be provided if this activity specifically needs them
 			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
+			def groups = activityInstance.groups?:null
+			def smartGroups = activityInstance.smartGroups?:null
+			def contacts = activityInstance.contacts.findAll { it.name != '' }?:null
+			def addresses = activityInstance.contacts.findAll { it.name == '' }?:null
 			def activityType = activityInstance.shortName
-			render view:"../$activityType/create", model:[contactList: Contact.list(),
+
+			def modelToRender = [
+				contactList: Contact.list(),
 				groupList:groupList,
-				activityInstanceToEdit: activityInstance, activityType: activityType]
+				activityInstanceToEdit: activityInstance,
+				activityType: activityType,
+				addresses: addresses,
+				contacts: contacts,
+				groups: groups,
+				smartGroups: smartGroups
+			]
+
+			render view:"../$activityType/create", model: modelToRender
 		}
 	}
 
