@@ -20,7 +20,11 @@
 
 	<g:if env="test">
 		function i18n(key) {
-			return key;
+			var translated = key
+			if (arguments.length > 1) {
+				translated = translated + '[' + Array.prototype.slice.call(arguments, 1) + ']';
+			}
+			return translated;
 		}
 	</g:if>
 	<g:else>
