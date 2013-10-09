@@ -101,7 +101,7 @@ recipientSelecter = (function() {
 			type: "POST",
 			async: false,
 			data: postData,
-			url: url_root + "quickMessage/recipientCount",
+			url: url_root + "search/recipientCount",
 			success: updateRecipientCount
 		});
 	};
