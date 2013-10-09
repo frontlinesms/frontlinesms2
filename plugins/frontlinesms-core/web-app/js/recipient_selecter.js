@@ -142,10 +142,10 @@ recipientSelecter = (function() {
 	 * is selected, but allow empty groups.
 	 */
 	validateDeferred = function() {
-		return $("#groups li.group input[type='checkbox']:checked").size() || validateImmediate();
+		return $("[name=recipients]").size() || validateImmediate();
 	};
 
-	getRecipientCount = function() { return recipientCount };
+	getRecipientCount = function() { fetchRecipientCount(); return recipientCount };
 
 	searchForContacts = function() {
 		var search = $("#searchbox").val().toLowerCase();
