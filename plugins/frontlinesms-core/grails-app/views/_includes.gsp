@@ -18,7 +18,14 @@
 
 	new Image().src = "${r.resource(dir:'images', file:'status/red.png')}";
 
-	<fsms:render template="/i18n"/>
+	<g:if env="test">
+		function i18n(key) {
+			return key;
+		}
+	</g:if>
+	<g:else>
+		<fsms:render template="/i18n"/>
+	</g:else>
 
 	<g:if env="test">
 		app_info.init(3000);
