@@ -37,31 +37,31 @@ class AutoforwardService {
 	}
 
 	def editContacts(autoforward, params){
+		def recipients = params.recipients
 		try{
-			if(params.addresses){
-				def newContacts = [params.addresses].flatten().collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
-				def oldContacts = autoforward.contacts?:[]
-				(oldContacts - newContacts?:[]).each { autoforward.removeFromContacts(it) }
-				(newContacts?:[] - oldContacts).each { autoforward.addToContacts(it) }
-			}
+			def oldContacts = autoforward.contacts?:[]
+			def oldGroups = autoforward.groups?:[]
+			def oldSmartGroups = autoforward.smartGroups?:[]
 
 			def newGroups = []
 			def newSmartGroups = []
+			def newContacts = []
 
-			if(params.groups){
-				([params.groups].flatten() - null).each{
-					if(it?.startsWith('group')){
-						newGroups << Group.get(it.substring(it.indexOf('-')+1))
-					} else if (it?.startsWith('smartgroup')) {
-						newSmartGroups << SmartGroup.get(it.substring(it.indexOf('-')+1))
-					}
-				}
+			if (recipients) {
+				println "I got here, people."
+				newContacts = messageSendService.getContacts(recipients)
+				newContacts += messageSendService.getManualAddresses(recipients).collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
+
+				messageSendService.getGroups(recipients).each { newGroups << it }
+				messageSendService.getSmartGroups(recipients).each { newSmartGroups << it }
 			}
 
-			def oldGroups = autoforward.groups?:[]
+			(oldContacts - newContacts?:[]).each { autoforward.removeFromContacts(it) }
+			(newContacts?:[] - oldContacts).each { autoforward.addToContacts(it) }
+
 			(oldGroups - newGroups?:[]).each{ autoforward.removeFromGroups(it) }
 			(newGroups?:[] - oldGroups).each{ autoforward.addToGroups(it) }
-			def oldSmartGroups = autoforward.smartGroups?:[]
+
 			(oldSmartGroups - newSmartGroups?:[]).each{ autoforward.removeFromSmartGroups(it) }
 			(newSmartGroups?:[] - oldSmartGroups).each{ autoforward.addToSmartGroups(it) }
 
