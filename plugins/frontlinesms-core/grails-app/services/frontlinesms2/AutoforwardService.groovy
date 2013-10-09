@@ -5,6 +5,7 @@ import groovy.sql.Sql
 
 // TODO fix indentation of this class
 class AutoforwardService {
+	def recipientLookupService
 	def messageSendService
 	def dataSource
 
