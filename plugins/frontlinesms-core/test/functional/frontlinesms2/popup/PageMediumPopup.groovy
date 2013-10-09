@@ -263,8 +263,8 @@ class SmartGroupCreateDialog extends MediumPopup {
 		ruleMatchText { rules.find('.rule-match-text')*.text() }
 		removeRuleButtons(required:false) { $('tr.smart-group-criteria a.remove-command') }
 		smartGroupNameField { $('input', type:'text', name:'smartgroupname') }
-		addRuleButton { $('.btn', text:"Add another rule") }
-		editButton { $('button', text:'Update')}
+		addRuleButton { $('.btn', text:"smartgroup.add.anotherrule") }
+		editButton { $('button', text:'action.update')}
 		flashMessage(required:false) { $('div.flash') }
 	}
 }
