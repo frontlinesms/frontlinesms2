@@ -16,7 +16,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to PageConnection
 		then:
 			btnNewConnection.displayed
-			noContent?.text()?.contains('You have no connections configured.')
+			noContent?.text()?.contains('connection.list.none')
 	}
 
 	def 'There is a Failed label shown for failed connection'() {
@@ -53,7 +53,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			connectionList.btnDelete(0).click()
 		then:
-			waitFor { notifications.flashMessageText.contains("Connection test email connection was deleted.") }
+			waitFor { notifications.flashMessageText.contains("connection.deleted[test email connection]") }
 			noContent.displayed
 			noContent?.text()?.contains('You have no connections configured.')
 	}
@@ -97,7 +97,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			confirmName.text() == "name"
 			confirmPort.text() == "COM2"
-			confirmType.text() == "Phone/Modem"
+			confirmType.text() == "smslib.label"
 		when:
 			submit.click()
 		then:
@@ -134,35 +134,35 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionForm.smssyncsecret = 'topcat'
 			next.click()
 		then:
-			confirmSmssyncSecret.text() == '****'
+			confirmSmssyncSecret.text() == 'topcat'
 	}
 
 	def 'Smslib connection has a description under its name'() {
 		when:
 			launchCreateWizard()
 		then:
-			basicInfo("smslib") == "Connect to USB, serial and bluetooth modems or phones"
+			basicInfo("smslib") == "smslib.description"
 	}
 
 	def 'Smssync connection has a description under its name'() {
 		when:
 			launchCreateWizard()
 		then:
-			basicInfo("smssync") == "Use an Android phone with the Smssync app installed to send and receive SMS with FrontlineSMS"
+			basicInfo("smssync") == "smssync.description"
 	}
 
 	def 'Clickatell connection has a description under its name'() {
 		when:
 			launchCreateWizard()
 		then:
-			basicInfo("clickatell") == "Send and receive messages through a Clickatell account"
+			basicInfo("clickatell") == "clickatell.description"
 	}
 
 	def 'Intellisms connection has a description under its name'() {
 		when:
 			launchCreateWizard()
 		then:
-			basicInfo("intellisms") == "Send and receive messages through an Intellisms account"
+			basicInfo("intellisms") == "intellisms.description"
 	}
 
 	def 'can set up a new Smssync connection with no secret'() {
@@ -172,7 +172,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			next.click()
 		then:
 			confirmSmssyncName.text() == 'Henry\'s SMSSync Connection'
-			confirmSmssyncSecret.text() == 'None'
+			confirmSmssyncSecret.text() == ''
 		when:
 			submit.click()
 		then:
@@ -192,7 +192,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			confirmIntelliSmsConnectionName.text() == "New IntelliSMS Connection"
 			confirmIntelliSmsUserName.text() == "test"
-			confirmIntelliSmsType.text() == "IntelliSms Account"
+			confirmIntelliSmsType.text() == "intellisms.label"
 		when:
 			submit.click()
 		then:
@@ -212,7 +212,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { at TestMessagePopup }
 			addresses == ''
-			message == "Congratulations from FrontlineSMS \\o/ you have successfully configured test email connection to send SMS \\o/"
+			message == "connection.test.message"
 	}
 
 	def 'failed connection should show an edit button in the flash message'() {
@@ -230,7 +230,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		given: 'connection exists, is started and failed message is displayed'
 			createBadConnection()
 			startBadConnection()
-			waitFor('very slow') { js.exec('window.location.reload()') || true; notifications.systemNotificationText.contains('Failed to create route on Bad Port') }
+			waitFor('very slow') { js.exec('window.location.reload()') || true; notifications.systemNotificationText.contains('connection.route.failNotification') }
 		when: 'edit button is clicked'
 			connectionFailedFlashMessageEditButton.click()
 		then: 'modification dialog is displayed'
