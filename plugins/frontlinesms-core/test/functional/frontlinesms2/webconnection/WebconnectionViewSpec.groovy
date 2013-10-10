@@ -143,7 +143,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			multipleMessageDetails.checkedMessageCount == "2 messages selected"
+			multipleMessageDetails.checkedMessageCount == 2
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {

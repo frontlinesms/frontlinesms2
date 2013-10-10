@@ -5,14 +5,8 @@ import frontlinesms2.popup.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.page.PageMessageActivity
 import java.util.regex.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class PollViewSpec extends PollBaseSpec {
-	
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
-	
 	def 'existing polls appear in activities section of messages'() {
 		given:
 			createTestPolls()

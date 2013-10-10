@@ -6,6 +6,8 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
+import static frontlinesms.grails.test.EchoMessageSource.parseDate
+
 class PageMessageTrash extends PageMessage {
 	static url = 'message/trash'
 	static at = {
@@ -13,21 +15,15 @@ class PageMessageTrash extends PageMessage {
 	}
 
 	String convertToPath(Object[] args) {
-		def restOfPath = ""
-
-		if (args.equals(null) || args.length == 0)
-			return ""
-	    else
-		    restOfPath += "/show/"+args[0]	       
-	    	return restOfPath
+		args? "/show/"+args[0]: ''
 	}
 
 	static content = {
 		trashMoreActions { $("ul.buttons li.trash #trash-actions") }
 		senderDetails { $('div#message-info p#message-detail-sender').text() }
-		date { 
-			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
-				.parse($('div#message-info p#message-detail-date').text())
-			 }
+		date {
+			parseDate($('div#message-info p#message-detail-date').text())
+		}
 	}
 }
+

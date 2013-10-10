@@ -89,13 +89,12 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			messageList.toggleSelect(0)
 		then:
-			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
+			waitFor { multipleMessageDetails.checkedMessageCount == 2 }
 		when:
 			messageList.toggleSelect(1)
-			def message = Fmessage.findBySrc('Alice')
 		then:
-			waitFor { singleMessageDetails.sender == message.src }
-			singleMessageDetails.text == message.text
+			waitFor { singleMessageDetails.sender == 'Alice' }
+			singleMessageDetails.text == remote { Fmessage.findBySrc('Alice').text }
 	}
 
 	def "should hide the messages when poll detail chart is shown"() {

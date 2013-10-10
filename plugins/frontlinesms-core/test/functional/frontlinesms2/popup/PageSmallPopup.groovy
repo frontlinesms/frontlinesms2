@@ -84,7 +84,7 @@ class CreateFolderPopup extends SmallPopup {
 
 class RenameFolderDialog extends SmallPopup {
 	static at = {
-		popupTitle == 'smallpopup.folder.rename.title'
+		popupTitle == 'smallpopup.fmessage.rename.title[folder]' // FIXME obviously this key is silly
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
@@ -114,7 +114,7 @@ class RenameSubscriptionDialog extends SmallPopup {
 
 class DeleteFolderPopup extends SmallPopup {
 	static at = {
-		popupTitle == 'smallpopup.folder.delete.title'
+		popupTitle == 'smallpopup.fmessage.delete.title[folder]' // FIXME obviously this key is silly
 	}
 	static content = {
 		text { $('#modalBox #confirmDelete h2') }
@@ -123,7 +123,7 @@ class DeleteFolderPopup extends SmallPopup {
 
 class EmptyTrashPopup extends SmallPopup {
 	static at = {
-		popupTitle.contains("empty trash?")
+		popupTitle == 'smallpopup.empty.trash.prompt'
 	}
 	static content = {
 		text { $('#confirmEmptyTrash p') }
