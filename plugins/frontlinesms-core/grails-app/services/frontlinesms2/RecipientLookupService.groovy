@@ -80,19 +80,19 @@ class RecipientLookupService {
 	def stripPrefix = { it.tokenize('-')[1] }
 
 	def getContacts = { recipients ->
-		recipients.findAll { it.startsWith('contact') }.collect { Contact.get(stripPrefix(it)) }.findAll { it!=null }
+		[recipients].flatten().findAll { it.startsWith('contact') }.collect { Contact.get(stripPrefix(it)) }.findAll { it!=null }
 	}
 
 	def getGroups = { recipients ->
-		recipients.findAll { it.startsWith('group') }.collect { Group.get(stripPrefix(it)) }.flatten()
+		[recipients].flatten().findAll { it.startsWith('group') }.collect { Group.get(stripPrefix(it)) }.flatten()
 	}
 
 	def getSmartGroups = { recipients ->
-		recipients.findAll { it.startsWith('smartgroup') }.collect { SmartGroup.get(stripPrefix(it)) }.flatten()
+		[recipients].flatten().findAll { it.startsWith('smartgroup') }.collect { SmartGroup.get(stripPrefix(it)) }.flatten()
 	}
 
 	def getManualAddresses = { recipients ->
-		recipients.findAll { it.startsWith('address') }.collect { stripPrefix(it) }
+		[recipients].flatten().findAll { it.startsWith('address') }.collect { stripPrefix(it) }
 	}
 
 	def getAddressesFromRecipientList(rawRecipients) {
