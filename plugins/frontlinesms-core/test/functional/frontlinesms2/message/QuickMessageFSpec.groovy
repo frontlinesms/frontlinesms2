@@ -163,12 +163,12 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { compose.wordCount == "Characters remaining 160 (1 SMS message(s))" }
+			waitFor { compose.wordCount == 'message.character.count[160,1]' }
 		when:
 			compose.textArea << "h"
 			compose.textArea.jquery.trigger('keyup')
 		then:
-			waitFor { compose.wordCount == "Characters remaining 159 (1 SMS message(s))" }
+			waitFor { compose.wordCount == 'message.character.count[159,1]' }
 	}
 	
 	def "should not deselect group when a non-member contact is unchecked"() {
@@ -208,7 +208,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { compose.wordCount == "Characters remaining 160 (1 SMS message(s))" }
+			waitFor { compose.wordCount == 'message.character.count[160,1]' }
 		when:
 			compose.textArea << "Hello, "
 			compose.textArea.jquery.trigger('keyup')

@@ -50,7 +50,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			messageList.toggleSelect(0)
 			messageList.toggleSelect(1)
 		then:
-			waitFor { multipleMessageDetails.checkedMessageCount == '2 messages selected' }
+			waitFor { multipleMessageDetails.checkedMessageCount == 2 }
 			multipleMessageDetails.deleteAll.click()
 		then:
 			waitFor { notifications.flashMessageText.contains("trash") }

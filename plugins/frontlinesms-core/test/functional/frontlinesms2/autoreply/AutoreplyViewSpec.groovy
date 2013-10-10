@@ -24,7 +24,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			header[item] == value
 		where:
 			item               | value
-			'title'            | "fruits autoreply"
+			'title'            | "autoreply.title[fruits]"
 			'autoreplyMessage' | 'Hello, this is an autoreply message'
 	}
 
@@ -106,7 +106,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
+			waitFor { multipleMessageDetails.text?.toLowerCase() == "many.selected[2,message]" }
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {

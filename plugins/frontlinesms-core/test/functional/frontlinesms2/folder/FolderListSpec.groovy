@@ -1,14 +1,12 @@
 package frontlinesms2.folder
 
 import frontlinesms2.*
-import java.text.SimpleDateFormat
 import frontlinesms2.message.*
 import frontlinesms2.popup.*
 import spock.lang.*
+import static frontlinesms.grails.test.EchoMessageSource.formatDate
 
 class FolderListSpec extends FolderBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
-
 	def 'folder message list is displayed'() {
 		given:
 			createTestFolders()
@@ -113,7 +111,7 @@ class FolderListSpec extends FolderBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
+			waitFor { multipleMessageDetails.checkedMessageCount == 2 }
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -146,7 +144,7 @@ class FolderListSpec extends FolderBaseSpec {
 			ok.jquery.trigger("click")
 			to PageMessageFolder
 		then:
-			folderLinks*.text().every { it.startsWith('New Work') || it.startsWith('Projects') || it == "Create new folder" }
+			folderLinks*.text().every { it.startsWith('New Work') || it.startsWith('Projects') || it == 'folder.create' }
 	}
 
 	def 'Errors are displayed when creating a folder with an already existing folders name'() {
@@ -163,7 +161,7 @@ class FolderListSpec extends FolderBaseSpec {
 				ok.jquery.trigger("click")
 			then:
 				at CreateFolderPopup
-				waitFor { errorPanel.text()?.toLowerCase() == "used folder name" }
+				waitFor { errorPanel.text() == 'folder.name.validator.error' }
 	}
 
 	def "display error when renaming a folder with a blank name"() {
@@ -171,28 +169,28 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, remote { Folder.findByName('Work').id } 
-			folderMoreActions.value("rename")
+			to PageMessageFolder, 'Work'
+			folderMoreActions.value('rename')
 			waitFor { at RenameFolderDialog }
-			folderName.equals("Work")
-			folderName.value("")
-			ok.jquery.trigger("click")
+			folderName.equals('Work')
+			folderName.value('')
+			ok.jquery.trigger('click')
 		then:
-			waitFor { errorPanel.text()?.toLowerCase() == "folder name cannot be blank" }
+			waitFor { errorPanel.text() == 'folder.name.blank.error' }
 	}
 
 	def "can delete a folder"() {
 		setup:
 			createTestFolders()
 		when:
-			to PageMessageFolder, remote { Folder.findByName("Work").id }
-			folderMoreActions.value("delete")
+			to PageMessageFolder, 'Work'
+			folderMoreActions.value('delete')
 			waitFor { at DeleteFolderPopup }
-			popupTitle.equals("delete folder")
+			popupTitle.equals('delete folder')
 		then:
 			ok.jquery.trigger("click")
 			at PageMessageFolder
-			waitFor { bodyMenu.selected == "inbox" }
+			waitFor { bodyMenu.selected == 'fmessage.section.inbox' }
 			!bodyMenu.folderLinks*.text().containsAll('Work')
 	}
 	
@@ -205,9 +203,9 @@ class FolderListSpec extends FolderBaseSpec {
 		then:
 			messageList.messageSource(0) == 'Work'
 			messageList.messageText(0) == '2 message(s)'
-			DATE_FORMAT.format(messageList.messageDate(0)) == DATE_FORMAT.format(remote { Trash.findByObjectId(folderId).dateCreated })
-			senderDetails == 'Work folder'
-			DATE_FORMAT.format(date) == DATE_FORMAT.format(remote { Trash.findByObjectId(folderId).dateCreated })
+			formatDate(messageList.messageDate(0)) == formatDate(remote { Trash.findByObjectId(folderId).dateCreated })
+			senderDetails == 'folder.title[Work]'
+			formatDate(date) == formatDate(remote { Trash.findByObjectId(folderId).dateCreated })
 	}
 
 	def "clicking on empty trash permanently deletes a folder"() {
@@ -219,7 +217,7 @@ class FolderListSpec extends FolderBaseSpec {
 			trashMoreActions.value("empty-trash")
 			waitFor { at EmptyTrashPopup }
 		then:
-			popupTitle.equals("empty trash?")
+			popupTitle.equals('smallpopup.empty.trash.prompt')
 		when:
 			ok.jquery.trigger("click")
 			waitFor { title.toLowerCase().contains("inbox") }

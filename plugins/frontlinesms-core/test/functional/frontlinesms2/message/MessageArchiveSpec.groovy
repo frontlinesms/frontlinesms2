@@ -13,7 +13,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageArchiveInbox
 		then:
-			waitFor() { messageList.noContent.text() == "No messages here, yet." }
+			singleMessageDetails.noneSelected
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)
@@ -38,7 +38,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageArchiveSent
 		then:
-			waitFor() { messageList.noContent.text() == "No messages here, yet." }
+			waitFor() { messageList.noContent.text() == 'fmessage.messages.none' }
 		when:
 			to PageMessageSent
 			messageList.toggleSelect(0)
@@ -50,7 +50,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageMessageSent
 		then:
-			waitFor() { messageList.noContent.text() == "No messages here, yet." }
+			waitFor() { messageList.noContent.text() == 'fmessage.messages.none' }
 	}
 
 	 def 'should not be able to archive activity messages'() {

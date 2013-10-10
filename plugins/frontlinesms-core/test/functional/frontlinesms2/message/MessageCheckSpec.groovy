@@ -25,7 +25,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			messageList.toggleSelect(0)
 			messageList.toggleSelect(1)
 		then:
-			waitFor('veryslow') { multipleMessageDetails.checkedMessageCount == "2 messages selected"}
+			waitFor('veryslow') { multipleMessageDetails.checkedMessageCount == 2 }
 	}
 
 	def "checked message details are displayed when message is checked"() {
@@ -162,15 +162,15 @@ class MessageCheckSpec extends MessageBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor('veryslow') { multipleMessageDetails.displayed }
-			multipleMessageDetails.checkedMessageCount == '2 messages selected'
+			multipleMessageDetails.checkedMessageCount == 2
 		when:
 			messageList.toggleSelect(2)
 		then:
-			waitFor { multipleMessageDetails.checkedMessageCount == '3 messages selected' }
+			waitFor { multipleMessageDetails.checkedMessageCount == 3 }
 		when:
 			messageList.toggleSelect(2)
 		then:
-			waitFor { multipleMessageDetails.checkedMessageCount == '2 messages selected' }
+			waitFor { multipleMessageDetails.checkedMessageCount == 2 }
 	}
 
 	def "can archive multiple messages"() {

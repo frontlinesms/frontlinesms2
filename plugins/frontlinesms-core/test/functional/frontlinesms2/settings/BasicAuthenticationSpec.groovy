@@ -16,6 +16,7 @@ class BasicAuthenticationSpec extends grails.plugin.geb.GebSpec {
 			basicAuthentication.username == 'test'
 			basicAuthentication.password == '' // password should not be passed in HTML, even if set
 		cleanup:
+			at PageGeneralSettings
 			basicAuthentication.enabled = false
 			basicAuthentication.save.click()
 	}

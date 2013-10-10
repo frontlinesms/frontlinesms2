@@ -133,7 +133,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 		when:
 			submit.click()
 		then:
-			waitFor('very slow'){ summary.message.text() == "The Web Connection has been saved!" }
+			waitFor('very slow') { summary.message.text() == 'webconnection.save' }
 			submit.click()
 			waitFor('very slow') { at PageMessageWebconnection }
 			header['name'] == 'trial web connection'

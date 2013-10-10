@@ -39,7 +39,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			create.click()
 		then: 'Summary tab should open'
 			waitFor { summary.displayed }
-			summary.message.contains('The autoreply has been created')
+			summary.message.contains('autoreply.info')
 	}
 
 	def "Can edit an existing autoreply"() {
@@ -48,7 +48,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 		when: 'go to autoreply message page'
 			to PageMessageAutoreply, 'Fruits'
 		then: 'autoreply message page should be open'
-			header.title == 'fruits autoreply'
+			header.title == 'autoreply.title[fruits]'
 		when: 'edit button is clicked'
 			header.moreActions.value("edit").click()
 		then: 'autoreply wizard should open'
@@ -70,7 +70,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			create.click()
 		then: 'Summary tab should open'
 			waitFor { summary.displayed }
-			summary.message.contains('The autoreply has been created')
+			summary.message.contains('autoreply.info')
 	}
 
 	def "keyword must be provided in autoreply"() {
@@ -79,8 +79,8 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 		when: 'Keyword is entered'
 			next.click()
 		then: 'Error message is displayed'
-			errorText == "please fill in all required fields"
-			validationErrorText == "This field is required."
+			errorText == "activity.validation.prompt"
+			validationErrorText == "jquery.validation.required"
 	}
 
 	def "keyword must have valid commas seperated values if provided"() {
@@ -90,8 +90,8 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			keyword.keywordText = 'Hello Goodbye'
 			next.click()
 		then: 'Error message is displayed'
-			errorText == "please fill in all required fields"
-			validationErrorText == "Keyword should not have spaces"
+			errorText == "activity.validation.prompt"
+			validationErrorText == "validation.nospaces.error"
 	}
 
 	def "keywords must be unique if provided"() {
@@ -101,8 +101,8 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			keyword.keywordText = 'Hello,Hello'
 			next.click()
 		then: 'Error message is displayed'
-			errorText == "please fill in all required fields"
-			validationErrorText == "Keywords must be unique"
+			errorText == "activity.validation.prompt"
+			validationErrorText == "activity.generic.sort.validation.unique.error"
 	}
 
 	def "keywords must not be used in another Activity"() {
@@ -122,7 +122,7 @@ class AutoreplyCedSpec extends AutoreplyBaseSpec{
 			create.click()
 		then: 'Summary tab should NOT be displayed'
 			confirm.displayed
-			waitFor { errorText.contains("the keyword mango is already in use by activity 'fruits'")}
+			waitFor { errorText.contains("activity.generic.keyword.in.use[mango,'fruits'")}
 	}
 
 	def launchAutoreplyPopup(String tab = ''){

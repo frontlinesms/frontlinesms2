@@ -43,7 +43,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			create.click()
 		then: 'Summary should display'
 			waitFor { summary.displayed }
-			summary.message.jquery.html().contains('The autoforward has been created')
+			summary.message.jquery.html().contains('autoforward.info')
 	}
 
 	def "Can edit an existing autoforward"() {
@@ -52,7 +52,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		when: 'go to autoforward message page'
 			to PageMessageAutoforward, 'News'
 		then: 'autoforward message page should be open'
-			header.title == 'news autoforward'
+			header.title == 'autoforward.title[news]'
 		when: 'edit button is clicked'
 			header.moreActions.value("edit").click()
 		then: 'autoforward wizard should open'
@@ -78,7 +78,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			create.click()
 		then: 'Summary tab should open'
 			waitFor { summary.displayed }
-			summary.message.jquery.html().contains('The autoforward has been created')
+			summary.message.jquery.html().contains('autoforward.info')
 	}
 
 	def "keyword must be provided in autoforward"() {
@@ -87,8 +87,8 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		when: 'Keyword is entered'
 			next.click()
 		then: 'Error message is displayed'
-			errorText == "please fill in all required fields"
-			validationErrorText == "This field is required."
+			errorText == "activity.validation.prompt"
+			validationErrorText == "jquery.validation.required"
 	}
 
 	def "keyword must have valid commas seperated values if provided"() {
@@ -98,8 +98,8 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			keyword.keywordText = 'Hello Goodbye'
 			next.click()
 		then: 'Error message is displayed'
-			errorText == "please fill in all required fields"
-			validationErrorText == "Keyword should not have spaces"
+			errorText == "activity.validation.prompt"
+			validationErrorText == "validation.nospaces.error"
 	}
 
 	def "keywords must be unique if provided"() {
@@ -109,8 +109,8 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			keyword.keywordText = 'Hello,Hello'
 			next.click()
 		then: 'Error message is displayed'
-			errorText == "please fill in all required fields"
-			validationErrorText == "Keywords must be unique"
+			errorText == "activity.validation.prompt"
+			validationErrorText == "activity.generic.sort.validation.unique.error"
 	}
 
 	def "keywords must not be used in another Activity"() {
@@ -133,7 +133,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			create.click()
 		then: 'Summary tab should NOT be displayed'
 			confirm.displayed
-			waitFor { errorText.contains("the keyword breaking is already in use by activity 'news'")}
+			waitFor { errorText.contains("activity.generic.keyword.in.use[breaking,'news']")}
 	}
 
 	def 'contact and groups of an autoforward should be preselected duting editing'(){
@@ -142,7 +142,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		when: 'go to autoforward message page'
 			to PageMessageAutoforward, 'News'
 		then: 'autoforward message page should be open'
-			header.title == 'news autoforward'
+			header.title == 'autoforward.title[news]'
 		when: 'edit button is clicked'
 			header.moreActions.value("edit").click()
 		then: 'autoforward wizard should open'
@@ -180,7 +180,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		then: 'Confirm tab should open'
 			confirm.displayed
 			confirm.keywordConfirm == 'HELLO'
-			confirm.groups == "None"
+			confirm.groups == "autoforward.groups.none"
 			confirm.contacts.contains('generated-contact-1')
 			confirm.contacts.contains('generated-contact-2')
 			confirm.contacts.contains('1234567890')

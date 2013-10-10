@@ -7,6 +7,8 @@ import java.util.Date
 import frontlinesms2.popup.*
 import frontlinesms2.*
 
+import static frontlinesms.grails.test.EchoMessageSource.formatDate
+
 class MessageInboxSpec extends MessageBaseSpec {
 	def 'inbox message list is displayed'() {
 		given:
@@ -161,7 +163,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, messageId
 			waitFor { singleMessageDetails.receivedOn.displayed }
 		then:
-			singleMessageDetails.receivedOn.text() == "Received on: MTN Dongle"
+			singleMessageDetails.receivedOn.text() == 'fmessage.connection.receivedon[MTN Dongle]'
 	}
 
 	def "message details should not show the name of the route if none can be found"() {
@@ -182,7 +184,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor('very slow') { multipleMessageDetails.displayed }
-			waitFor('very slow') { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
+			waitFor('very slow') { multipleMessageDetails.checkedMessageCount == 2 }
 		when:
 			messageList.toggleSelect(1)
 		then:
@@ -269,8 +271,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, remote { Fmessage.findByText('hello').id }
 			singleMessageDetails.moveTo(remote { Folder.findByName('my-folder').id })
 		then:
-			waitFor("veryslow") { messageList.noContent.text() == "No messages here, yet." }
-			bodyMenu.selected == "inbox"
+			waitFor("veryslow") { messageList.noContent.text() == 'fmessage.messages.none' }
+			bodyMenu.selected == 'fmessage.section.inbox'
 	}
 
 	def "should update message count on tab when new message is received"() {
@@ -344,12 +346,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			bodyMenu.pendingMessageCount == 2
 	}
 
-	String dateToString(Date date) {
-		new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).format(date)
-	}
-
 	boolean compareDatesIgnoreSeconds(Date a, Date b) {
-		dateToString(a) == dateToString(b)
+		formatDate(a) == formatDate(b)
 	}
 }
 

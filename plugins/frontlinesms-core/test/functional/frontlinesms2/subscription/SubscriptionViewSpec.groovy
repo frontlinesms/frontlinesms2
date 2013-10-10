@@ -24,12 +24,12 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header[item] == value
 		where:
 			item               | value
-			'title'            | "camping subscription subscription"
-			'groupMemberCount' | '2 members'
-			'group'            | 'Group: Camping'
-			'keyword'          | 'Top-level keywords: CAMPING'
-			'joinAliases'      | 'Join: JOIN,IN,START'
-			'leaveAliases'     | 'Leave: LEAVE,OUT,STOP'
+			'title'            | 'subscription.title[camping subscription]'
+			'groupMemberCount' | 'subscription.info.groupMemberCount[2]'
+			'group'            | 'subscription.info.group[Camping]'
+			'keyword'          | 'subscription.info.keyword[CAMPING]'
+			'joinAliases'      | 'subscription.info.joinKeywords[JOIN,IN,START]'
+			'leaveAliases'     | 'subscription.info.leaveKeywords[LEAVE,OUT,STOP]'
 	}
 
 	def "clicking the group link shoud redirect to the group page"() {

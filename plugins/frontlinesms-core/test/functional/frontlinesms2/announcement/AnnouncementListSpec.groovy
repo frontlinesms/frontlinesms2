@@ -4,11 +4,8 @@ import frontlinesms2.*
 import frontlinesms2.popup.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.page.PageMessageActivity
-import java.text.SimpleDateFormat
 
 class AnnouncementListSpec extends AnnouncementBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
-	
 	def 'Announcement message list is displayed'() {
 		given:
 			createTestAnnouncements()
@@ -103,7 +100,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.checkedMessageCount == "many.selected[2,message]" }
+			waitFor { multipleMessageDetails.checkedMessageCount == 2 }
 	}
 
 	def "'Reply All' button appears for multiple selected messages and works"() {
