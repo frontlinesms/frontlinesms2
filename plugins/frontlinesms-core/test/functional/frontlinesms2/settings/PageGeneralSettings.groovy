@@ -17,7 +17,7 @@ class PageGeneralSettings extends PageSettings {
 		databaseBackup { module DatabaseBackup }
 	}
 	static at = {
-		title.contains('Settings') || title.contains('Mazingira')
+		title.contains('settings.general.header')
 	}
 }
 

@@ -55,7 +55,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { notifications.flashMessageText.contains("connection.deleted[test email connection]") }
 			noContent.displayed
-			noContent?.text()?.contains('You have no connections configured.')
+			noContent?.text()?.contains('connection.list.none')
 	}
 
 	def 'Send test message button for particular connection displayed on a successfully created route'() {
@@ -212,7 +212,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { at TestMessagePopup }
 			addresses == ''
-			message == "connection.test.message"
+			message == "connection.test.message[test email connection]"
 	}
 
 	def 'failed connection should show an edit button in the flash message'() {
@@ -221,7 +221,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when: 'bad connection is started'
 			startBadConnection()
 		then: 'connection failed message is displayed'
-			waitFor('very slow') { js.exec('window.location.reload()') || true; notifications.systemNotificationText.contains('Failed to create route on Bad Port') }
+			waitFor('very slow') { js.exec('window.location.reload()') || true; notifications.systemNotificationText == "connection.route.failNotification[12,Bad Port,connection.error.java.io.ioexception[This is a bad mock port :(]]" }
 		and: 'there is an edit button available'
 			connectionFailedFlashMessageEditButton.displayed
 	}
