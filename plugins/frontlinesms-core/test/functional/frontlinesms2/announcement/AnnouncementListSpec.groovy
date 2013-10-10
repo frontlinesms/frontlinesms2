@@ -29,7 +29,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
-			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			rowContents[4] ==~ /[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}:[0-9]{2}/
 	}
 
 	def 'selected announcement is highlighted'() {
@@ -38,7 +38,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		when:
 			to PageMessageAnnouncement, 'New Office'
 		then:
-			selectedMenuItem.text() == 'New Office announcement'
+			selectedMenuItem.text() == 'announcement.title[New Office]'
 	}
 
 	def "should be able to reply for messages listed in the Announcement section"() {
@@ -103,7 +103,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
+			waitFor { multipleMessageDetails.checkedMessageCount == "many.selected[2,message]" }
 	}
 
 	def "'Reply All' button appears for multiple selected messages and works"() {
