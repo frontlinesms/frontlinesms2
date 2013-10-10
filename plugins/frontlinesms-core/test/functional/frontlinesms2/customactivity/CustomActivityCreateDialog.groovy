@@ -6,7 +6,7 @@ import frontlinesms2.popup.MediumPopup
 
 class CustomActivityCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("custom activity") || popupTitle.contains("edit")
+		popupTitle in ['default.new.label[customactivity.label]', 'default.edit.label[customactivity.label]']
 	}
 	static content = {
 		keyword { module ConfigureCustomKeywordTab }

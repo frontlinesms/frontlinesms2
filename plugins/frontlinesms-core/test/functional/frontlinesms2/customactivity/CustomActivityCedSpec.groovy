@@ -52,7 +52,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			next.click()
 		then:
 			error.displayed	
-			errorText == "please select a group"
+			errorText == 'validation.group.notnull'
 	}
 
 	def 'can add and remove steps in the confiure tab'(){

@@ -14,7 +14,7 @@
 			<fsms:menuitem selected="${contactsSection instanceof frontlinesms2.Group && contactsSection.id==g.id}" controller="group" action="show" string="${g.name}" id="${g.id}" />
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<fsms:popup  class="btn create" controller="group" action="create" popupCall="launchSmallPopup(i18n('smallpopup.group.title'), data, i18n('action.create'))">
+			<fsms:popup  class="btn create" controller="group" action="create" popupCall="launchSmallPopup(i18n('smallpopup.group.create.title'), data, i18n('action.create'))">
 				<g:message code="contact.create.group"/>
 			</fsms:popup >
 		</fsms:menuitem>

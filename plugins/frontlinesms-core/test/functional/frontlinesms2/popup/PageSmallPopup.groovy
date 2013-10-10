@@ -23,7 +23,7 @@ class DeletePopup extends SmallPopup {
 
 class CustomFieldPopup extends SmallPopup {
 	static at = {
-		popupTitle.contains("create custom field")
+		popupTitle == 'smallpopup.customfield.create.title'
 	}
 	static content = {
 		newField(required:false) { $('#modalBox #custom-field-popup #custom-field-name') }
@@ -32,7 +32,7 @@ class CustomFieldPopup extends SmallPopup {
 
 class GroupPopup extends SmallPopup {
 	static at = {
-		popupTitle.contains("group")
+		popupTitle == 'smallpopup.group.create.title'
 	}
 	static content = {
 		groupName { $('#modalBox #group-details #name') }
@@ -41,7 +41,7 @@ class GroupPopup extends SmallPopup {
 
 class RenameGroupPopup extends SmallPopup {
 	static at = {
-		popupTitle.contains("rename group")
+		popupTitle == 'smallpopup.group.rename.title'
 	}
 	static content = {
 		groupName { $('#modalBox #name') }
@@ -56,7 +56,7 @@ class RenameSmartGroupPopup extends RenameGroupPopup {
 
 class DeleteGroupPopup extends SmallPopup {
 	static at = {
-		popupTitle.contains("delete group")
+		popupTitle == 'smallpopup.group.delete.title'
 	}
 	static content = {
 		warningMessage { $('#modalBox div.dialog p').text()?.toLowerCase() }
@@ -65,7 +65,7 @@ class DeleteGroupPopup extends SmallPopup {
 
 class DeleteActivity extends SmallPopup {
 	static at = {
-		popupTitle.contains("delete")
+		popupTitle.contains('delete')
 	}
 	static content = {
 		text { $('#confirmDelete h2') }
@@ -74,7 +74,7 @@ class DeleteActivity extends SmallPopup {
 
 class CreateFolderPopup extends SmallPopup {
 	static at = {
-		popupTitle.contains("folder")
+		popupTitle == 'smallpopup.folder.create.title'
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
@@ -84,7 +84,7 @@ class CreateFolderPopup extends SmallPopup {
 
 class RenameFolderDialog extends SmallPopup {
 	static at = {
-		popupTitle.contains("rename folder")
+		popupTitle == 'smallpopup.folder.rename.title'
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
@@ -94,7 +94,7 @@ class RenameFolderDialog extends SmallPopup {
 
 class RenameActivityDialog extends SmallPopup {
 	static at = {
-		popupTitle.contains("rename")
+		popupTitle == 'smallpopup.activity.rename.title'
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
@@ -104,7 +104,7 @@ class RenameActivityDialog extends SmallPopup {
 
 class RenameSubscriptionDialog extends SmallPopup {
 	static at = {
-		popupTitle.contains("rename")
+		popupTitle == 'smallpopup.subscription.rename.title'
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
@@ -114,7 +114,7 @@ class RenameSubscriptionDialog extends SmallPopup {
 
 class DeleteFolderPopup extends SmallPopup {
 	static at = {
-		popupTitle.contains("delete folder")
+		popupTitle == 'smallpopup.folder.delete.title'
 	}
 	static content = {
 		text { $('#modalBox #confirmDelete h2') }

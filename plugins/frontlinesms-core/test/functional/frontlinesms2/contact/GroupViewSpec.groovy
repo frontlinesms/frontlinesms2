@@ -9,7 +9,7 @@ class GroupViewSpec extends GroupBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			bodyMenu.groupSubmenuLinks == ['Friends', 'Listeners', 'Create new group']
+			bodyMenu.groupSubmenuLinks == ['Friends', 'Listeners', 'contact.create.group']
 	}
 
 	def 'Group menu item is highlighted when viewing corresponding group'() {
