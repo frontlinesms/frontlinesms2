@@ -468,7 +468,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			response.choice("C").hasClass("error")
-			response.errorLabel("C").text()?.contains("A saved choice cannot")
+			response.errorLabel('C').text() == 'poll.choice.validation.error.deleting.response'
 	}
 
 	def deletePoll() {
