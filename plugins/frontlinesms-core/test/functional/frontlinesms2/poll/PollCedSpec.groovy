@@ -313,7 +313,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:	
 			bodyMenu.activityLink("Who is badder?").click()
 		then:
-			waitFor { header.title == "who is badder? poll" }
+			waitFor { header.title == 'poll.title[who is badder?]' }
 			at PageMessagePoll
 		when:
 			moreActions.value("rename").click()
