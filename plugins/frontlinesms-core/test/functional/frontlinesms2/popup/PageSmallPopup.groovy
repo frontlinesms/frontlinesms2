@@ -94,7 +94,7 @@ class RenameFolderDialog extends SmallPopup {
 
 class RenameActivityDialog extends SmallPopup {
 	static at = {
-		popupTitle.startsWith('smallpopup.activity.rename.title')
+		popupTitle.startsWith('smallpopup.fmessage.rename.title')
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
