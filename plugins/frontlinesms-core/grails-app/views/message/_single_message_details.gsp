@@ -21,7 +21,7 @@
 					<g:link class="add" elementId="add-contact" controller="contact" title="${g.message(code:'fmessage.addsender')}" action="createContact" params="[mobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"><g:message code="contact.new"/></g:link>
 				</g:if>
 			</p>
-			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.date}"/></p>
+			<p id="message-detail-date"><g:formatDate date="${messageInstance.date}"/></p>
 			<g:if test="${messageInstance.inbound && messageInstance.receivedOn}">
 				<p id="message-detail-fconnection">
 					<g:message code="fmessage.connection.receivedon" args="${[messageInstance.receivedOn?.name]}"/>
@@ -47,7 +47,7 @@
 			<p id="message-detail-sender">
 				<g:message code="${ownerInstance.shortName}.title" args="${[ownerInstance.name]}"/>
 			</p>
-			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${Trash.findByObject(ownerInstance).dateCreated}"/></p>
+			<p id="message-detail-date"><g:formatDate date="${Trash.findByObject(ownerInstance).dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.messages.size() == 1 ? g.message(code:'fmessage.count') : ownerInstance.messages.size() + " " + g.message(code:'fmessage.many')}</p></div>
 		</div>
 		<fsms:render template="/message/message_actions"/>

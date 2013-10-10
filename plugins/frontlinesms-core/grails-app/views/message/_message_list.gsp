@@ -58,7 +58,7 @@
 						<td class="message-date-cell">
 							<g:hiddenField name="message-created-date" value="${m.date}" disabled="true"/>
 							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
+								<g:formatDate date="${m.date}"/>
 							</g:link>
 						</td>
 					</tr>
