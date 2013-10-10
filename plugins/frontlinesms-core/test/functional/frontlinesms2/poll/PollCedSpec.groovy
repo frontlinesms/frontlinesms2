@@ -17,16 +17,15 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			header.title == 'football teams poll'
+			header.title == 'poll.title[football teams]'
 		when:
 			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc('Alice').id
 		then:
-			header.title == 'football teams poll'
+			header.title == 'poll.title[football teams]'
 		when:
 			to PageMessagePoll, Poll.findByName('Football Teams').id, 2
 		then:
-			header.title == 'football teams poll'
-
+			header.title == 'poll.title[football teams]'
 	}
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
@@ -292,7 +291,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:	
 			bodyMenu.activityLink("Who is badder?").click()
 		then:
-			waitFor { header.title == "who is badder? poll" }
+			waitFor { header.title == 'poll.title[who is badder?]' }
 			at PageMessagePoll
 		when:
 			moreActions.value("export").click()
@@ -324,7 +323,7 @@ class PollCedSpec extends PollBaseSpec {
 			done.click()
 		then:
 			at PageMessageInbox
-			waitFor { header.title == "rename poll poll" }
+			waitFor { header.title == 'poll.title[rename poll]' }
 	}
 
 	def "can delete a poll"() {

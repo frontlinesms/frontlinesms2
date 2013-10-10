@@ -354,7 +354,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			waitFor { searchsidebar.searchBtn.displayed }
 			messageList.messageCount() == 2
 			messageList.messageText(0) == 'experiment'
-			messageList.messageSource(0) == 'To: 3 recipients'
+			messageList.messageSource(0) == 'fmessage.to.multiple[3]'
 	}
 }
 
