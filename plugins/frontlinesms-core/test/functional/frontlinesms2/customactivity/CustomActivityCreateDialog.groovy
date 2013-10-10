@@ -6,7 +6,7 @@ import frontlinesms2.popup.MediumPopup
 
 class CustomActivityCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle in ['default.new.label[customactivity.label]', 'default.edit.label[customactivity.label]']
+		popupTitle in ['default.new.label[customactivity.label]', 'wizard.fmessage.edit.title[customactivity]', 'default.edit.label[customactivity.label]']
 	}
 	static content = {
 		keyword { module ConfigureCustomKeywordTab }

@@ -14,15 +14,14 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			to PageMessagePoll, 'Football Teams', remote { Fmessage.findBySrc('Bob').id }
 		then:
 			def actions = singleMessageDetails.moveActions.sort()
-			actions[0] == "Inbox"
-			actions[4] == "Shampoo Brands"
+			actions.containsAll(["fmessage.move.to.inbox", "Shampoo Brands"])
 			!actions.contains("Football Teams")
 		when:
 			to PageMessageInbox, remote { Fmessage.findBySrc("Bob").id }
 			def inboxActions = singleMessageDetails.moveActions
 		then:
 			inboxActions.size() >= 5
-			inboxActions.every {it != "Inbox"}
+			inboxActions.every {it != "fmessage.move.to.inbox"}
 	}
 
 	def "move to inbox option should be displayed for folder messages and should work"() {
@@ -110,9 +109,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			waitFor { notifications.flashMessageText }
 		when:
-			bodyMenu.sectionLink("Inbox").click()
+			bodyMenu.sectionLink("inbox").click()
 		then:
-			waitFor { title == "Inbox" }
+			waitFor { title == "message.header.inbox" }
 			messageList.messageCount() == 2
 	}
 }
