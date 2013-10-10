@@ -33,10 +33,10 @@ class BodyMenu extends geb.Module {
 		newFolder { $('#body-menu li.folders a.btn.create') }
 		folderLinks { $('ul li.folders ul.submenu li a') }
 		activityLink { activityName ->
-			$('#body-menu li.activities ul.submenu li a', text: startsWith(activityName + " " + Activity.findByName(activityName)?.shortName))
+			$('#body-menu li.activities ul.submenu li a', text: startsWith("${Activity.findByName(activityName)?.shortName}.title[${activityName}]"))
 		}
 		sectionLink { sectionName ->
-			$('#body-menu li.messages ul.submenu li a', text: startsWith(sectionName))
+			$('#body-menu li.messages ul.submenu li a', text: "fmessage.section.${sectionName.toLowerCase()}")
 		}
 	}
 }
