@@ -25,10 +25,10 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			header[item] == value
 		where:
 			item         | value
-			'title'      | "news autoforward"
-			'message'    | 'Message: Message is Message text'
-			'keywords'   | 'Keywords : BREAKING,ALERT'
-			'recipients' | 'Currently 10 recipients'
+			'title'      | "autoforward.title[news]"
+			'message'    | 'autoforward.message.format: Message is dynamicfield.message_text.label'
+			'keywords'   | 'poll.keywords : BREAKING,ALERT'
+			'recipients' | 'autoforward.recipientcount.current[10]'
 	}
 
 	def "clicking the edit option opens the Autoforward Dialog for editing"() {
@@ -109,7 +109,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
+			waitFor { multipleMessageDetails.text?.toLowerCase() == "many.selected[2,message]" }
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {

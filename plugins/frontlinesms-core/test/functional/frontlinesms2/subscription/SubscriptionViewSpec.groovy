@@ -24,12 +24,12 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header[item] == value
 		where:
 			item               | value
-			'title'            | "camping subscription subscription"
-			'groupMemberCount' | '2 members'
-			'group'            | 'Group: Camping'
-			'keyword'          | 'Top-level keywords: CAMPING'
-			'joinAliases'      | 'Join: JOIN,IN,START'
-			'leaveAliases'     | 'Leave: LEAVE,OUT,STOP'
+			'title'            | 'subscription.title[camping subscription]'
+			'groupMemberCount' | 'subscription.info.groupMemberCount[2]'
+			'group'            | 'subscription.info.group[Camping]'
+			'keyword'          | 'subscription.info.keyword[CAMPING]'
+			'joinAliases'      | 'subscription.info.joinKeywords[JOIN,IN,START]'
+			'leaveAliases'     | 'subscription.info.leaveKeywords[LEAVE,OUT,STOP]'
 	}
 
 	def "clicking the group link shoud redirect to the group page"() {
@@ -103,7 +103,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			at PageContactShow
 			bodyMenu.groupSubmenuLinks.contains("Friends")
-			notifications.flashMessageText.contains("Unable to delete group. In use by a subscription")
+			notifications.flashMessageText == 'group.delete.fail'
 	}
 
 	def 'Moving a message to a subscription launches the categorize dialog'() {
@@ -363,7 +363,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
+			waitFor { multipleMessageDetails.text == 'many.selected[2,message]' }
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {

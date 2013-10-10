@@ -24,7 +24,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow, bobId
 		then:
-			singleContactDetails.otherGroupOptions == ['contact.add.to.group', 'Others', 'four']
+			singleContactDetails.otherGroupOptions.containsAll(['contact.add.to.group', 'Others', 'four'])
 		when:
 			singleContactDetails.addToGroup otherGroupId.toString()
 		then:

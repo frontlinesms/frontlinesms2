@@ -56,7 +56,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
-			waitFor { summary.displayed }
+			waitFor('veryslow') { summary.displayed }
 	}
 
 	def "can create an external command with no keyword"() {
@@ -122,7 +122,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			keywordTab.useKeyword('enabled').jquery.click()//enable keyword
 			next.click()
 		then:
-			waitFor { error.toLowerCase().contains('this field is required') }
+			waitFor { error == 'jquery.validation.required' }
 	}
 
 	def "Url must be provided"() {

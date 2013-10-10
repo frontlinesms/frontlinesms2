@@ -1,9 +1,7 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
+import static frontlinesms.grails.test.EchoMessageSource.parseDate
 
 abstract class PageMessage extends frontlinesms2.page.PageBase {
 	static url = 'message/'
@@ -90,7 +88,7 @@ class MessageList extends geb.Module {
 		hasClass { i, cssClass -> message(i).hasClass(cssClass) }
 		getDateCell { i -> message(i).find('td.message-date-cell') }
 		messageDate { i=0 ->
-			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse(getDateCell(i).text())
+			parseDate(getDateCell(i).text())
 		}
 		messageText { i=0, onlySelected=false -> message(i, onlySelected).find('td.message-text-cell').text() }
 		selectedMessageText { i=0 -> messageText(i, true) }
@@ -113,14 +111,13 @@ class MessageList extends geb.Module {
 class SingleMessageDetails extends geb.Module {
 	static base = { $('#single-message') }
 	static content = {
-		noneSelected { $('#message-detail-content').text()?.toLowerCase() == "no message selected" }
+		noneSelected { $('#message-detail-content').text() == 'fmessage.selected.none' }
 		sender { $('#message-detail-sender').text() }
 		senderLink { $('#message-detail-sender a') }
 		addToContacts(required:false) { $('#add-contact') }
 		text { $('#message-detail-content').text() }
 		date {
-			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
-				.parse($('#message-detail-date').text())
+			parseDate($('#message-detail-date').text())
 		}
 		archive(required:false) { $('#archive-msg') }
 		unarchive { $('#unarchive-msg') }
@@ -141,7 +138,7 @@ class MultipleMessageDetails extends geb.Module {
 	static base = { $('#multiple-messages') }
 	static content = {
 		text { $('#message-detail-content').text() }
-		checkedMessageCount { $('p#checked-message-count').text() }
+		checkedMessageCount { ($('p#checked-message-count').text() =~ /many\.selected\[(\d+),\w+\]/)[0][1].toInteger() }
 		replyAll(required:false) { $('a#btn_reply_all') }
 		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}

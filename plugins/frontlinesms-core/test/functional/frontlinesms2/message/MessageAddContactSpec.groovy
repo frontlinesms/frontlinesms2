@@ -22,7 +22,7 @@ class MessageAddContactSpec extends MessageBaseSpec {
 			to PageMessageInbox, messageId
 			singleMessageDetails.senderLink.click()
 		then:
-			waitFor { title == 'Contacts' }
+			waitFor { title == 'contact.header' }
 			at PageContactShow
 			singleContactDetails.mobile.value() == "+254778899"
 	}

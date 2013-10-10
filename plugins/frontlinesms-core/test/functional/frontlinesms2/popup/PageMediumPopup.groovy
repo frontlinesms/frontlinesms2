@@ -253,18 +253,18 @@ class DeleteDialog extends MediumPopup {
 
 class SmartGroupCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains('create smart group')
+		popupTitle == 'popup.smartgroup.create'
 	}
 	static content = {
-
 		rules { $('tr.smart-group-criteria') }
 		ruleField { rules.find('select', name:'rule-field') }
 		ruleValues { rules.find('input', name:'rule-text') }
 		ruleMatchText { rules.find('.rule-match-text')*.text() }
 		removeRuleButtons(required:false) { $('tr.smart-group-criteria a.remove-command') }
 		smartGroupNameField { $('input', type:'text', name:'smartgroupname') }
-		addRuleButton { $('.btn', text:"smartgroup.add.anotherrule") }
-		editButton { $('button', text:'action.update')}
+		addRuleButton { $('.btn', text:'smartgroup.add.anotherrule') }
+		updateButton { $('button', text:'action.update') }
+		editButton { $('button', text:'action.edit') }
 		flashMessage(required:false) { $('div.flash') }
 	}
 }
@@ -272,7 +272,7 @@ class SmartGroupCreateDialog extends MediumPopup {
 
 class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	static at = {
-		popupTitle.contains('edit group')
+		popupTitle == 'smallpopup.group.edit.title'
 	}
 }
 
