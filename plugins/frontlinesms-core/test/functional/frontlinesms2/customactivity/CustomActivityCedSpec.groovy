@@ -113,7 +113,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			to PageMessageCustomActivity, remote { CustomActivity.findByName("Do it all").id }
 		then:
-			waitFor { title?.toLowerCase().contains("custom activity") }
+			waitFor { title == 'customactivity.title[do it all]' }
 			moreActions.value("edit").jquery.click()
 			waitFor { at CustomActivityCreateDialog }
 			keyword.keywordText == "CUSTOM"
