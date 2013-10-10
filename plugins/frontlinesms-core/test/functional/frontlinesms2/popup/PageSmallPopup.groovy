@@ -132,7 +132,7 @@ class EmptyTrashPopup extends SmallPopup {
 
 class TestMessagePopup extends SmallPopup {
 	static at ={
-		popupTitle.contains('test message')
+		popupTitle.contains('smallpopup.test.message.title')
 	}
 	static content = {
 		addresses { $('input#addresses').text() }
