@@ -253,7 +253,7 @@ class DeleteDialog extends MediumPopup {
 
 class SmartGroupCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains('create smart group')
+		popupTitle == 'popup.smartgroup.create'
 	}
 	static content = {
 
