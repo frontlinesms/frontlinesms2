@@ -151,7 +151,8 @@ class MultipleContactDetails extends geb.Module {
 		}
 		update { $('#action-buttons #update-all') }
 		delete { $('#action-buttons #btn_delete_all') }
-		checkedContactCount(required:false) { $("h2#checked-contact-count").text()?.split(" ")[0].toInteger() }
+		checkedContactCount(required:false) {
+			($("h2#checked-contact-count").text()  =~ /\d+/)[0].toInteger() }
 		deleteAllButton(required:false) { $('#btn_delete_all') }
 
 	}

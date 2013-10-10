@@ -1,7 +1,14 @@
 <%@ page import="frontlinesms2.Contact" %>
 <html>
 	<head>
-		<title><g:message code="${contactsSection ? 'contact.header.group' : 'contact.header'}" args= "[contactsSection?.name]"/></title>
+		<title>
+			<g:if test="${contactsSection == null}">
+				<g:message code="contact.header"/>
+			</g:if>
+			<g:else>
+				<g:message code="contact.header.group" args="[contactsSection.name]"/>
+			</g:else>
+		</title>
 		<meta name="layout" content="contacts"/>
 		<r:script>
 			$(function() {

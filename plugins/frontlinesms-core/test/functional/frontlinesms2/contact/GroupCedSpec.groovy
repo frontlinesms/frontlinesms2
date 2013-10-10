@@ -37,7 +37,7 @@ class GroupCedSpec extends GroupBaseSpec {
 			groupName.value("Renamed Group")
 			ok.jquery.trigger("click")
 		then:
-			at PageContactShow
+			at PageGroupShow
 			waitFor { bodyMenu.getGroupLink "Renamed Group" }
 			header.groupHeaderTitle.text()?.equalsIgnoreCase('Renamed Group (2)')
 	}
@@ -59,7 +59,7 @@ class GroupCedSpec extends GroupBaseSpec {
 			ok.jquery.trigger("click")
 		then:
 			at PageContactShow
-			bodyMenu.groupSubmenuLinks == ['Listeners', 'Create new group']
+			bodyMenu.groupSubmenuLinks == ['Listeners', 'contact.create.group']
 	}
 
 }

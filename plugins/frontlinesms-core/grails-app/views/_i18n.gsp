@@ -1,3 +1,15 @@
+<g:if env="test">
+// TODO should actually confirm that we are using the echo message source,
+// rather than just in test scope, but this is unlikely to be an issue
+function i18n(key) {
+	var translated = key;
+	if(arguments.length > 1) {
+		translated += "[" + Array.prototype.slice.call(arguments, 1) + "]";
+	}
+	return translated;
+}
+</g:if>
+<g:else>
 var i18nStrings = i18nStrings || {};
 function i18n(key) {
 	var translated =
@@ -11,4 +23,5 @@ function i18n(key) {
 	}
 	return translated;
 }
+</g:else>
 

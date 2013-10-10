@@ -16,7 +16,7 @@ class PageContactShow extends frontlinesms2.page.PageContact {
 	}
 
 	static at = {
-		title.contains('Contacts')
+		title == 'contact.header'
 	}
 }
 
@@ -30,6 +30,10 @@ class PageGroupShow extends PageContactShow {
 			def id = remote { Group.findByName(args[0]).id }
 			return "group/show/$id"
 		}
+	}
+
+	static at = {
+		title ==~ /contact.header.group\[.*\]/
 	}
 }
 
