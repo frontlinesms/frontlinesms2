@@ -1,3 +1,13 @@
+<g:if env="test">
+function i18n(key) {
+	var translated = key;
+	if(arguments.length > 1) {
+		translated = translated + "[" + Array.prototype.slice.call(arguments, 1) + "]";
+	}
+	return translated;
+}
+</g:if>
+<g:else>
 var i18nStrings = i18nStrings || {};
 function i18n(key) {
 	var translated =
@@ -11,4 +21,5 @@ function i18n(key) {
 	}
 	return translated;
 }
+</g:else>
 
