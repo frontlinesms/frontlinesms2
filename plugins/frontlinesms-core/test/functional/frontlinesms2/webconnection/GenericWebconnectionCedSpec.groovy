@@ -56,7 +56,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
-			waitFor { summary.displayed }
+			waitFor('veryslow') { summary.displayed }
 	}
 
 	def "can create an external command with no keyword"() {

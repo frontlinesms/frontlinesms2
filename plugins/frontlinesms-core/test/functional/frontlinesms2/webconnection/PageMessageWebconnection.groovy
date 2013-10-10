@@ -9,7 +9,7 @@ class PageMessageWebconnection extends frontlinesms2.page.PageMessageActivity {
 		header { module WebconnectionHeaderModule }
 	}
 	static at = {
-		title.contains("web connection")
+		title ==~ /webconnection.title\[.*\]/
 	}
 }
 

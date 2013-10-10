@@ -104,7 +104,7 @@ class RenameActivityDialog extends SmallPopup {
 
 class RenameSubscriptionDialog extends SmallPopup {
 	static at = {
-		popupTitle == 'smallpopup.subscription.rename.title'
+		popupTitle == 'smallpopup.fmessage.rename.title[subscription]'
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
