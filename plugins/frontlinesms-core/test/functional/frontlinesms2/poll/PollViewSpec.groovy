@@ -13,7 +13,7 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			bodyMenu.activityList*.text().containsAll(['Football Teams poll','Shampoo Brands poll', 'Rugby Brands poll', 'Create new activity'])
+			bodyMenu.activityList*.text().containsAll(['poll.title[Football Teams]','poll.title[Shampoo Brands]', 'poll.title[Rugby Brands]', 'activities.create'])
 	}
 
 	def 'message from bob is second in the list, and links to the show page'() {
