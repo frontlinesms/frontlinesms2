@@ -196,7 +196,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { confirm.displayed }
 			confirm.message == 'How often do you drink coffee? poll.reply.text1[poll.reply.text1[poll.reply.text1[poll.reply.text5,,COFFEE A,Never],,COFFEE B,Once a day],,COFFEE C,Twice a day].'
-			confirm.recipientCount == "1 contacts selected"
+			confirm.recipientCount == 'quickmessage.recipients.count[1]'
 			confirm.messageCount == "1 messages will be sent"
 			confirm.autoreply == "Thanks for participating..."
 		when:
@@ -257,7 +257,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { confirm.displayed }
 			confirm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
-			confirm.recipientCount == "1 contacts selected"
+			confirm.recipientCount == 'quickmessage.recipients.count[1]'
 			confirm.messageCount == "1 messages will be sent"
 		when:
 			confirm.pollName = "Coffee Poll"

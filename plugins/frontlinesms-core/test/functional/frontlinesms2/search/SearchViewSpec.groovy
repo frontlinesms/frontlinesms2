@@ -193,7 +193,9 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.datePickerDiv.jquery.hide()
 			waitFor { !searchsidebar.datePickerDiv.displayed }
 			searchsidebar.searchBtn.click()
-			waitFor { header.searchDescription.contains("Searching all messages, including archived messages") }
+			waitFor { header.searchDescription ==
+					'searchdescriptor.searching searchdescriptor.all.messagessearchdescriptor.archived.messagessearchdescriptor.from[Sat Sep 04 00:00:00 EAT 2010]' // FIXME this date is formatted wrong
+			}
 		then:
 			searchsidebar.startDate_day == '4'
 			searchsidebar.startDate_month == '9'
