@@ -195,7 +195,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { confirm.displayed }
-			confirm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			confirm.message == 'How often do you drink coffee? poll.reply.text1[poll.reply.text1[poll.reply.text1[poll.reply.text5,,COFFEE A,Never],,COFFEE B,Once a day],,COFFEE C,Twice a day].'
 			confirm.recipientCount == "1 contacts selected"
 			confirm.messageCount == "1 messages will be sent"
 			confirm.autoreply == "Thanks for participating..."
@@ -240,7 +240,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { edit.displayed }
-			edit.text.jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			edit.text.jquery.val() == 'How often do you drink coffee?\npoll.reply.text1[poll.reply.text1[poll.reply.text1[poll.reply.text5,,COFFEE A,Never],,COFFEE B,Once a day],,COFFEE C,Twice a day].'
 		when:
 			edit.text.value('How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating')
 			next.click()

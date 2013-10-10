@@ -36,7 +36,7 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			header.title == 'football teams poll'
+			header.title == 'poll.title[football teams]'
 			statsLabels == ['manchester', 'barcelona','Unknown']
 			statsNumbers == ['2', '0', '0']
 			statsPercents == ['100%', '0%', '0%']
@@ -53,7 +53,7 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			bodyMenu.selected.contains('football teams poll')
+			bodyMenu.selected.contains('poll.title[football teams]')
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {
@@ -123,7 +123,7 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			singleMessageDetails.text() == "No message selected"
+			singleMessageDetails.text() == 'fmessage.selected.none'
 	}
 
 	def 'new messages are checked for in the backround every ten seconds and cause a notification to appear if there are new messages'() {
