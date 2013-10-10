@@ -40,7 +40,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageNewSearch
 		then:
-			searchsidebar.searchForm.find('select', name:'groupId').children('option')*.text() == ['Select group', 'Friends', 'Listeners']
+			searchsidebar.searchForm.find('select', name:'groupId').children('option')*.text() == ['search.filter.group', 'Friends', 'Listeners']
 			searchsidebar.searchForm.find('select', name:'activityId').children('option')*.text() == ['Select activity/folder', "Miauow Mix poll", 'Work folder']
 	}
 	
@@ -50,7 +50,8 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchsidebar.searchBtn.displayed
 			searchsidebar.searchBtn.click()
 		then:
-			waitFor('veryslow') { header.searchDescription == 'Searching all messages, including archived messages' }
+			waitFor('veryslow') {
+				header.searchDescription == 'searchdescriptor.searching searchdescriptor.all.messagessearchdescriptor.archived.messages' }
 	}
 
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -170,7 +171,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			singleMessageDetails.delete.click()
 		then:
 			waitFor("veryslow") { messageList.messageCount() == 5 }
-			notifications.flashMessage.text()?.contains("Message moved to trash")
+			notifications.flashMessage.text()?.contains('default.trashed[fmessage.label,[]]')
 	}
 
 	def "should have the start date not set, then as the user set one the result page should contain his start date"() {

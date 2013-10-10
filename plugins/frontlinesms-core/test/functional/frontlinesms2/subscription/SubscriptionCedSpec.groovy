@@ -126,7 +126,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup('Select group')
+			group.addToGroup('search.filter.group')
 			next.click()
 		then:
 			waitFor { validationError.text() == 'subscription.group.required.error' }
