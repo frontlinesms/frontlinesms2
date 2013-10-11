@@ -6,7 +6,7 @@ import frontlinesms2.page.*
 class PageStatus extends PageBase {
 	static getUrl() { 'status' }
 	static at = {
-		title = 'status.header'
+		title == 'status.header'
 	}
 	static content = {
 		statusButton { $('#update-chart') }
