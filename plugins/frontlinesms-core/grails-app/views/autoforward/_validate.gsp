@@ -52,6 +52,7 @@
 			$("#keyword-confirm").html('<p>' + i18n("autoforward." + keywordstate + ".keyword")  + '</p>');
 		}
 		$("#autoforward-confirm-recipient-count").html('<p>' + recipientSelecter.getRecipientCount() + '</p>');
+		$("#autoforward-confirm-messagetext").html('<p>' + autoforwardText  + '</p>');
 	}
 	
 	function checkSavedContactsAndGroups(){
