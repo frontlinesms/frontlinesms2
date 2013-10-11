@@ -5,21 +5,15 @@ import frontlinesms2.popup.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.page.PageMessageActivity
 import java.util.regex.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class PollViewSpec extends PollBaseSpec {
-	
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
-	
 	def 'existing polls appear in activities section of messages'() {
 		given:
 			createTestPolls()
 		when:
 			to PageMessageInbox
 		then:
-			bodyMenu.activityList*.text().containsAll(['Football Teams poll','Shampoo Brands poll', 'Rugby Brands poll', 'Create new activity'])
+			bodyMenu.activityList*.text().containsAll(['poll.title[Football Teams]','poll.title[Shampoo Brands]', 'poll.title[Rugby Brands]', 'activities.create'])
 	}
 
 	def 'message from bob is second in the list, and links to the show page'() {

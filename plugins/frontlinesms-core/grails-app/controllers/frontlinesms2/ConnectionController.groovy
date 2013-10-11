@@ -195,12 +195,35 @@ class ConnectionController extends ControllerUtils {
 	}
 
 	private def doSave(Class<Fconnection> clazz) {
-		def fconnectionInstance = clazz.newInstance()
-		fconnectionInstance.properties = params
-		fconnectionInstance.validate()
-		println fconnectionInstance.errors.allErrors
-		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
-		if (fconnectionInstance.save(flush:true)) {
+		def connectionService = grailsApplication.mainContext["${clazz.shortName}Service"]
+		def saveSuccessful
+		def connectionErrors
+		def fconnectionInstance
+		if (connectionService && connectionService.respondsTo('handleSave')) {
+			def handleSaveResponse = connectionService.handleSave(params)
+			saveSuccessful = handleSaveResponse.success
+			connectionErrors = handleSaveResponse.errors
+			fconnectionInstance = handleSaveResponse.connectionInstance
+			withFormat {
+				html {
+					flash.message = LogEntry.log(saveSuccessful ? handleSaveResponse.successMessage : message(code: 'connection.creation.failed', args:[handleSaveResponse.errors]))
+					redirect(controller:'connection', action:"list")
+				}
+				json {
+					render((saveSuccessful ? [ok:true, redirectUrl:createLink(action:'list')] : [ok:false, text:handleSaveResponse.errors.join(", ")]) as JSON)
+				}
+			}
+			return
+		}
+		else {
+			fconnectionInstance = clazz.newInstance()
+			fconnectionInstance.properties = params
+			fconnectionInstance.validate()
+			println fconnectionInstance.errors.allErrors
+			connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
+			saveSuccessful = fconnectionInstance.save(flush:true)
+		}
+		if(saveSuccessful) {
 			doAfterSaveOperations(fconnectionInstance)
 			def connectionUseSetting = appSettingsService['routing.use']
 			appSettingsService['routing.use'] = connectionUseSetting?

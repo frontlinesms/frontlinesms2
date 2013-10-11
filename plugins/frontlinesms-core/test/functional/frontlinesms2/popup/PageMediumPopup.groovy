@@ -72,7 +72,7 @@ class QuickMessageConfirmTab extends geb.Module {
 
 class CreateActivityDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("create new activity")
+		popupTitle.contains("popup.activity.create")
 	}
 	static content = {
 		poll { $('input[value="poll"]') }
@@ -87,7 +87,7 @@ class CreateActivityDialog extends MediumPopup {
 
 class PollDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("poll") || popupTitle.contains("edit activity")
+		popupTitle.contains("poll") || popupTitle.contains("wizard.fmessage.edit.title")
 	}
 	static content = {
 		compose { module ComposeTab }
@@ -103,7 +103,7 @@ class PollDialog extends MediumPopup {
 
 class EditPollDialog extends PollDialog {
 	static at = {
-		popupTitle.contains("edit activity")
+		popupTitle.contains("wizard.fmessage.edit.title")
 	}
 }
 
@@ -243,7 +243,7 @@ class AnnouncementSummary extends geb.Module {
 
 class DeleteDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("empty trash");
+		popupTitle.contains("smallpopup.empty.trash.prompt");
 	}
 	static content = {
 		title { $("#title").text() }
@@ -253,18 +253,18 @@ class DeleteDialog extends MediumPopup {
 
 class SmartGroupCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains('create smart group')
+		popupTitle == 'popup.smartgroup.create'
 	}
 	static content = {
-
 		rules { $('tr.smart-group-criteria') }
 		ruleField { rules.find('select', name:'rule-field') }
 		ruleValues { rules.find('input', name:'rule-text') }
 		ruleMatchText { rules.find('.rule-match-text')*.text() }
 		removeRuleButtons(required:false) { $('tr.smart-group-criteria a.remove-command') }
 		smartGroupNameField { $('input', type:'text', name:'smartgroupname') }
-		addRuleButton { $('.btn', text:"Add another rule") }
-		editButton { $('button', text:'Update')}
+		addRuleButton { $('.btn', text:'smartgroup.add.anotherrule') }
+		updateButton { $('button', text:'action.update') }
+		editButton { $('button', text:'action.edit') }
 		flashMessage(required:false) { $('div.flash') }
 	}
 }
@@ -272,13 +272,13 @@ class SmartGroupCreateDialog extends MediumPopup {
 
 class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	static at = {
-		popupTitle.contains('edit group')
+		popupTitle == 'smallpopup.group.edit.title'
 	}
 }
 
 class WebconnectionWizard extends MediumPopup {
 	static at = {
-		waitFor('very slow') { popupTitle.contains("connection") || popupTitle == 'edit activity' }
+		waitFor('very slow') { popupTitle.contains("connection") || popupTitle == 'wizard.fmessage.edit.title' }
 		return true
 	}
 	static content = {
@@ -359,7 +359,7 @@ class WebconnectionSummary extends geb.Module {
 
 class SubscriptionCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("subscription") || popupTitle.contains("edit activity")
+		popupTitle.contains("subscription") || popupTitle.contains("wizard.fmessage.edit.title")
 	}
 	static content = {
 		group { module SubscriptionGroupTab }
@@ -462,7 +462,7 @@ class ConfigureUshahidiWebconnectionTab extends geb.Module{
 
 class AutoreplyCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("autoreply") || popupTitle.contains("edit activity")
+		popupTitle.contains("autoreply") || popupTitle.contains("wizard.fmessage.edit.title")
 	}
 	static content = {
 		message { module AutoreplyMessageTab}
@@ -517,7 +517,7 @@ class NewFeaturesDialog extends MediumPopup {
 
 class AutoforwardCreateDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("autoforward") || popupTitle.contains("edit activity")
+		popupTitle.contains("autoforward") || popupTitle.contains("wizard.fmessage.edit.title")
 	}
 	static content = {
 		message { module AutoforwardMessageTab}

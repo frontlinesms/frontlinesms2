@@ -52,7 +52,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 			next.click()
 		then:
 			error.displayed	
-			errorText == "please select a group"
+			errorText == 'validation.group.notnull'
 	}
 
 	def 'can add and remove steps in the confiure tab'(){
@@ -113,7 +113,7 @@ class CustomActivityCedSpec extends CustomActivityBaseSpec {
 		when:
 			to PageMessageCustomActivity, remote { CustomActivity.findByName("Do it all").id }
 		then:
-			waitFor { title?.toLowerCase().contains("custom activity") }
+			waitFor { title == 'customactivity.title[Do it all]' }
 			moreActions.value("edit").jquery.click()
 			waitFor { at CustomActivityCreateDialog }
 			keyword.keywordText == "CUSTOM"

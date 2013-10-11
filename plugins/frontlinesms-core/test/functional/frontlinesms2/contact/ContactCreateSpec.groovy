@@ -11,7 +11,7 @@ class ContactCreateSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			bodyMenu.selectedMenuItem == 'all contacts (0)'
+			bodyMenu.selectedMenuItem == 'contact.all.contacts[0]'
 	}
 
 	def 'button to create new contact exists and goes to NEW CONTACT page'() {

@@ -127,7 +127,7 @@ class SingleContactDetails extends geb.Module {
 			$('select#group-dropdown').jquery.trigger("change")
 		}
 		save { $('#action-buttons #update-single') }
-		cancel { $('#action-buttons a.cancel', text:'Cancel') }
+		cancel { $('#action-buttons a.cancel', text:'action.cancel') }
 		delete { $('#btn_delete') }
 		searchForMessages { $('#message-stats a.search') }
 		sentCount { $('li.sent').text()}
@@ -151,7 +151,8 @@ class MultipleContactDetails extends geb.Module {
 		}
 		update { $('#action-buttons #update-all') }
 		delete { $('#action-buttons #btn_delete_all') }
-		checkedContactCount(required:false) { $("h2#checked-contact-count").text()?.split(" ")[0].toInteger() }
+		checkedContactCount(required:false) {
+			($("h2#checked-contact-count").text()  =~ /\d+/)[0].toInteger() }
 		deleteAllButton(required:false) { $('#btn_delete_all') }
 
 	}

@@ -4,7 +4,7 @@ import frontlinesms2.message.*
 class PageSearchResult extends PageSearch {
 	static url = 'search/result/show'
 	static at = {
-		title.startsWith("Results")
+		title == 'search.result.header'
 	}
 
 	String convertToPath(Object[] args) {

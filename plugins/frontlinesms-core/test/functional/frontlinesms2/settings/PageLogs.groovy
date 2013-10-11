@@ -16,7 +16,7 @@ class PageLogs extends PageSettings {
 
 class SendLogsDialog extends PageLogs {
 	static at = {
-		$("#ui-dialog-title-modalBox").text()?.toLowerCase().contains('download logs to send')
+		$("#ui-dialog-title-modalBox").text()?.toLowerCase() == 'logs.download.title'
 	}
 
 	static content = {

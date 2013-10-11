@@ -118,7 +118,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			submit.click()
 		then:
-			waitFor {validationError.text()?.contains('This field is required.')}
+			waitFor { validationError.text() == 'jquery.validation.required' }
 			at SubscriptionCreateDialog
 	}
 
@@ -126,10 +126,10 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			waitFor { at SubscriptionCreateDialog }
-			group.addToGroup('Select group')
+			group.addToGroup('search.filter.group')
 			next.click()
 		then:
-			waitFor {validationError.text()?.contains('Subscriptions must have a group')}
+			waitFor { validationError.text() == 'subscription.group.required.error' }
 			at SubscriptionCreateDialog
 	}
 
@@ -146,7 +146,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.leaveKeywords = 'team'
 			next.click()
 		then:
-			waitFor {validationError.text()?.contains('Keywords should be unique')}
+			waitFor { validationError.text() == 'poll.keywords.validation.error' }
 			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
@@ -164,7 +164,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			keywords.leaveKeywords = 'team%^&%^%&'
 			next.click()
 		then:
-			waitFor { validationError.text()?.contains('Invalid keyword. Try a, name, word') }
+			waitFor { validationError.text() == 'poll.keywords.validation.error.invalid.keyword' }
 			keywords.joinKeywords.displayed
 			at SubscriptionCreateDialog
 	}
@@ -189,7 +189,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			autoreply.enableLeaveAutoreply.click()
 			next.click()
 		then:
-			waitFor {validationError.text()?.contains('Please enter leave autoreply text')}
+			waitFor { validationError.text() == 'subscription.leavetext.required' }
 			autoreply.enableLeaveAutoreply.displayed
 	}
 

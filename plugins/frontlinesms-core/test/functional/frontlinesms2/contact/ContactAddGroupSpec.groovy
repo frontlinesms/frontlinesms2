@@ -24,12 +24,12 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow, bobId
 		then:
-			singleContactDetails.otherGroupOptions == ['Add to group...', 'Others', 'four']
+			singleContactDetails.otherGroupOptions.containsAll(['contact.add.to.group', 'Others', 'four'])
 		when:
 			singleContactDetails.addToGroup otherGroupId.toString()
 		then:
 			waitFor { singleContactDetails.groupList.sort() == ['Others', 'Test', 'three'] }
-			singleContactDetails.otherGroupOptions == ['Add to group...', 'four']
+			singleContactDetails.otherGroupOptions == ['contact.add.to.group', 'four']
 	}
 
 	def 'clicking X next to group in list removes group from visible list, but does not change database if no other action is taken'() {

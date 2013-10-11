@@ -11,9 +11,9 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			option('generic').displayed
 		and:
-			getTitle('generic') == "Other web service"
+			getTitle('generic') == "webconnection.generic.label"
 		and:
-			getDescription('generic') == 'Send messages to other web service'
+			getDescription('generic') == 'webconnection.generic.description'
 	}
 
 	def "can create and save a HTTP GET external command"() {
@@ -56,7 +56,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
-			waitFor { summary.displayed }
+			waitFor('veryslow') { summary.displayed }
 	}
 
 	def "can create an external command with no keyword"() {
@@ -122,7 +122,7 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 			keywordTab.useKeyword('enabled').jquery.click()//enable keyword
 			next.click()
 		then:
-			waitFor { error.toLowerCase().contains('this field is required') }
+			waitFor { error == 'jquery.validation.required' }
 	}
 
 	def "Url must be provided"() {
@@ -144,18 +144,6 @@ class GenericWebconnectionCedSpec extends WebconnectionBaseSpec {
 		then:
 			nextTab(requestTab)
 			// N.B. there is no text displayed for this error
-	}
-
-	def "Test Webconnection button is displayed on the confirm tab"() {
-		given:
-			startAtTab('keyword')
-		when:
-			keywordTab.keyword = ""
-			keywordTab.useKeyword('disabled').click() // to disable
-			next.click()
-		then:
-			waitFor { confirmTab.displayed }
-			testConnectionButton.displayed
 	}
 
 	def 'secret is enabled when API is exposed'() {

@@ -53,7 +53,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 				to PageMessageInbox
 			then:
 				waitFor('slow') {
-					bodyMenu.activityList*.text().containsAll(['New Office announcement', 'Office Party announcement'])
+					bodyMenu.activityList*.text().containsAll(['announcement.title[New Office]', 'announcement.title[Office Party]'])
 				}
 	}
 
@@ -117,7 +117,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			confirm.announcementName.value("香川真司")
 			submit.click()
 		then:
-			waitFor { remote { Announcement.count() == 2 } }
+			waitFor { remote { Announcement.count() == 1 } }
 	}
 }
 

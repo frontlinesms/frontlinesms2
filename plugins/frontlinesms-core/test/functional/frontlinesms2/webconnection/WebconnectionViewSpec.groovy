@@ -20,12 +20,12 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		when:
 			to PageMessageWebconnection, webconnection.name
 		then:
-			waitFor { title?.toLowerCase().contains("web connection") }
-			header.name == 'sync web connection'
+			waitFor { title == 'webconnection.title[Sync]' }
+			header.name == 'webconnection.title[sync]'
 			header.url == 'http://www.frontlinesms.com/sync'
 			header.sendMethod == 'get'
-			header.subtitle == 'http web connection'
-			header.api == 'api url : (api disabled)'
+			header.subtitle == 'webconnection.generic.subtitle[generic]'
+			header.api == 'webconnection.api.url : (webconnection.api.disabled)'
 	}
 
 	@Unroll
@@ -35,7 +35,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		when:
 			to PageMessageWebconnection, c.name
 		then:
-			header.api.endsWith "/api/1/webconnection/$c.id/"
+			header.api.endsWith "/api/1/webconnection/$c.id"
 		where:
 			secret << [null, 'imagine']
 	}
@@ -46,11 +46,11 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		when:
 			to PageMessageWebconnection, "Ush"
 		then:
-			waitFor { title?.toLowerCase().contains("web connection") }
-			header.name == 'ush web connection'
+			waitFor { title == 'webconnection.title[Ush]' }
+			header.name == 'webconnection.title[ush]'
 			header.url == 'http://www.ushahidi.com/frontlinesms'
 			header.sendMethod == 'get'
-			header.subtitle == 'web connection to ushahidi'
+			header.subtitle == 'webconnection.ushahidi.subtitle[ushahidi]'
 	}
 
 	def "clicking the archive button archives the Webconnection and redirects to inbox "() {
@@ -62,7 +62,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			header.archive.click()
 		then:
 			waitFor { at PageMessageInbox }
-			notifications.flashMessageText.contains("Activity archived")
+			notifications.flashMessageText == 'default.archived[activity.label]'
 	}
 
 	def "clicking the edit option opens the Webconnection Dialog for editing"() {
@@ -143,7 +143,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			multipleMessageDetails.checkedMessageCount == "2 messages selected"
+			multipleMessageDetails.checkedMessageCount == 2
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {
@@ -260,7 +260,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		when:
 			header.moreActions.value('retryFailed')
 		then:
-			waitFor { notifications.flashMessageText.contains('Failed web connections have been scheduled for resending') }
+			waitFor { notifications.flashMessageText == 'webconnection.failed.retried' }
 			at PageMessageWebconnection
 	}
 }

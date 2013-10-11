@@ -34,7 +34,7 @@
 		</td>
 		<td class="message-date-cell">
 			<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: t.id]}">
-				<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${t.dateCreated}"/>
+				<g:formatDate date="${t.dateCreated}"/>
 			</g:link>
 		</td>
 	</tr>

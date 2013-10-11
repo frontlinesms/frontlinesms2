@@ -136,7 +136,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			launchCreateDialog()
 		then:
 			ruleField[0].value() == 'mobile'
-			ruleMatchText[0] == 'starts with'
+			ruleMatchText[0] == 'smartgroup.startswith.label'
 	}
 
 	def 'selecting fields other than PHONE NUMBER should set matcher text to CONTAINS'() {
@@ -144,15 +144,15 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			launchCreateDialog()
 		then:
 			ruleField[0].value() == 'mobile'
-			ruleMatchText[0] == 'starts with'
+			ruleMatchText[0] == 'smartgroup.startswith.label'
 		when:
 			ruleField[0].value('Contact name')
 		then:
-			ruleMatchText[0] == 'contains'
+			ruleMatchText[0] == 'smartgroup.contains.label'
 		when:
 			ruleField[0].value('Phone number')
 		then:
-			ruleMatchText[0] == 'starts with'
+			ruleMatchText[0] == 'smartgroup.startswith.label'
 	}
 
 	def 'adding multiple rules on the same field should fail validation'() {

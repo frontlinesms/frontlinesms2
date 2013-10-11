@@ -20,14 +20,14 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			contactList.noContent == 'No contacts have been added.'
+			contactList.noContent == 'contact.list.no.contact'
 	}
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
 		when:
 			to PageContactShow
 		then:
-			bodyMenu.selectedMenuItem.startsWith('all contacts')
+			bodyMenu.selectedMenuItem ==~ /contact.all.contacts\[\d+\]/
 	}
 	
 	def 'contacts list is paginated'() {

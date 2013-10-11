@@ -30,7 +30,7 @@
 			</fsms:menuitem>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<fsms:popup class="btn create" controller="folder" action="create" popupCall="launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('action.create'),'validate')">
+			<fsms:popup class="btn create" controller="folder" action="create" popupCall="launchSmallPopup(i18n('smallpopup.folder.create.title'), data, i18n('action.create'),'validate')">
 				<g:message code="folder.create"/>
 			</fsms:popup>
 		</fsms:menuitem>

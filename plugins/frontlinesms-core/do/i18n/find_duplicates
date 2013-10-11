@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Remove duplicate lines (key and value are equal)
+sort $1 | uniq > temporary.tmp
+
+# Find keys that are not unique
+doubleKeys=`awk -F"=" '{print $1}' temporary.tmp | sort | uniq -d` 
+
+if [ -z "$doubleKeys" ] ; then
+	echo "# No duplicate keys found"
+else
+	echo $doubleKeys > DoubleKeys.log
+	echo "# Duplicate keys:"
+	echo $doubleKeys
+	echo "----"
+	echo "# you can also find the outcome in DoubleKeys.log"
+fi
+rm temporary.tmp
+

@@ -106,8 +106,8 @@ class ContactEditSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow, remote { Contact.findByName('Alice').id }
 		then:
-			singleContactDetails.sentCount == "2 messages sent"
-			singleContactDetails.receivedCount == "1 messages received"
+			singleContactDetails.sentCount == 'contact.messages.sent[2]'
+			singleContactDetails.receivedCount == 'contact.received.messages[1]'
 	}
 }
 
