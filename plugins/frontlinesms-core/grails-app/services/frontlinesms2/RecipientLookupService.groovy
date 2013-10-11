@@ -108,13 +108,7 @@ class RecipientLookupService {
 		smartGroupAddressList = getSmartGroups(recipients)*.addresses.flatten() - null
 		manualAddressList = getManualAddresses(recipients).flatten()
 
-		println "contactList: $contactList"
-		println "groupAddressList: $groupAddressList"
-		println "smartGroupAddressList: $smartGroupAddressList"
-		println "manualAddressList: $manualAddressList"
-
 		addresses = contactList + groupAddressList + smartGroupAddressList + manualAddressList
-		println "Addresses: $addresses"
 		addresses.flatten().unique()
 	}
 }

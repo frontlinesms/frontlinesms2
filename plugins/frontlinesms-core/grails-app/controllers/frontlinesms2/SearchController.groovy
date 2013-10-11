@@ -131,7 +131,6 @@ class SearchController extends MessageController {
 	}
 
 	def recipientCount() {
-		println "Params.recipients: ${params["recipients"]}"
 		def recipients = [params.recipients].flatten()
 		def addresses = recipientLookupService.getAddressesFromRecipientList(recipients)
 		render([recipientCount: addresses.size()] as JSON)

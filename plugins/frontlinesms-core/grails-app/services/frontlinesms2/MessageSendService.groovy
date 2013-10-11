@@ -25,12 +25,10 @@ class MessageSendService {
 	}
 	
 	def createOutgoingMessage(params) {
-		print "Outgoing params: $params"
 		def message = new Fmessage(text:(params.messageText), inbound:false)
 		def addresses = []
 		if (params.recipients) {
 			addresses = recipientLookupService.getAddressesFromRecipientList(params.recipients)
-			println "addresses: $addresses"
 		} else {
 			addresses = [params.addresses].flatten() - null
 			addresses += getAddressesForContacts(params.contacts)
