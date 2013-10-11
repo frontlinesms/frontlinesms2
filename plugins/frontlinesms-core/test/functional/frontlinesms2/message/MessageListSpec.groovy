@@ -10,22 +10,22 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
         when:
           to PageMessageInbox
         then:
-			bodyMenu.messageSection("inbox").text() == 'Inbox'
+			bodyMenu.messageSection("fmessage.section.inbox").text() == 'fmessage.section.inbox'
 		when:
-			bodyMenu.messageSection("inbox").click()
+			bodyMenu.messageSection("fmessage.section.inbox").click()
 		then:
-			waitFor { title == "inbox" }
+			waitFor { title == "fmessage.section.inbox" }
     }
 
     def 'button to view sent messages exists and goes to SENT page'() {
         when:
           to PageMessageInbox
         then:
-			bodyMenu.messageSection("sent").text() == 'Sent'
+			bodyMenu.messageSection("fmessage.section.sent").text() == 'fmessage.section.sent'
 		when:
-			bodyMenu.messageSection("sent").click()
+			bodyMenu.messageSection("fmessage.section.sent").click()
 		then:
-			waitFor { title == "sent" }
+			waitFor { title == "fmessage.section.sent" }
     }
 
     def 'when in inbox, Inbox menu item is highlighted'() {
