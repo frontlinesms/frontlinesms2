@@ -14,7 +14,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		when:
 			bodyMenu.messageSection("fmessage.section.inbox").click()
 		then:
-			waitFor { title == "fmessage.section.inbox" }
+			waitFor { title == "message.header.inbox" }
     }
 
     def 'button to view sent messages exists and goes to SENT page'() {
@@ -25,7 +25,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		when:
 			bodyMenu.messageSection("fmessage.section.sent").click()
 		then:
-			waitFor { title == "fmessage.section.sent" }
+			waitFor { title == "message.header.sent" }
     }
 
     def 'when in inbox, Inbox menu item is highlighted'() {

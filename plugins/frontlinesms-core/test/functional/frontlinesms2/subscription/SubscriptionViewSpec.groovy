@@ -52,7 +52,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header.archive.click()
 		then:
 			waitFor { at PageMessageInbox }
-			notifications.flashMessageText == "Activity archived"
+			notifications.flashMessageText == "default.archived[activity.label]"
 	}
 
 	def "clicking the edit option opens the Subscription Dialog for editing"() {
