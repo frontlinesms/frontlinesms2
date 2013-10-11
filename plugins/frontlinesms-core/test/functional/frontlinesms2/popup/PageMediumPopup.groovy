@@ -168,6 +168,7 @@ class RecipientsTab extends geb.Module {
 		chosenOption { label ->
 			$('.chzn-container ul.chzn-results li.active-result', text: contains(label))
 		}
+		recipientsSelect { $('[name=recipients]') }
 		addRecipient { searchString ->
 			chosenInput.click()
 			chosenInput.value(searchString)
@@ -556,21 +557,8 @@ class AutoforwardKeywordTab extends geb.Module {
 	}
 }
 
-class AutoforwardRecipientsTab extends geb.Module {
+class AutoforwardRecipientsTab extends RecipientsTab {
 	static base = { $('div#tabs-3')}
-	static content = {
-		addField { $('input#address') }
-		addButton { $('a.btn.add-address') }
-		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text()?.toInteger() }
-		manualContacts { $("input", name:"addresses") }
-		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
-		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
-		contactCheckboxesChecked { $('input:checked', type:'checkbox', name:'addresses') }
-		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
-		selectGroup {group-> $("input", name:"groups", value:"${group}").jquery.click() }
-		selectContact {contact-> $("input", name:"addresses", value:"${contact}").jquery.click() }
-	}
 }
 
 class AutoforwardConfirmTab extends geb.Module {
