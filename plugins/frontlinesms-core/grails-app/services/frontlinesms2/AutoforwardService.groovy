@@ -49,7 +49,6 @@ class AutoforwardService {
 			def newContacts = []
 
 			if (recipients) {
-				println "I got here, people."
 				newContacts = recipientLookupService.getContacts(recipients)
 				newContacts += recipientLookupService.getManualAddresses(recipients).collect { return Contact.findByMobile(it)?:new Contact(mobile:it, name:'').save(failOnError:true) }
 
