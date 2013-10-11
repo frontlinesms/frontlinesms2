@@ -12,7 +12,7 @@ class StatusFSpec extends StatusBaseSpec {
 		when:
 			to PageStatus
 		then:
-			noConnections.text() == "You have no connections configured."
+			noConnections.text() == "status.connection.none"
 	}
 	
 	def "Shows a list of devices that FrontlineSMS can connect to"() {

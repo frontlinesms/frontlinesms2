@@ -34,7 +34,7 @@ class BodyMenu extends geb.Module {
 			$('#body-menu li.activities ul.submenu li a', text: startsWith("${Activity.findByName(activityName)?.shortName}.title[${activityName}]"))
 		}
 		sectionLink { sectionName ->
-			$('#body-menu li.messages ul.submenu li a', text: "fmessage.section.${sectionName.toLowerCase()}")
+			$('#body-menu li.messages ul.submenu li a', text: startsWith("fmessage.section.${sectionName.toLowerCase()}"))
 		}
 	}
 }
