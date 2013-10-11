@@ -10,7 +10,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			go 'connection/list'
 		then:
 			at PageConnectionSettings
-			btnNewConnection.text() == "Add new connection"
+			btnNewConnection.text() == "connection.add"
 			btnNewConnection.@href == "/connection/wizard"
 	}
 	
@@ -31,7 +31,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			go 'connection/list'
 		then:
 			at PageConnectionSettings
-			connections[2].text()?.contains("http://<your-ip-address>")
+			connections[2].text()?.contains("http://<localhost.ip.placeholder>")
 	}
 
 	def 'Saving routing preferences persists the changes'(){

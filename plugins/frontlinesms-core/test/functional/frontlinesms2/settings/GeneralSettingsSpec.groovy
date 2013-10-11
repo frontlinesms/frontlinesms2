@@ -10,6 +10,6 @@ class GeneralSettingsSpec extends grails.plugin.geb.GebSpec {
 		then:
 			databaseBackup.displayed
 			databaseBackup.title == 'configuration.location.title'
-			databaseBackup.instruction.contains('database')
+			databaseBackup.instruction.contains('configuration.location.description')
 	}
 }
