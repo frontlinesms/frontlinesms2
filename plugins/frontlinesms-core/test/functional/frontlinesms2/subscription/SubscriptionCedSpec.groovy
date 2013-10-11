@@ -189,7 +189,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			autoreply.enableLeaveAutoreply.click()
 			next.click()
 		then:
-			waitFor {validationError.text()?.contains('Please enter leave autoreply text')}
+			waitFor { validationError.text() == 'subscription.leavetext.required' }
 			autoreply.enableLeaveAutoreply.displayed
 	}
 

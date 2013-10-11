@@ -106,7 +106,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			confirmTab.confirm('service') == 'Crowdmap'
 			confirmTab.confirm('url') == 'https://my.crowdmap.com/frontlinesms/'
 			confirmTab.crowdmap_api_key == 'a1b2c3d4e5'
-			confirmTab.confirm('keyword') == 'None'
+			confirmTab.confirm('keyword') == 'webconnection.none.label'
 	}
 
 	def "editing a web connection should change values"() {
@@ -136,7 +136,7 @@ class UshahidiWebconnectionCedSpec extends WebconnectionBaseSpec {
 			waitFor('very slow') { summary.message.text() == 'webconnection.save' }
 			submit.click()
 			waitFor('very slow') { at PageMessageWebconnection }
-			header['name'] == 'trial web connection'
+			header['name'] == 'webconnection.title[trial]'
 			header['url'] == 'https://frontlinecrowd.crowdmap.com/frontlinesms/'
 	}
 

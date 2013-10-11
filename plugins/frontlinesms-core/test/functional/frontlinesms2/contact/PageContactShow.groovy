@@ -16,7 +16,7 @@ class PageContactShow extends frontlinesms2.page.PageContact {
 	}
 
 	static at = {
-		title == 'contact.header'
+		title ==~ /contact\.header(\.group\[.*\])?/
 	}
 }
 

@@ -148,7 +148,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			ruleField[0].value('Contact name')
 		then:
-			ruleMatchText[0] == 'contains'
+			ruleMatchText[0] == 'smartgroup.contains.label'
 		when:
 			ruleField[0].value('Phone number')
 		then:

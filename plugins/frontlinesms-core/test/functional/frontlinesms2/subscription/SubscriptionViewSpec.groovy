@@ -103,7 +103,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			at PageContactShow
 			bodyMenu.groupSubmenuLinks.contains("Friends")
-			notifications.flashMessageText.contains("Unable to delete group. In use by a subscription")
+			notifications.flashMessageText == 'group.delete.fail'
 	}
 
 	def 'Moving a message to a subscription launches the categorize dialog'() {
@@ -363,7 +363,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
+			waitFor { multipleMessageDetails.text == 'many.selected[2,message]' }
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {

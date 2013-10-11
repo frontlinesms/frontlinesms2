@@ -24,8 +24,8 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			header.name == 'webconnection.title[sync]'
 			header.url == 'http://www.frontlinesms.com/sync'
 			header.sendMethod == 'get'
-			header.subtitle == 'http web connection'
-			header.api == 'api url : (api disabled)'
+			header.subtitle == 'webconnection.generic.subtitle[generic]'
+			header.api == 'webconnection.api.url : (webconnection.api.disabled)'
 	}
 
 	@Unroll
@@ -50,7 +50,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			header.name == 'webconnection.title[ush]'
 			header.url == 'http://www.ushahidi.com/frontlinesms'
 			header.sendMethod == 'get'
-			header.subtitle == 'web connection to ushahidi'
+			header.subtitle == 'webconnection.ushahidi.subtitle[ushahidi]'
 	}
 
 	def "clicking the archive button archives the Webconnection and redirects to inbox "() {
