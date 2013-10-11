@@ -243,7 +243,7 @@ class AnnouncementSummary extends geb.Module {
 
 class DeleteDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("empty trash");
+		popupTitle.contains("smallpopup.empty.trash.prompt");
 	}
 	static content = {
 		title { $("#title").text() }
