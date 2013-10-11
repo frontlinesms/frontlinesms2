@@ -14,12 +14,8 @@
 			<td id="autoforward-confirm-messagetext"/>
 		</tr>
 		<tr>
-			<td><g:message code="autoforward.contacts"/></td>
-			<td id="autoforward-confirm-contacts"/>
-		</tr>
-		<tr>
-			<td><g:message code="autoforward.groups"/></td>
-			<td id="autoforward-confirm-groups"/>
+			<td><g:message code="autoforward.recipients"/></td>
+			<td id="autoforward-confirm-recipient-count"/>
 		</tr>
 	</table>
 </div>

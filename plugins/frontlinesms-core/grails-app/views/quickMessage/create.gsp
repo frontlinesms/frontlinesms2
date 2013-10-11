@@ -28,16 +28,17 @@
 		$("#tabs-1").contentWidget({
 			validate: function() {
 				var value = $("#messageText").val().htmlEncode();
-				$("#confirm-message-text").html(value || "none"); // FIXME i18n
-				recipientSelecter.updateRecipientCount();
+				$("#confirm-message-text").html(value || "-"); // FIXME i18n
+				recipientSelecter.fetchRecipientCount();
 				return true;
 			}
 		});
 		
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				recipientSelecter.addAddressHandler();
-				return ($("#recipient-count").html() > 0);
+				recipientSelecter.fetchRecipientCount();
+				console.log(recipientSelecter.getRecipientCount())
+				return (recipientSelecter.getRecipientCount() > 0);
 			}
 		});
 	}

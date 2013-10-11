@@ -28,6 +28,7 @@ class QuickMessageController extends ControllerUtils {
 				configureTabs: configureTabs,
 				groupList:groupList,
 				recipients:recipients,
+				addresses:recipients,
 				nonContactRecipients:nonContactRecipients,
 				recipientName: recipientName,
 				messageText: params.messageText ? params.messageText : [],
