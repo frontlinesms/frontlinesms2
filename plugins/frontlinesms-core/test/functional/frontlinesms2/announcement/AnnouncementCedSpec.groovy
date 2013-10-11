@@ -1,6 +1,7 @@
 package frontlinesms2.announcement
 
 import frontlinesms2.*
+import spock.lang.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.popup.*
 
@@ -32,10 +33,9 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			composeAnnouncement.textArea.value("announcing this new announcement!")
 			next.click()
 		then:
-			waitFor { recipients.addField.displayed }
+			waitFor { recipients.chosenInput.displayed }
 		when:
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient('+919544426000')
 			next.click()
 		then:
 			waitFor { confirm.announcementName.displayed }
@@ -76,10 +76,9 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			composeAnnouncement.textArea.value("announcing this new announcement!")
 			next.click()
 		then:
-			waitFor { recipients.addField.displayed }
+			waitFor { recipients.chosenInput.displayed }
 		when:
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
 			next.click()
 		then:
 			waitFor { confirm.announcementName.displayed }
@@ -106,10 +105,9 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			composeAnnouncement.textArea.value("박지성")
 			next.click()
 		then:
-			waitFor { recipients.addField.displayed }
+			waitFor { recipients.chosenInput.displayed }
 		when:
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
 			next.click()
 		then:
 			waitFor { confirm.announcementName.displayed }

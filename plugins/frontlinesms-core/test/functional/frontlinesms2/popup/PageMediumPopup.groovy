@@ -164,8 +164,17 @@ class EditMessageTab extends geb.Module {
 class RecipientsTab extends geb.Module {
 	static base = { $('div#tabs-6') }
 	static content = {
-		addField { $('input#address') }
-		addButton { $('a.btn.add-address') }
+		chosenInput { $('.chzn-container input[type=text]') }
+		chosenOption { label ->
+			$('.chzn-container ul.chzn-results li.active-result', text: contains(label))
+		}
+		addRecipient { searchString ->
+			chosenInput.click()
+			chosenInput.value(searchString)
+			chosenInput.jquery.trigger('keyup')
+			waitFor { chosenOption(searchString).displayed }
+			chosenOption(searchString).jquery.trigger("mouseup")
+		}
 		manual { $('li.manual.contact') }
 		count { $('#recipient-count').text()?.toInteger() }
 	}
