@@ -47,18 +47,8 @@ class QuickMessageComposeTab extends geb.Module {
 	}
 }
 
-class QuickMessageRecipientsTab extends geb.Module {
+class QuickMessageRecipientsTab extends RecipientsTab {
 	static base = { $('div#tabs-2') }
-	static content = {
-		addField { $('input#address') }
-		addButton { $('a.btn.add-address') }
-		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text()?.toInteger() }
-		manualContacts { $("li.manual").find("input", name:"addresses") }
-		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
-		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
-		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
-	}
 }
 
 class QuickMessageConfirmTab extends geb.Module {
