@@ -271,6 +271,7 @@ var mediumPopup = (function() {
 	messageResponseClick = function(messageType) {
 		var configureTabs, checkedMessageCount, me, src, messageSection, text;
 		configureTabs= "";
+		text = '';
 		me = $(this);
 		if (messageType === "Reply") {
 			configureTabs = "tabs-1, tabs-3, tabs-4";
@@ -284,10 +285,10 @@ var mediumPopup = (function() {
 			text = $("#single-message #message-detail-content p").text().trim();
 		}
 		messageSection = $("input:hidden[name=messageSection]").val();
-		
+		postData = jQuery.param({ recipients:src, messageText:text, configureTabs:configureTabs }, true)
 		$.ajax({
 			type:"POST",
-			data:{ recipients:src, messageText:text, configureTabs:configureTabs },
+			data:postData,
 			url:url_root + "quickMessage/create",
 			beforeSend:showThinking,
 			success:function(data, textStatus) {
