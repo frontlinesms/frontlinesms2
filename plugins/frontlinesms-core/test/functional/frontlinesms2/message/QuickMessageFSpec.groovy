@@ -67,17 +67,16 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { recipients.count == 2 }
 	}
 
-	def "unchecking a manually added contact updates the recipients count "() {
+	def "dropping a manually added contact updates the recipients count "() {
 		when:
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
 			recipients.addRecipient("+919544426000")
-			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
 		when:
-			recipients.manualContacts[0].click()
+			recipients.removeRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 0 }
 	}

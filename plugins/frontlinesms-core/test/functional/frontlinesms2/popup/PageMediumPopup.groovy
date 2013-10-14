@@ -177,8 +177,13 @@ class RecipientsTab extends geb.Module {
 			waitFor { chosenOption(searchString).displayed }
 			chosenOption(searchString).jquery.trigger("mouseup")
 		}
+		removeRecipient { label ->
+			if (!(['group', 'contact'].any { label.contains(it) }))
+				label = "\"$label\""
+			$('ul.chzn-choices li.search-choice', text: label).find('a.search-choice-close').click()
+		}
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text()?.toInteger() }
+		count { getRecipients().values().sum { it.size() } }
 	}
 }
 
