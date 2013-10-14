@@ -187,8 +187,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { error }
 		when:
-			recipients.addField = '1234567890'
-			recipients.addButton.click()
+			recipients.addRecipient('1234567890')
 		then:
 			waitFor { recipients.manual.size() == 1 }
 			recipients.count == 1
@@ -248,8 +247,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { recipients.displayed }
 		when:
-			recipients.addField = '1234567890'
-			recipients.addButton.click()
+			recipients.addRecipient '1234567890'
 		then:
 			waitFor { recipients.manual.size() == 1 }
 			recipients.count == 1
@@ -410,8 +408,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 			setKeywords()
 			goToTab(6)
-			recipients.addField = '1234567890'
-			recipients.addButton.click()
+			recipients.addRecipient '1234567890'
 		then:
 			waitFor { recipients.manual.size() == 1 }
 		when:

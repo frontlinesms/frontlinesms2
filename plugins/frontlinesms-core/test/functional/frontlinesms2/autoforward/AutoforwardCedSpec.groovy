@@ -31,8 +31,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		then: 'Recipients tab should open'
 			recipients.displayed
 		when: 'a recipient is added'
-			recipients.addField.value('1234567890')
-			recipients.addButton.click()
+			recipients.addRecipient('1234567890')
 			next.click()
 		then: 'Confirm tab should open'
 			confirm.displayed
@@ -67,8 +66,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		then: 'Recipients tab should open'
 			recipients.displayed
 		when: 'A contact is added'
-			recipients.addField.value('1234567890')
-			recipients.addButton.click()
+			recipients.addRecipient('1234567890')
 			next.click()
 		then: 'Confirm tab should open'
 			confirm.displayed
@@ -121,8 +119,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		when: 'Duplicate Keyword is entered'
 			keyword.keywordText = 'Breaking'
 			next.click()
-			recipients.addField.value('1234567890')
-			recipients.addButton.click()
+			recipients.addRecipient('1234567890')
 			next.click()
 		then: 'Confirm tab should open'
 			confirm.displayed
@@ -155,8 +152,8 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			keyword.keywordText = 'Goodbye'
 			next.click()
 		then: 'Contacts should be selected'
-			println "############# ${recipients.contactCheckboxesChecked*.value()}"
-			recipients.contactCheckboxesChecked*.value().containsAll((1..10).collect { mob -> remote { Contact.findByMobile(mob).mobile } })
+			println "############# RECIPIENTS::: ${recipients.getRecipients()}"
+			recipients.getRecipients('contact').containsAll((1..10).collect { mob -> remote { Contact.findByMobile(mob).id }.toString() })
 	}
 
 	def "comfirm page should have correct data listed" () {
@@ -172,10 +169,9 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		then: 'Recipients tab should open'
 			recipients.displayed
 		when: 'a recipient is added'
-			recipients.addField.value('1234567890')
-			recipients.addButton.click()
-			recipients.selectContact('1')
-			recipients.selectContact('2')
+			recipients.addRecipient('1234567890')
+			recipients.addRecipient('generated-contact-1')
+			recipients.addRecipient('generated-contact-2')
 			next.click()
 		then: 'Confirm tab should open'
 			confirm.displayed

@@ -47,8 +47,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
 	}
@@ -58,15 +57,12 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
+			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
 		when:
-			recipients.addField.value("+221122")
-			recipients.addButton.click()
+			recipients.addRecipient("+221122")
 		then:
 			waitFor { recipients.count == 2 }
 	}
@@ -76,10 +72,8 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
+			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
 		when:
@@ -93,8 +87,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
 			next.click()
 			submit.click()
 		then:
