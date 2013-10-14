@@ -159,6 +159,15 @@ class RecipientsTab extends geb.Module {
 			$('.chzn-container ul.chzn-results li.active-result', text: contains(label))
 		}
 		recipientsSelect { $('[name=recipients]') }
+		getRecipients { type = null ->
+			def recipients = [contact:[], address:[], group:[], smartgroup:[]]
+			recipientsSelect.value().each {
+				def k = it.split('-')[0]
+				def v = it.split('-')[1]
+				recipients[k] << v
+			}
+			return (type? recipients[type] : recipients)
+		}
 		addRecipient { searchString ->
 			chosenInput.click()
 			chosenInput.value(searchString)

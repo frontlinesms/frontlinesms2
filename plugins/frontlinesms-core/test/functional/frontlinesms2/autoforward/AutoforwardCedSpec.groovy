@@ -152,8 +152,8 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 			keyword.keywordText = 'Goodbye'
 			next.click()
 		then: 'Contacts should be selected'
-			println "############# ${recipients.contactCheckboxesChecked*.value()}"
-			recipients.contactCheckboxesChecked*.value().containsAll((1..10).collect { mob -> remote { Contact.findByMobile(mob).mobile } })
+			println "############# RECIPIENTS::: ${recipients.getRecipients()}"
+			recipients.getRecipients('contact').containsAll((1..10).collect { mob -> remote { Contact.findByMobile(mob).id }.toString() })
 	}
 
 	def "comfirm page should have correct data listed" () {
