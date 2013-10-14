@@ -20,9 +20,7 @@ class AutoforwardServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			new Group(name:'group3').save(failOnError:true)
 			new Group(name:'group4').save(failOnError:true)
 			def params = [:]
-			params.addresses = ['12345','67890']
-			params.groups = ["group-${Group.findByName('group3').id}", "group-${Group.findByName('group4').id}", "smartgroup-${SmartGroup.findByName('group').id}", "smartgroup-${SmartGroup.findByName('group2').id}"]
-			println params.groups
+			params.recipients = ["address-12345","address-67890","group-${Group.findByName('group3').id}", "group-${Group.findByName('group4').id}", "smartgroup-${SmartGroup.findByName('group').id}", "smartgroup-${SmartGroup.findByName('group2').id}"]
 		when:
 			autoforwardService.editContacts(autoforward, params)
 		then:
