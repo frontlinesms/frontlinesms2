@@ -70,6 +70,6 @@ class FolderISpec extends grails.plugin.spock.IntegrationSpec {
 			new Folder(name:'FolDeR').save(failOnError:true)
 		then:
 			Folder.findByNameIlike("folder").count() == 1
-			controller.flash.message == 'Could not create folder'
+			controller.flash.message == 'folder.create.failed'
 	}
 }

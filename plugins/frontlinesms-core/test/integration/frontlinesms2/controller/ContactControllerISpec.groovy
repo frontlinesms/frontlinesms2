@@ -164,7 +164,7 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.contactId = 12345
 			controller.show()
 		then:
-			controller.flash.message == 'Contact not found'
+			controller.flash.message == 'contact.not.found'
 	}
 	
 	def "attempting to view a missing group should forward to index"() {
@@ -172,7 +172,7 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId = 12345
 			controller.show()
 		then:
-			controller.flash.message == 'Group not found'
+			controller.flash.message == 'group.not.found'
 	}
 	
 	def "attempting to view a missing smart group should forward to index"() {
@@ -180,7 +180,7 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.smartGroupId = 12345
 			controller.show()
 		then:
-			controller.flash.message == 'Smart Group not found'
+			controller.flash.message == 'smartgroup.not.found'
 	}
 
 	def "should give correct total contact count even when in a group"() {

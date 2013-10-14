@@ -66,7 +66,7 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def getLookupResultFor(lookupResult, section) {
-		return lookupResult.results.find { it.text == i18ns."$section" }?.items*.text
+		return lookupResult.results.find { it.text == "contact.search.${section.toLowerCase()}" }?.items*.text
 	}
 }
 

@@ -40,6 +40,6 @@ class FconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			fconnectionService.enableFconnection(conn2)
 		then:
 			SystemNotification.count() == 2
-			SystemNotification.findAll()*.text.contains("Property [name] of class [Fconnection] cannot be blank")
+			SystemNotification.findAll()*.text.contains("connection.error.onsave[frontlinesms2.Fconnection.name.blank.error.frontlinesms2.Fconnection.name[frontlinesms2.Fconnection.name.label")
 	}
 }
