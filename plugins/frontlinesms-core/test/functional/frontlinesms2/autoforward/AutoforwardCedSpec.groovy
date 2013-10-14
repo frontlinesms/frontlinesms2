@@ -3,6 +3,7 @@ package frontlinesms2.autoforward
 import frontlinesms2.*
 import frontlinesms2.page.*
 import frontlinesms2.popup.*
+import spock.lang.*
 import frontlinesms2.message.PageMessageInbox
 
 class AutoforwardCedSpec extends AutoforwardBaseSpec{
@@ -176,10 +177,7 @@ class AutoforwardCedSpec extends AutoforwardBaseSpec{
 		then: 'Confirm tab should open'
 			confirm.displayed
 			confirm.keywordConfirm == 'HELLO'
-			confirm.groups == "autoforward.groups.none"
-			confirm.contacts.contains('generated-contact-1')
-			confirm.contacts.contains('generated-contact-2')
-			confirm.contacts.contains('1234567890')
+			confirm.recipientCount == '3'
 	}
 
 	def launchAutoforwardPopup(String tab = ''){
