@@ -207,7 +207,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.id = autoreply.id
 			controller.restore()
 		then:
-			controller.flash.message == i18nUtilService.getMessage([code:"default.restore.failed", args:["Activity" ,Autoreply.findByName("Should fail restore").id]])
+			controller.flash.message == "default.restore.failed[activity.label,${Autoreply.findByName("Should fail restore").id}]"
 	}
 }
 

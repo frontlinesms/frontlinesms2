@@ -17,7 +17,7 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.section()
 		then:
-			controller.response.text == '<p>This help file is not yet available, sorry.</p>'
+			controller.response.text == '<p>help.notfound</p>'
 	}
 
 	def 'appSettingsService should be updated to hide for rest of session on new popup display'() {
@@ -45,7 +45,7 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.section()
 		then:
-			controller.response.contentAsString == '<p>This help file is not yet available, sorry.</p>'
+			controller.response.contentAsString == '<p>help.notfound</p>'
 	}
 
 	def 'If a help file with the given name exists its text will be rendered'() {
