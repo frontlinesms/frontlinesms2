@@ -79,7 +79,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			next.click()
 		then:
 			waitFor { recipients.displayed }
-			waitFor { recipients.recipientsSelect*.value().contains("group-${remote { Group.findByName('Camping').id }}".toString()) }
+			waitFor { recipients.getRecipients('group') == [remote { Group.findByName('Camping').id }.toString() ] }
 	}
 
 	def 'Deleting a group that is used in a subscription should fail with an appropriate error'() {

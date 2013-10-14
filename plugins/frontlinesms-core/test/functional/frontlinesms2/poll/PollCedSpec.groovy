@@ -189,8 +189,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			recipients.addRecipient('1234567890')
 		then:
-			waitFor { recipients.manual.size() == 1 }
-			recipients.count == 1
+			waitFor { recipients.count == 1 }
 		when:
 			next.click()
 		then:
@@ -249,8 +248,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			recipients.addRecipient '1234567890'
 		then:
-			waitFor { recipients.manual.size() == 1 }
-			recipients.count == 1
+			waitFor { recipients.count == 1 }
 		when:
 			next.click()
 		then:
@@ -410,7 +408,7 @@ class PollCedSpec extends PollBaseSpec {
 			goToTab(6)
 			recipients.addRecipient '1234567890'
 		then:
-			waitFor { recipients.manual.size() == 1 }
+			waitFor { recipients.count == 1 }
 		when:
 			next.click()
 			confirm.pollName = 'Who is badder?'
