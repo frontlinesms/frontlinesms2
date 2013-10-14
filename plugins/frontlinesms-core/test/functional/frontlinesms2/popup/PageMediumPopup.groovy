@@ -156,7 +156,9 @@ class RecipientsTab extends geb.Module {
 	static content = {
 		chosenInput { $('.chzn-container input[type=text]') }
 		chosenOption { label ->
-			$('.chzn-container ul.chzn-results li.active-result', text: contains(label))
+			if (!(['group', 'contact'].any { label.contains(it) }))
+				label = "\"$label\""
+			$('.chzn-container ul.chzn-results li.active-result', text: label)
 		}
 		recipientsSelect { $('[name=recipients]') }
 		getRecipients { type = null ->
@@ -563,11 +565,9 @@ class AutoforwardRecipientsTab extends RecipientsTab {
 class AutoforwardConfirmTab extends geb.Module {
 	static base = { $('div#tabs-4') }
 	static content = {
-		nameText {$("#name")}
-		keywordConfirm {$("#keyword-confirm").text()}
-		contacts {$("#autoforward-confirm-contacts").text()}
-		groups {$("#autoforward-confirm-groups").text()}
-		smartGroups {$("#smart-groups").text()}
+		nameText { $("#name") }
+		keywordConfirm { $("#keyword-confirm").text() }
+		recipientCount { $("#autoforward-confirm-recipient-count").text() }
 	}
 }
 
