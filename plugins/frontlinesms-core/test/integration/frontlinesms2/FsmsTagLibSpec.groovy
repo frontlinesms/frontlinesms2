@@ -34,16 +34,6 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			output.contains 'input type="text" field="name"'
 	}
 	
-	def "INPUT creates a password input for a string field"() {
-		setup:
-			def clazz = new SmslibFconnection()
-		when:
-			params = [clazz:clazz]
-			template = '<fsms:input field="pin" instanceClass="${clazz.class}" instance="${clazz}" />'
-		then:
-			output.contains 'input type="password"'
-	}
-	
 	def "INPUT creates a select dropdown for an enum object"() {
 		setup:
 			def clazz = new EmailFconnection()
