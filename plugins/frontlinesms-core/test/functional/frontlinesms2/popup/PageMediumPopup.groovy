@@ -155,12 +155,16 @@ class RecipientsTab extends geb.Module {
 	static base = { $('div#tabs-6') }
 	static content = {
 		chosenInput { $('.chzn-container input[type=text]') }
-		chosenOption { label ->
-			if (!(['group', 'contact'].any { label.contains(it) }))
+		chosenOption { label=null ->
+			if (label && !(['group', 'contact'].any { label.contains(it) }))
 				label = "\"$label\""
-			$('.chzn-container ul.chzn-results li.active-result', text: label)
+			if (label)
+				$('.chzn-container ul.chzn-results li.active-result', text: label)
+			else
+				$('.chzn-container ul.chzn-results li.active-result')
 		}
 		recipientsSelect { $('[name=recipients]') }
+		noResultsIndicator { $('ul.chzn-results li.no-results') }
 		getRecipients { type = null ->
 			def recipients = [contact:[], address:[], group:[], smartgroup:[]]
 			recipientsSelect.value().each {
@@ -174,8 +178,21 @@ class RecipientsTab extends geb.Module {
 			chosenInput.click()
 			chosenInput.value(searchString)
 			chosenInput.jquery.trigger('keyup')
-			waitFor { chosenOption(searchString).displayed }
-			chosenOption(searchString).jquery.trigger("mouseup")
+			try {
+				waitFor { chosenOption(searchString).displayed || noResultsIndicator.displayed }
+			}
+			catch(geb.waiting.WaitTimeoutException e) {
+				// TODO drop this try catch once the empty optgroup bug is fixed, as the waitFor then covers all expected scenarios
+				// https://frontlinesms.jira.com/browse/TOOLS-737
+				return false
+			}
+			if( chosenOption(searchString).displayed) {
+				chosenOption(searchString).jquery.trigger("mouseup")
+				return true
+			}
+			else {
+				return false
+			}
 		}
 		removeRecipient { label ->
 			if (!(['group', 'contact'].any { label.contains(it) }))
