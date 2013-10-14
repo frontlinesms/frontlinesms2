@@ -1,0 +1,79 @@
+#!/bin/bash
+# S3 Deployment script for FrontlineSMS. Requires $FRONTLINESMS_SSH_USER
+# and # $FRONTLINESMS_SSH_PASS to be set and valid.
+
+# get local filename/path
+fileName() {
+	echo "$(ls install/target/install4j/ | grep $1)"
+}
+localPath() {
+	echo "$(ls install/target/install4j/frontlinesms* | grep $1)"
+}
+
+# upload files to S3 bucket & verify afterwards
+s3Upload() {
+	echo "Uploading to S3 bucket"
+	s3cmd put --acl-public --guess-mime-type $1 s3://${bucketName}/$2
+	s3cmd get s3://${bucketName}/$2 ${tempDir}/$1
+
+	md5Loc=$(md5sum $1 | awk '{print $1}')
+	md5Rem=$(md5sum ${tempDir}/$1 | awk '{print $1}')
+	echo "Local md5 checksum:  $md5Loc"
+	echo "Remote md5 checksum: $md5Rem"
+
+	if [ "$md5Loc" != "$md5Rem" ] ; then
+		echo "... verification failed, exiting script"
+		exit 0
+	else
+		echo "... verification successful"
+	fi
+}
+
+# 0. vars & set up
+bucketName="download-frontlinesms"
+serverUrl="ftp://frontlinesms.com/"
+serverPath="subdomains/wip/httpdocs/test/"
+
+tempDir=".tmp-$RANDOM"
+echo "Creating temporary directory at $tempDir"
+mkdir $tempDir
+echo "Setting up S3 access tokens"
+./setUpS3
+
+# 1. get paths & file names
+localWinPath=$(localPath windows)
+localMacPath=$(localPath mac)
+localUnxPath=$(localPath unix)
+winFile=$(fileName windows)
+macFile=$(fileName mac)
+unxFile=$(fileName unix)
+
+# 2. upload and verify
+s3Upload ${localWinPath}/$winFile $winFile
+s3Upload ${localMacPath}/$macFile $macFile
+s3Upload ${localUnxPath}/$unxFile $unxFile
+
+# 3. rewrite .htaccess
+s3LinkWin="http://${bucketName}.s3.amazonaws.com/${winFile}"
+s3LinkMac="http://${bucketName}.s3.amazonaws.com/${macFile}"
+s3LinkUnx="http://${bucketName}.s3.amazonaws.com/${unxFile}"
+
+touch ${tempDir}/.htaccess
+cat << EOT >> ${tempDir}/.htaccess
+Redirect /test-s3dl/latest/windows $s3LinkWin
+Redirect /test-s3dl/latest/mac     $s3LinkMac
+Redirect /test-s3dl/latest/unix    $s3LinkUnx
+EOT
+echo "Rewrote .htaccess with the following contents:"
+cat ${tempDir}/.htaccess
+
+# 4. publish .htaccess
+echo "Pushing .htaccess file to $serverUrl$serverPath"
+curl -T "${tempDir}/.htaccess" -u $FRONTLINESMS_SSH_USER:\
+$FRONTLINESMS_SSH_PASS -Q "TYPE I" "$serverUrl$serverPath"
+
+echo "Cleaning up"
+# 5. cleanup
+rm -R $tempDir
+
+echo "Complete"
