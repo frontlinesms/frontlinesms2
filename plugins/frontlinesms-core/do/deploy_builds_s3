@@ -1,7 +1,13 @@
 #!/bin/bash
 # S3 Deployment script for FrontlineSMS. Requires $FRONTLINESMS_SSH_USER
 # and # $FRONTLINESMS_SSH_PASS to be set and valid.
+set -e
 
+#check if $FRONTLINESMS_SSH_USER and $FRONTLINESMS_SSH_PASS env variables are set
+if [ -z "$FRONTLINESMS_SSH_USER" ] && [ -z "$FRONTLINESMS_SSH_PASS" ] ; then
+	echo "[error] FRONTLINESMS_SSH_USER or FRONTLINESMS_SSH_PASS has not been set"
+	exit 1
+fi
 # get local filename/path
 fileName() {
 	echo "$(ls install/target/install4j/ | grep $1)"
