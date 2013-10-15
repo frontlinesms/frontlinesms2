@@ -54,7 +54,7 @@ class QuickMessageRecipientsTab extends RecipientsTab {
 class QuickMessageConfirmTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
-		messagesToSendCount { $('#contacts-count').text() }
+		messagesToSendCount { $('#messages-count').text() }
 		recipientName { $('td#recipient').text() }
 		messageText { $('td#confirm-message-text').text() }
 	}
