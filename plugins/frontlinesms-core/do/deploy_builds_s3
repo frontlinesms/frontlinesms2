@@ -38,7 +38,7 @@ s3Upload() {
 # 0. vars & set up
 bucketName="download-frontlinesms"
 serverUrl="ftp://frontlinesms.com/"
-serverPath="subdomains/wip/httpdocs/test/"
+serverPath="subdomains/wip/httpdocs/dl/"
 
 tempDir=".tmp-$RANDOM"
 echo "Creating temporary directory at $tempDir"
@@ -62,7 +62,7 @@ for osArch in "windows" "mac" "unix"; do
 	s3Link="http://$bucketName.s3.amazonaws.com/${osArchFile}"
 	echo "Creating redirect statement in .htaccess to $s3Link"
 
-	echo "Redirect /test-s3dl/latest/$osArch $s3Link" >> ${tempDir}/.htaccess
+	echo "Redirect /dl/latest/$osArch $s3Link" >> ${tempDir}/.htaccess
 done
 
 echo "Rewrote .htaccess with the following contents:"
