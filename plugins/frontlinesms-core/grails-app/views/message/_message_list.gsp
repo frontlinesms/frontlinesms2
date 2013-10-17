@@ -77,7 +77,7 @@
 						</g:else>
 					</g:if>
 					<g:elseif test="${(messageSection=='pending') || (messageSection=='sent')}">
-						<g:message code="fmessage.messages.pending.none"/>
+						<g:message code="fmessage.messages.sent.none"/>
 					</g:elseif>
 					<g:else>
 						<g:message code="fmessage.messages.none"/>
