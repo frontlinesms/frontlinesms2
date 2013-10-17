@@ -29,7 +29,7 @@ s3Upload() {
 
 	if [ "$md5Loc" != "$md5Rem" ] ; then
 		echo "... verification failed, exiting script"
-		exit 0
+		exit 1
 	else
 		echo "... verification successful"
 	fi
