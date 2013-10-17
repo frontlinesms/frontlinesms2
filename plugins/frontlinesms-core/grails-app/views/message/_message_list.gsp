@@ -76,6 +76,9 @@
 							<g:message code="fmessage.search.description"/>
 						</g:else>
 					</g:if>
+					<g:elseif test="${(messageSection=='pending') || (messageSection=='sent')}">
+						<g:message code="fmessage.messages.sent.none"/>
+					</g:elseif>
 					<g:else>
 						<g:message code="fmessage.messages.none"/>
 					</g:else>

@@ -8,7 +8,6 @@
 }
 .chzn-container .chzn-drop {
   background: #fff;
-  border: 1px solid #aaa;
   position: absolute;
   top: 29px;
   left: 0;
@@ -273,6 +272,7 @@
 .chzn-container .chzn-results .no-results {
   background: #f4f4f4;
   display: list-item;
+  border: 1px solid #aaa;
 }
 .chzn-container .chzn-results .group-result {
   display: list-item;
