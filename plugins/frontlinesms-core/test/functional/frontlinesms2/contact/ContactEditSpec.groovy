@@ -109,5 +109,23 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.sentCount == 'contact.messages.sent[2]'
 			singleContactDetails.receivedCount == 'contact.received.messages[1]'
 	}
+
+	def 'in edit mode, a focused then blurred field should appear in view mode'() { throw new RuntimeException() }
+
+	def 'in edit mode, all fields should appear in view mode unless user focusses on them'() { throw new RuntimeException() }
+
+	def 'in edit mode, form data should only be submitted via ajax if values are dirty'() { throw new RuntimeException() }
+
+	def 'in edit mode, user should get success notification if contact editing was successull'() { throw new RuntimeException() }
+
+	def 'in edit mode, user should get failure notification if contact editing failed'() { throw new RuntimeException() }
+
+	def 'in edit mode, save and cancel button should not be visible'() { throw new RuntimeException() }
+
+	def 'in edit mode, on hover of contact data the user should see styling that indicates editability'() { throw new RuntimeException() }
+
+	def 'after editing a contact the user should not be redirected to another page'() { throw new RuntimeException() }
+
+	def 'if user is adding a new contact the form data should be sent via normal POST not ajax'() { throw new RuntimeException() }
 }
 
