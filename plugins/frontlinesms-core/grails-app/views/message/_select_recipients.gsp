@@ -1,3 +1,3 @@
 <div>
-	<fsms:recipientSelector class="customactivity-field" groups="${groups}" smartGroups="${smartGroups}" contacts="${contacts}" addresses="${addresses}" />
+	<fsms:recipientSelector class="customactivity-field" explanatoryText="${true}" groups="${groups}" smartGroups="${smartGroups}" contacts="${contacts}" addresses="${addresses}" />
 </div>

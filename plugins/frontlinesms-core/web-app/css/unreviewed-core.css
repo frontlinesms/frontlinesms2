@@ -19,3 +19,4 @@ fieldset.table { display:table; }
 .chzn-container-multi .chzn-choices .search-choice { -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;  }
 
 #failed-contacts p.warning_message { margin:10px 0 8px; }
+.recipient_selector_wrap { margin-bottom:2px; }

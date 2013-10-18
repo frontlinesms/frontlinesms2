@@ -367,6 +367,11 @@ class FsmsTagLib {
 	}
 
 	def recipientSelector = { att ->
+		if (att.explanatoryText) {
+			out << '<div class="recipient_selector_wrap"><h2>'
+			out << i18nUtilService.getMessage([code:'contact.search.helptext'])
+			out << '</h2></div>'
+		}
 		out << '<select name="recipients" style="width:320px;" data-placeholder="' + i18nUtilService.getMessage([code:'contact.search.placeholder']) + '" multiple class="chzn-select customactivity-field">'
 
 		def contacts = att?.contacts
