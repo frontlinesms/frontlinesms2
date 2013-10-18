@@ -103,6 +103,7 @@ grails.project.dependency.resolution = {
 			export = false
 		}
 		build ':bails:0.3.1'
+		compile ':font-awesome-resources:3.2.1.3'
 	}
 }
 

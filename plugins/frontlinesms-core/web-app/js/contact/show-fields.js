@@ -72,7 +72,7 @@ function addCustomField(name) {
 	fieldId = Math.floor(Math.random() * 100001);
 	fieldRow = $('<tr><td><label for="' + fieldId + '">' + name + '</label></td></tr>');
 	textFieldItem = $('<input type="text" name="' + name + '"/>');
-	deleteButton = $('<a class="remove-command unsaved-field custom-field" id="remove-field-' + fieldId + '">&nbsp;</a>');
+	deleteButton = $('<a class="remove-command icon-remove unsaved-field custom-field" id="remove-field-' + fieldId + '">&nbsp;</a>');
 
 	fieldTd = $("<td/>");
 	fieldTd.append(textFieldItem);
@@ -84,6 +84,9 @@ function addCustomField(name) {
 	$('#info-add').parent().before(fieldRow);
 	$('input[name="' + name + '"]').focus();
 	addField(name);
+	
+	var contactEditForm = $(".contact-edit-form");
+	contactEditForm.trigger("addedCustomFieldToContact");
 }
 
 function removeFieldClickAction() {

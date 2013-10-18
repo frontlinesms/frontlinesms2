@@ -124,7 +124,11 @@ class ContactController extends ControllerUtils {
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
 		}
-		redirect(action:'show', params:[contactId:contactInstance.id])
+		if(request.xhr) {
+			render ([success:true] as JSON)
+		} else {
+			redirect(action:'show', params:[contactId:contactInstance.id])
+		}
 	}
 	
 	def update() {

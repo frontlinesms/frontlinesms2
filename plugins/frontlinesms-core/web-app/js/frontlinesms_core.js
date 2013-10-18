@@ -37,6 +37,20 @@ if(!String.prototype.htmlEncode) {
 	};
 }
 
+//Imported from http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+if(!String.prototype.hashCode) {
+	String.prototype.hashCode = function() {
+		var hash = 0, i, char;
+		if (this.length == 0) return hash;
+		for (i = 0, l = this.length; i < l; i++) {
+			char  = this.charCodeAt(i);
+			hash  = ((hash<<5)-hash)+char;
+			hash |= 0;
+		}
+		return hash;
+	};
+}
+
 // Standardise the onclick/onchange firing in IE before IE9
 function addChangeHandlersForRadiosAndCheckboxes() {
 	jQuery('input:radio, input:checkbox').click(function() {

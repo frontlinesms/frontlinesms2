@@ -24,7 +24,7 @@
 #body.contacts #main-list li a, #body.contacts #main-list li label { padding:8px 0 9px 46px; display:block; }
 #body.contacts #main-list li input[type="checkbox"] { vertical-align:middle; position:absolute; top:7px; left:22px; }
 
-#body.contacts #detail { padding:37px; background-color:#d8e8ef; border-left:1px solid #9e9e9e; }
+#body.contacts #detail { padding:37px; background-color:white; border-left:1px solid #9e9e9e; }
 
 #body.contacts table input[type="text"], #body.contacts table textarea, #body.contacts td:nth-child(1) { padding:5px; }
 #body.contacts table .warning{ display:none; width:300px; padding:0 3px 3px 3px; color:#C03283; }
@@ -50,7 +50,28 @@
 #body.contacts #detail #multiple-contacts #multi-group-list { margin:10px 0; }
 #body.contacts #detail #multiple-contacts #multi-group-dropdown { margin:0 0 20px 0; }
 
-.send-message { background-image:url('../images/icons/send.png'); background-repeat:no-repeat;
-	display:inline-block; height:14px; text-indent:-999999px; display:ltr; width:14px; margin-left:3px; }
 .send-message.hidden { display:none; }
 #modalBox #smartGroup-table { margin:20px; }
+
+#body.contacts .edit input[type="text"], #body.contacts .edit textarea { border:0px; background-color:#F8F8F8; }
+#body.contacts .edit input[type="text"]:focus, #body.contacts .edit textarea:hover { background-color:#ffffff; }
+#body.contacts .edit .buttons .save { display:none; }
+#body.contacts .edit .btn-delete { color:#E00C0E; text-decoration: underline; }
+#body.contacts .edit .icon-remove-sign { color:#E00C0E; }
+#body.contacts .edit .buttons .cancel { display:none; }
+#body.contacts .edit .remove-command { background: none; }
+#body.contacts .edit table tr.editable:hover { background-color:#d8e8ef; }
+#body.contacts .edit table tr.editable:hover .icon-remove { color:#E00C0E; }
+
+#body.contacts table tr.editable .edit { width:0px; height:100%; background-color: red; }
+#body.contacts table tr.editable:hover .edit {
+    width: 50px;
+    border: 3px solid red;
+    -webkit-transition: width 3s linear;
+    -moz-transition: width 3s linear;
+}
+
+#body.contacts .edit table tr:hover * { cursor: pointer; }
+#body.contacts .edit table tr:hover input { cursor: text; }
+#body.contacts .edit table tr:hover textarea { cursor: text; }
+

@@ -79,6 +79,7 @@ modules = {
 	
 	contacts {
 		dependsOn 'common'
+		dependsOn 'font-awesome'
 		resource url:[dir:'js', file:'contact/buttonStates.js']
 		resource url:[dir:'js', file:'contact/moreGroupActions.js']
 		resource url:[dir:'js', file:'contact/search_within_list.js']

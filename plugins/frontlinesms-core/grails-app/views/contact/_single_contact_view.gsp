@@ -1,4 +1,4 @@
-<div id="single-contact" class="single-contact">
+<div id="single-contact" class="single-contact ${(contactInstance?.id)?'edit':''}">
 	<g:if test="${contactInstance}">
 		<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 	</g:if>
@@ -7,41 +7,34 @@
 	<g:hiddenField name="fieldsToAdd" value=","/>
 	<g:hiddenField name="fieldsToRemove" value=","/>
 	<table>
-		<tr>
+		<tr class="editable">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
 				<g:textField name="name" value="${contactInstance?.name}"/>
-				<a class="remove-command not-custom-field" id="remove-name">&nbsp;</a>
+				<span class="edit"></span>
 			</td>
 		</tr>
-		<tr>
+		<tr class="editable">
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
 				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)"/>
-				<g:if test="${contactInstance?.mobile?.trim()}">
-					<a class="remove-command not-custom-field" id="remove-mobile">
-						<g:message code="contact.remove.mobile"/>
-					</a>
-					<fsms:popup class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
-						&nbsp;
-					</fsms:popup>
-				</g:if>
+				<span><i class="icon-edit"></i></span>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
 		</tr>
-		<tr>
+		<tr class="editable">
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
 				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}"/>
-				<a class="remove-command not-custom-field" id="remove-email">&nbsp;</a>
+				<span><i class="icon-edit"></i></span>
 			</td>
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
-			<tr class="input ${f==fieldInstance? 'selected': ''}">
+			<tr class="input editable ${f==fieldInstance? 'selected': ''}">
 				<td><label for="custom-field-${f.name}">${f.name}</label></td>
 				<td>
 					<input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
-					<a class="remove-command custom-field" id="remove-field-${f.id}">&nbsp;</a>
+					<a id="remove-field-${f.id}" class="icon-remove custom-field remove-command"></a>
 				</td>
 			</tr>
 		</g:each>
@@ -62,7 +55,7 @@
 			</td>
 			<td></td>
 		</tr>
-		<tr id="note-area" class="input basic-info">
+		<tr id="note-area" class="input basic-info editable">
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
 			<td><g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/></td>
 		</tr>
@@ -72,7 +65,8 @@
 				<ul id="group-list">
 					<g:each in="${contactGroupInstanceList}" status="i" var="g">
 						<li class="${g == groupInstance ? 'selected' : ''}" groupName="${g.name}">
-							<span>${g.name}</span><a class="remove-command" id="remove-group-${g.id}"><g:message code="contact.remove.from.group"/></a>
+							<span>${g.name}</span>
+							<a class="remove-command icon-remove" id="remove-group-${g.id}"></a>
 						</li>
 					</g:each>
 					<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
@@ -95,7 +89,7 @@
 	</table>
 	<div id="action-buttons" class="buttons">
 		<g:if test="${contactInstance?.id}">
-			<g:actionSubmit class="btn" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
+			<g:actionSubmit class="btn save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
 			<g:link class="cancel btn disabled"><g:message code="action.cancel"/></g:link>
 		</g:if>
 		<g:else>
@@ -104,9 +98,16 @@
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
-			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
-				<g:message code="action.delete"/>
+			<i class="icon-remove-sign"></i>
+			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete">
+				<g:message code="contact.action.delete"/>
 			</g:link>
+		</g:if>
+
+		<g:if test="${contactInstance?.mobile?.trim()}">
+			<fsms:popup class="icon-envelope send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+			<g:message code="message.content.asd"/>
+			</fsms:popup>
 		</g:if>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
@@ -153,6 +154,59 @@ $(function() {
 			}
 		}
 	});
+
+	contactCtrl.init();
 });
+
+var contactCtrl = function() {
+	var formHash = 0,
+	contactEditForm = $(".contact-edit-form"),
+	contactFormDirtyCallBack = function() { contactEditForm.trigger("contactFormDirty"); },
+	init = function() {
+		formHash = contactEditForm.serialize().hashCode();
+		$("#notes").autosize();
+
+		bindOnFormDataChangedListeners();
+
+		contactEditForm.on("addedCustomFieldToContact", function() {
+			$(".edit input[type=text]").on("blur", contactFormDirtyCallBack);
+			$(".edit .remove-command").on("click", contactFormDirtyCallBack);			
+		});
+
+		contactEditForm.on("addedGroupToContact", function() {
+			$(".edit .remove-command").on("click", contactFormDirtyCallBack);
+		});
+
+		contactEditForm.on("contactFormDirty", function() {
+			updateContactData();
+		});
+	},
+	bindOnFormDataChangedListeners = function() {
+		$(".edit input[type=text]").on("blur", contactFormDirtyCallBack);
+		$(".edit input[type=hidden]").on("change", contactFormDirtyCallBack);
+		$(".edit select").on("change", contactFormDirtyCallBack);
+		$(".edit textarea").on("blur", contactFormDirtyCallBack);
+		$(".edit .remove-command").on("click", contactFormDirtyCallBack);
+	},
+	updateContactData = function() {
+		if(formDataChanged) {
+			$.ajax({
+				type : 'POST',
+				url : url_root + "contact/saveContact",
+				data : contactEditForm.serialize(),
+				success : function(data) {
+					console.log(data);
+				}
+			});
+		}
+	},
+	formDataChanged = function() {
+		return (contactEditForm.serialize().hashCode() != formHash);
+	};
+
+	return {
+		init : init
+	}
+}();
 </r:script>
 

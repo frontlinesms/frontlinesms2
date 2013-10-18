@@ -19,7 +19,7 @@
 		<fsms:render template="/head"/>
 		<div id="body" class="contacts">
 			<fsms:render template="menu"/>
-			<g:form controller="contact">
+			<g:form controller="contact" class="contact-edit-form">
 				<div id="main-list-container">
 					<div id="main-list-head">
 						<fsms:render template="header"/>

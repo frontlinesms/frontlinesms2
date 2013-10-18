@@ -19,7 +19,7 @@ function addGroupClickAction() {
 	noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups');
 
 	groupListItem = $('<li class="" groupName="' + groupName + '"><span>' + groupName + '</span>');
-	deleteButton = $('<a class="remove-command" id="remove-group-' + groupId + '"></a></li>');
+	deleteButton = $('<a class="remove-command icon-remove" id="remove-group-' + groupId + '"></a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
 	
@@ -28,6 +28,9 @@ function addGroupClickAction() {
 	noGroup.hide();
 	addGroupId(groupId);
 	enableSaveAndCancel();
+
+	var contactEditForm = $(".contact-edit-form");
+	contactEditForm.trigger("addedGroupToContact");
 }
 
 function removeGroupClickAction() {

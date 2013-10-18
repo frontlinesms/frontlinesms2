@@ -93,9 +93,8 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 #thinking img { background-color:white; padding:5px; border-radius:5px;
 	position:absolute; left:50%; width:40px; margin-left:-20px; top:50%; height:40px; margin-top:-20px; }
 
-.remove-command { background-image:url('../images/icons/remove.png'); background-repeat:no-repeat;
-	display:inline-block; height:14px; text-indent:-999999px; display:ltr; width:14px; margin-left:3px; }
-.remove-command:hover { background-image:url('../images/icons/remove_hover.png'); }
+.remove-command { margin-left: 5px; }
+.remove-command:hover { }
 .remove-command.hidden { display:none; }
 
 .message-composer {
