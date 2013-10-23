@@ -199,6 +199,7 @@ var contactCtrl = function() {
 				data : contactEditForm.serialize(),
 				success : function(data) {
 					console.log(data);
+					$('#action-buttons .send-message').html(' '+i18n('contact.send.message', $('.contact-edit-form [name="name"]').val())+' ')
 				}
 			});
 		}
