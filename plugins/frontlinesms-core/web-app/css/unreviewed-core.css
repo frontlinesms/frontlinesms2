@@ -19,3 +19,28 @@ fieldset.table { display:table; }
 .chzn-container-multi .chzn-choices .search-choice { -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;  }
 
 #failed-contacts p.warning_message { margin:10px 0 8px; }
+.stroked {
+	border: 1px solid;
+}
+.stroked.btn {
+	display: inline-block;
+	border: 1px solid #bbb;
+	padding: 5px;
+	font-size: 1em;
+	margin: 10px 0;
+	background-image: none;
+	border-radius: 2px;
+	transition: border-color 1s linear;
+}
+.stroked.btn:hover {
+	border: 1px solid #444;
+}
+
+.stroked.btn.warn {
+	color: #E00C0E;
+	border-color: #E95556;
+}
+
+.stroked.btn.warn:hover {
+	border-color: #E00C0E;
+}

@@ -17,7 +17,7 @@
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
 				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)" title='Click to edit'/>
-				<span><i class="icon-edit"></i></span>
+				<a class="icon-edit" href=''></a>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
 		</tr>
@@ -87,6 +87,17 @@
 		</tr>
 	</table>
 	<div id="action-buttons" class="buttons">
+		<g:if test="${contactInstance?.mobile?.trim()}">
+			<fsms:popup class="icon-envelope send-message stroked block btn" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+			<g:message code="contact.send.message" args="${[contactInstance.name?:contactInstance.mobile]}"/>
+			</fsms:popup>
+		</g:if>
+		<g:if test="${contactInstance?.id}">
+			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete btn stroked warn">
+				<i class="icon-remove-sign"></i>
+				<span><g:message code="contact.action.delete"/></span>
+			</g:link>
+		</g:if>
 		<g:if test="${contactInstance?.id}">
 			<g:actionSubmit class="btn save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
 			<g:link class="cancel btn disabled"><g:message code="action.cancel"/></g:link>
@@ -96,18 +107,7 @@
 			<g:link class="cancel btn" action="index"><g:message code="action.cancel"/></g:link>
 		</g:else>
 		
-		<g:if test="${contactInstance?.id}">
-			<i class="icon-remove-sign"></i>
-			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete">
-				<g:message code="contact.action.delete"/>
-			</g:link>
-		</g:if>
 
-		<g:if test="${contactInstance?.mobile?.trim()}">
-			<fsms:popup class="icon-envelope send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
-			<g:message code="message.content.asd"/>
-			</fsms:popup>
-		</g:if>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
 		<div id="message-stats">
