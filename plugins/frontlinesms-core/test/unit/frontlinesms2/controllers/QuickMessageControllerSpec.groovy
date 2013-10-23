@@ -18,7 +18,7 @@ class QuickMessageControllerSpec extends Specification {
 		}
 	}
 
-	def 'create returns the contact, group list'() {
+	def 'create returns the prepopulated recipients'() {
 		setup:
 			def jim = Contact.findByName('jim')
 			def mohave = Group.findByName('Mojave')
@@ -26,12 +26,10 @@ class QuickMessageControllerSpec extends Specification {
 			params.recipients = address
 		when:
 			def result = controller.create()
-			println "result.groupList: ${result.groupList['group-32']*.class}"
 		then:
 			result.contactList == [jim]
 			result.recipients == address
 			result.nonExistingRecipients == address
-			result.groupList["group-$mohave.id"] == [name:mohave.name ,addresses:[jim.mobile]]
 	}
 
 	def 'create returns the contact, group list even if address comes as a string'() {
