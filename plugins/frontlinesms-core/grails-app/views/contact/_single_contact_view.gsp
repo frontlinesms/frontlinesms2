@@ -103,12 +103,12 @@
 			</g:link>
 		</g:if>
 		<g:if test="${contactInstance?.id}">
-			<g:actionSubmit class="btn save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
-			<g:link class="cancel btn disabled"><g:message code="action.cancel"/></g:link>
+			<g:actionSubmit class="btn stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
+			<g:link class="cancel btn stroked disabled"><g:message code="action.cancel"/></g:link>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="btn" action="saveContact" value="${g.message(code:'action.save')}"/>
-			<g:link class="cancel btn" action="index"><g:message code="action.cancel"/></g:link>
+			<g:actionSubmit class="btn stroked" action="saveContact" value="${g.message(code:'action.save')}"/>
+			<g:link class="cancel stroked btn warn" action="index"><g:message code="action.cancel"/></g:link>
 		</g:else>
 		
 

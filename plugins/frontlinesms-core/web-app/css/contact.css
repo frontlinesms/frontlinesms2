@@ -56,17 +56,21 @@
 .send-message.hidden { display:none; }
 #modalBox #smartGroup-table { margin:20px; }
 
-#body.contacts .editable input[type="text"], #body.contacts .editable textarea { border: 1px #ffffff solid; transition: border-color 1s linear; }
-
-#body.contacts .editable input[type="text"]:focus,
-#body.contacts .editable input[type="text"]:hover,
-#body.contacts .editable textarea:hover { 
+#body.contacts .editable input[type="text"], #body.contacts .editable textarea { border: 1px #bbb solid; transition: border-color 1s linear; }
+#body.contacts #note-area textarea { padding: 10px 5px; border-color: #ddd; }
+#body.contacts .edit .editable input[type="text"], #body.contacts .edit #note-area textarea {  transition: border-color 1s linear; }
+#body.contacts .edit .editable input[type="text"] { border: 1px #fff solid; }
+#body.contacts .edit .editable input[type="text"]:focus,
+#body.contacts .edit .editable input[type="text"]:hover,
+#body.contacts #note-area textarea:hover { 
 	background-color: #ffffff; 
 	border-color: #bbb;
 }
 
 #body.contacts .edit .buttons .save { display:none; }
 #body.contacts .edit .btn-delete { color:#E00C0E; border: none; }
+#body.contacts .btn.cancel { color:#E00C0E; border: none; }
+#body.contacts .btn.cancel:hover { text-decoration: underline; }
 #body.contacts .edit .btn-delete:hover span { text-decoration: underline; }
 #body.contacts .edit .editable .icon-remove { visibility: hidden; }
 #body.contacts .edit .buttons .cancel { display:none; }
@@ -76,10 +80,9 @@
 #body.contacts .edit table tr.editable .icon-remove:hover { color:#E00C0E; }
 #body.contacts #note-area { position: relative; }
 #body.contacts #note-area .icon-edit { position: absolute; }
-#body.contacts #note-area textarea { border-color: #eee; padding: 15px auto; }
 #body.contacts table tr.editable input[type='text'], #body.contacts table tr.editable textarea { width:180px; }
 #body.contacts table tr.editable .icon-edit { opacity: 0.0; display: inline-block; margin-left: 5px; transition: opacity 1s linear; }
-#body.contacts table tr.editable:hover .icon-edit { opacity: 1.0; }
+#body.contacts .edit table tr.editable:hover .icon-edit { opacity: 1.0; }
 
 #body.contacts .edit table tr:hover * { cursor: pointer; }
 #body.contacts .edit table tr:hover input { cursor: text; }
