@@ -31,7 +31,7 @@
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
 			<tr class="input editable ${f==fieldInstance? 'selected': ''}">
-				<td><label for="custom-field-${f.name}">${f.name}</label></td>
+				<td><label for="field-item-${f.name}">${f.name}</label></td>
 				<td>
 					<input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
 					<a id="remove-field-${f.id}" class="icon-remove custom-field remove-command"></a>

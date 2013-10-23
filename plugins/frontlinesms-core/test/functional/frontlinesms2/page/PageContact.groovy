@@ -113,7 +113,7 @@ class SingleContactDetails extends geb.Module {
 		removeCustomFeild { feildId ->
 			$('a#remove-field-'+feildId).click()
 		}
-		contactsCustomFields { $('label', for: startsWith("custom-field-"))*.text() }
+		contactsCustomFields { $('label', for: startsWith("field-item-"))*.text() }
 		groupDropDown { $('#group-dropdown') }
         groupList { $('ul#group-list li span')*.text() }
         removeGroup { groupId ->
