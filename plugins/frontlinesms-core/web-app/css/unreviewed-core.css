@@ -44,3 +44,4 @@ fieldset.table { display:table; }
 .stroked.btn.warn:hover {
 	border-color: #E00C0E;
 }
+.recipient_selector_wrap { margin-bottom:2px; }

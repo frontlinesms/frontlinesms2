@@ -150,8 +150,6 @@ class DispatchRouterService {
 		if(!connection) return null
 		println "## Sending message with Connection with $connection ##"
 		def allOutRoutes = camelContext.routes.findAll { it.id.startsWith('out-') }
-		println "allOutRoutes ## $allOutRoutes"
-		println "ALL ROUTE IDS ## ${allOutRoutes*.id}"
 		def routeToTake = allOutRoutes.find{ it.id.endsWith("-${connection.id}") }
 		println "Chosen Route ## $routeToTake"
 		routeToTake? routeToTake.id: null

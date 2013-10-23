@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.*" %>
 <div class="header-buttons">
 	<g:if test='${ownerInstance?.shortName=='subscription'}'>
-		<fsms:quickMessage class="section-action-button activity-btn btn" groupId="${ownerInstance.group.id}"/>
+		<fsms:quickMessage class="section-action-button activity-btn btn" groupList="${ownerInstance?.group?.id?:''}"/>
 	</g:if>
 	<g:else>
 		<fsms:quickMessage class="section-action-button activity-btn btn"/>

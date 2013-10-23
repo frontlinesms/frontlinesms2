@@ -1,7 +1,7 @@
 var mediumPopup = (function() {
 	var ___start___,
 		cancel, submit, submitWithoutClose, range,
-		selectSubscriptionGroup, editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
+		editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
 		createModalBox,
 		launchMediumPopup, launchNewFeaturePopup, launchMediumWizard, launchHelpWizard,
 		getCurrentTab, getCurrentTabDom, getCurrentTabIndex, getTabLength,
@@ -307,11 +307,6 @@ var mediumPopup = (function() {
 		});
 	};
 
-	selectSubscriptionGroup = function(groupId) { // FIXME activity-specific code should not be inside this file
-		var labelId = $('input[value=group-'+groupId+']').attr('id');
-		$('label[for='+labelId+']').trigger('click');
-	};
-
 	return {
 		addValidation:addValidation,
 		appendButton:appendButton,
@@ -323,7 +318,6 @@ var mediumPopup = (function() {
 		launchMediumWizard:launchMediumWizard,
 		launchHelpWizard:launchHelpWizard,
 		messageResponseClick:messageResponseClick, // TODO move this somewhere more suitable
-		selectSubscriptionGroup:selectSubscriptionGroup, // TODO move this somewhere more suitable
 		submit:submit,
 		tabValidates:tabValidates,
 		getCurrentTab:getCurrentTab,
