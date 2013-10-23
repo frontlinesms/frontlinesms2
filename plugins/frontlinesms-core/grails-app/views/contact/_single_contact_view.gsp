@@ -7,24 +7,25 @@
 	<g:hiddenField name="fieldsToAdd" value=","/>
 	<g:hiddenField name="fieldsToRemove" value=","/>
 	<table>
-		<tr class="editable">
+		<tr class="editable" title='Click to edit'>
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
-				<g:textField name="name" value="${contactInstance?.name}" title='Click to edit'/>
+				<g:textField name="name" value="${contactInstance?.name}"/>
+				<span><i class="icon-edit"></i></span>
 			</td>
 		</tr>
-		<tr class="editable">
+		<tr class="editable" title='Click to edit'>
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
-				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)" title='Click to edit'/>
-				<a class="icon-edit" href=''></a>
+				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)"/>
+				<span><i class="icon-edit"></i></span>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
 		</tr>
-		<tr class="editable">
+		<tr class="editable" title='Click to edit'>
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
-				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" title='Click to edit'/>
+				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}"/>
 				<span><i class="icon-edit"></i></span>
 			</td>
 		</tr>
@@ -32,7 +33,7 @@
 			<tr class="input editable ${f==fieldInstance? 'selected': ''}">
 				<td><label for="custom-field-${f.name}">${f.name}</label></td>
 				<td>
-					<input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}" title='Click to edit'/>
+					<input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
 					<a id="remove-field-${f.id}" class="icon-remove custom-field remove-command"></a>
 				</td>
 			</tr>
@@ -54,9 +55,12 @@
 			</td>
 			<td></td>
 		</tr>
-		<tr id="note-area" class="input basic-info editable">
+		<tr id="note-area" class="input basic-info editable" title='Click to edit'>
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
-			<td><g:textArea name="notes" id="notes" value="${contactInstance?.notes}" title='Click to edit'/></td>
+			<td>
+				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
+				<span><i class="icon-edit"></i></span>
+			</td>
 		</tr>
 		<tr id="group-section" class="input basic-info">
 			<td><label for="groups"><g:message code="contact.groups.label"/></label></td>
