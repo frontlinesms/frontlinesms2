@@ -31,9 +31,11 @@
 #body.contacts td:nth-child(1) { padding:10px 20px 5px 5px; vertical-align:top; }
 #body.contacts td:nth-child(3) { padding-top:10px; vertical-align:top; }
 #body.contacts #group-list { padding:7px 0 0 0; }
-#body.contacts #group-list li { margin:3px 0; }
-#body.contacts #group-list li:first-child { margin:0 0 3px 0; }
-#body.contacts #group-list li:last-child { margin:3px 0 0 0; }
+#body.contacts #group-list li { margin: 4px 0; }
+#body.contacts #group-list li .remove-command { margin:3px; visibility: hidden; }
+#body.contacts #group-list li:hover .remove-command { visibility: visible; }
+#body.contacts #group-list li:hover .remove-command:hover { color: #E00C0E; }
+#body.contacts #group-list li:first-child { margin-top: 0; }
 
 #body.contacts #detail #single-contact .buttons { margin:10px 0; }
 #body.contacts #detail #single-contact td label{ font-style: italic; color: #444; display: inline-block; height: 100%; }
@@ -66,13 +68,15 @@
 #body.contacts .edit .buttons .save { display:none; }
 #body.contacts .edit .btn-delete { color:#E00C0E; border: none; }
 #body.contacts .edit .btn-delete:hover span { text-decoration: underline; }
-#body.contacts .edit .icon-remove-sign { color:#E00C0E; }
+#body.contacts .edit .editable .icon-remove { visibility: hidden; }
 #body.contacts .edit .buttons .cancel { display:none; }
 #body.contacts .edit .remove-command { background: none; }
 #body.contacts .edit table tr.editable:hover { background-color:#F8F8F8; }
-#body.contacts .edit table tr.editable:hover .icon-remove { color:#E00C0E; }
+#body.contacts .edit table tr.editable:hover .icon-remove { visibility: visible; }
+#body.contacts .edit table tr.editable .icon-remove:hover { color:#E00C0E; }
 #body.contacts #note-area { position: relative; }
 #body.contacts #note-area .icon-edit { position: absolute; }
+#body.contacts #note-area textarea { border-color: #eee; padding: 15px auto; }
 #body.contacts table tr.editable input[type='text'], #body.contacts table tr.editable textarea { width:180px; }
 #body.contacts table tr.editable .icon-edit { opacity: 0.0; display: inline-block; margin-left: 5px; transition: opacity 1s linear; }
 #body.contacts table tr.editable:hover .icon-edit { opacity: 1.0; }
