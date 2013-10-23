@@ -195,10 +195,5 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			response.contactInstanceTotal == 2
 			response.contactsSectionContactTotal == 1
 	}
-
-	def 'adding a new contact will redirect user to edit page'() { throw new RuntimeException() }
-
-	def 'updating a new contact returns JSON and does not redirect'() { throw new RuntimeException() }
-
 }
 

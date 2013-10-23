@@ -20,7 +20,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.name.value('Kate')
 			singleContactDetails.mobile.value('+2541234567')
 			singleContactDetails.email.value('gaga@gmail.com')
-			singleContactDetails.save.click()
+			singleContactDetails.name.click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
@@ -41,7 +41,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.name.value('Kate')
 			singleContactDetails.mobile.value('+2541234567') 
 			singleContactDetails.email.value('gaga@gmail.com')
-			singleContactDetails.save.click()
+			singleContactDetails.name.click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			remote { Contact.findByName('Kate') != null }
@@ -50,32 +50,11 @@ class ContactEditSpec extends ContactBaseSpec {
 			bodyMenu.selectedMenuItem == 'excellent'
 	}
 	
-	def "should remove address when delete icon is clicked"() {
-		when:
-			to PageContactShow, remote { Contact.findByName('Bob').id }
-		then:
-			singleContactDetails.removeMobile.displayed
-		when:
-			singleContactDetails.removeMobile.click()
-		then:
-			!singleContactDetails.removeMobile.displayed
-			!singleContactDetails.sendMessage.displayed
-	}
-	
 	def "should disable the save and cancel buttons when viewing a contact details"() {
 		when:
 			to PageContactShow, remote { Contact.findByName('Bob').id }
 		then:
 			singleContactDetails.save.disabled
-	}
-	
-	def "should enable save and cancel buttons when contact details are edited"() {
-		when:
-			to PageContactShow, remote { Contact.findByName('Bob').id }
-			singleContactDetails.email.value('bob@gmail.com')
-		then:
-			!singleContactDetails.save.disabled
-			!singleContactDetails.cancel.disabled
 	}
 	
 	def "should remain on the same page after updating a contact"() {
@@ -88,7 +67,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			!footer.prevPage.disabled
 		when:
 			singleContactDetails.name = 'Kate'
-			singleContactDetails.save.click()
+			singleContactDetails.mobile.click()
 		then:
 			!footer.prevPage.disabled
 	}
@@ -109,23 +88,5 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.sentCount == 'contact.messages.sent[2]'
 			singleContactDetails.receivedCount == 'contact.received.messages[1]'
 	}
-
-	def 'in edit mode, a focused then blurred field should appear in view mode'() { throw new RuntimeException() }
-
-	def 'in edit mode, all fields should appear in view mode unless user focusses on them'() { throw new RuntimeException() }
-
-	def 'in edit mode, form data should only be submitted via ajax if values are dirty'() { throw new RuntimeException() }
-
-	def 'in edit mode, user should get success notification if contact editing was successull'() { throw new RuntimeException() }
-
-	def 'in edit mode, user should get failure notification if contact editing failed'() { throw new RuntimeException() }
-
-	def 'in edit mode, save and cancel button should not be visible'() { throw new RuntimeException() }
-
-	def 'in edit mode, on hover of contact data the user should see styling that indicates editability'() { throw new RuntimeException() }
-
-	def 'after editing a contact the user should not be redirected to another page'() { throw new RuntimeException() }
-
-	def 'if user is adding a new contact the form data should be sent via normal POST not ajax'() { throw new RuntimeException() }
 }
 
