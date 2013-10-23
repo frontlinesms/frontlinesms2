@@ -7,12 +7,10 @@ class AnnouncementService {
 		announcement.name = params.name
 		announcement.sentMessageText = params.messageText
 		def m = messageSendService.createOutgoingMessage(params)
-		println "text ### ${m.text}"
-		println "inbound ### ${m.inbound}"
-		println "params ### ${params}"
-		messageSendService.send(m)
 		announcement.addToMessages(m)
-		announcement.save(failOnError:true,flush:true)
-		return announcement
+		if(announcement.save(failOnError:true)) {
+			messageSendService.send(m)
+		}
+		announcement
 	}
 }

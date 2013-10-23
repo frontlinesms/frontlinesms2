@@ -24,7 +24,7 @@ class MessageViewSpec extends grails.plugin.geb.GebSpec {
 			next.click()
 		and: 'test contact is entered'
 			waitFor { recipients.displayed }
-			recipients.addField = '+254123456'
+			recipients.addRecipient('+254123456')
 			next.click()
 		then: 'confirm details must be accurate'
 			waitFor { confirm.displayed }

@@ -52,7 +52,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header.archive.click()
 		then:
 			waitFor { at PageMessageInbox }
-			notifications.flashMessageText == "Activity archived"
+			notifications.flashMessageText == "default.archived[activity.label]"
 	}
 
 	def "clicking the edit option opens the Subscription Dialog for editing"() {
@@ -79,7 +79,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			next.click()
 		then:
 			waitFor { recipients.displayed }
-			waitFor { recipients.groupCheckboxesChecked*.value().contains("group-${remote { Group.findByName('Camping').id }}".toString()) }
+			waitFor { recipients.getRecipients('group') == [remote { Group.findByName('Camping').id }.toString() ] }
 	}
 
 	def 'Deleting a group that is used in a subscription should fail with an appropriate error'() {

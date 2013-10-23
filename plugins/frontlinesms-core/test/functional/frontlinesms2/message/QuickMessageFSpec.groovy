@@ -47,8 +47,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
 	}
@@ -58,32 +57,26 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
+			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
 		when:
-			recipients.addField.value("+221122")
-			recipients.addButton.click()
+			recipients.addRecipient("+221122")
 		then:
 			waitFor { recipients.count == 2 }
 	}
 
-	def "unchecking a manually added contact updates the recipients count "() {
+	def "dropping a manually added contact updates the recipients count "() {
 		when:
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
 		when:
-			recipients.manualContacts[0].click()
+			recipients.removeRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 0 }
 	}
@@ -93,8 +86,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			waitFor { compose.displayed }
 			next.click()
-			recipients.addField.value("+919544426000")
-			recipients.addButton.click()
+			recipients.addRecipient("+919544426000")
 			next.click()
 			submit.click()
 		then:
@@ -114,11 +106,12 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { next.displayed }
 			next.click()
 		then:
-			recipients.groupCheckboxes[0].displayed
+			recipients.displayed
 		when:
-			recipients.groupCheckboxes[0].click()
+			recipients.addRecipient('group1')
+			next.click()
 		then:
-			waitFor { recipients.count == 2 }
+			waitFor { confirm.displayed && confirm.messagesToSendCount() == '2' }
 	}
 
 	def "should not allow to proceed if the recipients are not selected in the quick message screen"() {
@@ -129,32 +122,12 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { next.displayed }
 			next.click()
 		then:
-			recipients.groupCheckboxes[0].displayed
+			recipients.displayed
 		when:
 			next.click()
 		then:
 			recipients.displayed
 			waitFor { errorPanel.displayed }
-	}
-
-	def "when common memeber is deselected the count should not change unless all parent groups are deselected"() {
-		setup:
-			createData()
-		when:
-			launchQuickMessageDialog()
-			waitFor { next.displayed }
-			next.click()
-			recipients.groupCheckboxes[0].click()
-			recipients.groupCheckboxes[1].click()
-		then:
-			waitFor { recipients.count == 2 }
-		when:
-			recipients.groupCheckboxes[0].click()
-		then:
-			!recipients.groupCheckboxes[0].checked
-			recipients.groupCheckboxes[1].checked
-			waitFor { recipients.count == 2 }
-
 	}
 
 	def "should show the character count of each message"() {
@@ -171,28 +144,6 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { compose.wordCount == 'message.character.count[159,1]' }
 	}
 	
-	def "should not deselect group when a non-member contact is unchecked"() {
-		setup:
-			createData()
-			remote { Contact.build(name:"Test", mobile:"876543212"); null }
-		when:
-			launchQuickMessageDialog()
-			waitFor { compose.displayed }
-			next.click()
-			recipients.groupCheckboxes[0].click()
-		then:
-			recipients.groupCheckboxes[0].checked
-		when:
-			recipients.recipientCheckboxByValue("876543212").click()
-		then:
-			recipients.groupCheckboxes[0].checked
-		when:
-			recipients.recipientCheckboxByValue("876543212").click()
-		then:
-			recipients.groupCheckboxes[0].checked
-
-	}
-
 	def "magic wand should be available and clicking should display menu"() {
 		setup:
 			createData()

@@ -38,7 +38,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageArchiveSent
 		then:
-			waitFor() { messageList.noContent.text() == 'fmessage.messages.none' }
+			waitFor() { messageList.noContent.text() == 'fmessage.messages.sent.none' }
 		when:
 			to PageMessageSent
 			messageList.toggleSelect(0)

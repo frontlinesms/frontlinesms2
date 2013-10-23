@@ -10,36 +10,36 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
         when:
           to PageMessageInbox
         then:
-			bodyMenu.messageSection("Inbox").text() == 'Inbox'
+			bodyMenu.messageSection("fmessage.section.inbox").text() == 'fmessage.section.inbox'
 		when:
-			bodyMenu.messageSection("Inbox").click()
+			bodyMenu.messageSection("fmessage.section.inbox").click()
 		then:
-			waitFor { title == "Inbox" }
+			waitFor { title == "message.header.inbox" }
     }
 
     def 'button to view sent messages exists and goes to SENT page'() {
         when:
           to PageMessageInbox
         then:
-			bodyMenu.messageSection("Sent").text() == 'Sent'
+			bodyMenu.messageSection("fmessage.section.sent").text() == 'fmessage.section.sent'
 		when:
-			bodyMenu.messageSection("Sent").click()
+			bodyMenu.messageSection("fmessage.section.sent").click()
 		then:
-			waitFor { title == "Sent" }
+			waitFor { title == "message.header.sent" }
     }
 
     def 'when in inbox, Inbox menu item is highlighted'() {
         when:
 			to PageMessageInbox
         then:
-			bodyMenu.selected == "inbox"
+			bodyMenu.selected == "fmessage.section.inbox"
 	}
 
 	def 'when viewing Sent Items, Sent Items menu item is hilighted'() {
         when:
 			to PageMessageSent
         then:
-			bodyMenu.selected == "sent"
+			bodyMenu.selected == "fmessage.section.sent"
     }
 
 	def 'Messages tab should have unread messages count next to it'() {

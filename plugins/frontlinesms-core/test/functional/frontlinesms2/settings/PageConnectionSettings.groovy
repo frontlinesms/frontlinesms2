@@ -5,7 +5,7 @@ import frontlinesms2.*
 class PageConnectionSettings extends PageSettings {
 	static url = 'connection/list'
 	static at = {
-		title.contains('Connections')
+		title.contains('connection.header')
 	}
 	
 	static content = {

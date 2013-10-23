@@ -22,7 +22,7 @@ class SubscriptionHeaderModule extends ContentHeader {
 		joinAliases { infoListItems[3] }
 		leaveAliases { infoListItems[4] }
 		groupLink { buttons.filter(text:'subscription.group.goto') }
-		archive { buttons.filter(text:'	fmessage.activity.archive[subscription]') }
+		archive { buttons.filter(text:'fmessage.activity.archive[subscription]') }
 		moreActions { $('div.header-buttons select#more-actions') }
 	}
 }

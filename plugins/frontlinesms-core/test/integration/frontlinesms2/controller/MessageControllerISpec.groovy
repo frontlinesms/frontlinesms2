@@ -56,7 +56,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.send()
 		then:
-			controller.response.contentAsString == 'Message has been queued to send to 3 recipients.'
+			controller.response.contentAsString == 'fmessage.queued.multiple[3]'
 	}
 
 	def 'Messages are sorted by date' () {

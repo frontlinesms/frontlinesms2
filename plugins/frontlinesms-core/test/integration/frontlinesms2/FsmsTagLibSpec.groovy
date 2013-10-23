@@ -11,7 +11,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:confirmTypeRow instanceClass="${clazz}" />'
 		then:
-			output.contains '<tr><td class="field-label">Type</td><td id="confirm-type"></td></tr>'
+			output.contains '<tr><td class="field-label">smslib.type.label</td><td id="confirm-type"></td></tr>'
 	}
 	
 	def "INPUTS should generate input fields for all configFields"() {
@@ -32,16 +32,6 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			template = '<fsms:input field="name" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
 			output.contains 'input type="text" field="name"'
-	}
-	
-	def "INPUT creates a password input for a string field"() {
-		setup:
-			def clazz = new SmslibFconnection()
-		when:
-			params = [clazz:clazz]
-			template = '<fsms:input field="pin" instanceClass="${clazz.class}" instance="${clazz}" />'
-		then:
-			output.contains 'input type="password"'
 	}
 	
 	def "INPUT creates a select dropdown for an enum object"() {

@@ -106,6 +106,7 @@ class PollCedSpec extends PollBaseSpec {
 	def "should not proceed when the poll is not named"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
+			setKeywords()
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -186,18 +187,16 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { error }
 		when:
-			recipients.addField = '1234567890'
-			recipients.addButton.click()
+			recipients.addRecipient('1234567890')
 		then:
-			waitFor { recipients.manual.size() == 1 }
-			recipients.count == 1
+			waitFor { recipients.count == 1 }
 		when:
 			next.click()
 		then:
 			waitFor { confirm.displayed }
 			confirm.message == 'How often do you drink coffee? poll.reply.text1[poll.reply.text1[poll.reply.text1[poll.reply.text5,,COFFEE A,Never],,COFFEE B,Once a day],,COFFEE C,Twice a day].'
-			confirm.recipientCount == 'quickmessage.recipients.count[1]'
-			confirm.messageCount == "1 messages will be sent"
+			confirm.recipientCount == '1 quickmessage.recipients.count'
+			confirm.messageCount == "1 quickmessage.messages.count"
 			confirm.autoreply == "Thanks for participating..."
 		when:
 			confirm.pollName = "Coffee Poll"
@@ -247,18 +246,16 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { recipients.displayed }
 		when:
-			recipients.addField = '1234567890'
-			recipients.addButton.click()
+			recipients.addRecipient '1234567890'
 		then:
-			waitFor { recipients.manual.size() == 1 }
-			recipients.count == 1
+			waitFor { recipients.count == 1 }
 		when:
 			next.click()
 		then:
 			waitFor { confirm.displayed }
 			confirm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
-			confirm.recipientCount == 'quickmessage.recipients.count[1]'
-			confirm.messageCount == "1 messages will be sent"
+			confirm.recipientCount == '1 quickmessage.recipients.count'
+			confirm.messageCount == "1 quickmessage.messages.count"
 		when:
 			confirm.pollName = "Coffee Poll"
 			submit.click()
@@ -272,10 +269,11 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { sort.displayed }
 		when:
+			setKeywords()
 			tab(7).click()
 		then:
 			waitFor { confirm.displayed }
-			confirm.recipientCount == "0 contacts selected"
+			confirm.recipientCount == "0 quickmessage.recipients.count"
 	}
 
 	def "can launch export popup"() {
@@ -408,10 +406,9 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 			setKeywords()
 			goToTab(6)
-			recipients.addField = '1234567890'
-			recipients.addButton.click()
+			recipients.addRecipient '1234567890'
 		then:
-			waitFor { recipients.manual.size() == 1 }
+			waitFor { recipients.count == 1 }
 		when:
 			next.click()
 			confirm.pollName = 'Who is badder?'
@@ -433,6 +430,7 @@ class PollCedSpec extends PollBaseSpec {
 			launchPollPopup('yesNo', 'question', false)
 		then:
 			waitFor { sort.displayed }
+			setKeywords()
 		when:
 			tab(7).click()
 			confirm.pollName = 'Who is badder?'

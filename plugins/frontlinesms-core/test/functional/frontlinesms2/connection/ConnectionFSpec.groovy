@@ -223,7 +223,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then: 'connection failed message is displayed'
 			waitFor('very slow') {
 				js.exec('window.location.reload()') || true
-				notifications.systemNotificationText.startsWith('connection.route.failNotification[12,Bad Port,connection.error.java.io.ioexception[This is a bad mock port :(]]')
+				notifications.systemNotificationText.startsWith('connection.route.failNotification') &&
+				notifications.systemNotificationText.endsWith('Bad Port,connection.error.java.io.ioexception[This is a bad mock port :(]]')
 			}
 		and: 'there is an edit button available'
 			connectionFailedFlashMessageEditButton.displayed

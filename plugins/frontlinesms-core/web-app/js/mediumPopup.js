@@ -1,7 +1,7 @@
 var mediumPopup = (function() {
 	var ___start___,
 		cancel, submit, submitWithoutClose, range,
-		selectSubscriptionGroup, editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
+		editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
 		createModalBox,
 		launchMediumPopup, launchNewFeaturePopup, launchMediumWizard, launchHelpWizard,
 		getCurrentTab, getCurrentTabDom, getCurrentTabIndex, getTabLength,
@@ -271,6 +271,7 @@ var mediumPopup = (function() {
 	messageResponseClick = function(messageType) {
 		var configureTabs, checkedMessageCount, me, src, messageSection, text;
 		configureTabs= "";
+		text = '';
 		me = $(this);
 		if (messageType === "Reply") {
 			configureTabs = "tabs-1, tabs-3, tabs-4";
@@ -284,10 +285,10 @@ var mediumPopup = (function() {
 			text = $("#single-message #message-detail-content p").text().trim();
 		}
 		messageSection = $("input:hidden[name=messageSection]").val();
-		
+		postData = jQuery.param({ recipients:src, messageText:text, configureTabs:configureTabs }, true)
 		$.ajax({
 			type:"POST",
-			data:{ recipients:src, messageText:text, configureTabs:configureTabs },
+			data:postData,
 			url:url_root + "quickMessage/create",
 			beforeSend:showThinking,
 			success:function(data, textStatus) {
@@ -306,11 +307,6 @@ var mediumPopup = (function() {
 		});
 	};
 
-	selectSubscriptionGroup = function(groupId) { // FIXME activity-specific code should not be inside this file
-		var labelId = $('input[value=group-'+groupId+']').attr('id');
-		$('label[for='+labelId+']').trigger('click');
-	};
-
 	return {
 		addValidation:addValidation,
 		appendButton:appendButton,
@@ -322,7 +318,6 @@ var mediumPopup = (function() {
 		launchMediumWizard:launchMediumWizard,
 		launchHelpWizard:launchHelpWizard,
 		messageResponseClick:messageResponseClick, // TODO move this somewhere more suitable
-		selectSubscriptionGroup:selectSubscriptionGroup, // TODO move this somewhere more suitable
 		submit:submit,
 		tabValidates:tabValidates,
 		getCurrentTab:getCurrentTab,

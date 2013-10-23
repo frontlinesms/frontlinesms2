@@ -1,7 +1,7 @@
-
 package frontlinesms2
 
 import grails.util.GrailsConfig
+import grails.converters.JSON
 
 class SearchController extends MessageController {
 	def recipientLookupService
@@ -128,6 +128,12 @@ class SearchController extends MessageController {
 			search = new Search(name: 'TempSearchObject')
 		}
 		c.call(search)
+	}
+
+	def recipientCount() {
+		def recipients = [params.recipients].flatten()
+		def addresses = recipientLookupService.getAddressesFromRecipientList(recipients)
+		render([recipientCount: addresses.size()] as JSON)
 	}
 }
 

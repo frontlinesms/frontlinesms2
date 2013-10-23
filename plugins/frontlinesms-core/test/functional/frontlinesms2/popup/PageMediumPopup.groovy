@@ -47,24 +47,14 @@ class QuickMessageComposeTab extends geb.Module {
 	}
 }
 
-class QuickMessageRecipientsTab extends geb.Module {
+class QuickMessageRecipientsTab extends RecipientsTab {
 	static base = { $('div#tabs-2') }
-	static content = {
-		addField { $('input#address') }
-		addButton { $('a.btn.add-address') }
-		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text()?.toInteger() }
-		manualContacts { $("li.manual").find("input", name:"addresses") }
-		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
-		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
-		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
-	}
 }
 
 class QuickMessageConfirmTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
-		messagesToSendCount { $('#contacts-count').text() }
+		messagesToSendCount { $('#messages-count').text() }
 		recipientName { $('td#recipient').text() }
 		messageText { $('td#confirm-message-text').text() }
 	}
@@ -164,10 +154,53 @@ class EditMessageTab extends geb.Module {
 class RecipientsTab extends geb.Module {
 	static base = { $('div#tabs-6') }
 	static content = {
-		addField { $('input#address') }
-		addButton { $('a.btn.add-address') }
+		chosenInput { $('.chzn-container input[type=text]') }
+		chosenOption { label=null ->
+			if (label && !(['group', 'contact'].any { label.contains(it) }))
+				label = "\"$label\""
+			if (label)
+				$('.chzn-container ul.chzn-results li.active-result', text: label)
+			else
+				$('.chzn-container ul.chzn-results li.active-result')
+		}
+		recipientsSelect { $('[name=recipients]') }
+		noResultsIndicator { $('ul.chzn-results li.no-results') }
+		getRecipients { type = null ->
+			def recipients = [contact:[], address:[], group:[], smartgroup:[]]
+			recipientsSelect.value().each {
+				def k = it.split('-')[0]
+				def v = it.split('-')[1]
+				recipients[k] << v
+			}
+			return (type? recipients[type] : recipients)
+		}
+		addRecipient { searchString ->
+			chosenInput.click()
+			chosenInput.value(searchString)
+			chosenInput.jquery.trigger('keyup')
+			try {
+				waitFor { chosenOption(searchString).displayed || noResultsIndicator.displayed }
+			}
+			catch(geb.waiting.WaitTimeoutException e) {
+				// TODO drop this try catch once the empty optgroup bug is fixed, as the waitFor then covers all expected scenarios
+				// https://frontlinesms.jira.com/browse/TOOLS-737
+				return false
+			}
+			if( chosenOption(searchString).displayed) {
+				chosenOption(searchString).jquery.trigger("mouseup")
+				return true
+			}
+			else {
+				return false
+			}
+		}
+		removeRecipient { label ->
+			if (!(['group', 'contact'].any { label.contains(it) }))
+				label = "\"$label\""
+			$('ul.chzn-choices li.search-choice', text: label).find('a.search-choice-close').click()
+		}
 		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text()?.toInteger() }
+		count { getRecipients().values().sum { it.size() } }
 	}
 }
 
@@ -547,31 +580,16 @@ class AutoforwardKeywordTab extends geb.Module {
 	}
 }
 
-class AutoforwardRecipientsTab extends geb.Module {
+class AutoforwardRecipientsTab extends RecipientsTab {
 	static base = { $('div#tabs-3')}
-	static content = {
-		addField { $('input#address') }
-		addButton { $('a.btn.add-address') }
-		manual { $('li.manual.contact') }
-		count { $('#recipient-count').text()?.toInteger() }
-		manualContacts { $("input", name:"addresses") }
-		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
-		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
-		contactCheckboxesChecked { $('input:checked', type:'checkbox', name:'addresses') }
-		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
-		selectGroup {group-> $("input", name:"groups", value:"${group}").jquery.click() }
-		selectContact {contact-> $("input", name:"addresses", value:"${contact}").jquery.click() }
-	}
 }
 
 class AutoforwardConfirmTab extends geb.Module {
 	static base = { $('div#tabs-4') }
 	static content = {
-		nameText {$("#name")}
-		keywordConfirm {$("#keyword-confirm").text()}
-		contacts {$("#autoforward-confirm-contacts").text()}
-		groups {$("#autoforward-confirm-groups").text()}
-		smartGroups {$("#smart-groups").text()}
+		nameText { $("#name") }
+		keywordConfirm { $("#keyword-confirm").text() }
+		recipientCount { $("#autoforward-confirm-recipient-count").text() }
 	}
 }
 
