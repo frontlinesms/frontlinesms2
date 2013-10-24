@@ -28,7 +28,7 @@ class CoreAppInfoProviders {
 		s.registerProvider 'contact_message_stats', contactMessageStats
 
 		s.registerProvider('system_notification') { app, controller, data ->
-			SystemNotification.findAllByRead(false).collectEntries { [it.id, it.text] }
+			SystemNotification.findAllByRd(false).collectEntries { [it.id, it.text] }
 		}
 
 		s.registerProvider 'status_indicator', statusIndicatorProvider
