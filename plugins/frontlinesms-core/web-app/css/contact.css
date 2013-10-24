@@ -99,13 +99,17 @@
 .contact-name span.preview { margin-left: 15px; font-style: italic; color: #999; }
 input[type=text]::-webkit-input-placeholder {
 	color: #bbb;
+	font-style: italic;
 }
 input[type=text]::-moz-input-placeholder {
 	color: #bbb;
+	font-style: italic;
 }
 input[type=text]:-moz-input-placeholder {
 	color: #bbb;
+	font-style: italic;
 }
 input[type=text]:-ms-input-placeholder {
 	color: #bbb;
+	font-style: italic;
 }

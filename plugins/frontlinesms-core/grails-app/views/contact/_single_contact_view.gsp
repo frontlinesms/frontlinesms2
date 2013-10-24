@@ -10,14 +10,14 @@
 		<tr class="editable" title='Click to edit'>
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
-				<g:textField name="name" value="${contactInstance?.name}"/>
+				<g:textField name="name" value="${contactInstance?.name}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
 				<span><i class="icon-edit"></i></span>
 			</td>
 		</tr>
 		<tr class="editable" title='Click to edit'>
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
-				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)"/>
+				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
 				<span><i class="icon-edit"></i></span>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
@@ -25,7 +25,7 @@
 		<tr class="editable" title='Click to edit'>
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
-				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}"/>
+				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" placeholder="${g.message(code:'contact.field.email.placeholder')}"/>
 				<span><i class="icon-edit"></i></span>
 			</td>
 		</tr>
