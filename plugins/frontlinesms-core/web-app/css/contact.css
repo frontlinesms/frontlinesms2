@@ -56,9 +56,18 @@
 .send-message.hidden { display:none; }
 #modalBox #smartGroup-table { margin:20px; }
 
-#body.contacts .editable input[type="text"], #body.contacts .editable textarea { border: 1px #bbb solid; transition: border-color 1s linear; }
+#body.contacts .editable input[type="text"], #body.contacts .editable textarea { 
+	border: 1px #bbb solid;
+	transition: border-color 1s linear;
+	-webkit-transition: border-color 1s linear;
+	-moz-transition: border-color 1s linear;
+}
 #body.contacts #note-area textarea { padding: 10px 5px; border-color: #ddd; }
-#body.contacts .edit .editable input[type="text"], #body.contacts .edit #note-area textarea {  transition: border-color 1s linear; }
+#body.contacts .edit .editable input[type="text"], #body.contacts .edit #note-area textarea {  
+	transition: border-color 1s linear;
+	-webkit-transition: border-color 1s linear;
+	-moz-transition: border-color 1s linear;
+}
 #body.contacts .edit .editable input[type="text"] { border: 1px #fff solid; }
 #body.contacts .edit .editable input[type="text"]:focus,
 #body.contacts .edit .editable input[type="text"]:hover,
@@ -88,4 +97,15 @@
 #body.contacts .edit table tr:hover input { cursor: text; }
 #body.contacts .edit table tr:hover textarea { cursor: text; }
 .contact-name span.preview { margin-left: 15px; font-style: italic; color: #999; }
-
+input[type=text]::-webkit-input-placeholder {
+	color: #bbb;
+}
+input[type=text]::-moz-input-placeholder {
+	color: #bbb;
+}
+input[type=text]:-moz-input-placeholder {
+	color: #bbb;
+}
+input[type=text]:-ms-input-placeholder {
+	color: #bbb;
+}
