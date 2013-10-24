@@ -8,7 +8,7 @@ import frontlinesms2.api.*
 
 class WebconnectionService {
 	private static final REPLACEMENT_KEY = /[$][{]*[a-z_]*[}]/
-	// Substitution variables
+
 	def camelContext
 	def i18nUtilService
 	def messageSendService
@@ -232,11 +232,12 @@ class WebconnectionService {
 		//> Send message
 		def m = messageSendService.createOutgoingMessage([messageText: message, addresses: addresses, groups: groups])
 		println "I am about to send $m"
-		if(!m.dispatches)
+		if(!m.dispatches) {
 			return [status:400, text:"no recipients supplied"]
-		messageSendService.send(m)
+		}
 		webcon.addToMessages(m)
-		webcon.save(failOnError: true)
+		messageSendService.send(m)
 		"message successfully queued to send to ${m.dispatches.size()} recipient(s)"
 	}
 }
+
