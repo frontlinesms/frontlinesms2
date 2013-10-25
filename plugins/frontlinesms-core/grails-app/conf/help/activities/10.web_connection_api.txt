@@ -47,9 +47,9 @@ Below is an example of a valid requestst body, utilising all the valid combinati
 	METHOD: POST
 	FORMAT: JSON
 	CONTENT: {
-		secret: "secret",
-		message:"Hello, ${contact_name}",
-		recipients: {
+		"secret":"secret",
+		"message":"Hello, ${contact_name}",
+		"recipients":[
 			{ "type":"group", "id":"1" },
 			{ "type":"group", "name":"friends" },
 			{ "type":"smartgroup", "id":"3" },
@@ -57,7 +57,7 @@ Below is an example of a valid requestst body, utilising all the valid combinati
 			{ "type":"contact", "id":"2" },
 			{ "type":"contact", "name":"bobby" },
 			{ "type":"address", "value":"+1234567890" }
-	    }
+		]
 	}
 
 ## Responses
