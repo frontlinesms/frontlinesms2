@@ -15,6 +15,7 @@ class MetaClassModifiers {
 		MetaClassModifiers.augmentFiles()
 		MetaClassModifiers.augmentCamelClasses()
 		MetaClassModifiers.augmentMaps()
+		MetaClassModifiers.toPrettyPhoneNumber()
 	}
 
 	static void augmentFiles() {
