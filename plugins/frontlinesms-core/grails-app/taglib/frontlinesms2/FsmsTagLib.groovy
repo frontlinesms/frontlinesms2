@@ -386,7 +386,7 @@ class FsmsTagLib {
 				out << "<optgroup label='${optgroupLabel}'>"
 					typeValue.each { recipient ->
 						optionValue = typeKey+'-'+((typeKey != 'address')?(recipient.id):(recipient))
-						optionLabel = (typeKey != 'address')?recipient.name:recipient
+						optionLabel = (typeKey != 'address')?recipient.name:recipient.toPrettyPhoneNumber()
 						out << "<option value='${optionValue}' selected>${optionLabel}</option>"
 					}
 				out << '</optgroup>'
