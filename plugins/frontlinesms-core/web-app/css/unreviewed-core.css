@@ -92,3 +92,6 @@ input[type=text]:-moz-input-placeholder,
 input[type=text]:-ms-input-placeholder {
 	color:#bbb; font-style:italic; }
 
+#body.contacts #detail #single-contact #action-buttons { margin-top:20px; }
+#body.contacts #action-buttons a:after { content:'\a'; white-space:pre; }
+
