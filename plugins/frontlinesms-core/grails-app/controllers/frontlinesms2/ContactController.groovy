@@ -136,8 +136,11 @@ class ContactController extends ControllerUtils {
 			contactInstance.properties = params
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
-			if(params.groupId) redirect(controller: params.contactsSection, action: 'show', id: params.groupId, params:[contactId: contactInstance.id, sort:params.sort, offset: params.offset])
-			else redirect(action:'show', params:[contactId: contactInstance.id, offset:params.offset], max:params.max)
+			if(params.groupId) {
+				redirect(action:'show', controller:params.contactsSection, id: params.groupId, params:[contactId: contactInstance.id, sort:params.sort, offset:params.offset])
+			} else {
+				redirect(action:'show', params:[contactId:contactInstance.id, offset:params.offset], max:params.max)
+			}
 		}
 	}
 	
@@ -180,9 +183,9 @@ class ContactController extends ControllerUtils {
 		def foundContact = Contact.findByMobile(params.mobile)
 		if (foundContact && foundContact.id.toString() == params.contactId) {
 			render true
-		} else
-			if(!foundContact && params.mobile) render true
-			else render false
+		} else {
+			render (!foundContact && params.mobile)
+		}
 	}
 
 //> PRIVATE HELPER METHODS
@@ -248,40 +251,34 @@ class ContactController extends ControllerUtils {
 	}
 	
 	private def updateCustomFields(Contact contactInstance) {
-		def fieldsToAdd = params.fieldsToAdd ? params.fieldsToAdd.tokenize(',') : []
-		def fieldsToRemove = params.fieldsToRemove ? params.fieldsToRemove.tokenize(',') : []
+		def fieldsToAdd = params.fieldsToAdd?.tokenize(',')
+		def fieldsToRemove = params.fieldsToRemove?.tokenize(',')
+		def existingFields = CustomField.findAllByContact(contactInstance)
 		
-		fieldsToAdd.each() { name ->
-			def existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
-			def fieldsByName = params."$name"
-			if(fieldsByName?.class != String) {
-				fieldsByName.each() { val ->
-					if(val != "" && !existingFields.value.contains(val))
-						contactInstance.addToCustomFields(new CustomField(name: name, value: val)).save(flush:true)
-						existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
-				}
-			} else if(fieldsByName != "" && !existingFields.value.contains(fieldsByName)) {
-				contactInstance.addToCustomFields(new CustomField(name: name, value: fieldsByName))
+		fieldsToAdd?.each { name ->
+			def fieldsByName = params["newCustomField-$name"]
+			if(fieldsByName && !(name in existingFields*.name)) {
+				contactInstance.addToCustomFields(new CustomField(name:name, value:fieldsByName))
 			}
 		}
-		fieldsToRemove.each() { id ->
-			def toRemove = CustomField.get(id)
-			contactInstance.removeFromCustomFields(toRemove)
-			if(toRemove)
+
+		fieldsToRemove?.each { name ->
+			def toRemove = CustomField.findByContactAndName(contactInstance, name)
+			if(toRemove) {
+				contactInstance.removeFromCustomFields(toRemove)
 				toRemove.delete()
+			}
 		}
 
 		//also save any existing fields that have changed
-		def existingFields = CustomField.findAllByContact(contactInstance)
-		existingFields.each() { existingField ->
-			def newValue = params."$existingField.name"
-			if (newValue && (existingField.value != newValue))
-			{
-				existingField.value = newValue
-				existingField.save()
+		existingFields.each { f ->
+			def newValue = params["customField-$f.id"]
+			if(newValue && f.value != newValue) {
+				f.value = newValue
+				f.save()
 			}
 		}
-
 		return contactInstance
 	}
 }
+

@@ -30,13 +30,7 @@
 			</td>
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
-			<tr class="input editable ${f==fieldInstance? 'selected': ''}">
-				<td><label for="field-item-${f.name}">${f.name}</label></td>
-				<td>
-					<input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
-					<a id="remove-field-${f.id}" class="icon-remove custom-field remove-command"></a>
-				</td>
-			</tr>
+			<fsms:render template="/contact/custom_field" model='[fieldName:"customField-${f.id}", removerName:"remove-field-${f.id}", name:f.name, value:f.value, selected:f==fieldInstance]'/>
 		</g:each>
 		<tr>
 			<td></td>
@@ -67,9 +61,9 @@
 			<td>
 				<ul id="group-list">
 					<g:each in="${contactGroupInstanceList}" status="i" var="g">
-						<li class="${g == groupInstance ? 'selected' : ''}" groupName="${g.name}">
+						<li class="group ${g == groupInstance ? 'selected' : ''}" groupName="${g.name}">
 							<span>${g.name}</span>
-							<a class="remove-command icon-remove" id="remove-group-${g.id}"></a>
+							<a class="icon-remove remove-command" id="remove-group-${g.id}"></a>
 						</li>
 					</g:each>
 					<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
@@ -110,8 +104,6 @@
 			<g:actionSubmit class="btn stroked" action="saveContact" value="${g.message(code:'action.save')}"/>
 			<g:link class="cancel stroked btn warn" action="index"><g:message code="action.cancel"/></g:link>
 		</g:else>
-		
-
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
 		<div id="message-stats">
@@ -121,7 +113,7 @@
 				<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
 			</ul>
 			<g:link class="btn stroked icon-search search" controller='search' action='result'
-				params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
+					params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
 				<g:message code="contact.search.messages"/>
 			</g:link>
 		</div>
@@ -135,82 +127,8 @@ $(function() {
 		$("#message-stats .sent").text(i18n("contact.messages.sent", data.outbound));
 		$("#message-stats .recieved").text(i18n("contact.messages.received", data.inbound));
 	});
-
-	$("td > input[type=text]").each(function(index) {
-		var clear = $(this).next();
-		if($(this).val() === "") {
-			clear.addClass("hidden");
-		} else {
-			clear.removeClass("hidden");
-		}
-	}).keyup(function() {
-		var clear = $(this).next();
-		if($(this).val() !== "") {
-			clear.removeClass("hidden");
-			if($(this).attr("name") === "mobile") {
-				$(".send-message").removeClass("hidden");
-			}
-		} else {
-			clear.addClass("hidden");
-			if($(this).attr("name") === "mobile") {
-				$(".send-message").addClass("hidden");
-			}
-		}
-	});
-
-	contactCtrl.init();
 });
-
-var contactCtrl = function() {
-	var formHash = 0,
-	contactEditForm = $(".contact-edit-form"),
-	contactFormDirtyCallBack = function() { contactEditForm.trigger("contactFormDirty"); },
-	init = function() {
-		formHash = contactEditForm.serialize().hashCode();
-		$("#notes").autosize();
-
-		bindOnFormDataChangedListeners();
-
-		contactEditForm.on("addedCustomFieldToContact", function() {
-			$(".edit input[type=text]").on("blur", contactFormDirtyCallBack);
-			$(".edit .remove-command").on("click", contactFormDirtyCallBack);			
-		});
-
-		contactEditForm.on("addedGroupToContact", function() {
-			$(".edit .remove-command").on("click", contactFormDirtyCallBack);
-		});
-
-		contactEditForm.on("contactFormDirty", function() {
-			updateContactData();
-		});
-	},
-	bindOnFormDataChangedListeners = function() {
-		$(".edit input[type=text]").on("blur", contactFormDirtyCallBack);
-		$(".edit input[type=hidden]").on("change", contactFormDirtyCallBack);
-		$(".edit select").on("change", contactFormDirtyCallBack);
-		$(".edit textarea").on("blur", contactFormDirtyCallBack);
-		$(".edit .remove-command").on("click", contactFormDirtyCallBack);
-	},
-	updateContactData = function() {
-		if(formDataChanged) {
-			$.ajax({
-				type : 'POST',
-				url : url_root + "contact/saveContact",
-				data : contactEditForm.serialize(),
-				success : function(data) {
-					console.log(data);
-					$('#action-buttons .send-message').html(' '+i18n('contact.send.message', $('.contact-edit-form [name="name"]').val())+' ')
-				}
-			});
-		}
-	},
-	formDataChanged = function() {
-		return (contactEditForm.serialize().hashCode() != formHash);
-	};
-
-	return {
-		init : init
-	}
-}();
 </r:script>
+
+<fsms:render template="/contact/custom_field" type="sanchez" id="custom-field-input" runtimeVars="name,fieldName,removerName" model="[selected:false, value:'']"/>
 

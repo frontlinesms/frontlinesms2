@@ -27,7 +27,6 @@ function addGroupClickAction() {
 	me.remove();
 	noGroup.hide();
 	addGroupId(groupId);
-	enableSaveAndCancel();
 
 	var contactEditForm = $(".contact-edit-form");
 	contactEditForm.trigger("addedGroupToContact");
@@ -53,8 +52,6 @@ function removeGroupClickAction() {
 	}
 	removeGroupId(groupId);
 	selectmenuTools.refresh(groupDropdown);
-	// removeIdFromGroupHiddenField(groupId);
-	enableSaveAndCancel();
 }
 
 function removeGroupId(id) {
