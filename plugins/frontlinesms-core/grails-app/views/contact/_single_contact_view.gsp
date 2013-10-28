@@ -11,14 +11,14 @@
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
 				<g:textField name="name" value="${contactInstance?.name}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
-				<span><i class="icon-edit"></i></span>
+				<label for="name" class="icon-edit"/>
 			</td>
 		</tr>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
 				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
-				<span><i class="icon-edit"></i></span>
+				<label for="mobile" class="icon-edit"/>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
 		</tr>
@@ -26,7 +26,7 @@
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
 				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" placeholder="${g.message(code:'contact.field.email.placeholder')}"/>
-				<span><i class="icon-edit"></i></span>
+				<label for="email" class="icon-edit"/>
 			</td>
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
@@ -53,7 +53,7 @@
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
 			<td>
 				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
-				<span><i class="icon-edit"></i></span>
+				<label class="icon-edit"/>
 			</td>
 		</tr>
 		<tr id="group-section" class="input basic-info">
@@ -86,23 +86,23 @@
 	</table>
 	<div id="action-buttons" class="buttons">
 		<g:if test="${contactInstance?.mobile?.trim()}">
-			<fsms:popup class="icon-envelope send-message stroked block btn" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+			<fsms:popup class="icon-envelope send-message stroked" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 			<g:message code="contact.send.message" args="${[contactInstance.name?:contactInstance.mobile]}"/>
 			</fsms:popup>
 		</g:if>
 		<g:if test="${contactInstance?.id}">
-			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete btn stroked warn">
+			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
 				<i class="icon-remove-sign"></i>
 				<span><g:message code="contact.action.delete"/></span>
 			</g:link>
 		</g:if>
 		<g:if test="${contactInstance?.id}">
-			<g:actionSubmit class="btn stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
-			<g:link class="cancel btn stroked disabled"><g:message code="action.cancel"/></g:link>
+			<g:actionSubmit class="stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
+			<g:link class="cancel stroked disabled"><g:message code="action.cancel"/></g:link>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="btn stroked" action="saveContact" value="${g.message(code:'action.save')}"/>
-			<g:link class="cancel stroked btn warn" action="index"><g:message code="action.cancel"/></g:link>
+			<g:actionSubmit class="stroked" action="saveContact" value="${g.message(code:'action.save')}"/>
+			<g:link class="cancel stroked warn" action="index"><g:message code="action.cancel"/></g:link>
 		</g:else>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
@@ -112,7 +112,7 @@
 				<li class="sent"><g:message code="contact.messages.sent" args="${[contactInstance?.outboundMessagesCount]}"/></li>
 				<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
 			</ul>
-			<g:link class="btn stroked icon-search search" controller='search' action='result'
+			<g:link class="stroked icon-search search" controller='search' action='result'
 					params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
 				<g:message code="contact.search.messages"/>
 			</g:link>
