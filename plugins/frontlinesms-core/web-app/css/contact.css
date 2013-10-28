@@ -21,7 +21,7 @@
 }
 #body.contacts #main-list li:not(:first-child):hover { background-color:#e5eff3; }
 #body.contacts #main-list li.selected { background-color:#d8e8ef; }
-#body.contacts #main-list li a, #body.contacts #main-list li label:nth-child(1) { padding:8px 0 9px 46px; display:block; }
+#body.contacts #main-list li a, #body.contacts #main-list li label { padding:8px 0 9px 46px; display:block; }
 #body.contacts #main-list li input[type="checkbox"] { vertical-align:middle; position:absolute; top:7px; left:22px; }
 
 #body.contacts #detail { padding:37px; background-color:white; border-left:1px solid #9e9e9e; }
