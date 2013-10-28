@@ -53,7 +53,7 @@
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
 			<td>
 				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
-				<label class="icon-edit"/>
+				<label for="notes" class="icon-edit"/>
 			</td>
 		</tr>
 		<tr id="group-section" class="input basic-info">
