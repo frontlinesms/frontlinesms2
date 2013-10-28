@@ -69,6 +69,10 @@ class Fconnection {
 		dispatchRouterService.updateDispatch(x, DispatchStatus.SENT)
 	}
 
+	def getDisplayMetadata() {
+		return null
+	}
+
 	List<RouteDefinition> getRouteDefinitions() {
 		if(Environment.current != Environment.TEST) {
 			throw new IllegalStateException("Do not know how to create routes for Fconnection of class: ${this.class}")
