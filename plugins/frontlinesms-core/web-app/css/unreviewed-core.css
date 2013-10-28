@@ -27,9 +27,11 @@ fieldset.table { display:table; }
 	margin:10px 0;
 	background-image:none;
 	border-radius:2px;
-	transition:border-color 1s linear;
+	transition:border-color 1s linear, background-color 1s linear;
 }
-.stroked:hover { border:1px solid #444; }
+.stroked:hover { border:1px solid black; background-color:#eee; }
+.stroked:hover { border-right:1px solid #6b6b6b; }
+.stroked:hover { border-bottom:1px solid #6b6b6b; }
 .stroked.warn { color:#e00c0e; border-color:#e95556; }
 .stroked.warn:hover { border-color:#e00c0e; }
 .recipient_selector_wrap { margin-bottom:2px; }
