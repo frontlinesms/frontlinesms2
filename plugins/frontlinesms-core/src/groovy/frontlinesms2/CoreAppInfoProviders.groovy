@@ -21,7 +21,7 @@ class CoreAppInfoProviders {
 
 		s.registerProvider('fconnection_statuses') { app, controller, data ->
 			Fconnection.findAll().collect { c ->
-				[id:c.id, status:c.status.toString()]
+				[id:c.id, userMutable:c.isUserMutable(), status:c.status.toString()]
 			}
 		}
 

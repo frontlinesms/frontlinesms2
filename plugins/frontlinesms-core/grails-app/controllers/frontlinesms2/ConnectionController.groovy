@@ -36,7 +36,9 @@ class ConnectionController extends ControllerUtils {
 	def wizard() {
 		if(params.id) {
 			withFconnection {
-				return [action:'update', fconnectionInstance:it]
+				if(it.userMutable) {
+					return [action:'update', fconnectionInstance:it]
+				}
 			}
 		} else {
 			return [action:'save']
@@ -148,18 +150,22 @@ class ConnectionController extends ControllerUtils {
 	}
 
 	def enable() {
-		EnableFconnectionJob.triggerNow([connectionId:params.id])
-		sleep 100 // This horrible hack allows enough time for the job to start before we try to get the status of the connection we're enabling
-		def connectionInstance = Fconnection.get(params.id)
-		if(connectionInstance?.shortName == 'smssync') { // FIXME should not be connection-specific code here
-			smssyncService.startTimeoutCounter(connectionInstance)
+		if (Fconnection.get(params.id)?.userMutable) {
+			EnableFconnectionJob.triggerNow([connectionId:params.id])
+			sleep 100 // This horrible hack allows enough time for the job to start before we try to get the status of the connection we're enabling
+			def connectionInstance = Fconnection.get(params.id)
+			if(connectionInstance?.shortName == 'smssync') { // FIXME should not be connection-specific code here
+				smssyncService.startTimeoutCounter(connectionInstance)
+			}
 		}
 		redirect(action:'list', params:params)
 	}
 
 	def disable() {
 		withFconnection { c ->
-			fconnectionService.disableFconnection(c)
+			if(c.userMutable) {
+				fconnectionService.disableFconnection(c)
+			}
 			redirect(action:'list', id:c.id)
 		}
 	}
