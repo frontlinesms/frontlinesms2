@@ -105,19 +105,24 @@ class SingleContactDetails extends geb.Module {
 			$('select#new-field-dropdown').jquery.val(customFieldValue) 
 			$('select#new-field-dropdown').jquery.trigger("change") 
 		}
-		customField { customFieldName ->
-			$ ('input', name:customFieldName)
+		customField { customFieldNameOrId ->
+			def customField = $('input', name:"customField-$customFieldNameOrId")
+			if(customField) return customField
+			else return $('input', name:"newCustomField-$customFieldNameOrId")
 		}
 		customFields { $('select#new-field-dropdown option')*.value() }
 
 		removeCustomFeild { feildId ->
+			$('a#remove-field-'+feildId).jquery.css("visibility", "visible")
 			$('a#remove-field-'+feildId).click()
 		}
-		contactsCustomFields { $('label', for: startsWith("field-item-"))*.text() }
+		contactsCustomFields { $('label', for: contains("ustomField-"))*.text() }
 		groupDropDown { $('#group-dropdown') }
         groupList { $('ul#group-list li span')*.text() }
         removeGroup { groupId ->
-			$("#group-list a#remove-group-${groupId}").click()
+        	def removeX = $("#group-list a#remove-group-${groupId}")
+        	removeX.jquery.css("visibility", "visible")
+			removeX.click()
 		}
 		removeMobile { $('#remove-mobile') }
 		sendMessage { $('#single-contact .send-message') }
