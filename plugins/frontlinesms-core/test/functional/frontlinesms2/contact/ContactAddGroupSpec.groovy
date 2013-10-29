@@ -32,7 +32,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			singleContactDetails.otherGroupOptions == ['contact.add.to.group', 'four']
 	}
 
-	def 'clicking X next to group in list removes group from visible list, but does not change database if no other action is taken'() {
+	def 'clicking X next to group in list removes group from visible list and from the database'() {
 		given:
 			def bobId = remote { Contact.findByName('Bob').id }
 			def testGroupId = remote { Group.findByName('Test').id }
@@ -48,7 +48,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow, bobId
 		then:
-			waitFor { singleContactDetails.groupList.size() == 2 }
+			waitFor { singleContactDetails.groupList.size() == 1 }
 	}
 
 	def 'clicking save actually adds contact to newly selected groups'() {
