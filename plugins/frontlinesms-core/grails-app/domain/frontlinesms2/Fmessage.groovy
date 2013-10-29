@@ -190,14 +190,14 @@ class Fmessage {
 	def getDisplayName() {
 		if(inbound) {
 			if(inboundContactName) return inboundContactName
-			else if(id) return src
-			else return Contact.findByMobile(src)?.name?: src
+			else if(id) return src.toPrettyPhoneNumber()
+			else return Contact.findByMobile(src)?.name?: src.toPrettyPhoneNumber()
 		} else if(dispatches.size() == 1) {
 			if(outboundContactName) return outboundContactName
 			else {
 				def dst = (dispatches as List)[0].dst
-				if(id) return dst
-				else return Contact.findByMobile(dst)?.name?: dst
+				if(id) return dst.toPrettyPhoneNumber()
+				else return Contact.findByMobile(dst)?.name?: dst.toPrettyPhoneNumber()
 			}
 		} else {
 			return Integer.toString(dispatches.size())

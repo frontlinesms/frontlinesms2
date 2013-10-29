@@ -385,8 +385,14 @@ class FsmsTagLib {
 				optgroupLabel = g.message(code:'contact.search.'+typeKey)
 				out << "<optgroup label='${optgroupLabel}'>"
 					typeValue.each { recipient ->
-						optionValue = typeKey+'-'+((typeKey != 'address')?(recipient.id):(recipient))
-						optionLabel = (typeKey != 'address')?recipient.name:recipient
+						optionValue = typeKey + '-'
+						if (typeKey == 'address') {
+							optionValue += recipient
+							optionLabel = recipient.toPrettyPhoneNumber()
+						} else {
+							optionValue += recipient.id
+							optionLabel = recipient.name
+						}
 						out << "<option value='${optionValue}' selected>${optionLabel}</option>"
 					}
 				out << '</optgroup>'
