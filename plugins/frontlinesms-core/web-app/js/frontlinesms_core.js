@@ -6,6 +6,15 @@ if(!Array.prototype.indexOf) {
 	};
 }
 
+if(!Array.prototype.remove) {
+	Array.prototype.remove = function(obj) {
+		var i;
+		while((i = this.indexOf(obj)) !== -1) {
+			this.splice(i, 1);
+		}
+	}
+}
+
 // String.trim is not available in IE before IE9, so
 // add it here using the jQuery implementation
 if(!String.prototype.trim) {

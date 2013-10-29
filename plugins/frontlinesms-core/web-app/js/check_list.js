@@ -113,8 +113,8 @@ check_list = (function() {
 	};
 
 	applyContactPaneJavascriptEnhancements = function(pane) {
-		initContactPaneGroups();
-		initContactPaneFields();
+		contactEditor.init();
+		groupMembershipEditor.init();
 		$("#mobile").trigger('change');
 	};
 

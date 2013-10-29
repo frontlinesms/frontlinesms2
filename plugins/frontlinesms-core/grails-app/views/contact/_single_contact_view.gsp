@@ -61,10 +61,7 @@
 			<td>
 				<ul id="group-list">
 					<g:each in="${contactGroupInstanceList}" status="i" var="g">
-						<li class="group ${g == groupInstance ? 'selected' : ''}" groupName="${g.name}">
-							<span>${g.name}</span>
-							<a class="icon-remove remove-command" id="remove-group-${g.id}"></a>
-						</li>
+						<fsms:render template="/contact/group_membership" model="[selected:groupInstance==g, name:g.name, id:g.id]"/>
 					</g:each>
 					<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
 						<p><g:message code="contact.notinanygroup.label"/></p>
@@ -131,4 +128,5 @@ $(function() {
 </r:script>
 
 <fsms:render template="/contact/custom_field" type="sanchez" id="custom-field-input" runtimeVars="name,fieldName,removerName" model="[selected:false, value:'']"/>
+<fsms:render template="/contact/group_membership" type="sanchez" id="group-membership" runtimeVars="id,name" model="[selected:false]"/>
 

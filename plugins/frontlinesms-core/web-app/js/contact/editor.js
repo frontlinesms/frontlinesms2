@@ -131,26 +131,25 @@ var ContactEditor = function() {
 //> CUSTOM FIELD STUFF END
 
 //> INITIALISE
-	cachedFormHash = contactEditForm.serialize().hashCode();
-	$("#notes").autosize();
+	function init() {
+		cachedFormHash = contactEditForm.serialize().hashCode();
+		$("#notes").autosize();
 
-	// bind form data change listeners
-	$(".edit input[type=text], .edit textarea").blur(updateContactData);
-	$(".edit input[type=hidden], .edit select").change(updateContactData);
+		// bind form data change listeners
+		$(".edit input[type=text], .edit textarea").blur(updateContactData);
+		$(".edit input[type=hidden], .edit select").change(updateContactData);
 
-	contactEditForm.bind("addedCustomFieldToContact", function() {
-		$(".edit input[type=text]").blur(updateContactData);
+		contactEditForm.bind("addedCustomFieldToContact", function() {
+			$(".edit input[type=text]").blur(updateContactData);
+			$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
+		});
 		$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
-	});
 
-	contactEditForm.bind("addedGroupToContact", function() {
-		$(".edit .group .remove-command").click(updateContactData);
-	});
-
-	$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
-	$(".edit .group .remove-command").click(updateContactData);
-	$("#new-field-dropdown").change(addFieldClickAction);
+		$("#new-field-dropdown").change(addFieldClickAction);
+	}
 
 	this.updateContactData = updateContactData;
+	this.init = init;
+	init();
 };
 

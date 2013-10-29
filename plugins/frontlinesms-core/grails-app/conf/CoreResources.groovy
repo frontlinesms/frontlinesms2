@@ -80,8 +80,8 @@ modules = {
 		dependsOn 'common, font-awesome'
 		resource url:[dir:'js', file:'contact/moreGroupActions.js']
 		resource url:[dir:'js', file:'contact/search_within_list.js']
-		resource url:[dir:'js', file:'contact/show-groups.js']
 		resource url:[dir:'js', file:'contact/editor.js']
+		resource url:[dir:'js', file:'contact/groups-editor.js']
 		resource url:[dir:'js', file:'contact/validateContact.js']
 	}
 
