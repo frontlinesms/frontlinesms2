@@ -117,7 +117,9 @@ class SingleContactDetails extends geb.Module {
 		groupDropDown { $('#group-dropdown') }
         groupList { $('ul#group-list li span')*.text() }
         removeGroup { groupId ->
-			$("#group-list a#remove-group-${groupId}").click()
+        	def removeX = $("#group-list a#remove-group-${groupId}")
+        	removeX.jquery.css("visibility", "visible")
+			removeX.click()
 		}
 		removeMobile { $('#remove-mobile') }
 		sendMessage { $('#single-contact .send-message') }

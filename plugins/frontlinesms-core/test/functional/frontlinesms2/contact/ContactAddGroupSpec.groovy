@@ -58,7 +58,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow, bobId
 			singleContactDetails.addToGroup otherGroupId
-			singleContactDetails.save.click()
+			singleContactDetails.name.jquery.focus()
 		then:
 			at PageContactShow
 			remote { Contact.findByName('Bob') in Group.findByName('Others').members }
@@ -120,22 +120,10 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 				GroupMembership.countMembers(Group.findByName('Test')) == 1
 			}
 			singleContactDetails.removeGroup(remote { Group.findByName('Test').id.toString() })
-			singleContactDetails.save.click()
+			singleContactDetails.name.focus()
 		then:
 			at PageContactShow
 			remote { Group.findByName('Test').members == [] }
-	}
-
-	def "should enable save and cancel buttons when new group is added"() {
-		when:
-			to PageContactShow, remote { Contact.findByName('Bob').id }
-		then:
-			singleContactDetails.save.disabled
-		when:
-			singleContactDetails.addToGroup(remote { Group.findByName('Others').id.toString() })
-		then:
-			waitFor { !singleContactDetails.save.disabled }
-			!singleContactDetails.cancel.disabled
 	}
 }
 
