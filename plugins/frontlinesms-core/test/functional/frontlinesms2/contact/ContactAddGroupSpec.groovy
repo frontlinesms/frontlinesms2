@@ -51,14 +51,13 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			waitFor { singleContactDetails.groupList.size() == 1 }
 	}
 
-	def 'clicking save actually adds contact to newly selected groups'() {
+	def 'Adding a contact to groups persists the changes to the database'() {
 		setup:
 			def bobId = remote { Contact.findByName('Bob').id }
 			def otherGroupId = remote { Group.findByName('Others').id.toString() }
 		when:
 			to PageContactShow, bobId
 			singleContactDetails.addToGroup otherGroupId
-			singleContactDetails.name.jquery.focus()
 		then:
 			at PageContactShow
 			remote { Contact.findByName('Bob') in Group.findByName('Others').members }

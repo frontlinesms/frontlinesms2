@@ -67,6 +67,7 @@ grails.project.dependency.resolution = {
 		compile('org.codehaus.groovy.modules.http-builder:http-builder:0.6') {
 			excludes "commons-logging", "xml-apis", "groovy"
 		}
+		compile 'com.googlecode.libphonenumber:libphonenumber:4.3'
 	}
 
 	plugins {
