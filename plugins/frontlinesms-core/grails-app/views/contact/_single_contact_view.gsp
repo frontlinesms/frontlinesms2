@@ -17,7 +17,7 @@
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
-				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
+				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
 				<label for="mobile" class="icon-edit"/>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
@@ -82,11 +82,9 @@
 		</tr>
 	</table>
 	<div id="action-buttons" class="buttons">
-		<g:if test="${contactInstance?.mobile?.trim()}">
-			<fsms:popup class="icon-envelope send-message stroked" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+		<fsms:popup class="icon-envelope send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 			<g:message code="contact.send.message" args="${[contactInstance.name?:contactInstance.mobile]}"/>
-			</fsms:popup>
-		</g:if>
+		</fsms:popup>
 		<g:if test="${contactInstance?.id}">
 			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
 				<i class="icon-remove-sign"></i>

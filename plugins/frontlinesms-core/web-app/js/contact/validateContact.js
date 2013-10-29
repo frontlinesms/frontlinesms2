@@ -1,17 +1,4 @@
-function validateMobile(field) {
-	var internationFormatWarning = $(field).parent().find(".warning");
-	if(field.value==="" || isInternationalFormat(field.value)) {
-		internationFormatWarning.hide('fast');
-	} else {
-		internationFormatWarning.show('fast');
-	}
-}
-
-function isInternationalFormat(phoneNumber) {
-	return phoneNumber.match(/\+\d+/);
-}
-
-$(document).ready(function() {
+$(function() {
 	var validator;
 	$("#mobile").trigger('change');
 	validator = $("form").validate({onsubmit: false});
@@ -38,3 +25,4 @@ $(document).ready(function() {
 	}, i18n("contact.exists.warn"));
 
 });
+

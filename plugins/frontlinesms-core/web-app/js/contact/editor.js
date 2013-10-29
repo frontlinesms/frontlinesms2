@@ -52,6 +52,25 @@ var ContactEditor = function() {
 		updateContactData();
 	};
 
+	function validateMobile(field) {
+		var internationFormatWarning, val, sendMessageButton;
+		field = $(this);
+		internationFormatWarning = field.parent().find(".warning"),
+		val = field.val();
+		if(!val || val.match(/\+\d+/)) {
+			internationFormatWarning.hide("fast");
+		} else {
+			internationFormatWarning.show("fast");
+		}
+
+		sendMessageButton = $("#action-buttons a.send-message");
+		if(val) {
+			sendMessageButton.show("fast");
+		} else {
+			sendMessageButton.hide("fast");
+		}
+	}
+
 //> CUSTOM FIELD STUFF START
 	this.checkCustomFieldResult = function(json) {
 		var name, fieldsToAdd, x, y;
@@ -134,6 +153,8 @@ var ContactEditor = function() {
 	function init() {
 		cachedFormHash = contactEditForm.serialize().hashCode();
 		$("#notes").autosize();
+
+		$("input[name=mobile]").change(validateMobile);
 
 		// bind form data change listeners
 		$(".edit input[type=text], .edit textarea").blur(updateContactData);
