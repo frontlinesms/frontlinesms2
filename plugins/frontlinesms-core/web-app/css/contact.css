@@ -35,13 +35,13 @@
 #body.contacts #group-list li { margin:4px 0; }
 #body.contacts #group-list li:first-child { margin-top:0; }
 
-#body.contacts #detail #single-contact #message-stats { position:absolute; top:17px; right:17px; }
-#body.contacts #detail #single-contact #message-stats h2 { font-weight:bold; }
-#body.contacts #detail #single-contact #message-stats ul { margin:10px 0; }
-#body.contacts #detail #single-contact #message-stats ul li { padding:5px 0 5px 25px;
+#body.contacts #detail #single-contact #contact-infos { position:absolute; top:17px; right:17px; }
+#body.contacts #detail #single-contact #contact-infos h2 { font-weight:bold; }
+#body.contacts #detail #single-contact #contact-infos ul { margin:10px 0; }
+#body.contacts #detail #single-contact #contact-infos ul li { padding:5px 0 5px 25px;
 	background-position:left center; background-repeat:no-repeat; }
-#body.contacts #detail #single-contact #message-stats ul li.sent { background-image:url("../images/message/sent.png"); }
-#body.contacts #detail #single-contact #message-stats ul li.received { background-image:url("../images/message/received.png"); }
+#body.contacts #detail #single-contact #contact-infos ul li.sent { background-image:url("../images/message/sent.png"); }
+#body.contacts #detail #single-contact #contact-infos ul li.received { background-image:url("../images/message/received.png"); }
 
 #body.contacts #detail #multiple-contacts { display:inline-block; }
 #body.contacts #detail #multiple-contacts h2 { background-color:white; border:1px solid #B5C6CD; margin:17px 0; padding:17px; text-align:center; }

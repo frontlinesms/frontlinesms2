@@ -82,10 +82,6 @@
 		</tr>
 	</table>
 	<div id="action-buttons" class="buttons">
-		<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients:contactInstance?'contact-'+contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
-			<i class="icon-envelope"></i>
-			<g:message code="contact.send.message" args="${[contactInstance?.name?:contactInstance?.mobile]}"/>
-		</fsms:popup>
 		<g:if test="${contactInstance?.id}">
 			<g:link url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
 				<i class="icon-remove-sign"></i>
@@ -101,7 +97,7 @@
 		</g:else>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
-		<div id="message-stats">
+		<div id="contact-infos">
 			<h2><g:message code="contact.messages.label"/></h2>
 			<ul>
 				<li class="sent"><g:message code="contact.messages.sent" args="${[contactInstance?.outboundMessagesCount]}"/></li>
@@ -111,6 +107,10 @@
 					params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
 				<g:message code="contact.search.messages"/>
 			</g:link>
+			<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients:contactInstance?'contact-'+contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+				<i class="icon-envelope"></i>
+				<g:message code="contact.send.message" args="${[contactInstance?.name?:contactInstance?.mobile]}"/>
+			</fsms:popup>
 		</div>
 	</g:if>
 </div>
@@ -119,8 +119,8 @@ $(function() {
 	app_info.listen("contact_message_stats", { id: "${contactInstance?.id}" }, function(data) {
 		data = data.contact_message_stats;
 		if(!data) { return; }
-		$("#message-stats .sent").text(i18n("contact.messages.sent", data.outbound));
-		$("#message-stats .recieved").text(i18n("contact.messages.received", data.inbound));
+		$("#contact-infos .sent").text(i18n("contact.messages.sent", data.outbound));
+		$("#contact-infos .recieved").text(i18n("contact.messages.received", data.inbound));
 	});
 });
 </r:script>
