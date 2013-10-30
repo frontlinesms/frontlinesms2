@@ -6,6 +6,9 @@
 	<g:hiddenField name="groupsToRemove" value=","/>
 	<g:hiddenField name="fieldsToAdd" value=","/>
 	<g:hiddenField name="fieldsToRemove" value=","/>
+	<div class="spinner-contact">
+		<span class="update-in-progress" style="display:none;"><g:message code="contact.update.in.progress"/></span>
+	</div>
 	<table>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
