@@ -30,10 +30,13 @@ var ContactEditor = function() {
 					}
 				},
 				success:function(data) {
+					var contactName, button, buttonKids;
 					cachedFormHash = formHashAtRequestTime;
-					var contactName = $(".contact-edit-form [name='name']").val(),
-					buttonLabel = " " + i18n("contact.send.message", contactName);
-					$('#action-buttons .send-message').html(buttonLabel);
+					button = $('#action-buttons .send-message');
+					buttonKids = button.children();
+					contactName = $(".contact-edit-form [name='name']").val();
+					button.text(" " + i18n("contact.send.message", contactName));
+					button.prepend(buttonKids);
 				}
 			});
 		}

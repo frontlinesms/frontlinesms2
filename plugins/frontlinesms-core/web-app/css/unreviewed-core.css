@@ -73,6 +73,7 @@ fieldset.table { display:table; }
 #body.contacts .edit .editable .icon-remove { visibility:hidden; }
 #body.contacts .edit .buttons .cancel { display:none; }
 #body.contacts .edit .remove-command { background:none; }
+#body.contacts .icon-edit { vertical-align:middle; font-size:18px; }
 #body.contacts .edit table tr.editable:hover { background-color:#F8F8F8; }
 #body.contacts .edit table tr.editable:hover .icon-remove { visibility:visible; }
 #body.contacts .edit table tr.editable .icon-remove:hover { color:#e00c0e; }
@@ -93,7 +94,12 @@ input[type=text]:-ms-input-placeholder {
 	color:#bbb; font-style:italic; }
 
 #body.contacts #detail #single-contact #action-buttons { margin-top:20px; }
+#body.contacts #detail #single-contact #action-buttons .icon-envelope,
+#body.contacts #detail #single-contact #action-buttons .icon-remove,
+#body.contacts #detail #single-contact #action-buttons .icon-remove-sign {
+		font-size:14px; }
 #body.contacts #action-buttons a:after { content:'\a'; white-space:pre; }
 #body.contacts .edit label.error { display: block; color: #c00; margin:5px 0 5px; }
 #body.contacts table .warning { color: #c00; margin:5px 0 5px; }
 #body.contacts .edit .editable input[type="text"].error { border: 1px solid #c00; }
+
