@@ -18,22 +18,23 @@ var ContactEditor = function() {
 				url:url_root + "contact/saveContact",
 				data:formData,
 				beforeSend:function() {
+					if(!contactEditForm.valid()) {
+						return false;
+					}
 					if(updateInProgress) {
 						updateRequested = true;
 						return false;
 					}
-					showUpdateInProgress();
-					updateInProgress = true;
+					setUpdateInProgress(true);
 				},
 				complete:function() {
-					updateInProgress = false;
+					setUpdateInProgress(false);
 					if(updateRequested) {
 						updateRequested = false;
 						updateContactData();
 					}
 				},
 				success:function(data) {
-					hideUpdateInProgress();
 					var contactName, button, buttonKids;
 					cachedFormHash = formHashAtRequestTime;
 					button = $('#action-buttons .send-message');
@@ -45,12 +46,14 @@ var ContactEditor = function() {
 			});
 		}
 	},
-	showUpdateInProgress = function() {
-		contactUpdateInProgressContainer.fadeIn();
+	setUpdateInProgress = function(inProgress) {
+		updateInProgress = inProgress;
+		if(updateInProgress) {
+			contactUpdateInProgressContainer.fadeIn();
+		} else {
+			contactUpdateInProgressContainer.fadeOut();
+		}
 	},
-	hideUpdateInProgress = function() {
-		contactUpdateInProgressContainer.fadeOut();
-	}
 	removeCustomFieldClickHandler = function() {
 		var fieldId, fieldElement, fieldName;
 		fieldId = $(this).attr('id').substring('remove-field-'.length);
