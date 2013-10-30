@@ -124,11 +124,7 @@ class ContactController extends ControllerUtils {
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
 		}
-		if(request.xhr) {
-			render ([success:true] as JSON)
-		} else {
-			redirect(action:'show', params:[contactId:contactInstance.id])
-		}
+		render ([success:true] as JSON)
 	}
 	
 	def update() {
@@ -198,7 +194,6 @@ class ContactController extends ControllerUtils {
 			return false
 		}
 		if (contactInstance.save()) {
-			flash.message = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
