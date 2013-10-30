@@ -51,7 +51,7 @@ var ContactEditor = function() {
 		if(updateInProgress) {
 			targetElement.after("<i class='update-in-progress'/>");
 		} else {
-			targetElement.parent().find(".update-in-progress").fadeOut(2000);
+			targetElement.parent().find(".update-in-progress").fadeOut(2000, function() { $(this).remove(); });
 		}
 	},
 	removeCustomFieldClickHandler = function(event) {
