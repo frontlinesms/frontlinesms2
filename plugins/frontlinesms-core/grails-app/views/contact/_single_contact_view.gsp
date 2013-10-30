@@ -82,7 +82,7 @@
 		</tr>
 	</table>
 	<div id="action-buttons" class="buttons">
-		<fsms:popup class="icon-envelope send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+		<fsms:popup class="icon-envelope send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients:contactInstance?'contact-'+contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 			<g:message code="contact.send.message" args="${[contactInstance.name?:contactInstance.mobile]}"/>
 		</fsms:popup>
 		<g:if test="${contactInstance?.id}">
