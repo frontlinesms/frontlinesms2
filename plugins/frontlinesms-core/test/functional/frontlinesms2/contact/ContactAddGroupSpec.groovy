@@ -45,10 +45,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			singleContactDetails.removeGroup testGroupId.toString()
 		then:
 			waitFor { singleContactDetails.groupList.size() == 1 }
-		when:
-			to PageContactShow, bobId
-		then:
-			waitFor { singleContactDetails.groupList.size() == 1 }
+			remote { Contact.findByName("Bob") in Group.findByName('Test').members }
 	}
 
 	def 'Adding a contact to groups persists the changes to the database'() {
@@ -126,19 +123,6 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			waitFor { notifications.flashMessage.displayed }
 			remote { Group.findByName('Others').members == [] }
-	}
-
-	def 'clicking save removes contact from newly removed groups'() {
-		when:
-			to PageContactShow, remote { Contact.findByName('Bob').id }
-			remote {
-				GroupMembership.countMembers(Group.findByName('Test')) == 1
-			}
-			singleContactDetails.removeGroup(remote { Group.findByName('Test').id.toString() })
-			singleContactDetails.name.focus()
-		then:
-			at PageContactShow
-			remote { Group.findByName('Test').members == [] }
 	}
 }
 
