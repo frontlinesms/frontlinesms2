@@ -55,7 +55,7 @@ class ContactController extends ControllerUtils {
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
 				smartGroupInstanceList: SmartGroup.list()]
-		render view:'/contact/_single_contact_view', model:model
+		render view:'/contact/_single_contact', model:model
 	}
 	
 	def show() {
@@ -208,7 +208,7 @@ class ContactController extends ControllerUtils {
 
 	def multipleContactGroupList() {
 		def groups = Group.getGroupLists(getCheckedContactIds())
-		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList:groups.shared,
+		render(view: '_multiple_contact', model: [sharedGroupInstanceList:groups.shared,
 				nonSharedGroupInstanceList:groups.nonShared])
 	}
 	
