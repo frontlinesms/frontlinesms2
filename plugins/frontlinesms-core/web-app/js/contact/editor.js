@@ -58,8 +58,10 @@ var ContactEditor = function() {
 		internationFormatWarning = field.parent().find(".warning"),
 		val = field.val();
 		if(!val || val.match(/\+\d+/)) {
+			field.removeClass("error");
 			internationFormatWarning.hide("fast");
 		} else {
+			field.addClass("error");
 			internationFormatWarning.show("fast");
 		}
 

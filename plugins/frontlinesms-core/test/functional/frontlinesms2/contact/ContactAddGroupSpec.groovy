@@ -63,6 +63,22 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			remote { Contact.findByName('Bob') in Group.findByName('Others').members }
 	}
 
+	def 'Adding and removing a contact to or from groups (from same edit page) persists the changes to the database'() {
+		setup:
+			def bobId = remote { Contact.findByName('Bob').id }
+			def otherGroupId = remote { Group.findByName('Others').id.toString() }
+		when:
+			to PageContactShow, bobId
+			singleContactDetails.addToGroup otherGroupId
+		then:
+			at PageContactShow
+			remote { Contact.findByName('Bob') in Group.findByName('Others').members }
+		when:
+			singleContactDetails.removeGroup otherGroupId
+		then:
+			remote { !(Contact.findByName('Bob') in Group.findByName('Others').members) }
+	}
+
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
 			to PageContactShow

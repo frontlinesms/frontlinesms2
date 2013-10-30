@@ -94,4 +94,6 @@ input[type=text]:-ms-input-placeholder {
 
 #body.contacts #detail #single-contact #action-buttons { margin-top:20px; }
 #body.contacts #action-buttons a:after { content:'\a'; white-space:pre; }
-
+#body.contacts .edit label.error { display: block; color: #c00; margin:5px 0 5px; }
+#body.contacts table .warning { color: #c00; margin:5px 0 5px; }
+#body.contacts .edit .editable input[type="text"].error { border: 1px solid #c00; }
