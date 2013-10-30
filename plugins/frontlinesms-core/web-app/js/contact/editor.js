@@ -18,11 +18,11 @@ var ContactEditor = function() {
 				url:url_root + "contact/saveContact",
 				data:formData,
 				beforeSend:function() {
-					if(!contactEditForm.valid()) {
-						return false;
-					}
 					if(updateInProgress) {
 						updateRequested = true;
+						return false;
+					}
+					if(!contactEditForm.valid()) {
 						return false;
 					}
 					setUpdateInProgress(true);
