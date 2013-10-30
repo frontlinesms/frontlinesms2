@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import com.google.i18n.phonenumbers.*
-
 class Contact {
 //> PROPERTIES
 	String name
@@ -41,17 +39,6 @@ class Contact {
 //> ACCESSORS
 	def getGroups() {
 		GroupMembership.findAllByContact(this)*.group.sort{it.name}
-	}
-
-	def getISOCountryCode() {
-		def phoneNumberUtil = PhoneNumberUtil.getInstance()
-		def number
-		try {
-			number = phoneNumberUtil.findNumbers(mobile, null).iterator().next().number()
-		} catch (NoSuchElementException exception) {
-			return ''
-		}
-		CountryCodeToRegionCodeMap.countryCodeToRegionCodeMap[number.countryCode]
 	}
 
 	def setGroups(groups) {
