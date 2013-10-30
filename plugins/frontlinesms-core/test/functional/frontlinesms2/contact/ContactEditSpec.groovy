@@ -20,7 +20,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.name.value('Kate')
 			singleContactDetails.mobile.value('+2541234567')
 			singleContactDetails.email.value('gaga@gmail.com')
-			singleContactDetails.name.click()
+			singleContactDetails.email.blur()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
@@ -41,7 +41,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.name.value('Kate')
 			singleContactDetails.mobile.value('+2541234567') 
 			singleContactDetails.email.value('gaga@gmail.com')
-			singleContactDetails.name.click()
+			singleContactDetails.email.blur()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			remote { Contact.findByName('Kate') != null }
