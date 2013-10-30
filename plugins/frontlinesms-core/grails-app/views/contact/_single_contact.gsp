@@ -87,18 +87,17 @@
 			<g:message code="contact.send.message" args="${[contactInstance?.name?:contactInstance?.mobile]}"/>
 		</fsms:popup>
 		<g:if test="${contactInstance?.id}">
-			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
+			<g:link url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
 				<i class="icon-remove-sign"></i>
 				<span><g:message code="contact.action.delete"/></span>
 			</g:link>
 		</g:if>
 		<g:if test="${contactInstance?.id}">
 			<g:actionSubmit class="stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
-			<g:link class="cancel stroked disabled"><g:message code="action.cancel"/></g:link>
 		</g:if>
 		<g:else>
 			<g:actionSubmit class="stroked" action="saveContact" value="${g.message(code:'action.save')}"/>
-			<g:link class="cancel stroked warn" action="index"><g:message code="action.cancel"/></g:link>
+			<g:link class="cancel stroked" action="index"><g:message code="action.cancel"/></g:link>
 		</g:else>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
