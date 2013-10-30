@@ -11,14 +11,14 @@
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
 				<g:textField name="name" value="${contactInstance?.name}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
-				<label for="name" class="icon-edit"/>
+				<label for="name" class="icon-edit"></label>
 			</td>
 		</tr>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
 				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
-				<label for="mobile" class="icon-edit"/>
+				<label for="mobile" class="icon-edit"></label>
 				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
 			</td>
 		</tr>
@@ -26,7 +26,7 @@
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
 				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" placeholder="${g.message(code:'contact.field.email.placeholder')}"/>
-				<label for="email" class="icon-edit"/>
+				<label for="email" class="icon-edit"></label>
 			</td>
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
@@ -53,7 +53,7 @@
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
 			<td>
 				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
-				<label for="notes" class="icon-edit"/>
+				<label for="notes" class="icon-edit"></label>
 			</td>
 		</tr>
 		<tr id="group-section" class="input basic-info">
