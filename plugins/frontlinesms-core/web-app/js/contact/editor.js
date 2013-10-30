@@ -154,6 +154,21 @@ var ContactEditor = function() {
 	}
 //> CUSTOM FIELD STUFF END
 
+//> MASS GROUP EDIT START
+	function enableSaveButton() {
+		var element, selecters;
+
+		selecters = ["#update-all"];
+		for(i=selecters.length-1; i>=0; --i) {
+			element = $(selecters[i]);
+			element.removeAttr("disabled");
+			element.removeClass("disabled");
+			if(element.hasClass("fsms-button-replaced")) {
+				element.next().removeClass("disabled");
+			}
+		}
+	}
+
 //> INITIALISE
 	function init() {
 		cachedFormHash = contactEditForm.serialize().hashCode();
@@ -172,6 +187,9 @@ var ContactEditor = function() {
 		$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
 
 		$("#new-field-dropdown").change(addFieldClickAction);
+
+		$("#multi-group-list .remove-group").click(enableSaveButton);
+		$("#multi-group-dropdown").change(enableSaveButton);
 	}
 
 	this.updateContactData = updateContactData;
