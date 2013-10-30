@@ -124,7 +124,11 @@ class ContactController extends ControllerUtils {
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
 		}
-		render ([success:true] as JSON)
+		if(request.xhr) {
+			render ([success:true] as JSON)
+		} else {
+			redirect(action:'show', params:[contactId:contactInstance.id])
+		}
 	}
 	
 	def update() {
@@ -193,7 +197,7 @@ class ContactController extends ControllerUtils {
 			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
 			return false
 		}
-		if (contactInstance.save()) {
+		if(contactInstance.save()) {
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
