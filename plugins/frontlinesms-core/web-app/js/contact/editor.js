@@ -46,15 +46,12 @@ var ContactEditor = function() {
 		}
 	},
 	setUpdateInProgress = function(inProgress, targetElement) {
-		var thinker;
-		targetElement = $(targetElement).parent();
+		targetElement = $(targetElement)
 		updateInProgress = inProgress;
 		if(updateInProgress) {
-			thinker = $("<i class='update-in-progress' style='display:none'/>");
-			targetElement.append(thinker);
-			thinker.show();
+			targetElement.after("<i class='update-in-progress'/>");
 		} else {
-			targetElement.find(".update-in-progress").fadeOut(2000);
+			targetElement.parent().find(".update-in-progress").fadeOut(2000);
 		}
 	},
 	removeCustomFieldClickHandler = function(event) {
