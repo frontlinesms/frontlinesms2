@@ -7,9 +7,11 @@ var ContactEditor = function() {
 	var cachedFormHash,
 	fieldsToAdd = [], fieldsToRemove = [],
 	contactEditForm = $(".contact-edit-form"),
-	contactUpdateInProgressContainer = $(".spinner-contact .update-in-progress"),
 	updateInProgress, updateRequested,
-	updateContactData = function() {
+	updateContactData = function(event) {
+		if(!contactEditForm.valid()) {
+			return false;
+		}
 		var formData = contactEditForm.serialize(),
 		formHashAtRequestTime = formData.hashCode();
 		if(formHashAtRequestTime !== cachedFormHash) {
@@ -22,16 +24,13 @@ var ContactEditor = function() {
 						updateRequested = true;
 						return false;
 					}
-					if(!contactEditForm.valid()) {
-						return false;
-					}
-					setUpdateInProgress(true);
+					setUpdateInProgress(true, event.target);
 				},
 				complete:function() {
-					setUpdateInProgress(false);
+					setUpdateInProgress(false, event.target);
 					if(updateRequested) {
 						updateRequested = false;
-						updateContactData();
+						updateContactData(event);
 					}
 				},
 				success:function(data) {
@@ -46,15 +45,19 @@ var ContactEditor = function() {
 			});
 		}
 	},
-	setUpdateInProgress = function(inProgress) {
+	setUpdateInProgress = function(inProgress, targetElement) {
+		var thinker;
+		targetElement = $(targetElement).parent();
 		updateInProgress = inProgress;
 		if(updateInProgress) {
-			contactUpdateInProgressContainer.fadeIn();
+			thinker = $("<i class='update-in-progress' style='display:none'/>");
+			targetElement.append(thinker);
+			thinker.show();
 		} else {
-			contactUpdateInProgressContainer.fadeOut();
+			targetElement.find(".update-in-progress").fadeOut(2000);
 		}
 	},
-	removeCustomFieldClickHandler = function() {
+	removeCustomFieldClickHandler = function(event) {
 		var fieldId, fieldElement, fieldName;
 		fieldId = $(this).attr('id').substring('remove-field-'.length);
 		fieldElement = $(this).parent().parent();
@@ -65,8 +68,7 @@ var ContactEditor = function() {
 		fieldsToAdd.remove(fieldName);
 		fieldsToRemove.push(fieldName);
 		updateHiddenFieldsForAddAndRemove();
-		contactEditor.updateContactData();
-		updateContactData();
+		updateContactData(event);
 	};
 
 	function validateMobile(field) {
