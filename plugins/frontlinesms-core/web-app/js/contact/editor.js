@@ -5,6 +5,7 @@ $(function() {
 
 var ContactEditor = function() {
 	var cachedFormHash,
+	fieldsToAdd = [], fieldsToRemove = [],
 	contactEditForm = $(".contact-edit-form"),
 	contactUpdateInProgressContainer = $(".spinner-contact .update-in-progress"),
 	updateInProgress, updateRequested,
@@ -58,8 +59,9 @@ var ContactEditor = function() {
 		fieldElement.remove();
 		$("#new-field-dropdown option[value='na']").after('<option value="'+fieldName+'">'+fieldName+'</option>');
 		selectmenuTools.refresh($('#new-field-dropdown'));
-		removeFieldFromList(fieldName, 'fieldsToAdd');
-		addFieldToList(fieldName, 'fieldsToRemove');
+		fieldsToAdd.remove(fieldName);
+		fieldsToRemove.push(fieldName);
+		updateHiddenFieldsForAddAndRemove();
 		contactEditor.updateContactData();
 		updateContactData();
 	};
@@ -87,15 +89,14 @@ var ContactEditor = function() {
 
 //> CUSTOM FIELD STUFF START
 	this.checkCustomFieldResult = function(json) {
-		var name, fieldsToAdd, x, y;
+		var name, i;
 		if ($("#custom-field-name").val() !== "") {
 			name = $("#custom-field-name").val();
-			fieldsToAdd = getFieldList('fieldsToAdd').val().split(",");
-			for (y in fieldsToAdd) {
-				if(fieldsToAdd[y] !== "") { json.uniqueCustomFields.push(fieldsToAdd[y]); }
+			for(i=0; i<fieldsToAdd.length; ++i) {
+				if(fieldsToAdd[i] !== "") { json.uniqueCustomFields.push(fieldsToAdd[i]); }
 			}
-			for (x in json.uniqueCustomFields) {
-				if (json.uniqueCustomFields[x].toLowerCase() === name.toLowerCase()) {
+			for(i=0; i<json.uniqueCustomFields.length; ++i) {
+				if (json.uniqueCustomFields[i].toLowerCase() === name.toLowerCase()) {
 					$("#smallpopup-error-panel").html(i18n("customfield.validation.error"));
 					$("#smallpopup-error-panel").show();
 					return false;
@@ -138,28 +139,16 @@ var ContactEditor = function() {
 	}
 
 	function addCustomField(name) {
-		removeFieldFromList(name, 'fieldsToRemove');
-		addFieldToList(name, 'fieldsToAdd');
+		fieldsToRemove.remove(name);
+		fieldsToAdd.push(name);
+		updateHiddenFieldsForAddAndRemove();
 		$("#info-add").parent().before(sanchez.template("custom-field-input", {name:name, fieldName:"newCustomField-"+name, removerName:""}));
 		$(".contact-edit-form").trigger("addedCustomFieldToContact");
 	}
 
-	function removeFieldFromList(id, fieldName) {
-		var f, oldList, newList;
-		f = $('input:hidden[name=' + fieldName + ']');
-		oldList = f.val();
-		newList = oldList.replace(','+ id +',', ',');
-		f.val(newList);
-	}
-	function addFieldToList(id, fieldName) {
-		var f, oldList, newList;
-		f = getFieldList(fieldName);
-		oldList = f.val();
-		newList = oldList + id + ',';
-		f.val(newList);
-	}
-	function getFieldList(fieldName) {
-		return $('input:hidden[name=' + fieldName + ']');
+	function updateHiddenFieldsForAddAndRemove() {
+		$("input:hidden[name=fieldsToAdd]").val(fieldsToAdd.join(","));
+		$("input:hidden[name=fieldsToRemove]").val(fieldsToRemove.join(","));
 	}
 //> CUSTOM FIELD STUFF END
 
