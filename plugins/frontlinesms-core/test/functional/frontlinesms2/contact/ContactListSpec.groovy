@@ -37,7 +37,7 @@ class ContactListSpec extends ContactBaseSpec {
 			to PageContactShow
 		then:
 			def contactNames = contactList.contacts - "Select All"
-			def expectedNames = (11..60).collect { "Contact${it}" }
+			def expectedNames = (11..60).collect { "Contact${it} 987654321${it}" }
 			assert contactNames == expectedNames
 	}
 	
