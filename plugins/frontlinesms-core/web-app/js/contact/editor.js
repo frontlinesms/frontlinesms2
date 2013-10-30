@@ -71,7 +71,7 @@ var ContactEditor = function() {
 	function validateMobile(field) {
 		var internationFormatWarning, val, sendMessageButton;
 		field = $(this);
-		internationFormatWarning = field.parent().find(".warning"),
+		internationFormatWarning = field.parent().find("label..warning.l10n"),
 		val = field.val();
 		if(!val || val.match(/\+\d+/)) {
 			field.removeClass("error");
