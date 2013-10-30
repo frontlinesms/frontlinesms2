@@ -28,12 +28,11 @@ fieldset.table { display:table; }
 	background-image:none;
 	border-radius:2px;
 	transition:border-color 1s linear, background-color 1s linear;
+	cursor:pointer;
 }
 .stroked:hover { border:1px solid black; background-color:#eee; }
 .stroked:hover { border-right:1px solid #6b6b6b; }
 .stroked:hover { border-bottom:1px solid #6b6b6b; }
-.stroked.warn { color:#e00c0e; border-color:#e95556; }
-.stroked.warn:hover { border-color:#e00c0e; }
 .recipient_selector_wrap { margin-bottom:2px; }
 
 .remove-command { margin-left:5px; }
@@ -66,12 +65,12 @@ fieldset.table { display:table; }
 }
 
 #body.contacts .edit .buttons .save { display:none; }
-#body.contacts .edit .btn-delete { color:#e00c0e; border:none; }
-#body.contacts .btn.cancel { color:#e00c0e; border:none; }
-#body.contacts .btn.cancel:hover { text-decoration:underline; }
-#body.contacts .edit .btn-delete:hover span { text-decoration:underline; }
+#body.contacts .edit .btn-delete,
+#body.contacts .cancel { border:none; }
+#body.contacts .edit .btn-delete { color:#e00c0e; }
+#body.contacts .edit .btn-delete:hover span,
+#body.contacts .cancel:hover { text-decoration:underline; }
 #body.contacts .edit .editable .icon-remove { visibility:hidden; }
-#body.contacts .edit .buttons .cancel { display:none; }
 #body.contacts .edit .remove-command { background:none; }
 #body.contacts .icon-edit { vertical-align:middle; font-size:18px; }
 #body.contacts .edit table tr.editable:hover { background-color:#F8F8F8; }
@@ -83,7 +82,7 @@ fieldset.table { display:table; }
 #body.contacts table tr.editable .icon-edit { opacity:0.0; display:inline-block; margin-left:5px; transition:opacity 1s linear; }
 #body.contacts .edit table tr.editable:hover .icon-edit { opacity:1.0; }
 
-#body.contacts .edit table tr:hover * { cursor:pointer; }
+#body.contacts table tr:hover * { cursor:pointer; }
 #body.contacts .edit table tr:hover input { cursor:text; }
 #body.contacts .edit table tr:hover textarea { cursor:text; }
 .contact-name span.preview { margin-left:15px; font-style:italic; color:#999; }
