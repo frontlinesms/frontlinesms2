@@ -28,6 +28,7 @@ fieldset.table { display:table; }
 	background-image:none;
 	border-radius:2px;
 	transition:border-color 1s linear, background-color 1s linear;
+	cursor:pointer;
 }
 .stroked:hover { border:1px solid black; background-color:#eee; }
 .stroked:hover { border-right:1px solid #6b6b6b; }
@@ -81,7 +82,7 @@ fieldset.table { display:table; }
 #body.contacts table tr.editable .icon-edit { opacity:0.0; display:inline-block; margin-left:5px; transition:opacity 1s linear; }
 #body.contacts .edit table tr.editable:hover .icon-edit { opacity:1.0; }
 
-#body.contacts .edit table tr:hover * { cursor:pointer; }
+#body.contacts table tr:hover * { cursor:pointer; }
 #body.contacts .edit table tr:hover input { cursor:text; }
 #body.contacts .edit table tr:hover textarea { cursor:text; }
 .contact-name span.preview { margin-left:15px; font-style:italic; color:#999; }
