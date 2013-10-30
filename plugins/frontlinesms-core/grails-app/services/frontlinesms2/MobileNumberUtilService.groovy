@@ -2,7 +2,7 @@ package frontlinesms2
 
 import com.google.i18n.phonenumbers.*
 
-class MobileNumberService {
+class MobileNumberUtilService {
 	def getISOCountryCode(Contact contact) {
 		if (!mobile) return ''
 		getISOCountryCode(contact.mobile)
