@@ -43,7 +43,7 @@ var GroupMembershipEditor = function() {
 		return groupListElements.size() <= 1;
 	}
 
-	function removeGroupClickAction() {
+	function removeGroupClickAction(event) {
 		var me, groupId, groupName, groupDropdown, option;
 		me = $(this);
 		groupId = me.attr('id').substring('remove-group-'.length);
@@ -61,7 +61,7 @@ var GroupMembershipEditor = function() {
 		removeGroupId(groupId);
 		selectmenuTools.refresh(groupDropdown);
 
-		contactEditor.updateContactData();
+		contactEditor.updateContactData(event);
 	}
 	function removeGroupId(id) {
 		toAdd.remove(id);
