@@ -103,3 +103,11 @@ input[type=text]:-ms-input-placeholder {
 #body.contacts table .warning { color: #c00; margin:5px 0 5px; }
 #body.contacts .edit .editable input[type="text"].error { border: 1px solid #c00; }
 
+#body.contacts .spinner-contact { height: 10px; }
+#body.contacts .spinner-contact .update-in-progress {
+	background:url('../images/message/gray-ajax-spinner.gif') 0px 1px no-repeat;
+	color: #c00;
+	font-weight: bold;
+	padding-left: 25px;
+}
+

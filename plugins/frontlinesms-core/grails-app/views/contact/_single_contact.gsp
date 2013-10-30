@@ -6,6 +6,9 @@
 	<g:hiddenField name="groupsToRemove" value=","/>
 	<g:hiddenField name="fieldsToAdd" value=","/>
 	<g:hiddenField name="fieldsToRemove" value=","/>
+	<div class="spinner-contact">
+		<span class="update-in-progress" style="display:none;"><g:message code="contact.update.in.progress"/></span>
+	</div>
 	<table>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
@@ -84,7 +87,7 @@
 	<div id="action-buttons" class="buttons">
 		<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients:contactInstance?'contact-'+contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 			<i class="icon-envelope"></i>
-			<g:message code="contact.send.message" args="${[contactInstance.name?:contactInstance.mobile]}"/>
+			<g:message code="contact.send.message" args="${[contactInstance?.name?:contactInstance?.mobile]}"/>
 		</fsms:popup>
 		<g:if test="${contactInstance?.id}">
 			<g:link elementId="btn_delete" url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">

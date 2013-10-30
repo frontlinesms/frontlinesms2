@@ -6,6 +6,7 @@ $(function() {
 var ContactEditor = function() {
 	var cachedFormHash,
 	contactEditForm = $(".contact-edit-form"),
+	contactUpdateInProgressContainer = $(".spinner-contact .update-in-progress"),
 	updateInProgress, updateRequested,
 	updateContactData = function() {
 		var formData = contactEditForm.serialize(),
@@ -20,6 +21,7 @@ var ContactEditor = function() {
 						updateRequested = true;
 						return false;
 					}
+					showUpdateInProgress();
 					updateInProgress = true;
 				},
 				complete:function() {
@@ -30,6 +32,7 @@ var ContactEditor = function() {
 					}
 				},
 				success:function(data) {
+					hideUpdateInProgress();
 					var contactName, button, buttonKids;
 					cachedFormHash = formHashAtRequestTime;
 					button = $('#action-buttons .send-message');
@@ -41,6 +44,12 @@ var ContactEditor = function() {
 			});
 		}
 	},
+	showUpdateInProgress = function() {
+		contactUpdateInProgressContainer.fadeIn();
+	},
+	hideUpdateInProgress = function() {
+		contactUpdateInProgressContainer.fadeOut();
+	}
 	removeCustomFieldClickHandler = function() {
 		var fieldId, fieldElement, fieldName;
 		fieldId = $(this).attr('id').substring('remove-field-'.length);
