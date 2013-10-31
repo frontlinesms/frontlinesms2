@@ -49,9 +49,9 @@ var ContactEditor = function() {
 		targetElement = $(targetElement)
 		updateInProgress = inProgress;
 		if(updateInProgress) {
-			targetElement.after("<i class='update-in-progress'/>");
+			targetElement.after("<i class='update in-progress'/>");
 		} else {
-			targetElement.parent().find(".update-in-progress").fadeOut(2000, function() { $(this).remove(); });
+			targetElement.parent().find(".update.in-progress").removeClass('in-progress').addClass('icon-ok').addClass('done').fadeOut(1000, function() { $(this).remove(); });
 		}
 	},
 	removeCustomFieldClickHandler = function(event) {

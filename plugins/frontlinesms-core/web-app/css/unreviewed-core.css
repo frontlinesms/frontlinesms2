@@ -103,5 +103,6 @@ input[type=text]:-ms-input-placeholder {
 #body.contacts label.error { color:#c00; }
 #body.contacts .edit .editable input[type="text"].error { border: 1px solid #c00; }
 
-#body.contacts .update-in-progress { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding-left:18px; }
+#body.contacts .update.in-progress { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding-left:18px; }
+#body.contacts .update.done { padding-left:4px; }
 
