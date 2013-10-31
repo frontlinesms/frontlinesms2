@@ -11,6 +11,8 @@ class MobileNumberUtilService {
 			number = phoneNumberUtil.parse(rawNumber, null)
 		} catch (NoSuchElementException exception) {
 			return ''
+		} catch (NumberParseException exception) {
+			return ''
 		}
 
 		phoneNumberUtil.getRegionCodeForNumber(number)
