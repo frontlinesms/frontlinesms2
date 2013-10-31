@@ -98,9 +98,9 @@ input[type=text]:-ms-input-placeholder {
 #body.contacts #detail #single-contact #action-buttons .icon-remove-sign {
 		font-size:14px; }
 #body.contacts #contact-infos a:after { content:'\a'; white-space:pre; }
-#body.contacts .edit label.error,
-#body.contacts .edit label.warning { display:block; margin:5px 0; padding:0; }
-#body.contacts .edit label.error { color:#c00; }
+#body.contacts label.error,
+#body.contacts label.warning { display:block; margin:5px 0; padding:0; }
+#body.contacts label.error { color:#c00; }
 #body.contacts .edit .editable input[type="text"].error { border: 1px solid #c00; }
 
 #body.contacts .update-in-progress { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding-left:18px; }
