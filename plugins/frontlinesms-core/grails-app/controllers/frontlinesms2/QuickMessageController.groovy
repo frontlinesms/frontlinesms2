@@ -4,7 +4,7 @@ class QuickMessageController extends ControllerUtils {
 	private static final CONTACT_ID_PATTERN = /^contact-(\d+)$/
 
 	def create() {
-		def groupList = params.groupList? Group.getAll(params.groupList.split(',')): []
+		def groupList = params.groupList? Group.getAll(params.groupList.split(',').flatten().collect{ it as Long }): []
 		if(params.recipients?.contains(',')) {
 			// params.recipients is a list of message IDS?!?!?!?!!!!!??
 			// we need to convert the message IDs to phone numbers!!!???!
