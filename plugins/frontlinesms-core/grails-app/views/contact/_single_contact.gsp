@@ -19,7 +19,7 @@
 			<td>
 				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
 				<label for="mobile" class="icon-edit"></label>
-				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
+				<label for="mobile" class="warning l10n" style="display:none"><g:message code="contact.phonenumber.international.warning"/></label>
 			</td>
 		</tr>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
