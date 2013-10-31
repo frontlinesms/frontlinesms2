@@ -264,8 +264,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { title.contains("Camping") }
 			at PageContactShow
-			contactList.contacts.containsAll(['wilburforce'])
-			!contactList.contacts.containsAll(['prudence'])
+			contactList.contacts.containsAll(['wilburforce +1232123'])
+			!contactList.contacts.containsAll(['prudence +12321'])
 
 	}
 
@@ -303,7 +303,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { title.contains("Camping") }
 			at PageContactShow
-			contactList.contacts.containsAll(['prudence', 'wilburforce'])
+			contactList.contacts.containsAll(['prudence +12321', 'wilburforce +1232123'])
 	}
 
 	def "clicking the rename option opens the rename small popup"() {
