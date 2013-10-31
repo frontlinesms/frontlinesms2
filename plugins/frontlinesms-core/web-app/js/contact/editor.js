@@ -83,9 +83,9 @@ var ContactEditor = function() {
 
 		sendMessageButton = $("#contact-infos a.send-message");
 		if(val) {
-			sendMessageButton.show("fast");
+			sendMessageButton.removeClass("hidden");
 		} else {
-			sendMessageButton.hide("fast");
+			sendMessageButton.addClass("hidden");
 		}
 	}
 
