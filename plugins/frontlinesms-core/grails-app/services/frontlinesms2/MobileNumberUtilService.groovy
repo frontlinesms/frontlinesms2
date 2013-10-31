@@ -4,15 +4,15 @@ import com.google.i18n.phonenumbers.*
 
 class MobileNumberUtilService {
 	def getISOCountryCode(rawNumber) {
-		def phoneNumberUtil = PhoneNumberUtil.getInstance()
+		def phoneNumberUtil = PhoneNumberUtil.instance
 		def number
 
 		try {
-			number = phoneNumberUtil.findNumbers(rawNumber, null).iterator().next().number()
+			number = phoneNumberUtil.parse(rawNumber, null)
 		} catch (NoSuchElementException exception) {
 			return ''
 		}
 
-		CountryCodeToRegionCodeMap.countryCodeToRegionCodeMap[number.countryCode]
+		phoneNumberUtil.getRegionCodeForNumber(number)
 	}
 }
