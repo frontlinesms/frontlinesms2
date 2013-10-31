@@ -41,6 +41,10 @@ class Contact {
 		GroupMembership.findAllByContact(this)*.group.sort{it.name}
 	}
 
+	def getIsoCountryCode() {
+		mobile?getISOCountryCode(mobile):''
+	}
+
 	def setGroups(groups) {
 		this.groups.each() { GroupMembership.remove(this, it) }
 		groups.each() { GroupMembership.create(this, it) }
