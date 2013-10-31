@@ -81,7 +81,7 @@ var ContactEditor = function() {
 			internationFormatWarning.show("fast");
 		}
 
-		sendMessageButton = $("#action-buttons a.send-message");
+		sendMessageButton = $("#contact-infos a.send-message");
 		if(val) {
 			sendMessageButton.show("fast");
 		} else {
