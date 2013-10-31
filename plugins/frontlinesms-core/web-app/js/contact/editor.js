@@ -178,7 +178,7 @@ var ContactEditor = function() {
 
 		// bind form data change listeners
 		$(".edit input[type=text], .edit textarea").blur(updateContactData);
-		$(".edit input[type=hidden], .edit select").change(updateContactData);
+		$(".edit input[type=hidden], .edit select:not(#group-dropdown)").change(updateContactData);
 
 		contactEditForm.bind("addedCustomFieldToContact", function() {
 			$(".edit input[type=text]").blur(updateContactData);

@@ -72,6 +72,7 @@ var GroupMembershipEditor = function() {
 		toRemove.remove(id);
 		toAdd.push(id);
 		updateFormLists();
+		contactEditor.updateContactData(event);
 	}
 	function updateFormLists() {
 		$('input:hidden[name=groupsToAdd]').val(toAdd.join(","));
