@@ -5,6 +5,7 @@
 		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
 		<div id='message-info'>
 			<p id="message-detail-sender">
+				<i class="${messageInstance.contactFlagCSSClasses}"></i>
 				<span>
 					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
 						<fsms:popup controller="message" action="listRecipients" params="[messageId: messageInstance.id]" popupCall="showRecipientList(data)" class="btn">
