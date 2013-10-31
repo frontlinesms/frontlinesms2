@@ -37,6 +37,5 @@ body { background-image:url("../images/head_background.png");
 .flag {
 	background:url(../images/flags.png) no-repeat;
 	display: inline-block;
-	background-color: #888;
 }
 
