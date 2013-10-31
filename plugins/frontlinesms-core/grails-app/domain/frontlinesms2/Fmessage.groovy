@@ -3,6 +3,8 @@ package frontlinesms2
 import groovy.time.*
 
 class Fmessage {
+	def mobileNumberUtilService
+
 	static final int MAX_TEXT_LENGTH = 1600
 	static final String TEST_MESSAGE_TEXT = "Test Message"
 
@@ -202,6 +204,21 @@ class Fmessage {
 		} else {
 			return Integer.toString(dispatches.size())
 		}
+	}
+
+	def getContactFlagCSSClasses() {
+		def isoCode
+		def flagCssClass = ''
+
+		if(inbound) {
+			isoCode = mobileNumberUtilService.getISOCountryCode(src)?.toLowerCase()
+		} else if(dispatches.size() == 1) {
+			def dst = (dispatches as List)[0].dst
+			isoCode = mobileNumberUtilService.getISOCountryCode(dst)?.toLowerCase()
+		}
+
+		if(isoCode) flagCssClass = "flag flag-$isoCode"
+		flagCssClass
 	}
 
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
