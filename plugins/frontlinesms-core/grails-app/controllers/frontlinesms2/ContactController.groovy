@@ -120,12 +120,13 @@ class ContactController extends ControllerUtils {
 	def saveContact() {
 		def contactInstance = Contact.get(params.contactId) ?: new Contact()
 		contactInstance.properties = params
+		def saveSuccessful = false
 		if(attemptSave(contactInstance)) {
 			parseContactFields(contactInstance)
-			attemptSave(contactInstance)
+			saveSuccessful = attemptSave(contactInstance)
 		}
 		if(request.xhr) {
-			render ([success:true] as JSON)
+			render ([success:saveSuccessful] as JSON)
 		} else {
 			redirect(action:'show', params:[contactId:contactInstance.id])
 		}
