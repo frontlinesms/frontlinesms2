@@ -169,7 +169,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { title.contains("Camping") }
 			at PageContactShow
-			contactList.contacts.containsAll(['wilburforce', 'prudence'])
+			contactList.contacts.containsAll(['wilburforce +1232123', 'prudence'])
 	}
 
 	def 'When a message is categorised as a leave with the dialog, it appears in the correct category and the contact membership is updated'() {
