@@ -3,6 +3,7 @@ modules = {
 
 	'frontlinesms-core' {
 		dependsOn 'jquery-ui'
+		dependsOn 'flags'
 		resource url:[dir:'css', file:'reset.css']
 		resource url:[dir:'css', file:'layout.css']
 		resource url:[dir:'css', file:'head.css']
@@ -138,6 +139,10 @@ modules = {
 	'internet-explorer-css' {
 		resource url:[dir:'css', file:'ie7.css'], bundle:'ie7'
 		resource url:[dir:'css', file:'ie8.css'], bundle:'ie8'
+	}
+
+	flags {
+		resource url:[dir:'css', file:'flags.css']
 	}
 }
 
