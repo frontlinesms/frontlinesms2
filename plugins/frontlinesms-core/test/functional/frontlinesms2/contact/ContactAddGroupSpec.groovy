@@ -45,7 +45,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			singleContactDetails.removeGroup testGroupId.toString()
 		then:
 			waitFor { singleContactDetails.groupList.size() == 1 }
-			remote { Contact.findByName("Bob") in Group.findByName('Test').members }
+			remote { !(Contact.findByName("Bob") in Group.findByName('Test').members) }
 	}
 
 	def 'Adding a contact to groups persists the changes to the database'() {
