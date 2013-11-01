@@ -126,10 +126,27 @@ class ContactController extends ControllerUtils {
 			saveSuccessful = attemptSave(contactInstance)
 		}
 		if(request.xhr) {
-			render ([success:saveSuccessful] as JSON)
+			def data = [success:saveSuccessful] << getContactErrors(contactInstance)
+			render (data as JSON)
 		} else {
 			redirect(action:'show', params:[contactId:contactInstance.id])
 		}
+	}
+
+	private getContactErrors(contactInstance) {
+		contactInstance.validate()
+		def data = [errors:[:]]
+		contactInstance.errors.allErrors.each {
+			def field =  it.field
+			def errorMessage = g.message(error:it)
+			if(data.errors."$field") {
+				data.errors."$field" << errorMessage
+			} else {
+				data.errors."$field" = [errorMessage]
+			}
+		}
+		println "##### ${data}"
+		return data
 	}
 	
 	def update() {
