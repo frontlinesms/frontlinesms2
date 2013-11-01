@@ -212,7 +212,7 @@ class ContactController extends ControllerUtils {
 		if(params.mobile && params.mobile[0] == '+') mobile = '+' + mobile
 		def existingContact = mobile ? Contact.findByMobileLike(mobile) : null
 		if (existingContact && existingContact != contactInstance) {
-			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
+			//flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
 			return false
 		}
 		if(contactInstance.save()) {
