@@ -70,21 +70,15 @@ var ContactEditor = function() {
 		targetElement.parent().find("label.server-side-error").remove();
 		contactEditWrapper.addClass("submit-in-progress");
 		contactEditWrapper.find("textarea,input[type='text']").not("#contact-search").not(targetElement).attr('disabled','disabled');
-		pseudoDisable("#new-field-dropdown");
-		pseudoDisable("#group-dropdown");
-	},
-	pseudoDisable = function(selectElement) {
-		var selectElementParent = $(selectElement).parent();
-		selectElementParent.find(".select-blocker").show();
-	},
-	pseudoReenable = function(selectElement) {
-		var selectElementParent = $(selectElement).parent();
-		selectElementParent.find(".select-blocker").hide();
+		selectmenuTools.disable("#new-field-dropdown");
+		selectmenuTools.disable("#group-dropdown");
 	},
 	reenableFormElements = function() {
 		contactEditWrapper.find("textarea,input[type='text']").removeAttr("disabled");
-		pseudoReenable("#new-field-dropdown");
-		pseudoReenable("#group-dropdown");
+		$("#new-field-dropdown").attr("disabled", false).selectmenu();;
+		$("#group-dropdown").attr("disabled", false).selectmenu();;
+		selectmenuTools.enable("#new-field-dropdown");
+		selectmenuTools.enable("#group-dropdown");
 		$("label.server-side-error").remove();
 	},
 	setUpdateInProgress = function(inProgress, targetElement) {

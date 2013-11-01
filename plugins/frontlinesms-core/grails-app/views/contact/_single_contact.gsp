@@ -46,7 +46,6 @@
 						<g:message code="contact.customfield.option.createnew"/>
 					</option>
 				</select>
-				<div class="select-blocker"></div>
 			</td>
 			<td></td>
 		</tr>
@@ -79,7 +78,6 @@
 						<option value="${g.id}">${g.name}</option>
 					</g:each>
 				</select>
-				<div class="select-blocker"></div>
 			</td>
 		</tr>
 	</table>

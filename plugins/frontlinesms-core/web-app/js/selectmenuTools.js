@@ -45,6 +45,16 @@ var selectmenuTools = {
 		menu = $(menu);
 		menu.find("[value='" + menu.val() + "']").remove();
 		selectmenuTools.snapback(menu);
+	},
+
+	enable: function(menu) {
+		menu = $(menu);
+		menu.attr("disabled", false).selectmenu();
+	},
+
+	disable: function(menu) {
+		menu = $(menu);
+		menu.attr("disabled", true).selectmenu();
 	}
 };
 

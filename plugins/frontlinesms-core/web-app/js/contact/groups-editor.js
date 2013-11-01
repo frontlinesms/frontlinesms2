@@ -72,6 +72,8 @@ var GroupMembershipEditor = function() {
 		toRemove.remove(id);
 		toAdd.push(id);
 		updateFormLists();
+		//TODO Quick fix for a bug Firefox ... Please forgive me
+		var event = { target : $("#group-dropdown") }
 		contactEditor.updateContactData(event);
 	}
 	function updateFormLists() {
