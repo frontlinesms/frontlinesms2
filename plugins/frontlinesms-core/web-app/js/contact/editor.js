@@ -7,6 +7,7 @@ var ContactEditor = function() {
 	var cachedFormHash,
 	fieldsToAdd = [], fieldsToRemove = [],
 	contactEditForm = $(".contact-edit-form"),
+	contactEditWrapper = $(".contact-edit-form .edit"),
 	updateInProgress, updateRequested,
 	updateContactData = function(event) {
 		if(!contactEditForm.valid()) {
@@ -33,7 +34,6 @@ var ContactEditor = function() {
 						updateRequested = false;
 						updateContactData(event);
 					}
-					contactEditForm.removeClass("submit-in-progress");
 				},
 				success:function(data) {
 					console.log(data);
@@ -46,7 +46,8 @@ var ContactEditor = function() {
 					button.prepend(buttonKids);
 					if(data.success) {
 						reenableFormElements();
-						contactEditForm.removeClass("has-server-errors");
+						contactEditWrapper.removeClass("has-server-errors");
+						contactEditWrapper.removeClass("submit-in-progress");
 						var targetElement = $(event.target);
 						targetElement.removeClass("server-side-error");
 					} else {
@@ -58,7 +59,7 @@ var ContactEditor = function() {
 						$.each(errors, function(index, item) {
 							targetElement.parent().append("<label class='server-side-error' for='"+ localFieldName +"'>"+ item +"</label>");
 						});
-						contactEditForm.addClass("has-server-errors");
+						contactEditWrapper.addClass("has-server-errors");
 					}
 				}
 			});
@@ -67,8 +68,8 @@ var ContactEditor = function() {
 	disableForm = function(targetElement) {
 		targetElement = $(targetElement);
 		targetElement.parent().find("label.server-side-error").remove();
-		contactEditForm.addClass("submit-in-progress");
-		contactEditForm.find("select,textarea,input[type='text']").not("#contact-search").not(targetElement).attr('disabled','disabled');
+		contactEditWrapper.addClass("submit-in-progress");
+		contactEditWrapper.find("textarea,input[type='text']").not("#contact-search").not(targetElement).attr('disabled','disabled');
 		pseudoDisable("#new-field-dropdown");
 		pseudoDisable("#group-dropdown");
 	},
@@ -81,7 +82,7 @@ var ContactEditor = function() {
 		selectElementParent.find(".select-blocker").hide();
 	},
 	reenableFormElements = function() {
-		contactEditForm.find("select,textarea,input[type='text']").removeAttr("disabled");
+		contactEditWrapper.find("textarea,input[type='text']").removeAttr("disabled");
 		pseudoReenable("#new-field-dropdown");
 		pseudoReenable("#group-dropdown");
 		$("label.server-side-error").remove();
