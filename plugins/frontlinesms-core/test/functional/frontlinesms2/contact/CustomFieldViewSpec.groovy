@@ -75,7 +75,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			singleContactDetails.addCustomField 'lake'
 			def customFeild = singleContactDetails.customField 'lake'
 			customFeild.value('erie')
-			singleContactDetails.name.focus()
+			customFeild.blur()
 		then:
 			singleContactDetails.contactsCustomFields.containsAll(['lake', 'town'])
 	}
