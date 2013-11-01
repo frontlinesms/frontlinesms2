@@ -18,7 +18,11 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShow, aliceId
 
 			singleContactDetails.name.value('Kate')
+			singleContactDetails.name.blur()
+
 			singleContactDetails.mobile.value('+2541234567')
+			singleContactDetails.mobile.blur()
+
 			singleContactDetails.email.value('gaga@gmail.com')
 			singleContactDetails.email.blur()
 		then:
@@ -39,12 +43,18 @@ class ContactEditSpec extends ContactBaseSpec {
 		when:
 			to PageGroupShow, groupId, remote { Contact.findByName('Alice').id }
 			singleContactDetails.name.value('Kate')
-			singleContactDetails.mobile.value('+2541234567') 
+			singleContactDetails.name.blur()
+
+			waitFor { !singleContactDetails.mobile.disabled }
+			singleContactDetails.mobile.value('+2541234567')
+			singleContactDetails.mobile.blur()
+
+			waitFor { !singleContactDetails.email.disabled }
 			singleContactDetails.email.value('gaga@gmail.com')
 			singleContactDetails.email.blur()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			remote { Contact.findByName('Kate') != null }
+			remote { Contact.findByName('Kate').id != null }
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			bodyMenu.selectedMenuItem == 'excellent'
