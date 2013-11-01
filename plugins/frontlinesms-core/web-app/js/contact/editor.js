@@ -25,6 +25,7 @@ var ContactEditor = function() {
 						return false;
 					}
 					setUpdateInProgress(true, event.target);
+					disableForm(event.target);
 				},
 				complete:function() {
 					setUpdateInProgress(false, event.target);
@@ -32,8 +33,10 @@ var ContactEditor = function() {
 						updateRequested = false;
 						updateContactData(event);
 					}
+					contactEditForm.removeClass("submit-in-progress");
 				},
 				success:function(data) {
+					console.log(data);
 					var contactName, button, buttonKids;
 					cachedFormHash = formHashAtRequestTime;
 					button = $('#action-buttons .send-message');
@@ -41,9 +44,47 @@ var ContactEditor = function() {
 					contactName = $(".contact-edit-form [name='name']").val();
 					button.text(" " + i18n("contact.send.message", contactName));
 					button.prepend(buttonKids);
+					if(data.success) {
+						reenableFormElements();
+						contactEditForm.removeClass("has-server-errors");
+						var targetElement = $(event.target);
+						targetElement.removeClass("server-side-error");
+					} else {
+						var targetElement = $(event.target);
+						var localFieldName = event.target.name;
+						var errors = data.errors[localFieldName];
+
+						targetElement.addClass("server-side-error");
+						$.each(errors, function(index, item) {
+							targetElement.parent().append("<label class='server-side-error' for='"+ localFieldName +"'>"+ item +"</label>");
+						});
+						contactEditForm.addClass("has-server-errors");
+					}
 				}
 			});
 		}
+	},
+	disableForm = function(targetElement) {
+		targetElement = $(targetElement);
+		targetElement.parent().find("label.server-side-error").remove();
+		contactEditForm.addClass("submit-in-progress");
+		contactEditForm.find("select,textarea,input[type='text']").not("#contact-search").not(targetElement).attr('disabled','disabled');
+		pseudoDisable("#new-field-dropdown");
+		pseudoDisable("#group-dropdown");
+	},
+	pseudoDisable = function(selectElement) {
+		var selectElementParent = $(selectElement).parent();
+		selectElementParent.find(".select-blocker").show();
+	},
+	pseudoReenable = function(selectElement) {
+		var selectElementParent = $(selectElement).parent();
+		selectElementParent.find(".select-blocker").hide();
+	},
+	reenableFormElements = function() {
+		contactEditForm.find("select,textarea,input[type='text']").removeAttr("disabled");
+		pseudoReenable("#new-field-dropdown");
+		pseudoReenable("#group-dropdown");
+		$("label.server-side-error").remove();
 	},
 	setUpdateInProgress = function(inProgress, targetElement) {
 		targetElement = $(targetElement)

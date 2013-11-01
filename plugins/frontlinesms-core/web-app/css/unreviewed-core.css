@@ -107,3 +107,13 @@ input[type=text]:-ms-input-placeholder {
 #body.contacts .update.in-progress { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding-left:18px; }
 #body.contacts .update.done { padding-left:4px; }
 
+#body.contacts table td { position: relative; }
+
+.has-server-errors .remove-command { display: none; }
+.submit-in-progress .remove-command { display: none; }
+.select-blocker { display: none; }
+.has-server-errors .select-blocker { position:absolute; background-color:white; height:100%; width:100%; padding:0; top: 0; opacity: 0.5; }
+.submit-in-progress .select-blocker { position:absolute; background-color:white; height:100%; width:100%; padding:0; top: 0; opacity: 0.5; }
+
+input[type=text].server-side-error { border-color: #c00 !important; }
+label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; width: 300px; }
