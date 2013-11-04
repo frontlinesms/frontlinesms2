@@ -11,13 +11,5 @@ class QuickMessageControllerISpec extends IntegrationSpec {
 		controller = new QuickMessageController()
 	}
 	
-	def "contact list returned should be sorted alphabetically"() {
-		given:
-			def contact2 = Contact.build(name:'Charlie')
-			def contact3 = Contact.build(name:'Alice')
-		when:
-			def model = controller.create()
-		then:
-			model.contactList == [contact3, contact2]
-	}
+	//TODO Add test for prepopulating the wizard with recipients and groups
 }
