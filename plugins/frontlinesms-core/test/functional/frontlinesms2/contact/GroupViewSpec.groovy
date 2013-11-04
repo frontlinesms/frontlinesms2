@@ -27,7 +27,7 @@ class GroupViewSpec extends GroupBaseSpec {
 		when:
 			to PageGroupShow, 'Friends'
 		then:
-			contactList.contacts.containsAll(['Bobby', 'Duchamps'])
+			contactList.contacts.containsAll(['Bobby -', 'Duchamps -'])
 	}
 
 	def 'Group members list has correct href when viewing corresponding group'() {
@@ -49,7 +49,7 @@ class GroupViewSpec extends GroupBaseSpec {
 			to PageGroupShow, 'Friends'
 		then:
 			def contactNames = contactList.contacts - "Select All"
-			def expectedNames = (11..60).collect{ "Contact${it}" }
+			def expectedNames = (11..60).collect{ "Contact${it} 987654321${it}" }
 			contactNames == expectedNames
 	}
 

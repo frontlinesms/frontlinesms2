@@ -195,6 +195,5 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			response.contactInstanceTotal == 2
 			response.contactsSectionContactTotal == 1
 	}
-
 }
 

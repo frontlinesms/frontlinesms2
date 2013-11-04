@@ -13,7 +13,7 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:	
-			contactList.contacts.containsAll(['Alice', 'Bob'])
+			contactList.contacts.containsAll(['Alice 2541234567', 'Bob +254987654'])
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
@@ -37,7 +37,7 @@ class ContactListSpec extends ContactBaseSpec {
 			to PageContactShow
 		then:
 			def contactNames = contactList.contacts - "Select All"
-			def expectedNames = (11..60).collect { "Contact${it}" }
+			def expectedNames = (11..60).collect { "Contact${it} 987654321${it}" }
 			assert contactNames == expectedNames
 	}
 	
@@ -55,7 +55,7 @@ class ContactListSpec extends ContactBaseSpec {
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
-			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones', 'SaM Tina']) && contactList.contacts.size() == 3 }
+			waitFor { contactList.contacts.containsAll(['Sam Anderson -', 'SAm Jones -', 'SaM Tina -']) && contactList.contacts.size() == 3 }
 	}
 
 	def 'should be able to search contacts by phone number'() {
@@ -72,7 +72,7 @@ class ContactListSpec extends ContactBaseSpec {
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "+1111"
 		then:
-			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones']) }
+			waitFor { contactList.contacts.containsAll(['Sam Anderson +11111', 'SAm Jones +11112']) }
 	}
 	
 	def 'should be able to search contacts within a group'() {
@@ -95,7 +95,7 @@ class ContactListSpec extends ContactBaseSpec {
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
-			waitFor { contactList.contacts.containsAll(['SAm Jones', 'Sam Anderson']) }
+			waitFor { contactList.contacts.containsAll(['SAm Jones -', 'Sam Anderson -']) }
 	}
 	
 	def "should remain on the same page when a contact is selected"() {

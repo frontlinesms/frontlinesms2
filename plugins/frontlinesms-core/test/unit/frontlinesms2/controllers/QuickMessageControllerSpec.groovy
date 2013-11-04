@@ -20,27 +20,12 @@ class QuickMessageControllerSpec extends Specification {
 
 	def 'create returns the prepopulated recipients'() {
 		setup:
-			def jim = Contact.findByName('jim')
-			def mohave = Group.findByName('Mojave')
 			def address = ["9544426444"]
 			params.recipients = address
 		when:
 			def result = controller.create()
 		then:
-			result.contactList == [jim]
-			result.recipients == address
-			result.nonExistingRecipients == address
-	}
-
-	def 'create returns the contact, group list even if address comes as a string'() {
-		setup:
-			def address= "9544426444"
-			params.recipients = address
-		when:
-			def result = controller.create()
-		then:
-			result['recipients'] == [address]
-			result['nonExistingRecipients'] == [address]
+			result['addresses'] == address
 	}
 
 	def "should identify existing contacts and non existing recipients"() {
@@ -50,8 +35,8 @@ class QuickMessageControllerSpec extends Specification {
 		when:
 			def result = controller.create()
 		then:
-			result['recipients'] == address
-			result['nonExistingRecipients'] ==  []
+			result['addresses'] == address
+			result['recipientName'] == 'jim'
 			result['configureTabs'] ==  ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 	}
 
@@ -64,12 +49,11 @@ class QuickMessageControllerSpec extends Specification {
 			result['configureTabs'] ==  ['tabs-1', 'tabs-3']
 	}
 
-	def "recipient list must be empty if there is no need for pre populating address"() {
+	def "addresses list must be empty if there is no need for pre populating address"() {
 		when:
 			def result = controller.create()
 		then:
-			!result['recipients']
-			!result['nonExistingRecipients']
+			!result['addresses']
 	}
 
 }

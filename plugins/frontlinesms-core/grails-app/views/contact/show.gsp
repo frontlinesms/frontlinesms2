@@ -21,9 +21,9 @@
 			<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
 			<g:hiddenField name="contactsSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
 			<g:if test="${contactInstance || !contactsSection}">
-				<fsms:render template="single_contact_view"/>
+				<fsms:render template="single_contact"/>
 			</g:if>
-			<fsms:render template="multiple_contact_view"/>
+			<fsms:render template="multiple_contact"/>
 		</div>
 	</body>
 </html>

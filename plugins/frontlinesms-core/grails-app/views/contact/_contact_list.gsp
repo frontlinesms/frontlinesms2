@@ -26,6 +26,9 @@
 				<g:else><g:set var="contactLinkParams" value="[:]"/></g:else>
 				<g:link class="displayName-${c.id} contact-name" action="show" params="${contactLinkParams + [contactId:c.id, sort:params.sort, offset:params.offset]}">
 					${c.name?:c.mobile?.toPrettyPhoneNumber()?:'[No Name]'}
+					<g:if test="${c.name}">
+						<span class='preview'>${c.mobile?.toPrettyPhoneNumber()?:'-'}</span>
+					</g:if>
 				</g:link>
 
 			</li>

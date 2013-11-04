@@ -169,7 +169,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { title.contains("Camping") }
 			at PageContactShow
-			contactList.contacts.containsAll(['wilburforce', 'prudence'])
+			contactList.contacts.containsAll(['wilburforce +1232123', 'prudence +12321'])
 	}
 
 	def 'When a message is categorised as a leave with the dialog, it appears in the correct category and the contact membership is updated'() {
@@ -264,8 +264,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { title.contains("Camping") }
 			at PageContactShow
-			contactList.contacts.containsAll(['wilburforce'])
-			!contactList.contacts.containsAll(['prudence'])
+			contactList.contacts.containsAll(['wilburforce +1232123'])
+			!contactList.contacts.containsAll(['prudence +12321'])
 
 	}
 
@@ -303,7 +303,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { title.contains("Camping") }
 			at PageContactShow
-			contactList.contacts.containsAll(['prudence', 'wilburforce'])
+			contactList.contacts.containsAll(['prudence +12321', 'wilburforce +1232123'])
 	}
 
 	def "clicking the rename option opens the rename small popup"() {

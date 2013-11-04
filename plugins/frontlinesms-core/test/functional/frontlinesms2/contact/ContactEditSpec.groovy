@@ -18,48 +18,17 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShow, aliceId
 
 			singleContactDetails.name.value('Kate')
+			singleContactDetails.name.blur()
+
 			singleContactDetails.mobile.value('+2541234567')
+			singleContactDetails.mobile.blur()
+
 			singleContactDetails.email.value('gaga@gmail.com')
-			singleContactDetails.save.click()
+			singleContactDetails.email.blur()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			remote { Contact.findById(aliceId).name } == 'Kate'
-	}
-
-	def "Updating a contact within a group keeps the view inside the group"() {
-		given:
-			def groupId = remote {
-				def alice = Contact.findByName('Alice')
-				Group g = new Group(name: 'Excellent').save(failOnError:true, flush:true)
-				alice.addToGroups(g)
-				alice.save(flush:true)
-				g.id
-			}
-		when:
-			to PageGroupShow, groupId, remote { Contact.findByName('Alice').id }
-			singleContactDetails.name.value('Kate')
-			singleContactDetails.mobile.value('+2541234567') 
-			singleContactDetails.email.value('gaga@gmail.com')
-			singleContactDetails.save.click()
-		then:
-			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			remote { Contact.findByName('Kate') != null }
-			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
-			bodyMenu.selectedMenuItem == 'excellent'
-	}
-	
-	def "should remove address when delete icon is clicked"() {
-		when:
-			to PageContactShow, remote { Contact.findByName('Bob').id }
-		then:
-			singleContactDetails.removeMobile.displayed
-		when:
-			singleContactDetails.removeMobile.click()
-		then:
-			!singleContactDetails.removeMobile.displayed
-			!singleContactDetails.sendMessage.displayed
 	}
 	
 	def "should disable the save and cancel buttons when viewing a contact details"() {
@@ -67,15 +36,6 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShow, remote { Contact.findByName('Bob').id }
 		then:
 			singleContactDetails.save.disabled
-	}
-	
-	def "should enable save and cancel buttons when contact details are edited"() {
-		when:
-			to PageContactShow, remote { Contact.findByName('Bob').id }
-			singleContactDetails.email.value('bob@gmail.com')
-		then:
-			!singleContactDetails.save.disabled
-			!singleContactDetails.cancel.disabled
 	}
 	
 	def "should remain on the same page after updating a contact"() {
@@ -88,7 +48,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			!footer.prevPage.disabled
 		when:
 			singleContactDetails.name = 'Kate'
-			singleContactDetails.save.click()
+			singleContactDetails.mobile.click()
 		then:
 			!footer.prevPage.disabled
 	}
