@@ -2,6 +2,8 @@
 # S3 Deployment script for FrontlineSMS. Requires $FRONTLINESMS_SSH_USER
 # and # $FRONTLINESMS_SSH_PASS to be set and valid.
 set -e
+# set the subdomain where deoply will be done
+subdomain=$1
 
 #check if $FRONTLINESMS_SSH_USER and $FRONTLINESMS_SSH_PASS env variables are set
 if [ -z "$FRONTLINESMS_SSH_USER" ] && [ -z "$FRONTLINESMS_SSH_PASS" ] ; then
@@ -38,7 +40,12 @@ s3Upload() {
 # 0. vars & set up
 bucketName="download-frontlinesms"
 serverUrl="ftp://frontlinesms.com/"
-serverPath="subdomains/wip/httpdocs/dl/"
+if [ $subdomain == "www" ] ; then
+	serverPath="www/dl/"
+else
+	serverPath="subdomains/wip/httpdocs/dl/"
+fi
+echo "htaccess file will be pushed to $serverUrl$serverPath"
 
 tempDir=".tmp-$RANDOM"
 echo "Creating temporary directory at $tempDir"

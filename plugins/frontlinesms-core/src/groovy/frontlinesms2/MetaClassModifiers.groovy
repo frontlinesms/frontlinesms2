@@ -5,6 +5,7 @@ import java.util.zip.ZipEntry
 
 import org.apache.camel.Exchange
 import org.smslib.util.GsmAlphabet
+import com.google.i18n.phonenumbers.*
 
 
 class MetaClassModifiers {
@@ -58,6 +59,17 @@ class MetaClassModifiers {
 		String.metaClass.areAllCharactersValidGSM = {
 			GsmAlphabet.areAllCharactersValidGSM(delegate)
 		}
+		String.metaClass.toPrettyPhoneNumber = {
+			def phoneNumberUtil = PhoneNumberUtil.getInstance()
+			def number
+			try {
+				number = phoneNumberUtil.findNumbers(delegate, null).iterator().next().number()
+			} catch (NoSuchElementException e) {
+				return delegate
+			}
+			return phoneNumberUtil.format(number, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+		}
+
 	}
 
 	static void augmentDates() {
