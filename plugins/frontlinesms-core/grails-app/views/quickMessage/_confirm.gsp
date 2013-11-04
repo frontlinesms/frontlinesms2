@@ -11,11 +11,11 @@
 		</tr>
 		<tr>
 			<td><g:message code="quickmessage.recipient.label"/></td>
-			<g:if test="${recipients.size() == 1}">
+			<g:if test="${recipientCount == 1}">
 				<td id="recipient">${recipientName}</td>
 			</g:if>
 			<g:else>
-				<td id="confirm-recipients-count"><span id="contacts-count">${recipients.size()}</span> <g:message code="quickmessage.recipients.count"/></td>
+				<td id="confirm-recipients-count"><span id="contacts-count">${recipientCount}</span> <g:message code="quickmessage.recipients.count"/></td>
 			</g:else>
 		</tr>
 		<tr>

@@ -41,7 +41,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			customFeild.value() == ""
 	}
 
-	def 'clicking X next to custom field in list removes it from visible list, but does not change database if no other action is taken'() {
+	def 'clicking X next to custom field in list removes it from visible list, and makes relevant changes to the database'() {
 		given:
 			remote {
 				Contact.findByName("Bob")
@@ -53,37 +53,38 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			to PageContactShow, 'Bob'
 			singleContactDetails.contactsCustomFields.size() == 2
 			singleContactDetails.removeCustomFeild(remote { CustomField.findByName("town").id })
+			singleContactDetails.name.focus()
 		then:
 			singleContactDetails.contactsCustomFields.size() == 1
 			singleContactDetails.contactsCustomFields == ['lake']
-			Contact.findByName("Bob").customFields.size() == 2
+			Contact.findByName("Bob").customFields.size() == 1
 	}
 
 	def 'clicking X next to custom field in list then saving removes it from  database'() {
 		when:
 			to PageContactShow, 'Bob'
 			singleContactDetails.removeCustomFeild(remote { CustomField.findByName("town").id })
-			singleContactDetails.save.click()
+			singleContactDetails.name.focus()
 		then:
 			waitFor { remote { !CustomField.findByContact(Contact.findByName("Bob")) } }
 	}
 
-	def 'clicking save actually adds field to contact in database if value is filled in'() {
+	def 'loosing focus on a custom field actually adds field to contact in database if value is filled in'() {
 		when:
 			to PageContactShow, 'Bob'
 			singleContactDetails.addCustomField 'lake'
 			def customFeild = singleContactDetails.customField 'lake'
 			customFeild.value('erie')
-			singleContactDetails.save.click()
+			customFeild.blur()
 		then:
-			singleContactDetails.contactsCustomFields == ['lake', 'town']
+			singleContactDetails.contactsCustomFields.containsAll(['lake', 'town'])
 	}
 
-	def "clicking save doesn't add field to contact in database if there is a blank value for field"() {
+	def "adding a custom field to a contact does not add it to the database if there is a blank value for field"() {
 		when:
 			to PageContactShow, 'Bob'
 			singleContactDetails.addCustomField 'lake'
-			singleContactDetails.save.click()
+			singleContactDetails.name.focus()
 		then:
 			remote { Contact.findByName('Bob').customFields*.name } == ['town']
 	}

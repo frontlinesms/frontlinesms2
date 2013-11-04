@@ -7,16 +7,108 @@ fieldset.table { display:table; }
 .connection-info a { color:blue; }
 .connection-info ol { list-style:decimal; list-style-position:inside; padding:5px 0; }
 
-#connection-status > ul {padding:17px 25px;	font-weight:bold; text-transform:uppercase;	border-bottom: 1px solid #EEEEEE; }
+#connection-status > ul { padding:17px 25px; font-weight:bold; text-transform:uppercase; border-bottom:1px solid #eee; }
 #connection-header > li { display:inline; }
-#connection-header > li:last-child { display:inline; position:absolute;	right:17px; }
+#connection-header > li:last-child { display:inline; position:absolute; right:17px; }
 #manage-connection > a:hover { text-decoration:underline; }
 
 #connectionForm div.info { margin-top:0px; }
 
-.forward.step div.input { margin: 0; }
-.message-composer { background-color: #fff; }
-.chzn-container-multi .chzn-choices .search-choice { -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;  }
+.forward.step div.input { margin:0; }
+.message-composer { background-color:#fff; }
+.chzn-container-multi .chzn-choices .search-choice { -webkit-border-radius:0; -moz-border-radius:0; border-radius:0; }
 
 #failed-contacts p.warning_message { margin:10px 0 8px; }
+.stroked {
+	display:inline-block;
+	border:1px solid #ccc;
+	padding:5px;
+	font-size:1em;
+	margin:10px 0;
+	background-image:none;
+	border-radius:2px;
+	transition:border-color 1s linear, background-color 1s linear;
+	cursor:pointer;
+}
+.stroked:hover { border:1px solid black; background-color:#eee; }
+.stroked:hover { border-right:1px solid #6b6b6b; }
+.stroked:hover { border-bottom:1px solid #6b6b6b; }
 .recipient_selector_wrap { margin-bottom:2px; }
+
+.remove-command { margin-left:5px; }
+
+#body.contacts #detail #single-contact .buttons { margin:10px 0; }
+#body.contacts #detail #single-contact td label:nth-child(1) { font-style:italic; color:#444; display:inline-block; height:100%; }
+
+#body.contacts #group-list li .remove-command { margin:3px; visibility:hidden; }
+#body.contacts #group-list li:hover .remove-command { visibility:visible; }
+#body.contacts #group-list li:hover .remove-command:hover { color:#e00c0e; }
+
+#body.contacts .editable input[type="text"], #body.contacts .editable textarea {
+	border:1px #bbb solid;
+	transition:border-color 1s linear;
+	-webkit-transition:border-color 1s linear;
+	-moz-transition:border-color 1s linear;
+}
+#body.contacts #note-area textarea { padding:10px 5px; border-color:#ddd; }
+#body.contacts .edit .editable input[type="text"], #body.contacts .edit #note-area textarea {
+	transition:border-color 1s linear;
+	-webkit-transition:border-color 1s linear;
+	-moz-transition:border-color 1s linear;
+}
+#body.contacts .edit .editable input[type="text"] { border:1px #fff solid; }
+#body.contacts .edit .editable input[type="text"]:focus,
+#body.contacts .edit .editable input[type="text"]:hover,
+#body.contacts #note-area textarea:hover {
+	background-color:#fff;
+	border-color:#bbb;
+}
+
+#body.contacts .edit .buttons .save { display:none; }
+#body.contacts .edit .btn-delete,
+#body.contacts .cancel { border:none; }
+#body.contacts .edit .btn-delete { color:#e00c0e; }
+#body.contacts .edit .btn-delete:hover span,
+#body.contacts .cancel:hover { text-decoration:underline; }
+#body.contacts .edit .editable .icon-remove { visibility:hidden; }
+#body.contacts .edit .remove-command { background:none; }
+#body.contacts .icon-edit { vertical-align:middle; font-size:18px; }
+#body.contacts .edit table tr.editable:hover { background-color:#F8F8F8; }
+#body.contacts .edit table tr.editable:hover .icon-remove { visibility:visible; }
+#body.contacts .edit table tr.editable .icon-remove:hover { color:#e00c0e; }
+#body.contacts #note-area { position:relative; }
+#body.contacts #note-area .icon-edit { position:absolute; }
+#body.contacts table tr.editable input[type='text'], #body.contacts table tr.editable textarea { width:180px; }
+#body.contacts table tr.editable .icon-edit { opacity:0.0; display:inline-block; margin-left:5px; transition:opacity 200ms linear; }
+#body.contacts .edit table tr.editable:hover .icon-edit { opacity:1.0; }
+
+#body.contacts table tr:hover * { cursor:pointer; }
+#body.contacts .edit table tr:hover input { cursor:text; }
+#body.contacts .edit table tr:hover textarea { cursor:text; }
+.contact-name span.preview { margin-left:15px; font-style:italic; color:#999; }
+input[type=text]::-webkit-input-placeholder,
+input[type=text]::-moz-input-placeholder,
+input[type=text]:-moz-input-placeholder,
+input[type=text]:-ms-input-placeholder {
+	color:#bbb; font-style:italic; }
+
+#body.contacts #detail #single-contact #action-buttons { margin-top:20px; }
+#body.contacts #detail #single-contact #action-buttons .icon-envelope,
+#body.contacts #detail #single-contact #action-buttons .icon-remove,
+#body.contacts #detail #single-contact #action-buttons .icon-remove-sign {
+		font-size:14px; }
+#body.contacts #contact-infos a:after { content:'\a'; white-space:pre; }
+#body.contacts #contact-infos { min-width: 170px; }
+#body.contacts label.error,
+#body.contacts label.warning { display:block; margin:5px 0; padding:0; }
+#body.contacts label.error { color:#c00; }
+#body.contacts .edit .editable input[type="text"].error { border: 1px solid #c00; }
+
+#body.contacts .update.in-progress { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding-left:18px; }
+#body.contacts .update.done { padding-left:4px; }
+#body.contacts table td { position: relative; }
+#body.contacts .has-server-errors .remove-command { display: none; }
+#body.contacts .submit-in-progress .remove-command { display: none; }
+
+input[type=text].server-side-error { border-color: #c00 !important; }
+label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; width: 300px; }

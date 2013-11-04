@@ -34,3 +34,8 @@ body { background-image:url("../images/head_background.png");
 #status-indicator.green { background-image:url('../images/status/green.png'); }
 #status-indicator.orange { background-image:url('../images/status/orange.png'); }
 
+.flag {
+	background:url(../images/flags.png) no-repeat;
+	display: inline-block;
+}
+

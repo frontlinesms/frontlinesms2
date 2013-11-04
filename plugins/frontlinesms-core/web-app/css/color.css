@@ -1,7 +1,7 @@
-::-webkit-input-placeholder { color:#D9ADE6; }
-:-moz-placeholder { color:#D9ADE6; }
-::-moz-placeholder { color:#D9ADE6; }
-:-ms-input-placeholder { color:#D9ADE6; }
+::-webkit-input-placeholder { color:#aaa; }
+:-moz-placeholder { color:#aaa; }
+::-moz-placeholder { color:#aaa; }
+:-ms-input-placeholder { color:#aaa; }
 
 input[disabled]::-webkit-input-placeholder { color:#EEEEEE; }
 input[disabled]:-moz-placeholder { color:#EEEEEE; }

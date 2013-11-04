@@ -55,7 +55,7 @@ class ContactController extends ControllerUtils {
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
 				smartGroupInstanceList: SmartGroup.list()]
-		render view:'/contact/_single_contact_view', model:model
+		render view:'/contact/_single_contact', model:model
 	}
 	
 	def show() {
@@ -120,11 +120,33 @@ class ContactController extends ControllerUtils {
 	def saveContact() {
 		def contactInstance = Contact.get(params.contactId) ?: new Contact()
 		contactInstance.properties = params
+		def saveSuccessful = false
 		if(attemptSave(contactInstance)) {
 			parseContactFields(contactInstance)
-			attemptSave(contactInstance)
+			saveSuccessful = attemptSave(contactInstance)
 		}
-		redirect(action:'show', params:[contactId:contactInstance.id])
+		if(request.xhr) {
+			def data = [success:saveSuccessful] << getContactErrors(contactInstance)
+			render (data as JSON)
+		} else {
+			redirect(action:'show', params:[contactId:contactInstance.id])
+		}
+	}
+
+	private getContactErrors(contactInstance) {
+		contactInstance.validate()
+		def data = [errors:[:]]
+		contactInstance.errors.allErrors.each {
+			def field =  it.field
+			def errorMessage = g.message(error:it)
+			if(data.errors."$field") {
+				data.errors."$field" << errorMessage
+			} else {
+				data.errors."$field" = [errorMessage]
+			}
+		}
+		println "##### ${data}"
+		return data
 	}
 	
 	def update() {
@@ -132,8 +154,11 @@ class ContactController extends ControllerUtils {
 			contactInstance.properties = params
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
-			if(params.groupId) redirect(controller: params.contactsSection, action: 'show', id: params.groupId, params:[contactId: contactInstance.id, sort:params.sort, offset: params.offset])
-			else redirect(action:'show', params:[contactId: contactInstance.id, offset:params.offset], max:params.max)
+			if(params.groupId) {
+				redirect(action:'show', controller:params.contactsSection, id: params.groupId, params:[contactId: contactInstance.id, sort:params.sort, offset:params.offset])
+			} else {
+				redirect(action:'show', params:[contactId:contactInstance.id, offset:params.offset], max:params.max)
+			}
 		}
 	}
 	
@@ -176,9 +201,9 @@ class ContactController extends ControllerUtils {
 		def foundContact = Contact.findByMobile(params.mobile)
 		if (foundContact && foundContact.id.toString() == params.contactId) {
 			render true
-		} else
-			if(!foundContact && params.mobile) render true
-			else render false
+		} else {
+			render (!foundContact && params.mobile)
+		}
 	}
 
 //> PRIVATE HELPER METHODS
@@ -190,8 +215,7 @@ class ContactController extends ControllerUtils {
 			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
 			return false
 		}
-		if (contactInstance.save()) {
-			flash.message = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
+		if(contactInstance.save()) {
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
@@ -201,7 +225,7 @@ class ContactController extends ControllerUtils {
 
 	def multipleContactGroupList() {
 		def groups = Group.getGroupLists(getCheckedContactIds())
-		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList:groups.shared,
+		render(view: '_multiple_contact', model: [sharedGroupInstanceList:groups.shared,
 				nonSharedGroupInstanceList:groups.nonShared])
 	}
 	
@@ -244,40 +268,34 @@ class ContactController extends ControllerUtils {
 	}
 	
 	private def updateCustomFields(Contact contactInstance) {
-		def fieldsToAdd = params.fieldsToAdd ? params.fieldsToAdd.tokenize(',') : []
-		def fieldsToRemove = params.fieldsToRemove ? params.fieldsToRemove.tokenize(',') : []
+		def fieldsToAdd = params.fieldsToAdd?.tokenize(',')
+		def fieldsToRemove = params.fieldsToRemove?.tokenize(',')
+		def existingFields = CustomField.findAllByContact(contactInstance)
 		
-		fieldsToAdd.each() { name ->
-			def existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
-			def fieldsByName = params."$name"
-			if(fieldsByName?.class != String) {
-				fieldsByName.each() { val ->
-					if(val != "" && !existingFields.value.contains(val))
-						contactInstance.addToCustomFields(new CustomField(name: name, value: val)).save(flush:true)
-						existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
-				}
-			} else if(fieldsByName != "" && !existingFields.value.contains(fieldsByName)) {
-				contactInstance.addToCustomFields(new CustomField(name: name, value: fieldsByName))
+		fieldsToAdd?.each { name ->
+			def fieldsByName = params["newCustomField-$name"]
+			if(fieldsByName && !(name in existingFields*.name)) {
+				contactInstance.addToCustomFields(new CustomField(name:name, value:fieldsByName))
 			}
 		}
-		fieldsToRemove.each() { id ->
-			def toRemove = CustomField.get(id)
-			contactInstance.removeFromCustomFields(toRemove)
-			if(toRemove)
+
+		fieldsToRemove?.each { name ->
+			def toRemove = CustomField.findByContactAndName(contactInstance, name)
+			if(toRemove) {
+				contactInstance.removeFromCustomFields(toRemove)
 				toRemove.delete()
+			}
 		}
 
 		//also save any existing fields that have changed
-		def existingFields = CustomField.findAllByContact(contactInstance)
-		existingFields.each() { existingField ->
-			def newValue = params."$existingField.name"
-			if (newValue && (existingField.value != newValue))
-			{
-				existingField.value = newValue
-				existingField.save()
+		existingFields.each { f ->
+			def newValue = params["customField-$f.id"]
+			if(newValue && f.value != newValue) {
+				f.value = newValue
+				f.save()
 			}
 		}
-
 		return contactInstance
 	}
 }
+
