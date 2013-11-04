@@ -30,35 +30,6 @@ class ContactEditSpec extends ContactBaseSpec {
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			remote { Contact.findById(aliceId).name } == 'Kate'
 	}
-
-	def "Updating a contact within a group keeps the view inside the group"() {
-		given:
-			def groupId = remote {
-				def alice = Contact.findByName('Alice')
-				Group g = new Group(name: 'Excellent').save(failOnError:true, flush:true)
-				alice.addToGroups(g)
-				alice.save(flush:true)
-				g.id
-			}
-		when:
-			to PageGroupShow, groupId, remote { Contact.findByName('Alice').id }
-			singleContactDetails.name.value('Kate')
-			singleContactDetails.name.blur()
-
-			waitFor { !singleContactDetails.mobile.disabled }
-			singleContactDetails.mobile.value('+2541234567')
-			singleContactDetails.mobile.blur()
-
-			waitFor { !singleContactDetails.email.disabled }
-			singleContactDetails.email.value('gaga@gmail.com')
-			singleContactDetails.email.blur()
-		then:
-			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			remote { Contact.findByName('Kate').id != null }
-			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
-			bodyMenu.selectedMenuItem == 'excellent'
-	}
 	
 	def "should disable the save and cancel buttons when viewing a contact details"() {
 		when:
