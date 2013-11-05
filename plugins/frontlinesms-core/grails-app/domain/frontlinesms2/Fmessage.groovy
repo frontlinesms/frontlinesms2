@@ -9,7 +9,7 @@ class Fmessage {
 	static final String TEST_MESSAGE_TEXT = "Test Message"
 
 	static belongsTo = [messageOwner:MessageOwner]
-	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'receivedOn']
+	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'read', 'receivedOn']
 	
 	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
 	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
@@ -18,7 +18,7 @@ class Fmessage {
 	String text
 	String outboundContactName
 	String inboundContactName
-	boolean read
+	boolean rd
 	boolean starred
 	boolean archived
 	boolean isDeleted
@@ -153,7 +153,7 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
-				eq("read", false)
+				eq('rd', false)
 				if(owner == null)
 					isNull("messageOwner")
 				else
@@ -165,7 +165,7 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
-				eq("read", false)
+				eq('rd', false)
 			}
 		}
 
@@ -243,6 +243,9 @@ class Fmessage {
 	public void setText(String text) {
 		this.text = text?.truncate(MAX_TEXT_LENGTH)
 	}
+
+	public boolean isRead() { return this.rd }
+	public boolean setRead(boolean read) { this.rd = read }
 
 	static def listPending(onlyFailed, params=[:]) {
 		def ids = pending(onlyFailed).list(params) as List

@@ -77,14 +77,18 @@
 <g:javascript>
 $(function() {
 	<g:each in="${connectionInstanceList}" status="i" var="c">
-		fconnection_list.update("${c.status}", ${c.id});
+		<g:if test="${c.isUserMutable()}">
+			fconnection_list.update("${c.status}", ${c.id});
+		</g:if>
 	</g:each>
 	app_info.listen("fconnection_statuses", function(data) {
 		var i;
 		data = data.fconnection_statuses;
 		if(!data) { return; }
 		for(i=data.length-1; i>=0; --i) {
-			fconnection_list.update(data[i].status, data[i].id);
+			if(data[i].userMutable) {
+				fconnection_list.update(data[i].status, data[i].id);
+			}
 		}
 	});
 });

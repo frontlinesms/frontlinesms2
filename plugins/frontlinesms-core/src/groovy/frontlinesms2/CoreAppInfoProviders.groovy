@@ -21,14 +21,14 @@ class CoreAppInfoProviders {
 
 		s.registerProvider('fconnection_statuses') { app, controller, data ->
 			Fconnection.findAll().collect { c ->
-				[id:c.id, status:c.status.toString()]
+				[id:c.id, userMutable:c.isUserMutable(), status:c.status.toString()]
 			}
 		}
 
 		s.registerProvider 'contact_message_stats', contactMessageStats
 
 		s.registerProvider('system_notification') { app, controller, data ->
-			SystemNotification.findAllByRead(false).collectEntries { [it.id, it.text] }
+			SystemNotification.findAllByRd(false).collectEntries { [it.id, it.text] }
 		}
 
 		s.registerProvider 'status_indicator', statusIndicatorProvider
