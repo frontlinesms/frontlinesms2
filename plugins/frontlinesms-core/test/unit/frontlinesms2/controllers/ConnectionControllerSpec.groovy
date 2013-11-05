@@ -16,16 +16,18 @@ class ConnectionControllerSpec extends Specification {
 		controller.metaClass.setFlashMessage = { String msg -> msg }
 	}
 
-	def 'createRoute should call FconnectionService'() {
+	def 'createRoute should trigger EnableFconnectionJob'() {
 		setup:
 			def routesTriggered = []
-			EnableFconnectionJob.metaClass.static.triggerNow = { LinkedHashMap map -> routesTriggered << map.connectionId }
-			[new Fconnection(), new Fconnection()]*.save()
+			EnableFconnectionJob.metaClass.static.triggerNow = { LinkedHashMap map -> 
+				routesTriggered << map.connectionId
+			}
+			def connection = buildTestConnection()
 		when:
-			params.id = 1 // mock the parameters for the request.  NB. mockParams cannot be overridden - only added and removed from
+			params.id = connection.id // mock the parameters for the request.  NB. mockParams cannot be overridden - only added and removed from
 			controller.enable()
 		then:
-			routesTriggered == [1]
+			routesTriggered == [connection.id]
 	}
 
 	def "delete should delete an inactive Fconnection"() {
