@@ -49,11 +49,11 @@ if(!String.prototype.htmlEncode) {
 //Imported from http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
 if(!String.prototype.hashCode) {
 	String.prototype.hashCode = function() {
-		var hash = 0, i, char;
+		var hash = 0, i, character;
 		if (this.length == 0) return hash;
 		for (i = 0, l = this.length; i < l; i++) {
-			char  = this.charCodeAt(i);
-			hash  = ((hash<<5)-hash)+char;
+			character  = this.charCodeAt(i);
+			hash  = ((hash<<5)-hash)+character;
 			hash |= 0;
 		}
 		return hash;
