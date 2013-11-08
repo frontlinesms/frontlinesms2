@@ -3,6 +3,7 @@ modules = {
 
 	'frontlinesms-core' {
 		dependsOn 'jquery-ui'
+		dependsOn 'flags'
 		resource url:[dir:'css', file:'reset.css']
 		resource url:[dir:'css', file:'layout.css']
 		resource url:[dir:'css', file:'head.css']
@@ -20,7 +21,6 @@ modules = {
 		resource url:[dir:'css', file:'chosen.css']
 		resource url:[dir:'css', file:'color.css']
 		resource url:[dir:'css', file:'unreviewed-core.css']
-
 
 		resource url:[dir:'js/layout', file:'resizer.js'], disposition:'head'
 		resource url:[dir:'css', file:'status.css']
@@ -78,12 +78,11 @@ modules = {
 	}
 	
 	contacts {
-		dependsOn 'common'
-		resource url:[dir:'js', file:'contact/buttonStates.js']
+		dependsOn 'common, font-awesome'
 		resource url:[dir:'js', file:'contact/moreGroupActions.js']
 		resource url:[dir:'js', file:'contact/search_within_list.js']
-		resource url:[dir:'js', file:'contact/show-groups.js']
-		resource url:[dir:'js', file:'contact/show-fields.js']
+		resource url:[dir:'js', file:'contact/editor.js']
+		resource url:[dir:'js', file:'contact/groups-editor.js']
 		resource url:[dir:'js', file:'contact/validateContact.js']
 	}
 
@@ -138,6 +137,10 @@ modules = {
 	'internet-explorer-css' {
 		resource url:[dir:'css', file:'ie7.css'], bundle:'ie7'
 		resource url:[dir:'css', file:'ie8.css'], bundle:'ie8'
+	}
+
+	flags {
+		resource url:[dir:'css', file:'flags.css']
 	}
 }
 

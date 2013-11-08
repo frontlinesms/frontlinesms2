@@ -107,3 +107,8 @@ span.character-count { color:#000; }
 span.character-count.invalid { color:#89A; }
 
 #modalBox .recipient-list { padding:17px; max-height: 200px; overflow-y:scroll; }
+
+.flag {
+	vertical-align: middle;
+	margin-top: -3px;
+}

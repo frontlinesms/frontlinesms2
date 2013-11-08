@@ -50,7 +50,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageMessageSent
 		then:
-			waitFor() { messageList.noContent.text() == 'fmessage.messages.none' }
+			waitFor() { messageList.noContent.text() == 'fmessage.messages.sent.none' }
 	}
 
 	 def 'should not be able to archive activity messages'() {

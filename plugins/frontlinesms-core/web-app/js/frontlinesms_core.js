@@ -6,6 +6,15 @@ if(!Array.prototype.indexOf) {
 	};
 }
 
+if(!Array.prototype.remove) {
+	Array.prototype.remove = function(obj) {
+		var i;
+		while((i = this.indexOf(obj)) !== -1) {
+			this.splice(i, 1);
+		}
+	}
+}
+
 // String.trim is not available in IE before IE9, so
 // add it here using the jQuery implementation
 if(!String.prototype.trim) {
@@ -34,6 +43,20 @@ if(!String.prototype.htmlEncode) {
 			.replace(/'/g, '&#39;')
 			.replace(/</g, '&lt;')
 			.replace(/>/g, '&gt;');
+	};
+}
+
+//Imported from http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+if(!String.prototype.hashCode) {
+	String.prototype.hashCode = function() {
+		var hash = 0, i, character;
+		if (this.length == 0) return hash;
+		for (i = 0, l = this.length; i < l; i++) {
+			character  = this.charCodeAt(i);
+			hash  = ((hash<<5)-hash)+character;
+			hash |= 0;
+		}
+		return hash;
 	};
 }
 

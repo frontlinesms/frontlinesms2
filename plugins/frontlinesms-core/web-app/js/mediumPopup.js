@@ -284,6 +284,9 @@ var mediumPopup = (function() {
 		} else if(messageType === "Forward") {
 			text = $("#single-message #message-detail-content p").text().trim();
 		}
+		if (typeof src === "undefined") {
+			src = "";
+		}
 		messageSection = $("input:hidden[name=messageSection]").val();
 		postData = jQuery.param({ recipients:src, messageText:text, configureTabs:configureTabs }, true)
 		$.ajax({

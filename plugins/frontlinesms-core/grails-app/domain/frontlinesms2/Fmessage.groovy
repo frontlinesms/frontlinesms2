@@ -3,11 +3,13 @@ package frontlinesms2
 import groovy.time.*
 
 class Fmessage {
+	def mobileNumberUtilService
+
 	static final int MAX_TEXT_LENGTH = 1600
 	static final String TEST_MESSAGE_TEXT = "Test Message"
 
 	static belongsTo = [messageOwner:MessageOwner]
-	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'receivedOn']
+	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'read', 'receivedOn']
 	
 	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
 	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
@@ -16,7 +18,7 @@ class Fmessage {
 	String text
 	String outboundContactName
 	String inboundContactName
-	boolean read
+	boolean rd
 	boolean starred
 	boolean archived
 	boolean isDeleted
@@ -151,7 +153,7 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
-				eq("read", false)
+				eq('rd', false)
 				if(owner == null)
 					isNull("messageOwner")
 				else
@@ -163,7 +165,7 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
-				eq("read", false)
+				eq('rd', false)
 			}
 		}
 
@@ -190,18 +192,33 @@ class Fmessage {
 	def getDisplayName() {
 		if(inbound) {
 			if(inboundContactName) return inboundContactName
-			else if(id) return src
-			else return Contact.findByMobile(src)?.name?: src
+			else if(id) return src.toPrettyPhoneNumber()
+			else return Contact.findByMobile(src)?.name?: src.toPrettyPhoneNumber()
 		} else if(dispatches.size() == 1) {
 			if(outboundContactName) return outboundContactName
 			else {
 				def dst = (dispatches as List)[0].dst
-				if(id) return dst
-				else return Contact.findByMobile(dst)?.name?: dst
+				if(id) return dst.toPrettyPhoneNumber()
+				else return Contact.findByMobile(dst)?.name?: dst.toPrettyPhoneNumber()
 			}
 		} else {
 			return Integer.toString(dispatches.size())
 		}
+	}
+
+	def getContactFlagCSSClasses() {
+		def isoCode
+		def flagCssClass = ''
+
+		if(inbound) {
+			isoCode = mobileNumberUtilService.getISOCountryCode(src)?.toLowerCase()
+		} else if(dispatches.size() == 1) {
+			def dst = (dispatches as List)[0].dst
+			isoCode = mobileNumberUtilService.getISOCountryCode(dst)?.toLowerCase()
+		}
+
+		if(isoCode) flagCssClass = "flag flag-$isoCode"
+		flagCssClass
 	}
 
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
@@ -226,6 +243,9 @@ class Fmessage {
 	public void setText(String text) {
 		this.text = text?.truncate(MAX_TEXT_LENGTH)
 	}
+
+	public boolean isRead() { return this.rd }
+	public boolean setRead(boolean read) { this.rd = read }
 
 	static def listPending(onlyFailed, params=[:]) {
 		def ids = pending(onlyFailed).list(params) as List

@@ -6,7 +6,7 @@
 	<g:textArea class="required" name="joinAutoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit?.joinAutoreplyText ? false:'disabled'}" value="${activityInstanceToEdit?.joinAutoreplyText ?:''}"/>
 	<div class="controls">
 		<div class="stats">
-			<span id="send-message-stats" class="character-count">
+			<span id="send-contact-infos" class="character-count">
 				<g:message code="message.character.count" args="[0, 1]"/>
 			</span>
 		</div>
@@ -25,7 +25,7 @@
 	<g:textArea class="required" name="leaveAutoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit?.leaveAutoreplyText ? false:'disabled'}" value="${activityInstanceToEdit?.leaveAutoreplyText ?:''}"/>
 	<div class="controls">
 		<div class="stats">
-			<span id="send-message-stats" class="character-count">
+			<span id="send-contact-infos" class="character-count">
 				<g:message code="message.character.count" args="[0, 1]"/>
 			</span>
 		</div>
