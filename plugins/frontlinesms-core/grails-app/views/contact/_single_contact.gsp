@@ -10,14 +10,14 @@
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
-				<g:textField name="name" value="${contactInstance?.name}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
+				<g:textField name="name" value="${contactInstance?.name}" class="${contactInstance?.id?'':'mobileOrNameRequired'}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
 				<label for="name" class="icon-edit"></label>
 			</td>
 		</tr>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
-				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
+				<g:textField class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
 				<label for="mobile" class="icon-edit"></label>
 				<label for="mobile" class="warning l10n" style="display:none"><g:message code="contact.phonenumber.international.warning"/></label>
 			</td>
@@ -121,6 +121,14 @@ $(function() {
 		if(!data) { return; }
 		$("#contact-infos .sent").text(i18n("contact.messages.sent", data.outbound));
 		$("#contact-infos .recieved").text(i18n("contact.messages.received", data.inbound));
+	});
+
+	$("#single-contact").find("input,a.stroked,textarea").each(function(i, e) {
+		e = $(e);
+		if(!e.is(":visible")) {
+			return;
+		}
+		$(e).attr("tabindex", i);
 	});
 });
 </r:script>
