@@ -5,6 +5,7 @@ class QuickMessageController extends ControllerUtils {
 
 	def create() {
 		def groupList = params.groupList? Group.getAll(params.groupList.split(',').flatten().collect{ it as Long }): []
+		// TODO we should just use a different name for the parameter which provides us with IDs from messages instead of contacts
 		if(params.recipients?.contains(',')) {
 			// params.recipients is a list of message IDS?!?!?!?!!!!!??
 			// we need to convert the message IDs to phone numbers!!!???!

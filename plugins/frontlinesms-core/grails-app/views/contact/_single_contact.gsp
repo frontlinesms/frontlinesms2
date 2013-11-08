@@ -122,6 +122,14 @@ $(function() {
 		$("#contact-infos .sent").text(i18n("contact.messages.sent", data.outbound));
 		$("#contact-infos .recieved").text(i18n("contact.messages.received", data.inbound));
 	});
+
+	$("#single-contact").find("input,a.stroked,textarea").each(function(i, e) {
+		e = $(e);
+		if(!e.is(":visible")) {
+			return;
+		}
+		$(e).attr("tabindex", i);
+	});
 });
 </r:script>
 
