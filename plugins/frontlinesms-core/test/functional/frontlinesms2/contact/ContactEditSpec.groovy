@@ -10,7 +10,7 @@ class ContactEditSpec extends ContactBaseSpec {
 	def setup() {
 		createTestContacts()
 	}
-	
+
 	def 'selected contact details can be edited and saved'() {
 		given:
 			def aliceId = remote { Contact.findByName('Alice').id }
@@ -18,13 +18,15 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShow, aliceId
 
 			singleContactDetails.name.value('Kate')
-			singleContactDetails.name.blur()
+			header.click()
 
+			sleep 4000
 			singleContactDetails.mobile.value('+2541234567')
-			singleContactDetails.mobile.blur()
+			header.click()
 
+			sleep 4000
 			singleContactDetails.email.value('gaga@gmail.com')
-			singleContactDetails.email.blur()
+			header.click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
