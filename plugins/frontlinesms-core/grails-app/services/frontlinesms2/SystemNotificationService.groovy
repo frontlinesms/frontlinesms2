@@ -10,10 +10,9 @@ class SystemNotificationService {
 		def kwargs = params?.kwargs ?: [:]
 		if(kwargs.exception) args += [i18nUtilService.getMessage(code:'connection.error.'+kwargs.exception.class.name.toLowerCase(), args:[kwargs.exception.message])]
 		def text = i18nUtilService.getMessage(code:code, args:args)
+		text = substituteLinks(text)
 		def blockedNotificationList = grailsApplication.config.frontlinesms.blockedNotificationList
-		println "SystemNotificationService.create()::: blockedNotificationList::$blockedNotificationList"
 		if(!(blockedNotificationList && code in blockedNotificationList)) { getOrCreate(text, params?.topic) }
-		
 	}
 
 	private def getOrCreate(text, topic=null) {
@@ -28,4 +27,9 @@ class SystemNotificationService {
 		notification.read = false
 		notification.save(flush:true)
 	}
+
+	String substituteLinks(CharSequence input) {
+		input.replaceAll(/\[\[([^\[]*?)\]\]\(\((.*?)\)\)([^\)]|$)/, /<a href="$2">$1<\/a>$3/)
+	}
 }
+

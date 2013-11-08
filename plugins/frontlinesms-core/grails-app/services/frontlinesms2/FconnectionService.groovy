@@ -134,7 +134,10 @@ class FconnectionService {
 		ex.printStackTrace()
 		log.warn("Error creating routes to fconnection with id $c?.id", ex)
 		logService.handleRouteCreationFailed(c)
-		systemNotificationService.create(code:'connection.route.failNotification', args:[c?.id, c?.name?:c?.id], kwargs:[exception: ex, connection: c])
+		def link = /#" onclick="mediumPopup.editConnection(${c.id})/
+		systemNotificationService.create(code:'connection.route.failNotification',
+				args:[link, c?.name?:c?.id],
+				kwargs:[exception:ex, connection:c])
 	}
 
 	private def isFailed(Fconnection c) {
