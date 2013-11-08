@@ -17,4 +17,13 @@ class MobileNumberUtilService {
 
 		phoneNumberUtil.getRegionCodeForNumber(number)
 	}
+
+	def getFlagCSSClasses(phoneNumber, allowEmpty=true) {
+		def isoCode
+		def flagCssClass = ''
+		isoCode = getISOCountryCode(phoneNumber)?.toLowerCase()
+		if(isoCode) flagCssClass = "flag flag-$isoCode"
+		else if(!allowEmpty) flagCssClass = 'flag'
+		flagCssClass
+	}
 }

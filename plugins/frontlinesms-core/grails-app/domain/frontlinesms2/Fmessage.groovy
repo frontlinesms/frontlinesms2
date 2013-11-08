@@ -207,17 +207,13 @@ class Fmessage {
 	}
 
 	def getContactFlagCSSClasses() {
-		def isoCode
-		def flagCssClass = ''
-
+		def flagCssClass
 		if(inbound) {
-			isoCode = mobileNumberUtilService.getISOCountryCode(src)?.toLowerCase()
+			flagCssClass = mobileNumberUtilService.getFlagCSSClasses(src)
 		} else if(dispatches.size() == 1) {
 			def dst = (dispatches as List)[0].dst
-			isoCode = mobileNumberUtilService.getISOCountryCode(dst)?.toLowerCase()
+			flagCssClass = mobileNumberUtilService.getFlagCSSClasses(dst)
 		}
-
-		if(isoCode) flagCssClass = "flag flag-$isoCode"
 		flagCssClass
 	}
 
