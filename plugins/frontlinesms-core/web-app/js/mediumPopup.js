@@ -279,7 +279,9 @@ var mediumPopup = (function() {
 			if(checkedMessageCount > 0) {
 				src = getCheckedList("message");
 			} else {
-				src = $("#message-src").val();
+				// wrap the message ID in commas so that the quick message controller knows...it's a message ID
+				// there is probably a much more sane way of doing this, and TODO we should be doing it
+				src = "," + $("#message-id").val() + ",";
 			}
 		} else if(messageType === "Forward") {
 			text = $("#single-message #message-detail-content p").text().trim();
