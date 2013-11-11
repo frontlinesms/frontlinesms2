@@ -59,9 +59,10 @@ var ContactEditor = function() {
 		contactName = $(".contact-edit-form [name='name']").val();
 		
 		mainListContactLink = $('#main-list-container li a.displayName-' + contactId);
-		mainListContactLinkKids = mainListContactLink.children();
+		mainListContactNumberPreview = mainListContactLink.children();
 		mainListContactLink.text(contactName);
-		mainListContactLink.append(mainListContactLinkKids);
+		mainListContactNumberPreview.text($("input[name=mobile]").val());
+		mainListContactLink.append(mainListContactNumberPreview);
 
 		button = $('#single-contact a.send-message');
 		buttonKids = button.children();
@@ -132,9 +133,6 @@ var ContactEditor = function() {
 			internationFormatWarning.show("fast");
 		}
 
-		mainListContactLink = $('#main-list-container li a.displayName-' + contactId);
-		mainListContactNumberPreview = mainListContactLink.children(".preview");
-		mainListContactNumberPreview.text(val);
 
 		sendMessageButton = $("#contact-infos a.send-message");
 		if(val) {
