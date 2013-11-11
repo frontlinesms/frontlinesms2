@@ -36,7 +36,6 @@ var ContactEditor = function() {
 					}
 				},
 				success:function(data) {
-					console.log(data);
 					var contactName, button, buttonKids;
 					cachedFormHash = formHashAtRequestTime;
 					button = $('#action-buttons .send-message');
