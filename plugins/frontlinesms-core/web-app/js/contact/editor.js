@@ -72,6 +72,20 @@ var ContactEditor = function() {
 		selectmenuTools.disable("#new-field-dropdown");
 		selectmenuTools.disable("#group-dropdown");
 	},
+	dismissInternatinalFormatWarning = function() {
+		$.ajax({
+			type:"GET",
+			url:url_root + "contact/disableInternationalFormatWarning",
+			complete: function() {
+				$(".warning.l10n").fadeOut(300, function() { $(this).remove(); } );
+			}
+		});
+		$(this).find("i").removeClass("in-progress").addClass("icon-loading");
+
+	},
+	internationalFormatWarningDisabled = function() {
+		return ($("input[name=showl10warning]").val() == 'false');
+	}
 	reenableFormElements = function() {
 		contactEditWrapper.find("textarea,input[type='text']").removeAttr("disabled");
 		$("#new-field-dropdown").attr("disabled", false).selectmenu();;
@@ -106,9 +120,9 @@ var ContactEditor = function() {
 	function validateMobile(field) {
 		var internationFormatWarning, val, sendMessageButton;
 		field = $(this);
-		internationFormatWarning = field.parent().find("label..warning.l10n"),
+		internationFormatWarning = $(".warning.l10n"),
 		val = field.val();
-		if(!val || val.match(/\+\d+/)) {
+		if(!val || val.match(/\+\d+/) || internationalFormatWarningDisabled()) {
 			field.removeClass("error");
 			internationFormatWarning.hide("fast");
 		} else {
@@ -225,6 +239,7 @@ var ContactEditor = function() {
 
 		$("#multi-group-list .remove-group").click(enableSaveButton);
 		$("#multi-group-dropdown").change(enableSaveButton);
+		$("#dismissl10nWarning").click(dismissInternatinalFormatWarning);
 	}
 
 	this.updateContactData = updateContactData;
