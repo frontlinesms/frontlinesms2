@@ -172,6 +172,7 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def updateMultipleContacts() {
+		params.remove("mobile") //TODO remove on refactor of contact form
 		getCheckedContacts().each { c ->
 			parseContactFields(c)
 			attemptSave(c)

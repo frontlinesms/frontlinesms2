@@ -131,7 +131,7 @@ class SingleContactDetails extends geb.Module {
 			$('select#group-dropdown').jquery.val(groupId)
 			$('select#group-dropdown').jquery.trigger("change")
 		}
-		save { $('#action-buttons #update-single') }
+		save { $("#action-buttons input[value='action.save']") }
 		cancel { $('#action-buttons a.cancel', text:'action.cancel') }
 		delete { $('.btn-delete') }
 		searchForMessages { $('a.search') }
