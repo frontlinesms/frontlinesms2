@@ -11,7 +11,7 @@ class ContactEditSpec extends ContactBaseSpec {
 		createTestContacts()
 	}
 
-	def 'selected contact details can be edited and saved'() {
+	def 'selected contact details can be edited and saved, which updates contact list values'() {
 		given:
 			def aliceId = remote { Contact.findByName('Alice').id }
 		when:
@@ -74,6 +74,32 @@ class ContactEditSpec extends ContactBaseSpec {
 		then:
 			singleContactDetails.sentCount == 'contact.messages.sent[2]'
 			singleContactDetails.receivedCount == 'contact.received.messages[1]'
+	}
+
+	def 'contact fields in the list are not updated if save was unsuccessful'() {
+		given:
+			def aliceId = remote { Contact.findByName('Alice').id }
+		when:
+			to PageContactShow, aliceId
+
+			singleContactDetails.name.value('')
+			header.click()
+
+		then:
+			waitFor {
+				!contactList.selectedContact.text().contains('Kate')
+			}
+		when:
+			singleContactDetails.mobile.value('')
+			header.click()
+
+			sleep 4000
+		then:
+			remote { Contact.findById(aliceId).name } == ''
+			remote { Contact.findById(aliceId).mobile } == '2541234567'
+			waitFor {
+				contactList.selectedContact.text().contains('2541234567')
+			}
 	}
 }
 

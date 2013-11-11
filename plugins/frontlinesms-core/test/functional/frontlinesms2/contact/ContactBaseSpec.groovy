@@ -57,7 +57,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 		assert input.@value  == expectedValue
 		true
 	}
-	
+
 	static createManyContacts() {
 		remote {
 			(11..90).each {
