@@ -2,8 +2,8 @@ $(function() {
 	var validator;
 	$("#mobile").trigger('change');
 	$("form").on('submit', function(e){
-		var isValidate=$("form").valid();
-		if(!isValidate) {
+		var isValid=$("form").valid();
+		if(!isValid) {
 			e.preventDefault();
 		}
 	});
@@ -13,10 +13,10 @@ $(function() {
 			element.parent().append(error); }
 	});
 	jQuery.validator.addMethod("phoneNumber", function(value, element) {
-		var valid, hasChild;
+		var valid, hasChar;
 		valid = true;
-		hasChild = $(element).val().match(/[^\+?\d+]/);
-		if(hasChild !== null) {
+		hasChar = $(element).val().match(/[^\+?\d+]/);
+		if(hasChar !== null) {
 			valid = false;
 		}
 		return valid;
