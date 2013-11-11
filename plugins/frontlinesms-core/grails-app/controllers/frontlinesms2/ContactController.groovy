@@ -199,7 +199,7 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def checkForDuplicates() {
-		def foundContact = Contact.findByMobileLike(params.mobile)
+		def foundContact = Contact.findByMobile(params.mobile)
 		if (foundContact && foundContact.id.toString() == params.contactId) {
 			render true
 		} else {
