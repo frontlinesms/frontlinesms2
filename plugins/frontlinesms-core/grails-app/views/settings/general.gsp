@@ -23,5 +23,5 @@ $(function() {
 	$("#basic-authentication input[name=enabled]").attr("onchange", "basicAuthValidation.toggleFields(this)");
 	$("#basic-authentication input[type=submit]").attr("onclick", "basicAuthValidation.showErrors()");
 });
-
 </r:script>
+
