@@ -5,12 +5,9 @@ class QuickMessageController extends ControllerUtils {
 
 	def create() {
 		def groupList = params.groupList? Group.getAll(params.groupList.split(',').flatten().collect{ it as Long }): []
-		// TODO we should just use a different name for the parameter which provides us with IDs from messages instead of contacts
-		if(params.recipients?.contains(',')) {
-			// params.recipients is a list of message IDS?!?!?!?!!!!!??
-			// we need to convert the message IDs to phone numbers!!!???!
-			def recipientList = []
-			params.recipients.tokenize(',').each {
+		def recipientList = []
+		if(params.messageIds?.contains(',')) {
+			params.messageIds.tokenize(',').each {
 				def msg = Fmessage.findById(it)
 				if (msg.inbound) {
 					recipientList << msg.src
@@ -18,17 +15,17 @@ class QuickMessageController extends ControllerUtils {
 					recipientList += msg.dispatches*.dst
 				}
 			}
-			params.recipients = recipientList.unique()
-		} else if(params.recipients ==~ CONTACT_ID_PATTERN) {
-			params.recipients = Contact.get((params.recipients =~ CONTACT_ID_PATTERN)[0][1]).mobile
+			recipientList = recipientList.unique()
+		} else if(params.contactId) {
+			recipientList << Contact.get(params.contactId).mobile
 		}
-		def recipients = params.recipients? [params.recipients].flatten() : []
-		def recipientName = recipients.size() == 1 ? (Contact.findByMobile(recipients[0])?.name?: recipients[0]): ''
+		recipientList = recipientList.flatten()
+		def recipientName = recipientList.size() == 1 ? (Contact.findByMobile(recipientList[0])?.name?: recipientList[0]): ''
 		def configureTabs = params.configureTabs? configTabs(params.configureTabs): ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 		[configureTabs:configureTabs,
-				addresses:recipients,
+				addresses:recipientList,
 				groups:groupList,
-				recipientCount:recipients.size(),
+				recipientCount:recipientList.size(),
 				recipientName:recipientName,
 				messageText:params.messageText?:'']
 	}

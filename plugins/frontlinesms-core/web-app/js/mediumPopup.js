@@ -269,7 +269,7 @@ var mediumPopup = (function() {
 	};
 	//> FUNCTION-SPECIFIC METHODS
 	messageResponseClick = function(messageType) {
-		var configureTabs, checkedMessageCount, me, src, messageSection, text;
+		var configureTabs, checkedMessageCount, me, messageIds, messageSection, text;
 		configureTabs= "";
 		text = '';
 		me = $(this);
@@ -277,20 +277,20 @@ var mediumPopup = (function() {
 			configureTabs = "tabs-1, tabs-3, tabs-4";
 			checkedMessageCount = getCheckedItemCount("message");
 			if(checkedMessageCount > 0) {
-				src = getCheckedList("message");
+				messageIds = getCheckedList("message");
 			} else {
 				// wrap the message ID in commas so that the quick message controller knows...it's a message ID
 				// there is probably a much more sane way of doing this, and TODO we should be doing it
-				src = "," + $("#message-id").val() + ",";
+				messageIds = "," + $("#message-id").val() + ",";
 			}
 		} else if(messageType === "Forward") {
 			text = $("#single-message #message-detail-content p").text().trim();
 		}
-		if (typeof src === "undefined") {
-			src = "";
+		if (typeof messageIds === "undefined") {
+			messageIds = "";
 		}
 		messageSection = $("input:hidden[name=messageSection]").val();
-		postData = jQuery.param({ recipients:src, messageText:text, configureTabs:configureTabs }, true)
+		postData = jQuery.param({ messageIds:messageIds, messageText:text, configureTabs:configureTabs }, true)
 		$.ajax({
 			type:"POST",
 			data:postData,
