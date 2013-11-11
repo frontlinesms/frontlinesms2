@@ -1,6 +1,7 @@
 <%@ page defaultCodec="html" import="frontlinesms2.*" %>
 <div id="single-message">
 	<g:if test="${messageInstance}">
+		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
 		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
 		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
 		<div id='message-info'>
@@ -18,7 +19,7 @@
 					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed"/>)</g:if>
 					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed"/>)</g:elseif>
 				</span> 
-				<g:if test="${messageInstance.displayName ==~ /^\+?\d+$/ && (messageInstance.inbound || messageInstance.dispatches.size() == 1)}">
+				<g:if test="${messageInstance.displayName ==~ /^\+?[\d -.]+$/ && (messageInstance.inbound || messageInstance.dispatches.size() == 1)}">
 					<g:link class="add" elementId="add-contact" controller="contact" title="${g.message(code:'fmessage.addsender')}" action="createContact" params="[mobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"><g:message code="contact.new"/></g:link>
 				</g:if>
 			</p>

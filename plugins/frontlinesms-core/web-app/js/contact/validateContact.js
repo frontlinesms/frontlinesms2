@@ -1,6 +1,12 @@
 $(function() {
 	var validator;
 	$("#mobile").trigger('change');
+	$("form").on('submit', function(e){
+		var isValidate=$("form").valid();
+		if(!isValidate) {
+			e.preventDefault();
+		}
+	});
 	validator = $("form").validate({
 		onsubmit:false,
 		errorPlacement:function(error, element) {
@@ -27,5 +33,16 @@ $(function() {
 		});
 		return valid;
 	}, i18n("contact.exists.warn"));
+	jQuery.validator.addMethod("mobileOrNameRequired", function(value, element) {
+		var fields = $(".mobileOrNameRequired");
+		if(fields.length != 0) {
+			var nameField = $(fields[0]);
+			var mobileField = $(fields[1]);
+			if((nameField.val() == "") && (mobileField.val() == "")) {
+				return false;
+			}
+		}
+		return true;
+	}, i18n("contact.name.validator.invalid"))
 });
 
