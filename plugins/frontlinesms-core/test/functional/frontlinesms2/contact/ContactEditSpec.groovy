@@ -31,19 +31,19 @@ class ContactEditSpec extends ContactBaseSpec {
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			remote { Contact.findById(aliceId).name } == 'Kate'
-			waitFor { 
-				contactList.selectedContact.text().contains('Kate') 
-				contactList.selectedContact.text().contains('+2541234567') 
+			waitFor {
+				contactList.selectedContact.text().contains('Kate')
+				contactList.selectedContact.text().contains('+2541234567')
 			}
 	}
-	
+
 	def "should disable the save and cancel buttons when viewing a contact details"() {
 		when:
 			to PageContactShow, remote { Contact.findByName('Bob').id }
 		then:
 			singleContactDetails.save.disabled
 	}
-	
+
 	def "should remain on the same page after updating a contact"() {
 		given:
 			createManyContacts()
