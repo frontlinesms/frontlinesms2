@@ -6,7 +6,7 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(QuickMessageController)
-@Mock([GroupMembership, Contact, Group, SmartGroup])
+@Mock([GroupMembership, Contact, Group, SmartGroup, Fmessage])
 class QuickMessageControllerSpec extends Specification {
 
 	def setup() {
@@ -18,24 +18,14 @@ class QuickMessageControllerSpec extends Specification {
 		}
 	}
 
-	def 'create returns the prepopulated recipients'() {
+	def "create returns the prepopulated recipients based on params.contactId"() {
 		setup:
-			def address = ["9544426444"]
-			params.recipients = address
+			def contact = Contact.findByName("jim")
+			params.contactId = "${contact.id}"
 		when:
 			def result = controller.create()
 		then:
-			result['addresses'] == address
-	}
-
-	def "should identify existing contacts and non existing recipients"() {
-		setup:
-			def address = ["12345"]
-			params.recipients = address
-		when:
-			def result = controller.create()
-		then:
-			result['addresses'] == address
+			result['addresses'] == [contact.mobile]
 			result['recipientName'] == 'jim'
 			result['configureTabs'] ==  ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 	}
