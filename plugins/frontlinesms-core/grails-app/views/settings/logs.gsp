@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="settings"/>
-		<title>Settings ><g:message code="settings.logs.header"/></title>
+		<title><g:message code="settings.logs.header"/></title>
 		<r:script>
 			function filterLogEntries(timePeriod) {
 				$.get(url_root + 'settings/logs', {timePeriod: timePeriod}, function(data) {

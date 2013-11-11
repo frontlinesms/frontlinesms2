@@ -92,7 +92,7 @@
 			<g:actionSubmit class="stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="stroked" action="saveContact" value="${g.message(code:'action.save')}"/>
+			<g:actionSubmit class="stroked save" action="saveContact" value="${g.message(code:'action.save')}"/>
 			<g:link class="cancel stroked" action="index"><g:message code="action.cancel"/></g:link>
 		</g:else>
 	</div>
@@ -107,7 +107,7 @@
 					params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
 				<g:message code="contact.search.messages"/>
 			</g:link>
-			<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients:contactInstance?'contact-'+contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+			<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', contactId:contactInstance?contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 				<i class="icon-envelope"></i>
 				<g:message code="contact.send.message" args="${[contactInstance?.name?:contactInstance?.mobile]}"/>
 			</fsms:popup>
@@ -129,6 +129,20 @@ $(function() {
 			return;
 		}
 		$(e).attr("tabindex", i);
+	});
+
+	$(document.documentElement).keyup(function(event) {
+		var key;
+		var saveAnchor = $("#single-contact a.save");
+		var saveInput = $("#single-contact input.save");
+		if(event) {
+			key = event.which;
+		} else {
+			key = event.keyCode;
+		}
+		if((key == 13) && (saveAnchor.is(":focus"))) {
+			saveInput.trigger("click");
+		}
 	});
 });
 </r:script>
