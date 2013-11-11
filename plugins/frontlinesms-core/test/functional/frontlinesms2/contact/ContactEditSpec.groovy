@@ -9,6 +9,9 @@ import frontlinesms2.message.*
 class ContactEditSpec extends ContactBaseSpec {
 	def setup() {
 		createTestContacts()
+		remote {
+			new AppSettingsService().set('international.number.format.warning.disabled', 'some placeholder value')
+		}
 	}
 
 	def 'selected contact details can be edited and saved'() {
@@ -70,6 +73,51 @@ class ContactEditSpec extends ContactBaseSpec {
 		then:
 			singleContactDetails.sentCount == 'contact.messages.sent[2]'
 			singleContactDetails.receivedCount == 'contact.received.messages[1]'
+	}
+
+	def 'using a non-internationalised number should display a warning'() {
+		given:
+			def aliceId = remote { Contact.findByName('Alice').id }
+		when:
+			to PageContactShow, aliceId
+
+			singleContactDetails.name.value('Kate')
+			header.click()
+
+			sleep 4000
+			singleContactDetails.mobile.value('11111')
+			singleContactDetails.mobile.jquery.trigger('change')
+			singleContactDetails.mobile.jquery.trigger('blur')
+		then:
+			waitFor {
+				singleContactDetails.nonInternationalNumberWarning.displayed
+			}
+	}
+
+	def 'once non-internationalised number warning is dismissed, it does not appear again'() {
+		given:
+			def aliceId = remote { Contact.findByName('Alice').id }
+		when:
+			to PageContactShow, aliceId
+
+			singleContactDetails.name.value('Kate')
+			header.click()
+
+			sleep 4000
+			singleContactDetails.mobile.value('11111')
+			header.click()
+		then:
+			singleContactDetails.nonInternationalNumberWarning.displayed
+		when:
+			singleContactDetails.dismissNonInternationalNumberWarning.click()
+		then:
+			waitFor {
+				!singleContactDetails.nonInternationalNumberWarning.displayed
+			}
+		when:
+			to PageContactShow, aliceId
+		then:
+			!singleContactDetails.nonInternationalNumberWarning.displayed
 	}
 }
 
