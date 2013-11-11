@@ -27,7 +27,26 @@ class ContactCreateSpec extends ContactBaseSpec {
 		then:
 			bodyMenu.newGroup.@href.contains "/group/create"
 	}
-	
+
+	def 'form should fail validation if no name or number is provided'() {
+		when:
+			to PageContactCreate
+			singleContactDetails.save.click()
+		then:
+			singleContactDetails.labels("name").collect{ it.text() }.contains("contact.name.validator.invalid")
+			singleContactDetails.labels("mobile").collect{ it.text() }.contains("contact.name.validator.invalid")
+	}
+
+	def 'form should pass validation and save contact if valid values are provided'() {
+		when:
+			to PageContactCreate
+			singleContactDetails.name = "Bob"
+			singleContactDetails.mobile = "123456789"
+			singleContactDetails.save.click()
+		then:
+			remote { Contact.findByNameAndMobile("Bob", "123456789").id }
+	}
+
 }
 
 

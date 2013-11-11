@@ -37,3 +37,7 @@ class PageGroupShow extends PageContactShow {
 	}
 }
 
+class PageContactCreate extends frontlinesms2.page.PageContact {
+	static url = 'contact/createContact'
+}
+
