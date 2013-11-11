@@ -163,6 +163,7 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def updateMultipleContacts() {
+		params.remove("mobile") //TODO remove on refactor of contact form
 		getCheckedContacts().each { c ->
 			parseContactFields(c)
 			attemptSave(c)
@@ -198,7 +199,7 @@ class ContactController extends ControllerUtils {
 	}
 	
 	def checkForDuplicates() {
-		def foundContact = Contact.findByMobile(params.mobile)
+		def foundContact = Contact.findByMobileLike(params.mobile)
 		if (foundContact && foundContact.id.toString() == params.contactId) {
 			render true
 		} else {
