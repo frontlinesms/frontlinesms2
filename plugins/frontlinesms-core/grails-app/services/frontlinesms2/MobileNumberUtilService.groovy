@@ -19,11 +19,10 @@ class MobileNumberUtilService {
 	}
 
 	def getFlagCSSClasses(phoneNumber, allowEmpty=true) {
-		def isoCode
-		def flagCssClass = ''
-		isoCode = getISOCountryCode(phoneNumber)?.toLowerCase()
+		def flagCssClass = (allowEmpty)?'':'flag'
+		if (!phoneNumber) return flagCssClass
+		def isoCode = getISOCountryCode(phoneNumber)?.toLowerCase()
 		if(isoCode) flagCssClass = "flag flag-$isoCode"
-		else if(!allowEmpty) flagCssClass = 'flag'
 		flagCssClass
 	}
 }
