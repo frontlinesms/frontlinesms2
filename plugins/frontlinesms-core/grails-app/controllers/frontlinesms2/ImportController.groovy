@@ -10,7 +10,7 @@ import au.com.bytecode.opencsv.CSVParser
 class ImportController extends ControllerUtils {
 	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	private final def standardFields = ['Name':'name', 'Mobile Number':'mobile',
-					'E-mail Address':'email', 'Notes':'notes']
+					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
 	
 	def importData() {
 		if (params.data == 'contacts') {
@@ -47,7 +47,7 @@ class ImportController extends ControllerUtils {
 					def customFields = []
 					headers.eachWithIndex { key, i ->
 						def value = tokens[i]
-						if(key in standardFields) {
+						if(key in standardFields && key != 'Group(s)') {
 							c."${standardFields[key]}" = value
 						} else if(key == 'Group(s)') {
 							def groupNames = getGroupNames(value)

@@ -131,8 +131,12 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 	width:100%;
 }
 #contactImportReview .headers td input {
-	background-color:#E5FFFF;
-	border-color:#008080;
+	background-color:#fcf8e3;
+	border-color:#faebcc;
+}
+#contactImportReview .headers td input.recognised {
+	background-color:#ccddcc;
+	border-color:#008000;
 }
 a#submitContacts {
 	float: right;

@@ -9,7 +9,12 @@ var ContactImportReviewer = function() {
 		return JSON.stringify($('input[data-x=' + x + '][data-y=' + y + ']').val());
 	},
 	checkForRecognisedHeader = function() {
-
+		if($.inArray($(this).val(), $('input[name=recognisedTitles]').val().split(',')) > -1) {
+			$(this).addClass('recognised');
+		}
+		else {
+			$(this).removeClass('recognised');
+		}
 	},
 	submit = function() {
 		$('input[name=csv]').val(generateCSV());
@@ -30,7 +35,8 @@ var ContactImportReviewer = function() {
 	},
 
 	init = function() {
-		console.log("INIT");
+		$('tr.headers td input').change(checkForRecognisedHeader);
+		$('tr.headers td input').change();
 	};
 	this.init = init;
 	this.submit = submit;

@@ -13,6 +13,7 @@
 			<p class="known-fields">
 				<g:message code="settings.import.contact.review.recognisedTitles" args="${[recognisedTitles.join(', ')]}"/>
 			</p>
+			<input type="hidden" name="recognisedTitles" value="${recognisedTitles.join(',')}"/>
 			<g:form name="reviewForm" action="importData">
 				<input type="hidden" name="reviewDone" value="true"/>
 				<input type="hidden" name="data" value="contacts"/>
