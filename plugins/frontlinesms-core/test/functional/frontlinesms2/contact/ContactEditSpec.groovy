@@ -7,10 +7,11 @@ import grails.plugin.geb.GebSpec
 import frontlinesms2.message.*
 
 class ContactEditSpec extends ContactBaseSpec {
+
 	def setup() {
 		createTestContacts()
 		remote {
-			new AppSettingsService().set('international.number.format.warning.disabled', 'some placeholder value')
+			ctx.grailsApplication.mainContext.appSettingsService.set('international.number.format.warning.disabled', 'some placeholder value')
 		}
 	}
 
