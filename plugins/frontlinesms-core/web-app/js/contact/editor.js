@@ -48,7 +48,7 @@ var ContactEditor = function() {
 		}
 	},
 	handleSuccessResponse = function(event, data) {
-		var contactName, mainListContactLink, mainListContactLinkKids, button, buttonKids,
+		var contactName, mainListContactLink, mainListContactLinkKids, button, buttonKids, flagElement
 			targetElement = $(event.target);
 
 		reenableFormElements();
@@ -63,6 +63,9 @@ var ContactEditor = function() {
 		mainListContactLink.text(contactName);
 		mainListContactNumberPreview.text($("input[name=mobile]").val());
 		mainListContactLink.append(mainListContactNumberPreview);
+
+		flagElement = $('.flag');
+		flagElement.removeClass().addClass(data.flagCSSClasses);
 
 		button = $('#single-contact a.send-message');
 		buttonKids = button.children();
