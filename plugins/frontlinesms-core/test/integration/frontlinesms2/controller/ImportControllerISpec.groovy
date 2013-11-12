@@ -129,6 +129,254 @@ Shantelle''']
 			Fmessage.list()*.inbound == [true]
 	}
 
+	def 'contact import should support vcard 2.1'() {
+		when:
+			importContacts('''BEGIN:VCARD
+VERSION:2.1
+N:Gump;Forrest
+FN:Forrest Gump
+ORG:Bubba Gump Shrimp Co.
+TITLE:Shrimp Man
+PHOTO;GIF:http://www.example.com/dir_photos/my_photo.gif
+TEL;WORK;VOICE:(111) 555-1212
+TEL;HOME;VOICE:(404) 555-1212
+ADR;WORK:;;100 Waters Edge;Baytown;LA;30314;United States of America
+LABEL;WORK;ENCODING=QUOTED-PRINTABLE:100 Waters Edge=0D=0ABaytown, LA 30314=0D=0AUnited States of America
+ADR;HOME:;;42 Plantation St.;Baytown;LA;30314;United States of America
+LABEL;HOME;ENCODING=QUOTED-PRINTABLE:42 Plantation St.=0D=0ABaytown, LA 30314=0D=0AUnited States of America
+EMAIL;PREF;INTERNET:forrestgump@example.com
+REV:20080424T195243Z
+END:VCARD''')
+		then:
+			Contact.list().size() == 1
+			Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+	}
+
+	def 'contact import should support vcard 3.0'() {
+		when:
+			importContacts('''BEGIN:VCARD
+VERSION:3.0
+N:Gump;Forrest;Mr.
+FN:Forrest Gump
+ORG:Bubba Gump Shrimp Co.
+TITLE:Shrimp Man
+PHOTO;VALUE=URL;TYPE=GIF:http://www.example.com/dir_photos/my_photo.gif
+TEL;TYPE=WORK,VOICE:(111) 555-1212
+TEL;TYPE=HOME,VOICE:(404) 555-1212
+ADR;TYPE=WORK:;;100 Waters Edge;Baytown;LA;30314;United States of America
+LABEL;TYPE=WORK:100 Waters Edge\nBaytown, LA 30314\nUnited States of America
+ADR;TYPE=HOME:;;42 Plantation St.;Baytown;LA;30314;United States of America
+LABEL;TYPE=HOME:42 Plantation St.\nBaytown, LA 30314\nUnited States of America
+EMAIL;TYPE=PREF,INTERNET:forrestgump@example.com
+REV:2008-04-24T19:52:43Z
+END:VCARD''')
+		then:
+			Contact.list().size() == 1
+			Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+	}
+
+	def 'contact import should support vcard 4.0'() {
+		when:
+			importContacts('''BEGIN:VCARD
+VERSION:4.0
+N:Gump;Forrest;;;
+FN:Forrest Gump
+ORG:Bubba Gump Shrimp Co.
+TITLE:Shrimp Man
+PHOTO;MEDIATYPE=image/gif:http://www.example.com/dir_photos/my_photo.gif
+TEL;TYPE=work,voice;VALUE=uri:tel:+1-111-555-1212
+TEL;TYPE=home,voice;VALUE=uri:tel:+1-404-555-1212
+ADR;TYPE=work;LABEL="100 Waters Edge\nBaytown, LA 30314\nUnited States of America"
+:;;100 Waters Edge;Baytown;LA;30314;United States of America
+ADR;TYPE=home;LABEL="42 Plantation St.\nBaytown, LA 30314\nUnited States of America"
+:;;42 Plantation St.;Baytown;LA;30314;United States of America
+EMAIL:forrestgump@example.com
+REV:20080424T195243Z
+END:VCARD''')
+		then:
+			Contact.list().size() == 1
+			Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+	}
+
+	def 'contact import should support xCard'() {
+		when:
+			importContacts('''<?xml version="1.0" encoding="UTF-8"?>
+<vcards xmlns="urn:ietf:params:xml:ns:vcard-4.0">
+  <vcard>
+    <n>
+      <surname>Gump</surname><ref>{{cite web|last=Perreault|first=Simon|url=http://tools.ietf.org/html/rfc6351|publisher=Internet Engineering Task Force (IETF)|accessdate=18 September 2013}}</ref> 
+      <given>Forrest</given>
+    </n>
+    <fn><text>Forrest Gump</text></fn>
+    <title><text>Shrimp Man</text></title>
+    <photo>
+        <parameters>
+            <mediatype><text>image/gif</text></mediatype>
+        </parameters>
+        <uri>http://www.example.com/dir_photos/my_photo.gif</uri>
+    </photo>
+    <tel>
+      <parameters>
+        <type>
+          <text>work</text>
+          <text>voice</text>
+        </type>
+      </parameters>
+      <uri>tel:+1-111-555-1212</uri>
+    </tel>
+    <tel>
+      <parameters>
+        <type>
+          <text>home</text>
+          <text>voice</text>
+        </type>
+      </parameters>
+      <uri>tel:+1-404-555-1212</uri>
+    </tel>
+    <adr>
+      <parameters>
+        <type><text>work</text></type>
+        <label><text>100 Waters Edge
+Baytown, LA 30314
+United States of America</text></label>
+      </parameters>
+      <pobox/>
+      <ext/>
+      <street>100 Waters Edge</street>
+      <locality>Baytown</locality>
+      <region>LA</region>
+      <code>30314</code>
+      <country>United States of America</country>
+    </adr>
+    <adr>
+      <parameters>
+        <type><text>home</text></type>
+        <label><text>100 Waters Edge
+Baytown, LA 30314
+United States of America</text></label>
+      </parameters>
+      <pobox/>
+      <ext/>
+      <street>42 Plantation St.</street>
+      <locality>Baytown</locality>
+      <region>LA</region>
+      <code>30314</code>
+      <country>United States of America</country>
+    </adr>
+    <email><text>forrestgump@example.com</text></email>
+    <rev><timestamp>20080424T195243Z</timestamp></rev>
+  </vcard>
+</vcards>''')
+		then:
+			Contact.list().size() == 1
+			Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+	}
+
+	def 'contact import should support jCard'() {
+		when:
+			importContacts('''["vcardstream",
+  ["vcard",
+    [
+      ["version", {}, "text", "4.0"],
+      ["n", {}, "text", ["Gump", "Forrest", "", "", ""]],
+      ["fn", {}, "text", "Forrest Gump"],
+      ["org", {}, "text", "Bubba Gump Shrimp Co"],
+      ["title", {} ,"text", "Shrimp Man"],
+      ["photo", {"mediatype":"image/gif"}, "uri", "http://www.example.com/dir_photos/my_photo.gif"],
+      ["tel", {"type":["work", "voice"]}, "uri", "tel:+1-111-555-1212"],
+      ["tel", {"type":["home", "voice"]}, "uri", "tel:+1-404-555-1212"],
+      ["adr",
+        {"label":"100 Waters Edge\nBaytown, LA 30314\nUnited States of America", "type":"work"},
+        "text",
+        ["", "", "100 Waters Edge", "Baytown", "LA", "30314", "United States of America"]
+      ],
+      ["adr",
+        {"label":"42 Plantation St.\nBaytown, LA 30314\nUnited States of America", "type":"home"},
+        "text",
+        ["", "", "42 Plantation St.", "Baytown", "LA", "30314", "United States of America"]
+      ],
+      ["email", {}, "text", "forrestgump@example.com"],
+      ["rev", {}, "timestamp", "2008-04-24T19:52:43Z"]
+    ]
+  ]
+]''')
+		then:
+			Contact.list().size() == 1
+			Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+	}
+
+	def 'contact import should support hCard'() {
+		when:
+			importContacts('''<html>
+  <head>
+    <link rel="profile" href="http://microformats.org/profile/hcard" />
+  </head>
+  <body>
+    <div class="vcard">
+      <img class="photo" src="http://www.example.com/dir_photos/my_photo.gif" align="left" />
+      <h1 class="fn">Forrest Gump</h1>
+      <div class="email">
+        <span class="type">Internet</span> Email (<span class="type">pref</span>erred):
+        <a class="value" href="mailto:forrestgump@example.com">forrestgump@example.com</a>
+      </div>
+      <div class="n">
+        First Name: <span class="given-name">Forrest</span><br>
+        Last Name: <span class="family-name">Gump</span>
+      </div>
+ 
+      <div class="label" style="display:none">
+        <span class="type">home</span>
+        42 Plantation St.<br>Baytown, LA 30314<br>United States of America
+      </div>
+      <div class="adr">
+        <span class="type">Home</span> Address:<br>
+        <span class="street-address">42 Plantation St.</span><br>
+        <span class="locality">Baytown</span>, <span class="region">LA</span>
+        <span class="postal-code">30314</span><br>
+        <span class="country-name">United States of America</span>
+      </div>
+      <div class="tel">
+         <abbr class="type" title="voice"></abbr>
+         <span class="type">Home</span> Phone: <span class="value">+1-111-555-1212</span>
+      </div>
+ 
+      <div>
+        Organization: <span class="org">Bubba Gump Shrimp Co.</span><br>
+        Title: <span class="title">Shrimp Man</span>
+      </div>
+ 
+      <div class="label" style="display:none">
+        <span class="type">work</span>
+        100 Waters Edge<br>Baytown, LA 30314<br>United States of America
+      </div>
+      <div class="adr">
+        <span class="type">Work</span> Address:<br>
+        <span class="street-address">100 Waters Edge</span><br>
+        <span class="locality">Baytown</span>, <span class="region">LA</span>
+        <span class="postal-code">30314</span><br>
+        <span class="country-name">United States of America</span>
+      </div>
+      <div class="tel">
+         <abbr class="type" title="voice"></abbr>
+         <span class="type">Work</span> Phone: <span class="value">+1-404-555-1212</span>
+      </div>
+ 
+      <em>vCard last updated:</em>
+      <time class="rev" datetime="2008-04-24T19:52:43Z">April 24, 2008 at 7:52 PM GMT</time>
+    </div>
+  </body>
+</html>''')
+		then:
+			Contact.list().size() == 1
+			Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+	}
+
 	def importMessages(String fileContent) {
 		mockFileUpload('importCsvFile', fileContent)
 		controller.importMessages()
