@@ -5,7 +5,7 @@ import frontlinesms2.*
 class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestContacts() {
 		remote {
-			Contact.build(name:'Alice', mobile:'2541234567', notes:'notes')
+			Contact.build(name:'Alice', mobile:'+2541234567', notes:'notes')
 			Contact.build(name:'Bob', mobile:'+254987654', email:"bob@bob.com")
 			null
 		}
