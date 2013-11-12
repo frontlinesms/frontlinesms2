@@ -4,6 +4,10 @@ import frontlinesms2.*
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockMultipartFile
 
 class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
+	private static final String FILE_TYPE_CSV = ''
+	private static final String FILE_TYPE_VCF = 'text/vcard'
+
+
 	def controller
 	
 	def setup() {
@@ -12,7 +16,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Uploading a contacts CSV file should create new contacts and groups in the database'() {
 		when:
-			importContacts('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
+			importContactCsv('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
 "Alice Sihoho","+254728749000","","","true","","/ToDo/Work"
 "Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
 "anyango Gitu","+254727689908","","","true","","/isIt\\/ToDo/Work/jobo"
@@ -25,7 +29,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'Uploading a contacts CSV file with failed contacts should create failed contacts in a file'() {
 		given:
-			importContacts('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
+			importContactCsv('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
 "Alice Sihoho254728749000","","","true","","/ToDo/Work"
 "Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
 "anyango Gitu","+254727689908","","","true","","/isIt\\/ToDo/Work/jobo"
@@ -44,7 +48,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	def 'uploading contacts with backslash characters should unfortunately interpret them as separate groups'() {
 		when:
-			importContacts('''"Name","Mobile Number","E-mail Address","Notes","Group(s)","lake","town"
+			importContactCsv('''"Name","Mobile Number","E-mail Address","Notes","Group(s)","lake","town"
 "Alex","0702597711",,,"\\o/ team",,
 "Enock","0711756950",,,"\\o/ team",,
 "Geoff","0725675317",,,"\\o/ team",,
@@ -131,7 +135,7 @@ Shantelle''']
 
 	def 'contact import should support vcard 2.1'() {
 		when:
-			importContacts('''BEGIN:VCARD
+			importVcard('''BEGIN:VCARD
 VERSION:2.1
 N:Gump;Forrest
 FN:Forrest Gump
@@ -155,7 +159,7 @@ END:VCARD''')
 
 	def 'contact import should support vcard 3.0'() {
 		when:
-			importContacts('''BEGIN:VCARD
+			importVcard('''BEGIN:VCARD
 VERSION:3.0
 N:Gump;Forrest;Mr.
 FN:Forrest Gump
@@ -179,7 +183,7 @@ END:VCARD''')
 
 	def 'contact import should support vcard 4.0'() {
 		when:
-			importContacts('''BEGIN:VCARD
+			importVcard('''BEGIN:VCARD
 VERSION:4.0
 N:Gump;Forrest;;;
 FN:Forrest Gump
@@ -203,7 +207,7 @@ END:VCARD''')
 
 	def 'contact import should support xCard'() {
 		when:
-			importContacts('''<?xml version="1.0" encoding="UTF-8"?>
+			importVcard('''<?xml version="1.0" encoding="UTF-8"?>
 <vcards xmlns="urn:ietf:params:xml:ns:vcard-4.0">
   <vcard>
     <n>
@@ -278,7 +282,7 @@ United States of America</text></label>
 
 	def 'contact import should support jCard'() {
 		when:
-			importContacts('''["vcardstream",
+			importVcard('''["vcardstream",
   ["vcard",
     [
       ["version", {}, "text", "4.0"],
@@ -312,7 +316,7 @@ United States of America</text></label>
 
 	def 'contact import should support hCard'() {
 		when:
-			importContacts('''<html>
+			importVcard(FILE_TYPE_VCF, '''<html>
   <head>
     <link rel="profile" href="http://microformats.org/profile/hcard" />
   </head>
@@ -382,13 +386,21 @@ United States of America</text></label>
 		controller.importMessages()
 	}
 
-	def importContacts(String fileContent) {
-		mockFileUpload('importCsvFile', fileContent)
+	def importContactCsv(String fileContent) {
+		importContacts(fileContent, FILE_TYPE_CSV)
+	}
+
+	def importContacts(String fileContent, contentType) {
+		mockFileUpload('importCsvFile', fileContent, contentType)
 		controller.importContacts()
 	}
 
-	def mockFileUpload(filename, fileContent) {
-		controller.request.addFile(new GrailsMockMultipartFile(filename, fileContent.getBytes("UTF-8")))
+	def importVcard(String fileContent) {
+		importContacts(fileContent, FILE_TYPE_VCF)
+	}
+
+	def mockFileUpload(filename, fileContent, contentType=FILE_TYPE_CSV) {
+		controller.request.addFile(new GrailsMockMultipartFile(filename, 'somefile', contentType, fileContent.getBytes("UTF-8")))
 	}
 }
 
