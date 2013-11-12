@@ -12,8 +12,8 @@ var ContactImportReviewer = function() {
 
 	},
 	submit = function() {
-		console.log("csv:::");
-		console.log(generateCSV());
+		$('input[name=csv]').val(generateCSV());
+		$('form[name=reviewForm]').submit();
 	},
 	generateCSV = function() {
 		var rowCount, columnCount, currentLine, result = [];

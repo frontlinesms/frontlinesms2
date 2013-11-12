@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.io.StringWriter
 
 import au.com.bytecode.opencsv.CSVWriter
+import au.com.bytecode.opencsv.CSVParser
 
 class ImportController extends ControllerUtils {
 	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -13,7 +14,7 @@ class ImportController extends ControllerUtils {
 	
 	def importData() {
 		if (params.data == 'contacts') {
-			if(params.skipReview)
+			if(params.reviewDone)
 				importContacts()
 			else
 				forward action:'reviewContacts'
@@ -32,12 +33,13 @@ class ImportController extends ControllerUtils {
 	
 	def importContacts() {
 		def savedCount = 0
-		def uploadedCSVFile = request.getFile('importCsvFile')
 		
-		if(uploadedCSVFile) {
+		if(params.csv) {
 			def headers
+			def parser = new CSVParser()
 			def failedLines = []
-			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
+			params.csv.eachLine { line ->
+				def tokens = parser.parseLine(line)
 				if(!headers) headers = tokens
 				else try {
 					Contact c = new Contact()
@@ -191,7 +193,7 @@ println "The errors are $fm.errors"
 				csvGroups << longName
 			}
 		}
-		println "getGroupNames() : ${csvGroups - ''}"
+		println "getGroupNames() : ${csvGroups - ''}, a length of ${(csvGroups - '').size()}"
 		return csvGroups - ''
 	}
 	
@@ -209,4 +211,5 @@ println "The errors are $fm.errors"
 		f.deleteOnExit()
 		return f
 	}
+
 }
