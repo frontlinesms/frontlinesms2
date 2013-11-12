@@ -7,10 +7,16 @@ class PageImportExportSettings extends PageSettings {
 	
 	static content = {
 		exportOption { option-> $("input[name=exportData]", value:option) }
-		exportButton { $("input#exportSubmit")}
+		exportButton { $("input#exportSubmit") }
+		importFileUploader { $("input[name=importCsvFile]") }
+		uploadCsv { path ->
+			$("form[name=importForm]").importCsvFile = path
+			return true
+		}
+		importOption { option-> $("input[name=data]", value:option) }
 	}
 	static at = {
-		title.contains('Settings') || title.contains('Mazingira')
+		title.contains('Settings')
 	}
 }
 

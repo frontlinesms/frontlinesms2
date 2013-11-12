@@ -21,5 +21,50 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { at ExportDialog }
 	}
+
+	def 'importing a contact csv takes the user to a review page'() {
+		setup:
+			def filePath = createTestUpload()
+		when:
+			to PageImportExportSettings
+			importOption("contacts").click()
+			uploadCsv(filePath)
+		then:
+			waitFor { at PageImportReview }
+	}
+
+	def 'review page shows contact data matching imported contacts'() {
+		when:
+			skipToReview()
+		then:
+			[["Name","Mobile Number","E-mail Address","Notes","Group(s)"],
+			["Kama","+123456789",'','',""],
+			["Vernerck","+447944888888",'','',""],
+			["Joe-Free","+254701000000",'','',""]].eachWithIndex { rowValue, rowIndex ->
+				rowValue.eachWithIndex { cellValue, cellIndex ->
+					assert valueAt(cellIndex, rowIndex) == cellValue
+				}
+			}
+	}
+
+	private def createTestUpload(csvContent=null) {
+		def csvString = csvContent?:"""\
+"Name","Mobile Number","E-mail Address","Notes","Group(s)"
+"Kama","+123456789",,,""
+"Vernerck","+447944888888",,,""
+"Joe-Free","+254701000000",,,""
+		"""
+		def file = new File(ResourceUtils.resourceDirectory, 'test_contact_import.csv')
+		if (file.exists()) file.delete()
+		file.write(csvString)
+		file.absolutePath
+	}
+
+	private def skipToReview() {
+		to PageImportExportSettings
+		importOption("contacts").click()
+		uploadCsv(createTestUpload())
+		waitFor { at PageImportReview }
+	}
 }
 
