@@ -112,3 +112,5 @@ input[type=text]:-ms-input-placeholder {
 
 input[type=text].server-side-error { border-color: #c00 !important; }
 label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; width: 300px; }
+
+.flag-frontlinesms { background-image: url("../images/frontline-flag.png"); }

@@ -23,6 +23,7 @@ class MobileNumberUtilService {
 		if (!phoneNumber) return flagCssClass
 		def isoCode = getISOCountryCode(phoneNumber)?.toLowerCase()
 		if(isoCode) flagCssClass = "flag flag-$isoCode"
+		else if(phoneNumber.startsWith("+")) flagCssClass = "flag flag-frontlinesms"
 		flagCssClass
 	}
 }
