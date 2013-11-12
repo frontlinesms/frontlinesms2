@@ -18,12 +18,8 @@ class MobileNumberUtilService {
 		phoneNumberUtil.getRegionCodeForNumber(number)
 	}
 
-	def getFlagCSSClasses(phoneNumber, allowEmpty=true) {
-		def flagCssClass = (allowEmpty)?'':'flag'
-		if (!phoneNumber) return flagCssClass
-		def isoCode = getISOCountryCode(phoneNumber)?.toLowerCase()
-		if(isoCode) flagCssClass = "flag flag-$isoCode"
-		else if(phoneNumber.startsWith("+")) flagCssClass = "flag flag-frontlinesms"
-		flagCssClass
+	def getFlagCSSClasses(phoneNumber, allowEmpty=false) {
+		if (!phoneNumber) { return ((allowEmpty)?'':'flag flag-frontlinesms') }
+		return "flag flag-${getISOCountryCode(phoneNumber)?.toLowerCase() ?: 'frontlinesms'}"
 	}
 }
