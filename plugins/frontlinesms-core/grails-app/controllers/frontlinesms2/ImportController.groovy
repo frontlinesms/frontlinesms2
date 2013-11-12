@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.io.StringWriter
 
 import au.com.bytecode.opencsv.CSVWriter
+import ezvcard.*
 
 class ImportController extends ControllerUtils {
 	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -13,8 +14,28 @@ class ImportController extends ControllerUtils {
 		if (params.data == 'contacts') importContacts()
 		else importMessages()
 	}
+
+	private def importContacts() {
+		switch(request.getFile('importCsvFile').contentType) {
+			case 'text/vcard':
+				importContactVcard()
+				break
+			default:
+				importContactCsv()
+		}
+	}
+
+	private def importContactVcard() {
+		Ezvcard.parse(request.getFile('importCsvFile').inputStream).all().each { v ->
+			def mobile = v.telephoneNumbers? v.telephoneNumbers.first().parameters.pref: ''
+			def email = v.emails? v.emails.first().value: ''
+			new Contact(name:v.formattedName.value,
+					mobile:mobile,
+					email:email).save(failOnError:true)
+		}
+	}
 	
-	def importContacts() {
+	private def importContactCsv() {
 		def savedCount = 0
 		def uploadedCSVFile = request.getFile('importCsvFile')
 		

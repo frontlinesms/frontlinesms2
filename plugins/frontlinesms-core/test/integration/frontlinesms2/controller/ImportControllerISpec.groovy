@@ -316,7 +316,7 @@ United States of America</text></label>
 
 	def 'contact import should support hCard'() {
 		when:
-			importVcard(FILE_TYPE_VCF, '''<html>
+			importVcard('''<html>
   <head>
     <link rel="profile" href="http://microformats.org/profile/hcard" />
   </head>
