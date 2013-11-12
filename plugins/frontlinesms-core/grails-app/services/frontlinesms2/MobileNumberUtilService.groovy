@@ -19,7 +19,11 @@ class MobileNumberUtilService {
 	}
 
 	def getFlagCSSClasses(phoneNumber, allowEmpty=false) {
-		if (!phoneNumber) { return ((allowEmpty)?'':'flag flag-frontlinesms') }
-		return "flag flag-${getISOCountryCode(phoneNumber)?.toLowerCase() ?: 'frontlinesms'}"
+		if (!phoneNumber) {
+			return ((allowEmpty)?'':'flag flag-frontlinesms')
+		}
+		else {
+			return "flag flag-${getISOCountryCode(phoneNumber)?.toLowerCase() ?: 'frontlinesms'}"
+		}
 	}
 }

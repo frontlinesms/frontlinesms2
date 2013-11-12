@@ -137,6 +137,7 @@ class SingleContactDetails extends geb.Module {
 		searchForMessages { $('a.search') }
 		sentCount { $('li.sent').text()}
 		receivedCount {$('li.received').text()}
+		flagClasses { $('i.flag').classes() }
 	}
 }
 

@@ -122,5 +122,24 @@ class ContactEditSpec extends ContactBaseSpec {
 			}
 			contactList.selectedContact.text().contains('+2541234567')
 	}
+
+	def 'contact flags are displayed and updated on save'() {
+		given:
+			def aliceId = remote { Contact.findByName('Alice').id }
+		when:
+			to PageContactShow, aliceId
+		then:
+			singleContactDetails.flagClasses.contains('flag-ke')
+		when:
+			singleContactDetails.mobile = '+447943444444'
+			singleContactDetails.mobile().jquery.blur()
+		then:
+			waitFor { singleContactDetails.flagClasses.contains('flag-gb') }
+		when:
+			singleContactDetails.mobile = '+111'
+			singleContactDetails.mobile().jquery.blur()
+		then:
+			waitFor { singleContactDetails.flagClasses.contains('flag-frontlinesms') }
+	}
 }
 
