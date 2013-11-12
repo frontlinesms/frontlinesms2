@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="settings"/>
-		<title><g:message code="settings.general.header"/></title>
+		<title><g:message code="settings.import.contact.review.page.header"/></title>
 		<export:resource/>
 	</head>
 	<body>

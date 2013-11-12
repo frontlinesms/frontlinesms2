@@ -20,8 +20,11 @@ class ImportController extends ControllerUtils {
 			else {
 				def uploadedCSVFile = request.getFile('importCsvFile')
 				def csvAsNestedLists = []
+				def headerRowSize
 				uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
-					csvAsNestedLists << tokens
+					if (!headerRowSize) headerRowSize = tokens.size()
+					if (tokens.size() == headerRowSize) 
+						csvAsNestedLists << tokens
 				}
 				session.csvData = csvAsNestedLists 
 				redirect action:'reviewContacts'
