@@ -14,21 +14,24 @@ class ImportController extends ControllerUtils {
 	
 	def importData() {
 		if (params.data == 'contacts') {
-			if(params.reviewDone)
+			if(params.reviewDone) {
 				importContacts()
-			else
-				forward action:'reviewContacts'
+			}
+			else {
+				def uploadedCSVFile = request.getFile('importCsvFile')
+				def csvAsNestedLists = []
+				uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
+					csvAsNestedLists << tokens
+				}
+				session.csvData = csvAsNestedLists 
+				redirect action:'reviewContacts'
+			}
 		}
 		else importMessages()
 	}
 
 	def reviewContacts() {
-		def uploadedCSVFile = request.getFile('importCsvFile')
-		def csvAsNestedLists = []
-		uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
-			csvAsNestedLists << tokens
-		}
-		[csvData: csvAsNestedLists, recognisedTitles: standardFields.keySet()]
+		[csvData: session.csvData, recognisedTitles: standardFields.keySet()]
 	}
 	
 	def importContacts() {
