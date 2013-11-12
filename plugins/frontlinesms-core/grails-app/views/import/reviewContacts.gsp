@@ -22,7 +22,7 @@
 				<g:each in="${csvData}" var="row" status="rowIndex">
 					<tr class="${rowIndex == 0 ? 'headers' : ''}">
 					<g:each in="${row}" var="celldata" status="cellIndex">
-						<td><input data-x="${cellIndex}" data-y="${rowIndex}" type="text" value="${celldata}"> </td>
+						<td><input data-x="${cellIndex}" data-y="${rowIndex}" type="text" value="${celldata.replace('"', '&quot;')}"> </td>
 					</g:each>
 					</tr>
 				</g:each>
