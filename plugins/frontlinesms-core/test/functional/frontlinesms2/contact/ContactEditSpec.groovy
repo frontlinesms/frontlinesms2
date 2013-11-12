@@ -84,7 +84,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.mobile().jquery.blur()
 		then:
 			waitFor {
-				!contactList.selectedContact.text().contains('+2541234567')
+				!contactList.selectedContact?.text()?.contains('+2541234567')
 			}
 		when:
 			singleContactDetails.name = ''
@@ -96,7 +96,7 @@ class ContactEditSpec extends ContactBaseSpec {
 					[c.name, c.mobile]
 				} == ['Alice', null]
 			}
-			contactList.selectedContact.text().contains('Alice')
+			contactList.selectedContact?.text()?.contains('Alice')
 	}
 
 	def 'contact fields in the list are not updated if save was unsuccessful (mobile number edit)'() {
@@ -108,7 +108,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.name().jquery.blur()
 		then:
 			waitFor {
-				!contactList.selectedContact.text().contains('Alice')
+				!contactList.selectedContact?.text()?.contains('Alice')
 			}
 		when:
 			singleContactDetails.mobile = ''
@@ -120,7 +120,7 @@ class ContactEditSpec extends ContactBaseSpec {
 					[c.name, c.mobile]
 				} == ['', '+2541234567']
 			}
-			contactList.selectedContact.text().contains('+2541234567')
+			contactList.selectedContact?.text()?.contains('+2541234567')
 	}
 
 	def 'contact flags are displayed and updated on save'() {
