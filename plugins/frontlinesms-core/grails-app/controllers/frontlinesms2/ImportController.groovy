@@ -8,10 +8,26 @@ import au.com.bytecode.opencsv.CSVWriter
 
 class ImportController extends ControllerUtils {
 	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+	private final def standardFields = ['Name':'name', 'Mobile Number':'mobile',
+					'E-mail Address':'email', 'Notes':'notes']
 	
 	def importData() {
-		if (params.data == 'contacts') importContacts()
+		if (params.data == 'contacts') {
+			if(params.skipReview)
+				importContacts()
+			else
+				forward action:'reviewContacts'
+		}
 		else importMessages()
+	}
+
+	def reviewContacts() {
+		def uploadedCSVFile = request.getFile('importCsvFile')
+		def csvAsNestedLists = []
+		uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
+			csvAsNestedLists << tokens
+		}
+		[csvData: csvAsNestedLists, recognisedTitles: standardFields.keySet()]
 	}
 	
 	def importContacts() {
@@ -21,8 +37,6 @@ class ImportController extends ControllerUtils {
 		if(uploadedCSVFile) {
 			def headers
 			def failedLines = []
-			def standardFields = ['Name':'name', 'Mobile Number':'mobile',
-					'E-mail Address':'email', 'Notes':'notes']
 			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
 				if(!headers) headers = tokens
 				else try {

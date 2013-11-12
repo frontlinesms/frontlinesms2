@@ -126,3 +126,19 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 	color: #c09853;
 	background-color: #fcf8e3;
 }
+#contactImportReview {
+	margin-top:10px;
+	width:100%;
+}
+#contactImportReview .headers td input {
+	background-color:#E5FFFF;
+	border-color:#008080;
+}
+a#submitContacts {
+	float: right;
+	margin: 20px 60px;
+	padding:8px;
+}
+.known-fields {
+	margin:8px;
+}
