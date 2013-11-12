@@ -10,7 +10,7 @@
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
-				<g:textField name="name" value="${contactInstance?.name}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
+				<g:textField name="name" value="${contactInstance?.name}" class="${contactInstance?.id?'':'mobileOrNameRequired'}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
 				<label for="name" class="icon-edit"></label>
 			</td>
 		</tr>
@@ -20,7 +20,7 @@
 				<g:if test="${contactInstance}">
 					<i class="${contactInstance.flagCSSClasses}"></i>
 				</g:if>
-				<g:textField class="phoneNumber" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
+				<g:textField class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
 				<label for="mobile" class="icon-edit"></label>
 				<label for="mobile" class="warning l10n" style="display:none"><g:message code="contact.phonenumber.international.warning"/></label>
 			</td>
@@ -95,7 +95,7 @@
 			<g:actionSubmit class="stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="stroked" action="saveContact" value="${g.message(code:'action.save')}"/>
+			<g:actionSubmit class="stroked save" action="saveContact" value="${g.message(code:'action.save')}"/>
 			<g:link class="cancel stroked" action="index"><g:message code="action.cancel"/></g:link>
 		</g:else>
 	</div>
@@ -110,7 +110,7 @@
 					params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
 				<g:message code="contact.search.messages"/>
 			</g:link>
-			<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients:contactInstance?'contact-'+contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+			<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', contactId:contactInstance?contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
 				<i class="icon-envelope"></i>
 				<g:message code="contact.send.message" args="${[contactInstance?.name?:contactInstance?.mobile]}"/>
 			</fsms:popup>
@@ -124,6 +124,28 @@ $(function() {
 		if(!data) { return; }
 		$("#contact-infos .sent").text(i18n("contact.messages.sent", data.outbound));
 		$("#contact-infos .recieved").text(i18n("contact.messages.received", data.inbound));
+	});
+
+	$("#single-contact").find("input,a.stroked,textarea").each(function(i, e) {
+		e = $(e);
+		if(!e.is(":visible")) {
+			return;
+		}
+		$(e).attr("tabindex", i);
+	});
+
+	$(document.documentElement).keyup(function(event) {
+		var key;
+		var saveAnchor = $("#single-contact a.save");
+		var saveInput = $("#single-contact input.save");
+		if(event) {
+			key = event.which;
+		} else {
+			key = event.keyCode;
+		}
+		if((key == 13) && (saveAnchor.is(":focus"))) {
+			saveInput.trigger("click");
+		}
 	});
 });
 </r:script>

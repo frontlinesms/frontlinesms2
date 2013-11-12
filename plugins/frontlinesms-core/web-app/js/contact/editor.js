@@ -8,6 +8,7 @@ var ContactEditor = function() {
 	fieldsToAdd = [], fieldsToRemove = [],
 	contactEditForm = $(".contact-edit-form"),
 	contactEditWrapper = $(".contact-edit-form .edit"),
+	contactId = $(".contact-edit-form [name='contactId']").val(),
 	updateInProgress, updateRequested,
 	updateContactData = function(event) {
 		if(!contactEditForm.valid()) {
@@ -36,34 +37,49 @@ var ContactEditor = function() {
 					}
 				},
 				success:function(data) {
-					console.log(data);
-					var contactName, button, buttonKids;
 					cachedFormHash = formHashAtRequestTime;
-					button = $('#action-buttons .send-message');
-					buttonKids = button.children();
-					contactName = $(".contact-edit-form [name='name']").val();
-					button.text(" " + i18n("contact.send.message", contactName));
-					button.prepend(buttonKids);
 					if(data.success) {
-						reenableFormElements();
-						contactEditWrapper.removeClass("has-server-errors");
-						contactEditWrapper.removeClass("submit-in-progress");
-						var targetElement = $(event.target);
-						targetElement.removeClass("server-side-error");
+						handleSuccessResponse(event, data);
 					} else {
-						var targetElement = $(event.target);
-						var localFieldName = event.target.name;
-						var errors = data.errors[localFieldName];
-
-						targetElement.addClass("server-side-error");
-						$.each(errors, function(index, item) {
-							targetElement.parent().append("<label class='server-side-error' for='"+ localFieldName +"'>"+ item +"</label>");
-						});
-						contactEditWrapper.addClass("has-server-errors");
+						handleFailureResponse(event, data);
 					}
 				}
 			});
 		}
+	},
+	handleSuccessResponse = function(event, data) {
+		var contactName, mainListContactLink, mainListContactLinkKids, button, buttonKids,
+			targetElement = $(event.target);
+
+		reenableFormElements();
+		contactEditWrapper.removeClass("has-server-errors");
+		contactEditWrapper.removeClass("submit-in-progress");
+		targetElement.removeClass("server-side-error");
+
+		contactName = $(".contact-edit-form [name='name']").val();
+		
+		mainListContactLink = $('#main-list-container li a.displayName-' + contactId);
+		mainListContactNumberPreview = mainListContactLink.children();
+		mainListContactLink.text(contactName);
+		mainListContactNumberPreview.text($("input[name=mobile]").val());
+		mainListContactLink.append(mainListContactNumberPreview);
+
+		button = $('#single-contact a.send-message');
+		buttonKids = button.children();
+		button.text(" " + i18n("contact.send.message", contactName));
+		button.prepend(buttonKids);
+	},
+	handleFailureResponse = function(event, data) {
+		var 
+			targetElement = $(event.target), 
+			localFieldName = event.target.name,
+			errors = data.errors[localFieldName];
+
+		targetElement.addClass("server-side-error");
+		$.each(errors, function(index, item) {
+			targetElement.parent().append("<label class='server-side-error' for='"+ localFieldName +"'>"+ item +"</label>");
+		});
+		contactEditWrapper.addClass("has-server-errors");
 	},
 	disableForm = function(targetElement) {
 		targetElement = $(targetElement);
@@ -75,14 +91,14 @@ var ContactEditor = function() {
 	},
 	reenableFormElements = function() {
 		contactEditWrapper.find("textarea,input[type='text']").removeAttr("disabled");
-		$("#new-field-dropdown").attr("disabled", false).selectmenu();;
-		$("#group-dropdown").attr("disabled", false).selectmenu();;
+		$("#new-field-dropdown").attr("disabled", false).selectmenu();
+		$("#group-dropdown").attr("disabled", false).selectmenu();
 		selectmenuTools.enable("#new-field-dropdown");
 		selectmenuTools.enable("#group-dropdown");
 		$("label.server-side-error").remove();
 	},
 	setUpdateInProgress = function(inProgress, targetElement) {
-		targetElement = $(targetElement)
+		targetElement = $(targetElement);
 		updateInProgress = inProgress;
 		if(updateInProgress) {
 			targetElement.after("<i class='update in-progress'/>");
@@ -105,9 +121,9 @@ var ContactEditor = function() {
 	};
 
 	function validateMobile(field) {
-		var internationFormatWarning, val, sendMessageButton;
+		var internationFormatWarning, val, sendMessageButton, mainListContactLink, mainListContactLinkKids;
 		field = $(this);
-		internationFormatWarning = field.parent().find("label..warning.l10n"),
+		internationFormatWarning = field.parent().find("label..warning.l10n");
 		val = field.val();
 		if(!val || val.match(/\+\d+/)) {
 			field.removeClass("error");
@@ -116,6 +132,7 @@ var ContactEditor = function() {
 			field.addClass("error");
 			internationFormatWarning.show("fast");
 		}
+
 
 		sendMessageButton = $("#contact-infos a.send-message");
 		if(val) {

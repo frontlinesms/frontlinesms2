@@ -42,7 +42,7 @@ class QuickMessageComposeTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
 		textArea { $('textarea#messageText') }
-		wordCount { $("span#send-message-stats").text() }
+		wordCount { $("span#send-contact-infos").text() }
 		magicWand { $("#magicwand-selectmessageText") }
 	}
 }

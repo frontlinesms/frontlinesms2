@@ -35,4 +35,18 @@ class SystemNotificationServiceSpec extends Specification {
 			startTopicNotification.read
 			!noticeTopicNotification.read
 	}
+
+	def 'test link substitution'() {
+		expect:
+			service.substituteLinks(input) == expected
+		where:
+			input | expected
+			'Here is a link: [[stringA]]((stringB)).  I bet its interesting.' |
+					'Here is a link: <a href="stringB">stringA</a>.  I bet its interesting.'
+			'Failed to create connection on {1}: {2} [[[edit]]((#" onclick="mediumPopup.editConnection({0})))]' |
+					'Failed to create connection on {1}: {2} [<a href="#" onclick="mediumPopup.editConnection({0})">edit</a>]'
+			'Double trouble: [[one]]((http://1)), and then: [[two]]((http://2)).' |
+					'Double trouble: <a href="http://1">one</a>, and then: <a href="http://2">two</a>.'
+	}
 }
+

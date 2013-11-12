@@ -16,7 +16,16 @@ class PageConnection extends PageBase {
 		noContent { $("div#body-content p.no-content") }
 		btnNewConnection(wait:true) { $(".btn", text: 'connection.add') }
 		connectionFailedFlashMessageEditButton { // technically not tied to this page - could be defined elsewhere if useful
-			notifications.systemNotification.find('a', text:'edit')
+			def n = notifications.systemNotification
+			if(!(n.text() ==~ /(?s).*#" onclick="mediumPopup\.editConnection\(\d+\).*/)) {
+				return new geb.navigator.EmptyNavigator(browser)
+			}
+			return [
+				click:{ ->
+					js.exec((delegate.text() =~ /onclick="(.*?)[",]/)[0][1])
+				},
+				displayed:true
+			]
 		}
 	}
 }

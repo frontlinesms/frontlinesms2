@@ -1,13 +1,19 @@
 $(function() {
 	var validator;
 	$("#mobile").trigger('change');
+	$("form").on('submit', function(e){
+		var isValid=$("form").valid();
+		if(!isValid) {
+			e.preventDefault();
+		}
+	});
 	validator = $("form").validate({
 		onsubmit:false,
 		errorPlacement:function(error, element) {
 			element.parent().append(error); }
 	});
 	jQuery.validator.addMethod("phoneNumber", function(value, element) {
-		var valid, hasChild;
+		var valid, hasChar;
 		valid = true;
 		hasChar = $(element).val().match(/[^\+?\d+]/);
 		if(hasChar !== null) {
@@ -27,5 +33,17 @@ $(function() {
 		});
 		return valid;
 	}, i18n("contact.exists.warn"));
+	jQuery.validator.addMethod("mobileOrNameRequired", function(value, element) {
+		var nameField, mobileField, 
+			fields = $(".mobileOrNameRequired");
+		if(fields.length !== 0) {
+			nameField = $(fields[0]);
+			mobileField = $(fields[1]);
+			if((nameField.val() === "") && (mobileField.val() === "")) {
+				return false;
+			}
+		}
+		return true;
+	}, i18n("contact.name.validator.invalid"));
 });
 

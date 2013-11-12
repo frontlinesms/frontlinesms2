@@ -8,6 +8,9 @@
 			<g:if test="${FrontlineApi.isAssignableFrom(c.class)}">
 				<p class="api-url">${c.getFullApiUrl(request)}</p>
 			</g:if>
+			<g:elseif test="${c.displayMetadata}">
+				<p>${c.displayMetadata}</p>
+			</g:elseif>
 	</td>
 	<td><div class="controls"></div></td>
 </tr>
