@@ -106,7 +106,8 @@ class ContactEditSpec extends ContactBaseSpec {
 
 			sleep 4000
 			singleContactDetails.mobile.value('11111')
-			header.click()
+			singleContactDetails.mobile.jquery.trigger('change')
+			singleContactDetails.mobile.jquery.trigger('blur')
 		then:
 			singleContactDetails.nonInternationalNumberWarning.displayed
 		when:
