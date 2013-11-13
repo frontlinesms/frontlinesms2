@@ -2,6 +2,7 @@
 #export-form > * { margin:0 0 15px 0; }
 #export-form > a { display:block; text-align:center; }
 #export-form > :last-child { margin:0; }
+#export-form label { display:block; }
 
 #tabs div.info { padding: 8px; padding-left:26px; margin:15px 0; background-color:#e5eff3; border-radius:2px;
 	background-position:5px 5px; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }

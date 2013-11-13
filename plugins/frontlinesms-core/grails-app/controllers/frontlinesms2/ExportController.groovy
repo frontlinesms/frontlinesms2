@@ -1,7 +1,7 @@
 package frontlinesms2
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat
+import ezvcard.*
 
 class ExportController extends ControllerUtils {
 	def exportService
@@ -81,12 +81,27 @@ class ExportController extends ControllerUtils {
 		} else {
 			throw new RuntimeException("Unrecognised section: $params.contactsSection")
 		}
-		generateContactReport(contactInstanceList)
+		if(params.format == 'vcf') {
+			exportContactVcf(contactInstanceList)
+		} else {
+			generateContactReport(contactInstanceList)
+		}
+	}
+
+	private def exportContactVcf(contactInstanceList) {
+		response.setHeader 'Content-disposition',
+				"attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}"
+		response.setHeader 'Content-Type', 'text/vcard'
+		def cards = contactInstanceList.collect { c ->
+			def v = new VCard()
+			v.setFormattedName(c.name)
+			v.addTelephoneNumber(c.mobile)
+			return v
+		}
+		render text:Ezvcard.write(cards).go()
 	}
 
 	private def generateMessageReport(messageInstanceList) {
-		def currentTime = new Date()
-		def formatedTime = dateToString(currentTime)
 		List fields = ["id", "inboundContactName", "src", "outboundContactList", "dispatches.dst", "text", "date"]
 		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dispatches.dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
 		Map parameters = [title: message(code: 'export.message.title')]
@@ -103,8 +118,6 @@ class ExportController extends ControllerUtils {
 	}
 	
 	private def generateContactReport(contactInstanceList) {
-		def currentTime = new Date()
-		def formatedTime = dateToString(currentTime)
 		List fields = ["name", "mobile", "email", "notes", "groupMembership"]
 		Map labels = params.format == "csv" ? 
 			["name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes", "groupMembership":"Group(s)"]
@@ -156,12 +169,8 @@ class ExportController extends ControllerUtils {
 		}
 	}
 
-	private String dateToString(Date date) {
-		DateFormat formatedDate = createDateFormat()
-		return formatedDate.format(date)
-	}
-
-	private DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyyMMdd", request.locale)
+	private String getFormatedTime() {
+		new SimpleDateFormat("yyyyMMdd", request.locale).format(new Date())
 	}
 }
+
