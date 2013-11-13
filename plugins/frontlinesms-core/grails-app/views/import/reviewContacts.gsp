@@ -9,7 +9,7 @@
 		<div id="body-content-head">
 			<h1><g:message code="settings.import.contact.review.header"/></h1>
 		</div>
-		<div id="body-content">
+		<div id="body-content" class="import-review">
 			<p class="known-fields">
 				<g:message code="settings.import.contact.review.recognisedTitles" args="${[recognisedTitles.join(', ')]}"/>
 			</p>
@@ -21,14 +21,14 @@
 				<input type="hidden" name="reviewDone" value="true"/>
 				<input type="hidden" name="data" value="contacts"/>
 				<input type="hidden" name="csv" value=""/>
-				<table id="contactImportReview">
-				<g:each in="${csvData}" var="row" status="rowIndex">
-					<tr class="${rowIndex == 0 ? 'headers' : ''}">
-					<g:each in="${row}" var="celldata" status="cellIndex">
-						<td><input data-x="${cellIndex}" data-y="${rowIndex}" type="text" value="${celldata.encodeAsHTML()}"></td>
+				<table>
+					<g:each in="${csvData}" var="row" status="rowIndex">
+						<tr class="${rowIndex == 0 ? 'headers' : ''}">
+						<g:each in="${row}" var="celldata" status="cellIndex">
+							<td><input data-x="${cellIndex}" data-y="${rowIndex}" type="text" value="${celldata.encodeAsHTML()}"></td>
+						</g:each>
+						</tr>
 					</g:each>
-					</tr>
-				</g:each>
 				</table>
 			</g:form>
 			<a class="stroked" id="submitContacts" onclick="contactImportReviewer.submit()">
