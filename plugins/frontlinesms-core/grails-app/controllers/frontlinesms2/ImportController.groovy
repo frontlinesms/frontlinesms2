@@ -8,8 +8,8 @@ import au.com.bytecode.opencsv.CSVWriter
 import au.com.bytecode.opencsv.CSVParser
 
 class ImportController extends ControllerUtils {
-	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-	private final def STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
+	private final MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
 					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
 
 	def importData() {
