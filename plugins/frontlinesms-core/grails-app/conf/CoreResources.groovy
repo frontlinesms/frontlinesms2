@@ -112,7 +112,7 @@ modules = {
 	settings {
 		dependsOn 'common'
 		resource url:[dir:'js', file:'/settings/general_settings.js']
-		resource url:[dir:'js', file:'contact/importReview.js']
+		resource url:[dir:'js', file:'contact/import_review.js']
 	}
 	
 	overrides {
