@@ -17,4 +17,13 @@ class MobileNumberUtilService {
 
 		phoneNumberUtil.getRegionCodeForNumber(number)
 	}
+
+	def getFlagCSSClasses(phoneNumber, allowEmpty=false) {
+		if (!phoneNumber) {
+			return ((allowEmpty)?'':'flag flag-frontlinesms')
+		}
+		else {
+			return "flag flag-${getISOCountryCode(phoneNumber)?.toLowerCase() ?: 'frontlinesms'}"
+		}
+	}
 }

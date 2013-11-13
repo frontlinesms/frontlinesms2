@@ -10,6 +10,7 @@ class ContactController extends ControllerUtils {
 //> SERVICES
 	def grailsApplication
 	def contactSearchService
+	def appSettingsService
 
 //> INTERCEPTORS
 	def beforeInterceptor = {
@@ -32,6 +33,11 @@ class ContactController extends ControllerUtils {
 			}
 		}
 	}
+
+	def disableInternationalFormatWarning() {
+		appSettingsService.set('international.number.format.warning.disabled', true)
+		render ([ok:true] as JSON)
+	}
 	
 	def updateContactPane() {
 		def contactInstance = Contact.get(params.id)
@@ -53,6 +59,7 @@ class ContactController extends ControllerUtils {
 				nonContactGroupInstanceList: contactInstance ? Group.findAllWithoutMember(contactInstance) : null,
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
+				showl10warning: appSettingsService.get('international.number.format.warning.disabled') != 'true',
 				groupInstanceList: Group.findAll(),
 				smartGroupInstanceList: SmartGroup.list()]
 		render view:'/contact/_single_contact', model:model
@@ -95,6 +102,7 @@ class ContactController extends ControllerUtils {
 				contactInstanceTotal: contactInstanceTotal,
 				contactsSection: contactList.contactsSection,
 				contactsSectionContactTotal: contactList.contactsSectionContactTotal,
+				showl10warning: appSettingsService.get('international.number.format.warning.disabled') != 'true',
 				contactFieldInstanceList: usedFields,
 				contactGroupInstanceList: contactGroupInstanceList,
 				contactGroupInstanceTotal: contactGroupInstanceList.size(),
@@ -110,6 +118,7 @@ class ContactController extends ControllerUtils {
 				contactFieldInstanceList: [],
 				contactGroupInstanceList: [],
 				contactGroupInstanceTotal: 0,
+				showl10warning: appSettingsService.get('international.number.format.warning.disabled') != 'true',
 				nonContactGroupInstanceList: Group.findAll(),
 				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
 				fieldInstanceList: CustomField.findAll(),
@@ -126,7 +135,7 @@ class ContactController extends ControllerUtils {
 			saveSuccessful = attemptSave(contactInstance)
 		}
 		if(request.xhr) {
-			def data = [success:saveSuccessful] << getContactErrors(contactInstance)
+			def data = [success:saveSuccessful, flagCSSClasses: contactInstance.flagCSSClasses] << getContactErrors(contactInstance)
 			render (data as JSON)
 		} else {
 			redirect(action:'show', params:[contactId:contactInstance.id])
