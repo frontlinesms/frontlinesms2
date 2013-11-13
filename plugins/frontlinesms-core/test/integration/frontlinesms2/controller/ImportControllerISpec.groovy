@@ -15,7 +15,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			importContacts('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
 "Alice Sihoho","+254728749000","","","true","","/ToDo/Work"
 "Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
-"anyango Gitu","+254727689908","","","true","","/isIt\\/ToDo/Work/jobo"
+"anyango Gitu","+254727689908","","","true","","/isIt\\\\/ToDo/Work/jobo"
 ''')
 		then:
 			// check that contacts and groups were created
@@ -134,8 +134,8 @@ Shantelle''']
 		controller.importMessages()
 	}
 
-	def importContacts(String fileContent) {
-		mockFileUpload('importCsvFile', fileContent)
+	def importContacts(String csvContent) {
+		controller.params.csv = csvContent
 		controller.importContacts()
 	}
 
