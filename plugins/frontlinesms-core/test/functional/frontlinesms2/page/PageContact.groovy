@@ -138,8 +138,10 @@ class SingleContactDetails extends geb.Module {
 		sentCount { $('li.sent').text()}
 		receivedCount {$('li.received').text()}
 		flagClasses { $('i.flag').classes() }
-		nonInternationalNumberWarning(required: false) { $('.warning.l10n') }
+		nonInternationalNumberWarning(required: false) { $('.warning.l10nWarning') }
 		dismissNonInternationalNumberWarning(required: false) { $('#dismissl10nWarning') }
+		nonNumericCharacterWarning(required: false) { $('.warning.NonNumericNotAllowedWarning') }
+		dismissNonNumericCharacterWarning(required: false) { $('#dismissNonNumericNotAllowedWarning') }
 	}
 }
 

@@ -11,7 +11,10 @@ class ContactEditSpec extends ContactBaseSpec {
 	def setup() {
 		createTestContacts()
 		remote {
-			ctx.grailsApplication.mainContext.appSettingsService.set('international.number.format.warning.disabled', 'some placeholder value')
+			def s1 = ContactController.NON_NUMERIC_CHARACTERS_WARNING_DISABLE_SETTING
+			def s2 = ContactController.INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING
+			ctx.grailsApplication.mainContext.appSettingsService.set(s1, 'some placeholder value')
+			ctx.grailsApplication.mainContext.appSettingsService.set(s2, 'some placeholder value')
 		}
 	}
 
@@ -190,6 +193,52 @@ class ContactEditSpec extends ContactBaseSpec {
 			singleContactDetails.mobile().jquery.blur()
 		then:
 			waitFor { singleContactDetails.flagClasses.contains('flag-frontlinesms') }
+	}
+
+	def 'entering non-numeric characters in mobile number should display a warning'() {
+		given:
+			def aliceId = remote { Contact.findByName('Alice').id }
+		when:
+			to PageContactShow, aliceId
+
+			singleContactDetails.name.value('Kate')
+			header.click()
+
+			sleep 4000
+			singleContactDetails.mobile.value('11111sdd')
+			singleContactDetails.mobile.jquery.trigger('keyup')
+		then:
+			waitFor {
+				singleContactDetails.nonNumericCharacterWarning.displayed
+			}
+	}
+
+	def 'once non-numeric characters warning is dismissed, it does not appear again'() {
+		given:
+			def aliceId = remote { Contact.findByName('Alice').id }
+		when:
+			to PageContactShow, aliceId
+
+			singleContactDetails.name.value('Kate')
+			header.click()
+
+			sleep 4000
+			singleContactDetails.mobile.value('11111dff')
+			singleContactDetails.mobile.jquery.trigger('keyup')
+			singleContactDetails.mobile.jquery.trigger('change')
+			singleContactDetails.mobile.jquery.trigger('blur')
+		then:
+			singleContactDetails.nonNumericCharacterWarning.displayed
+		when:
+			singleContactDetails.dismissNonNumericCharacterWarning.click()
+		then:
+			waitFor {
+				!singleContactDetails.nonNumericCharacterWarning.displayed
+			}
+		when:
+			to PageContactShow, aliceId
+		then:
+			!singleContactDetails.nonNumericCharacterWarning.displayed
 	}
 }
 
