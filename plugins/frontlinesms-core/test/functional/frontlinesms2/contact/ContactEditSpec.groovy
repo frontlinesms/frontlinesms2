@@ -89,9 +89,10 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShow, aliceId
 
 			singleContactDetails.name.value('Kate')
-			header.click()
-
-			sleep 4000
+			singleContactDetails.name().jquery.blur()
+		then:
+			waitFor { remote { Contact.findById(aliceId).name } == 'Kate' }
+		when:
 			singleContactDetails.mobile.value('11111')
 			singleContactDetails.mobile.jquery.trigger('change')
 			singleContactDetails.mobile.jquery.trigger('blur')
@@ -108,9 +109,10 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShow, aliceId
 
 			singleContactDetails.name.value('Kate')
-			header.click()
-
-			sleep 4000
+			singleContactDetails.name().jquery.blur()
+		then:
+			waitFor { remote { Contact.findById(aliceId).name } == 'Kate' }
+		when:
 			singleContactDetails.mobile.value('11111')
 			singleContactDetails.mobile.jquery.trigger('change')
 			singleContactDetails.mobile.jquery.trigger('blur')
@@ -202,9 +204,10 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShow, aliceId
 
 			singleContactDetails.name.value('Kate')
-			header.click()
-
-			sleep 4000
+			singleContactDetails.name().jquery.blur()
+		then:
+			waitFor { remote { Contact.findById(aliceId).name } == 'Kate' }
+		when:
 			singleContactDetails.mobile.value('11111sdd')
 			singleContactDetails.mobile.jquery.trigger('keyup')
 		then:
@@ -218,11 +221,6 @@ class ContactEditSpec extends ContactBaseSpec {
 			def aliceId = remote { Contact.findByName('Alice').id }
 		when:
 			to PageContactShow, aliceId
-
-			singleContactDetails.name.value('Kate')
-			header.click()
-
-			sleep 4000
 			singleContactDetails.mobile.value('11111dff')
 			singleContactDetails.mobile.jquery.trigger('keyup')
 			singleContactDetails.mobile.jquery.trigger('change')
