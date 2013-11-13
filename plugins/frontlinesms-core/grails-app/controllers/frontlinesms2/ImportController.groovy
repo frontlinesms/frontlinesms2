@@ -27,7 +27,7 @@ class ImportController extends ControllerUtils {
 
 	private def importContactVcard() {
 		Ezvcard.parse(request.getFile('importCsvFile').inputStream).all().each { v ->
-			def mobile = v.telephoneNumbers? v.telephoneNumbers.first().parameters.pref: ''
+			def mobile = v.telephoneNumbers? v.telephoneNumbers.first().text: ''
 			def email = v.emails? v.emails.first().value: ''
 			new Contact(name:v.formattedName.value,
 					mobile:mobile,
