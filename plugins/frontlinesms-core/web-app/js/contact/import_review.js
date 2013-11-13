@@ -11,8 +11,7 @@ var ContactImportReviewer = function() {
 	checkForRecognisedHeader = function() {
 		if($.inArray($(this).val(), $('input[name=recognisedTitles]').val().split(',')) > -1) {
 			$(this).addClass('recognised');
-		}
-		else {
+		} else {
 			$(this).removeClass('recognised');
 		}
 	},
@@ -33,10 +32,10 @@ var ContactImportReviewer = function() {
 		}
 		return result.join('\n');
 	},
-
 	init = function() {
-		$('tr.headers td input').change(checkForRecognisedHeader);
-		$('tr.headers td input').change();
+		var inputCells = $('tr.headers td input');
+		inputCells.change(checkForRecognisedHeader);
+		inputCells.change();
 	};
 	this.init = init;
 	this.submit = submit;
