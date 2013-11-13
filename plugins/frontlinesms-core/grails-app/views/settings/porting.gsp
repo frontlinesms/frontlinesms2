@@ -27,6 +27,7 @@
 						<g:form controller="import" action="failedContacts">
 							<p class='warning_message'><g:message code="import.contact.failed.info" args="[numberOfFailedLines]"/></p>
 							<g:hiddenField name='failedContacts' value='${failedContacts.trim()}'/>
+							<g:hiddenField name='format' value='${failedContactsFormat}'/>
 							<g:submitButton name="failedContactSubmit" value="${message(code:'import.download.failed.contacts')}" class="btn"/>
 						</g:form>
 					</div>

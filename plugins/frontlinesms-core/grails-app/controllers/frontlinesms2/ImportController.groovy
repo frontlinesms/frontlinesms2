@@ -9,6 +9,7 @@ import ezvcard.*
 
 class ImportController extends ControllerUtils {
 	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard']
 	
 	def importData() {
 		if (params.data == 'contacts') importContacts()
@@ -17,7 +18,7 @@ class ImportController extends ControllerUtils {
 
 	private def importContacts() {
 		switch(request.getFile('importCsvFile').contentType) {
-			case 'text/vcard':
+			case CONTENT_TYPES.vcf:
 				importContactVcard()
 				break
 			default:
@@ -26,6 +27,8 @@ class ImportController extends ControllerUtils {
 	}
 
 	private def importContactVcard() {
+		def failedVcards = []
+		def savedCount = 0
 		def uploadFile = request.getFile('importCsvFile')
 		def processCard = { v ->
 			def mobile = v.telephoneNumbers? v.telephoneNumbers.first(): null
@@ -34,9 +37,14 @@ class ImportController extends ControllerUtils {
 				mobile = mobile.replaceAll(/[^+\d]/, '')
 			}
 			def email = v.emails? v.emails.first().value: ''
-			new Contact(name:v.formattedName.value,
-					mobile:mobile,
-					email:email).save(failOnError:true)
+			try {
+				new Contact(name:v.formattedName.value,
+						mobile:mobile,
+						email:email).save(failOnError:true)
+				++savedCount
+			} catch(Exception ex) {
+				failedVcards << v
+			}
 		}
 		def parse = { format='', exceptionClass=null ->
 			try {
@@ -56,6 +64,13 @@ class ImportController extends ControllerUtils {
 				(parse('html') && parse()))) {
 			throw new RuntimeException('Failed to parse vcf.')
 		}
+		if(savedCount > 0) {
+			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
+		}
+		flash.failedContacts = Ezvcard.write(failedVcards).go()
+		flash.numberOfFailedLines = failedVcards.size()
+		flash.failedContactsFormat = 'vcf'
+		redirect controller:'settings', action:'porting'
 	}
 	
 	private def importContactCsv() {
@@ -116,12 +131,14 @@ class ImportController extends ControllerUtils {
 			}
 			flash.failedContacts = failedLineWriter.toString()
 			flash.numberOfFailedLines = failedLines.size()
+			flash.failedContactsFormat = 'csv'
 			redirect controller:'settings', action:'porting'
 		} else throw new RuntimeException(message(code:'import.upload.failed'))
 	}
 
 	def failedContacts() { 
-		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
+		response.setHeader("Content-disposition", "attachment; filename=failedContacts.${params.format}")
+		response.setHeader 'Content-Type', CONTENT_TYPES[params.format]
 		params.failedContacts.eachLine { response.outputStream << it << '\n' }
 		response.outputStream.flush()
 	}
