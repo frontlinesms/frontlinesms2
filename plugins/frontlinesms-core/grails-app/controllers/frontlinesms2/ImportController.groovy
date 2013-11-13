@@ -34,6 +34,8 @@ class ImportController extends ControllerUtils {
 	}
 
 	def reviewContacts() {
+		if(!session.csvData)
+			redirect controller:'settings', action:'porting'
 		[csvData: session.csvData, recognisedTitles: standardFields.keySet()]
 	}
 	
@@ -94,8 +96,9 @@ class ImportController extends ControllerUtils {
 			}
 			flash.failedContacts = failedLineWriter.toString()
 			flash.numberOfFailedLines = failedLines.size()
-			redirect controller:'settings', action:'porting'
-		} else throw new RuntimeException(message(code:'import.upload.failed'))
+			session.csvData = null
+		}
+		redirect controller:'settings', action:'porting'
 	}
 
 	def failedContacts() { 

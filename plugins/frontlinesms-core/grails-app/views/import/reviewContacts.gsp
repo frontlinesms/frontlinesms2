@@ -13,6 +13,9 @@
 			<p class="known-fields">
 				<g:message code="settings.import.contact.review.recognisedTitles" args="${[recognisedTitles.join(', ')]}"/>
 			</p>
+			<p class="known-fields">
+				<g:message code="settings.import.contact.review.unrecognisedTitles" />
+			</p>
 			<input type="hidden" name="recognisedTitles" value="${recognisedTitles.join(',')}"/>
 			<g:form name="reviewForm" action="importData">
 				<input type="hidden" name="reviewDone" value="true"/>
@@ -28,7 +31,7 @@
 				</g:each>
 				</table>
 			</g:form>
-			<a class="stroked icon-cloud-upload" id="submitContacts" onclick="contactImportReviewer.submit();">${g.message(code:'action.save')}</a>
+			<a class="stroked" id="submitContacts" onclick="contactImportReviewer.submit();">${g.message(code:'settings.import.contact.review.submit')}</a>
 		</div>
 		<r:script>
 			$(function() {

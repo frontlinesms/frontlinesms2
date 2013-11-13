@@ -140,8 +140,7 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 	border-color:#008000;
 }
 a#submitContacts {
-	float: right;
-	margin: 20px 60px;
+	margin: 20px 7px;
 	padding:8px;
 }
 .known-fields {
