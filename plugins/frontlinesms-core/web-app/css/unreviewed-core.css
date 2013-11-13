@@ -113,6 +113,7 @@ input[type=text]:-ms-input-placeholder {
 input[type=text].server-side-error { border-color: #c00 !important; }
 label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; width: 300px; }
 
+.flag-frontlinesms { background-image: url("../images/frontline-flag.png"); }
 .warning.l10n { max-width:60%; margin:0; }
 .warning.l10n p { margin:5px 0; }
 .warning.l10n #dismissl10nWarning { margin: -5px -4px 0 0; font-size:1.3em; color:#C09853; float:right; }
@@ -146,3 +147,4 @@ a#submitContacts {
 .known-fields {
 	margin:8px;
 }
+

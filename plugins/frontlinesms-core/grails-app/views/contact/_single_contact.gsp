@@ -29,6 +29,9 @@
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
+				<g:if test="${contactInstance}">
+					<i class="${contactInstance.flagCSSClasses}"></i>
+				</g:if>
 				<g:textField class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
 				<label for="mobile" class="icon-edit"></label>
 			</td>

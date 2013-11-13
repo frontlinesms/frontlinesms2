@@ -11,6 +11,7 @@ import org.apache.camel.Exchange
 class Fconnection {
 	def fconnectionService
 	def dispatchRouterService
+	def mobileNumberUtilService
 	
 	static final String HEADER_FCONNECTION_ID = 'fconnection-id'
 	static transients = ['status', 'routeDefinitions']
@@ -64,7 +65,15 @@ class Fconnection {
 	def getStatus() {
 		fconnectionService.getConnectionStatus(this)
 	}
-	
+
+	def getFlagCSSClasses() {
+		if('fromNumber' in this.properties) {
+			return mobileNumberUtilService.getFlagCSSClasses(fromNumber) 
+		} else { 
+			return 'flag'
+		}
+	}
+
 	def updateDispatch(Exchange x) {
 		dispatchRouterService.updateDispatch(x, DispatchStatus.SENT)
 	}

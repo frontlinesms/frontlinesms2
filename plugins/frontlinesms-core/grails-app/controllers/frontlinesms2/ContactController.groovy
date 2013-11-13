@@ -135,7 +135,7 @@ class ContactController extends ControllerUtils {
 			saveSuccessful = attemptSave(contactInstance)
 		}
 		if(request.xhr) {
-			def data = [success:saveSuccessful] << getContactErrors(contactInstance)
+			def data = [success:saveSuccessful, flagCSSClasses: contactInstance.flagCSSClasses] << getContactErrors(contactInstance)
 			render (data as JSON)
 		} else {
 			redirect(action:'show', params:[contactId:contactInstance.id])

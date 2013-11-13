@@ -1,6 +1,8 @@
 package frontlinesms2
 
 class Contact {
+	def mobileNumberUtilService
+
 //> PROPERTIES
 	String name
 	String mobile
@@ -82,6 +84,10 @@ class Contact {
 		def n = mobile?.replaceAll(/\D/, '')
 		if(mobile && mobile[0] == '+') n = '+' + n
 		mobile = n
+	}
+
+	def getFlagCSSClasses() {
+		mobileNumberUtilService.getFlagCSSClasses(mobile)
 	}
 	
 	static findByCustomFields(fields) {
