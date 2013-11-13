@@ -127,23 +127,9 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 	color: #c09853;
 	background-color: #fcf8e3;
 }
-#contactImportReview {
-	margin-top:10px;
-	width:100%;
-}
-#contactImportReview .headers td input {
-	background-color:#fcf8e3;
-	border-color:#faebcc;
-}
-#contactImportReview .headers td input.recognised {
-	background-color:#ccddcc;
-	border-color:#008000;
-}
-a#submitContacts {
-	margin: 20px 7px;
-	padding:8px;
-}
-.known-fields {
-	margin:8px;
-}
+#contactImportReview { margin-top:10px; width:100%; }
+#contactImportReview .headers td input { background-color:#fcf8e3; border-color:#faebcc; }
+#contactImportReview .headers td input.recognised { background-color:#ccddcc; border-color:#008000; }
+a#submitContacts { margin:20px 7px; padding:8px; }
+.known-fields { margin:8px; }
 
