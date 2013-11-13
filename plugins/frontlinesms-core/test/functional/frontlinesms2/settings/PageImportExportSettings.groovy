@@ -16,7 +16,7 @@ class PageImportExportSettings extends PageSettings {
 		importOption { option-> $("input[name=data]", value:option) }
 	}
 	static at = {
-		title.contains('Settings')
+		title.contains('settings')
 	}
 }
 

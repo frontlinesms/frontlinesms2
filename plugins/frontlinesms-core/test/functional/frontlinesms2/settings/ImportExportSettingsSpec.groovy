@@ -47,6 +47,19 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 			}
 	}
 
+	def 'submitting data on te review page completes contact import'() {
+		when:
+			skipToReview()
+			submitButton.click()
+		then:
+			waitFor {
+				at PageImportExportSettings
+			}
+			remote {
+				Contact.count() == 3
+			}
+	}
+
 	private def createTestUpload(csvContent=null) {
 		def csvString = csvContent?:"""\
 "Name","Mobile Number","E-mail Address","Notes","Group(s)"
