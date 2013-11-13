@@ -9,7 +9,7 @@ import au.com.bytecode.opencsv.CSVParser
 
 class ImportController extends ControllerUtils {
 	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-	private final def standardFields = ['Name':'name', 'Mobile Number':'mobile',
+	private final def STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
 					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
 
 	def importData() {
@@ -41,7 +41,7 @@ class ImportController extends ControllerUtils {
 			redirect controller:'settings', action:'porting'
 			return
 		}
-		[csvData:session.csvData, recognisedTitles:standardFields.keySet()]
+		[csvData:session.csvData, recognisedTitles:STANDARD_FIELDS.keySet()]
 	}
 
 	def importContacts() {
@@ -60,8 +60,8 @@ class ImportController extends ControllerUtils {
 					def customFields = []
 					headers.eachWithIndex { key, i ->
 						def value = tokens[i]
-						if(key in standardFields && key != 'Group(s)') {
-							c."${standardFields[key]}" = value
+						if(key in STANDARD_FIELDS && key != 'Group(s)') {
+							c."${STANDARD_FIELDS[key]}" = value
 						} else if(key == 'Group(s)') {
 							def groupNames = getGroupNames(value)
 							groups = getGroups(groupNames)
