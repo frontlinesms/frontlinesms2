@@ -115,11 +115,11 @@ input[type=text].server-side-error { border-color: #c00 !important; }
 label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; width: 300px; }
 
 .flag-frontlinesms { background-image: url("../images/frontline-flag.png"); }
-.warning.l10n { max-width:60%; margin:0; }
-.warning.l10n p { margin:5px 0; }
-.warning.l10n #dismissl10nWarning { margin: -5px -4px 0 0; font-size:1.3em; color:#C09853; float:right; }
-.warning.l10n #dismissl10nWarning:hover { color:#000; }
-.warning.l10n em { font-weight:bold; margin-bottom:5px; }
+.warning { max-width:60%; margin:0; }
+.warning p { margin:5px 0; }
+.warning .dismissWarning { margin: -5px -4px 0 0; font-size:1.3em; color:#C09853; float:right; }
+.warning .dismissWarning:hover { color:#000; }
+.warning em { font-weight:bold; margin-bottom:5px; }
 
 .warning-display {
 	padding:8px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; -o-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; margin-left: 27px; margin-right: 27px;
