@@ -556,6 +556,21 @@ class FsmsTagLib {
 		}
 	}
 
+	def contactWarning = { att, body ->
+		def warningType = att.warningType
+		out << "<div for='mobile' class='warning-display warning ${warningType}' style='display:none'>"
+		out << "<a onclick='contactEditor.dismissWarning(\"${warningType}\")' name='dismiss${warningType}' class='dismissWarning' title='${g.message(code:'contact.phonenumber.' + warningType + '.dismiss')}''>"
+		out << "<i class='icon-remove'></i>"
+		out << "</a>"
+		def header = g.message(code: "contact.phonenumber." + warningType + ".header")
+		def description = g.message(code: "contact.phonenumber." + warningType + ".description")
+		if(warningType != "NonNumericNotAllowedWarning") {
+			out << "<p><em>${header}</em></p>"
+		}
+		out << "<p>${description}</p>"
+		out << "</div>"
+	}
+
 	private def getFields(att) {
 		def fields = att.remove('fields')
 		if(!fields) fields = att.instanceClass?.configFields
