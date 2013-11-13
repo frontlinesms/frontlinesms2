@@ -25,13 +25,15 @@
 				<g:each in="${csvData}" var="row" status="rowIndex">
 					<tr class="${rowIndex == 0 ? 'headers' : ''}">
 					<g:each in="${row}" var="celldata" status="cellIndex">
-						<td><input data-x="${cellIndex}" data-y="${rowIndex}" type="text" value="${celldata.replace('"', '&quot;')}"> </td>
+						<td><input data-x="${cellIndex}" data-y="${rowIndex}" type="text" value="${celldata.encodeAsHTML()}"></td>
 					</g:each>
 					</tr>
 				</g:each>
 				</table>
 			</g:form>
-			<a class="stroked" id="submitContacts" onclick="contactImportReviewer.submit();">${g.message(code:'settings.import.contact.review.submit')}</a>
+			<a class="stroked" id="submitContacts" onclick="contactImportReviewer.submit()">
+				<g:message code="settings.import.contact.review.submit"/>
+			</a>
 		</div>
 		<r:script>
 			$(function() {
