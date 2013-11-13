@@ -11,7 +11,7 @@ class ImportController extends ControllerUtils {
 	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	private final def standardFields = ['Name':'name', 'Mobile Number':'mobile',
 					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
-	
+
 	def importData() {
 		if (params.data == 'contacts') {
 			if(params.reviewDone) {
@@ -22,11 +22,14 @@ class ImportController extends ControllerUtils {
 				def csvAsNestedLists = []
 				def headerRowSize
 				uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
-					if (!headerRowSize) headerRowSize = tokens.size()
-					if (tokens.size() == headerRowSize) 
+					if(!headerRowSize) {
+						headerRowSize = tokens.size()
+					}
+					if(tokens.size() == headerRowSize) {
 						csvAsNestedLists << tokens
+					}
 				}
-				session.csvData = csvAsNestedLists 
+				session.csvData = csvAsNestedLists
 				redirect action:'reviewContacts'
 			}
 		}
@@ -38,10 +41,10 @@ class ImportController extends ControllerUtils {
 			redirect controller:'settings', action:'porting'
 		[csvData: session.csvData, recognisedTitles: standardFields.keySet()]
 	}
-	
+
 	def importContacts() {
 		def savedCount = 0
-		
+
 		if(params.csv) {
 			def headers
 			def parser = new CSVParser()
@@ -78,7 +81,7 @@ class ImportController extends ControllerUtils {
 				} catch(Exception ex) {
 					log.info message(code: 'import.contact.save.error'), ex
 					failedLines << tokens
-				}		
+				}
 			}
 
 			def failedLineWriter = new StringWriter()
@@ -101,12 +104,12 @@ class ImportController extends ControllerUtils {
 		redirect controller:'settings', action:'porting'
 	}
 
-	def failedContacts() { 
+	def failedContacts() {
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
 		params.failedContacts.eachLine { response.outputStream << it << '\n' }
 		response.outputStream.flush()
 	}
-	
+
 	def importMessages() {
 		def savedCount = 0
 		def failedCount = 0
@@ -182,7 +185,7 @@ println "The errors are $fm.errors"
 			redirect controller:'settings', action:'general'
 		}
 	}
-	
+
 	private def getMessageFolder(name) {
 		Folder.findByName(name)?: new Folder(name:name).save(failOnError:true)
 	}
@@ -205,7 +208,7 @@ println "The errors are $fm.errors"
 		println "getGroupNames() : ${csvGroups - ''}, a length of ${(csvGroups - '').size()}"
 		return csvGroups - ''
 	}
-	
+
 	private def getGroups(groupNames) {
 		println "ImportController.getGroups() : $groupNames"
 		groupNames.collect { name ->
