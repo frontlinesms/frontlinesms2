@@ -63,7 +63,11 @@ var ContactEditor = function() {
 		mainListContactLink = $('#main-list-container li a.displayName-' + contactId);
 		mainListContactNumberPreview = mainListContactLink.children();
 		mainListContactLink.text(contactName);
-		mainListContactNumberPreview.text(data.contactPrettyPhoneNumber);
+		if(data.contactPrettyPhoneNumber != null) {
+			mainListContactNumberPreview.text(data.contactPrettyPhoneNumber);
+		} else {
+			mainListContactNumberPreview.text("-");
+		}
 		mainListContactLink.append(mainListContactNumberPreview);
 
 		flagElement = $('.flag');
