@@ -79,6 +79,7 @@ fieldset.table { display:table; }
 #body.contacts #note-area { position:relative; }
 #body.contacts #note-area .icon-edit { position:absolute; }
 #body.contacts table tr.editable input[type='text'], #body.contacts table tr.editable textarea { width:180px; }
+#body.contacts table tr.editable input[type='text'][name=mobile] { width:156px; }
 #body.contacts table tr.editable .icon-edit { opacity:0.0; display:inline-block; margin-left:5px; transition:opacity 200ms linear; }
 #body.contacts .edit table tr.editable:hover .icon-edit { opacity:1.0; }
 
