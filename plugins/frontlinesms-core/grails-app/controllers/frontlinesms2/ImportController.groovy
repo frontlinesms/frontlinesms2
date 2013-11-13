@@ -30,6 +30,7 @@ class ImportController extends ControllerUtils {
 				}
 				session.csvData = csvAsNestedLists
 				redirect action:'reviewContacts'
+				return
 			}
 		} else {
 			importMessages()
