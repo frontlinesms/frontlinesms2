@@ -26,12 +26,35 @@ class ImportController extends ControllerUtils {
 	}
 
 	private def importContactVcard() {
-		Ezvcard.parse(request.getFile('importCsvFile').inputStream).all().each { v ->
-			def mobile = v.telephoneNumbers? v.telephoneNumbers.first().text: ''
+		def uploadFile = request.getFile('importCsvFile')
+		def processCard = { v ->
+			def mobile = v.telephoneNumbers? v.telephoneNumbers.first(): null
+			mobile = mobile.text?: mobile.uri?.number?: ''
+			if(mobile) {
+				mobile = mobile.replaceAll(/[^+\d]/, '')
+			}
 			def email = v.emails? v.emails.first().value: ''
 			new Contact(name:v.formattedName.value,
 					mobile:mobile,
 					email:email).save(failOnError:true)
+		}
+		def parse = { format='', exceptionClass=null ->
+			try {
+				Ezvcard."parse${format.capitalize()}"(uploadFile.inputStream)
+						.all()
+						.each processCard
+			} catch(Exception ex) {
+				if(exceptionClass && ex.class.isAssignableFrom(exceptionClass)) {
+					return false
+				}
+				throw ex
+			}
+			return true
+		}
+		if(!(parse('xml', org.xml.sax.SAXParseException) ||
+				parse('json', com.fasterxml.jackson.core.JsonParseException) ||
+				(parse('html') && parse()))) {
+			throw new RuntimeException('Failed to parse vcf.')
 		}
 	}
 	
@@ -116,7 +139,6 @@ class ImportController extends ControllerUtils {
 					Outbox:DispatchStatus.SENT,
 					Sent:DispatchStatus.SENT]
 			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
-				println "Processing: $tokens"
 				if(!headers) {
 					headers = tokens
 					// strip BOM from first value
@@ -128,7 +150,6 @@ class ImportController extends ControllerUtils {
 					def dispatchStatus
 					headers.eachWithIndex { key, i ->
 						def value = tokens[i]
-						println "Processing cell value: $value for key '$key'"
 						if (key in standardFields) {
 							fm[standardFields[key]] = value
 						} else if (key == 'Message Date') {
@@ -160,9 +181,6 @@ class ImportController extends ControllerUtils {
 						if (dispatchStatus==DispatchStatus.SENT) it.dateSent = fm.date
 					}
 
-println "Is the message valid? ${fm.validate()}"
-println "The errors are $fm.errors"
-
 					Fmessage.withNewSession {
 						fm.save(failOnError:true)
 					}
@@ -188,7 +206,6 @@ println "The errors are $fm.errors"
 	}
 
 	private def getGroupNames(csvValue) {
-		println "getGroupNames() : csvValue=$csvValue"
 		Set csvGroups = []
 		csvValue.split("\\\\").each { gName ->
 			def longName
@@ -198,12 +215,10 @@ println "The errors are $fm.errors"
 				csvGroups << longName
 			}
 		}
-		println "getGroupNames() : ${csvGroups - ''}"
 		return csvGroups - ''
 	}
 	
 	private def getGroups(groupNames) {
-		println "ImportController.getGroups() : $groupNames"
 		groupNames.collect { name ->
 			name = name.trim()
 			Group.findByName(name)?: new Group(name:name).save(failOnError:true)

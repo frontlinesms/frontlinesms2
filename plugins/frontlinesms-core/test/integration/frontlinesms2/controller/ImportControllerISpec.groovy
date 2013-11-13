@@ -202,7 +202,7 @@ END:VCARD''')
 		then:
 			Contact.list().size() == 1
 			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']]
 	}
 
 	def 'contact import should support xCard'() {
@@ -277,7 +277,7 @@ United States of America</text></label>
 		then:
 			Contact.list().size() == 1
 			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']]
 	}
 
 	def 'contact import should support jCard'() {
@@ -294,12 +294,12 @@ United States of America</text></label>
       ["tel", {"type":["work", "voice"]}, "uri", "tel:+1-111-555-1212"],
       ["tel", {"type":["home", "voice"]}, "uri", "tel:+1-404-555-1212"],
       ["adr",
-        {"label":"100 Waters Edge\nBaytown, LA 30314\nUnited States of America", "type":"work"},
+        {"label":"100 Waters Edge\\nBaytown, LA 30314\\nUnited States of America", "type":"work"},
         "text",
         ["", "", "100 Waters Edge", "Baytown", "LA", "30314", "United States of America"]
       ],
       ["adr",
-        {"label":"42 Plantation St.\nBaytown, LA 30314\nUnited States of America", "type":"home"},
+        {"label":"42 Plantation St.\\nBaytown, LA 30314\\nUnited States of America", "type":"home"},
         "text",
         ["", "", "42 Plantation St.", "Baytown", "LA", "30314", "United States of America"]
       ],
@@ -311,7 +311,7 @@ United States of America</text></label>
 		then:
 			Contact.list().size() == 1
 			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']]
 	}
 
 	def 'contact import should support hCard'() {
@@ -378,7 +378,7 @@ United States of America</text></label>
 		then:
 			Contact.list().size() == 1
 			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']]
 	}
 
 	def importMessages(String fileContent) {
