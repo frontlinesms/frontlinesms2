@@ -13,11 +13,10 @@ class ImportController extends ControllerUtils {
 					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
 
 	def importData() {
-		if (params.data == 'contacts') {
+		if(params.data == 'contacts') {
 			if(params.reviewDone) {
 				importContacts()
-			}
-			else {
+			} else {
 				def uploadedCSVFile = request.getFile('importCsvFile')
 				def csvAsNestedLists = []
 				def headerRowSize
@@ -32,14 +31,17 @@ class ImportController extends ControllerUtils {
 				session.csvData = csvAsNestedLists
 				redirect action:'reviewContacts'
 			}
+		} else {
+			importMessages()
 		}
-		else importMessages()
 	}
 
 	def reviewContacts() {
-		if(!session.csvData)
+		if(!session.csvData) {
 			redirect controller:'settings', action:'porting'
-		[csvData: session.csvData, recognisedTitles: standardFields.keySet()]
+			return
+		}
+		[csvData:session.csvData, recognisedTitles:standardFields.keySet()]
 	}
 
 	def importContacts() {
