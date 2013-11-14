@@ -21,8 +21,8 @@ var ContactImportReviewer = function() {
 	},
 	generateCSV = function() {
 		var rowCount, columnCount, currentLine, result = [];
-		rowCount = $("#contactImportReview tr").size();
-		columnCount = $("#contactImportReview tr:first td").size();
+		rowCount = $(".import-review tr").size();
+		columnCount = $(".import-review tr:first td").size();
 		for(y = 0; y < rowCount; y++) {
 			currentLine = [];
 			for(x = 0; x < columnCount; x++) {

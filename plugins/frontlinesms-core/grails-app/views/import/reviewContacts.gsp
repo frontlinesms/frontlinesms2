@@ -31,13 +31,14 @@
 					</g:each>
 				</table>
 			</g:form>
-			<a class="stroked" id="submitContacts" onclick="contactImportReviewer.submit()">
+			<a class="stroked" id="submitContacts">
 				<g:message code="settings.import.contact.review.submit"/>
 			</a>
 		</div>
 		<r:script>
 			$(function() {
 				contactImportReviewer.init();
+				$("#submitContacts").click(contactImportReviewer.submit);
 			});
 		</r:script>
 	</body>
