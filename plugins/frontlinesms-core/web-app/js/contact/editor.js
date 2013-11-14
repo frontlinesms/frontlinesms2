@@ -45,6 +45,8 @@ var ContactEditor = function() {
 					}
 				}
 			});
+		} else {
+			resetMobileField();
 		}
 	},
 	handleSuccessResponse = function(event, data) {
@@ -61,11 +63,21 @@ var ContactEditor = function() {
 		mainListContactLink = $('#main-list-container li a.displayName-' + contactId);
 		mainListContactNumberPreview = mainListContactLink.children();
 		mainListContactLink.text(contactName);
-		mainListContactNumberPreview.text($("input[name=mobile]").val());
+		if(data.contactPrettyPhoneNumber != null) {
+			mainListContactNumberPreview.text(data.contactPrettyPhoneNumber);
+		} else {
+			mainListContactNumberPreview.text("-");
+		}
 		mainListContactLink.append(mainListContactNumberPreview);
 
 		flagElement = $('.flag');
 		flagElement.removeClass().addClass(data.flagCSSClasses);
+
+		var mobileField = $("#mobile");
+		var nonPrettyPhoneNumber = mobileField.val();
+		mobileField.attr("data-nonPrettyPhoneNumber", nonPrettyPhoneNumber);
+		mobileField.attr("data-prettyPhoneNumber", data.contactPrettyPhoneNumber);
+		mobileField.val(data.contactPrettyPhoneNumber);
 
 		button = $('#single-contact a.send-message');
 		buttonKids = button.children();
@@ -92,12 +104,13 @@ var ContactEditor = function() {
 		selectmenuTools.disable("#new-field-dropdown");
 		selectmenuTools.disable("#group-dropdown");
 	},
-	dismissInternatinalFormatWarning = function() {
+	dismissWarning = function(warningType) {
 		$.ajax({
 			type:"GET",
-			url:url_root + "contact/disableInternationalFormatWarning",
+			url:url_root + "contact/disableWarning",
+			data: { 'warning': warningType },
 			complete: function() {
-				$(".warning.l10n").fadeOut(300, function() { $(this).remove(); } );
+				$(".warning."+warningType).fadeOut(300, function() { $(this).remove(); } );
 			}
 		});
 		$(this).find("i").removeClass("in-progress").addClass("icon-loading");
@@ -105,7 +118,10 @@ var ContactEditor = function() {
 	},
 	internationalFormatWarningDisabled = function() {
 		return ($("input[name=showl10warning]").val() == 'false');
-	}
+	},
+	nonNumericCharacterWarningDisabled = function() {
+		return ($("input[name=showNonNumericCharacterWarning]").val() == 'false');
+	},
 	reenableFormElements = function() {
 		contactEditWrapper.find("textarea,input[type='text']").removeAttr("disabled");
 		$("#new-field-dropdown").attr("disabled", false).selectmenu();
@@ -137,25 +153,51 @@ var ContactEditor = function() {
 		updateContactData(event);
 	};
 
+	function removeNonNumericCharacters() {
+		var mobileField = $(this), prettyPhoneNumber, nonPrettyPhoneNumber;
+		prettyPhoneNumber = mobileField.val();
+		nonPrettyPhoneNumber = prettyPhoneNumber.replace(/[^0-9\+]/g,"");
+		mobileField.val(nonPrettyPhoneNumber);
+	}
+
+	function resetMobileField() {
+		var mobileField = $("#mobile");
+		var mobileFieldNonPrettyPhoneNumber = mobileField.attr("data-nonPrettyPhoneNumber");
+		var mobileFieldPrettyPhoneNumber = mobileField.attr("data-prettyPhoneNumber");
+		if(mobileField.val() == mobileFieldNonPrettyPhoneNumber) {
+			mobileField.val(mobileFieldPrettyPhoneNumber);
+		}
+	}
+
 	function validateMobile(field) {
-		var internationFormatWarning, val, sendMessageButton, mainListContactLink, mainListContactLinkKids;
+		var internationFormatWarning, val, sendMessageButton, mainListContactLink, mainListContactLinkKids, nonNumericCharacterWarning;
 		field = $(this);
-		internationFormatWarning = $(".warning.l10n");
+		internationFormatWarning = $(".warning.l10nWarning");
 		val = field.val();
 		if(!val || val.match(/\+\d+/) || internationalFormatWarningDisabled()) {
-			field.removeClass("error");
 			internationFormatWarning.hide("fast");
 		} else {
-			field.addClass("error");
+			field.removeClass("error");
 			internationFormatWarning.show("fast");
 		}
-
 
 		sendMessageButton = $("#contact-infos a.send-message");
 		if(val) {
 			sendMessageButton.removeClass("hidden");
 		} else {
 			sendMessageButton.addClass("hidden");
+		}
+	}
+
+	function showMobileWarning() {
+		var field = $(this), val, nonNumericCharacterWarning, hasNonNumericCharacters;
+		val = field.val();
+		nonNumericCharacterWarning = $(".warning.NonNumericNotAllowedWarning");
+		hasNonNumericCharacters = !(/^\+?[0-9]+$/.test(val));
+		if(hasNonNumericCharacters && !nonNumericCharacterWarningDisabled()) {
+			nonNumericCharacterWarning.show("fast");
+		} else {
+			nonNumericCharacterWarning.hide("fast");
 		}
 	}
 
@@ -245,6 +287,8 @@ var ContactEditor = function() {
 		$("#notes").autosize();
 
 		$("input[name=mobile]").change(validateMobile);
+		$("input[name=mobile]").focus(removeNonNumericCharacters);
+		$("input[name=mobile]").keyup(showMobileWarning);
 
 		// bind form data change listeners
 		$(".edit input[type=text], .edit textarea").blur(updateContactData);
@@ -260,10 +304,10 @@ var ContactEditor = function() {
 
 		$("#multi-group-list .remove-group").click(enableSaveButton);
 		$("#multi-group-dropdown").change(enableSaveButton);
-		$("#dismissl10nWarning").click(dismissInternatinalFormatWarning);
 	}
 
 	this.updateContactData = updateContactData;
+	this.dismissWarning = dismissWarning;
 	this.init = init;
 	init();
 };

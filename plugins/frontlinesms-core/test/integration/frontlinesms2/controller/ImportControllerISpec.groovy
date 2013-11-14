@@ -19,7 +19,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			importContactCsv('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
 "Alice Sihoho","+254728749000","","","true","","/ToDo/Work"
 "Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
-"anyango Gitu","+254727689908","","","true","","/isIt\\/ToDo/Work/jobo"
+"anyango Gitu","+254727689908","","","true","","/isIt\\\\/ToDo/Work/jobo"
 ''')
 		then:
 			// check that contacts and groups were created
@@ -388,16 +388,18 @@ United States of America</text></label>
 	}
 
 	def importContactCsv(String fileContent) {
-		importContacts(fileContent, FILE_TYPE_CSV)
-	}
-
-	def importContacts(String fileContent, contentType) {
-		mockFileUpload('importCsvFile', fileContent, contentType)
-		controller.importContacts()
+		controller.params.csv = fileContent
+		controller.params.reviewDone = true
+		importContacts(fileContent)
 	}
 
 	def importVcard(String fileContent) {
 		importContacts(fileContent, FILE_TYPE_VCF)
+	}
+
+	def importContacts(String fileContent, contentType=FILE_TYPE_CSV) {
+		mockFileUpload('importCsvFile', fileContent, contentType)
+		controller.importContacts()
 	}
 
 	def mockFileUpload(filename, fileContent, contentType=FILE_TYPE_CSV) {

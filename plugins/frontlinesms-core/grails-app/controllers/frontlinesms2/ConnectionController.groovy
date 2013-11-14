@@ -108,7 +108,6 @@ class ConnectionController extends ControllerUtils {
 			fconnectionRoutingList = fconnectionRoutingList.collect { rule ->
 				if(rule.startsWith(RULE_PREFIX)) {
 					connectionInstanceList.find {
-						println "Comparing rule:: $rule with id:: $it ::  ${it.id == ((rule - RULE_PREFIX) as Integer)}"
 						it.id == ((rule - RULE_PREFIX) as Integer)
 					}
 				} else rule
@@ -225,7 +224,6 @@ class ConnectionController extends ControllerUtils {
 			fconnectionInstance = clazz.newInstance()
 			fconnectionInstance.properties = params
 			fconnectionInstance.validate()
-			println fconnectionInstance.errors.allErrors
 			connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
 			saveSuccessful = fconnectionInstance.save(flush:true)
 		}

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="settings"/>
-		<title><g:message code="settings.general.header"/></title>
+		<title><g:message code="settings.porting.header"/></title>
 		<export:resource/>
 	</head>
 	<body>
@@ -19,7 +19,7 @@
 							labelPrefix="import."
 							checked="contacts.csv"/>
 					<fsms:info message="import.contacts.info"/>
-					<input type="file" name="importCsvFile" onchange="this.form.submit();"/>
+					<input type="file" name="importCsvFile" onchange="this.form.submit();" accept="text/csv,text/vcard,text/directory,.csv,.vcf"/>
 					<label for="importCsvFile"><g:message code="import.prompt"/></label>
 				</g:uploadForm>
 				<g:if test="${failedContacts}">
