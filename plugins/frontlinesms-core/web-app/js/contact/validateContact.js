@@ -12,15 +12,6 @@ $(function() {
 		errorPlacement:function(error, element) {
 			element.parent().append(error); }
 	});
-	jQuery.validator.addMethod("phoneNumber", function(value, element) {
-		var valid, hasChar;
-		valid = true;
-		hasChar = $(element).val().match(/[^\+?\d+]/);
-		if(hasChar !== null) {
-			valid = false;
-		}
-		return valid;
-	}, i18n("fmessage.number.error"));
 	jQuery.validator.addMethod("unique", function(value, element) {
 		var valid, params;
 		valid = true;

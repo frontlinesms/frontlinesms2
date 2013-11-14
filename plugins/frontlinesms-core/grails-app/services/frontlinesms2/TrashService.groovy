@@ -38,14 +38,10 @@ class TrashService {
 		}
 	}
 
-	def restore(object) {
+	boolean restore(object) {
 		Trash.findByObject(object)?.delete()
-		println "Restoring ${object}"
 		object.restoreFromTrash()
-		if (object.save())
-			return true
-		else
-			return false
+		return object.save() as boolean
 	}
 }
 

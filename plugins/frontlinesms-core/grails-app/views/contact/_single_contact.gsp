@@ -2,22 +2,16 @@
 	<g:if test="${contactInstance}">
 		<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 	</g:if>
-	<g:hiddenField name="showl10warning" value="${showl10warning}"/>
 	<g:hiddenField name="groupsToAdd" value=","/>
 	<g:hiddenField name="groupsToRemove" value=","/>
 	<g:hiddenField name="fieldsToAdd" value=","/>
 	<g:hiddenField name="fieldsToRemove" value=","/>
-	<div for="mobile" class="warning-display warning l10n" style="display:none">
-		<a href="#" id="dismissl10nWarning" title="${g.message(code:'contact.phonenumber.international.warning.dismiss')}"/>
-			<i class="icon-remove"></i>
-		</a>
-		<p>
-			<em><g:message code="contact.phonenumber.international.warning.header"/></em>
-		</p>
-		<p>
-			<g:message code="contact.phonenumber.international.warning.description"/>
-		</p>
-	</div>
+
+	<g:hiddenField name="showl10warning" value="${showl10warning}"/>
+	<g:hiddenField name="showNonNumericCharacterWarning" value="${showNonNumericCharacterWarning}"/>
+	<fsms:contactWarning warningType="l10nWarning"/>
+	<fsms:contactWarning warningType="NonNumericNotAllowedWarning"/>
+
 	<table>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
@@ -32,7 +26,7 @@
 				<g:if test="${contactInstance}">
 					<i class="${contactInstance.flagCSSClasses}"></i>
 				</g:if>
-				<g:textField class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
+				<g:textField data-nonPrettyPhoneNumber="${contactInstance?.mobile?.trim()}" data-prettyPhoneNumber="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
 				<label for="mobile" class="icon-edit"></label>
 			</td>
 		</tr>
