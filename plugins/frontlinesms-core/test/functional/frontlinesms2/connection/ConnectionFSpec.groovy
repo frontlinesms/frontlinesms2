@@ -248,10 +248,10 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to PageConnection
 		then: 'the url for the connection is visible'
 			connectionList.smssyncUrl(0).displayed
-			connectionList.smssyncUrl(0).text().contains("http")
+			connectionList.smssyncUrl(0)?.text().contains("http")
 		and: 'the time the phone last contacted is shown'
 			connectionList.smssyncLastconnected(0).displayed
-			connectionList.smssyncLastconnected(0).text().contains((new Date()-4).format('yyyy-dd-MM'))
+			connectionList.smssyncLastconnected(0)?.text().contains((new Date()-4).format('yyyy-dd-MM'))
 	}
 
 	def 'smssync connections show placeholder text if the connection has not been contacted'() {
@@ -261,7 +261,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to PageConnection
 		then: 'the time the phone last contacted is shown'
 			connectionList.smssyncLastconnected(0).displayed
-			connectionList.smssyncLastconnected(0).text().contains('smssync.lastConnected.never')
+			connectionList.smssyncLastconnected(0)?.text().contains('smssync.lastConnected.never')
 	}
 
 	private def createBadConnection() {
