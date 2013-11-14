@@ -32,6 +32,8 @@ class SmssyncService {
 		try {
 			def payload = controller.params.task=='send'? handlePollForOutgoing(connection): handleIncoming(connection, controller.params)
 			startTimeoutCounter(connection)
+			updateLastConnectionTime(connection)
+			connection.save(failOnError: true)
 			if(connection.secret) payload = [secret:connection.secret] + payload
 			return [payload:payload]
 		} catch(FrontlineApiException ex) {
@@ -40,21 +42,21 @@ class SmssyncService {
 		}
 	}
 
+	def updateLastConnectionTime(connection) {
+		connection.lastConnectionTime = new Date()
+	}
+
 	def startTimeoutCounter(connection) {
-		if (connection instanceof SmssyncFconnection) {
-			connection.lastConnectionTime = new Date()
-			if(connection?.timeout > 0) {
-				ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
-				def sendTime = new Date()
-				use(groovy.time.TimeCategory) {
-					sendTime = sendTime + (connection.timeout).minutes
-				}
-				def trigger = TriggerHelper.simpleTrigger(new JobKey("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs"), sendTime, 0, 1, [connectionId:connection.id])
-				trigger.name = "SmssyncFconnection-${connection.id}" 
-				trigger.group = "SmssyncFconnectionTimeoutJobs"
-				ReportSmssyncTimeoutJob.schedule(trigger)
+		if (connection instanceof SmssyncFconnection && connection?.timeout > 0) {
+			ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
+			def sendTime = new Date()
+			use(groovy.time.TimeCategory) {
+				sendTime = sendTime + (connection.timeout).minutes
 			}
-			connection.save()
+			def trigger = TriggerHelper.simpleTrigger(new JobKey("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs"), sendTime, 0, 1, [connectionId:connection.id])
+			trigger.name = "SmssyncFconnection-${connection.id}" 
+			trigger.group = "SmssyncFconnectionTimeoutJobs"
+			ReportSmssyncTimeoutJob.schedule(trigger)
 		}
 
 	}
