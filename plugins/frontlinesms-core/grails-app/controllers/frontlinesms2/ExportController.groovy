@@ -96,6 +96,7 @@ class ExportController extends ControllerUtils {
 			def v = new VCard()
 			v.setFormattedName(c.name)
 			v.addTelephoneNumber(c.mobile)
+			v.addEmail(c.email)
 			return v
 		}
 		render text:Ezvcard.write(cards).go()

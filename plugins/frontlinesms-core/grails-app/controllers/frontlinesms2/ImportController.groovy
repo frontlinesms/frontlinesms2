@@ -32,8 +32,8 @@ class ImportController extends ControllerUtils {
 		def uploadFile = request.getFile('importCsvFile')
 		def processCard = { v ->
 			def mobile = v.telephoneNumbers? v.telephoneNumbers.first(): null
-			mobile = mobile.text?: mobile.uri?.number?: ''
 			if(mobile) {
+				mobile = mobile.text?: mobile.uri?.number?: ''
 				mobile = mobile.replaceAll(/[^+\d]/, '')
 			}
 			def email = v.emails? v.emails.first().value: ''
