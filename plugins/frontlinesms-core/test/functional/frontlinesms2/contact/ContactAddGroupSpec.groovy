@@ -121,7 +121,6 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			multipleContactDetails.removeMultiGroup(remote { Group.findByName('Others').id.toString() })
 			multipleContactDetails.update.jquery.trigger("click")
 		then:
-			waitFor { notifications.flashMessage.displayed }
 			remote { Group.findByName('Others').members == [] }
 	}
 }

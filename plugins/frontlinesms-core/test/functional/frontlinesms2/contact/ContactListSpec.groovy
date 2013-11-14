@@ -13,7 +13,7 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:	
-			contactList.contacts.containsAll(['Alice 2541234567', 'Bob +254987654'])
+			contactList.contacts.containsAll(['Alice +2541234567', 'Bob +254987654'])
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
