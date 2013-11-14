@@ -9,16 +9,16 @@ import ezvcard.*
 
 class ImportController extends ControllerUtils {
 	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard']
+	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard', vcfDepricated:'text/directory']
 	
 	def importData() {
-		if (params.data == 'contacts') importContacts()
-		else importMessages()
+		if (params.data == 'messages') importMessages()
+		else importContacts()
 	}
 
 	private def importContacts() {
 		switch(request.getFile('importCsvFile').contentType) {
-			case CONTENT_TYPES.vcf:
+			case [CONTENT_TYPES.vcf, CONTENT_TYPES.vcfDepricated]:
 				importContactVcard()
 				break
 			default:
