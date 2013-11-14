@@ -27,7 +27,7 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 			def filePath = createTestUpload()
 		when:
 			to PageImportExportSettings
-			importOption("contacts").click()
+			importOption("contacts.csv").click()
 			uploadCsv(filePath)
 		then:
 			waitFor { at PageImportReview }
@@ -75,7 +75,7 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 
 	private def skipToReview() {
 		to PageImportExportSettings
-		importOption("contacts").click()
+		importOption("contacts.csv").click()
 		uploadCsv(createTestUpload())
 		waitFor { at PageImportReview }
 	}
