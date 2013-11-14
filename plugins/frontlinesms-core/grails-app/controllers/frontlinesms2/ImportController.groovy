@@ -136,7 +136,7 @@ class ImportController extends ControllerUtils {
 		} else throw new RuntimeException(message(code:'import.upload.failed'))
 	}
 
-	def failedContacts() { 
+	def failedContacts() {
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.${params.format}")
 		response.setHeader 'Content-Type', CONTENT_TYPES[params.format]
 		params.failedContacts.eachLine { response.outputStream << it << '\n' }
