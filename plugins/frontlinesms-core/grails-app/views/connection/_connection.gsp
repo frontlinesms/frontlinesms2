@@ -5,12 +5,14 @@
 	<td class="connection-flag"><i class="${c.flagCSSClasses}"></i></td>
 	<td class="connection-name">
 		<h2>'${c.name}'</h2>
-			<g:if test="${FrontlineApi.isAssignableFrom(c.class)}">
-				<p class="api-url">${c.getFullApiUrl(request)}</p>
-			</g:if>
-			<g:elseif test="${c.displayMetadata}">
-				<p>${c.displayMetadata}</p>
-			</g:elseif>
+			<fsms:templateElseBody template="/connection/${c.shortName}">
+				<g:if test="${FrontlineApi.isAssignableFrom(c.class)}">
+					<p class="api-url">${c.getFullApiUrl(request)}</p>
+				</g:if>
+				<g:elseif test="${c.displayMetadata}">
+					<p>${c.displayMetadata}</p>
+				</g:elseif>
+			</fsms:templateElseBody>
 	</td>
 	<td><div class="controls"></div></td>
 </tr>

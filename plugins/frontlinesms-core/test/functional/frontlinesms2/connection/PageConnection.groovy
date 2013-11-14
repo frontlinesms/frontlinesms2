@@ -43,6 +43,8 @@ class ConnectionList extends Module {
 		btnDelete(required:false) { i -> hoverOn(i) ; connection(i).find('.btn', text:'connection.delete') }
 		btnTestRoute(required:false) { i -> hoverOn(i) ; connection(i).find('.btn', text:'connection.send.test.message') }
 		status { i -> connection(i).find('td.connection-status') }
+		smssyncUrl { i -> connection(i).find('p.api-url') }
+		smssyncLastconnected { i -> connection(i).find('em.smssync-lastconnected') }
 	}
 }
 
