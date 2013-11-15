@@ -44,7 +44,6 @@ var ContactEditor = function() {
 						updateRequested = false;
 						updateContactData(event);
 					}
-					reenableFormElements();
 				},
 				success:function(data) {
 					cachedFormHash = formHashAtRequestTime;
@@ -53,6 +52,7 @@ var ContactEditor = function() {
 					} else {
 						handleFailureResponse(event, data);
 					}
+					reenableFormElements(data.success);
 				}
 			});
 		} else {
@@ -135,13 +135,15 @@ var ContactEditor = function() {
 	nonNumericCharacterWarningDisabled = function() {
 		return ($("input[name=showNonNumericCharacterWarning]").val() === 'false');
 	},
-	reenableFormElements = function() {
+	reenableFormElements = function(removeErrorMessages) {
 		contactEditWrapper.find("textarea,input[type='text']").removeAttr("disabled");
 		$("#new-field-dropdown").attr("disabled", false).selectmenu();
 		$("#group-dropdown").attr("disabled", false).selectmenu();
 		selectmenuTools.enable("#new-field-dropdown");
 		selectmenuTools.enable("#group-dropdown");
-		$("label.server-side-error").remove();
+		if(removeErrorMessages) {
+			$("label.server-side-error").remove();
+		}
 	},
 	setUpdateInProgress = function(inProgress, targetElement) {
 		targetElement = $(targetElement);
