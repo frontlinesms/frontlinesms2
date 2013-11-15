@@ -209,7 +209,7 @@ var ContactEditor = function() {
 		var field = $(this), val, nonNumericCharacterWarning, hasNonNumericCharacters;
 		val = field.val();
 		nonNumericCharacterWarning = $(".warning.NonNumericNotAllowedWarning");
-		hasNonNumericCharacters = !(/^\+?[0-9]+$/.test(val));
+		hasNonNumericCharacters = !(/^\+?[0-9]*$/.test(val));
 		if(hasNonNumericCharacters && !nonNumericCharacterWarningDisabled()) {
 			nonNumericCharacterWarning.show("fast");
 		} else {
