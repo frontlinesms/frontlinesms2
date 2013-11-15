@@ -108,8 +108,6 @@ input[type=text]:-ms-input-placeholder {
 #body.contacts .update.in-progress { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding-left:18px; }
 #body.contacts .update.done { padding-left:4px; }
 #body.contacts table td { position: relative; }
-#body.contacts .has-server-errors .remove-command { display: none; }
-#body.contacts .submit-in-progress .remove-command { display: none; }
 
 input[type=text].server-side-error { border-color: #c00 !important; }
 label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; width: 300px; }
