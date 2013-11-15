@@ -11,16 +11,14 @@ var ContactEditor = function() {
 	contactId = $(".contact-edit-form [name='contactId']").val(),
 	updateInProgress, updateRequested,
 	updateContactData = function(event) {
-		if(!contactEditForm.valid()) {
-			return false;
-		}
 		var formData = contactEditForm.serialize(),
-		formHashAtRequestTime = formData.hashCode();
+		formHashAtRequestTime = formData.hashCode(),
+		dataToSend = $(event.target).add($('#contactId, [name=fieldsToAdd], [name=fieldsToRemove], [name=groupsToAdd], [name=groupsToRemove]')).serialize();
 		if(formHashAtRequestTime !== cachedFormHash) {
 			$.ajax({
 				type:"POST",
 				url:url_root + "contact/saveContact",
-				data:formData,
+				data:dataToSend,
 				beforeSend:function() {
 					if(updateInProgress) {
 						updateRequested = true;
@@ -57,6 +55,10 @@ var ContactEditor = function() {
 		contactEditWrapper.removeClass("has-server-errors");
 		contactEditWrapper.removeClass("submit-in-progress");
 		targetElement.removeClass("server-side-error");
+		if(targetElement.attr('name') == 'name' || targetElement.attr('name') == 'mobile') {
+			removeNameOrMobileRequiredError();
+		}
+		
 
 		contactName = $(".contact-edit-form [name='name']").val();
 		
@@ -89,7 +91,7 @@ var ContactEditor = function() {
 			targetElement = $(event.target), 
 			localFieldName = event.target.name,
 			errors = data.errors[localFieldName];
-
+		reenableFormElements();
 		targetElement.addClass("server-side-error");
 		$.each(errors, function(index, item) {
 			targetElement.parent().append("<label class='server-side-error' for='"+ localFieldName +"'>"+ item +"</label>");
@@ -199,6 +201,17 @@ var ContactEditor = function() {
 		} else {
 			nonNumericCharacterWarning.hide("fast");
 		}
+	}
+
+	removeNameOrMobileRequiredError = function() {
+		var nameFieldI18n = i18n('contact.name.validator.invalid'),
+			mobileFieldI18n = i18n('contact.mobile.validator.invalid');
+		if($('label:contains("'+nameFieldI18n+'"), label:contains("'+mobileFieldI18n+'")').length) {
+			$.each(this, function(index, item) {
+				$(item).remove();
+			})
+		}
+		$('input[name=name].server-side-error, input[name=mobile].server-side-error').removeClass('server-side-error');
 	}
 
 //> CUSTOM FIELD STUFF START
