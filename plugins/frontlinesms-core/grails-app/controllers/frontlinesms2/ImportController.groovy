@@ -5,25 +5,55 @@ import java.text.SimpleDateFormat
 import java.io.StringWriter
 
 import au.com.bytecode.opencsv.CSVWriter
+import au.com.bytecode.opencsv.CSVParser
 
 class ImportController extends ControllerUtils {
-	private final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-	
+	private final MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
+					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
+
 	def importData() {
-		if (params.data == 'contacts') importContacts()
-		else importMessages()
+		if(params.data == 'contacts') {
+			if(params.reviewDone) {
+				importContacts()
+			} else {
+				def uploadedCSVFile = request.getFile('importCsvFile')
+				def csvAsNestedLists = []
+				def headerRowSize
+				uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
+					if(!headerRowSize) {
+						headerRowSize = tokens.size()
+					}
+					if(tokens.size() == headerRowSize) {
+						csvAsNestedLists << tokens
+					}
+				}
+				session.csvData = csvAsNestedLists
+				redirect action:'reviewContacts'
+				return
+			}
+		} else {
+			importMessages()
+		}
 	}
-	
+
+	def reviewContacts() {
+		if(!session.csvData) {
+			redirect controller:'settings', action:'porting'
+			return
+		}
+		[csvData:session.csvData, recognisedTitles:STANDARD_FIELDS.keySet()]
+	}
+
 	def importContacts() {
 		def savedCount = 0
-		def uploadedCSVFile = request.getFile('importCsvFile')
-		
-		if(uploadedCSVFile) {
+
+		if(params.csv) {
 			def headers
+			def parser = new CSVParser()
 			def failedLines = []
-			def standardFields = ['Name':'name', 'Mobile Number':'mobile',
-					'E-mail Address':'email', 'Notes':'notes']
-			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
+			params.csv.eachLine { line ->
+				def tokens = parser.parseLine(line)
 				if(!headers) headers = tokens
 				else try {
 					Contact c = new Contact()
@@ -31,8 +61,8 @@ class ImportController extends ControllerUtils {
 					def customFields = []
 					headers.eachWithIndex { key, i ->
 						def value = tokens[i]
-						if(key in standardFields) {
-							c."${standardFields[key]}" = value
+						if(key in STANDARD_FIELDS && key != 'Group(s)') {
+							c."${STANDARD_FIELDS[key]}" = value
 						} else if(key == 'Group(s)') {
 							def groupNames = getGroupNames(value)
 							groups = getGroups(groupNames)
@@ -54,7 +84,7 @@ class ImportController extends ControllerUtils {
 				} catch(Exception ex) {
 					log.info message(code: 'import.contact.save.error'), ex
 					failedLines << tokens
-				}		
+				}
 			}
 
 			def failedLineWriter = new StringWriter()
@@ -72,16 +102,17 @@ class ImportController extends ControllerUtils {
 			}
 			flash.failedContacts = failedLineWriter.toString()
 			flash.numberOfFailedLines = failedLines.size()
-			redirect controller:'settings', action:'porting'
-		} else throw new RuntimeException(message(code:'import.upload.failed'))
+			session.csvData = null
+		}
+		redirect controller:'settings', action:'porting'
 	}
 
-	def failedContacts() { 
+	def failedContacts() {
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
 		params.failedContacts.eachLine { response.outputStream << it << '\n' }
 		response.outputStream.flush()
 	}
-	
+
 	def importMessages() {
 		def savedCount = 0
 		def failedCount = 0
@@ -157,7 +188,7 @@ println "The errors are $fm.errors"
 			redirect controller:'settings', action:'general'
 		}
 	}
-	
+
 	private def getMessageFolder(name) {
 		Folder.findByName(name)?: new Folder(name:name).save(failOnError:true)
 	}
@@ -177,10 +208,10 @@ println "The errors are $fm.errors"
 				csvGroups << longName
 			}
 		}
-		println "getGroupNames() : ${csvGroups - ''}"
+		println "getGroupNames() : ${csvGroups - ''}, a length of ${(csvGroups - '').size()}"
 		return csvGroups - ''
 	}
-	
+
 	private def getGroups(groupNames) {
 		println "ImportController.getGroups() : $groupNames"
 		groupNames.collect { name ->
@@ -195,4 +226,5 @@ println "The errors are $fm.errors"
 		f.deleteOnExit()
 		return f
 	}
+
 }

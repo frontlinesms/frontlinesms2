@@ -69,7 +69,6 @@ class MetaClassModifiers {
 			}
 			return phoneNumberUtil.format(number, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
 		}
-
 	}
 
 	static void augmentDates() {

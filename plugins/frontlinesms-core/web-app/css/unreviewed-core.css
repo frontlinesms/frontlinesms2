@@ -128,4 +128,9 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 	color: #c09853;
 	background-color: #fcf8e3;
 }
+.import-review table { margin:10px 20px; }
+.import-review .headers td input { background-color:#fcf8e3; border-color:#faebcc; }
+.import-review .headers td input.recognised { background-color:#ccddcc; border-color:#008000; }
+.import-review .known-fields { margin:8px; }
+.import-review a { margin:10px 7px; padding:8px; }
 

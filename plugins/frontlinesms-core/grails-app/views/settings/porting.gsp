@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="settings"/>
-		<title><g:message code="settings.general.header"/></title>
+		<title><g:message code="settings.porting.header"/></title>
 		<export:resource/>
 	</head>
 	<body>
