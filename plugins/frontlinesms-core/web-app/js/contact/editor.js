@@ -7,13 +7,24 @@ var ContactEditor = function() {
 	var cachedFormHash,
 	fieldsToAdd = [], fieldsToRemove = [],
 	contactEditForm = $(".contact-edit-form"),
-	contactEditWrapper = $(".contact-edit-form .edit"),
-	contactId = $(".contact-edit-form [name='contactId']").val(),
+	contactEditWrapper = contactEditForm.find(".edit"),
+	field = function(name) {
+		var selecter = $.map(arguments, function(v, i) {
+			return "[name=" + v + "]"; }).join();
+		return contactEditForm.find(selecter); },
 	updateInProgress, updateRequested,
 	updateContactData = function(event) {
 		var formData = contactEditForm.serialize(),
 		formHashAtRequestTime = formData.hashCode(),
-		dataToSend = $(event.target).add($('#contactId, [name=fieldsToAdd], [name=fieldsToRemove], [name=groupsToAdd], [name=groupsToRemove]')).serialize();
+		targetElement = $(event.target),
+		dataToSend = targetElement
+				.add(field("contactId", "fieldsToAdd", "fieldsToRemove", "groupsToAdd", "groupsToRemove"));
+		if(targetElement.attr("name") === "name") {
+			dataToSend = dataToSend.add(field("mobile"));
+		} else if(targetElement.attr("name") === "mobile") {
+			dataToSend = dataToSend.add(field("name"));
+		}
+		dataToSend = dataToSend.serialize();
 		if(formHashAtRequestTime !== cachedFormHash) {
 			$.ajax({
 				type:"POST",
@@ -33,6 +44,7 @@ var ContactEditor = function() {
 						updateRequested = false;
 						updateContactData(event);
 					}
+					reenableFormElements();
 				},
 				success:function(data) {
 					cachedFormHash = formHashAtRequestTime;
@@ -48,24 +60,25 @@ var ContactEditor = function() {
 		}
 	},
 	handleSuccessResponse = function(event, data) {
-		var contactName, mainListContactLink, mainListContactLinkKids, button, buttonKids, flagElement
+		var contactName, mainListContactLink, mainListContactLinkKids, button, buttonKids,
+			flagElement, mobileField, nonPrettyPhoneNumber,
 			targetElement = $(event.target);
 
-		reenableFormElements();
 		contactEditWrapper.removeClass("has-server-errors");
 		contactEditWrapper.removeClass("submit-in-progress");
 		targetElement.removeClass("server-side-error");
-		if(targetElement.attr('name') == 'name' || targetElement.attr('name') == 'mobile') {
-			removeNameOrMobileRequiredError();
+		if(targetElement.attr('name') === 'name' ||
+				targetElement.attr('name') === 'mobile') {
+			$("label.server-side-error[for=mobile], label.server-side-error[for=name]").remove();
+			field("name", "mobile").removeClass('server-side-error');
 		}
-		
 
 		contactName = $(".contact-edit-form [name='name']").val();
-		
-		mainListContactLink = $('#main-list-container li a.displayName-' + contactId);
+
+		mainListContactLink = $('#main-list-container li a.displayName-' + field('contactId').val());
 		mainListContactNumberPreview = mainListContactLink.children();
 		mainListContactLink.text(contactName);
-		if(data.contactPrettyPhoneNumber != null) {
+		if(data.contactPrettyPhoneNumber !== null) {
 			mainListContactNumberPreview.text(data.contactPrettyPhoneNumber);
 		} else {
 			mainListContactNumberPreview.text("-");
@@ -75,8 +88,8 @@ var ContactEditor = function() {
 		flagElement = $('.flag');
 		flagElement.removeClass().addClass(data.flagCSSClasses);
 
-		var mobileField = $("#mobile");
-		var nonPrettyPhoneNumber = mobileField.val();
+		mobileField = $("#mobile");
+		nonPrettyPhoneNumber = mobileField.val();
 		mobileField.attr("data-nonPrettyPhoneNumber", nonPrettyPhoneNumber);
 		mobileField.attr("data-prettyPhoneNumber", data.contactPrettyPhoneNumber);
 		mobileField.val(data.contactPrettyPhoneNumber);
@@ -87,11 +100,10 @@ var ContactEditor = function() {
 		button.prepend(buttonKids);
 	},
 	handleFailureResponse = function(event, data) {
-		var 
-			targetElement = $(event.target), 
+		var
+			targetElement = $(event.target),
 			localFieldName = event.target.name,
 			errors = data.errors[localFieldName];
-		reenableFormElements();
 		targetElement.addClass("server-side-error");
 		$.each(errors, function(index, item) {
 			targetElement.parent().append("<label class='server-side-error' for='"+ localFieldName +"'>"+ item +"</label>");
@@ -119,10 +131,10 @@ var ContactEditor = function() {
 
 	},
 	internationalFormatWarningDisabled = function() {
-		return ($("input[name=showl10warning]").val() == 'false');
+		return ($("input[name=showl10warning]").val() === 'false');
 	},
 	nonNumericCharacterWarningDisabled = function() {
-		return ($("input[name=showNonNumericCharacterWarning]").val() == 'false');
+		return ($("input[name=showNonNumericCharacterWarning]").val() === 'false');
 	},
 	reenableFormElements = function() {
 		contactEditWrapper.find("textarea,input[type='text']").removeAttr("disabled");
@@ -163,10 +175,11 @@ var ContactEditor = function() {
 	}
 
 	function resetMobileField() {
-		var mobileField = $("#mobile");
-		var mobileFieldNonPrettyPhoneNumber = mobileField.attr("data-nonPrettyPhoneNumber");
-		var mobileFieldPrettyPhoneNumber = mobileField.attr("data-prettyPhoneNumber");
-		if(mobileField.val() == mobileFieldNonPrettyPhoneNumber) {
+		var mobileField, mobileFieldNonPrettyPhoneNumber, mobileFieldPrettyPhoneNumber;
+		mobileField = $("#mobile");
+		mobileFieldNonPrettyPhoneNumber = mobileField.attr("data-nonPrettyPhoneNumber");
+		mobileFieldPrettyPhoneNumber = mobileField.attr("data-prettyPhoneNumber");
+		if(mobileField.val() === mobileFieldNonPrettyPhoneNumber) {
 			mobileField.val(mobileFieldPrettyPhoneNumber);
 		}
 	}
@@ -203,17 +216,6 @@ var ContactEditor = function() {
 		}
 	}
 
-	removeNameOrMobileRequiredError = function() {
-		var nameFieldI18n = i18n('contact.name.validator.invalid'),
-			mobileFieldI18n = i18n('contact.mobile.validator.invalid');
-		if($('label:contains("'+nameFieldI18n+'"), label:contains("'+mobileFieldI18n+'")').length) {
-			$.each(this, function(index, item) {
-				$(item).remove();
-			})
-		}
-		$('input[name=name].server-side-error, input[name=mobile].server-side-error').removeClass('server-side-error');
-	}
-
 //> CUSTOM FIELD STUFF START
 	this.checkCustomFieldResult = function(json) {
 		var name, i;
@@ -224,16 +226,18 @@ var ContactEditor = function() {
 			}
 			for(i=0; i<json.uniqueCustomFields.length; ++i) {
 				if (json.uniqueCustomFields[i].toLowerCase() === name.toLowerCase()) {
-					$("#smallpopup-error-panel").html(i18n("customfield.validation.error"));
-					$("#smallpopup-error-panel").show();
+					$("#smallpopup-error-panel")
+							.html(i18n("customfield.validation.error"))
+							.show();
 					return false;
 				}
 			}
 			addCustomField(name);
 			$("#modalBox").remove();
 		} else {
-			$("#smallpopup-error-panel").html(i18n("customfield.validation.prompt"));
-			$("#smallpopup-error-panel").show();
+			$("#smallpopup-error-panel")
+					.html(i18n("customfield.validation.prompt"))
+					.show();
 		}
 	};
 
@@ -299,9 +303,10 @@ var ContactEditor = function() {
 		cachedFormHash = contactEditForm.serialize().hashCode();
 		$("#notes").autosize();
 
-		$("input[name=mobile]").change(validateMobile);
-		$("input[name=mobile]").focus(removeNonNumericCharacters);
-		$("input[name=mobile]").keyup(showMobileWarning);
+		$("input[name=mobile]")
+				.change(validateMobile)
+				.focus(removeNonNumericCharacters)
+				.keyup(showMobileWarning);
 
 		// bind form data change listeners
 		$(".edit input[type=text], .edit textarea").blur(updateContactData);
