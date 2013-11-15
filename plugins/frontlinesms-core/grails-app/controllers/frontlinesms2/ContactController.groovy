@@ -264,7 +264,7 @@ class ContactController extends ControllerUtils {
 
 	private def getCheckedContactIds() {
 		def ids = params['contact-select']?:
-				params.checkedContactList? params.checkedContactList.tokenize(',').unique():
+				params.checkedContactList? params.checkedContactList?.tokenize(',')?.unique():
 				[params.contactId]
 		return ids.flatten().unique()
 	}
@@ -276,11 +276,11 @@ class ContactController extends ControllerUtils {
 	}
 	
 	private def updateGroups(Contact contactInstance) {
-		def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
-		def groupsToRemove = params.groupsToRemove.tokenize(',')
+		def groupsToAdd = params.groupsToAdd?.tokenize(',')?.unique()
+		def groupsToRemove = params.groupsToRemove?.tokenize(',')
 		
 		// Check for errors in groupsToAdd and groupsToRemove
-		if(!groupsToAdd.disjoint(groupsToRemove)) {
+		if(!groupsToAdd?.disjoint(groupsToRemove)) {
 			contactInstance.errors.reject(message(code: 'contact.addtogroup.error'))
 			return false
 		}
