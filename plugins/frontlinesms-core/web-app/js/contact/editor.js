@@ -73,11 +73,11 @@ var ContactEditor = function() {
 			field("name", "mobile").removeClass('server-side-error');
 		}
 
-		contactName = $(".contact-edit-form [name='name']").val();
+		contactName = field("name").val();
 		mainListContactLink = $('#main-list-container li.selected a');
 		mainListContactNumberPreview = mainListContactLink.children();
 		mainListContactLink.text(contactName);
-		if(data.contactPrettyPhoneNumber !== null) {
+		if(data.contactPrettyPhoneNumber) {
 			mainListContactNumberPreview.text(data.contactPrettyPhoneNumber);
 		} else {
 			mainListContactNumberPreview.text("-");
@@ -177,12 +177,10 @@ var ContactEditor = function() {
 
 	function resetMobileField() {
 		var mobileField, mobileFieldNonPrettyPhoneNumber, mobileFieldPrettyPhoneNumber;
-		mobileField = $("#mobile");
+		mobileField = field("mobile");
 		mobileFieldNonPrettyPhoneNumber = mobileField.attr("data-nonPrettyPhoneNumber");
 		mobileFieldPrettyPhoneNumber = mobileField.attr("data-prettyPhoneNumber");
-		if(mobileField.val() === mobileFieldNonPrettyPhoneNumber) {
-			mobileField.val(mobileFieldPrettyPhoneNumber);
-		}
+		mobileField.val(mobileFieldPrettyPhoneNumber);
 	}
 
 	function validateMobile(field) {

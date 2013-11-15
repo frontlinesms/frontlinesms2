@@ -25,10 +25,10 @@
 				</g:elseif>
 				<g:else><g:set var="contactLinkParams" value="[:]"/></g:else>
 				<g:link class="displayName-${c.id} contact-name" action="show" params="${contactLinkParams + [contactId:c.id, sort:params.sort, offset:params.offset]}">
-					${c.name?:c.mobile?.toPrettyPhoneNumber()?:'[No Name]'}
-					<g:if test="${c.name}">
-						<span class='preview'>${c.mobile?.toPrettyPhoneNumber()?:'-'}</span>
-					</g:if>
+					<g:if test="${c.name}">${c.name}</g:if>
+					<span class='preview'>
+						<g:if test="${c.mobile}">${c.mobile?.toPrettyPhoneNumber()?:'-'}</g:if>
+					</span>
 				</g:link>
 
 			</li>
