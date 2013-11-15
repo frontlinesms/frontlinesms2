@@ -10,7 +10,7 @@ class PageImportReview extends PageSettings {
 			println "## Trying to retrieve value of cell at position $x, $y"
 			$("input", 'data-x': "$x", 'data-y': "$y").value()
 		}
-		submitButton { $("#submitContacts") }
+		submitButton { $(".submitContacts") }
 	}
 	static at = {
 		title.contains('settings.import.contact.review.page.header')
