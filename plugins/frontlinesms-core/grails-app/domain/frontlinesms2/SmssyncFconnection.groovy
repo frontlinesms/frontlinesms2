@@ -18,6 +18,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	def grailsLinkGenerator
 	def urlHelperService
 	def dispatchRouterService
+	Date lastConnectionTime
 
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
@@ -26,6 +27,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 
 	static constraints = {
 		secret nullable:true
+		lastConnectionTime nullable:true
 	}
 
 	def removeDispatchesFromQueue(dispatches) {
@@ -72,5 +74,6 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
  		def path = grailsLinkGenerator.link(controller: 'api', params:[entityClassApiUrl: entityClassApiUrl, entityId: id, secret: secret], absolute: false)
 		return apiEnabled? "${urlHelperService.getBaseUrl(request)}$path" : ''
 	}
+
 }
 

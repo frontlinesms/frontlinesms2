@@ -74,8 +74,7 @@ var ContactEditor = function() {
 		}
 
 		contactName = $(".contact-edit-form [name='name']").val();
-
-		mainListContactLink = $('#main-list-container li a.displayName-' + field('contactId').val());
+		mainListContactLink = $('#main-list-container li.selected a');
 		mainListContactNumberPreview = mainListContactLink.children();
 		mainListContactLink.text(contactName);
 		if(data.contactPrettyPhoneNumber !== null) {

@@ -32,12 +32,18 @@ class SmssyncService {
 		try {
 			def payload = controller.params.task=='send'? handlePollForOutgoing(connection): handleIncoming(connection, controller.params)
 			startTimeoutCounter(connection)
+			updateLastConnectionTime(connection)
+			connection.save(failOnError: true)
 			if(connection.secret) payload = [secret:connection.secret] + payload
 			return [payload:payload]
 		} catch(FrontlineApiException ex) {
 // FIXME should send a non-200 status code here
 			return failure(ex)
 		}
+	}
+
+	def updateLastConnectionTime(connection) {
+		connection.lastConnectionTime = new Date()
 	}
 
 	def startTimeoutCounter(connection) {

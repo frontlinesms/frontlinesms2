@@ -53,6 +53,7 @@ class ImportControllerSpec extends Specification {
 			"Sam","987654322","","","Camping Group","",""
 			"Ron","987654323","","","Football Updates","",""
 			'''
+			controller.params.format = "csv"
 		when:
 			controller.failedContacts()
 		then:

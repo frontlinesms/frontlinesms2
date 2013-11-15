@@ -7,8 +7,18 @@
 		<p class="info"><g:message code="export.contact.info"/></p>
 		<div>
 			<h2><g:message code="export.selectformat"/></h2>
-			<input type="radio" name="format" value="csv" checked="checked"/><g:message code="export.csv"/><br/>
-			<input type="radio" name="format" value="pdf"/> <g:message code="export.pdf"/>
+			<label>
+				<input type="radio" name="format" value="csv" checked="checked"/>
+				<g:message code="export.csv"/>
+			</label>
+			<label>
+				<input type="radio" name="format" value="pdf"/>
+				<g:message code="export.pdf"/>
+			</label>
+			<label>
+				<input type="radio" name="format" value="vcf"/>
+				<g:message code="export.vcf"/>
+			</label>
 		</div>
 	</g:form>
 </div>

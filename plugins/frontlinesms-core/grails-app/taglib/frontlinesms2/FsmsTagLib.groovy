@@ -178,6 +178,15 @@ class FsmsTagLib {
 		if(!rendered) throw new GrailsTagException("Failed to render [att=$att, plugins=${grailsApplication.config.frontlinesms.plugins}]")
 	}
 
+	def templateElseBody = { att, body ->
+		try {
+			out << render(att)
+		}
+		catch(GrailsTagException gte) {
+			out << body()
+		}
+	}
+
 	def i18nBundle = {
 		def locale = RequestContextUtils.getLocale(request)
 		// Always include English in case their locale is not available.  The most accurate

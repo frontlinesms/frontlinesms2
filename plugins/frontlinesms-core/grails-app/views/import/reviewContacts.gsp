@@ -16,6 +16,10 @@
 			<p class="known-fields">
 				<g:message code="settings.import.contact.review.unrecognisedTitles" />
 			</p>
+			<a class="stroked submitContacts">
+				<i class="icon-file-text"></i>
+				<g:message code="settings.import.contact.review.submit"/>
+			</a>
 			<input type="hidden" name="recognisedTitles" value="${recognisedTitles.join(',')}"/>
 			<g:form name="reviewForm" action="importData">
 				<input type="hidden" name="reviewDone" value="true"/>
@@ -31,14 +35,15 @@
 					</g:each>
 				</table>
 			</g:form>
-			<a class="stroked" id="submitContacts">
+			<a class="stroked submitContacts">
+				<i class="icon-file-text"></i>
 				<g:message code="settings.import.contact.review.submit"/>
 			</a>
 		</div>
 		<r:script>
 			$(function() {
 				contactImportReviewer.init();
-				$("#submitContacts").click(contactImportReviewer.submit);
+				$(".submitContacts").click(contactImportReviewer.submit);
 			});
 		</r:script>
 	</body>

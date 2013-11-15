@@ -15,11 +15,11 @@
 				<fsms:info message="import.backup.label"/>
 				<g:uploadForm name="importForm" controller="import" action="importData" method="post">
 					<fsms:radioGroup name="data" title="import.prompt.type"
-							values="contacts,messages"
+							values="contacts.csv,contacts.vcf,messages"
 							labelPrefix="import."
-							checked="contacts"/>
-					<fsms:info message="import.version1.info"/>
-					<input type="file" name="importCsvFile" onchange="this.form.submit();"/>
+							checked="contacts.csv"/>
+					<fsms:info message="import.contacts.info"/>
+					<input type="file" name="importCsvFile" onchange="this.form.submit();" accept="text/csv,text/vcard,text/directory,.csv,.vcf"/>
 					<label for="importCsvFile"><g:message code="import.prompt"/></label>
 				</g:uploadForm>
 				<g:if test="${failedContacts}">
@@ -27,6 +27,7 @@
 						<g:form controller="import" action="failedContacts">
 							<p class='warning_message'><g:message code="import.contact.failed.info" args="[numberOfFailedLines]"/></p>
 							<g:hiddenField name='failedContacts' value='${failedContacts.trim()}'/>
+							<g:hiddenField name='format' value='${failedContactsFormat}'/>
 							<g:submitButton name="failedContactSubmit" value="${message(code:'import.download.failed.contacts')}" class="btn"/>
 						</g:form>
 					</div>

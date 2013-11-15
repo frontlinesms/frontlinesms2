@@ -241,6 +241,29 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { at ConnectionDialog }
 	}
 
+	def 'smssync connections show the url and time since last connection'() {
+		given: 'an SMSSync connection exists, that has been contacted before by an android phone'
+			createTestSmssyncConnection(true)
+		when: 'user goes to connection page'
+			to PageConnection
+		then: 'the url for the connection is visible'
+			connectionList.smssyncUrl(0).displayed
+			connectionList.smssyncUrl(0).text()?.contains("http")
+		and: 'the time the phone last contacted is shown'
+			connectionList.smssyncLastconnected(0).displayed
+			connectionList.smssyncLastconnected(0).text()?.contains((new Date()-4).format('yyyy-dd-MM'))
+	}
+
+	def 'smssync connections show placeholder text if the connection has not been contacted'() {
+		given: 'an SMSSync connection exists, that has been contacted before by an android phone'
+			createTestSmssyncConnection(false)
+		when: 'user goes to connection page'
+			to PageConnection
+		then: 'the time the phone last contacted is shown'
+			connectionList.smssyncLastconnected(0).displayed
+			connectionList.smssyncLastconnected(0).text()?.contains('smssync.lastConnected.never')
+	}
+
 	private def createBadConnection() {
 		remote {
 			MockModemUtils.initialiseMockSerial([
@@ -295,6 +318,14 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			MockModemUtils.initialiseMockSerial([
 					COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
 			SmslibFconnection.build(name:'MTN Dongle', port:'COM99', enabled:true).id }
+	}
+
+	def createTestSmssyncConnection(hasBeenContacted=false) {
+		remote {
+			def c = new SmssyncFconnection(name:"SMSSync connection", secret:'secret', enabled:false).save(flush: true, failOnError:true)
+			if(hasBeenContacted)
+				c.lastConnectionTime = new Date() -4
+		}
 	}
 
 }
