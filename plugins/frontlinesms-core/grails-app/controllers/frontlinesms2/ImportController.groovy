@@ -6,109 +6,119 @@ import java.io.StringWriter
 
 import au.com.bytecode.opencsv.CSVWriter
 import au.com.bytecode.opencsv.CSVParser
+import ezvcard.*
 
 class ImportController extends ControllerUtils {
 	private final MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
 					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
+	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard', vcfDepricated:'text/directory']
 
 	def importData() {
-		if(params.data == 'contacts') {
-			if(params.reviewDone) {
-				importContacts()
-			} else {
-				def uploadedCSVFile = request.getFile('importCsvFile')
-				def csvAsNestedLists = []
-				def headerRowSize
-				uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
-					if(!headerRowSize) {
-						headerRowSize = tokens.size()
-					}
-					if(tokens.size() == headerRowSize) {
-						csvAsNestedLists << tokens
-					}
-				}
-				session.csvData = csvAsNestedLists
-				redirect action:'reviewContacts'
-				return
-			}
-		} else {
+	println "ImportController.importData() :: params=$params"
+		if(params.data == 'messages') {
 			importMessages()
+		} else {
+			importContacts()
 		}
 	}
 
-	def reviewContacts() {
-		if(!session.csvData) {
-			redirect controller:'settings', action:'porting'
+	private def importContacts() {
+		println "ImportController.importContacts() :: ENTRY"
+		if(params.reviewDone) {
+			importContactCsv()
 			return
 		}
-		[csvData:session.csvData, recognisedTitles:STANDARD_FIELDS.keySet()]
+		switch(request.getFile('importCsvFile').contentType) {
+			case [CONTENT_TYPES.vcf, CONTENT_TYPES.vcfDepricated]:
+				importContactVcard()
+				break
+			default:
+				prepareCsvReview()
+		}
 	}
 
-	def importContacts() {
+	private def prepareCsvReview() {
+		println "ImportController.prepareCsvReview() :: ENTRY"
+		def uploadedCSVFile = request.getFile('importCsvFile')
+		def csvAsNestedLists = []
+		def headerRowSize
+		uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
+			if(!headerRowSize) {
+				headerRowSize = tokens.size()
+			}
+			if(tokens.size() == headerRowSize) {
+				csvAsNestedLists << tokens
+			}
+		}
+		session.csvData = csvAsNestedLists
+		redirect action:'reviewContacts'
+		return
+	}
+	
+	private def importContactCsv() {
 		def savedCount = 0
-
-		if(params.csv) {
-			def headers
-			def parser = new CSVParser()
-			def failedLines = []
-			params.csv.eachLine { line ->
-				def tokens = parser.parseLine(line)
-				if(!headers) headers = tokens
-				else try {
-					Contact c = new Contact()
-					def groups
-					def customFields = []
-					headers.eachWithIndex { key, i ->
-						def value = tokens[i]
-						if(key in STANDARD_FIELDS && key != 'Group(s)') {
-							c."${STANDARD_FIELDS[key]}" = value
-						} else if(key == 'Group(s)') {
-							def groupNames = getGroupNames(value)
-							groups = getGroups(groupNames)
-						} else {
-							if (value.size() > 0 ){
-								customFields << new CustomField(name:key, value:value)
-							}
+		def headers
+		def parser = new CSVParser()
+		def failedLines = []
+		params.csv.eachLine { line ->
+			def tokens = parser.parseLine(line)
+			if(!headers) headers = tokens
+			else try {
+				Contact c = new Contact()
+				def groups
+				def customFields = []
+				headers.eachWithIndex { key, i ->
+					def value = tokens[i]
+					if(key in STANDARD_FIELDS && key != 'Group(s)') {
+						c."${STANDARD_FIELDS[key]}" = value
+					} else if(key == 'Group(s)') {
+						def groupNames = getGroupNames(value)
+						groups = getGroups(groupNames)
+					} else {
+						if (value.size() > 0 ){
+							customFields << new CustomField(name:key, value:value)
 						}
 					}
-					// TODO not sure why this has to be done in a new session, but grails
-					// can't cope with failed saves if we don't do this
-					Contact.withNewSession {
-						c.save(failOnError:true)
-						if(groups) groups.each { c.addToGroup(it) }
-						if(customFields) customFields.each { c.addToCustomFields(it) }
-						c.save()
-					}
-					++savedCount
-				} catch(Exception ex) {
-					log.info message(code: 'import.contact.save.error'), ex
-					failedLines << tokens
 				}
+				// TODO not sure why this has to be done in a new session, but grails
+				// can't cope with failed saves if we don't do this
+				Contact.withNewSession {
+					c.save(failOnError:true)
+					if(groups) groups.each { c.addToGroup(it) }
+					if(customFields) customFields.each { c.addToCustomFields(it) }
+					c.save()
+				}
+				++savedCount
+			} catch(Exception ex) {
+				log.info message(code: 'import.contact.save.error'), ex
+				failedLines << tokens
 			}
-
-			def failedLineWriter = new StringWriter()
-			if(failedLines) {
-				def writer
-				try {
-					writer = new CSVWriter(failedLineWriter)
-					writer.writeNext(headers)
-					failedLines.each { writer.writeNext(it) }
-				} finally { try { writer.close() } catch(Exception ex) {} }
-			}
-
-			if(savedCount > 0) {
-				flash.message = g.message(code:'import.contact.complete', args:[savedCount])
-			}
-			flash.failedContacts = failedLineWriter.toString()
-			flash.numberOfFailedLines = failedLines.size()
-			session.csvData = null
 		}
+
+		def failedLineWriter = new StringWriter()
+		if(failedLines) {
+			def writer
+			try {
+				writer = new CSVWriter(failedLineWriter)
+				writer.writeNext(headers)
+				failedLines.each { writer.writeNext(it) }
+			} finally { try { writer.close() } catch(Exception ex) {} }
+		}
+
+		if(savedCount > 0) {
+			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
+		}
+		flash.failedContacts = failedLineWriter.toString()
+		flash.numberOfFailedLines = failedLines.size()
+		flash.failedContactsFormat = 'csv'
+		session.csvData = null
 		redirect controller:'settings', action:'porting'
 	}
 
 	def failedContacts() {
-		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
+		response.setHeader("Content-disposition", "attachment; filename=failedContacts.${params.format}")
+		response.setHeader 'Content-Type', CONTENT_TYPES[params.format]
 		params.failedContacts.eachLine { response.outputStream << it << '\n' }
 		response.outputStream.flush()
 	}
@@ -126,7 +136,6 @@ class ImportController extends ControllerUtils {
 					Outbox:DispatchStatus.SENT,
 					Sent:DispatchStatus.SENT]
 			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
-				println "Processing: $tokens"
 				if(!headers) {
 					headers = tokens
 					// strip BOM from first value
@@ -138,7 +147,6 @@ class ImportController extends ControllerUtils {
 					def dispatchStatus
 					headers.eachWithIndex { key, i ->
 						def value = tokens[i]
-						println "Processing cell value: $value for key '$key'"
 						if (key in standardFields) {
 							fm[standardFields[key]] = value
 						} else if (key == 'Message Date') {
@@ -170,9 +178,6 @@ class ImportController extends ControllerUtils {
 						if (dispatchStatus==DispatchStatus.SENT) it.dateSent = fm.date
 					}
 
-println "Is the message valid? ${fm.validate()}"
-println "The errors are $fm.errors"
-
 					Fmessage.withNewSession {
 						fm.save(failOnError:true)
 					}
@@ -185,7 +190,7 @@ println "The errors are $fm.errors"
 				}
 			}
 			flash.message = message(code: 'import.message.complete', args:[savedCount, failedCount])
-			redirect controller:'settings', action:'general'
+			redirect controller:'settings', action:'porting'
 		}
 	}
 
@@ -198,7 +203,6 @@ println "The errors are $fm.errors"
 	}
 
 	private def getGroupNames(csvValue) {
-		println "getGroupNames() : csvValue=$csvValue"
 		Set csvGroups = []
 		csvValue.split("\\\\").each { gName ->
 			def longName
@@ -208,12 +212,10 @@ println "The errors are $fm.errors"
 				csvGroups << longName
 			}
 		}
-		println "getGroupNames() : ${csvGroups - ''}, a length of ${(csvGroups - '').size()}"
 		return csvGroups - ''
 	}
 
 	private def getGroups(groupNames) {
-		println "ImportController.getGroups() : $groupNames"
 		groupNames.collect { name ->
 			name = name.trim()
 			Group.findByName(name)?: new Group(name:name).save(failOnError:true)
@@ -227,4 +229,59 @@ println "The errors are $fm.errors"
 		return f
 	}
 
+	private def importContactVcard() {
+		def failedVcards = []
+		def savedCount = 0
+		def uploadFile = request.getFile('importCsvFile')
+		def processCard = { v ->
+			def mobile = v.telephoneNumbers? v.telephoneNumbers.first(): null
+			if(mobile) {
+				mobile = mobile.text?: mobile.uri?.number?: ''
+				mobile = mobile.replaceAll(/[^+\d]/, '')
+			}
+			def email = v.emails? v.emails.first().value: ''
+			try {
+				new Contact(name:v.formattedName.value,
+						mobile:mobile,
+						email:email).save(failOnError:true)
+				++savedCount
+			} catch(Exception ex) {
+				failedVcards << v
+			}
+		}
+		def parse = { format='', exceptionClass=null ->
+			try {
+				Ezvcard."parse${format.capitalize()}"(uploadFile.inputStream)
+						.all()
+						.each processCard
+			} catch(Exception ex) {
+				if(exceptionClass && ex.class.isAssignableFrom(exceptionClass)) {
+					return false
+				}
+				throw ex
+			}
+			return true
+		}
+		if(!(parse('xml', org.xml.sax.SAXParseException) ||
+				parse('json', com.fasterxml.jackson.core.JsonParseException) ||
+				(parse('html') && parse()))) {
+			throw new RuntimeException('Failed to parse vcf.')
+		}
+		if(savedCount > 0) {
+			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
+		}
+		flash.failedContacts = Ezvcard.write(failedVcards).go()
+		flash.numberOfFailedLines = failedVcards.size()
+		flash.failedContactsFormat = 'vcf'
+		redirect controller:'settings', action:'porting'
+	}
+
+	def reviewContacts() {
+		if(!session.csvData) {
+			redirect controller:'settings', action:'porting'
+			return
+		}
+		[csvData:session.csvData, recognisedTitles:STANDARD_FIELDS.keySet()]
+	}
 }
+

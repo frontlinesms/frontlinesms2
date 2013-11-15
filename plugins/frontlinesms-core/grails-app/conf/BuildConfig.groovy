@@ -68,6 +68,7 @@ grails.project.dependency.resolution = {
 			excludes "commons-logging", "xml-apis", "groovy"
 		}
 		compile 'com.googlecode.libphonenumber:libphonenumber:4.3'
+		compile 'com.googlecode.ez-vcard:ez-vcard:0.9.0'
 	}
 
 	plugins {

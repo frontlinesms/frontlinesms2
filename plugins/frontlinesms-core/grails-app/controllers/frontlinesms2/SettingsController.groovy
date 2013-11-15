@@ -37,7 +37,9 @@ class SettingsController extends ControllerUtils {
 	}
 
 	def porting() {	
-		[failedContacts: flash.failedContacts, numberOfFailedLines: flash.numberOfFailedLines]	
+		[failedContacts:flash.failedContacts,
+				numberOfFailedLines:flash.numberOfFailedLines,
+				failedContactsFormat:flash.failedContactsFormat]
 	}
 
 	def selectLocale() {
