@@ -55,7 +55,7 @@ class ContactListSpec extends ContactBaseSpec {
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
-			waitFor { contactList.contacts.containsAll(['Sam Anderson -', 'SAm Jones -', 'SaM Tina -']) && contactList.contacts.size() == 3 }
+			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones', 'SaM Tina']) && contactList.contacts.size() == 3 }
 	}
 
 	def 'should be able to search contacts by phone number'() {
@@ -95,7 +95,7 @@ class ContactListSpec extends ContactBaseSpec {
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
-			waitFor { contactList.contacts.containsAll(['SAm Jones -', 'Sam Anderson -']) }
+			waitFor { contactList.contacts.containsAll(['SAm Jones', 'Sam Anderson']) }
 	}
 	
 	def "should remain on the same page when a contact is selected"() {
