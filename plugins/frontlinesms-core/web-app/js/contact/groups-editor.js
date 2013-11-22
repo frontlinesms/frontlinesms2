@@ -31,7 +31,7 @@ var GroupMembershipEditor = function() {
 		groupList.append(groupListItem);
 		me.remove();
 		getNoGroupMessage().hide();
-		if(isSingleContactEdit) { addGroupId(groupId); }
+		if(isSingleContactEdit()) { addGroupId(groupId); }
 	}
 
 	function getNoGroupMessage() {
@@ -61,7 +61,7 @@ var GroupMembershipEditor = function() {
 		removeGroupId(groupId);
 		selectmenuTools.refresh(groupDropdown);
 
-		if(isSingleContactEdit) { contactEditor.updateContactData(event); }
+		if(isSingleContactEdit()) { contactEditor.updateContactData(event); }
 	}
 	function removeGroupId(id) {
 		toAdd.remove(id);
