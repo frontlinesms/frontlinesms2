@@ -31,7 +31,7 @@ var GroupMembershipEditor = function() {
 		groupList.append(groupListItem);
 		me.remove();
 		getNoGroupMessage().hide();
-		if(isSingleContactEdit()) { addGroupId(groupId); }
+		addGroupId(groupId);
 	}
 
 	function getNoGroupMessage() {
@@ -73,8 +73,10 @@ var GroupMembershipEditor = function() {
 		toAdd.push(id);
 		updateFormLists();
 		//TODO Quick fix for a bug Firefox ... Please forgive me
-		var event = { target : $("#group-dropdown") }
-		contactEditor.updateContactData(event);
+		if(isSingleContactEdit()) { 
+			var event = { target : $("#group-dropdown") }
+			contactEditor.updateContactData(event);
+		}
 	}
 	function updateFormLists() {
 		$('input:hidden[name=groupsToAdd]').val(toAdd.join(","));
