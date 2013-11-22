@@ -187,7 +187,7 @@ var ContactEditor = function() {
 		var internationFormatWarning, val, sendMessageButton, mainListContactLink, mainListContactLinkKids, nonNumericCharacterWarning;
 		field = $(this);
 		internationFormatWarning = $(".warning.l10nWarning");
-		val = field.val();
+		val = $.trim(field.val());
 		if(!val || val.match(/\+\d+/) || internationalFormatWarningDisabled()) {
 			internationFormatWarning.hide("fast");
 		} else {
@@ -205,7 +205,7 @@ var ContactEditor = function() {
 
 	function showMobileWarning() {
 		var field = $(this), val, nonNumericCharacterWarning, hasNonNumericCharacters;
-		val = field.val();
+		val = $.trim(field.val());
 		nonNumericCharacterWarning = $(".warning.NonNumericNotAllowedWarning");
 		hasNonNumericCharacters = !(/^\+?[0-9]*$/.test(val));
 		if(hasNonNumericCharacters && !nonNumericCharacterWarningDisabled()) {
