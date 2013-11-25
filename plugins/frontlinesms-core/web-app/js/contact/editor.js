@@ -129,12 +129,6 @@ var ContactEditor = function() {
 		$(this).find("i").removeClass("in-progress").addClass("icon-loading");
 
 	},
-	internationalFormatWarningDisabled = function() {
-		return ($("input[name=showl10warning]").val() === 'false');
-	},
-	nonNumericCharacterWarningDisabled = function() {
-		return ($("input[name=showNonNumericCharacterWarning]").val() === 'false');
-	},
 	reenableFormElements = function(removeErrorMessages) {
 		contactEditWrapper.find("textarea,input[type='text']").removeAttr("disabled");
 		$("#new-field-dropdown").attr("disabled", false).selectmenu();
@@ -184,35 +178,27 @@ var ContactEditor = function() {
 	}
 
 	function validateMobile(field) {
-		var internationFormatWarning, val, sendMessageButton, mainListContactLink, mainListContactLinkKids, nonNumericCharacterWarning;
+		var val, sendMessageButton, notInternationalFormat;
 		field = $(this);
-		internationFormatWarning = $(".warning.l10nWarning");
-		val = $.trim(field.val());
-		if(!val || val.match(/\+\d+/) || internationalFormatWarningDisabled()) {
-			internationFormatWarning.hide("fast");
-		} else {
-			field.removeClass("error");
-			internationFormatWarning.show("fast");
+		val = field.val().trim();
+
+		if(fsms_config["mobileNumbers.nonNumeric.warn"]) {
+			notInternationalFormat = val && !(/^\+/.test(val));
+			$(".warning.l10nWarning").showIf(notInternationalFormat, "fast");
+			if(!notInternationalFormat) {
+				field.removeClass("error");
+			}
 		}
 
-		sendMessageButton = $("#contact-infos a.send-message");
-		if(val) {
-			sendMessageButton.removeClass("hidden");
-		} else {
-			sendMessageButton.addClass("hidden");
-		}
+		$("#contact-infos a.send-message").toggleClass("hidden", val !== "");
 	}
 
-	function showMobileWarning() {
-		var field = $(this), val, nonNumericCharacterWarning, hasNonNumericCharacters;
-		val = $.trim(field.val());
-		nonNumericCharacterWarning = $(".warning.NonNumericNotAllowedWarning");
-		hasNonNumericCharacters = !(/^\+?[0-9]*$/.test(val));
-		if(hasNonNumericCharacters && !nonNumericCharacterWarningDisabled()) {
-			nonNumericCharacterWarning.show("fast");
-		} else {
-			nonNumericCharacterWarning.hide("fast");
-		}
+	function checkMobileNumberForNonNumericCharacters() {
+		var nonNumericCharactersFound;
+		if(!fsms_config["mobileNumbers.nonNumeric.warn"]) { return; }
+		nonNumericCharactersFound = !(/^\+?[0-9]*$/.test($(this).val().trim()));
+		$(".warning.NonNumericNotAllowedWarning")
+				.showIf(nonNumericCharactersFound, "fast");
 	}
 
 //> CUSTOM FIELD STUFF START
@@ -305,7 +291,7 @@ var ContactEditor = function() {
 		$("input[name=mobile]")
 				.change(validateMobile)
 				.focus(removeNonNumericCharacters)
-				.keyup(showMobileWarning);
+				.keyup(checkMobileNumberForNonNumericCharacters);
 
 		// bind form data change listeners
 		$(".edit input[type=text], .edit textarea").blur(updateContactData);

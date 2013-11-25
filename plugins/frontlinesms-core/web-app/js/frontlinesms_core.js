@@ -190,5 +190,14 @@ jQuery(function() {
 		max: jQuery.validator.format(i18n("jquery.validation.max")),
 		min: jQuery.validator.format(i18n("jquery.validation.min"))
 	});
+
+	jQuery.fn.showIf = function(shouldShow) {
+		var args = Array.slice(arguments, 1);
+		if(shouldShow) {
+			jQuery.fn.show.apply(this, args);
+		} else {
+			jQuery.fn.hide.apply(this, args);
+		}
+	};
 });
 

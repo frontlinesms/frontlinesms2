@@ -15,6 +15,10 @@
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 	var console = console || {};
 	console.log = console.log || function() {};
+	var fsms_config = {
+		"mobileNumbers.international.require":${grailsApplication.config.mobileNumbers.international.require},
+		"mobileNumbers.nonNumeric.warn":      ${grailsApplication.config.mobileNumbers.nonNumeric.warn}
+	};
 
 	new Image().src = "${r.resource(dir:'images', file:'status/red.png')}";
 

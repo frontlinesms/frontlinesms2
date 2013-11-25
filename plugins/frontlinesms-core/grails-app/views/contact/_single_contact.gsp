@@ -6,9 +6,6 @@
 	<g:hiddenField name="groupsToRemove" value=","/>
 	<g:hiddenField name="fieldsToAdd" value=","/>
 	<g:hiddenField name="fieldsToRemove" value=","/>
-
-	<g:hiddenField name="showl10warning" value="${showl10warning}"/>
-	<g:hiddenField name="showNonNumericCharacterWarning" value="${showNonNumericCharacterWarning}"/>
 	<fsms:contactWarning warningType="l10nWarning"/>
 	<fsms:contactWarning warningType="NonNumericNotAllowedWarning"/>
 

@@ -6,8 +6,6 @@ import grails.converters.JSON
 class ContactController extends ControllerUtils {
 //> STATIC PROPERTIES
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-	static NON_NUMERIC_CHARACTERS_WARNING_DISABLE_SETTING = "non.numeric.characters.removed.warning.disabled"
-	static INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING = "international.number.format.warning.disabled"
 
 //> SERVICES
 	def grailsApplication
@@ -71,8 +69,6 @@ class ContactController extends ControllerUtils {
 				nonContactGroupInstanceList: contactInstance ? Group.findAllWithoutMember(contactInstance) : null,
 				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
-				showl10warning: appSettingsService.get(INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING) != 'true',
-				showNonNumericCharacterWarning: appSettingsService.get(NON_NUMERIC_CHARACTERS_WARNING_DISABLE_SETTING) != 'true',
 				groupInstanceList: Group.findAll(),
 				smartGroupInstanceList: SmartGroup.list()]
 		render view:'/contact/_single_contact', model:model
@@ -115,8 +111,6 @@ class ContactController extends ControllerUtils {
 				contactInstanceTotal: contactInstanceTotal,
 				contactsSection: contactList.contactsSection,
 				contactsSectionContactTotal: contactList.contactsSectionContactTotal,
-				showl10warning: appSettingsService.get(INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING) != 'true',
-				showNonNumericCharacterWarning: appSettingsService.get(NON_NUMERIC_CHARACTERS_WARNING_DISABLE_SETTING) != 'true',
 				contactFieldInstanceList: usedFields,
 				contactGroupInstanceList: contactGroupInstanceList,
 				contactGroupInstanceTotal: contactGroupInstanceList.size(),
@@ -132,8 +126,6 @@ class ContactController extends ControllerUtils {
 				contactFieldInstanceList: [],
 				contactGroupInstanceList: [],
 				contactGroupInstanceTotal: 0,
-				showl10warning: appSettingsService.get(INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING) != 'true',
-				showNonNumericCharacterWarning: appSettingsService.get(NON_NUMERIC_CHARACTERS_WARNING_DISABLE_SETTING) != 'true',
 				nonContactGroupInstanceList: Group.findAll(),
 				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
 				fieldInstanceList: CustomField.findAll(),
