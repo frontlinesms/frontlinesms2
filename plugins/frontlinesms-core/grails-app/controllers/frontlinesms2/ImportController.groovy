@@ -65,6 +65,9 @@ class ImportController extends ControllerUtils {
 			def tokens = parser.parseLine(line)
 			if(!headers) headers = tokens
 			else try {
+				if(headers.any { it.size() == 0 }) {
+					throw new RuntimeException("Empty headers in some contact import columns")
+				}
 				Contact c = new Contact()
 				def groups
 				def customFields = []

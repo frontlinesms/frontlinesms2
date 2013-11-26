@@ -10,9 +10,12 @@ var ContactImportReviewer = function() {
 	},
 	checkForRecognisedHeader = function() {
 		if($.inArray($(this).val(), $('input[name=recognisedTitles]').val().split(',')) > -1) {
-			$(this).addClass('recognised');
-		} else {
-			$(this).removeClass('recognised');
+			$(this).removeClass().addClass('recognised');
+		} else if ($(this).val() == "") {
+			$(this).removeClass().addClass('empty');
+		}
+		else {
+			$(this).removeClass().addClass('unrecognised');
 		}
 	},
 	submit = function() {
