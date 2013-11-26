@@ -23,6 +23,7 @@ class ContactController extends ControllerUtils {
 				Integer.MAX_VALUE
 			}
 		}.call()
+		maxRequested = maxRequested?:50
 		params.max = Math.min(maxRequested, maxConfigured)
 		params.sort = params.sort ?: 'name'
 		params.offset = params.offset ?: 0
