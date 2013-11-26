@@ -18,11 +18,9 @@ class ContactController extends ControllerUtils {
 
 		def maxRequested = {
 			try {
-				params.max as Integer
-			} catch(NumberFormatException _) {
-				Integer.MAX_VALUE
-			}
-		}.call()
+				return params.max as Integer
+			} catch(Exception _) {}
+		}.call()?: Integer.MAX_VALUE
 		params.max = Math.min(maxRequested, maxConfigured)
 		params.sort = params.sort ?: 'name'
 		params.offset = params.offset ?: 0
