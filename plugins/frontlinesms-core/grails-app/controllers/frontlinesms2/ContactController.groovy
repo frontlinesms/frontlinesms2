@@ -14,7 +14,16 @@ class ContactController extends ControllerUtils {
 
 //> INTERCEPTORS
 	def beforeInterceptor = {
-		params.max = params.max?: grailsApplication.config.grails.views.pagination.max
+		def maxConfigured = grailsApplication.config.grails.views.pagination.max
+
+		def maxRequested = {
+			try {
+				params.max as Integer
+			} catch(NumberFormatException _) {
+				Integer.MAX_VALUE
+			}
+		}.call()
+		params.max = Math.min(maxRequested, maxConfigured)
 		params.sort = params.sort ?: 'name'
 		params.offset = params.offset ?: 0
 		true
@@ -22,7 +31,7 @@ class ContactController extends ControllerUtils {
 
 //> ACTIONS
 	def index() {
-		redirect action: "show", params:params
+		redirect action:'show', params:params
 	}
 
 	def getUniqueCustomFields() {
@@ -48,7 +57,7 @@ class ContactController extends ControllerUtils {
 		}
 		render ([ok:true] as JSON)
 	}
-	
+
 	def updateContactPane() {
 		def contactInstance = Contact.get(params.id)
 		def usedFields = contactInstance?.customFields ?: []
@@ -73,7 +82,7 @@ class ContactController extends ControllerUtils {
 				smartGroupInstanceList: SmartGroup.list()]
 		render view:'/contact/_single_contact', model:model
 	}
-	
+
 	def show() {
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
@@ -93,15 +102,15 @@ class ContactController extends ControllerUtils {
 		def contactGroupInstanceList = contactInstance?.groups ?: []
 		if(params.contactId && !contactInstance) {
 			flash.message = message(code:'contact.not.found')
-			redirect(action: 'show')
+			redirect action:'show'
 			return false
 		} else if(params.groupId && !contactList.contactsSection) {
 			flash.message = message(code:'group.not.found')
-			redirect(action: 'show')
+			redirect action:'show'
 			return false
 		} else if(params.smartGroupId && !contactList.contactsSection) {
 			flash.message = message(code:'smartgroup.not.found')
-			redirect(action: 'show')
+			redirect action:'show'
 			return false
 		}
 
@@ -120,7 +129,7 @@ class ContactController extends ControllerUtils {
 				groupInstanceList: Group.findAll(),
 				smartGroupInstanceList: SmartGroup.list()]
 	}
-	
+
 	def createContact() {
 		render view:'show', model: [contactInstance: new Contact(params),
 				contactFieldInstanceList: [],
@@ -147,7 +156,7 @@ class ContactController extends ControllerUtils {
 					contactPrettyPhoneNumber: contactInstance.mobile?.toPrettyPhoneNumber() ] << getContactErrors(contactInstance)
 			render (data as JSON)
 		} else {
-			redirect(action:'show', params:[contactId:contactInstance.id])
+			redirect action:'show', params:[contactId:contactInstance.id]
 		}
 	}
 
@@ -166,7 +175,7 @@ class ContactController extends ControllerUtils {
 		println "##### ${data}"
 		return data
 	}
-	
+
 	def update() {
 		withContact { contactInstance ->
 			contactInstance.properties = params
@@ -179,7 +188,7 @@ class ContactController extends ControllerUtils {
 			}
 		}
 	}
-	
+
 	def updateMultipleContacts() {
 		params.remove("mobile") //TODO remove on refactor of contact form
 		getCheckedContacts().each { c ->
@@ -188,20 +197,20 @@ class ContactController extends ControllerUtils {
 		}
 		render(view:'show', model: show())
 	}
-	
+
 	def confirmDelete() {
 		def contactInstanceList = getCheckedContacts()
 		[contactInstanceList:contactInstanceList,
 				contactInstanceTotal:contactInstanceList.size()]
 	}
-	
+
 	def delete() {
 		// FIXME looks like someone doesn't know what's going wrong here and clutching at straws
 		Contact.withTransaction { status ->
 			getCheckedContacts()*.delete()
 		}
 		flash.message = message(code:'default.deleted', args:[message(code:'contact.label')])
-		redirect(action: "show")		
+		redirect action:'show'
 	}
 
 	def newCustomField() {
@@ -215,7 +224,7 @@ class ContactController extends ControllerUtils {
 	def search() {
 		render(template:'search_results', model:contactSearchService.contactList(params))
 	}
-	
+
 	def checkForDuplicates() {
 		def foundContact = Contact.findByMobile(params.mobile)
 		if (foundContact && foundContact.id.toString() == params.contactId) {
@@ -247,7 +256,7 @@ class ContactController extends ControllerUtils {
 		render(view: '_multiple_contact', model: [sharedGroupInstanceList:groups.shared,
 				nonSharedGroupInstanceList:groups.nonShared])
 	}
-	
+
 	private def withContact = withDomainObject Contact, { params.contactId }
 
 	private def getCheckedContacts() {
@@ -266,17 +275,17 @@ class ContactController extends ControllerUtils {
 		updateGroups(contactInstance)
 		return contactInstance.stripNumberFields()
 	}
-	
+
 	private def updateGroups(Contact contactInstance) {
 		def groupsToAdd = params.groupsToAdd?.tokenize(',')?.unique()
 		def groupsToRemove = params.groupsToRemove?.tokenize(',')
-		
+
 		// Check for errors in groupsToAdd and groupsToRemove
 		if(!groupsToAdd?.disjoint(groupsToRemove)) {
 			contactInstance.errors.reject(message(code: 'contact.addtogroup.error'))
 			return false
 		}
-		
+
 		groupsToRemove.each() { id ->
 			contactInstance.removeFromGroups(Group.get(id))
 		}
@@ -285,12 +294,12 @@ class ContactController extends ControllerUtils {
 		}
 		return contactInstance
 	}
-	
+
 	private def updateCustomFields(Contact contactInstance) {
 		def fieldsToAdd = params.fieldsToAdd?.tokenize(',')
 		def fieldsToRemove = params.fieldsToRemove?.tokenize(',')
 		def existingFields = CustomField.findAllByContact(contactInstance)
-		
+
 		fieldsToAdd?.each { name ->
 			def fieldsByName = params["newCustomField-$name"]
 			if(fieldsByName && !(name in existingFields*.name)) {
