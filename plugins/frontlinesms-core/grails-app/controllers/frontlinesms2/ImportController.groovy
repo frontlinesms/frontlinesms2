@@ -47,7 +47,7 @@ class ImportController extends ControllerUtils {
 			if(!headerRowSize) {
 				headerRowSize = tokens.size()
 			}
-			if(tokens.size() == headerRowSize) {
+			if(tokens.size() == headerRowSize && tokens.find({it as Boolean})) {
 				csvAsNestedLists << tokens
 			}
 		}
