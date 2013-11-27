@@ -104,7 +104,7 @@ grails.project.dependency.resolution = {
 		build ":tomcat:$grailsVersion", {
 			export = false
 		}
-		build ':bails:0.4.1'
+		build ':bails:0.6-SNAPSHOT'
 		compile ':font-awesome-resources:3.2.1.3'
 	}
 }
