@@ -9,13 +9,16 @@ var ContactImportReviewer = function() {
 		return JSON.stringify($('input[data-x=' + x + '][data-y=' + y + ']').val());
 	},
 	checkForRecognisedHeader = function() {
-		if($.inArray($(this).val(), $('input[name=recognisedTitles]').val().split(',')) > -1) {
-			$(this).removeClass().addClass('recognised');
-		} else if ($(this).val() == "") {
-			$(this).removeClass().addClass('empty');
-		}
-		else {
-			$(this).removeClass().addClass('unrecognised');
+		var element, val;
+		element = $(this);
+		element.removeClass();
+		val = element.val();
+		if($.inArray(val, $('input[name=recognisedTitles]').val().split(',')) > -1) {
+			element.addClass('recognised');
+		} else if(val) {
+			element.addClass('unrecognised');
+		} else {
+			element.addClass('empty');
 		}
 	},
 	submit = function() {
