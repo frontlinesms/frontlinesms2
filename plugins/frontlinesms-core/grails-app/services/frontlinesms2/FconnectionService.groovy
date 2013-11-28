@@ -78,15 +78,11 @@ class FconnectionService {
 		if(camelContext.routes.any { it.id ==~ /.*-$c.id$/ }) {
 			return ConnectionStatus.CONNECTED
 		}
-		if (c instanceof SmslibFconnection) {
-			if(deviceDetectionService.isConnecting(((SmslibFconnection) c).port)) {
-				return ConnectionStatus.CONNECTING
-			}
-			if(isFailed(c)) {
-				return ConnectionStatus.FAILED
-			}
-			return ConnectionStatus.NOT_CONNECTED
+
+		if(c.hasProperty('customStatus')) {
+			return c.customStatus
 		}
+
 		return ConnectionStatus.FAILED
 	}
 

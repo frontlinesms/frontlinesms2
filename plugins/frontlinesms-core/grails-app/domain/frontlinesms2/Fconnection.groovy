@@ -21,6 +21,7 @@ class Fconnection {
 	
 	static final def implementations = [SmslibFconnection,
 			ClickatellFconnection,
+			FrontlinesyncFconnection,
 			IntelliSmsFconnection,
 			NexmoFconnection,
 			SmssyncFconnection,

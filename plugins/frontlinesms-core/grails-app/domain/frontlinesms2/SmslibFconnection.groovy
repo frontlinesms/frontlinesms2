@@ -11,6 +11,8 @@ class SmslibFconnection extends Fconnection {
 	static configFields = ['name', 'manufacturer', 'model', 'port', 'baud', 'pin', 'imsi', 'serial', 'sendEnabled', 'receiveEnabled']
 	static defaultValues = [sendEnabled:true, receiveEnabled:true, baud:9600]
 	static String getShortName() { 'smslib' }
+
+	def deviceDetectionService
 	
 	private def camelAddress = {
 		def optional = { name, val ->
@@ -71,6 +73,16 @@ class SmslibFconnection extends Fconnection {
 			}
 		}
 	}
+
+	def getCustomStatus() {
+		if(deviceDetectionService.isConnecting(port)) {
+			return ConnectionStatus.CONNECTING
+		}
+		if(fconnectionService.isFailed(this)) {
+			return ConnectionStatus.FAILED
+		}
+		return ConnectionStatus.NOT_CONNECTED
+	}
 	
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
@@ -103,3 +115,4 @@ class SmslibFconnection extends Fconnection {
 		}.routeDefinitions
 	}
 }
+
