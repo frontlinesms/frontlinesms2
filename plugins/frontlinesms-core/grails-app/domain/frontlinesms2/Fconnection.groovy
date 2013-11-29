@@ -19,13 +19,16 @@ class Fconnection {
 
 	static hasMany = [messages: Fmessage]
 	
-	static final def implementations = [SmslibFconnection,
+	static final implementations = [SmslibFconnection,
 			ClickatellFconnection,
-			FrontlinesyncFconnection,
 			IntelliSmsFconnection,
 			NexmoFconnection,
 			SmssyncFconnection,
 			SmppFconnection]
+	static final betaImplementations = [FrontlinesyncFconnection] + implementations
+	static final getImplementations(params) {
+		params.beta? betaImplementations: implementations
+	}
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields

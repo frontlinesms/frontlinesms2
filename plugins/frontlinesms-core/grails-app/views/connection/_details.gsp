@@ -6,10 +6,11 @@
 	</div>
 </g:if>
 <g:else>
-	<g:each in="${Fconnection.implementations}">
+	<g:each in="${Fconnection.getImplementations(params)}">
 		<div id="${it.shortName}-form" class="fconnection-details">
 			<h2><g:message code="${it.shortName}.label"/></h2>
 			<fsms:inputs instance="${fconnectionInstance}" instanceClass="${it}" list="true"/>
 		</div>
 	</g:each>
 </g:else>
+

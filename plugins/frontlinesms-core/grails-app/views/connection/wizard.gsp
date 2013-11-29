@@ -10,6 +10,9 @@
 		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
 	</ol>
 	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); fconnection.handleSaveResponse(data)">
+		<g:if test="${params.beta != null}">
+			<g:hiddenField name="beta" value="true"/>
+		</g:if>
 		<fsms:wizardTabs templates="type, details, confirm"/>
 	</g:formRemote>
 </div>
@@ -29,7 +32,7 @@ fconnection.setType = function(connectionType) {
 			}
 		});
 	}
-	<g:each in="${Fconnection.implementations*.shortName}">
+	<g:each in="${Fconnection.getImplementations(params)*.shortName}">
 		$("#${it}-form").hide();
 	</g:each>
 	$("#" + connectionType + "-form").css('display', 'inline');
@@ -37,7 +40,7 @@ fconnection.setType = function(connectionType) {
 	connectionTooltips.init(connectionType);
 };
 
-<g:each in="${Fconnection.implementations}" var="imp">
+<g:each in="${Fconnection.getImplementations(params)}" var="imp">
 	fconnection.${imp.shortName} = {
 		<%
 			def asJs = { it? '"' + it.join('", "') + '"': '' }
@@ -48,7 +51,7 @@ fconnection.setType = function(connectionType) {
 		validationSubsectionFieldKeys: [${validationSubsectionFieldKeys}],
 		humanReadableName: "<g:message code="${imp.shortName}.label"/>",
 		show: function() {
-			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
+			<g:each in="${(Fconnection.getImplementations(params) - imp)*.shortName}">
 				$("#${it}-confirm").hide();
 			</g:each>
 			var validationSubsectionFieldKeys = fconnection[fconnection.getType()].validationSubsectionFieldKeys;

@@ -47,7 +47,7 @@ class ConnectionController extends ControllerUtils {
 
 	def save() {
 		remapFormParams()
-		doSave(Fconnection.implementations.find { it.shortName == params.connectionType })
+		doSave(Fconnection.getImplementations(params).find { it.shortName == params.connectionType })
 	}
 
 	def delete() {
@@ -131,7 +131,7 @@ class ConnectionController extends ControllerUtils {
 
 	private def remapFormParams() {
 		def cType = params.connectionType
-		if(!(cType in Fconnection.implementations*.shortName)) {
+		if(!(cType in Fconnection.getImplementations(params)*.shortName)) {
 			throw new RuntimeException("Unknown connection type: " + cType)
 		}
 		def newParams = [:] // TODO remove this - without currently throw ConcurrentModificationException

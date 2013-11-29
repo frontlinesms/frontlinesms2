@@ -2,7 +2,7 @@
 <g:if test="${!fconnectionInstance}">
 	<fsms:radioGroup solo="true" title="connection.select"
 			name="connectionType" checked="smslib"
-			values="${Fconnection.implementations*.shortName}"
+			values="${Fconnection.getImplementations(params)*.shortName}"
 			labelSuffix=".label"
 			descriptionSuffix=".description"
 			onclick="fconnection.setType(this.value)"/>
