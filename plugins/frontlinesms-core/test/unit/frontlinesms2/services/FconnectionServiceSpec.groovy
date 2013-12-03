@@ -43,17 +43,18 @@ class FconnectionServiceSpec extends Specification {
 		given:
 			context.routes >> []
 			def c = mockSmslibFconnection(1, true)
+			c.getCustomStatus() >> { ConnectionStatus.NOT_CONNECTED}
 		when:
 			def status = service.getConnectionStatus(c)
 		then:
 			status == ConnectionStatus.NOT_CONNECTED
 	}
-
+	
 	def 'Connecting enabled SmslibFconnection gives a status of CONNECTING'() {
 		given:
 			context.routes >> []
 			def c = mockSmslibFconnection(1, true)
-			service.deviceDetectionService.isConnecting(_) >> { ConnectionStatus.CONNECTING }
+			service.connectingIds = 1
 		when:
 			def status = service.getConnectionStatus(c)
 		then:
