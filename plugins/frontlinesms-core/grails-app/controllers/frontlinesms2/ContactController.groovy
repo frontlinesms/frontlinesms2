@@ -42,16 +42,16 @@ class ContactController extends ControllerUtils {
 	}
 
 	def disableInternationalFormatWarning() {
-		appSettingsService.set(INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING, true)
+		appSettingsService.set("INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING", true)
 		render ([ok:true] as JSON)
 	}
 
 	def disableWarning() {
 		def warning = params.warning
 		if(warning == "NonNumericNotAllowedWarning") {
-			appSettingsService.set(NON_NUMERIC_CHARACTERS_WARNING_DISABLE_SETTING, true)
+			appSettingsService.set("NON_NUMERIC_CHARACTERS_WARNING_DISABLE_SETTING", true)
 		} else if(warning =="l10nWarning") {
-			appSettingsService.set(INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING, true)
+			appSettingsService.set("INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING", true)
 		}
 		render ([ok:true] as JSON)
 	}
