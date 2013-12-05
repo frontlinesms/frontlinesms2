@@ -40,6 +40,7 @@ class CoreBootStrap {
 		MetaClassModifiers.addAll()
 
 		initAppSettings()
+		updateAvailableFconnections()
 
 		if(Environment.current == Environment.TEST) {
 			quartzScheduler.start()
@@ -635,6 +636,13 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 			def fconnectionIdList = fconnectionInstanceList.collect {"fconnection-${it.id}"}.join(",")
 			appSettingsService.set('routing.use', fconnectionIdList)
 		}
+	}
+
+	private def updateAvailableFconnections() {
+		println "# CoreBootStrap.updateAvailableFconnections() :: Fconnection implementations before pruning: ${Fconnection.implementations}"
+		Fconnection.implementations.remove(ClickatellFconnection)
+		Fconnection.implementations.remove(IntelliSmsFconnection)
+		println "# CoreBootStrap.updateAvailableFconnections() :: Fconnection implementations after pruning: ${Fconnection.implementations}"
 	}
 }
 
