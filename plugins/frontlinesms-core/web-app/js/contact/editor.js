@@ -182,7 +182,7 @@ var ContactEditor = function() {
 		field = $(this);
 		val = field.val().trim();
 
-		if(fsms_config["mobileNumbers.nonNumeric.warn"]) {
+		if(fsms_config["mobileNumbers.international.require"]) {
 			notInternationalFormat = val && !(/^\+/.test(val));
 			$(".warning.l10nWarning").showIf(notInternationalFormat, "fast");
 			if(!notInternationalFormat) {
@@ -289,8 +289,8 @@ var ContactEditor = function() {
 		$("#notes").autosize();
 
 		$("input[name=mobile]")
-				.change(validateMobile)
 				.focus(removeNonNumericCharacters)
+				.keyup(validateMobile)
 				.keyup(checkMobileNumberForNonNumericCharacters);
 
 		// bind form data change listeners
