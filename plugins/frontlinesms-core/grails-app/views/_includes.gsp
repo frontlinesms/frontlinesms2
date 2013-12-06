@@ -16,7 +16,7 @@
 	var console = console || {};
 	console.log = console.log || function() {};
 	var fsms_config = {
-		"mobileNumbers.international.require":${grailsApplication.config.mobileNumbers.international.require},
+		"mobileNumbers.international.warn":${grailsApplication.config.mobileNumbers.international.warn},
 		"mobileNumbers.nonNumeric.warn":      ${grailsApplication.config.mobileNumbers.nonNumeric.warn}
 	};
 
