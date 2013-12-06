@@ -92,6 +92,7 @@ var ContactEditor = function() {
 		mobileField.attr("data-nonPrettyPhoneNumber", nonPrettyPhoneNumber);
 		mobileField.attr("data-prettyPhoneNumber", data.contactPrettyPhoneNumber);
 		mobileField.val(data.contactPrettyPhoneNumber);
+		mobileField.trigger("keyup");
 
 		button = $('#single-contact a.send-message');
 		buttonKids = button.children();
@@ -183,7 +184,7 @@ var ContactEditor = function() {
 		val = field.val().trim();
 
 		if(fsms_config["mobileNumbers.international.warn"]) {
-			notInternationalFormat = val && !(/^\+/.test(val));
+			notInternationalFormat = val && !(/^\+/.test(val)) && !((/^\+([a-zA-Z0-9]*)/).test(val));
 			$(".warning.l10nWarning").showIf(notInternationalFormat, "fast");
 			if(!notInternationalFormat) {
 				field.removeClass("error");
