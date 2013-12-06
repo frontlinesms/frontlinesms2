@@ -182,7 +182,7 @@ var ContactEditor = function() {
 		field = $(this);
 		val = field.val().trim();
 
-		if(fsms_config["mobileNumbers.international.require"]) {
+		if(fsms_config["mobileNumbers.international.warn"]) {
 			notInternationalFormat = val && !(/^\+/.test(val));
 			$(".warning.l10nWarning").showIf(notInternationalFormat, "fast");
 			if(!notInternationalFormat) {
