@@ -18,6 +18,10 @@
 	var fsms_config = {
 		"mobileNumbers.international.warn":${grailsApplication.config.mobileNumbers.international.warn},
 		"mobileNumbers.nonNumeric.warn":      ${grailsApplication.config.mobileNumbers.nonNumeric.warn}
+	},
+	fsms_settings = {
+		"non.numeric.characters.removed.warning.disabled": ${grailsApplication.mainContext.appSettingsService.get('non.numeric.characters.removed.warning.disabled')?:false},
+		"international.number.format.warning.disabled": ${grailsApplication.mainContext.appSettingsService.get('international.number.format.warning.disabled')?:false}
 	};
 
 	new Image().src = "${r.resource(dir:'images', file:'status/red.png')}";

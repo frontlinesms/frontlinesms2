@@ -183,7 +183,7 @@ var ContactEditor = function() {
 		field = $(this);
 		val = field.val().trim();
 
-		if(fsms_config["mobileNumbers.international.warn"]) {
+		if(fsms_config["mobileNumbers.international.warn"] && !fsms_settings["international.number.format.warning.disabled"]) {
 			notInternationalFormat = val && !(/^\+/.test(val)) && !((/^\+([a-zA-Z0-9]*)/).test(val));
 			$(".warning.l10nWarning").showIf(notInternationalFormat, "fast");
 			if(!notInternationalFormat) {
@@ -196,7 +196,7 @@ var ContactEditor = function() {
 
 	function checkMobileNumberForNonNumericCharacters() {
 		var nonNumericCharactersFound;
-		if(!fsms_config["mobileNumbers.nonNumeric.warn"]) { return; }
+		if(!fsms_config["mobileNumbers.nonNumeric.warn"] || fsms_settings["international.number.format.warning.disabled"]) { return; }
 		nonNumericCharactersFound = !(/^\+?[0-9]*$/.test($(this).val().trim()));
 		$(".warning.NonNumericNotAllowedWarning")
 				.showIf(nonNumericCharactersFound, "fast");
