@@ -192,7 +192,7 @@ jQuery(function() {
 	});
 
 	jQuery.fn.showIf = function(shouldShow) {
-		var args = Array.prototype.slice(arguments, 1);
+		var args = Array.prototype.slice.call(arguments, 1);
 		if(shouldShow) {
 			jQuery.fn.show.apply(this, args);
 		} else {
