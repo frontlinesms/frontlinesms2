@@ -196,7 +196,7 @@ var ContactEditor = function() {
 
 	function checkMobileNumberForNonNumericCharacters() {
 		var nonNumericCharactersFound;
-		if(!fsms_config["mobileNumbers.nonNumeric.warn"] || fsms_settings["international.number.format.warning.disabled"]) { return; }
+		if(!fsms_config["mobileNumbers.nonNumeric.warn"] || fsms_settings["non.numeric.characters.removed.warning.disabled"]) { return; }
 		nonNumericCharactersFound = !(/^\+?[0-9]*$/.test($(this).val().trim()));
 		$(".warning.NonNumericNotAllowedWarning")
 				.showIf(nonNumericCharactersFound, "fast");
