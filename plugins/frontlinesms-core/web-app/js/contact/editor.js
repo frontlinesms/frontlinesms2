@@ -184,7 +184,7 @@ var ContactEditor = function() {
 		val = field.val().trim();
 
 		if(fsms_config["mobileNumbers.international.warn"] && !fsms_settings["international.number.format.warning.disabled"]) {
-			notInternationalFormat = val && !(/^\+/.test(val)) && !((/^\+([a-zA-Z0-9]*)/).test(val));
+			notInternationalFormat = val && !(/^\+/.test(val)) && (/[0-9]+/).test(val);
 			$(".warning.l10nWarning").showIf(notInternationalFormat, "fast");
 			if(!notInternationalFormat) {
 				field.removeClass("error");
