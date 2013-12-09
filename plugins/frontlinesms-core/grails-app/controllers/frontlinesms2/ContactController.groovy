@@ -193,7 +193,8 @@ class ContactController extends ControllerUtils {
 			parseContactFields(c)
 			attemptSave(c)
 		}
-		render(view:'show', model: show())
+		flash.message = message(code:'default.updated.multiple', args:[message(code:'contact.label')])
+		render view:'show', model:show()
 	}
 
 	def confirmDelete() {
