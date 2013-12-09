@@ -292,7 +292,8 @@ var ContactEditor = function() {
 		$("input[name=mobile]")
 				.focus(removeNonNumericCharacters)
 				.keyup(validateMobile)
-				.keyup(checkMobileNumberForNonNumericCharacters);
+				.keyup(checkMobileNumberForNonNumericCharacters)
+				.keyup();
 
 		// bind form data change listeners
 		$(".edit input[type=text], .edit textarea").blur(updateContactData);
