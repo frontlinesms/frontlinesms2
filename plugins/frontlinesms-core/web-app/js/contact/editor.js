@@ -92,7 +92,8 @@ var ContactEditor = function() {
 		mobileField.attr("data-nonPrettyPhoneNumber", nonPrettyPhoneNumber);
 		mobileField.attr("data-prettyPhoneNumber", data.contactPrettyPhoneNumber);
 		mobileField.val(data.contactPrettyPhoneNumber);
-		mobileField.trigger("keyup");
+		validateMobile();
+		$(".warning.NonNumericNotAllowedWarning").hide("fast");
 
 		button = $('#single-contact a.send-message');
 		buttonKids = button.children();
@@ -179,15 +180,15 @@ var ContactEditor = function() {
 	}
 
 	function validateMobile() {
-		var val, sendMessageButton, notInternationalFormat;
-		field = $(this) || $("input[name=mobile]");
-		val = field.val().trim();
+		var val, sendMessageButton, notInternationalFormat,
+		mobileField = $('input[name=mobile]');
+		val = mobileField.val().trim();
 
 		if(fsms_config["mobileNumbers.international.warn"] && !fsms_settings["international.number.format.warning.disabled"]) {
 			notInternationalFormat = val && !(/^\+/.test(val)) && (/[0-9]+/).test(val);
 			$(".warning.l10nWarning").showIf(notInternationalFormat, "fast");
 			if(!notInternationalFormat) {
-				field.removeClass("error");
+				mobileField.removeClass("error");
 			}
 		}
 
