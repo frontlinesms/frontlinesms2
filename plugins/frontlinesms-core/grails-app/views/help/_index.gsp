@@ -58,6 +58,7 @@
 		* [How do I create a Group?][60]
 	* ### Managing your Contacts
 		* [How do I see the messages that have been sent and received by a particular contact?][62]
+		* [How do I import contacts?](settings/contact_import)
 		* [How do I export contacts?][63]
 		* [How do I search through the contacts list?][64]
 	* ### Advanced
@@ -76,6 +77,7 @@
 	* [How do I import Messages and Contacts?][92]
 	* [How do I password-protect my FrontlineSMS installation?][103]
 	* [How do I use my modem/phone with FrontlineSMS?][94]
+	* [How do I use my Android phone with FrontlineSMS?][95]
 	* [How do I edit/delete a Connection?][97]
 	* [How do I get FrontlineSMS to detect my device?][98]
 	* [How do I translate the interface into my language?][99]
@@ -135,6 +137,7 @@
 [91]: settings/2.changing_languages
 [92]: settings/3.restoring_a_backup
 [94]: settings/4.setting_up_a_device
+[95]: settings/smssync
 [97]: settings/6.edit_delete_connection
 [98]: settings/5.manually_adding_device
 [99]: settings/7.translatingfrontlinesms
