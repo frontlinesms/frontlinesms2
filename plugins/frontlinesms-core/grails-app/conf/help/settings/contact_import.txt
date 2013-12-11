@@ -1,16 +1,16 @@
-You can import contacts into FrontlineCloud as a .csv file (comma separated value) or vCard (.vcf file). These are common database and phone contact formats. You can import contacts using the following steps.
+You can import contacts into FrontlineSMS as a .csv file (comma separated value) or vCard (.vcf file). These are common database and phone contact formats. You can import contacts using the following steps.
 
 ## Step 1: Make Sure Your Database Is Correctly Formatted
 
-If you can export contacts as a .csv from a program you are currently using, then all you need to do is adjust the column headings. The column headings should follow the example in the screenshot below. Note that "group" is optional; it will be interpreted by FrontlineCloud as a group tag for the contact.
+If you can export contacts as a .csv from a program you are currently using, then all you need to do is adjust the column headings. The column headings should follow the example in the screenshot below. Note that "group" is optional; it will be interpreted by FrontlineSMS as a group tag for the contact.
 
-If you need help getting the format correct, you could enter a few contacts directly into FrontlineCloud, then export those as a .csv file. Open this in a spreadsheet application such as OpenOffice or Microsoft Excel, and add your contacts under the appropriate columns. You can probably copy and paste these from your own database. Once finished, save your new contacts file as a .csv, and import into FrontlineCloud.
+If you need help getting the format correct, you could enter a few contacts directly into FrontlineSMS, then export those as a .csv file. Open this in a spreadsheet application such as OpenOffice or Microsoft Excel, and add your contacts under the appropriate columns. You can probably copy and paste these from your own database. Once finished, save your new contacts file as a .csv, and import into FrontlineSMS.
 
 Note: the column headings must be exact (e.g. 'E-mail Address', not 'email address').
 
 ![TODO](../images/help/contact_import/Screenshot_5_20_13_4_24_PM.jpg)
 
-Note: If you are importing using vCards, you only need to ensure that your contact's mobile number is correctly listed as a mobile number; FrontlineCloud will ignore other numbers.
+Note: If you are importing using vCards, you only need to ensure that your contact's mobile number is correctly listed as a mobile number; FrontlineSMS will ignore other numbers.
 
 ## Step 2: Import Contacts
 
