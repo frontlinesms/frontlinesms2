@@ -1,3 +1,6 @@
+# Online help documents now available
+There is a knowledge base online which is constantly updated and provides easy search of our articles. [If you have access to the internet then please use this resources: http://support.frontlinesms.com][1]
+
 # New features in FrontlineSMS v 2.2.0
 ## New activities
 ### Subscriptions
@@ -17,3 +20,5 @@ Similarly, Polls now optionally allow you to set only one keyword for poll respo
 
 ##Basic Authentication
 Users can now set simple password authentication so that users logging into the platform across a network will be asked for a password before being able to interact with the system.
+
+[1]: http://support.frontlinesms.com
