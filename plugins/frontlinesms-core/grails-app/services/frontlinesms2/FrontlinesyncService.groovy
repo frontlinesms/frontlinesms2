@@ -12,7 +12,7 @@ class FrontlinesyncService {
 				new Fmessage(inbound:true,
 						src:e.fromNumber,
 						text:'missed call',
-						date:new Date())
+						date:new Date(e.callTimestamp))
 					.save()
 			}
 
