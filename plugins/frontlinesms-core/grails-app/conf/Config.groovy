@@ -125,5 +125,5 @@ jqueryValidation.additionalMethods = false
 frontlinesms.plugins=['frontlinesms-core']
 frontlinesms.blockedNotificationList = []
 
-mobileNumbers.international.warn = false
+mobileNumbers.international.warn = true
 mobileNumbers.nonNumeric.warn = true

@@ -41,17 +41,12 @@ class ContactController extends ControllerUtils {
 		}
 	}
 
-	def disableInternationalFormatWarning() {
-		appSettingsService.set("INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING", true)
-		render ([ok:true] as JSON)
-	}
-
 	def disableWarning() {
 		def warning = params.warning
 		if(warning == "NonNumericNotAllowedWarning") {
-			appSettingsService.set("NON_NUMERIC_CHARACTERS_WARNING_DISABLE_SETTING", true)
+			appSettingsService.set("non.numeric.characters.removed.warning.disabled", true)
 		} else if(warning =="l10nWarning") {
-			appSettingsService.set("INTERNATIONAL_NUMBER_FORMAT_WARNING_DISABLE_SETTING", true)
+			appSettingsService.set("international.number.format.warning.disabled", true)
 		}
 		render ([ok:true] as JSON)
 	}
@@ -193,7 +188,8 @@ class ContactController extends ControllerUtils {
 			parseContactFields(c)
 			attemptSave(c)
 		}
-		render(view:'show', model: show())
+		flash.message = message(code:'default.updated.multiple', args:[message(code:'contact.label')])
+		render view:'show', model:show()
 	}
 
 	def confirmDelete() {

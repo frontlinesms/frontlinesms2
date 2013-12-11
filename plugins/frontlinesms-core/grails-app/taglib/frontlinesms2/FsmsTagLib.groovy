@@ -568,7 +568,7 @@ class FsmsTagLib {
 	def contactWarning = { att, body ->
 		def warningType = att.warningType
 		out << "<div for='mobile' class='warning-display warning ${warningType}' style='display:none'>"
-		out << "<a onclick='contactEditor.dismissWarning(\"${warningType}\")' name='dismiss${warningType}' id='dismiss${warningType}' class='dismissWarning' title='${g.message(code:'contact.phonenumber.' + warningType + '.dismiss')}''>"
+		out << "<a onclick='contactEditor.dismissWarning(\"${warningType}\")' name='dismiss${warningType}' id='dismiss${warningType}' class='dismissWarning' title='${g.message(code:'contact.phonenumber.' + warningType + '.dismiss').encodeAsHTML()}''>"
 		out << "<i class='icon-remove'></i>"
 		out << "</a>"
 		def header = g.message(code: "contact.phonenumber." + warningType + ".header")
