@@ -92,7 +92,8 @@ var ContactEditor = function() {
 		mobileField.attr("data-nonPrettyPhoneNumber", nonPrettyPhoneNumber);
 		mobileField.attr("data-prettyPhoneNumber", data.contactPrettyPhoneNumber);
 		mobileField.val(data.contactPrettyPhoneNumber);
-		mobileField.trigger("keyup");
+		validateMobile();
+		$(".warning.NonNumericNotAllowedWarning").hide("fast");
 
 		button = $('#single-contact a.send-message');
 		buttonKids = button.children();
@@ -178,16 +179,16 @@ var ContactEditor = function() {
 		mobileField.val(mobileFieldPrettyPhoneNumber);
 	}
 
-	function validateMobile(field) {
-		var val, sendMessageButton, notInternationalFormat;
-		field = $(this);
-		val = field.val().trim();
+	function validateMobile() {
+		var val, sendMessageButton, notInternationalFormat,
+		mobileField = $('input[name=mobile]');
+		val = mobileField.val().trim();
 
-		if(fsms_config["mobileNumbers.international.warn"]) {
-			notInternationalFormat = val && !(/^\+/.test(val)) && !((/^\+([a-zA-Z0-9]*)/).test(val));
+		if(fsms_config["mobileNumbers.international.warn"] && !fsms_settings["international.number.format.warning.disabled"]) {
+			notInternationalFormat = val && !(/^\+/.test(val)) && (/[0-9]+/).test(val);
 			$(".warning.l10nWarning").showIf(notInternationalFormat, "fast");
 			if(!notInternationalFormat) {
-				field.removeClass("error");
+				mobileField.removeClass("error");
 			}
 		}
 
@@ -196,7 +197,7 @@ var ContactEditor = function() {
 
 	function checkMobileNumberForNonNumericCharacters() {
 		var nonNumericCharactersFound;
-		if(!fsms_config["mobileNumbers.nonNumeric.warn"]) { return; }
+		if(!fsms_config["mobileNumbers.nonNumeric.warn"] || fsms_settings["non.numeric.characters.removed.warning.disabled"]) { return; }
 		nonNumericCharactersFound = !(/^\+?[0-9]*$/.test($(this).val().trim()));
 		$(".warning.NonNumericNotAllowedWarning")
 				.showIf(nonNumericCharactersFound, "fast");
@@ -292,8 +293,8 @@ var ContactEditor = function() {
 		$("input[name=mobile]")
 				.focus(removeNonNumericCharacters)
 				.keyup(validateMobile)
-				.keyup(checkMobileNumberForNonNumericCharacters)
-				.keyup();
+				.keyup(checkMobileNumberForNonNumericCharacters);
+		validateMobile();
 
 		// bind form data change listeners
 		$(".edit input[type=text], .edit textarea").blur(updateContactData);
