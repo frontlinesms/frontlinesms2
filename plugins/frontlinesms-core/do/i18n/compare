@@ -16,7 +16,7 @@ def loadProps(filename) {
 }
 
 def compare(fileA, fileB) {
-	println "# Reporting on differences betweer $fileA and $fileB..."
+	println "# Reporting on KEY differences between $fileA and $fileB..."
 	// read files into props
 	master = loadProps(fileA)
 	other = loadProps(fileB)
@@ -25,15 +25,34 @@ def compare(fileA, fileB) {
 	def missingKeys = (master.keySet().findAll {
 		(!other[it] || other[it].length() == 0) &&
 				!(master[it] ==~ /\s*\{[0-9]\}\s*$/ )
-	}).size()
-	def redundantKeys = (other.keySet() - master.keySet()).size()
+	})
+	def missingKeysSize = missingKeys.size()
+	def redundantKeys = other.keySet() - master.keySet()
+	def redundantKeysSize = redundantKeys.size()
 	def langName = other["language.name"]
 
-	double perc = ((master.size() - missingKeys) / master.size()) * 100
-	println "# Redundant entries: $redundantKeys, MissingEntries: $missingKeys"
+	println "# RedundantKeys are..."
+	println "# \t${redundantKeys.join("\n# \t")}"
+	println "# Missing keys are..."
+	println "# \t${missingKeys.join("\n# \t")}"
+	def identicalValuesCount = compareValues(master, other)
+	double perc = ((master.size() - missingKeysSize - identicalValuesCount) / master.size()) * 100
+	println "# Summary #"
+	println "# Redundant entries: $redundantKeysSize, MissingEntries: $missingKeysSize, Identical values: $identicalValuesCount"
 	println "# ${langName? langName + ' translation' : fileB} is ${perc.round(2)}% complete"
 
 	return perc == 100
+}
+
+def compareValues(master, other) {
+	def identicalMap = master.findAll { k, v ->
+		if(master[k] == other[k]) {	[k: other[k]] }
+	}
+	def identicalMapSize = identicalMap.keySet().size()
+	println "# Keys with identical Values are: "
+	println "#\t${identicalMap.keySet().join('\n#\t')}"
+	println "\n"
+	return identicalMapSize
 }
 
 def perc = compare(args[0], args[1])
