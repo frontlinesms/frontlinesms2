@@ -5,14 +5,16 @@
 The use of SMPP to send and receive messages requires a pre-negotiated agreement with the mobile provider, as the service is typically closed to the general public. In some cases, internet aggregators allow third party applications like FrontlineSMS to connect to them using the SMPP protocol, which is a more common use case for the FrontlineSMS SMPP functionality.
 
 The configuration details required to connect to an SMSC vary from case to case. The fields that are configurable in the SMPP connection in Frontline are:
-* The SMSC URL that the SMSC accepts SMPP traffic through
-* The port that the SMSC expects traffic to be routed through
-* The username for your user account on this SMSC
-* The password for your account
-* The From Number, which will be the number that messages sent through this connection will originate from
-* The name you want your connection to be saved under
+
+* the **URL** that the SMSC accepts SMPP traffic through
+* the **port** that the SMSC expects traffic to be routed through
+* the **username** for your account with this SMSC
+* the **password** for your account
+* the **From Number**, which will be the number that messages sent through this connection will originate from
+* the name you want your connection to be saved under
 
 All fields except the name should be populated with values provided by the other party.
 
 [1]: ../settings/smssync
-[1]: ../settings/4.setting_up_a_device
+[2]: ../settings/4.setting_up_a_device
+
