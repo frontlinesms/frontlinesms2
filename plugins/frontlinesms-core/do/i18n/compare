@@ -15,7 +15,7 @@ def loadProps(filename) {
 	return props
 }
 
-def compareKeys(fileA, fileB) {
+def compare(fileA, fileB) {
 	println "# Reporting on KEY differences between $fileA and $fileB..."
 	// read files into props
 	master = loadProps(fileA)
@@ -35,30 +35,26 @@ def compareKeys(fileA, fileB) {
 	println "# \t${redundantKeys.join("\n# \t")}"
 	println "# Missing keys are..."
 	println "# \t${missingKeys.join("\n# \t")}"
-	double perc = ((master.size() - missingKeysSize) / master.size()) * 100
+	def identicalValuesCount = compareValues(master, other)
+	double perc = ((master.size() - missingKeysSize - identicalValuesCount) / master.size()) * 100
 	println "# Summary #"
-	println "# Redundant entries: $redundantKeysSize, MissingEntries: $missingKeysSize"
+	println "# Redundant entries: $redundantKeysSize, MissingEntries: $missingKeysSize, Identical values: $identicalValuesCount"
 	println "# ${langName? langName + ' translation' : fileB} is ${perc.round(2)}% complete"
 
 	return perc == 100
 }
 
-def compareValues(fileA, fileB) {
-	println "# Reporting on VALUE differences between $fileA and $fileB..."
-	master = loadProps(fileA)
-	other = loadProps(fileB)
-
+def compareValues(master, other) {
 	def identicalMap = master.findAll { k, v ->
 		if(master[k] == other[k]) {	[k: other[k]] }
 	}
+	def identicalMapSize = identicalMap.keySet().size()
 	println "# Keys with identical Values are: "
 	println "#\t${identicalMap.keySet().join('\n#\t')}"
-	println "# Summary #"
-	println "# Identical values in files are: ${identicalMap.keySet().size()}"
 	println "\n"
+	return identicalMapSize
 }
 
-compareValues(args[0], args[1])
-def perc = compareKeys(args[0], args[1])
+def perc = compare(args[0], args[1])
 System.exit perc == 100? 0: 1
 
