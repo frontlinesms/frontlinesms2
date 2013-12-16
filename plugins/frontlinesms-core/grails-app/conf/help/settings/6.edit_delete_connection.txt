@@ -39,15 +39,11 @@ The connection will be deleted. If this was your active connection then you will
 ---
 
 ### Related Actions
-[Automatically Setting Up a Connection][1]  
-[Setting up a Connection to a Clickatell Account][5]
-[Setting up a Connection to an IntelliSMS Account][6]
+[Automatically Setting Up a Connection][1]
 [Manually Setting up a Connection][7]
 
 [1]: ../settings/4.setting_up_a_device
 [3]: ../settings/1.getting_around_the_settings_menu
-[5]: ../settings/4b.clickatell
-[6]: ../settings/4a.intellisms
 [7]: ../settings/5.manually_adding_device
 [8]: ../images/help/settings_connections.png
 [9]: ../images/help/edit_connection.png
