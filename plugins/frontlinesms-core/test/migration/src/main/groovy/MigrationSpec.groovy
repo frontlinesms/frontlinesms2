@@ -180,7 +180,7 @@ class MigrationSpec {
 
 			def barcelonaResponse = PollResponse.findByValue('barcelona');
 			10.times {
-				def msg = new Fmessage(src: "+9198765432${it}", date: new Date() - it, text: "Barca", inbound:true)
+				def msg = new Fmessage(src: "+9198765432${it}", date: new Date() - it, text: "Barca", inbound:true, read: true)
 				msg.save(failOnError: true);
 				barcelonaResponse.addToMessages(msg);
 			}
@@ -222,6 +222,8 @@ class MigrationSpec {
 			def autoreply = Autoreply.findByName('Toothpaste')
 			assert autoreply.autoreplyText == 'Thanks for the input. Your number, ${recipient_number}, has been added to our records'
 
+			def msg = Fmessage.findBySrc("+91987654321")
+			assert msg.read
 			// create any additional data for future
 			return true
 		}
