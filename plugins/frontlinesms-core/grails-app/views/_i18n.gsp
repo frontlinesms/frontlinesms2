@@ -1,4 +1,5 @@
-<g:if env="test">
+<%@ page import="grails.util.Environment" %>
+<g:if test="${Environment.current == Environment.TEST || Environment.current == 'core-func-test'}">
 // TODO should actually confirm that we are using the echo message source,
 // rather than just in test scope, but this is unlikely to be an issue
 function i18n(key) {
