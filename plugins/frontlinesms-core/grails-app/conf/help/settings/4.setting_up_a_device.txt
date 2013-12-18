@@ -44,14 +44,10 @@ If you are having trouble getting a connection set up then please click [here][3
 
 ### Related Actions
 [Manually Setting Up A Connection][3]  
-[Editing a Connection][6]  
-[Setting up a Connection to an IntelliSMS Account][7]
-[Setting up a Connection to a Clickatell Account][8]
+[Editing a Connection][6]
 
 [2]: ../status/1.getting_around_the_status_tab
 [3]: ../settings/5.manually_adding_device
 [6]: ../settings/6.edit_delete_connection
-[7]: ../settings/4a.intellisms
-[8]: ../settings/4b.clickatell
 [9]: ../images/help/successfully_connected.png
 [10]: ../images/help/connecting.png

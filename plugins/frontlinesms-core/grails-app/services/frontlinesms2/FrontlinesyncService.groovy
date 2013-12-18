@@ -9,11 +9,12 @@ class FrontlinesyncService {
 
 		try {
 			data.payload.each { e ->
-				new Fmessage(inbound:true,
-						src:e.fromNumber,
-						text:'missed call',
-						date:new Date(e.callTimestamp))
-					.save()
+				sendMessageAndHeaders('seda:incoming-fmessages-to-store',
+						new Fmessage(inbound:true,
+								src:e.fromNumber,
+								text:'missed call',
+								date:new Date(e.callTimestamp)),
+						['fconnection-id':connection.id])
 			}
 
 			controller.render text:'OK'
