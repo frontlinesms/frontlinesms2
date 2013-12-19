@@ -17,10 +17,7 @@ class Interaction {
 	boolean starred
 	boolean archived
 	boolean isDeleted
-
-	boolean isInbound() {
-		return false
-	}
+	boolean inbound
 
 	static mapping = {
 		table 'fmessage'
@@ -29,7 +26,6 @@ class Interaction {
 		inboundContactName formula:'(SELECT c.name FROM contact c WHERE c.mobile=src)'
 		outboundContactName formula:'(SELECT MAX(c.name) FROM contact c, dispatch d WHERE c.mobile=d.dst AND d.message_id=id)'
 		version false
-
 	}
 	
 	static constraints = {
@@ -71,7 +67,7 @@ class Interaction {
 			and {
 				eq("isDeleted", false)
 				eq("archived", false)
-				q('rd', false)
+				eq('rd', false)
 				if(owner == null)
 					isNull("messageOwner")
 				else

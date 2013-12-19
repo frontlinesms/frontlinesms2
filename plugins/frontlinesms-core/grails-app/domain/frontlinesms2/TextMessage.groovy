@@ -11,9 +11,6 @@ class TextMessage extends Interaction {
 	String text
 	
 	boolean inbound
-	boolean isInbound() {
-		return inbound
-	}
 
 	static hasMany = [dispatches:Dispatch, details:MessageDetail]
 
