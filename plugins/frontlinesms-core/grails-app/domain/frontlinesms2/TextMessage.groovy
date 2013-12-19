@@ -2,59 +2,30 @@ package frontlinesms2
 
 import groovy.time.*
 
-class Fmessage {
+class TextMessage extends Interaction {
 	def mobileNumberUtilService
 
 	static final int MAX_TEXT_LENGTH = 1600
 	static final String TEST_MESSAGE_TEXT = "Test Message"
-
-	static belongsTo = [messageOwner:MessageOwner]
-	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList', 'read', 'receivedOn']
 	
-	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
-	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
-	
-	String src
 	String text
-	String outboundContactName
-	String inboundContactName
-	boolean rd
-	boolean starred
-	boolean archived
-	boolean isDeleted
 	
 	boolean inbound
+	boolean isInbound() {
+		return inbound
+	}
 
 	static hasMany = [dispatches:Dispatch, details:MessageDetail]
 
-	static mapping = {
-		sort date:'desc'
-		inboundContactName formula:'(SELECT c.name FROM contact c WHERE c.mobile=src)'
-		outboundContactName formula:'(SELECT MAX(c.name) FROM contact c, dispatch d WHERE c.mobile=d.dst AND d.message_id=id)'
-		version false
-
-	}
-	
 	static constraints = {
-		messageOwner nullable:true
-		src(nullable:true, validator: { val, obj ->
-				val || !obj.inbound
-		})
 		text maxSize:MAX_TEXT_LENGTH
 		inboundContactName nullable:true
 		outboundContactName nullable:true
-		archived(nullable:true, validator: { val, obj ->
-				obj.messageOwner == null || obj.messageOwner.archived == val
-		})
 		inbound(nullable:true, validator: { val, obj ->
 				val ^ (obj.dispatches? true: false)
 		})
 		dispatches nullable:true
 		details nullable:true
-	}
-
-	def beforeInsert = {
-		if(!this.inbound) this.read = true
 	}
 
 	static namedQueries = {
@@ -129,49 +100,6 @@ class Fmessage {
 				property 'id'
 			}
 		}
-
-		deleted { getOnlyStarred=false ->
-			and {
-				eq("isDeleted", true)
-				eq("archived", false)
-				if(getOnlyStarred)
-					eq('starred', true)
-			}
-		}
-		owned { MessageOwner owner, boolean getOnlyStarred=false, getSent=null ->
-			and {
-				eq("isDeleted", false)
-				eq("messageOwner", owner)
-				if(getOnlyStarred)
-					eq("starred", true)
-				if(getSent != null)
-					eq("inbound", getSent)
-			}
-		}
-		unread { MessageOwner owner=null ->
-			and {
-				eq("isDeleted", false)
-				eq("archived", false)
-				eq("inbound", true)
-				eq('rd', false)
-				if(owner == null)
-					isNull("messageOwner")
-				else
-					eq("messageOwner", owner)
-			}
-		}
-		totalUnread {
-			and {
-				eq("isDeleted", false)
-				eq("archived", false)
-				eq("inbound", true)
-				eq('rd', false)
-			}
-		}
-
-		search { ids ->
-			'in'('id', ids)
-		}
 		
 		forReceivedStats { params ->
 			def groupInstance = params.groupInstance
@@ -187,6 +115,7 @@ class Fmessage {
 				if(messageOwner) 'in'('messageOwner', messageOwner)
 			}
 		}
+		<< Interaction.namedQueries // Named Queries are not inherited
 	}
 
 	def getDisplayName() {
@@ -224,14 +153,6 @@ class Fmessage {
 		dispatches.collect { Contact.findByMobile(it.dst)?.name } - null
 	}
 
-	private boolean isMoveAllowed() {
-		if(this.messageOwner){
-			return !(this.messageOwner?.archived)
-		} else {
-			return (!this.isDeleted && !this.archived)
-		}
-	}
-
 	private def areAnyDispatches(status) {
 		dispatches?.any { it.status == status }
 	}
@@ -239,9 +160,6 @@ class Fmessage {
 	public void setText(String text) {
 		this.text = text?.truncate(MAX_TEXT_LENGTH)
 	}
-
-	public boolean isRead() { return this.rd }
-	public boolean setRead(boolean read) { this.rd = read }
 
 	static def listPending(onlyFailed, params=[:]) {
 		def ids = pending(onlyFailed).list(params) as List
@@ -254,18 +172,6 @@ class Fmessage {
 
 	static def hasFailedMessages() {
 		return pending(true).count() > 0
-	}
-	
-	static def countUnreadMessages() {
-		Fmessage.unread.count()
-	}
-
-	static def countUnreadMessages(owner) {
-		Fmessage.unread(owner).count()
-	}
-
-	static def countTotalUnreadMessages() {
-		Fmessage.totalUnread.count()
 	}
 	
 	static def countAllMessages() {
@@ -296,15 +202,6 @@ class Fmessage {
 		}
 		
 		dates
-	}
-	
-	//TODO: Remove in Groovy 1.8 (Needed for 1.7)
-	private static def countAnswer(final Map<Object, Integer> answer, Object mappedKey) {
-		if (!answer.containsKey(mappedKey)) {
-			answer.put(mappedKey, 0)
-		}
-		int current = answer.get(mappedKey)
-		answer.put(mappedKey, current + 1)
 	}
 	
 	def updateDispatches() {
@@ -354,10 +251,6 @@ class Fmessage {
 		messageDetailInstance.value = value
 		this.save(failOnError:true)
 		messageDetailInstance.save(failOnError:true)
-	}
-
-	private def getOwnerType(owner) {
-		owner instanceof Step ? MessageDetail.OwnerType.STEP : MessageDetail.OwnerType.ACTIVITY
 	}
 
 	def clearAllDetails() {
