@@ -134,3 +134,4 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 .import-review a { margin:10px 7px; padding:8px; }
 
 tr.connection .smssync-lastconnected { font-weight:bold; }
+tr.connection.receiveOnly .btn.test { display:none; }
