@@ -17,7 +17,7 @@ class Fconnection {
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
 
-	static hasMany = [messages: Fmessage]
+	static hasMany = [messages: TextMessage]
 	
 	static final implementations = [SmslibFconnection,
 			ClickatellFconnection,

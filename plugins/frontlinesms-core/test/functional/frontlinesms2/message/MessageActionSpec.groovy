@@ -11,13 +11,13 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestMessages()
 			createTestFolders()
 		when:
-			to PageMessagePoll, 'Football Teams', remote { Fmessage.findBySrc('Bob').id }
+			to PageMessagePoll, 'Football Teams', remote { TextMessage.findBySrc('Bob').id }
 		then:
 			def actions = singleMessageDetails.moveActions.sort()
 			actions.containsAll(["fmessage.move.to.inbox", "Shampoo Brands"])
 			!actions.contains("Football Teams")
 		when:
-			to PageMessageInbox, remote { Fmessage.findBySrc("Bob").id }
+			to PageMessageInbox, remote { TextMessage.findBySrc("Bob").id }
 			def inboxActions = singleMessageDetails.moveActions
 		then:
 			inboxActions.size() >= 5
@@ -27,9 +27,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 	def "move to inbox option should be displayed for folder messages and should work"() {
 		given:
 			createTestFolders()
-			remote { Folder.findByName("Work").addToMessages(new Fmessage(text:'', src: "src", inbound: true)).save(flush:true, failOnError:true); null }
+			remote { Folder.findByName("Work").addToMessages(new TextMessage(text:'', src: "src", inbound: true)).save(flush:true, failOnError:true); null }
 		when:
-			to PageMessageFolder, "Work", remote { Fmessage.findBySrc("src").id }
+			to PageMessageFolder, "Work", remote { TextMessage.findBySrc("src").id }
 			singleMessageDetails.moveTo("inbox")
 		then:
 			waitFor { notifications.flashMessage.displayed }
@@ -44,15 +44,15 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePoll, 'Football Teams', remote { Fmessage.findBySrc("Bob").id }
+			to PageMessagePoll, 'Football Teams', remote { TextMessage.findBySrc("Bob").id }
 			def barce = "btn-" + remote { PollResponse.findByValue('barcelona').id }
 		then:
-			remote { Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('manchester').poll }
+			remote { TextMessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('manchester').poll }
 		when:
 			categoriseSingle(remote { PollResponse.findByValue('barcelona').id })
 		then:
 			waitFor { notifications.flashMessage.displayed }
-			remote { Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('barcelona').poll }
+			remote { TextMessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('barcelona').poll }
 	}
 
 	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll or inbox'() {
@@ -72,8 +72,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			waitFor("veryslow") { messageList.noContent.displayed }
 			remote {
-				Fmessage.owned(Poll.findByName('Football Teams')).count() == 0
-				Fmessage.owned(Poll.findByName('Shampoo Brands')).count() == 3
+				TextMessage.owned(Poll.findByName('Football Teams')).count() == 0
+				TextMessage.owned(Poll.findByName('Shampoo Brands')).count() == 3
 			}
 	}
 
@@ -97,7 +97,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePoll, 'Football Teams', remote { Fmessage.findBySrc("Bob").id }
+			to PageMessagePoll, 'Football Teams', remote { TextMessage.findBySrc("Bob").id }
 		then:
 			waitFor { messageList.displayed }
 		when:

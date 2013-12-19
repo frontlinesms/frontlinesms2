@@ -2,7 +2,7 @@ package frontlinesms2
 
 import org.hibernate.criterion.CriteriaSpecification
 
-class FmessageService {
+class TextMessageService {
 	def messageSendService
 	
 	def move(messageList, activity, params) {
@@ -42,7 +42,7 @@ class FmessageService {
 		def searchMessageInstanceList = []
 
 		if(fmessageInstanceList) {
-			rawSearchResults = Fmessage.search(fmessageInstanceList*.id)
+			rawSearchResults = TextMessage.search(fmessageInstanceList*.id)
 		}
 
 		if(rawSearchResults) {
@@ -55,7 +55,7 @@ class FmessageService {
 	}
 
 	private def fmessageFilter(search) {
-		def ids = Fmessage.withCriteria {
+		def ids = TextMessage.withCriteria {
 			createAlias('dispatches', 'disp', CriteriaSpecification.LEFT_JOIN)
 			if(search.searchString) {
 				or {

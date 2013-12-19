@@ -8,8 +8,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Deleted messages do not show up as responses'() {
 		when:
-			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
-			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
+			def message1 = new TextMessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
+			def message2 = new TextMessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
@@ -41,7 +41,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:"Unknown", count:0, percent:0]
 			]
 		when:
-			def outbound1 = new Fmessage(inbound:false, text:'who is badder in your opinion?')
+			def outbound1 = new TextMessage(inbound:false, text:'who is badder in your opinion?')
 			outbound1.addToDispatches(dst:"123", status:DispatchStatus.SENT, dateSent:new Date())
 			p.addToMessages(outbound1)
 			p.save(failOnError:true, flush:true)
@@ -52,8 +52,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:"Unknown", count:0, percent:0]
 			]
 		when:
-			PollResponse.findByValue('Michael-Jackson').addToMessages(new Fmessage(text:'MJ', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
-			PollResponse.findByValue('Chuck-Norris').addToMessages(new Fmessage(text:'big charlie', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
+			PollResponse.findByValue('Michael-Jackson').addToMessages(new TextMessage(text:'MJ', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
+			PollResponse.findByValue('Chuck-Norris').addToMessages(new TextMessage(text:'big charlie', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
 			println "POLL MESSAGE COUNT: ${p.messages.size()}"
 		then:
 			p.responseStats == [
@@ -62,8 +62,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
 		when:
-			Fmessage.findByText('MJ').isDeleted = true
-			Fmessage.findByText('MJ').save(flush:true)
+			TextMessage.findByText('MJ').isDeleted = true
+			TextMessage.findByText('MJ').save(flush:true)
 		then:
 			p.responseStats == [
 				[id:mjId, value:'Michael-Jackson', count:0, percent:0],
@@ -71,7 +71,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
 		when:
-			def outbound = new Fmessage(inbound:false, text:'thanks for your response')
+			def outbound = new TextMessage(inbound:false, text:'thanks for your response')
 			outbound.addToDispatches(dst:"123", status:DispatchStatus.SENT, dateSent:new Date())
 			p.addToMessages(outbound)
 			p.save(failOnError:true, flush:true)
@@ -135,9 +135,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name:"title")
 			poll.editResponses(choiceA: "one", choiceB: "two")
 			poll.save(flush: true)
-			def m1 = Fmessage.build(src: "src1", inbound: true, date: new Date() - 10)
-			def m2 = Fmessage.build(src: "src2", inbound: true, date: new Date() - 10)
-			def m3 = Fmessage.build(src: "src3", inbound: true, date: new Date() - 10)
+			def m1 = TextMessage.build(src: "src1", inbound: true, date: new Date() - 10)
+			def m2 = TextMessage.build(src: "src2", inbound: true, date: new Date() - 10)
+			def m3 = TextMessage.build(src: "src3", inbound: true, date: new Date() - 10)
 			PollResponse.findByValue("one").addToMessages(m1)
 			PollResponse.findByValue("one").addToMessages(m2)
 			PollResponse.findByValue("two").addToMessages(m3)
@@ -153,9 +153,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
 			liveCount() == [2, 1, 0, 0, 0]
 		when:
-			m1 = Fmessage.build(src: "src1", inbound: true, date: new Date() - 10)
+			m1 = TextMessage.build(src: "src1", inbound: true, date: new Date() - 10)
 			PollResponse.findByValue("one").addToMessages(m1)
-			PollResponse.findByValue("three").addToMessages(Fmessage.build(src: "src4", inbound: true, date: new Date() - 10))
+			PollResponse.findByValue("three").addToMessages(TextMessage.build(src: "src4", inbound: true, date: new Date() - 10))
 			poll.save(flush:true)
 		then:
 			liveCount() == [3, 1, 1, 0, 0]
@@ -178,8 +178,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.editResponses(choiceA:'Michael-Jackson', choiceB:'Chuck-Norris')
 			poll.save(failOnError:true, flush:true)
 
-			def message1 = Fmessage.build(src:'Bob', text:'I like manchester')
-			def message2 = Fmessage.build(src:'Alice', text:'go barcelona')
+			def message1 = TextMessage.build(src:'Bob', text:'I like manchester')
+			def message2 = TextMessage.build(src:'Alice', text:'go barcelona')
 			poll.addToMessages(message1)
 			poll.addToMessages(message2)
 			poll.save(flush:true, failOnError:true)
@@ -204,9 +204,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	private def setUpPollResponseAndItsMessages() {
 		def poll = setUpPollAndResponses()
-		def m1 = Fmessage.build(src: "src1", inbound: true, date: new Date() - 10)
-		def m2 = Fmessage.build(src: "src2", inbound: true, date: new Date() - 2)
-		def m3 = Fmessage.build(src: "src3", inbound: true, date: new Date() - 5, starred: true)
+		def m1 = TextMessage.build(src: "src1", inbound: true, date: new Date() - 10)
+		def m2 = TextMessage.build(src: "src2", inbound: true, date: new Date() - 2)
+		def m3 = TextMessage.build(src: "src3", inbound: true, date: new Date() - 5, starred: true)
 		PollResponse.findByValue("response 1").addToMessages(m1)
 		PollResponse.findByValue("response 2").addToMessages(m2)
 		PollResponse.findByValue("response 3").addToMessages(m3)
@@ -216,7 +216,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Adding a message will propogate it to the Unknown response'() {
 		given:
 			Poll p = setUpPollAndResponses()
-			Fmessage m = Fmessage.build(date:new Date(), inbound:true, src:"a-unit-test!").save(flush:true, failOnError:true)
+			TextMessage m = TextMessage.build(date:new Date(), inbound:true, src:"a-unit-test!").save(flush:true, failOnError:true)
 			p.refresh()
 			m.refresh()
 			p.responses*.refresh()
@@ -239,7 +239,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	// TODO move this test to MessageControllerISpec	
 	def "Message should not remain in old PollResponse after moving it to inbox"(){
 		given:
-			def m = Fmessage.build(inbound:true)
+			def m = TextMessage.build(inbound:true)
 			def responseA = new PollResponse(key:'A', value:'TessstA')
 			def previousOwner = new Poll(name:'This is a poll', question:'What is your name?')
 					.addToResponses(responseA)
@@ -269,7 +269,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def p = TestData.createFootballPollWithKeywords()
 		then:
-			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), Keyword.findByValue(keywordValue)).value == pollResponseValue
+			p.getPollResponse(new TextMessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), Keyword.findByValue(keywordValue)).value == pollResponseValue
 		where:
 			keywordValue | pollResponseValue
 			"FOOTBALL"   | "Unknown"
@@ -283,7 +283,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def p = TestData.createFootballPollWithKeywords()
 		then:
-			p.getPollResponse(new Fmessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), p.keywords.find{ it.value == keywordValue }).value == pollResponseValue
+			p.getPollResponse(new TextMessage(src:'Bob', text:"FOOTBALL something", inbound:true, date:new Date()).save(), p.keywords.find{ it.value == keywordValue }).value == pollResponseValue
 		where:
 			keywordValue | pollResponseValue
 			"MANCHESTER" | "Manchester"

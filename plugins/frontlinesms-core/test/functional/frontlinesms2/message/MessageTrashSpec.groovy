@@ -10,9 +10,9 @@ class MessageTrashSpec extends grails.plugin.geb.GebSpec {
 		setup:
 			remote {
 				trashService = new TrashService()
-				Fmessage.build(src:"src1", starred:true, isDeleted:true)
-				Fmessage.build(src:"src2", isDeleted:true)
-				Fmessage.findAll().each { trashService.sendToTrash(it) }
+				TextMessage.build(src:"src1", starred:true, isDeleted:true)
+				TextMessage.build(src:"src2", isDeleted:true)
+				TextMessage.findAll().each { trashService.sendToTrash(it) }
 				null
 			}
 		when:

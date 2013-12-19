@@ -7,7 +7,7 @@ import grails.buildtestdata.mixin.Build
 
 @TestFor(Subscription)
 @Mock([Group, GroupMembership, SubscriptionService])
-@Build([Contact, Fmessage])
+@Build([Contact, TextMessage])
 class SubscriptionSpec extends Specification {
 	private static final String TEST_CONTACT = '+1111111111'
 
@@ -61,7 +61,7 @@ class SubscriptionSpec extends Specification {
 	}
 
 	private def mockMessage(String messageText, String sourcePhoneNumber) {
-		return Fmessage.build(text:messageText, src:sourcePhoneNumber)
+		return TextMessage.build(text:messageText, src:sourcePhoneNumber)
 	}
 }
 

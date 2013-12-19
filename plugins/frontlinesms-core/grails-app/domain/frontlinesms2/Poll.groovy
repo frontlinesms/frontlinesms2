@@ -24,7 +24,7 @@ class Poll extends Activity {
 		version false
 	}
 
-	def getDisplayText(Fmessage msg) {
+	def getDisplayText(TextMessage msg) {
 		def p = responses.find { "$it.id" == msg.ownerDetail }
 		p? "${p.value} (\"${msg.text}\")": msg.text
 	}
@@ -50,7 +50,7 @@ class Poll extends Activity {
 	def getUnknown() {
 		responses.find { it.key == KEY_UNKNOWN } }
 	
-	Poll addToMessages(Fmessage message) {
+	Poll addToMessages(TextMessage message) {
 		if(!messages) messages = []
 		messages << message
 		message.messageOwner = this
@@ -64,7 +64,7 @@ class Poll extends Activity {
 		this
 	}
 	
-	Poll removeFromMessages(Fmessage message) {
+	Poll removeFromMessages(TextMessage message) {
 		this.messages?.remove(message)
 		if(message.inbound) {
 			this.responses.each {
@@ -144,7 +144,7 @@ class Poll extends Activity {
 		if(raw) raw.toUpperCase().replaceAll(/\s/, "").split(",").findAll { it }.join(", ")
 	}
 
-	def processKeyword(Fmessage message, Keyword keyword) {
+	def processKeyword(TextMessage message, Keyword keyword) {
 		def response = getPollResponse(message, keyword)
 		response?.addToMessages(message)
 		response?.save()
@@ -160,7 +160,7 @@ class Poll extends Activity {
 		this.save(failOnError:true)
 	}
 	
-	def PollResponse getPollResponse(Fmessage message, Keyword keyword) {
+	def PollResponse getPollResponse(TextMessage message, Keyword keyword) {
 		if(!keyword || (keyword?.isTopLevel && !keyword?.ownerDetail)){
 			return this.unknown
 		} else {

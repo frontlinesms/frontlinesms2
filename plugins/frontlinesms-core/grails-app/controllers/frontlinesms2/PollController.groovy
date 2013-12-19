@@ -12,7 +12,7 @@ class PollController extends ActivityController {
 
 	def sendReply() {
 		def poll = Poll.get(params.ownerId)
-		def incomingMessage = Fmessage.get(params.messageId)
+		def incomingMessage = TextMessage.get(params.messageId)
 		if(poll.autoreplyText) {
 			params.addresses = incomingMessage.src
 			params.messageText = poll.autoreplyText

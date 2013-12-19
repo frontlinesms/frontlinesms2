@@ -24,12 +24,12 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		def futureDate = new Date()
 		futureDate.hours = futureDate.hours + 1
 		
-		Fmessage.build(src:'+254987654', text:'work at 11.00', archived:true, date:TEST_DATE)
-		Fmessage.build(src:'+254987654', text:'finaly i stay in bed', date:TEST_DATE)
-		Fmessage.build(src:'+254111222', text:'work is awesome', date:futureDate)
-		Fmessage.build(src:'Bob', text:'hi Bob', date:TEST_DATE-5)
-		Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes', date:TEST_DATE-7)
-		Fmessage.build(src:'+666666666', text:'finally i stay in bed', date:TEST_DATE, starred:true)
+		TextMessage.build(src:'+254987654', text:'work at 11.00', archived:true, date:TEST_DATE)
+		TextMessage.build(src:'+254987654', text:'finaly i stay in bed', date:TEST_DATE)
+		TextMessage.build(src:'+254111222', text:'work is awesome', date:futureDate)
+		TextMessage.build(src:'Bob', text:'hi Bob', date:TEST_DATE-5)
+		TextMessage.build(src:'Michael', text:'Can we get meet in 5 minutes', date:TEST_DATE-7)
+		TextMessage.build(src:'+666666666', text:'finally i stay in bed', date:TEST_DATE, starred:true)
 				
 		[new CustomField(name:'city', value:'Paris', contact: firstContact),
 				new CustomField(name:'like', value:'cake', contact: secondContact),
@@ -88,7 +88,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "message searches can be restricted to a folder"() {
 		given:
 			folder = new Folder(name: 'work').save(failOnError:true, flush:true)
-			def m = Fmessage.findBySrc('+254111222')
+			def m = TextMessage.findBySrc('+254111222')
 			folder.addToMessages(m).save(failOnError: true, flush:true)
 			m.save(flush:true, failOnError:true)
 		when:
@@ -111,7 +111,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "search for outgoing messages only"() {
 		setup:
-			3.times { new Fmessage(src:'src', date:TEST_DATE, inbound:false, text:'')
+			3.times { new TextMessage(src:'src', date:TEST_DATE, inbound:false, text:'')
 					.addToDispatches(dst:'123456', status:DispatchStatus.PENDING)
 					.save(flush:true, failOnError:true) }
 		when:
@@ -184,8 +184,8 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.searchString = "liver"
 			controller.params.activityId = "activity-${Poll.findByName('Miauow Mix').id}"
-			Fmessage.findBySrc("+254333222").isDeleted = true
-			Fmessage.findBySrc("+254333222").save(flush: true)
+			TextMessage.findBySrc("+254333222").isDeleted = true
+			TextMessage.findBySrc("+254333222").save(flush: true)
 			def model = controller.result()
 		then:
 			model.messageInstanceList*.src == ['Minime']
@@ -280,7 +280,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "if searching in a group, archive is included, ignoring params value"() {
 		when:
 			folder = new Folder(name: 'work').save(failOnError:true, flush:true)
-			def m = Fmessage.findBySrc('+254111222')
+			def m = TextMessage.findBySrc('+254111222')
 			folder.addToMessages(m).save(failOnError: true, flush:true)
 			m.save(flush:true, failOnError:true)
 			controller.params.activityId = "folder-"+folder.id
@@ -304,7 +304,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "ensure dispatch count in message results is correct"() {
 		setup:
-			def message = new Fmessage(text:"test")
+			def message = new TextMessage(text:"test")
 			message.addToDispatches(dst:'999', status:DispatchStatus.PENDING)
 			message.addToDispatches(dst:'998', status:DispatchStatus.PENDING)
 			message.addToDispatches(dst:'888', status:DispatchStatus.PENDING)

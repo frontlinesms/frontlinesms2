@@ -8,7 +8,7 @@ import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 
 @TestFor(FconnectionService)
-@Mock([LogEntry, Dispatch, Fmessage, SystemNotification])
+@Mock([LogEntry, Dispatch, TextMessage, SystemNotification])
 class FconnectionServiceSpec extends Specification {
 	def context
 	def systemNotificationService = Mock(SystemNotificationService)

@@ -26,11 +26,11 @@ class PollResponseSpec extends Specification {
 		then:
 			r.validate()
 		when:
-			r.addToMessages(new Fmessage())
+			r.addToMessages(new TextMessage())
 		then:
 			r.validate()
 		when:
-			r.addToMessages(new Fmessage())
+			r.addToMessages(new TextMessage())
 		then:
 			r.validate()
 	}

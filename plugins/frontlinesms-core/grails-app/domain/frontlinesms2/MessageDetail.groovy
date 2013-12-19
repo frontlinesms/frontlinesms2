@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class MessageDetail {
-	static belongsTo = [message: Fmessage]
+	static belongsTo = [message: TextMessage]
 	enum OwnerType { ACTIVITY, STEP }
 
 	OwnerType ownerType

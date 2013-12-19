@@ -11,13 +11,13 @@ import org.apache.camel.Exchange
 import org.apache.camel.Message
 
 @TestFor(DispatchRouterService)
-@Mock([Dispatch, Fmessage, Fconnection, SmslibFconnection, SystemNotification])
+@Mock([Dispatch, TextMessage, Fconnection, SmslibFconnection, SystemNotification])
 class DispatchRouterServiceSpec extends Specification {
 	def appSettingsService
 
 	def setup() {
-		Fmessage.metaClass.static.findBySrc = { src, map->
-			def m = Mock(Fmessage)
+		TextMessage.metaClass.static.findBySrc = { src, map->
+			def m = Mock(TextMessage)
 			def f = Mock(Fconnection)
 			f.id >> 2
 			m.receivedOn >> f
@@ -47,7 +47,7 @@ class DispatchRouterServiceSpec extends Specification {
 
 			def camelMessage = Mock(org.apache.camel.Message)
 			exchange.getIn() >> camelMessage
-			camelMessage.getBody() >> new Dispatch(dst:"dst", message:new Fmessage())
+			camelMessage.getBody() >> new Dispatch(dst:"dst", message:new TextMessage())
 
 			service.camelContext = camelContext
 		when:

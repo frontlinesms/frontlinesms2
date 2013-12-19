@@ -34,7 +34,7 @@ class CoreAppInfoProviders {
 		s.registerProvider 'status_indicator', statusIndicatorProvider
 
 		s.registerProvider('inbox_unread') { app, controller, data ->
-			Fmessage.countTotalUnreadMessages()
+			TextMessage.countTotalUnreadMessages()
 		}
 
 		s.registerProvider('new_messages') { app, controller, data ->
@@ -44,9 +44,9 @@ class CoreAppInfoProviders {
 			data.inbound = data.inbound? Boolean.parseBoolean(data.inbound): null
 			if(!data.ownerId && section != 'trash') {
 				if(section == 'pending') {
-					messageCount = Fmessage.countPending(data.failed)
+					messageCount = TextMessage.countPending(data.failed)
 				} else {
-					messageCount = Fmessage."$section"(data.starred).count()
+					messageCount = TextMessage."$section"(data.starred).count()
 				}
 			} else if(section == 'activity') {
 				messageCount = Activity.get(data.ownerId)?.getMessageCount(data.starred, data.inbound)
@@ -60,7 +60,7 @@ class CoreAppInfoProviders {
 			def c = Webconnection.get(data.ownerId)
 			def response = [ownerId:data.ownerId, ok:true]
 			if(c) {
-				def message = Fmessage.findByMessageOwnerAndText(c, Fmessage.TEST_MESSAGE_TEXT)
+				def message = TextMessage.findByMessageOwnerAndText(c, TextMessage.TEST_MESSAGE_TEXT)
 				response.status = message?.ownerDetail
 			} else {
 				response.ok = false
@@ -73,12 +73,12 @@ class CoreAppInfoProviders {
 		}
 
 		s.registerProvider('new_message_summary') { app, controller, data ->
-			def m = [inbox: Fmessage.countUnreadMessages(), pending: Fmessage.pendingAndNotFailed.count(), activities: [:], folders: [:]]
+			def m = [inbox: TextMessage.countUnreadMessages(), pending: TextMessage.pendingAndNotFailed.count(), activities: [:], folders: [:]]
 			Activity.findAllByArchivedAndDeleted(false, false).each { act ->
-				m.activities."${act.id}" = Fmessage.countUnreadMessages(act)
+				m.activities."${act.id}" = TextMessage.countUnreadMessages(act)
 			}
 			Folder.findAllByArchivedAndDeleted(false, false).each { folder ->
-				m.folders."${folder.id}" = Fmessage.countUnreadMessages(folder)
+				m.folders."${folder.id}" = TextMessage.countUnreadMessages(folder)
 			}
 			return m
 		}

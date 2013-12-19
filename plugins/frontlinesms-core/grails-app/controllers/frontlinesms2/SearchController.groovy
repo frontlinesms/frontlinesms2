@@ -55,7 +55,7 @@ class SearchController extends MessageController {
 	}
 
 	def show() {
-		def messageInstance = params.messageId ? Fmessage.get(params.messageId.toLong()) : null
+		def messageInstance = params.messageId ? TextMessage.get(params.messageId.toLong()) : null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()

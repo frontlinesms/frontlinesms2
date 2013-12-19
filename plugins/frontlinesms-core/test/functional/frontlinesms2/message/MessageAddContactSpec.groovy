@@ -8,7 +8,7 @@ import frontlinesms2.contact.*
 class MessageAddContactSpec extends MessageBaseSpec {
 	def 'if source of message does not exists in the database then number is displayed'() {
 		setup:
-			def contactlessMessageId = remote { Fmessage.build(src:'+254778899', text:'test').id }
+			def contactlessMessageId = remote { TextMessage.build(src:'+254778899', text:'test').id }
 		when:
 			to PageMessageInbox, contactlessMessageId
 		then:
@@ -17,7 +17,7 @@ class MessageAddContactSpec extends MessageBaseSpec {
 	
 	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {
 		setup:
-			def messageId = remote { Fmessage.build(src:'+254778899', text:'test').id }
+			def messageId = remote { TextMessage.build(src:'+254778899', text:'test').id }
 		when:
 			to PageMessageInbox, messageId
 			singleMessageDetails.senderLink.click()

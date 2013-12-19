@@ -3,7 +3,7 @@ package frontlinesms2
 import org.smslib.util.GsmAlphabet
 
 // TODO please rename as SmsInfoService
-class FmessageInfoService {
+class TextMessageInfoService {
 	/** Maximum number of characters that can be fit into a single 7-bit GSM SMS message. TODO this value should probably be fetched from {@link TpduUtils}. */
 	private static final int SMS_LENGTH_LIMIT = 160 
 	/** Maximum number of characters that can be fit in one part of a multipart 7-bit GSM SMS message.  TODO this number is incorrect, I suspect.  The value should probably be fetched from {@link TpduUtils}. */

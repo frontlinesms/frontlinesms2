@@ -16,7 +16,7 @@ class IntelliSmsTranslationServiceSpec extends Specification {
 		}
 	}
 	
-	def "incoming intellisms email message is translated into Fmessage"() {
+	def "incoming intellisms email message is translated into TextMessage"() {
 		given:
 			def testDate = "Fri, 20 Apr 2012 14:27:14 +0100"
 			def date = new Date().parse("EEE, dd MMM yyyy hh:mm:ss Z", testDate)
@@ -24,7 +24,7 @@ class IntelliSmsTranslationServiceSpec extends Specification {
 		when:
 			service.process(testExchange)
 		then:
-			testExchange.out.body instanceof Fmessage
+			testExchange.out.body instanceof TextMessage
 			testExchange.out.body.src == "+254725672318"
 			testExchange.out.body.text == "Here's the test email body converted into a textual message."
 			testExchange.out.body.date == date

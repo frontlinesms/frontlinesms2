@@ -113,8 +113,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c1 = Contact.build(name:'prudence', mobile:'+12321')
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
-				def m1 = Fmessage.build(text:'I want to leave', src:'prudence', read:true)
-				def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
+				def m1 = TextMessage.build(text:'I want to leave', src:'prudence', read:true)
+				def m2 = TextMessage.build(text:'I want to join', src:'wilburforce', read:true)
 				def s = Subscription.findByName('Camping Subscription')
 				[s:s.id, m:m1.id]
 			}
@@ -132,8 +132,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c1 = Contact.build(name:'prudence', mobile:'+12321')
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
-				def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
-				def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
+				def m1 = TextMessage.build(text:'I want to go away', src:'+12321', read:true)
+				def m2 = TextMessage.build(text:'I want to come in', src:'+1232123', read:true)
 				def s = Subscription.findByName('Camping Subscription')
 				[s:s.id, m1:m1.id, m2:m2.id]
 			}
@@ -179,8 +179,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c1 = Contact.build(name:'prudence', mobile:'+12321')
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
-				def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
-				def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
+				def m1 = TextMessage.build(text:'I want to go away', src:'+12321', read:true)
+				def m2 = TextMessage.build(text:'I want to come in', src:'+1232123', read:true)
 				def subscription = Subscription.findByName('Camping Subscription')
 				[m1:m1.id, m2:m2.id, s:subscription.id]
 			}
@@ -227,8 +227,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c1 = Contact.build(name:'prudence', mobile:'+12321')
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
-				def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
-				def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
+				def m1 = TextMessage.build(text:'I want to go away', src:'+12321', read:true)
+				def m2 = TextMessage.build(text:'I want to come in', src:'+1232123', read:true)
 				def subscription = Subscription.findByName('Camping Subscription')
 				[m1:m1.id, m2:m2.id, s:subscription.id]
 			}
@@ -276,7 +276,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c1 = Contact.build(name:'prudence', mobile:'+12321')
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
-				def m1 = new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi prudence and wilburforce! You are signed up by force').addToDispatches(dst:"+12321", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
+				def m1 = new TextMessage(src:'src', hasSent:true, inbound:false, text:'hi prudence and wilburforce! You are signed up by force').addToDispatches(dst:"+12321", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
 				m1.addToDispatches(dst:"+1232123", status:DispatchStatus.SENT, dateSent:new Date()).save(flush:true, failOnError:true)
 				def subscription = Subscription.findByName('Camping Subscription')
 				[m1:m1.id, s:subscription.id]
@@ -464,7 +464,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	def "moving a message from another activity to a subscription opens the categorise popup for the chosen subscription"() {
 		setup:
 			def activity = remote { Activity.findByName("Sample Announcement").id }
-			def m = remote { Fmessage.findBySrc("announce").id }
+			def m = remote { TextMessage.findBySrc("announce").id }
 			def subscription = remote { Subscription.findByName('Camping Subscription').id }
 		when:
 			to PageMessageAnnouncement, activity, m

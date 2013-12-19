@@ -72,7 +72,7 @@ class CoreBootStrap {
 			dev_initGroups()
 			dev_initContacts()
 			dev_initFconnections()
-			dev_initFmessages()
+			dev_initTextMessages()
 			dev_initPolls()
 			dev_initAutoreplies()
 			dev_initAutoforwards()
@@ -154,55 +154,55 @@ class CoreBootStrap {
 		['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 	}
 	
-	private def dev_initFmessages() {
+	private def dev_initTextMessages() {
 		if(!bootstrapData) return
 
-		def m5 = new Fmessage(src:'Jinja', date:new Date(), text:'Look at all my friends!')
+		def m5 = new TextMessage(src:'Jinja', date:new Date(), text:'Look at all my friends!')
 		for(i in 1..100) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true)
 		for(i in 101..200) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.FAILED).save(failOnError:true)
 		for(i in 201..300) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.PENDING).save(failOnError:true)
 
 		for(i in 1..100) {
-			new Fmessage(src:"123456", date:new Date(), text:"Generated SENT message: $i")
+			new TextMessage(src:"123456", date:new Date(), text:"Generated SENT message: $i")
 					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.SENT, dateSent:new Date())
 					.save(failOnError:true)
 		}
 
 		for(i in 101..200) {
-			new Fmessage(src:"123456", date:new Date(), text:"Generated PENDING message: $i")
+			new TextMessage(src:"123456", date:new Date(), text:"Generated PENDING message: $i")
 					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.PENDING)
 					.save(failOnError:true)
 		}
 
 		for(i in 201..300) {
-			new Fmessage(src:"123456", date:new Date(), text:"Generated FAILED message: $i")
+			new TextMessage(src:"123456", date:new Date(), text:"Generated FAILED message: $i")
 					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.FAILED)
 					.save(failOnError:true)
 		}
 
-		new Fmessage(src:'+123987123',
+		new TextMessage(src:'+123987123',
 				text:'A really long message which should be beautifully truncated so we can all see what happens in the UI when truncation is required.',
 				inbound:true,
 				date: new Date()).save(failOnError:true)
 				
-		[new Fmessage(src:'+123456789', text:'manchester rules!', date:new Date()),
-				new Fmessage(src:'+198765432', text:'go manchester', date:new Date()),
-				new Fmessage(src:'Joe', text:'pantene is the best', date:new Date()-1),
-				new Fmessage(src:'Jill', text:"where's the hill?", date:createDate("2011/01/21")),
-				new Fmessage(src:'+254675334', text:"where's the pale?", date:createDate("2011/01/20")),
-				new Fmessage(src:'Humpty', text:"where're the king's men?", starred:true, date:createDate("2011/01/23"))].each() {
+		[new TextMessage(src:'+123456789', text:'manchester rules!', date:new Date()),
+				new TextMessage(src:'+198765432', text:'go manchester', date:new Date()),
+				new TextMessage(src:'Joe', text:'pantene is the best', date:new Date()-1),
+				new TextMessage(src:'Jill', text:"where's the hill?", date:createDate("2011/01/21")),
+				new TextMessage(src:'+254675334', text:"where's the pale?", date:createDate("2011/01/20")),
+				new TextMessage(src:'Humpty', text:"where're the king's men?", starred:true, date:createDate("2011/01/23"))].each() {
 			it.inbound = true
 			it.save(failOnError:true)
 		}
 		
 		(1..101).each {
-			new Fmessage(src:'+198765432', text:"text-${it}", date: new Date() - it, inbound:true).save(failOnError:true)
+			new TextMessage(src:'+198765432', text:"text-${it}", date: new Date() - it, inbound:true).save(failOnError:true)
 		}
 
-		def m1 = new Fmessage(src: '+3245678', date: new Date(), text: "time over?")
-		def m2 = new Fmessage(src: 'Johnny', date:new Date(), text: "I am in a meeting")
-		def m3 = new Fmessage(src: 'Sony', date:new Date(), text: "Hurry up")
-		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "Some cool characters: कञॠ, and more: á é í ó ú ü ñ ¿ ¡ ºª")
+		def m1 = new TextMessage(src: '+3245678', date: new Date(), text: "time over?")
+		def m2 = new TextMessage(src: 'Johnny', date:new Date(), text: "I am in a meeting")
+		def m3 = new TextMessage(src: 'Sony', date:new Date(), text: "Hurry up")
+		def m4 = new TextMessage(src: 'Jill', date:new Date(), text: "Some cool characters: कञॠ, and more: á é í ó ú ü ñ ¿ ¡ ºª")
 		
 		m1.addToDispatches(dst:'+123456789', status:DispatchStatus.FAILED)
 		m1.addToDispatches(dst:'+254114533', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
@@ -210,8 +210,8 @@ class CoreBootStrap {
 		m3.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
 		m4.addToDispatches(dst:'+254115533', status:DispatchStatus.PENDING).save(failOnError:true)
 
-		new Fmessage(src:'+33445566', text:"modem message", inbound:true, date: new Date()).save(failOnError:true, flush:true)
-		new Fmessage(src:'+33445566', text:"<0_O> marvel at the HTML & how it works!", inbound:true, date: new Date()).save(failOnError:true, flush:true)
+		new TextMessage(src:'+33445566', text:"modem message", inbound:true, date: new Date()).save(failOnError:true, flush:true)
+		new TextMessage(src:'+33445566', text:"<0_O> marvel at the HTML & how it works!", inbound:true, date: new Date()).save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFconnections() {
@@ -267,13 +267,13 @@ class CoreBootStrap {
 		
 		poll1.save(failOnError:true, flush:true)
 		poll2.save(failOnError:true, flush: true)
-		PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
-		PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
-		PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
+		PollResponse.findByValue('manchester').addToMessages(TextMessage.findBySrc('+198765432'))
+		PollResponse.findByValue('manchester').addToMessages(TextMessage.findBySrc('+123456789'))
+		PollResponse.findByValue('pantene').addToMessages(TextMessage.findBySrc('Joe'))
 
 		def barcelonaResponse = PollResponse.findByValue('barcelona');
 		10.times {
-			def msg = new Fmessage(src: "+9198765432${it}", date: new Date() - it, text: "Yes", inbound:true);
+			def msg = new TextMessage(src: "+9198765432${it}", date: new Date() - it, text: "Yes", inbound:true);
 			msg.save(failOnError: true);
 			barcelonaResponse.addToMessages(msg);
 		}
@@ -309,23 +309,23 @@ class CoreBootStrap {
 		['Work', 'Projects'].each {
 			new Folder(name:it).save(failOnError:true, flush:true)
 		}
-		[new Fmessage(src:'Max', text:'I will be late'),
-				new Fmessage(src:'Jane', text:'Meeting at 10 am'),
-				new Fmessage(src:'Patrick', text:'Project has started'),
-				new Fmessage(src:'Zeuss', text:'Sewage blocked')].each() {
+		[new TextMessage(src:'Max', text:'I will be late'),
+				new TextMessage(src:'Jane', text:'Meeting at 10 am'),
+				new TextMessage(src:'Patrick', text:'Project has started'),
+				new TextMessage(src:'Zeuss', text:'Sewage blocked')].each() {
 			it.inbound = true
 			it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
 
-		[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
-				Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
-				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
-				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
+		[Folder.findByName('Work').addToMessages(TextMessage.findBySrc('Max')),
+				Folder.findByName('Work').addToMessages(TextMessage.findBySrc('Jane')),
+				Folder.findByName('Projects').addToMessages(TextMessage.findBySrc('Zeuss')),
+				Folder.findByName('Projects').addToMessages(TextMessage.findBySrc('Patrick'))].each() {
 			it.save(failOnError:true, flush:true)
 		}
 
-		def m = Fmessage.findByText("modem message")
+		def m = TextMessage.findByText("modem message")
 		def modem = SmslibFconnection.list()[0]
 		modem.addToMessages(m)
 		modem.save(failOnError:true, flush:true)
@@ -334,37 +334,37 @@ class CoreBootStrap {
 	
 	private def dev_initAnnouncements() {
 		if(!bootstrapData) return
-		[new Fmessage(src:'Roy', text:'I will be late'),
-			new Fmessage(src:'Marie', text:'Meeting at 10 am'),
-			new Fmessage(src:'Mike', text:'Project has started')].each() {
+		[new TextMessage(src:'Roy', text:'I will be late'),
+			new TextMessage(src:'Marie', text:'Meeting at 10 am'),
+			new TextMessage(src:'Mike', text:'Project has started')].each() {
 				it.inbound = true
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
 		def a1 = new Announcement(name:'Free cars!', sentMessageText:"Everyone who recieves this message will also recieve a free Subaru")
 		def a2 = new Announcement(name:'Office Party', sentMessageText:"Office Party on Friday!")
-		def sent1 = new Fmessage(src:'me', inbound:false, text:"Everyone who recieves this message will also recieve a free Subaru")
-		def sent2 = new Fmessage(src:'me', inbound:false, text:"Office Party on Friday!")
+		def sent1 = new TextMessage(src:'me', inbound:false, text:"Everyone who recieves this message will also recieve a free Subaru")
+		def sent2 = new TextMessage(src:'me', inbound:false, text:"Office Party on Friday!")
 		sent1.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
 		sent2.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
 		a1.addToMessages(sent1).save(failOnError:true, flush:true)
 		a2.addToMessages(sent2).save(failOnError:true, flush:true)
 		
-		[Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Roy')),
-				Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Marie')),
-				Announcement.findByName('Office Party').addToMessages(Fmessage.findBySrc('Mike'))].each() {
+		[Announcement.findByName('Free cars!').addToMessages(TextMessage.findBySrc('Roy')),
+				Announcement.findByName('Free cars!').addToMessages(TextMessage.findBySrc('Marie')),
+				Announcement.findByName('Office Party').addToMessages(TextMessage.findBySrc('Mike'))].each() {
 			it.save(failOnError:true, flush:true)
 		}
 	}
 
 	private def dev_initWebconnections() {
 		if(!bootstrapData) return
-		[	new Fmessage(src:'Wanyama', text:'forward me to the server'),
-			new Fmessage(src:'Tshabalala', text:'a text from me'),
-			new Fmessage(src:'June', text:'I just arrived'),
-			new Fmessage(src:'Otieno', text:'I am on a map!'),
-			new Fmessage(src:'Ekisa', text:'I too am on a map'),
-			new Fmessage(src:'James', text:'I just arrived')].each() {
+		[	new TextMessage(src:'Wanyama', text:'forward me to the server'),
+			new TextMessage(src:'Tshabalala', text:'a text from me'),
+			new TextMessage(src:'June', text:'I just arrived'),
+			new TextMessage(src:'Otieno', text:'I am on a map!'),
+			new TextMessage(src:'Ekisa', text:'I too am on a map'),
+			new TextMessage(src:'James', text:'I just arrived')].each() {
 				it.inbound = true
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
@@ -379,12 +379,12 @@ class CoreBootStrap {
 		extCmd.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'senderName' , value: '${message_src_name}'))
 		extCmd.save(failOnError:true, flush:true)
-		def sent1 = new Fmessage(src:'me', inbound:false, text:"Your messages are in 'the cloud'")
+		def sent1 = new TextMessage(src:'me', inbound:false, text:"Your messages are in 'the cloud'")
 		sent1.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
 		extCmd.addToMessages(sent1).save(failOnError:true, flush:true)
-		extCmd.addToMessages(Fmessage.findBySrc('Wanyama'))
-		extCmd.addToMessages(Fmessage.findBySrc('Tshabalala'))
-		extCmd.addToMessages(Fmessage.findBySrc('June'))
+		extCmd.addToMessages(TextMessage.findBySrc('Wanyama'))
+		extCmd.addToMessages(TextMessage.findBySrc('Tshabalala'))
+		extCmd.addToMessages(TextMessage.findBySrc('June'))
 		extCmd.save(failOnError:true, flush:true)
 		def extCmdPost = new GenericWebconnection(name:'POST to Server', url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:Webconnection.HttpMethod.POST)
 			.addToKeywords(value:'POST')
@@ -400,12 +400,12 @@ class CoreBootStrap {
 		ushahidiWebconnection.addToRequestParameters(new RequestParameter(name:'key' , value: '1NIJP34G'))
 		ushahidiWebconnection.addToRequestParameters(new RequestParameter(name:'s' , value: '${message_src_number}'))
 		ushahidiWebconnection.save(failOnError:true, flush:true)
-		def ushSent = new Fmessage(src:'me', inbound:false, text:"Your messages are on Ushahidi!")
+		def ushSent = new TextMessage(src:'me', inbound:false, text:"Your messages are on Ushahidi!")
 		ushSent.addToDispatches(dst:'+25411663123', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
 		ushahidiWebconnection.addToMessages(ushSent).save(failOnError:true, flush:true)
-		ushahidiWebconnection.addToMessages(Fmessage.findBySrc('Otieno'))
-		ushahidiWebconnection.addToMessages(Fmessage.findBySrc('Ekisa'))
-		ushahidiWebconnection.addToMessages(Fmessage.findBySrc('James'))
+		ushahidiWebconnection.addToMessages(TextMessage.findBySrc('Otieno'))
+		ushahidiWebconnection.addToMessages(TextMessage.findBySrc('Ekisa'))
+		ushahidiWebconnection.addToMessages(TextMessage.findBySrc('James'))
 		ushahidiWebconnection.save(failOnError:true, flush:true)
 	}
 

@@ -50,7 +50,7 @@ class AutoforwardControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			autoforward.addToContacts(Contact.build(mobile:'123123'))
 			autoforward.save(failOnError:true)
 
-			def message = Fmessage.build(text:'This should be moved to Autoforward')
+			def message = TextMessage.build(text:'This should be moved to Autoforward')
 			def controller = new MessageController()
 			controller.params.messageId = message.id
 			controller.params.ownerId = autoforward.id
@@ -58,6 +58,6 @@ class AutoforwardControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.move()
 		then:
-			Fmessage.findByText("This should be moved to Autoforward").messageOwner.id == autoforward.id
+			TextMessage.findByText("This should be moved to Autoforward").messageOwner.id == autoforward.id
 	}
 }

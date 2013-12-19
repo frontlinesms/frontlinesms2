@@ -5,7 +5,7 @@ import spock.lang.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(SubscriptionService)
-@Build([Group, SmartGroup, Contact, Fmessage, Subscription, GroupMembership])
+@Build([Group, SmartGroup, Contact, TextMessage, Subscription, GroupMembership])
 class SubscriptionServiceSpec extends Specification {
 	def s, c, g, service, sendService, replyMessage
 
@@ -21,7 +21,7 @@ class SubscriptionServiceSpec extends Specification {
 		given:
 			createTestSubscription(true)
 		when:
-			service.doJoin(s, mockFmessage("doesntmatter", TEST_CONTACT))
+			service.doJoin(s, mockTextMessage("doesntmatter", TEST_CONTACT))
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -30,7 +30,7 @@ class SubscriptionServiceSpec extends Specification {
 		given:
 			createTestSubscription(false)
 		when:
-			service.doLeave(s, mockFmessage("doesntmatter", TEST_CONTACT))
+			service.doLeave(s, mockTextMessage("doesntmatter", TEST_CONTACT))
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -39,7 +39,7 @@ class SubscriptionServiceSpec extends Specification {
 		given:
 			createTestSubscription(true)
 		when:
-			service.doToggle(s, mockFmessage("doesntmatter", TEST_CONTACT))
+			service.doToggle(s, mockTextMessage("doesntmatter", TEST_CONTACT))
 		then:
 			1 * sendService.send(replyMessage)
 	}
@@ -49,14 +49,14 @@ class SubscriptionServiceSpec extends Specification {
 			createTestSubscription(false)
 			c.addToGroup(g)
 		when:
-			service.doToggle(s, mockFmessage("doesntmatter", TEST_CONTACT))
+			service.doToggle(s, mockTextMessage("doesntmatter", TEST_CONTACT))
 		then:
 			1 * sendService.send(replyMessage)
 	}
 
 	private def createTestSubscription(joinExpected=true) {
 		sendService = Mock(MessageSendService)
-		replyMessage = mockFmessage("woteva")
+		replyMessage = mockTextMessage("woteva")
 		sendService.createOutgoingMessage({ params ->
 			println "CREATE OUTGOING MESSAGE INVOKED WITH PARAMS ::: $params"
 			params.addresses==TEST_CONTACT && params.messageText == "you have ${joinExpected ? 'joined' : 'left'}"
@@ -72,8 +72,8 @@ class SubscriptionServiceSpec extends Specification {
 		c = Contact.build(mobile:TEST_CONTACT)
 	}
 
-	private def mockFmessage(String messageText, String src=null) {
-		Fmessage m = Mock()
+	private def mockTextMessage(String messageText, String src=null) {
+		TextMessage m = Mock()
 		m.inbound >> true
 		m.text >> messageText
 		m.src >> src

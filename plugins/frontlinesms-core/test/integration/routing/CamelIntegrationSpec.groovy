@@ -7,7 +7,7 @@ import org.apache.camel.*
 import org.apache.camel.builder.*
 import org.apache.camel.impl.DefaultProducerTemplate
 import org.apache.camel.component.mock.MockEndpoint
-import frontlinesms2.Fmessage
+import frontlinesms2.TextMessage
 
 abstract class CamelIntegrationSpec extends IntegrationSpec {
 	// This is the CamelContext used by Grails.  It will be injected for you.
@@ -32,7 +32,7 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 		camelContext.removeRouteDefinitions(testRoutes - null)
 
 		// Work around as domain objects created within routes are not cleaned up by the transaction of the integration test
-		//Fmessage.findAll().each {
+		//TextMessage.findAll().each {
 		//	it.delete()
 		//}
 	}

@@ -174,13 +174,13 @@ class MigrationSpec {
 			poll1.addToResponses(PollResponse.createUnknown())
 				
 			poll1.save(failOnError:true, flush:true)
-			PollResponse.findByValue('manchester').addToMessages(new Fmessage(src:'+123', date:new Date(), text:'UTD!'))
-			PollResponse.findByValue('manchester').addToMessages(new Fmessage(src:'+123', date:new Date(), text:'MUFC!'))
-			PollResponse.findByValue('Unknown').addToMessages(new Fmessage(src:'+123', date:new Date(), text:'All I want is a good game.'))
+			PollResponse.findByValue('manchester').addToMessages(new TextMessage(src:'+123', date:new Date(), text:'UTD!'))
+			PollResponse.findByValue('manchester').addToMessages(new TextMessage(src:'+123', date:new Date(), text:'MUFC!'))
+			PollResponse.findByValue('Unknown').addToMessages(new TextMessage(src:'+123', date:new Date(), text:'All I want is a good game.'))
 
 			def barcelonaResponse = PollResponse.findByValue('barcelona');
 			10.times {
-				def msg = new Fmessage(src: "+9198765432${it}", date: new Date() - it, text: "Barca", inbound:true, read: true)
+				def msg = new TextMessage(src: "+9198765432${it}", date: new Date() - it, text: "Barca", inbound:true, read: true)
 				msg.save(failOnError: true);
 				barcelonaResponse.addToMessages(msg);
 			}
@@ -222,7 +222,7 @@ class MigrationSpec {
 			def autoreply = Autoreply.findByName('Toothpaste')
 			assert autoreply.autoreplyText == 'Thanks for the input. Your number, ${recipient_number}, has been added to our records'
 
-			def msg = Fmessage.findBySrc("+91987654321")
+			def msg = TextMessage.findBySrc("+91987654321")
 			assert msg.read
 			// create any additional data for future
 			return true

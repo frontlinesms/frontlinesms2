@@ -72,9 +72,9 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 ''')
 		then:
 			// check that messages and folders were created
-			Fmessage.list()*.text.sort() == ['Message Received Msg1.', 'Message Received Msg2.', 'Message Sent Msg1', 'Message Sent Msg2']
+			TextMessage.list()*.text.sort() == ['Message Received Msg1.', 'Message Received Msg2.', 'Message Sent Msg1', 'Message Sent Msg2']
 			Folder.list().name == ['messages from v1']
-			Fmessage.list()*.messageOwner.name.every { it == 'messages from v1' }
+			TextMessage.list()*.messageOwner.name.every { it == 'messages from v1' }
 	}
 	
 	def 'Uploading a messages CSV file from version 2 should create new messages and folder in the database'() {
@@ -86,9 +86,9 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 ''')
 		then:
 			// check that messages and folders were created
-			Fmessage.list()*.text.sort() == ['Message 1', 'Message 2', 'Message 3']
+			TextMessage.list()*.text.sort() == ['Message 1', 'Message 2', 'Message 3']
 			Folder.list().name == ['messages from v2']
-			Fmessage.list()*.messageOwner.name.every { it == 'messages from v2' }
+			TextMessage.list()*.messageOwner.name.every { it == 'messages from v2' }
 	}
 
 	def 'Uploading a messages CSV file from version 2 should be able to handle line breaks in messages'() {
@@ -104,7 +104,7 @@ Shantelle","2012-06-12 15:58:44.488"
 ''')
 		then:
 			// check that messages and folders were created
-			Fmessage.list()*.text.sort() == ['''Joyce
+			TextMessage.list()*.text.sort() == ['''Joyce
 Vancouver
 Siloi
 Rotation
@@ -112,7 +112,7 @@ Amelia
 Georgina
 Shantelle''']
 			Folder.list().name == ['messages from v2']
-			Fmessage.list()*.messageOwner.name.every { it == 'messages from v2' }
+			TextMessage.list()*.messageOwner.name.every { it == 'messages from v2' }
 	}
 
 	def 'Uploading a message with a very long content field results in the message content being...'() {
@@ -122,7 +122,7 @@ Shantelle''']
 "Received","Received","2012-02-24 17:22:59","short message","254705693656","254704593656"
 ''')
 		then:
-			Fmessage.list()*.text == ['short message', ('0123456789ABCDEF' * 256)[0..1598] + '…']
+			TextMessage.list()*.text == ['short message', ('0123456789ABCDEF' * 256)[0..1598] + '…']
 	}
 
 	def 'Uploading a CSV with a BOM should not cause issues'() {
@@ -131,7 +131,7 @@ Shantelle''']
 "Received","Received","2012-02-16 16:42:24","+123456789","Safaricom","254704593656"
 ''')
 		then:
-			Fmessage.list()*.inbound == [true]
+			TextMessage.list()*.inbound == [true]
 	}
 
 	def 'contact import should support vcard 2.1'() {

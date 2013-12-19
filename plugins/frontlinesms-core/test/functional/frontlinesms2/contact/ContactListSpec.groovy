@@ -150,8 +150,8 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			remote {
 				def pedro = Contact.build(name:'Pedro', mobile:'+111')
-				(1..20).each { Fmessage.build(src:'+111', inbound:true, text:"message ${it}") }
-				def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
+				(1..20).each { TextMessage.build(src:'+111', inbound:true, text:"message ${it}") }
+				def outgoingMsg = new TextMessage(src:'000', inbound:false, text:"outgoing message to Pedro")
 						.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
 						.save(failOnError:true, flush:true)
 				null
@@ -172,8 +172,8 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			remote {
 				def pedro = Contact.build(name:'', mobile:'+111')
-				(1..20).each { Fmessage.build(src:'+111', inbound:true, text:"message ${it}") }
-				def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
+				(1..20).each { TextMessage.build(src:'+111', inbound:true, text:"message ${it}") }
+				def outgoingMsg = new TextMessage(src:'000', inbound:false, text:"outgoing message to Pedro")
 						.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
 						.save(failOnError:true, flush:true)
 				null

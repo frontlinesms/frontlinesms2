@@ -41,15 +41,15 @@ class AutoreplySpec extends Specification {
 			def autoreplyService = Mock(AutoreplyService)
 			autoreply.autoreplyService = autoreplyService
 
-			def inMessage = mockFmessage("message text", TEST_NUMBER)
+			def inMessage = mockTextMessage("message text", TEST_NUMBER)
 		when:
 			autoreply.processKeyword(inMessage, Mock(Keyword))
 		then:
 			1 * autoreplyService.doReply(autoreply, inMessage)
 	}
 
-	private def mockFmessage(String messageText, String src=null) {
-		Fmessage m = Mock()
+	private def mockTextMessage(String messageText, String src=null) {
+		TextMessage m = Mock()
 		m.text >> messageText
 		m.src >> src
 		return m

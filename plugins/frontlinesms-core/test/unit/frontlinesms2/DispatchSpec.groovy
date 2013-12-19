@@ -4,7 +4,7 @@ import spock.lang.*
 import grails.test.mixin.*
 
 @TestFor(Dispatch)
-@Mock(Fmessage)
+@Mock(TextMessage)
 class DispatchSpec extends Specification {
 	def "Dispatch must have a dst, a message, and a status"() {
 		when:
@@ -20,7 +20,7 @@ class DispatchSpec extends Specification {
 		then:
 			!dis.validate()
 		when:
-			dis.message = new Fmessage()
+			dis.message = new TextMessage()
 		then:
 			dis.validate()
 	}
@@ -28,7 +28,7 @@ class DispatchSpec extends Specification {
 	def "dispatch only has a dateSent if the status is SENT"() {
 		when:
 			def now = new Date()
-			Dispatch dis = new Dispatch(dst: '12345', message: new Fmessage(), status: DispatchStatus.FAILED, dateSent: now)
+			Dispatch dis = new Dispatch(dst: '12345', message: new TextMessage(), status: DispatchStatus.FAILED, dateSent: now)
 		then:
 			!dis.validate()
 		when:

@@ -30,7 +30,7 @@ class AnnouncementControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can edit an announcement"() {
 		setup:
-			def message = Fmessage.build()
+			def message = TextMessage.build()
 			def announcement = new Announcement(name: 'Test', addresses: "12345")
 			announcement.addToMessages(message)
 			announcement.save(failOnError:true, flush:true)

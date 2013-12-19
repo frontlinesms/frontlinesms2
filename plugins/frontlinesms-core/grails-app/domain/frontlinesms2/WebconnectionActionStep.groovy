@@ -48,7 +48,7 @@ class WebconnectionActionStep extends Step {
 		return parameters
 	}
 	
-	def process(Fmessage message) {
+	def process(TextMessage message) {
 		webconnectionService.doUpload(this, message)
 	}
 
@@ -90,7 +90,7 @@ class WebconnectionActionStep extends Step {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def fmessage = Fmessage.get(x.in.headers.'fmessage-id')
+		def fmessage = TextMessage.get(x.in.headers.'fmessage-id')
 		def stepProperties = this.requestParameters.collect { if(!(it.key ==~ /httpMethod|url/)) it} - null
 		def encodedParameters = stepProperties?.collect {
 			urlEncode(it.name) + '=' + urlEncode(webconnectionService.getProcessedValue(it, fmessage))

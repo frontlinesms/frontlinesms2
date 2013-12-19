@@ -7,8 +7,8 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(PollController)
-@Mock([Contact, Fmessage, Group, GroupMembership, Poll, SmartGroup, PollResponse])
-@Build(Fmessage)
+@Mock([Contact, TextMessage, Group, GroupMembership, Poll, SmartGroup, PollResponse])
+@Build(TextMessage)
 class PollControllerSpec extends Specification {
 	def setup() {
 		Group.metaClass.getMembers = {

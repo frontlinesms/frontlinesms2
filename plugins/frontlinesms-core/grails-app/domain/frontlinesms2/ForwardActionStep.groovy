@@ -75,7 +75,7 @@ class ForwardActionStep extends Step {
 		}
 	}
 	
-	def process(Fmessage message) {
+	def process(TextMessage message) {
 		autoforwardService.doForward(this, message)
 	}
 

@@ -71,7 +71,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageFolder, remote { Folder.findByName('Work').id },
-					remote { Fmessage.findBySrc('Max').id }
+					remote { TextMessage.findBySrc('Max').id }
 		then:
 			messageList.messageCount() == 2
 		when:
@@ -92,7 +92,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolder, remote { Folder.findByName('Work').id }, remote { Fmessage.findBySrc('Max').id }
+			to PageMessageFolder, remote { Folder.findByName('Work').id }, remote { TextMessage.findBySrc('Max').id }
 			singleMessageDetails.forward.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
@@ -234,7 +234,7 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder,
 					remote { Folder.findByName('Projects').id },
-					remote { Fmessage.findBySrc('Patrick').id }
+					remote { TextMessage.findBySrc('Patrick').id }
 		then:
 			messageList.messageCount() == 3
 		when:

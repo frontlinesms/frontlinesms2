@@ -7,7 +7,7 @@ import grails.buildtestdata.mixin.Build
 
 @TestFor(Poll)
 @Mock([PollResponse, MessageDetail])
-@Build(Fmessage)
+@Build(TextMessage)
 class PollSpec extends Specification {
 	/** some responses that should pass validation */
 	def OK_RESPONSES = [new PollResponse(value:'one', key:'A'), new PollResponse(value:'two', key:'B')]
@@ -54,7 +54,7 @@ class PollSpec extends Specification {
 			def pollAndResponses = createPoll(validResponseCount)
 			def poll = pollAndResponses.poll
 			def responses = pollAndResponses.responses
-			def m = Fmessage.build(text:messageText)
+			def m = TextMessage.build(text:messageText)
 			def k = new Keyword(value:'irrelevant', ownerDetail:keywordOwnerDetail, isTopLevel:!keywordOwnerDetail)
 		when:
 			poll.processKeyword(m, k)
@@ -89,13 +89,13 @@ class PollSpec extends Specification {
 			poll.autoreplyText = "some reply text"
 			poll.save(failOnError:true, flush:true)
 
-			def replyMessage = Fmessage.build(text:"woteva")
+			def replyMessage = TextMessage.build(text:"woteva")
 			sendService.createOutgoingMessage({ params ->
 				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
 			}) >> replyMessage
 
 
-			def inMessage = Fmessage.build(text:"message text", src:TEST_NUMBER)
+			def inMessage = TextMessage.build(text:"message text", src:TEST_NUMBER)
 		when:
 			poll.processKeyword(inMessage, new Keyword(value:'test', isTopLevel:true, ownerDetail:null))
 		then:
@@ -115,7 +115,7 @@ class PollSpec extends Specification {
 
 	def 'removing a message from a poll should remove it from poll.messages'() {
 		given:
-			Fmessage m = new Fmessage()
+			TextMessage m = new TextMessage()
 			Poll p = new Poll()
 		when:
 			p.removeFromMessages(m)

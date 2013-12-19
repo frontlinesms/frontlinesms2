@@ -65,7 +65,7 @@ class SubscriptionController extends ActivityController {
 	}
 
 	private def getCheckedMessages() {
-		return Fmessage.getAll(getCheckedMessageList()) - null
+		return TextMessage.getAll(getCheckedMessageList()) - null
 	}
 
 	private def getCheckedMessageList() {

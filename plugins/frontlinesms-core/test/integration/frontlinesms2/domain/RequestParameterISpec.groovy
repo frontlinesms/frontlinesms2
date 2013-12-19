@@ -7,7 +7,7 @@ class RequestParameterISpec extends grails.plugin.spock.IntegrationSpec {
 	@spock.lang.Unroll
 	def "parameter in a message should be replaced with actual values"(){
 		when:
-			def message = Fmessage.build(text:"Sample text to send out", src:'12345')
+			def message = TextMessage.build(text:"Sample text to send out", src:'12345')
 			def syncKeyword = new Keyword(value:"SYNC")
 			def parameter = new RequestParameter(name:'message', value:"\${}")
 			def webconnection = new GenericWebconnection(name:"Sync", url:"http://www.frontlinesms.com/sync", httpMethod:Webconnection.HttpMethod.GET).addToKeywords(syncKeyword)

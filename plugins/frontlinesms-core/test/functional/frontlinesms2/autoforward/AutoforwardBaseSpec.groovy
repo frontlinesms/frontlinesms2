@@ -21,7 +21,7 @@ class AutoforwardBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			def a = Autoforward.findByName(aName)
 			(0..90).each {
-				def m = Fmessage.build(src:'Nagila', text:"Sudden shock $it", date:new Date()-it)
+				def m = TextMessage.build(src:'Nagila', text:"Sudden shock $it", date:new Date()-it)
 				a.addToMessages(m)
 			}
 			a.save(failOnError:true, flush:true)
@@ -32,7 +32,7 @@ class AutoforwardBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestActivities() {
 		remote {
 			Announcement.build(name:"Sample Announcement", sentMessageText:"Message to send")
-			Fmessage.build(src:'announce')
+			TextMessage.build(src:'announce')
 			null
 		}
 	}

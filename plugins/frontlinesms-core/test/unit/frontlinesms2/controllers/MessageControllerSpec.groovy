@@ -8,8 +8,8 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(MessageController)
-@Mock([Contact, Fmessage, Group, GroupMembership, Poll, Trash])
-@Build([Poll, Fmessage])
+@Mock([Contact, TextMessage, Group, GroupMembership, Poll, Trash])
+@Build([Poll, TextMessage])
 class MessageControllerSpec extends Specification {
 	MessageSendService mockMessageSendService
 
@@ -30,8 +30,8 @@ class MessageControllerSpec extends Specification {
 				new GroupMembership(group: thar, contact: new Contact(mobile: "12121")),
 				new GroupMembership(group: thar, contact: new Contact(mobile: "22222"))]*.save()
 
-		Fmessage.metaClass.static.getAll = { List ids ->
-			ids.collect { Fmessage.get(it) } }
+		TextMessage.metaClass.static.getAll = { List ids ->
+			ids.collect { TextMessage.get(it) } }
 
 		mockMessageSendService = Mock()
 		controller.messageSendService = mockMessageSendService
@@ -39,9 +39,9 @@ class MessageControllerSpec extends Specification {
 
 	def "should resend a single failed message"() {
 		setup:
-			[new Fmessage(text:'', id:1, inbound:false, dispatches:[new Dispatch()]),
-					new Fmessage(text:'', id:2, inbound:false, dispatches:[new Dispatch()]),
-					new Fmessage(text:'', id:3, inbound:false, dispatches:[new Dispatch()])]*.save(failOnError:true)*.id
+			[new TextMessage(text:'', id:1, inbound:false, dispatches:[new Dispatch()]),
+					new TextMessage(text:'', id:2, inbound:false, dispatches:[new Dispatch()]),
+					new TextMessage(text:'', id:3, inbound:false, dispatches:[new Dispatch()])]*.save(failOnError:true)*.id
 			params.messageId = 1
 			1 * mockMessageSendService.retry(_) >> { m ->
 				assert m*.id == [1]
@@ -54,9 +54,9 @@ class MessageControllerSpec extends Specification {
 
 	def "should resend multiple failed message"() {
 		setup:
-			[new Fmessage(text:'', id:1L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
-				new Fmessage(text:'', id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
-				new Fmessage(text:'', id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])]*.save(failOnError:true)
+			[new TextMessage(text:'', id:1L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
+				new TextMessage(text:'', id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
+				new TextMessage(text:'', id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])]*.save(failOnError:true)
 			params['message-select'] = [1, 2]
 			2 * mockMessageSendService.retry(_) >> { m ->
 				return 1 }
@@ -79,7 +79,7 @@ class MessageControllerSpec extends Specification {
 		given:
 			params.controller = "message"
 			params.messageSection = "inbox"
-			params.messageId = Fmessage.build().id
+			params.messageId = TextMessage.build().id
 		when:
 			controller.archive()
 		then:
@@ -90,7 +90,7 @@ class MessageControllerSpec extends Specification {
 		given:
 			params.controller = "message"
 			params.messageSection = "result"
-			params.messageId = Fmessage.build().id
+			params.messageId = TextMessage.build().id
 			params.searchId = 1
 		when:
 			controller.archive()
@@ -100,7 +100,7 @@ class MessageControllerSpec extends Specification {
 	
 	def "archiving pending messages from the result screen should fail"(){
 		setup:
-			def message = new Fmessage(text:'', id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:PENDING)]).save()
+			def message = new TextMessage(text:'', id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:PENDING)]).save()
 			params.controller = "message"
 			params.messageSection = "result"
 			params.searchId = "1"

@@ -4,7 +4,7 @@ import spock.lang.*
 import grails.test.mixin.*
 
 @TestFor(Folder)
-@Mock(Fmessage)
+@Mock(TextMessage)
 class FolderSpec extends Specification {
 	def setup() {
 		// Not sure why this is necessary with Test Mixins, but it seems to be:
@@ -21,11 +21,11 @@ class FolderSpec extends Specification {
 		then:
 			f.validate()
 		when:
-			f.addToMessages(new Fmessage())
+			f.addToMessages(new TextMessage())
 		then:
 			f.validate()
 		when:
-			f.addToMessages(new Fmessage())
+			f.addToMessages(new TextMessage())
 		then:
 			f.validate()
 	}

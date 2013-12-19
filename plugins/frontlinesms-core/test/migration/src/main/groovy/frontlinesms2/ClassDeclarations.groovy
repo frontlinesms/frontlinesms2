@@ -6,7 +6,7 @@ package frontlinesms2
 
 class Autoreply {}
 class ClickatellFconnection {}
-class Fmessage {}
+class TextMessage {}
 class Keyword {}
 class Poll {}
 class PollResponse {}

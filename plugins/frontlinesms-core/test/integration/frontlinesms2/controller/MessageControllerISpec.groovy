@@ -33,20 +33,20 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.send()
 		then:
-			Fmessage.count() == 1
-			(Fmessage.getAll() as List)[0].dispatches*.dst == ['+919544426000']
+			TextMessage.count() == 1
+			(TextMessage.getAll() as List)[0].dispatches*.dst == ['+919544426000']
 	}
 
 	def "should send message to each recipient in the list of address"() {
 		setup:
 			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
 			controller.params.addresses = addresses
-			assert Fmessage.count() == 0
+			assert TextMessage.count() == 0
 		when:
 			controller.send()
 		then:
-			Fmessage.count() == 1
-			(Fmessage.getAll() as List)[0].dispatches*.dst.sort() == addresses.sort()
+			TextMessage.count() == 1
+			(TextMessage.getAll() as List)[0].dispatches*.dst.sort() == addresses.sort()
 	}
 
 	def 'should render message on successful message sending'() {
@@ -61,12 +61,12 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Messages are sorted by date' () {
 		setup:
-			def message1 = Fmessage.build(date:createDate("2011/01/20"))
-			def message2 = Fmessage.build(date:createDate("2011/01/24"))
-			def message3 = Fmessage.build(date:createDate("2011/01/23"))
-			def message4 = Fmessage.build(date:createDate("2011/01/21"))
+			def message1 = TextMessage.build(date:createDate("2011/01/20"))
+			def message2 = TextMessage.build(date:createDate("2011/01/24"))
+			def message3 = TextMessage.build(date:createDate("2011/01/23"))
+			def message4 = TextMessage.build(date:createDate("2011/01/21"))
 		when:
-			def messageInstanceList = Fmessage.inbox(false, false)
+			def messageInstanceList = TextMessage.inbox(false, false)
 		then:
 			messageInstanceList.count() == 4
 			messageInstanceList.list(sort:'date', order: 'desc') == [message2, message3, message4, message1]
@@ -75,49 +75,49 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling SHOW action in inbox leads to unread message becoming read'() {
 		setup:
-			def id = Fmessage.build().id
-			assert Fmessage.get(id).read == false
+			def id = TextMessage.build().id
+			assert TextMessage.get(id).read == false
 		when:
 			controller.params.messageId = id
 			controller.params.messageSection = 'inbox'
 			controller.show()
 		then:
-			Fmessage.get(id).read == true
+			TextMessage.get(id).read == true
 	}
 
 	def 'calling SHOW action leads to read message staying read'() {
 		setup:
-			def id = Fmessage.build(read:true).id
-			assert Fmessage.get(id).read
+			def id = TextMessage.build(read:true).id
+			assert TextMessage.get(id).read
 		when:
 			controller.params.messageSection = 'inbox'
 			controller.inbox()
 		then:
-			Fmessage.get(id).read
+			TextMessage.get(id).read
 	}
 
 	def 'calling "starMessage" action leads to unstarred message becoming starred'() {
 		setup:
-			def id = Fmessage.build().id
-			assert Fmessage.get(id).read == false
+			def id = TextMessage.build().id
+			assert TextMessage.get(id).read == false
 		when:
 			controller.params.messageId = id
 			controller.params.messageSection = 'inbox'
 			controller.changeStarStatus()
 		then:
-			Fmessage.get(id).starred == true
+			TextMessage.get(id).starred == true
 	}
 
 	def 'calling "starMessage" action leads to starred message becoming unstarred'() {
 		setup:
-			def id = Fmessage.build(starred:true).id
-			assert Fmessage.get(id).starred
+			def id = TextMessage.build(starred:true).id
+			assert TextMessage.get(id).starred
 		when:
 			controller.params.messageId = id
 			controller.params.messageSection = 'inbox'
 			controller.changeStarStatus()
 		then:
-			Fmessage.get(id).starred == false
+			TextMessage.get(id).starred == false
 	}
 
 	def 'calling "sendMessageCount" returns the number of messages to be sent'() {
@@ -139,7 +139,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'move action should work for activities'() {
 		given:
 			def poll = TestData.createFootballPoll()
-			def message = Fmessage.build()
+			def message = TextMessage.build()
 		when:
 			controller.params.messageId = message.id
 			controller.params.ownerId = poll.id
@@ -154,7 +154,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			new Contact(mobile:'456', name:'bertrand').save()
 			new Contact(mobile:'123', name:'andrea').save()
-			def m = new Fmessage(text:"")
+			def m = new TextMessage(text:"")
 					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 					.addToDispatches(dst:'456', status:DispatchStatus.SENT, dateSent:new Date())
 					.addToDispatches(dst:'789', status:DispatchStatus.FAILED)
@@ -168,7 +168,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "Message should not remain in old PollResponse after moving it to another activity"() {
 		given:
-			def m = Fmessage.build(inbound:true)
+			def m = TextMessage.build(inbound:true)
 			def responseA = new PollResponse(key:'A', value:'TessstA')
 			def previousOwner = new Poll(name:'This is a poll', question:'What is your name?')
 					.addToResponses(responseA)
@@ -198,9 +198,9 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			def announcement = Announcement.build(name:"Archived activity",sentMessageText:"text message",archived:true)
 			def announcement2 = Announcement.build(name:"Moving Into Announcement",sentMessageText:"text")
-			def m1 = Fmessage.build(archived:true)//archived message fails
-			def m2 = Fmessage.build(messageOwner:announcement,archived:true)//archived owner fails
-			def m3 = Fmessage.build()//inbox message passes
+			def m1 = TextMessage.build(archived:true)//archived message fails
+			def m2 = TextMessage.build(messageOwner:announcement,archived:true)//archived owner fails
+			def m3 = TextMessage.build()//inbox message passes
 			def controller = new MessageController()
 			controller.params['message-select'] = []
 			controller.params['message-select'] << m1.id << m2.id << m3.id
@@ -217,7 +217,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			def webConnection =  GenericWebconnection.build()
 			def announcement = Announcement.build()
-			def message = Fmessage.build()
+			def message = TextMessage.build()
 			message.setMessageDetail(webConnection, "ownerdetail-pending")
 			webConnection.addToMessages(message)
 			webConnection.save(failOnError:true, flush:true)
@@ -233,7 +233,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'moving messages to different activities and sections should work'() {
 		given:
-			def message = Fmessage.build(inbound:true, text:'the message')
+			def message = TextMessage.build(inbound:true, text:'the message')
 			def autoforward = Autoforward.build(name:'autoforward')
 			def autoreply = Autoreply.build(name:'autoreply')
 			def webconnection = GenericWebconnection.build(name:'webconnection')

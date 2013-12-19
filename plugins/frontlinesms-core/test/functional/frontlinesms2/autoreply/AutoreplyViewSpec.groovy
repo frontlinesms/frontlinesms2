@@ -207,7 +207,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 	def "moving a message from another activity to a autoreply displays an update message"() {
 		setup:
 			def activityId = remote { Activity.findByName("Sample Announcement").id }
-			def mId = remote { Fmessage.findBySrc("announce").id }
+			def mId = remote { TextMessage.findBySrc("announce").id }
 			def autoreplyId = remote { Autoreply.findByName('Fruits').id }
 		when:
 			to PageMessageAnnouncement, activityId, mId
@@ -248,9 +248,9 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 	private createInAndOutTestMessages() {
 		remote {
 			Autoreply a = Autoreply.build(name:'Vegetables')
-			3.times { a.addToMessages(Fmessage.build()) }
+			3.times { a.addToMessages(TextMessage.build()) }
 			2.times {
-				def sentMessage = Fmessage.buildWithoutSave(inbound:false)
+				def sentMessage = TextMessage.buildWithoutSave(inbound:false)
 				sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
 				sentMessage.save(failOnError:true, flush:true)
 				a.addToMessages(sentMessage) }

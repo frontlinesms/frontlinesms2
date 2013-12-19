@@ -134,7 +134,7 @@ class SmssyncServiceSpec extends Specification {
 			true     | false          | true        | 0
 	}
 
-	def 'generateApiResponse for incoming message should forward new Fmessage to storage route and reschedule the timeout counter job'() {
+	def 'generateApiResponse for incoming message should forward new TextMessage to storage route and reschedule the timeout counter job'() {
 		given:
 			connection.timeout >> 1
 			setupDefaultConnection(false)
@@ -149,7 +149,7 @@ class SmssyncServiceSpec extends Specification {
 			service.generateApiResponse(connection, controller)
 		then:
 			storageQueue.size() == 1 && 
-				storageQueue[0] instanceof Fmessage &&
+				storageQueue[0] instanceof TextMessage &&
 				storageQueue[0].inbound &&
 				storageQueue[0].src == '12345' &&
 				storageQueue[0].text == 'hi there boris'

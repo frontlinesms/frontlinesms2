@@ -11,7 +11,7 @@ class RequestParameter {
 
 	static belongsTo = [connection:Webconnection]
 
-	String getProcessedValue(Fmessage msg) {
+	String getProcessedValue(TextMessage msg) {
 		def val = this.value
 		def matches = val.findAll(regex)
 		matches.each { match ->
@@ -20,7 +20,7 @@ class RequestParameter {
 		return val
 	}
 
-	String getReplacement(String arg, Fmessage msg) {
+	String getReplacement(String arg, TextMessage msg) {
 		arg = (arg - '${') - '}'
 		def c = Webconnection.subFields[arg]
 		if (c)

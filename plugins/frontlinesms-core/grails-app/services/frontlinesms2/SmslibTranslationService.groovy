@@ -6,14 +6,14 @@ import org.smslib.CStatusReportMessage
 import org.smslib.COutgoingMessage
 
 class SmslibTranslationService {
-	void toFmessage(Exchange exchange) {
+	void toTextMessage(Exchange exchange) {
 		CIncomingMessage bod = exchange.in.body
 		
 		// Ignore CStatusReportMessages
 		if(bod instanceof CStatusReportMessage) {
 			return
 		} else {
-			Fmessage message = new Fmessage(inbound:true)
+			TextMessage message = new TextMessage(inbound:true)
 			message.src = bod.originator
 			message.text = bod.text
 			message.date = new Date(bod.date)
@@ -25,7 +25,7 @@ class SmslibTranslationService {
 	
 	void toCmessage(Exchange exchange) {
 		Dispatch d = exchange.in.body
-		Fmessage m = d.message
+		TextMessage m = d.message
 		String address = d.dst
 		String messageText = d.text?: ''
 		def c = new COutgoingMessage(address, messageText)

@@ -1,6 +1,6 @@
 import org.apache.camel.builder.RouteBuilder
 
-class IncomingFmessageRoute extends RouteBuilder {
+class IncomingTextMessageRoute extends RouteBuilder {
 	void configure() {
 		from('seda:incoming-fmessages-to-store').
 				beanRef('messageStorageService', 'process').

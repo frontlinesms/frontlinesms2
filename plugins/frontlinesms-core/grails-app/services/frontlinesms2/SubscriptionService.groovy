@@ -101,7 +101,7 @@ class SubscriptionService {
 		})
 	}
 
-	def withEachCorrespondent(Fmessage message, Closure c) {
+	def withEachCorrespondent(TextMessage message, Closure c) {
 		def phoneNumbers = []
 		if (message.inbound)
 			phoneNumbers << message.src

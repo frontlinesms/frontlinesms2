@@ -5,9 +5,9 @@ import spock.lang.*
 import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
-@Mock([Autoforward, CustomActivity, Fmessage, ForwardActionStep, MessageDetail])
+@Mock([Autoforward, CustomActivity, TextMessage, ForwardActionStep, MessageDetail])
 @TestFor(AutoforwardService)
-@Build([Autoforward, CustomActivity, Fmessage, ForwardActionStep])
+@Build([Autoforward, CustomActivity, TextMessage, ForwardActionStep])
 class AutoforwardServiceSpec extends Specification {
 	def outgoingMessage
 	def sendService
@@ -16,7 +16,7 @@ class AutoforwardServiceSpec extends Specification {
 		CustomActivity.metaClass.addToSteps = { s -> if(!steps) steps = []; steps << s }
 		CustomActivity.metaClass.addToMessages = { m -> if(!messages) messages = []; messages << m; m.messageOwner = delegate }
 		Autoforward.metaClass.addToMessages = { m -> if(!messages) messages = []; messages << m; m.messageOwner = delegate }
-		outgoingMessage = Fmessage.build()
+		outgoingMessage = TextMessage.build()
 
 		sendService = Mock(MessageSendService)
 		sendService.createOutgoingMessage(_) >> outgoingMessage
@@ -31,7 +31,7 @@ class AutoforwardServiceSpec extends Specification {
 			forwardStep.addToStepProperties(key:'sentMessageText', value:'sent this message')
 			def owner = CustomActivity.build()
 
-			def message = Fmessage.build()
+			def message = TextMessage.build()
 			owner.addToMessages(message)
 		when:
 			service.doForward(forwardStep, message)
@@ -42,7 +42,7 @@ class AutoforwardServiceSpec extends Specification {
 	def 'doForward() for a standard Activity should send a message'() {
 		given:
 			def a = Autoforward.build()
-			def m = Fmessage.build(messageOwner:a)
+			def m = TextMessage.build(messageOwner:a)
 		when:
 			service.doForward(a, m)
 		then:

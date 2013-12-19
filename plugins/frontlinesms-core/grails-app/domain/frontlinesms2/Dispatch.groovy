@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class Dispatch {
-	static belongsTo = [message: Fmessage]
+	static belongsTo = [message: TextMessage]
 	String dst
 	DispatchStatus status
 	Date dateSent

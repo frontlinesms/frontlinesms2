@@ -20,8 +20,8 @@ abstract class PageMessageActivity extends frontlinesms2.message.PageMessage {
 	    // find the message
 	    if (args.length > 1)
 	    {
-	    	if (args[1] instanceof Fmessage)
-	    		restOfPath +="/show/"+(args[1] as Fmessage).id
+	    	if (args[1] instanceof TextMessage)
+	    		restOfPath +="/show/"+(args[1] as TextMessage).id
 	    	else if (args[1] instanceof Number)
 	    		restOfPath +="/show/"+args[1]
 	    }

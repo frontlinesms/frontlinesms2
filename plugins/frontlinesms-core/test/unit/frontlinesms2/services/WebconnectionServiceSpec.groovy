@@ -10,8 +10,8 @@ import org.apache.camel.Message
 import grails.buildtestdata.mixin.Build
 
 @TestFor(WebconnectionService)
-@Build([Group, SmartGroup, Contact, Fmessage])
-@Mock([Fmessage])
+@Build([Group, SmartGroup, Contact, TextMessage])
+@Mock([TextMessage])
 class WebconnectionServiceSpec extends Specification {
 	def requestedId
 	def mockConnection
@@ -36,10 +36,10 @@ class WebconnectionServiceSpec extends Specification {
 
 	def 'postprocess call is handed back to the relevant domain object'() {
 		given:
-			service.metaClass.private.changeMessageOwnerDetail = {Fmessage a, String b -> b}
-			def m = Mock(Fmessage)
+			service.metaClass.private.changeMessageOwnerDetail = {TextMessage a, String b -> b}
+			def m = Mock(TextMessage)
 			m.messageOwner >> mockConnection
-			Fmessage.metaClass.static.get = { Serializable id -> return m }
+			TextMessage.metaClass.static.get = { Serializable id -> return m }
 			def x = mockExchange(null, ['webconnection-id':'123','fmessage-id':m.id])
 		when:
 			service.postProcess(x)
@@ -76,7 +76,7 @@ class WebconnectionServiceSpec extends Specification {
 			def controller = [request:[:], render: { renderedArgs = it }]
 			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			m.dispatches >> [] // for test with non-existant group
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
@@ -104,7 +104,7 @@ class WebconnectionServiceSpec extends Specification {
 			def controller = [request:[:], render: { renderedArgs = it }]
 			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			m.dispatches >> ['1', '2', '3']
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
@@ -129,7 +129,7 @@ class WebconnectionServiceSpec extends Specification {
 			def controller = [request:[:], render: { renderedArgs = it }]
 			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			m.dispatches >> ['1', '2', '3']
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
@@ -154,7 +154,7 @@ class WebconnectionServiceSpec extends Specification {
 			def controller = [request:[:], render: { renderedArgs = it }]
 			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			m.dispatches >> ['1', '2', '3']
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
@@ -179,7 +179,7 @@ class WebconnectionServiceSpec extends Specification {
 			def controller = [request:[:], render: { renderedArgs = it }]
 			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			m.dispatches >> ['1', '2', '3']
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService
@@ -202,7 +202,7 @@ class WebconnectionServiceSpec extends Specification {
 			def controller = [request:[:], render: { renderedArgs = it }]
 			controller.request = [JSON:requestBody]
 			def messageSendService = Mock(MessageSendService)
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			m.dispatches >> ['1', '2', '3']
 			messageSendService.createOutgoingMessage(_) >> m
 			service.messageSendService = messageSendService

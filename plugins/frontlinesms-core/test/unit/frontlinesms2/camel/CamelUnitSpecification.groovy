@@ -15,7 +15,7 @@ class CamelUnitSpecification extends Specification {
 			id:'45678',
 			message:[
 				text:messageText,
-				toString:{"mock Fmessage"}
+				toString:{"mock TextMessage"}
 			],
 			text:messageText,
 			dst:'+1234567890',

@@ -6,7 +6,7 @@ import grails.test.mixin.*
 import spock.lang.*
  
 @TestFor(FolderController)
-@Mock([Folder, Fmessage])
+@Mock([Folder, TextMessage])
 class FolderControllerSpec extends Specification {
 	def "can archive a folder"() {
 		given:

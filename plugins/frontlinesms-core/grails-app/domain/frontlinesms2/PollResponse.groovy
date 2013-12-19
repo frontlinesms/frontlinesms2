@@ -34,7 +34,7 @@ class PollResponse implements Comparable {
 		return poll.messages.findAll { it.ownerDetail == "$id" && it.inbound }.asList()
 	}
 
-	void addToMessages(Fmessage message) {
+	void addToMessages(TextMessage message) {
 		if(!message.inbound) return
 		if (this.poll.messages == null)
 			this.poll.messages = []

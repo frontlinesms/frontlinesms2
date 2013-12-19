@@ -21,7 +21,7 @@ abstract class Step {
 		stepProperties cascade: "all-delete-orphan"
 	}
 	
-	abstract def process(Fmessage message)
+	abstract def process(TextMessage message)
 
 	String getPropertyValue(key) {
 		stepProperties?.find { it.key == key }?.value

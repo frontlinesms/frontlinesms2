@@ -28,7 +28,7 @@ class JoinActionStep extends Step {
 		setPropertyValue("group", group.id)
 	}
 
-	def process(Fmessage message) {
+	def process(TextMessage message) {
 		subscriptionService.doJoin(this, message)
 	}
 

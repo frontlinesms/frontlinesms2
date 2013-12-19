@@ -15,8 +15,8 @@ class PageMessageSent extends PageMessage {
 		if (args.length == 0)
 			return ""
 
-		if (args[0] instanceof Fmessage)
-			restOfPath += "/show/"+(args[0] as Fmessage).id
+		if (args[0] instanceof TextMessage)
+			restOfPath += "/show/"+(args[0] as TextMessage).id
 		else if (args[0] instanceof Number)
 			restOfPath += "/show/"+args[0]
 		return restOfPath

@@ -5,17 +5,17 @@ import frontlinesms2.*
 class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestMessages() {
 		remote {
-			Fmessage.build(src:'Bob', text:'hi Bob')
-			Fmessage.build(src:'Alice', text:'hi Alice')
-			Fmessage.build(src:'+254778899', text:'test')
+			TextMessage.build(src:'Bob', text:'hi Bob')
+			TextMessage.build(src:'Alice', text:'hi Alice')
+			TextMessage.build(src:'+254778899', text:'test')
 			null
 		}
 	}
 
 	static createInboxTestMessages() {
 		remote {
-			Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-2)
-			Fmessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
+			TextMessage.build(src:'Bob', text:'hi Bob', date:new Date()-2)
+			TextMessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
 			null
 		}
 
@@ -24,11 +24,11 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createPendingTestMessages() {
 		remote {
-			def a = Fmessage.buildWithoutSave(inbound:false)
+			def a = TextMessage.buildWithoutSave(inbound:false)
 			a.addToDispatches(Dispatch.buildWithoutSave(status: DispatchStatus.PENDING))
 			a.save() // no-flush-deliberate
 
-			def b = Fmessage.buildWithoutSave(inbound:false)
+			def b = TextMessage.buildWithoutSave(inbound:false)
 			b.addToDispatches(Dispatch.buildWithoutSave(status: DispatchStatus.PENDING))
 			b.save() // no-flush-deliberate
 
@@ -38,9 +38,9 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createSearchTestMessages() {
 		remote {
-			Fmessage.build(src:'Alex', text:'meeting at 11.00')
-			Fmessage.build(src:'Bob', text:'hi Bob')
-			Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes')
+			TextMessage.build(src:'Alex', text:'meeting at 11.00')
+			TextMessage.build(src:'Bob', text:'hi Bob')
+			TextMessage.build(src:'Michael', text:'Can we get meet in 5 minutes')
 			null
 		}
 
@@ -59,19 +59,19 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			Contact.build(name:'Bob', mobile:'+254987654')
 
-			Fmessage.build(src:'Bob',text:'hi Bob')
-			Fmessage.build(src:'Alice', text:'hi Alice')
-			Fmessage.build(src:'+254778899', text:'test')
-			Fmessage.build(src:'Mary', text:'hi Mary')
-			Fmessage.build(src:'+254445566', text:'test2')
+			TextMessage.build(src:'Bob',text:'hi Bob')
+			TextMessage.build(src:'Alice', text:'hi Alice')
+			TextMessage.build(src:'+254778899', text:'test')
+			TextMessage.build(src:'Mary', text:'hi Mary')
+			TextMessage.build(src:'+254445566', text:'test2')
 			null
 		}
 
 		createMiaouwMixPoll()
 
 		remote {
-			def message1 = Fmessage.build(src:'Cheney', text:'i hate chicken')
-			def message2 = Fmessage.build(src:'Bush', text:'i hate liver')
+			def message1 = TextMessage.build(src:'Cheney', text:'i hate chicken')
+			def message2 = TextMessage.build(src:'Bush', text:'i hate liver')
 			def fools = Folder.build(name:'Fools')
 			fools.addToMessages(message1)
 			fools.addToMessages(message2)
@@ -82,8 +82,8 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createMiaouwMixPoll() {
 		remote {
-			def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
-			def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
+			def chickenMessage = TextMessage.build(src:'Barnabus', text:'i like chicken')
+			def liverMessage = TextMessage.build(src:'Minime', text:'i like liver')
 
 			def poll = new Poll(name:'Miauow Mix')
 			def chickenResponse = new PollResponse(key:'A', value:'chicken')

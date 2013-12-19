@@ -14,9 +14,9 @@ class ReplyActionStepISpec extends IntegrationSpec{
 				.addToKeywords(value:"CUSTOM")
 				.save(failOnError:true, flush:true)
  
-			def incomingMessage = Fmessage.build(text:"incoming message", messageOwner: customActivity)
+			def incomingMessage = TextMessage.build(text:"incoming message", messageOwner: customActivity)
 			replyStep.process(incomingMessage)
 		then:
-			Fmessage.findByText("i will send this").ownerDetail == incomingMessage.id.toString()
+			TextMessage.findByText("i will send this").ownerDetail == incomingMessage.id.toString()
 	}	
 }

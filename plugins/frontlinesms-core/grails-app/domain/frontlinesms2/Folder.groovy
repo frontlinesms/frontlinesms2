@@ -25,11 +25,11 @@ class Folder extends MessageOwner {
 
 //> ACCESSORS
 	def getFolderMessages(getOnlyStarred=false, getSent=null) {
-		Fmessage.owned(this, getOnlyStarred, getSent)
+		TextMessage.owned(this, getOnlyStarred, getSent)
 	}
 	
 	def getLiveMessageCount() {
-		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
+		def m = TextMessage.findAllByMessageOwnerAndIsDeleted(this, false)
 		m ? m.size() : 0
 	}
 
@@ -44,7 +44,7 @@ class Folder extends MessageOwner {
 	
 	def unarchive() {
 		this.archived = false
-		def messagesToArchive = Fmessage?.owned(this, false, true)?.list()
+		def messagesToArchive = TextMessage?.owned(this, false, true)?.list()
 		messagesToArchive.each { it?.archived = false }
 	}
 

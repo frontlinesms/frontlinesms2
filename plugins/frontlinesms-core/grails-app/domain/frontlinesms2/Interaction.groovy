@@ -106,15 +106,15 @@ class Interaction {
 	public boolean setRead(boolean read) { this.rd = read }
 	
 	static def countUnreadMessages() {
-		unread.count()
+		Interaction.unread.count()
 	}
 
 	static def countUnreadMessages(owner) {
-		unread(owner).count()
+		Interaction.unread(owner).count()
 	}
 
 	static def countTotalUnreadMessages() {
-		totalUnread.count()
+		Interaction.totalUnread.count()
 	}
 	
 	//TODO: Remove in Groovy 1.8 (Needed for 1.7)

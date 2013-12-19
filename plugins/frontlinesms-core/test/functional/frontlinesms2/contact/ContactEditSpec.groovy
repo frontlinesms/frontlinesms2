@@ -66,11 +66,11 @@ class ContactEditSpec extends ContactBaseSpec {
 	def "should display a count of messages recieved and sent for a contact"() {
 		given: 'A contact has received and sent messages'
 			remote {
-				def sent1 = new Fmessage(inbound:false, text:"outbound 1")
-				def sent2 = new Fmessage(inbound:false, text:"outbound 2")
+				def sent1 = new TextMessage(inbound:false, text:"outbound 1")
+				def sent2 = new TextMessage(inbound:false, text:"outbound 2")
 				sent1.addToDispatches(dst:'+2541234567', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
 				sent2.addToDispatches(dst:'+2541234567', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
-				new Fmessage(src:'+2541234567', text:"inbound 1", date: new Date(), inbound:true).save(failOnError:true, flush:true)
+				new TextMessage(src:'+2541234567', text:"inbound 1", date: new Date(), inbound:true).save(failOnError:true, flush:true)
 				null
 			}
 		when:

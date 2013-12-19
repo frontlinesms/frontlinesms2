@@ -74,7 +74,7 @@ class SmssyncService {
 		    sent_to -- the phone number the SMS was sent to
 		    sent_timestamp -- the timestamp the SMS was sent. In the UNIX timestamp format */
 		sendMessageAndHeaders('seda:incoming-fmessages-to-store',
-				new Fmessage(inbound:true, src:params.from, text:params.message),
+				new TextMessage(inbound:true, src:params.from, text:params.message),
 				['fconnection-id':connection.id])
 
 		def response = success()

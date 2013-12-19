@@ -28,7 +28,7 @@ class NexmoService {
 			text : incoming message
 		     */
 		sendMessageAndHeaders('seda:incoming-fmessages-to-store',
-				new Fmessage(inbound:true, src:params.msisdn, text:params.text),
+				new TextMessage(inbound:true, src:params.msisdn, text:params.text),
 				['fconnection-id':connection.id])
 
 		def response = success()

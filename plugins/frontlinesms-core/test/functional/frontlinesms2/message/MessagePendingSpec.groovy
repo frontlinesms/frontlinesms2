@@ -11,16 +11,16 @@ import frontlinesms2.*
 class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		remote {
-			new Fmessage(text:'text',src:"src1", starred:true)
+			new TextMessage(text:'text',src:"src1", starred:true)
 					.addToDispatches(dst:"dst2", status:DispatchStatus.FAILED)
 					.save(failOnError:true, flush:true)
-			new Fmessage(text:'text',src:"src2")
+			new TextMessage(text:'text',src:"src2")
 					.addToDispatches(dst:"dst1", status:DispatchStatus.PENDING)
 					.save(failOnError:true, flush:true)
-			new Fmessage(text:'text',src:"src")
+			new TextMessage(text:'text',src:"src")
 					.addToDispatches(dst:"dst3", status:DispatchStatus.SENT, dateSent:new Date())
 					.save(failOnError:true, flush:true)
-			Fmessage.build(src:"src")
+			TextMessage.build(src:"src")
 			null
 		}
 	}

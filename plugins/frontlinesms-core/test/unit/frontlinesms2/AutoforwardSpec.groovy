@@ -5,7 +5,7 @@ import spock.lang.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Autoforward)
-@Mock([Keyword, SmartGroup, Group, Contact, Fmessage, MessageSendService, AutoforwardService, CustomActivity])
+@Mock([Keyword, SmartGroup, Group, Contact, TextMessage, MessageSendService, AutoforwardService, CustomActivity])
 @Build([Contact, Autoforward])
 class AutoforwardSpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
@@ -42,7 +42,7 @@ class AutoforwardSpec extends Specification {
 		given:
 			def a = Autoforward.build()
 			a.contacts = ['a contact']
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			def k = Mock(Keyword)
 			def s = Mock(AutoforwardService)
 			a.autoforwardService = s
@@ -56,7 +56,7 @@ class AutoforwardSpec extends Specification {
 	def 'processKeyword should not call autoforwardService if no addresses are available'() {
 		given:
 			def a = Autoforward.build()
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			def k = Mock(Keyword)
 			def s = Mock(AutoforwardService)
 			a.autoforwardService = s
@@ -119,8 +119,8 @@ class AutoforwardSpec extends Specification {
 		return g
 	}
 
-	private def mockFmessage(String messageText, String src=null, String ownerDetail=null) {
-		Fmessage m = Mock()
+	private def mockTextMessage(String messageText, String src=null, String ownerDetail=null) {
+		TextMessage m = Mock()
 		m.id >> 1
 		m.text >> messageText
 		m.src >> src

@@ -2,9 +2,9 @@ package frontlinesms2
 
 class TestData {
 	static void createMiaowMixPoll(def baseDate=new Date(), int liverMessageCount=1) {
-		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken', date:baseDate)
+		def chickenMessage = TextMessage.build(src:'Barnabus', text:'i like chicken', date:baseDate)
 				.save(failOnError:true, flush:true)
-		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver', date:baseDate)
+		def liverMessage = TextMessage.build(src:'Minime', text:'i like liver', date:baseDate)
 				.save(failOnError:true, flush:true)
 		def chickenResponse = new PollResponse(key:'A', value:'chicken')
 		def liverResponse = new PollResponse(key:'B', value:'liver')
@@ -15,7 +15,7 @@ class TestData {
 				.save(failOnError:true, flush:true)
 		liverResponse.addToMessages(liverMessage)
 		if(liverMessageCount > 1) {
-			def liverMessage2 = Fmessage.build(src:'+254333222', text:'liver for lunch?', date:baseDate)
+			def liverMessage2 = TextMessage.build(src:'+254333222', text:'liver for lunch?', date:baseDate)
 					.save(failOnError:true, flush:true)
 			liverResponse.addToMessages(liverMessage2)
 		}

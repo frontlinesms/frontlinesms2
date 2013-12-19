@@ -4,7 +4,7 @@ import frontlinesms2.*
 
 import spock.lang.*
 
-class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
+class TextMessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def fmessageService 
 
@@ -55,10 +55,10 @@ class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def messages = [:]
 			[robert:'123', bernie:'456', iane:'789'].each { contactName, mobile ->
 				Contact.build(name:contactName, mobile:mobile)
-				def sent = new Fmessage(text:'')
+				def sent = new TextMessage(text:'')
 						.addToDispatches(dst:mobile, status:DispatchStatus.PENDING)
 						.save(failOnError:true, flush:true)
-				def received = Fmessage.build(src:mobile).save(failOnError:true, flush:true)
+				def received = TextMessage.build(src:mobile).save(failOnError:true, flush:true)
 				messages[contactName] = [received, sent]
 			}
 		expect:
@@ -71,13 +71,13 @@ class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			'e'           | ['iane', 'bernie', 'robert']
 	}
 
-	private Fmessage buildWithDispatches(Dispatch... dispatches) {
-		def m = Fmessage.buildWithoutSave(inbound:false)
+	private TextMessage buildWithDispatches(Dispatch... dispatches) {
+		def m = TextMessage.buildWithoutSave(inbound:false)
 		dispatches.each { m.addToDispatches(it) }
 		m.save(failOnError:true, flush:true)
 	}
 
-	private Fmessage buildOutgoing(params) {
+	private TextMessage buildOutgoing(params) {
 		def m = buildWithDispatches(params.dispatches)
 		if(params.containsKey('deleted')) m.isDeleted = params.deleted
 		if(params.text) m.text = params.text
@@ -85,8 +85,8 @@ class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def setUpMessages() {
-		Fmessage.build(text:"An inbox message")
-		Fmessage.build(text:"Another inbox message")
+		TextMessage.build(text:"An inbox message")
+		TextMessage.build(text:"Another inbox message")
 		buildWithDispatches(dispatch())
 		buildWithDispatches(dispatch(), dispatch())
 		buildOutgoing(deleted:true, dispatches:dispatch())

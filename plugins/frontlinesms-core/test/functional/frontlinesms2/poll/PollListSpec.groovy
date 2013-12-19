@@ -22,7 +22,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc('Bob').id
+			to PageMessagePoll, 'Football Teams', TextMessage.findBySrc('Bob').id
 		then:
 			messageList.messageSource(1) == 'Bob'
 			messageList.messageText(1) == 'manchester ("I like manchester")'
@@ -94,7 +94,7 @@ class PollListSpec extends PollBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { singleMessageDetails.sender == 'Alice' }
-			singleMessageDetails.text == remote { Fmessage.findBySrc('Alice').text }
+			singleMessageDetails.text == remote { TextMessage.findBySrc('Alice').text }
 	}
 
 	def "should hide the messages when poll detail chart is shown"() {

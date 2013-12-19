@@ -10,7 +10,7 @@ class CustomActivityServiceSpec extends Specification {
 	
 	def "triggerSteps invokes doAction on each step"() {
 		given:
-			def m = Mock(Fmessage)
+			def m = Mock(TextMessage)
 			def joinStep = Mock(JoinActionStep)
 			def leaveStep = Mock(LeaveActionStep)
 			def replyStep = Mock(ReplyActionStep)

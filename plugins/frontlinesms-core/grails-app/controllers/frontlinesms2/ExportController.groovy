@@ -33,16 +33,16 @@ class ExportController extends ControllerUtils {
 		//TODO Clean up switch mess
 		switch(messageSection) {
 			case 'inbox':
-				messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive).list()
+				messageInstanceList = TextMessage.inbox(params.starred, params.viewingArchive).list()
 				break
 			case 'sent':
-				messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
+				messageInstanceList = TextMessage.sent(params.starred, params.viewingArchive).list()
 				break
 			case 'pending':
-				messageInstanceList = Fmessage.listPending(params.failed, params)
+				messageInstanceList = TextMessage.listPending(params.failed, params)
 				break
 			case 'trash':
-				messageInstanceList = Fmessage.trash().list()
+				messageInstanceList = TextMessage.trash().list()
 				break
 			case 'activity':
 				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred?:false, params.inbound)
@@ -54,10 +54,10 @@ class ExportController extends ControllerUtils {
 				messageInstanceList = MessageOwner.get(params.ownerId).getShowMessages().list()
 				break
 			case 'result':
-				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
+				messageInstanceList = TextMessage.search(Search.get(params.searchId)).list()
 				break
 			default:
-				messageInstanceList = Fmessage.findAll()
+				messageInstanceList = TextMessage.findAll()
 				break
 		}
 		

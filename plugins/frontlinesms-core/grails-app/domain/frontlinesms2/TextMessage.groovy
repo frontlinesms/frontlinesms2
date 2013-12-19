@@ -115,8 +115,7 @@ class TextMessage extends Interaction {
 				if(messageOwner) 'in'('messageOwner', messageOwner)
 			}
 		}
-		<< Interaction.namedQueries // Named Queries are not inherited
-	}
+	} << Interaction.namedQueries // Named Queries are not inherited
 
 	def getDisplayName() {
 		if(inbound) {
@@ -163,7 +162,7 @@ class TextMessage extends Interaction {
 
 	static def listPending(onlyFailed, params=[:]) {
 		def ids = pending(onlyFailed).list(params) as List
-		(!ids) ? [] : Fmessage.getAll(ids)
+		(!ids) ? [] : TextMessage.getAll(ids)
 	}
 
 	static def countPending(onlyFailed) {
@@ -175,7 +174,7 @@ class TextMessage extends Interaction {
 	}
 	
 	static def countAllMessages() {
-		['inbox', 'sent', 'pending', 'deleted'].collectEntries { [it, Fmessage[it].count()] }
+		['inbox', 'sent', 'pending', 'deleted'].collectEntries { [it, TextMessage[it].count()] }
 	}
 
 	// TODO should this be in a service?
@@ -196,7 +195,7 @@ class TextMessage extends Interaction {
 		
 		if(params.inbound == null || params.inbound) {
 			// TODO the named query should ideally do the counts for us
-			Fmessage.forReceivedStats(params).list().each { m ->
+			TextMessage.forReceivedStats(params).list().each { m ->
 				++dates[asKey(m.date)].received
 			}
 		}

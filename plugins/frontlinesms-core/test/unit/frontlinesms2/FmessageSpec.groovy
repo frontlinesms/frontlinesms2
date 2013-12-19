@@ -3,43 +3,43 @@ package frontlinesms2
 import spock.lang.*
 import grails.test.mixin.*
 
-@TestFor(Fmessage)
-class FmessageSpec extends Specification {
+@TestFor(TextMessage)
+class TextMessageSpec extends Specification {
 	def 'TEXT cannot be null'() {
 		when:
-			Fmessage message = new Fmessage(text:null, src:'21345', read:true, inbound: true)
+			TextMessage message = new TextMessage(text:null, src:'21345', read:true, inbound: true)
 		then:
 			!message.validate()
 	}
 
 	def 'READ flag cannot be null'() {
 		when:
-			Fmessage message = new Fmessage(src: '21345', read: null, inbound: true)
+			TextMessage message = new TextMessage(src: '21345', read: null, inbound: true)
 		then:
 			message.read != null || !message.validate()
 	}
 	
 	def 'messages are unread by default'() {
 		when:
-			Fmessage message = new Fmessage()
+			TextMessage message = new TextMessage()
 		then:
 			message.read == false
 	}
 	
 	def 'messages are unstarred by default'() {
 		when:
-			Fmessage message = new Fmessage()
+			TextMessage message = new TextMessage()
 		then:
 			message.starred == false
 	}
 
-	def "Fmessage must have a src if inbound"() {
+	def "TextMessage must have a src if inbound"() {
 		when:
-			def m = new Fmessage(inbound:true)
+			def m = new TextMessage(inbound:true)
 		then:
 			!m.validate()
 		when:
-			def t = new Fmessage(text:'text', src: 'src', inbound: true)
+			def t = new TextMessage(text:'text', src: 'src', inbound: true)
 		then:
 			t.validate()
 	}
@@ -47,7 +47,7 @@ class FmessageSpec extends Specification {
 	@Unroll
 	def "outbound message must have one or more dispatches"() {
 		expect:
-			new Fmessage(text:'text', dispatches:dispatches).validate() == valid
+			new TextMessage(text:'text', dispatches:dispatches).validate() == valid
 		where:
 			valid | dispatches
 			false | []
@@ -56,16 +56,16 @@ class FmessageSpec extends Specification {
 			true  | [new Dispatch(), new Dispatch()]
 	}
 	
-	def "inbound Fmessages cannot have dispatches"() {
+	def "inbound TextMessages cannot have dispatches"() {
 		when:
-			Fmessage message = new Fmessage(src: '23456', inbound: true, dispatches: [new Dispatch()])
+			TextMessage message = new TextMessage(src: '23456', inbound: true, dispatches: [new Dispatch()])
 		then:
 			!message.validate()
 	}
 	
 	def 'message can have an activity'() {
 		when:
-			def message = new Fmessage(text:'text', src: 'src', inbound: true, messageOwner: new Folder(archived: false))
+			def message = new TextMessage(text:'text', src: 'src', inbound: true, messageOwner: new Folder(archived: false))
 		then:
 			message.validate()
 	}

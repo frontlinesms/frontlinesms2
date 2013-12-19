@@ -12,8 +12,8 @@ class WebconnectionActionStepSpec extends Specification {
 	def setup() {
 		webconnectionService = Mock(WebconnectionService)
 		webconnectionService.getProcessedValue(_,_) >> {it, fmessage -> it.value}
-		Fmessage.metaClass.static.get = { Serializable id ->
-			return Mock(Fmessage)
+		TextMessage.metaClass.static.get = { Serializable id ->
+			return Mock(TextMessage)
 		}
 	}
 
