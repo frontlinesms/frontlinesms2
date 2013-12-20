@@ -1,0 +1,11 @@
+digraph {
+	subgraph cluster_outgoing {
+		label="Outgoing Messages"
+		a[label="MessageSendService.send()"]
+		b[label="MessageStorageService.process()"]
+		c[label="seda:dispatches"]
+	}
+	a -> b
+	b -> c
+}
+

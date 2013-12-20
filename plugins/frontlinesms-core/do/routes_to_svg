@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+source bails/head
+
+launch_browser=false
+while [[ "$1" == --* ]]; do
+	if [[ "$1" == "--launch-browser" ]]; then
+		launch_browser=true
+	fi
+	shift
+done
+
+tmp=$(pwd)/tmp
+mkdir -p $tmp
+target=${tmp}/routes.svg
+log "Generating SVG for routes..."
+dot -o${target} -Tsvg asdf/routes.dot
+log "SVG generated at ${target}."
+
+if $launch_browser; then
+	log "Launching browser..."
+	firefox file://$target
+	log "Done."
+fi
+
