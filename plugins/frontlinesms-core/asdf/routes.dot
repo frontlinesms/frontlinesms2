@@ -4,6 +4,7 @@ digraph {
 	smslib_endpoint[label="SmslibEndpoint"]
 	smpp_endpoint[label="SmppEndpoint"]
 	http_endpoint[label="HTTPEndpoint"]
+	email_endpoint[label="EmailEndpoint"]
 	fmessage_storage[label="MessageStorageService.process()"]
 	subgraph cluster_outgoing {
 		label="Outgoing Messages"
@@ -43,6 +44,14 @@ digraph {
 			nexmo_oauth_endpoint -> nexmo_oauth_post
 			error_handler -> handle_disconnect
 		}
+		subgraph cluster_smpp_out {
+			label="SMPP (outgoing)"
+			smpp_pre[label="SmppPreprocessor.process()"]
+			smpp_post[label="SmppPostprocessor.process()"]
+			internet_out -> smpp_pre
+			smpp_pre -> smpp_endpoint
+			smpp_endpoint -> smpp_post
+		}
 	}
 	subgraph cluster_incoming {
 		label="Incoming Messages"
@@ -74,6 +83,13 @@ digraph {
 			smpp_in -> smpp_in_translate
 			smpp_in_translate -> in_store_queue
 		}
+		subgraph cluster_intellisms_in {
+			label="IntelliSMS (incoming)"
+			intellisms_in_translate[label="IntellismsTranslationService.process()"]
+			email_endpoint -> intellisms_in_translate
+			intellisms_in_translate -> in_store_queue
+		}
+
 		subgraph cluster_radio_in {
 			label="Radio"
 			radio_in_queue[label="seda:radioshow-fmessages-to-process"]
