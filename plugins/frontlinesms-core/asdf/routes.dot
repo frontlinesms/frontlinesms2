@@ -3,6 +3,7 @@ digraph {
 	smslib_disconnect[label="fconnectionService.handleDisconnection()"]
 	smslib_endpoint[label="SmslibEndpoint"]
 	smpp_endpoint[label="SmppEndpoint"]
+	http_endpoint[label="HTTPEndpoint"]
 	fmessage_storage[label="MessageStorageService.process()"]
 	subgraph cluster_outgoing {
 		label="Outgoing Messages"
@@ -15,6 +16,15 @@ digraph {
 		out_failure_handler[label="dispatchRouterService.handleFailed()"]
 		out_success[label="onSuccessOnly"]
 		out_success_handler[label="dispatchRouterService.handleCompleted()"]
+
+		a -> fmessage_storage
+		fmessage_storage -> c
+		c -> router
+		router -> modem_out
+		router -> internet_out
+		out_failuer -> out_failure_handler
+		out_success -> out_success_handler
+
 		subgraph cluster_smslib_out {
 			label="SMSLib (outgoing)"
 			modem_out
@@ -33,19 +43,19 @@ digraph {
 			nexmo_oauth_endpoint -> nexmo_oauth_post
 			error_handler -> handle_disconnect
 		}
-		a -> fmessage_storage
-		fmessage_storage -> c
-		c -> router
-		router -> modem_out
-		router -> internet_out
-		out_failuer -> out_failure_handler
-		out_success -> out_success_handler
 	}
 	subgraph cluster_incoming {
 		label="Incoming Messages"
 		in_store_queue[label="seda:incoming-fmessages-to-store"]
 		in_process_queue[label="seda:incoming-fmessages-to-process"]
 		in_router[label="IncomingMessageRouterService.route()"]
+		keyword_processor[label="KeywordProcessorService.process()"]
+
+		in_store_queue -> fmessage_storage
+		fmessage_storage -> in_process_queue
+		in_process_queue -> in_router
+		in_router -> keyword_processor
+
 		subgraph cluster_smslib_in {
 			label="SMSLib (incoming)"
 			smslib_in[label="seda:raw-smslib"]
@@ -64,9 +74,31 @@ digraph {
 			smpp_in -> smpp_in_translate
 			smpp_in_translate -> in_store_queue
 		}
-		in_store_queue -> fmessage_storage
-		fmessage_storage -> in_process_queue
-		in_process_queue -> in_router
+		subgraph cluster_radio_in {
+			label="Radio"
+			radio_in_queue[label="seda:radioshow-fmessages-to-process"]
+			in_router -> radio_in_queue
+		}
+
+		subgraph cluster_activity_processors {
+			label="Activities"
+			activity_processor[label="Activity.process()"]
+
+			keyword_processor -> activity_processor
+
+			subgraph cluster_webconnection_processor {
+				label="Webconnections"
+
+				wc_queue[label="seda:activity-webconnection-${id}"]
+				wc_pre[label="WebconnectionService.preProcess()"]
+				wc_post[label="WebconnectionService.postProcess()"]
+
+				activity_processor -> wc_queue
+				wc_queue -> wc_pre
+				wc_pre -> http_endpoint
+				http_endpoint -> wc_post
+			}
+		}
 	}
 }
 
