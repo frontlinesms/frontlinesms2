@@ -72,7 +72,7 @@ grails.project.dependency.resolution = {
 	}
 
 	plugins {
-		test ':frontlinesms-grails-test:0.17'
+		test ':frontlinesms-grails-test:0.18'
 
 		compile ":hibernate:$grailsVersion"
 		compile ":database-migration:1.0"
@@ -104,7 +104,7 @@ grails.project.dependency.resolution = {
 		build ":tomcat:$grailsVersion", {
 			export = false
 		}
-		build ':bails:0.6-SNAPSHOT'
+		build ':bails:0.6'
 		compile ':font-awesome-resources:3.2.1.3'
 	}
 }

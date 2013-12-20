@@ -14,7 +14,7 @@ Note: If you are importing using vCards, you only need to ensure that your conta
 
 ## Step 2: Import Contacts
 
-Go to **Account Management**, then select **Import and Export** from the drop-down menu. From there, select the file format you wish to use for your contacts (.csv or vCard). Click **Browse** and find the file on your computer. You can see how to do both of these things in the screenshot below:
+Go to **Settings**, then select **Import and Export** from the sidebar. From there, select the file format you wish to use for your contacts (.csv or vCard). Click **Browse** and find the file on your computer. You can see how to do both of these things in the screenshot below:
 
 ![TODO](../images/help/contact_import/Settings___Import___Export-2.jpg)
 
