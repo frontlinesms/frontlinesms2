@@ -4,8 +4,22 @@ digraph {
 		a[label="MessageSendService.send()"]
 		b[label="MessageStorageService.process()"]
 		c[label="seda:dispatches"]
+		router[label="DispatchRouterService.slip()"]
+		modem_out[label="seda:out-modem-${id}"]
+		e[label="seda:out-internet-${id}"]
+		subgraph cluster_smslib {
+			label="SMSLib (outgoing)"
+			modem_out
+			smslib_translate[label="SmslibTranslationService.toCMessage()"]
+			smslib_endpoint[label="SmslibEndpoint"]
+			modem_out -> smslib_translate
+			smslib_translate -> smslib_endpoint
+		}
+		a -> b
+		b -> c
+		c -> router
+		router -> modem_out
+		router -> e
 	}
-	a -> b
-	b -> c
 }
 
