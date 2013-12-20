@@ -9,9 +9,9 @@ class MessageController extends ControllerUtils {
 
 //> SERVICES
 	def messageSendService
-	def fmessageInfoService
+	def textMessageInfoService
 	def trashService
-	def fmessageService
+	def textMessageService
 
 //> INTERCEPTORS
 	def bobInterceptor = {
@@ -211,7 +211,7 @@ class MessageController extends ControllerUtils {
 	def move() {
 		def activity = params.messageSection == 'activity'? Activity.get(params.ownerId): null
 		def messageList = getCheckedMessages()
-		fmessageService.move(messageList, activity, params)
+		textMessageService.move(messageList, activity, params)
 		flash.message = dynamicMessage 'updated', messageList
 		render 'OK'
 	}
@@ -257,7 +257,7 @@ class MessageController extends ControllerUtils {
 	}
 
 	def sendMessageCount() {
-		render fmessageInfoService.getMessageInfos(params.message) as JSON
+		render textMessageInfoService.getMessageInfos(params.message) as JSON
 	}
 
 //> PRIVATE HELPERS

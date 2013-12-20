@@ -6,7 +6,7 @@ import grails.converters.JSON
 class SearchController extends MessageController {
 	def recipientLookupService
 	def contactSearchService
-	def fmessageService
+	def textMessageService
 
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
@@ -46,7 +46,7 @@ class SearchController extends MessageController {
 			searchInstance.save(failOnError:true, flush:true)
 		}
 
-		def searchResultsList = fmessageService.search(search, params)
+		def searchResultsList = textMessageService.search(search, params)
 
 		[searchDescription:getSearchDescription(search), search:search,
 				checkedMessageCount:params.checkedMessageList?.tokenize(',')?.size(),
