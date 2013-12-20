@@ -1,4 +1,5 @@
 digraph {
+	handle_disconnect[label="fconnectionService.handleDisconnect()"]
 	subgraph cluster_outgoing {
 		label="Outgoing Messages"
 		a[label="MessageSendService.send()"]
@@ -6,7 +7,7 @@ digraph {
 		c[label="seda:dispatches"]
 		router[label="DispatchRouterService.slip()"]
 		modem_out[label="seda:out-modem-${id}"]
-		e[label="seda:out-internet-${id}"]
+		internet_out[label="seda:out-internet-${id}"]
 		subgraph cluster_smslib {
 			label="SMSLib (outgoing)"
 			modem_out
@@ -15,11 +16,22 @@ digraph {
 			modem_out -> smslib_translate
 			smslib_translate -> smslib_endpoint
 		}
+		subgraph cluster_nexmo_oauth {
+			label="Nexmo OAuth (outgoing)"
+			nexmo_oauth_pre[label="OauthNexmoPreProcessor.process()"]
+			nexmo_oauth_post[label="OauthNexmoPostProcessor.process()"]
+			nexmo_oauth_endpoint[label="OauthNexmoEndpoint"]
+			error_handler[label="AuthenticationException\nInvalidApiIdException\nInsufficientCreditException"]
+			internet_out -> nexmo_oauth_pre
+			nexmo_oauth_pre -> nexmo_oauth_endpoint
+			nexmo_oauth_endpoint -> nexmo_oauth_post
+			error_handler -> handle_disconnect
+		}
 		a -> b
 		b -> c
 		c -> router
 		router -> modem_out
-		router -> e
+		router -> internet_out
 	}
 }
 
