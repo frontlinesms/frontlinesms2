@@ -90,10 +90,10 @@ class WebconnectionActionStep extends Step {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def fmessage = TextMessage.get(x.in.headers.'fmessage-id')
+		def textMessage = TextMessage.get(x.in.headers.'fmessage-id')
 		def stepProperties = this.requestParameters.collect { if(!(it.key ==~ /httpMethod|url/)) it} - null
 		def encodedParameters = stepProperties?.collect {
-			urlEncode(it.name) + '=' + urlEncode(webconnectionService.getProcessedValue(it, fmessage))
+			urlEncode(it.name) + '=' + urlEncode(webconnectionService.getProcessedValue(it, textMessage))
 		}.join('&')
 		println "PARAMS:::$encodedParameters"
 		x.in.headers[Exchange.HTTP_PATH] = this.url
