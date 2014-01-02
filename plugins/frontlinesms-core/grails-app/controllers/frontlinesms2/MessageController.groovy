@@ -147,9 +147,9 @@ class MessageController extends ControllerUtils {
 	}
 
 	def send() {
-		def fmessage = messageSendService.createOutgoingMessage(params)
-		messageSendService.send(fmessage)
-		render(text: dispatchMessage('queued', fmessage))
+		def textMessage = messageSendService.createOutgoingMessage(params)
+		messageSendService.send(textMessage)
+		render(text: dispatchMessage('queued', textMessage))
 	}
 	
 	def retry() {
