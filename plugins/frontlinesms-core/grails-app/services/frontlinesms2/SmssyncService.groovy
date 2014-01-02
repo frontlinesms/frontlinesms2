@@ -5,17 +5,20 @@ import org.quartz.JobKey
 import grails.plugin.quartz2.TriggerHelper
 import org.apache.camel.Exchange
 import frontlinesms2.api.*
+import org.springframework.transaction.annotation.Transactional
 
 // TODO handle unscheduling of ReportSmssyncTimeoutJob as an event listener.
 class SmssyncService {
 	def i18nUtilService
 
+	@Transactional
 	void processSend(Exchange x) {
 		def connection = SmssyncFconnection.get(x.in.headers['fconnection-id'])
 		connection.addToQueuedDispatches(x.in.body)
 		connection.save(failOnError:true)
 	}
 
+	@Transactional
 	def reportTimeout(connection) {
 		SystemNotification.findOrCreateByText(i18nUtilService.getMessage(
 						code:'smssync.timeout', args:[connection.name, connection.timeout, connection.id]))
@@ -30,10 +33,10 @@ class SmssyncService {
 		if(connection.secret && controller.params.secret != connection.secret) return failure()
 
 		try {
+			updateLastConnectionTime(connection)
+			connection.save(flush:true, failOnError: true)
 			def payload = controller.params.task=='send'? handlePollForOutgoing(connection): handleIncoming(connection, controller.params)
 			startTimeoutCounter(connection)
-			updateLastConnectionTime(connection)
-			connection.save(failOnError: true)
 			if(connection.secret) payload = [secret:connection.secret] + payload
 			return [payload:payload]
 		} catch(FrontlineApiException ex) {
@@ -46,6 +49,7 @@ class SmssyncService {
 		connection.lastConnectionTime = new Date()
 	}
 
+	@Transactional
 	def startTimeoutCounter(connection) {
 		if (connection instanceof SmssyncFconnection && connection?.timeout > 0) {
 			ReportSmssyncTimeoutJob.unschedule("SmssyncFconnection-${connection.id}", "SmssyncFconnectionTimeoutJobs")
@@ -82,12 +86,14 @@ class SmssyncService {
 		return response
 	}
 
+	@Transactional
 	private def handlePollForOutgoing(connection) {
 		if(!connection.sendEnabled) throw new FrontlineApiException("Send not enabled for this connection")
 
 		return success(generateOutgoingResponse(connection, true))
 	}
 
+	@Transactional
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {
 		def responseMap = [:]
 
