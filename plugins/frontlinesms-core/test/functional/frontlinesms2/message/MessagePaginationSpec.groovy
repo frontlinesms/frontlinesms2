@@ -13,7 +13,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessageInbox
 		then:
-			messageList.messageCount() == 50
+			messageList.messageCount() == 1000
 		when:
 			footer.nextPage.click()
 			waitFor {footer.nextPage.hasClass("disabled")}
@@ -27,7 +27,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessagePending
 		then:
-			messageList.messageCount() == 50
+			messageList.messageCount() == 1000
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
@@ -43,7 +43,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessageTrash
 		then:
-			messageList.messageCount() == 50
+			messageList.messageCount() == 1000
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
@@ -59,7 +59,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessageSent
 		then:
-			messageList.messageCount() == 50
+			messageList.messageCount() == 1000
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
@@ -75,7 +75,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessageFolder, 'folder'
 		then:
-			messageList.messageCount() == 50
+			messageList.messageCount() == 1000
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
@@ -91,7 +91,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 		when:
 			to PageMessagePoll, 'poll'
 		then:
-			messageList.messageCount() == 50
+			messageList.messageCount() == 1000
 			footer.prevPage.hasClass("disabled")
 		when:
 			footer.nextPage.click()
@@ -103,7 +103,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 
 	private def setupInboxMessages() {
 		remote {
-			(1..51).each { i ->
+			(1..1001).each { i ->
 				TextMessage.build(src:"src${i}", text:"inbox ${i}", date:new Date()-i)
 			}
 			null
@@ -113,7 +113,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 
 	private def setupSentMessages() {
 		remote {
-			(1..51).each { i ->
+			(1..1001).each { i ->
 				new TextMessage(src:"src${i}", text:"sent ${i}")
 						.addToDispatches(dst:"345678", status:DispatchStatus.SENT, dateSent:new Date())
 						.save(flush:true, failOnError:true)
@@ -125,7 +125,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 
 	private def setupPendingMessages() {
 		remote {
-			(1..51).each { i ->
+			(1..1001).each { i ->
 				new TextMessage(src:"src${i}", text:"pending ${i}")
 						.addToDispatches(dst:"345678", status: DispatchStatus.PENDING)
 						.save(flush:true, failOnError:true)
@@ -142,7 +142,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 				message.save(failOnError:true, flush:true)
 				Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class.name, objectId:message.id)
 			}
-			(1..51).each { i ->
+			(1..1001).each { i ->
 				deleteMessage(TextMessage.build(src:"src${i}", text:"deleted ${i}"))
 			}
 			null
@@ -152,7 +152,7 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 	private def setupFolderAndItsMessages() {
 		remote {
 			def folder = Folder.build(name:'folder')
-			(1..51).each { i ->
+			(1..1001).each { i ->
 				folder.addToMessages(TextMessage.build(src:"src${i}", text:"folder ${i}"))
 			}
 			folder.save(failOnError:true, flush:true)
@@ -169,10 +169,10 @@ class MessagePaginationSpec extends grails.plugin.geb.GebSpec  {
 					.addToResponses(no)
 					.addToResponses(PollResponse.createUnknown())
 					.save(flush:true, failOnError:true)
-			(1..25).each { i ->
+			(1..500).each { i ->
 				yes.addToMessages(TextMessage.build(src:"src${i}", text:"yes ${i}"))
 			}
-			(1..26).each { i ->
+			(1..501).each { i ->
 				no.addToMessages(TextMessage.build(src:"src${i}", text:"no ${i}"))
 			}
 			poll.save(flush:true, failOnError:true)

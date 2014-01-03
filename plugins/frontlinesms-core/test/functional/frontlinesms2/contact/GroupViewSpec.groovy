@@ -49,7 +49,7 @@ class GroupViewSpec extends GroupBaseSpec {
 			to PageGroupShow, 'Friends'
 		then:
 			def contactNames = contactList.contacts - "Select All"
-			def expectedNames = (11..60).collect{ "Contact${it} 987654321${it}" }
+			def expectedNames = (11..90).collect{ "Contact${it} 987654321${it}" }
 			contactNames == expectedNames
 	}
 
