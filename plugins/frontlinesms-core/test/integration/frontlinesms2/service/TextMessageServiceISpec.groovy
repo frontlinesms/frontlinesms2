@@ -6,21 +6,21 @@ import spock.lang.*
 
 class TextMessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
-	def fmessageService 
+	def textMessageService 
 
 	def "search returns results with a given max and offset"() {
 		setup:
 			setUpMessages()
 			def search = new Search(searchString: 'inbox')
 		when:
-			def firstInboxMessage = fmessageService.search(search, [max: 1,  offset:0]).messageInstanceList
-			def firstTwoInboxMessages = fmessageService.search(search, [max: 2, offset: 0]).messageInstanceList
-			def allMsgsWithTheGivenSearchString = fmessageService.search(search).messageInstanceList
+			def firstInboxMessage = textMessageService.search(search, [max: 1,  offset:0]).messageInstanceList
+			def firstTwoInboxMessages = textMessageService.search(search, [max: 2, offset: 0]).messageInstanceList
+			def allMsgsWithTheGivenSearchString = textMessageService.search(search).messageInstanceList
 		then:
 			firstInboxMessage.size() == 1
 			firstTwoInboxMessages.size() == 2
 			allMsgsWithTheGivenSearchString.size() == 3
-			fmessageService.search(search).messageInstanceTotal == 3
+			textMessageService.search(search).messageInstanceTotal == 3
 	}
 
 	def "messages are fetched based on message status"() {
@@ -30,9 +30,9 @@ class TextMessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def search2 = new Search(status: ['SENT', 'PENDING', 'FAILED'])
 			def search3 = new Search(searchString: "")
 		when:
-			def allInboundMessages = fmessageService.search(search).messageInstanceList
-			def allSentMessages = fmessageService.search(search2).messageInstanceList
-			def allMessages = fmessageService.search(search3).messageInstanceList
+			def allInboundMessages = textMessageService.search(search).messageInstanceList
+			def allSentMessages = textMessageService.search(search2).messageInstanceList
+			def allMessages = textMessageService.search(search3).messageInstanceList
 		then:
 			allInboundMessages*.every { it.inbound }
 			allSentMessages*.every { !it.inbound }
@@ -44,7 +44,7 @@ class TextMessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def footballGroup = new Group(name: "football").save(flush: true)
 			def search = new Search(group: footballGroup)
 		when:
-			def searchMessages = fmessageService.search(search).messageInstanceList
+			def searchMessages = textMessageService.search(search).messageInstanceList
 		then:
 			!searchMessages
 	}
@@ -62,7 +62,7 @@ class TextMessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 				messages[contactName] = [received, sent]
 			}
 		expect:
-			fmessageService.search([contactString:contactString]).messageInstanceList == contactNames.inject([]) { m, c -> m += messages[c] }
+			textMessageService.search([contactString:contactString]).messageInstanceList == contactNames.inject([]) { m, c -> m += messages[c] }
 		where:
 			contactString | contactNames
 			'ROB'         | ['robert']
