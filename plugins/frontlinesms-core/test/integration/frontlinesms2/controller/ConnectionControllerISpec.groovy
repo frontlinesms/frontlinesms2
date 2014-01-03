@@ -78,23 +78,6 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			c.secret == 'humbug'
 	}
 	
-	def "can save a new IntelliSmsFconnection"() {
-		given:
-			controller.params.name = "Test IntelliSmsFconnection"
-			controller.params.connectionType = 'intellisms'
-			controller.params.sendEnabled = 'true'
-			controller.params.username = "test"
-			controller.params.password = "test"
-		when:
-			controller.save()
-			def conn = IntelliSmsFconnection.findByName("Test IntelliSmsFconnection")
-		then:
-			conn
-			conn.name == "Test IntelliSmsFconnection"
-			conn.username == "test"
-			conn.password == "test"
-	}
-
 	def "can save a new SmppFconnection"() {
 		given:
 			controller.params.name = "Test SmppFconnection"
@@ -165,34 +148,6 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.sendTest()
 		then:
 			controller.response.redirectedUrl == "/connection/list/$conn.id"
-	}
-	
-	def "can edit an existing IntelliSmsFconnection"() {
-		given:
-			def intellismsConn = new IntelliSmsFconnection(sendEnabled:true, name:"Test IntelliSmsFconnection", username:"test", password:"****").save(flush:true)
-			controller.params.connectionType = 'intellisms'
-			controller.params.id = intellismsConn.id
-			controller.params._intellismssendEnabled = ''
-			controller.params.receiveEnabled = 'true'
-			controller.params.receiveProtocol = "POP3"
-			controller.params.serverName = 'pop3.gmail.com'
-			controller.params.serverPort = '465'
-			controller.params.emailUserName = 'test'
-			controller.params.emailPassword = 'bla'
-		when:
-			controller.update()
-			def conn = IntelliSmsFconnection.findByName("Test IntelliSmsFconnection")
-		then:
-			conn
-			!conn.sendEnabled
-			conn.username == "test"
-			conn.password == "****"
-			conn.receiveEnabled
-			conn.receiveProtocol == EmailReceiveProtocol.POP3
-			conn.serverName == "pop3.gmail.com"
-			conn.serverPort == 465
-			conn.emailUserName == "test"
-			conn.emailPassword == "bla"
 	}
 	
 }
