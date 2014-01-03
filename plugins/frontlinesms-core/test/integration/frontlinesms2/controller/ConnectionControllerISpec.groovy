@@ -78,6 +78,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			c.secret == 'humbug'
 	}
 	
+	@spock.lang.Ignore // Intellisms hidden from implementations. If we delete the connection, we should delete this test
 	def "can save a new IntelliSmsFconnection"() {
 		given:
 			controller.params.name = "Test IntelliSmsFconnection"
@@ -167,6 +168,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.response.redirectedUrl == "/connection/list/$conn.id"
 	}
 	
+	@spock.lang.Ignore // Intellisms hidden from implementations. If we delete the connection, we should delete this test
 	def "can edit an existing IntelliSmsFconnection"() {
 		given:
 			def intellismsConn = new IntelliSmsFconnection(sendEnabled:true, name:"Test IntelliSmsFconnection", username:"test", password:"****").save(flush:true)
