@@ -1,22 +1,26 @@
 # Setting up a Modem or Phone
 
-_Before you can start using FrontlineSMS Version 2, you will have to connect and configure a device to use. This is done mostly automatically by FrontlineSMS so you don't have to worry about it. If you are having trouble setting up a device or want to follow the recommended method then this page will explain how to connect and configure a device in FrontlineSMS. The detection process differs if you have already attached your device to your computer before running FrontlineSMS and when you attach a device while FrontlineSMS is running._
+_Before you can start using FrontlineSMS Version 2, you will have to connect and configure a device to send and receive messages. Some of the work is done automatically by FrontlineSMS to make it easier for you. If you are having trouble setting up a phone or modem, or want step-by-step instructions to get started, then this page will explain how to connect and configure a phone or modem in FrontlineSMS. The detection process differs if you have already attached your device to your computer before running FrontlineSMS and when you attach a device while FrontlineSMS is running._
 
-### Making Sure Your Device is Detected
+### Detecting a Phone or a Modem
 
-Before FrontlineSMS Version 2 can connect to your device, it needs to know that the device is connected so it can gather all the information it requires to connect to it. We call this [device detection][2]. 
+FrontlineSMS Version 2 can automatically connect to your phone or modem, provided that it can gather specific information. We call this [device detection][2]. You can follow the steps below to ensure your device is connected properly.
 
-The first step in connecting a device is making sure your device has been detected. To do this, you need to make sure the device is physically connected to your computer and that it's driver software is installed.
+1. If it's already open, close the FrontlineSMS software. This is to make sure your phone or modem is connecting correctly to your computer, before connecting it to our application.
 
-For newer Windows machines this should happen when you attach your device to your computer for the first time. If you don't know how to do this, please consult your device's operating instructions. 
+2. Once FrontlineSMS is closed, make sure your phone or modem is physically connected to your computer. 
 
-1.  Once your device is attached and the device's drivers have been installed, please start FrontlineSMS Version 2.
-2.  FrontlineSMS Version 2 will automatically detect the attached device and begin to collate the information it needs to create a usable connection.  
+3. Make sure that the driver software is installed. For newer Windows and Mac machines, the drivers should install automatically when you attach your phone or modem to your computer for the first time. If you don't know how to do this, please consult your device's operating instructions. 
+
+4. Once your device is attached and the device's drivers have been installed, please start FrontlineSMS Version 2.
+
+5.  FrontlineSMS Version 2 will automatically detect the attached device and begin to collate the information it needs to create a usable connection.  
+
 **_Note:** This process can take a few **minutes**. Please be patient and allow the software time to work. You will be notified if the connection has failed or if no device is detected. If the connection fails then click [here][3] to manually set up a connection.
 
 ![Connecting][10]
 
-3.  After a few minutes, a notification should appear informing you that a successful connection has been established to your device and it can now be used for sending and receiving messages. 
+6.  After a few minutes, a notification should appear informing you that a successful connection has been established to your device and it can now be used for sending and receiving messages. 
 
 ![Successfully Connected][9]
 
@@ -24,9 +28,9 @@ This will also be indicated by a green light on the [status tab][2]. The connect
 
 ### Attaching a Device While FrontlineSMS Version 2 is Running
 
-If you start FrontlineSMS Version 2 and then attach a device to your computer you will have to prompt FrontlineSMS to scan your system so that it can begin the automatic device setup process. This method is not recommended unless your device has previously been attached to this computer and has device's drivers installed.
+If you start FrontlineSMS Version 2 and then attach a phone or modem to your computer, you will have to prompt FrontlineSMS to scan your system so that it can begin the automatic device setup process. This approach is only recommended if your phone or modem has already been connected to FrontlineSMS previously.
 
-As before, make sure the device's drivers are installed and that the device is correctly detected by your operating system before continuing with these steps.
+As noted above, make sure the device's drivers are installed and that the device is correctly detected by your operating system before continuing with these steps.
 
 1.  Navigate to the [status tab][2] and click on "Detect Modems".  
 This will begin the automatic set up process.
