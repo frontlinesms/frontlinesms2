@@ -642,6 +642,7 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		println "# CoreBootStrap.updateAvailableFconnections() :: Fconnection implementations before pruning: ${Fconnection.implementations}"
 		Fconnection.implementations.remove(ClickatellFconnection)
 		Fconnection.implementations.remove(IntelliSmsFconnection)
+		Fconnection.implementations.remove(NexmoFconnection)
 		println "# CoreBootStrap.updateAvailableFconnections() :: Fconnection implementations after pruning: ${Fconnection.implementations}"
 	}
 }
