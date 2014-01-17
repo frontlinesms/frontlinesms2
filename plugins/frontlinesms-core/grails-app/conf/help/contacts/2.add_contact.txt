@@ -76,6 +76,16 @@ If you have a large number of contacts to import, then you can use a different m
 
 2. Select the type of file you wish to import. You can choose .csv - a common database format, or a vCard / .vcf format which is used in many contact management systems. 
 
+3. Select the file from your computer. If it is a vCard it will import at this point. If it is a .csv file, you will now have the chance to review your file, as per the screenshot below. Ensure that your column headings are accurate; they will appear as green if they are correct, or yellow if they are incorrect. Once you're happy with the column headings, click "Import all contacts." FrontlineSMS will tell you if your contacts imported successfully or now.
+
+![Importing Multiple Contacts](../images/help/contact_import/ReviewContactImport.png)
+
+If your contact did not import successfully, you will receive a fail notice as pictured below. FrontlineSMS will ask if you want to download a spreadsheet of the failed contact entries so that you can correct the issues and attempt to import them again into FrontlineSMS. 
+
+![Importing Multiple Contacts](../images/help/contact_import/ImportFailNotice.png)
+
+
+
 ### Related Actions
 
 [Managing a group][9]  
