@@ -10,7 +10,7 @@ This help file explains how to create these routing rules.
 
 If you would like to set routing rules, click "Settings" in the upper right-hand corner of your screen, then "Phones and Connections." Your screen should now look something like the one below (although perhaps with fewer connections than our test account):
 
-![Connection routing rules](../images/help/ConnectionsRoutingRules.png)
+![Connection routing rules][1]
 
 Now you can create routing rules following the steps below.
 
@@ -24,7 +24,7 @@ In many cases, the people you are trying to reach will message the number they a
 
 For instance, if Jane is trying to reach you and has your Android telephone number, you probably want to respond to Jane through that same number. If you respond through a different phone number, she may not know who you are! To always reply to someone through the same number they messaged most recently, select the very first box, as indicated in the screenshot below.
 
-![Connection routing rules 2](../images/help/ConnectionsRoutingRules2.png)
+![Connection routing rules 2][2]
 
 3. Now decide the priority order for other connections in your list.
 
@@ -41,3 +41,7 @@ In order to create a prioritized list, you can 'drag and drop' your phone number
 In the event that you do NOT want FrontlineSMS to use a certain phone number, you can simply deselect it in the list by clicking on the relevant box and ensuring the checkmark disappears.
 
 **Note: remember to save your selection!**
+
+[1]: ../images/help/ConnectionsRoutingRules.png
+[2]: ../images/help/ConnectionsRoutingRules2.png
+
