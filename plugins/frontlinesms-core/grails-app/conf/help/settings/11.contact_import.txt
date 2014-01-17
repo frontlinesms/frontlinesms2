@@ -1,0 +1,33 @@
+## Importing Multiple Contacts
+
+If you have a large number of contacts to import, then you can use a different mechanism for importing them into FrontlineSMS by following the instructions below. The important steps are highlighted in the screenshot below.
+
+![Importing Multiple Contacts][1]
+
+1. Make sure your column headings are correct.
+
+The column headings should follow the example in the screenshot below. Note that "group" is optional; it will be interpreted by FrontlineSMS as a group tag for the contact.
+
+**Note: the column headings must be exact (e.g. 'E-mail Address', not 'email address').**
+
+![Importing Multiple Contacts Headings][2]
+
+**Note: If you are importing using vCards, you only need to ensure that your contact's mobile number is correctly listed as a mobile number; FrontlineSMS will ignore other numbers.**
+
+2. Click on 'Settings' in the upper right-hand corner of the window. Then click on 'Import and Export.'
+
+3. Select the type of file you wish to import. You can choose .csv - a common database format, or a vCard / .vcf format which is used in many contact management systems. 
+
+4. Select the file from your computer. If it is a vCard it will import at this point. If it is a .csv file, you will now have the chance to review your file, as per the screenshot below. Ensure that your column headings are accurate; they will appear as green if they are correct, or yellow if they are incorrect. Once you're happy with the column headings, click "Import all contacts." FrontlineSMS will tell you if your contacts imported successfully or now.
+
+![Review Contact Import][3]
+
+If your contact did not import successfully, you will receive a fail notice as pictured below. FrontlineSMS will ask if you want to download a spreadsheet of the failed contact entries so that you can correct the issues and attempt to import them again into FrontlineSMS. 
+
+![Import Fail Notice][4]
+
+[1]: ../images/help/ContactImport.png
+[2]: ../images/help/contact_import/Screenshot_5_20_13_4_24_PM.jpg
+[3]: ../images/help/contact_import/ReviewContactImport.png
+[4]: ../images/help/contact_import/ImportFailNotice.png 
+
