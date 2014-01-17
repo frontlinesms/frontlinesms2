@@ -102,7 +102,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 	def "select all should update the total message count when messages are checked"() {
 		given:
 			createInboxTestMessages()
-			remote { Fmessage.build(); null }
+			remote { TextMessage.build(); null }
 		when:
 			to PageSearchResult, "hi"
 			messageList.selectAll.click()

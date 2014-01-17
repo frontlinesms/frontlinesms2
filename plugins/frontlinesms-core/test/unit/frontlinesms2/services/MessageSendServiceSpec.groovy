@@ -5,13 +5,13 @@ import spock.lang.*
 import frontlinesms2.*
 
 @TestFor(MessageSendService)
-@Mock([Fmessage, Dispatch])
+@Mock([TextMessage, Dispatch])
 class MessageSendServiceSpec extends Specification {
 	MessageSendService s
 
 	def setup() {
-		// for some reason mocking Fmessage and Dispatch does not add Fmessage.addToDispatches method
-		Fmessage.metaClass.addToDispatches = { d ->
+		// for some reason mocking TextMessage and Dispatch does not add TextMessage.addToDispatches method
+		TextMessage.metaClass.addToDispatches = { d ->
 			if(!delegate.dispatches) delegate.dispatches = []
 			delegate.dispatches << d
 		}

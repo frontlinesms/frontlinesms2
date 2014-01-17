@@ -6,7 +6,7 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(QuickMessageController)
-@Mock([GroupMembership, Contact, Group, SmartGroup, Fmessage])
+@Mock([GroupMembership, Contact, Group, SmartGroup, TextMessage])
 class QuickMessageControllerSpec extends Specification {
 
 	def setup() {

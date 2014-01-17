@@ -73,7 +73,7 @@ class Contact {
 	}
 
 	def getInboundMessagesCount() {
-		mobile ? Fmessage.countBySrcAndIsDeleted(mobile, false) : 0
+		mobile ? TextMessage.countBySrcAndIsDeleted(mobile, false) : 0
 	}
 
 	def getOutboundMessagesCount() {

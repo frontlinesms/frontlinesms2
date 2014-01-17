@@ -13,8 +13,8 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	static createTestMessages() {
 		remote {
-			Fmessage.build(src:'Bob', dst:'MyNumber', text:'hi Bob')
-			Fmessage.build(src:'Alice', dst:'MyNumber', text:'hi Alice')
+			TextMessage.build(src:'Bob', dst:'MyNumber', text:'hi Bob')
+			TextMessage.build(src:'Alice', dst:'MyNumber', text:'hi Alice')
 			null
 		}
 	}

@@ -4,7 +4,7 @@ class MessageSendService {
 	static transactional = false
 	def recipientLookupService
 	
-	def send(Fmessage m, Fconnection c=null) {
+	def send(TextMessage m, Fconnection c=null) {
 		def headers = [:]
 		if(c) headers['requested-fconnection-id'] = c.id
 		m.save()
@@ -13,7 +13,7 @@ class MessageSendService {
 		}
 	}
 	
-	def retry(Fmessage m) {
+	def retry(TextMessage m) {
 		def dispatchCount = 0
 		m.dispatches.each { dispatch ->
 			if(dispatch.status == DispatchStatus.FAILED) {
@@ -25,7 +25,7 @@ class MessageSendService {
 	}
 	
 	def createOutgoingMessage(params) {
-		def message = new Fmessage(text:(params.messageText), inbound:false)
+		def message = new TextMessage(text:(params.messageText), inbound:false)
 		def addresses = []
 		if (params.recipients) {
 			addresses = recipientLookupService.getAddressesFromRecipientList(params.recipients)

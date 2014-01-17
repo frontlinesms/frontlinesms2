@@ -11,7 +11,7 @@ class PollResponseISpec extends grails.plugin.spock.IntegrationSpec {
 			p.addToResponses(value:'No', key:'No')
 			p.addToResponses(r)
 			p.save(flush:true, failOnError:true)
-			def m = Fmessage.build()
+			def m = TextMessage.build()
 		when:
 			r.addToMessages(m)
 			p.save(failOnError:true, flush:true)
@@ -30,10 +30,10 @@ class PollResponseISpec extends grails.plugin.spock.IntegrationSpec {
 			p.addToResponses(value:'No', key:'No')
 			p.addToResponses(r)
 			p.save(flush:true, failOnError:true)
-			def m1 = Fmessage.buildWithoutSave(inbound: false, date: new Date() - 10)
+			def m1 = TextMessage.buildWithoutSave(inbound: false, date: new Date() - 10)
 			m1.addToDispatches(Dispatch.build())
-			def m2 = Fmessage.build(src: "src4", inbound: true, date: new Date() - 10)
-			def m3 = Fmessage.build(src: "src4", inbound: true, date: new Date() - 10)
+			def m2 = TextMessage.build(src: "src4", inbound: true, date: new Date() - 10)
+			def m3 = TextMessage.build(src: "src4", inbound: true, date: new Date() - 10)
 			[m1, m2, m3].each { p.addToMessages(it) }
 			m1.setMessageDetail(p, r.id)
 			m1.save()

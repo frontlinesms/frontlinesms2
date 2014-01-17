@@ -9,9 +9,9 @@ class MessageController extends ControllerUtils {
 
 //> SERVICES
 	def messageSendService
-	def fmessageInfoService
+	def textMessageInfoService
 	def trashService
-	def fmessageService
+	def textMessageService
 
 //> INTERCEPTORS
 	def bobInterceptor = {
@@ -31,7 +31,7 @@ class MessageController extends ControllerUtils {
 	}
 
 	def show() {
-		def messageInstance = Fmessage.get(params.messageId)
+		def messageInstance = TextMessage.get(params.messageId)
 		def ownerInstance = MessageOwner.get(params?.ownerId)
 		messageInstance.read = true
 		messageInstance.save()
@@ -45,7 +45,7 @@ class MessageController extends ControllerUtils {
 	}
 
 	def inbox() {
-		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
+		def messageInstanceList = TextMessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
 				model:[messageInstanceList: messageInstanceList.list(params),
 						messageSection:'inbox',
@@ -53,16 +53,16 @@ class MessageController extends ControllerUtils {
 	}
 
 	def sent() {
-		def messageInstanceList = Fmessage.sent(params.starred, this.viewingArchive)
+		def messageInstanceList = TextMessage.sent(params.starred, this.viewingArchive)
 		render view:'../message/standard', model:[messageSection:'sent',
 				messageInstanceList: messageInstanceList.list(params).unique(),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	} 
 
 	def pending() {
-		render view:'standard', model:[messageInstanceList:Fmessage.listPending(params.failed, params),
+		render view:'standard', model:[messageInstanceList:TextMessage.listPending(params.failed, params),
 				messageSection:'pending',
-				messageInstanceTotal: Fmessage.countPending()] << getShowModel()
+				messageInstanceTotal: TextMessage.countPending()] << getShowModel()
 	}
 	
 	def trash() {
@@ -72,7 +72,7 @@ class MessageController extends ControllerUtils {
 		params.sort = params.sort?: 'date'
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.objectClass == "frontlinesms2.Fmessage") {
+				if(obj.objectClass == "frontlinesms2.TextMessage") {
 					params.messageId = obj.objectId
 				} else {
 					trashedObject = obj.object
@@ -81,7 +81,7 @@ class MessageController extends ControllerUtils {
 			setTrashInstance(Trash.findById(params.id))
 		}
 		if(params.starred) {
-			messageInstanceList = Fmessage.deleted(params.starred)
+			messageInstanceList = TextMessage.deleted(params.starred)
 		} else {
 			if(params.sort == 'date') params.sort = 'dateCreated'
 			trashInstanceList = Trash.list(params)
@@ -109,7 +109,7 @@ class MessageController extends ControllerUtils {
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
-			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
+			TextMessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
 				sentDispatchCount += it.dispatches.size()
 				sentMessageCount++				
 			}
@@ -147,9 +147,9 @@ class MessageController extends ControllerUtils {
 	}
 
 	def send() {
-		def fmessage = messageSendService.createOutgoingMessage(params)
-		messageSendService.send(fmessage)
-		render(text: dispatchMessage('queued', fmessage))
+		def textMessage = messageSendService.createOutgoingMessage(params)
+		messageSendService.send(textMessage)
+		render(text: dispatchMessage('queued', textMessage))
 	}
 	
 	def retry() {
@@ -211,7 +211,7 @@ class MessageController extends ControllerUtils {
 	def move() {
 		def activity = params.messageSection == 'activity'? Activity.get(params.ownerId): null
 		def messageList = getCheckedMessages()
-		fmessageService.move(messageList, activity, params)
+		textMessageService.move(messageList, activity, params)
 		flash.message = dynamicMessage 'updated', messageList
 		render 'OK'
 	}
@@ -228,17 +228,17 @@ class MessageController extends ControllerUtils {
 	}
 
 	def changeStarStatus() {
-		withFmessage { messageInstance ->
+		withTextMessage { messageInstance ->
 			messageInstance.starred =! messageInstance.starred
 			messageInstance.save(failOnError: true)
-			Fmessage.get(params.messageId).messageOwner?.refresh()
+			TextMessage.get(params.messageId).messageOwner?.refresh()
 			params.remove('messageId')
 			render(text: messageInstance.starred ? "starred" : "unstarred")
 		}
 	}
 	
 	def listRecipients() {
-		def message = Fmessage.get(params.messageId)
+		def message = TextMessage.get(params.messageId)
 		if(!message) {
 			render text:'ERROR'
 			return
@@ -257,16 +257,16 @@ class MessageController extends ControllerUtils {
 	}
 
 	def sendMessageCount() {
-		render fmessageInfoService.getMessageInfos(params.message) as JSON
+		render textMessageInfoService.getMessageInfos(params.message) as JSON
 	}
 
 //> PRIVATE HELPERS
 	boolean isViewingArchive() { params.controller=='archive' }
 
-	private def withFmessage = withDomainObject Fmessage, { params.messageId }
+	private def withTextMessage = withDomainObject TextMessage, { params.messageId }
 
 	private def getShowModel() {
-		def messageInstance = params.messageId? Fmessage.get(params.messageId): null
+		def messageInstance = params.messageId? TextMessage.get(params.messageId): null
 		messageInstance?.read = true
 		messageInstance?.save()
 
@@ -275,13 +275,13 @@ class MessageController extends ControllerUtils {
 				checkedMessageCount: checkedMessageCount,
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
-				messageCount: Fmessage.countAllMessages(),
-				hasFailedMessages: Fmessage.hasFailedMessages(),
+				messageCount: TextMessage.countAllMessages(),
+				hasFailedMessages: TextMessage.hasFailedMessages(),
 				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
 	private def getCheckedMessages() {
-		return Fmessage.getAll(getCheckedMessageList()) - null
+		return TextMessage.getAll(getCheckedMessageList()) - null
 	}
 
 	private def getCheckedMessageList() {
@@ -292,7 +292,7 @@ class MessageController extends ControllerUtils {
 		return checked
 	}
 
-	private def dispatchMessage(String code, Fmessage m) {
+	private def dispatchMessage(String code, TextMessage m) {
 		def args
 		code = 'fmessage.' + code
 		if(m.dispatches.size() == 1) {

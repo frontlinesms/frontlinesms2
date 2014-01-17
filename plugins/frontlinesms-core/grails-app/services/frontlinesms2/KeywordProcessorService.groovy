@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class KeywordProcessorService {
-	def process(Fmessage message) {
+	def process(TextMessage message) {
 		def words = message.text?.trim().toUpperCase().split(/\s/)
 		def topLevelMatch = Keyword.getFirstLevelMatch(words[0])
 		if(!topLevelMatch) topLevelMatch = Keyword.getFirstLevelMatch('')

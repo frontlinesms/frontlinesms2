@@ -43,7 +43,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			to PageMessageAnnouncement, 'New Office', remote { Fmessage.findBySrc('Max').id }
+			to PageMessageAnnouncement, 'New Office', remote { TextMessage.findBySrc('Max').id }
 			singleMessageDetails.reply.click()
 		then:
 			waitFor { at QuickMessageDialog }
@@ -80,7 +80,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			to PageMessageAnnouncement, 'New Office', remote { Fmessage.findBySrc('Max').id }
+			to PageMessageAnnouncement, 'New Office', remote { TextMessage.findBySrc('Max').id }
 			singleMessageDetails.forward.click()
 		then:
 			waitFor { at QuickMessageDialog }

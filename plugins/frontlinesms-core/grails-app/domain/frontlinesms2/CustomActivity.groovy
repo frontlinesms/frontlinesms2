@@ -16,13 +16,13 @@ class CustomActivity extends Activity {
 			if((Step.get(stepId) instanceof ReplyActionStep) || (Step.get(stepId) instanceof ForwardActionStep)) {
 				outgoingMessagesByStep = MessageDetail.findAllByOwnerTypeAndOwnerId(MessageDetail.OwnerType.STEP, stepId).collect{ it.message }
 			}
-			return (outgoingMessagesByStep + Fmessage.owned(this, getOnlyStarred, true)?.list(params?:[:])).flatten()
+			return (outgoingMessagesByStep + TextMessage.owned(this, getOnlyStarred, true)?.list(params?:[:])).flatten()
 		} else {
-			Fmessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
+			TextMessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
 		}
 	}
 
-	def processKeyword(Fmessage message, Keyword matchedKeyword) {
+	def processKeyword(TextMessage message, Keyword matchedKeyword) {
 		this.addToMessages(message)
 		this.save(flush:true)
 		customActivityService.triggerSteps(this, message)

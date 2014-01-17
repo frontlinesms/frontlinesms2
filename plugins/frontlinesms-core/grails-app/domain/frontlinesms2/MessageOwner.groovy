@@ -2,7 +2,7 @@ package frontlinesms2
 
 abstract class MessageOwner {
 	String name
-	static hasMany = [messages: Fmessage]
+	static hasMany = [messages: TextMessage]
 	boolean archived
 	boolean deleted
 	
@@ -12,7 +12,7 @@ abstract class MessageOwner {
 		version false
 	}
 
-	def getDisplayText(Fmessage msg) {
+	def getDisplayText(TextMessage msg) {
 		msg.text
 	}
 

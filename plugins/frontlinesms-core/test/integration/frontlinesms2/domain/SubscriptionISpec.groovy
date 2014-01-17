@@ -111,7 +111,7 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def mockMessage(String messageText, String sourcePhoneNumber) {
-		return Fmessage.build(text:messageText, src:sourcePhoneNumber)
+		return TextMessage.build(text:messageText, src:sourcePhoneNumber)
 	}
 
 	private def getNewContact() {

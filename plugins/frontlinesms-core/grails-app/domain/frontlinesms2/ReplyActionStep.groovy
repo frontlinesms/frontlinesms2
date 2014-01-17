@@ -23,7 +23,7 @@ class ReplyActionStep extends Step {
 		this.autoreplyText.truncate(20);
 	}
 
-	def process(Fmessage message) {
+	def process(TextMessage message) {
 		autoreplyService.doReply(this, message)
 	}
 

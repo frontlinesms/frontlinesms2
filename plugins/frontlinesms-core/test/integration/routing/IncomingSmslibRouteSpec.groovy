@@ -13,7 +13,7 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 	String getTestRouteFrom() { '' }
 	String getTestRouteTo() { '' }
 	
-	def "should translate a CIncomingMessage into a Fmessage then save it then deliver it to KeywordProcessor"() {
+	def "should translate a CIncomingMessage into a TextMessage then save it then deliver it to KeywordProcessor"() {
 		given:
 			def mockPortHandler = MockModemUtils.createMockPortHandler(false, [1:'0891534875001040F30414D0537AD91C7683A465B71E0000013020017560400CC7F79B0C6ABFE5EEB4FB0C'])
 			// initialise mock serial device with message available
@@ -34,7 +34,7 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			sleep 3000
 		then:
 			def poll = Poll.findByName('What do you think of goo?')
-			def messages = Fmessage.findAll()*.refresh()
+			def messages = TextMessage.findAll()*.refresh()
 			messages.size() == 1
 			messages[0].text == 'Good morning'
 			messages[0].messageOwner == poll

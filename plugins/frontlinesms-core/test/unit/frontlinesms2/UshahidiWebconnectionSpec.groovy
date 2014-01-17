@@ -8,7 +8,7 @@ import grails.buildtestdata.mixin.Build
 
 @TestFor(UshahidiWebconnection)
 @Mock([Keyword])
-@Build(Fmessage)
+@Build(TextMessage)
 class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 	def setup() {
 		Webconnection.metaClass.static.findAllByNameIlike = { name -> UshahidiWebconnection.findAll().findAll { it.name == name } }
@@ -31,7 +31,7 @@ class UshahidiWebconnectionSpec extends CamelUnitSpecification {
 
 	def "Test Ushahidi pre-processor"() {
 		given:
-			def message = Fmessage.build(text:"testing", src:"23423")
+			def message = TextMessage.build(text:"testing", src:"23423")
 			def connection = new UshahidiWebconnection(name:'name',
 					url:"www.ushahidi.com/frontlinesms2",
 					httpMethod:Webconnection.HttpMethod.GET)

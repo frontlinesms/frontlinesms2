@@ -31,7 +31,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "checked message details are displayed when message is checked"() {
 		given:
 			createInboxTestMessages()
-			def m = remote { Fmessage.findBySrc('Bob').id }
+			def m = remote { TextMessage.findBySrc('Bob').id }
 		when:
 			to PageMessageInbox, m
 			messageList.toggleSelect(1)
@@ -92,8 +92,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "Should show the contact's name when replying to multiple messages from the same contact"() {
 		given:
 			remote {
-				Fmessage.build(src:'Alice', text:'hi Alice')
-				Fmessage.build(src:'Alice', text:'test')
+				TextMessage.build(src:'Alice', text:'hi Alice')
+				TextMessage.build(src:'Alice', text:'test')
 				Contact.build(name:'Alice', mobile:'Alice')
 				null
 			}
@@ -119,7 +119,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, remote { Fmessage.findBySrc('Alice').id }
+			to PageMessageInbox, remote { TextMessage.findBySrc('Alice').id }
 			messageList.selectAll.click()
 		then:
 			waitFor { messageList.selectedMessageCount() == 2 }
@@ -155,7 +155,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "select all should update the total message count when messages are checked"() {
 		given:
 			createInboxTestMessages()
-			remote { Fmessage.build(); null }
+			remote { TextMessage.build(); null }
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)

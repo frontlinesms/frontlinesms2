@@ -113,19 +113,19 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "should fetch all sent messages alone"() {
 		given:
 			remote {
-				def m1 = new Fmessage(src:"src", text:"sent", date:new Date()-1)
+				def m1 = new TextMessage(src:"src", text:"sent", date:new Date()-1)
 				m1.addToDispatches(dst:'123', status: DispatchStatus.SENT, dateSent:new Date())
 				m1.save(failOnError:true, flush:true)
 
-				def m2 = new Fmessage(src: "src", text:"send_pending", date:new Date()-1)
+				def m2 = new TextMessage(src: "src", text:"send_pending", date:new Date()-1)
 				m2.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 				m2.save(failOnError:true, flush:true)
 
-				def m3 = new Fmessage(src: "src", text:"send_failed", date:new Date()-1)
+				def m3 = new TextMessage(src: "src", text:"send_failed", date:new Date()-1)
 				m3.addToDispatches(dst:'123', status:DispatchStatus.FAILED)
 				m3.save(failOnError:true, flush:true)
 
-				Fmessage.build(text:"received", date:new Date()-1)
+				TextMessage.build(text:"received", date:new Date()-1)
 				null
 			}
 			
@@ -155,9 +155,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "should return to the same search results when message is deleted" () {
 		setup:
 			remote {
-				Fmessage.build(src:"src", text:"received1")
-				Fmessage.build(src:"src", text:"received2", date:new Date()-1)
-				Fmessage.build(src:"src3", text:"send_failed", date:new Date()-2)
+				TextMessage.build(src:"src", text:"received1")
+				TextMessage.build(src:"src", text:"received2", date:new Date()-1)
+				TextMessage.build(src:"src3", text:"send_failed", date:new Date()-2)
 				null
 			}
 		when:
@@ -310,7 +310,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			tabs.unreadcount == 3
 		when:
-			remote { Fmessage.build(src:'+254999999', text:'message count'); null }
+			remote { TextMessage.build(src:'+254999999', text:'message count'); null }
 		then:
 			waitFor('very slow') { tabs.unreadcount == 4 }
 	}
@@ -318,8 +318,8 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "moveaction drop down should not be visible if only one archived message is seleted"() {
 		when:
 			remote {
-				Fmessage.build(src:'+25499934', text:'archived2')
-				Fmessage.build(src:'+25499912', text:'archived1', archived:true)
+				TextMessage.build(src:'+25499934', text:'archived2')
+				TextMessage.build(src:'+25499912', text:'archived1', archived:true)
 				null
 			}
 			to PageSearchResult, "archived", "inArchive=true"
@@ -338,10 +338,10 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "ensure dispatch count in message results is correct"() {
 		given:
 			remote {
-				Fmessage.build(src:'3333333')
-				Fmessage.build()
+				TextMessage.build(src:'3333333')
+				TextMessage.build()
 
-				def message = new Fmessage(text:"experiment")
+				def message = new TextMessage(text:"experiment")
 				message.addToDispatches(dst:'333', status:DispatchStatus.PENDING)
 				message.addToDispatches(dst:'332', status:DispatchStatus.PENDING)
 				message.addToDispatches(dst:'222', status:DispatchStatus.PENDING)

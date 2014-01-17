@@ -17,7 +17,7 @@ class AutoreplyBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			def a = Autoreply.findByName(aName)
 			(0..90).each {
-				def m = Fmessage.build(src:'Robert', text:"Test message $it", date:new Date()-it)
+				def m = TextMessage.build(src:'Robert', text:"Test message $it", date:new Date()-it)
 				a.addToMessages(m)
 			}
 			a.save(failOnError:true, flush:true)
@@ -28,7 +28,7 @@ class AutoreplyBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestActivities() {
 		remote {
 			Announcement.build(name:"Sample Announcement", sentMessageText:"Message to send")
-			Fmessage.build(src:'announce')
+			TextMessage.build(src:'announce')
 			null
 		}
 	}

@@ -11,7 +11,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def 'delete button does not show up for messages in trash view'() {
 		when:
 			remote {
-				def message = Fmessage.findBySrc('Bob')
+				def message = TextMessage.findBySrc('Bob')
 				new TrashService().sendToTrash(message)
 				null
 			}
@@ -19,7 +19,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			messageList.clickLink()
 		then:
 			waitFor { singleMessageDetails.displayed }
-			remote { Fmessage.deleted(false).count() == 1 }
+			remote { TextMessage.deleted(false).count() == 1 }
 			singleMessageDetails.sender == 'Bob'
 			!singleMessageDetails.delete.displayed
 	}
@@ -27,9 +27,9 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
 			remote {
-				def message = Fmessage.build()
+				def message = TextMessage.build()
 				new TrashService().sendToTrash(message)
-				assert Fmessage.findAllByIsDeleted(true).size == 1
+				assert TextMessage.findAllByIsDeleted(true).size == 1
 				null
 			}
 			to PageMessageTrash
@@ -41,7 +41,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			done.click()
 		then:
 			waitFor { at PageMessageInbox }
-			remote { Fmessage.findAllByIsDeleted(true).size } == 0
+			remote { TextMessage.findAllByIsDeleted(true).size } == 0
 	}
 	
 	def "'Delete All' button appears for multiple selected messages and works"() {
@@ -58,7 +58,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Delete' button appears for individual messages and works"() {
 		when:
-			to PageMessageInbox, remote { Fmessage.findBySrc('Bob').id }
+			to PageMessageInbox, remote { TextMessage.findBySrc('Bob').id }
 		then:
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.delete.displayed }
@@ -71,11 +71,11 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestData() {
 		remote {
-			Fmessage.build(src:'Bob', text:'hi Bob')
-			Fmessage.build(src:'Alice', text:'hi Alice')
-			Fmessage.build(src:'+254778899', text:'test')
-			Fmessage.build(src:'Mary', text:'hi Mary')
-			Fmessage.build(src:'+254445566', text:'test')
+			TextMessage.build(src:'Bob', text:'hi Bob')
+			TextMessage.build(src:'Alice', text:'hi Alice')
+			TextMessage.build(src:'+254778899', text:'test')
+			TextMessage.build(src:'Mary', text:'hi Mary')
+			TextMessage.build(src:'+254445566', text:'test')
 			null
 		}
 	}

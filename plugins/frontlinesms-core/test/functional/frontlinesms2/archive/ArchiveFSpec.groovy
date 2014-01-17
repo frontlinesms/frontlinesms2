@@ -27,13 +27,13 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestMessages2()
 		when:
-			to PageArchiveInbox, remote { Fmessage.findBySrc('Max').id }
+			to PageArchiveInbox, remote { TextMessage.findBySrc('Max').id }
 		then:
 			messageList.messageCount == 2
 			messageList.messageSource(0) == 'Jane'
 			messageList.messageSource(1) == 'Max'
 		when:
-			to PageArchiveInbox, remote { Fmessage.findBySrc('Max').id }
+			to PageArchiveInbox, remote { TextMessage.findBySrc('Max').id }
 			singleMessageDetails.delete.click()
 		then:
 			messageList.messageCount == 1
@@ -44,7 +44,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestMessages2()
 		when:
-			to PageArchiveInbox, remote { Fmessage.findBySrc('Max').id }
+			to PageArchiveInbox, remote { TextMessage.findBySrc('Max').id }
 			messageList.selectAll.click()
 		then:
 			!multipleMessageDetails.archiveAll.displayed
@@ -59,8 +59,8 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 				poll.addToResponses(key:'B', value:'Other')
 				poll.addToResponses(PollResponse.createUnknown())
 				poll.save(failOnError:true, flush:true)
-				def messages = [Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4),
-						Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4)] 
+				def messages = [TextMessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4),
+						TextMessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4)] 
 				println messages
 				poll.addToMessages(messages[0])
 				poll.addToMessages(messages[1])

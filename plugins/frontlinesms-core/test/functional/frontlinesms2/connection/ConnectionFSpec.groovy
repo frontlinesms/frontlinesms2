@@ -151,20 +151,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			basicInfo("smssync") == "smssync.description"
 	}
 
-	def 'Clickatell connection has a description under its name'() {
-		when:
-			launchCreateWizard()
-		then:
-			basicInfo("clickatell") == "clickatell.description"
-	}
-
-	def 'Intellisms connection has a description under its name'() {
-		when:
-			launchCreateWizard()
-		then:
-			basicInfo("intellisms") == "intellisms.description"
-	}
-
 	def 'can set up a new Smssync connection with no secret'() {
 		when:
 			launchCreateWizard('smssync')
@@ -179,25 +165,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			at PageConnection
 		and:
 			waitFor { connectionList.connectionName(0).contains('Henry') }
-	}
-
-	def 'can set up a new IntelliSMS account'() {
-		when:
-			launchCreateWizard('intellisms')
-			connectionForm.intellismssendEnabled = true
-			connectionForm.intellismsname = "New IntelliSMS Connection"
-			connectionForm.intellismsusername = "test"
-			connectionForm.intellismspassword = "1234"
-			next.click()
-		then:
-			confirmIntelliSmsConnectionName.text() == "New IntelliSMS Connection"
-			confirmIntelliSmsUserName.text() == "test"
-			confirmIntelliSmsType.text() == "intellisms.label"
-		when:
-			submit.click()
-		then:
-			at PageConnection
-			waitFor { connectionList.connectionName(0).contains('New IntelliSMS Connection') }
 	}
 
 	def 'clicking Send test message displays a popup with a default message and empty address field'() {

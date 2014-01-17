@@ -19,7 +19,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			header.title == 'poll.title[football teams]'
 		when:
-			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc('Alice').id
+			to PageMessagePoll, 'Football Teams', TextMessage.findBySrc('Alice').id
 		then:
 			header.title == 'poll.title[football teams]'
 		when:

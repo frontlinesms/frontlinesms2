@@ -19,14 +19,14 @@ class SmslibTranslationServiceSpec extends Specification {
 			camelMessage.getBody() >> Mock(CStatusReportMessage)
 			statusReportExchange.getOut() >> Mock(org.apache.camel.Message)
 		when:
-			service.toFmessage(statusReportExchange)
+			service.toTextMessage(statusReportExchange)
 		then:
 			0 * statusReportExchange.out
 	}
 
 	def 'toCmessage should not choke if message content is null'() {
 		given:
-			Fmessage m = Mock() // implicitly has dst and text set to null
+			TextMessage m = Mock() // implicitly has dst and text set to null
 			m.date >> new Date()
 			Dispatch d = Mock()
 			d.message >> m

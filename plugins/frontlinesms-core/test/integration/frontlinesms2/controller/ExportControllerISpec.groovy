@@ -15,8 +15,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def p = new Poll(name: 'Football Teams')
 			p.editResponses(choiceA: 'manchester', choiceB:'barcelona')
 			p.save(flush: true)
-			[PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob')),
-					PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice'))]*.save(failOnError:true, flush:true)
+			[PollResponse.findByValue('manchester').addToMessages(TextMessage.findBySrc('Bob')),
+					PollResponse.findByValue('manchester').addToMessages(TextMessage.findBySrc('Alice'))]*.save(failOnError:true, flush:true)
 			controller.params.messageSection = "poll"
 			controller.params.ownerId = Poll.findByName("Football Teams").id
 		when:
@@ -71,8 +71,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "can export only sent messages from a folder"() {
 		given:
 			def workFolder = new Folder(name: 'Work')
-			workFolder.addToMessages(Fmessage.build(src: "Bob", inbound: true, date: new Date()))
-			Fmessage m = new Fmessage(text:"test", inbound:false, date:new Date())
+			workFolder.addToMessages(TextMessage.build(src: "Bob", inbound: true, date: new Date()))
+			TextMessage m = new TextMessage(text:"test", inbound:false, date:new Date())
 			Dispatch d = new Dispatch(dst: '54321', status: DispatchStatus.PENDING)
 			m.addToDispatches(d)
 			m.save(failOnError:true)
@@ -90,8 +90,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "can export only received messages from a folder"() {
 		given:
 			def workFolder = new Folder(name: 'Work')
-			workFolder.addToMessages(Fmessage.build(src: "Bob", inbound: true, date: new Date()))
-			Fmessage m = new Fmessage(text:"test", inbound:false, date:new Date())
+			workFolder.addToMessages(TextMessage.build(src: "Bob", inbound: true, date: new Date()))
+			TextMessage m = new TextMessage(text:"test", inbound:false, date:new Date())
 			Dispatch d = new Dispatch(dst: '54321', status: DispatchStatus.PENDING)
 			m.addToDispatches(d)
 			m.save(failOnError:true)
@@ -109,8 +109,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "can export only received messages from an activity"() {
 		given:
 			def a = new Announcement(name:'Free Food')
-			a.addToMessages(Fmessage.build(src: "Bob", inbound: true, date: new Date()))
-			Fmessage m = new Fmessage(text:"test", inbound:false, date:new Date())
+			a.addToMessages(TextMessage.build(src: "Bob", inbound: true, date: new Date()))
+			TextMessage m = new TextMessage(text:"test", inbound:false, date:new Date())
 			Dispatch d = new Dispatch(dst: '54321', status: DispatchStatus.PENDING)
 			m.addToDispatches(d)
 			m.save(failOnError:true)
@@ -127,8 +127,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 
 	def createTestMessages() {
-		[Fmessage.build(src:'Bob', text:'I like manchester', date: new Date() - 4, starred: true),
-			Fmessage.build(src:'Alice', text:'go manchester', date: new Date() - 3)].each {
+		[TextMessage.build(src:'Bob', text:'I like manchester', date: new Date() - 4, starred: true),
+			TextMessage.build(src:'Alice', text:'go manchester', date: new Date() - 3)].each {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 			}
@@ -136,8 +136,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def createTestFolders() {
 		def workFolder = new Folder(name: 'Work')
-		workFolder.addToMessages(Fmessage.build(src: "Bob", inbound: true, date: new Date()))
-		workFolder.addToMessages(Fmessage.build(src: "Alice", inbound: true, date: new Date()))
+		workFolder.addToMessages(TextMessage.build(src: "Bob", inbound: true, date: new Date()))
+		workFolder.addToMessages(TextMessage.build(src: "Alice", inbound: true, date: new Date()))
 		workFolder.save(flush: true)
 	}
 
@@ -157,9 +157,9 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def createTestAnnouncement() {
-		Fmessage.build(src: "Bob", inbound: true, date: new Date())
+		TextMessage.build(src: "Bob", inbound: true, date: new Date())
 		def a = new Announcement(name:'Free Food')
-		a.addToMessages(Fmessage.build(src:"Alice", inbound:true, date:new Date())).save(failOnError:true, flush:true)
+		a.addToMessages(TextMessage.build(src:"Alice", inbound:true, date:new Date())).save(failOnError:true, flush:true)
 	}
 }
 

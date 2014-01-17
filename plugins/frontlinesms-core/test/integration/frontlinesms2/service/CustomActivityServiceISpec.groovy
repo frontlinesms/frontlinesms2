@@ -10,7 +10,7 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		customActivityService = new CustomActivityService()
 		contact = new Contact(name:"Wamaitha", mobile:"+23888")
 		contact.save(failOnError:true)
-		message = new Fmessage(src:contact.mobile, text:"CUSTOM TEST", inbound:true).save(failOnError:true)
+		message = new TextMessage(src:contact.mobile, text:"CUSTOM TEST", inbound:true).save(failOnError:true)
 		createCustomActivity()
 	}
 
@@ -23,7 +23,7 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			customActivityService.triggerSteps(customActivity, message)
 		then:
 			contact.groups == [group]
-			Fmessage.findAllByText("autoreply seems to work").size() == 1
+			TextMessage.findAllByText("autoreply seems to work").size() == 1
 	}
 
 	def 'customActivityService.triggerSteps() should perform relevant action for leave and reply'(){
@@ -38,7 +38,7 @@ class CustomActivityServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			customActivityService.triggerSteps(customActivity, message)
 		then:
 			contact.groups == []
-			Fmessage.findAllByText("autoreply seems to work").size() == 1
+			TextMessage.findAllByText("autoreply seems to work").size() == 1
 	}
 
 	private def createCustomActivity() {

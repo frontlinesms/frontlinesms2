@@ -146,7 +146,7 @@ class ImportController extends ControllerUtils {
 						headers[0] = headers[0].substring(1)
 					}
 				} else try {
-					Fmessage fm = new Fmessage()
+					TextMessage fm = new TextMessage()
 					def dispatchStatus
 					headers.eachWithIndex { key, i ->
 						def value = tokens[i]
@@ -181,7 +181,7 @@ class ImportController extends ControllerUtils {
 						if (dispatchStatus==DispatchStatus.SENT) it.dateSent = fm.date
 					}
 
-					Fmessage.withNewSession {
+					TextMessage.withNewSession {
 						fm.save(failOnError:true)
 					}
 					++savedCount

@@ -211,7 +211,7 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 	def "moving a message from another activity to a autoforward displays an update message"() {
 		setup:
 			def activity = remote { Activity.findByName("Sample Announcement").id }
-			def m = remote { Fmessage.findBySrc("announce").id }
+			def m = remote { TextMessage.findBySrc("announce").id }
 			def autoforward = remote { Autoforward.findByName('News').id }
 		when:
 			to PageMessageAnnouncement, activity, m
@@ -255,9 +255,9 @@ class AutoforwardViewSpec extends AutoforwardBaseSpec {
 			a.addToContacts(new Contact(name:"name"))
 			a.addToKeywords(value:"VEGS")
 			a.sentMessageText = 'Message is \${message_text}'
-			3.times { a.addToMessages(Fmessage.build()) }
+			3.times { a.addToMessages(TextMessage.build()) }
 			2.times {
-				def sentMessage = new Fmessage(text:'this is a sent message',inbound:false)
+				def sentMessage = new TextMessage(text:'this is a sent message',inbound:false)
 				sentMessage.addToDispatches(dst:'123456789', status:DispatchStatus.PENDING)
 				a.addToMessages(sentMessage) }
 			a.save(flush:true, failOnError:true)

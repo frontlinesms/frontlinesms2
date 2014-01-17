@@ -37,15 +37,15 @@ abstract class Activity extends MessageOwner {
 
 //> ACCESSORS
 	def getActivityMessages(getOnlyStarred=false, getSent=null, stepId=null, params=null) {
-		Fmessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
+		TextMessage.owned(this, getOnlyStarred, getSent).list(params?:[:])
 	}
 
 	def getMessageCount(getOnlyStarred=false, getSent=null) {
-		Fmessage.owned(this, getOnlyStarred, getSent).count()
+		TextMessage.owned(this, getOnlyStarred, getSent).count()
 	}
 	
 	def getLiveMessageCount() {
-		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
+		def m = TextMessage.findAllByMessageOwnerAndIsDeleted(this, false)
 		m ? m.size() : 0
 	}
 
@@ -67,7 +67,7 @@ abstract class Activity extends MessageOwner {
 		this.messages*.isDeleted = false
 	}
 
-	def processKeyword(Fmessage message, Keyword match) {
+	def processKeyword(TextMessage message, Keyword match) {
 		message.setMessageDetail(this, "")
 		this.addToMessages(message)
 		this.save(failOnError:true)

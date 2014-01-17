@@ -13,7 +13,7 @@ class DispatchRouterServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def x = o.x
 		when:
 			dispatchRouterService.handleFailed(x)
-			m = Fmessage.get(m.id)
+			m = TextMessage.get(m.id)
 		then:
 			Dispatch.get(d.id).status == DispatchStatus.FAILED
 			!m.hasPending && m.hasFailed && !m.hasSent
@@ -27,7 +27,7 @@ class DispatchRouterServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def x = o.x
 		when:
 			dispatchRouterService.handleCompleted(x)
-			m = Fmessage.get(m.id)
+			m = TextMessage.get(m.id)
 		then:
 			Dispatch.get(d.id).status == DispatchStatus.SENT
 			!m.hasPending && !m.hasFailed && m.hasSent
@@ -41,14 +41,14 @@ class DispatchRouterServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def x = o.x
 		when:
 			dispatchRouterService.handleCompleted(x)
-			m = Fmessage.get(m.id)
+			m = TextMessage.get(m.id)
 		then:
 			Dispatch.get(d.id).status == DispatchStatus.PENDING
 
 	}
 	
 	private def setUpOutgoingMessage(sentBySmssync=false) {
-		Fmessage m = new Fmessage(text:"test", inbound:false, date:new Date())
+		TextMessage m = new TextMessage(text:"test", inbound:false, date:new Date())
 		Dispatch d = new Dispatch(dst: '54321', status: DispatchStatus.PENDING)
 		def smssyncConnection = SmssyncFconnection.build()
 		def connection = IntelliSmsFconnection.build()

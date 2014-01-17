@@ -2,7 +2,7 @@ package frontlinesms2
 
 import spock.lang.*
 
-@Mock([CustomActivity, Fmessage, Group, MessageSendService])
+@Mock([CustomActivity, TextMessage, Group, MessageSendService])
 @TestFor(ForwardActionStep)
 class ForwardActionStepSpec extends Specification {
 	@Unroll
@@ -29,7 +29,7 @@ class ForwardActionStepSpec extends Specification {
 						.addToStepProperties(new StepProperty(key:"sentMessageText", value:"some forward text"))
 						.addToStepProperties(new StepProperty(key:"recipient", value:"Address-12341234"))
 			def forwardService = Mock(AutoforwardService)
-			def message =  Mock(Fmessage)
+			def message =  Mock(TextMessage)
 			forwardActionStep.autoforwardService = forwardService
 		when:
 			forwardActionStep.process(message)

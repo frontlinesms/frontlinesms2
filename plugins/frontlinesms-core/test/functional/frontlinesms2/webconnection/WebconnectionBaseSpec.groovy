@@ -20,7 +20,7 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestActivities() {
 		remote {
 			Announcement.build(name:"Sample Announcement", sentMessageText:"Message to send")
-			Fmessage.build(src:'announce')
+			TextMessage.build(src:'announce')
 			null
 		}
 	}
@@ -30,7 +30,7 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		remote {
 			def wc = Webconnection.get(wcId)
 			(0..90).each {
-				def m = Fmessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
+				def m = TextMessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
 				it % 5 == 0 ? (m.setMessageDetail(wc, DispatchStatus.SENT)) : (m.setMessageDetail(wc, DispatchStatus.FAILED))
 				wc.addToMessages(m)
 			}

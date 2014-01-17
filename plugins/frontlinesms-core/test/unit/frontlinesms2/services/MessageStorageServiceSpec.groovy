@@ -11,7 +11,7 @@ import org.apache.camel.impl.DefaultExchange
 import frontlinesms2.*
 
 @TestFor(MessageStorageService)
-@Mock([Fmessage, Fconnection, SmslibFconnection])
+@Mock([TextMessage, Fconnection, SmslibFconnection])
 class MessageStorageServiceSpec extends Specification {
 	def conn 
 
@@ -31,13 +31,13 @@ class MessageStorageServiceSpec extends Specification {
 			service instanceof org.apache.camel.Processor
 	}
 
-	def "it saves the incoming Fmessage"() {
+	def "it saves the incoming TextMessage"() {
 		given:
-			def m = new Fmessage(text:'', src:"12345", inbound:true, date:new Date())
+			def m = new TextMessage(text:'', src:"12345", inbound:true, date:new Date())
 		when:
 			service.process(createTestExchange(m, conn.id))
 		then:
-			Fmessage.findAll() == [m]
+			TextMessage.findAll() == [m]
 	}
 
 	def createTestExchange(def fmessage, connectionId=null) {

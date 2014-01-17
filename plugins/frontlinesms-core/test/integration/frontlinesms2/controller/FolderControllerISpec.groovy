@@ -40,7 +40,7 @@ class FolderControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "Restoring a folder restores its messages as well"() {
 		setup:
 			def folder = new Folder(name: 'test')
-			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true, flush:true)
+			def message = new TextMessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true, flush:true)
 			folder.addToMessages(message)
 			folder.save(failOnError:true, flush:true)
 			folder.deleted = true

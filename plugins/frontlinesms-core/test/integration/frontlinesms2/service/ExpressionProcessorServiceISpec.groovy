@@ -11,7 +11,7 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 	def 'process should return message content with no expressions in it, unless some expressions are not recognised'() {
 		setup:
 			new Contact(name:'Gedi', mobile:'10983').save(failOnError:true, flush:true)
-			def m = new Fmessage(src:'10983', inbound:false)
+			def m = new TextMessage(src:'10983', inbound:false)
 			m.text = messageText
 			def d = new Dispatch(dst:'10983', status:DispatchStatus.FAILED)
 			m.addToDispatches(d)
@@ -40,10 +40,10 @@ class ExpressionProcessorServiceISpec extends grails.plugin.spock.IntegrationSpe
 				.addToKeywords(value:'INCOMING')
 				.addToContacts(destination)
 				.save(failOnError:true, flush:true)
-			def inbound = new Fmessage(src:'112233', inbound:true, text:'Incoming Message Text').save(failOnError:true, flush:true)
+			def inbound = new TextMessage(src:'112233', inbound:true, text:'Incoming Message Text').save(failOnError:true, flush:true)
 			autoforward.addToMessages(inbound)
 
-			def outbound = new Fmessage(src:'0', inbound:false, ownerDetail:inbound.id, text:outboundMessageText)
+			def outbound = new TextMessage(src:'0', inbound:false, ownerDetail:inbound.id, text:outboundMessageText)
 			Dispatch dis = new Dispatch(dst:'445566', status:DispatchStatus.PENDING)
 			outbound.addToDispatches(dis)
 			outbound.addToDetails(new MessageDetail(value: inbound.id, ownerType: MessageDetail.OwnerType.ACTIVITY, ownerId: autoforward.id))

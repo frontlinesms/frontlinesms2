@@ -2,21 +2,21 @@ package frontlinesms2
 
 class TrashService {
     	def emptyTrash() {
-    	Fmessage.findAllByIsDeleted(true).each {
+    	TextMessage.findAllByIsDeleted(true).each {
     		def conn = it.receivedOn
     		if(conn) {
     			conn.removeFromMessages(it)
     			conn.save()
     		}
     	}
-		Fmessage.findAllByIsDeleted(true)*.delete()
+		TextMessage.findAllByIsDeleted(true)*.delete()
 		MessageOwner.findAllByDeleted(true)*.delete()
 		Trash.findAll()*.delete()
     	}
     
 	def sendToTrash(object) {
 		println "Deleting ${object}"
-		if (object instanceof frontlinesms2.Fmessage) {
+		if (object instanceof frontlinesms2.TextMessage) {
 			object.isDeleted = true
 			new Trash(displayName:object.displayName,
 					displayText:object.text.truncate(Trash.MAXIMUM_DISPLAY_TEXT_SIZE),

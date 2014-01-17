@@ -5,14 +5,14 @@ class MessageSendJob {
 
 	def execute(context) {
 		def ids = context.mergedJobDataMap.get('ids')
-		def messages = Fmessage.getAll(ids)
+		def messages = TextMessage.getAll(ids)
 		messages.each { m ->
 			messageSendService.send(m)
 		}
 	}
 
 	/** Send a message or messages in 30 seconds time */
-	static defer(Fmessage message) {
+	static defer(TextMessage message) {
 		defer([message])
 	}
 

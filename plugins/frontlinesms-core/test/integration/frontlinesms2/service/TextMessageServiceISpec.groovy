@@ -4,23 +4,23 @@ import frontlinesms2.*
 
 import spock.lang.*
 
-class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
+class TextMessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
-	def fmessageService 
+	def textMessageService 
 
 	def "search returns results with a given max and offset"() {
 		setup:
 			setUpMessages()
 			def search = new Search(searchString: 'inbox')
 		when:
-			def firstInboxMessage = fmessageService.search(search, [max: 1,  offset:0]).messageInstanceList
-			def firstTwoInboxMessages = fmessageService.search(search, [max: 2, offset: 0]).messageInstanceList
-			def allMsgsWithTheGivenSearchString = fmessageService.search(search).messageInstanceList
+			def firstInboxMessage = textMessageService.search(search, [max: 1,  offset:0]).messageInstanceList
+			def firstTwoInboxMessages = textMessageService.search(search, [max: 2, offset: 0]).messageInstanceList
+			def allMsgsWithTheGivenSearchString = textMessageService.search(search).messageInstanceList
 		then:
 			firstInboxMessage.size() == 1
 			firstTwoInboxMessages.size() == 2
 			allMsgsWithTheGivenSearchString.size() == 3
-			fmessageService.search(search).messageInstanceTotal == 3
+			textMessageService.search(search).messageInstanceTotal == 3
 	}
 
 	def "messages are fetched based on message status"() {
@@ -30,9 +30,9 @@ class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def search2 = new Search(status: ['SENT', 'PENDING', 'FAILED'])
 			def search3 = new Search(searchString: "")
 		when:
-			def allInboundMessages = fmessageService.search(search).messageInstanceList
-			def allSentMessages = fmessageService.search(search2).messageInstanceList
-			def allMessages = fmessageService.search(search3).messageInstanceList
+			def allInboundMessages = textMessageService.search(search).messageInstanceList
+			def allSentMessages = textMessageService.search(search2).messageInstanceList
+			def allMessages = textMessageService.search(search3).messageInstanceList
 		then:
 			allInboundMessages*.every { it.inbound }
 			allSentMessages*.every { !it.inbound }
@@ -44,7 +44,7 @@ class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def footballGroup = new Group(name: "football").save(flush: true)
 			def search = new Search(group: footballGroup)
 		when:
-			def searchMessages = fmessageService.search(search).messageInstanceList
+			def searchMessages = textMessageService.search(search).messageInstanceList
 		then:
 			!searchMessages
 	}
@@ -55,14 +55,14 @@ class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def messages = [:]
 			[robert:'123', bernie:'456', iane:'789'].each { contactName, mobile ->
 				Contact.build(name:contactName, mobile:mobile)
-				def sent = new Fmessage(text:'')
+				def sent = new TextMessage(text:'')
 						.addToDispatches(dst:mobile, status:DispatchStatus.PENDING)
 						.save(failOnError:true, flush:true)
-				def received = Fmessage.build(src:mobile).save(failOnError:true, flush:true)
+				def received = TextMessage.build(src:mobile).save(failOnError:true, flush:true)
 				messages[contactName] = [received, sent]
 			}
 		expect:
-			fmessageService.search([contactString:contactString]).messageInstanceList == contactNames.inject([]) { m, c -> m += messages[c] }
+			textMessageService.search([contactString:contactString]).messageInstanceList == contactNames.inject([]) { m, c -> m += messages[c] }
 		where:
 			contactString | contactNames
 			'ROB'         | ['robert']
@@ -71,13 +71,13 @@ class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			'e'           | ['iane', 'bernie', 'robert']
 	}
 
-	private Fmessage buildWithDispatches(Dispatch... dispatches) {
-		def m = Fmessage.buildWithoutSave(inbound:false)
+	private TextMessage buildWithDispatches(Dispatch... dispatches) {
+		def m = TextMessage.buildWithoutSave(inbound:false)
 		dispatches.each { m.addToDispatches(it) }
 		m.save(failOnError:true, flush:true)
 	}
 
-	private Fmessage buildOutgoing(params) {
+	private TextMessage buildOutgoing(params) {
 		def m = buildWithDispatches(params.dispatches)
 		if(params.containsKey('deleted')) m.isDeleted = params.deleted
 		if(params.text) m.text = params.text
@@ -85,8 +85,8 @@ class FmessageServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def setUpMessages() {
-		Fmessage.build(text:"An inbox message")
-		Fmessage.build(text:"Another inbox message")
+		TextMessage.build(text:"An inbox message")
+		TextMessage.build(text:"Another inbox message")
 		buildWithDispatches(dispatch())
 		buildWithDispatches(dispatch(), dispatch())
 		buildOutgoing(deleted:true, dispatches:dispatch())

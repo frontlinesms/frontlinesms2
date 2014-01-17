@@ -7,7 +7,7 @@ import org.apache.camel.Exchange
 
 import org.apache.camel.component.mail.MailEndpoint
 import frontlinesms2.EmailTranslationService
-import frontlinesms2.Fmessage
+import frontlinesms2.TextMessage
 
 @TestFor(EmailTranslationService)
 class EmailTranslationServiceSpec extends Specification {
@@ -16,16 +16,16 @@ class EmailTranslationServiceSpec extends Specification {
 			service instanceof org.apache.camel.Processor
 	}
 
-	def "converted message is an Fmessage"() {
+	def "converted message is an TextMessage"() {
 		given:
 			def testExchange = createTestExchange()
 		when:
 			service.process(testExchange)
 		then:
-			assert testExchange.out.body instanceof Fmessage
+			assert testExchange.out.body instanceof TextMessage
 	}
 
-	def "email from field is converted to a suitable Fmessage from field"() {
+	def "email from field is converted to a suitable TextMessage from field"() {
 		given:
 			def testExchange = createTestExchange()
 		when:
@@ -34,7 +34,7 @@ class EmailTranslationServiceSpec extends Specification {
 			assert testExchange.out.body.src == "email:test@example.com"
 	}
 
-	def "email body is converted to a suitable Fmessage body"() {
+	def "email body is converted to a suitable TextMessage body"() {
 		given:
 			def testExchange = createTestExchange([body:"Here's the test email body converted into a textual message."])
 		when:
@@ -43,7 +43,7 @@ class EmailTranslationServiceSpec extends Specification {
 			assert testExchange.out.body.text == "Here's the test email body converted into a textual message."
 	}
 
-	def "email subject is converted to a suitable Fmessage body"() {
+	def "email subject is converted to a suitable TextMessage body"() {
 		given:
 			def testExchange = createTestExchange([subject:'Hello'])
 		when:
@@ -52,7 +52,7 @@ class EmailTranslationServiceSpec extends Specification {
 			assert testExchange.out.body.text == 'Hello'
 	}
 
-	def "email body and subject is converted to a suitable Fmessage body"() {
+	def "email body and subject is converted to a suitable TextMessage body"() {
 		given:
 			def testExchange = createTestExchange([subject:'Hello', body:"Here's the test email body converted into a textual message."])
 		when:

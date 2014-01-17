@@ -141,7 +141,7 @@ class DispatchRouterService {
 		log "Dispatch is ${exchange.in.getBody()}"
 		def d = exchange.in.getBody()
 		log "dispatch to send # $d ### d.dst # $d?.dst"
-		def latestReceivedMessage = Fmessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
+		def latestReceivedMessage = TextMessage.findBySrc(d.dst, [sort: 'dateCreated', order:'desc'])
 		log "## latestReceivedMessage ## is $latestReceivedMessage"
 		latestReceivedMessage?.receivedOn
 	}

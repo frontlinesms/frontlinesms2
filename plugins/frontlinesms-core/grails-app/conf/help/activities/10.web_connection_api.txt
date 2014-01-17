@@ -15,8 +15,8 @@ The Web Connection API expects a JSON Map with the following parameters:
 - message
 - recipients
 
-### secret (required if Api Secret is set in Web Connection instance)
-When configuring a Web Connection, you will be prompted to enter an API Secret. Incoming requests will only be processed if the secret parameter matches what was set up in the Web Connection walkthough. If no secret was provided, the secret parameter can be left out of a request.
+### secret (required if API Secret is set in Web Connection instance)
+When configuring a Web Connection, you will be prompted to enter an API Secret. Incoming requests will only be processed if the secret parameter matches what was set up in the Web Connection walkthrough. If no secret was provided, the secret parameter can be left out of a request.
 
 ### message (required)
 This is the message body that will be sent out as the SMS. Substitution variables of the type used within FrontlineSMS are supported (so, for example, ${contact_name} will be replaced with the receiving contact's name). As with any SMS, extra cost may be incurred if this message body is longer than 160 characters.

@@ -3,7 +3,7 @@ import frontlinesms2.*
 testDataConfig {
 	def counter = 0
 	sampleData {
-		'frontlinesms2.Fmessage' {
+		'frontlinesms2.TextMessage' {
 			inbound = true
 			src = '+254701234567'
 			text = 'build-test-data made me'

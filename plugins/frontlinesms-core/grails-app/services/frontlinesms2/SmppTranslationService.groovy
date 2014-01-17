@@ -18,7 +18,7 @@ class SmppTranslationService implements Processor {
 		
 		//TODO allow messages is source is set
 		if(i.headers['CamelSmppSourceAddr']) {
-			Fmessage message = new Fmessage(inbound:true)
+			TextMessage message = new TextMessage(inbound:true)
 			def messageBody = i.body
 			def messageSource = i.headers['CamelSmppSourceAddr']
 			log "###### message-timestamp ${i.headers['CamelSmppDoneDate']}"

@@ -28,15 +28,15 @@ class PollBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestMessages() {
 		remote {
-			Fmessage.build(src:'Bob', text:'I like manchester', date:new Date()-4, starred:true)
-			Fmessage.build(src:'Alice', text:'go manchester', date:new Date()-3)
-			Fmessage.build(src:'Joe', text:'pantene is the best',  date:new Date()-2)
-			Fmessage.build(src:'Jill', text:'I fell down the hill',  date:new Date()-1)
+			TextMessage.build(src:'Bob', text:'I like manchester', date:new Date()-4, starred:true)
+			TextMessage.build(src:'Alice', text:'go manchester', date:new Date()-3)
+			TextMessage.build(src:'Joe', text:'pantene is the best',  date:new Date()-2)
+			TextMessage.build(src:'Jill', text:'I fell down the hill',  date:new Date()-1)
 
 			def poll = Poll.findByName('Football Teams')
-			[PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob')),
-					PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice')),
-					PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))]
+			[PollResponse.findByValue('manchester').addToMessages(TextMessage.findBySrc('Bob')),
+					PollResponse.findByValue('manchester').addToMessages(TextMessage.findBySrc('Alice')),
+					PollResponse.findByValue('pantene').addToMessages(TextMessage.findBySrc('Joe'))]
 			poll.save(failOnError:true, flush:true)
 			null
 		}
@@ -44,11 +44,11 @@ class PollBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createMoreTestMessages() {
 		remote {
-			Fmessage.build(src:'Jill', text:'barcelona sucks!', starred:true)
-			Fmessage.build(src:'Tony', text:'Gormahia!')
+			TextMessage.build(src:'Jill', text:'barcelona sucks!', starred:true)
+			TextMessage.build(src:'Tony', text:'Gormahia!')
 
-			PollResponse.findByValue('manchester').addToMessages(Fmessage.findByText('barcelona sucks!'))
-			PollResponse.findByValue('barcelona').addToMessages(Fmessage.findBySrc('Tony'))
+			PollResponse.findByValue('manchester').addToMessages(TextMessage.findByText('barcelona sucks!'))
+			PollResponse.findByValue('barcelona').addToMessages(TextMessage.findBySrc('Tony'))
 			Poll.findByName('Football Teams').save(failOnError:true, flush:true)
 			null
 		}

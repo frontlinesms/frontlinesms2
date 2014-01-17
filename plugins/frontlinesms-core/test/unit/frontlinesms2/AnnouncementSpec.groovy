@@ -5,8 +5,8 @@ import spock.lang.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Announcement)
-@Mock([Fmessage])
-@Build(Fmessage)
+@Mock([TextMessage])
+@Build(TextMessage)
 class AnnouncementSpec extends Specification {
 	def setup() {
 		// Not sure why this is necessary with Test Mixins, but it seems to be:
@@ -27,7 +27,7 @@ class AnnouncementSpec extends Specification {
 		then:
 			!a.validate()
 		when:
-			a.addToMessages(Fmessage.build())
+			a.addToMessages(TextMessage.build())
 		then:
 			a.validate()
 	}
@@ -35,15 +35,15 @@ class AnnouncementSpec extends Specification {
 	def "Announcement can have one or many messages"() {
 		when:
 			def a = new Announcement(name:'test announcement')
-					.addToMessages(Fmessage.build())
+					.addToMessages(TextMessage.build())
 		then:
 			a.validate()
 		when:
-			a.addToMessages(Fmessage.build())
+			a.addToMessages(TextMessage.build())
 		then:
 			a.validate()
 		when:
-			a.addToMessages(Fmessage.build())
+			a.addToMessages(TextMessage.build())
 		then:
 			a.validate()
 	} /**/

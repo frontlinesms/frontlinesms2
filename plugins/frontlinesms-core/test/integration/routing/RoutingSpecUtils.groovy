@@ -3,8 +3,8 @@ package routing
 import frontlinesms2.*
 
 class RoutingSpecUtils {
-	static Fmessage createOutgoing(String dst, String text) {
-		Fmessage m = new Fmessage(text:text, inbound:false, hasPending:true)
+	static TextMessage createOutgoing(String dst, String text) {
+		TextMessage m = new TextMessage(text:text, inbound:false, hasPending:true)
 		m.addToDispatches(new Dispatch(dst:dst, status:DispatchStatus.PENDING))
 		return m
 	}

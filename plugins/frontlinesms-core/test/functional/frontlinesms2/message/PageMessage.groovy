@@ -94,14 +94,14 @@ class MessageList extends geb.Module {
 		selectedMessageText { i=0 -> messageText(i, true) }
 		noContent { $('tr.no-content') }
 		starFor { message ->
-			if (message instanceof Fmessage) {
+			if (message instanceof TextMessage) {
 				return $("tr #star-${message.id} a")
 			} else if(message instanceof Number) {
 				return $("tr #star-${message} a")
 			}
 		}
 		displayedNameFor { m ->
-			def id = m instanceof Fmessage? m.id: m
+			def id = m instanceof TextMessage? m.id: m
 			return $(".displayName-${id}").text()
 		}
 		newMessageNotification(required:false) { $("#new-message-notification") }

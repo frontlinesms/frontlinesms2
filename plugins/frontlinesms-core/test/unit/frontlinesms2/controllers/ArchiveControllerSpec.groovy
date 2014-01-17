@@ -6,7 +6,7 @@ import spock.lang.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(ArchiveController)
-@Mock([Folder, Fmessage, Autoforward, Contact])
+@Mock([Folder, TextMessage, Autoforward, Contact])
 @Build([Contact, Autoforward])
 
 class ArchiveControllerSpec extends Specification {

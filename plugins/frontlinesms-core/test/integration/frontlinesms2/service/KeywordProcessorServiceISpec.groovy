@@ -10,7 +10,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def "activity.processKeyword should be called with most specific keyword match"() {
 		given:
 			createTestPoll()
-			def m = createFmessage(messageText).save(failOnError:true)
+			def m = createTextMessage(messageText).save(failOnError:true)
 		when:
 			keywordProcessorService.process(m)
 		then:
@@ -36,7 +36,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def "no activity should be processed if no keyword matches"() {
 		given:
 			createTestPoll()
-			def m = createFmessage(messageText)
+			def m = createTextMessage(messageText)
 		when:
 			keywordProcessorService.process(m)
 		then:
@@ -49,7 +49,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def "archived and deleted activities should not be matched"() {
 		given:
 			createTestPoll(archived, deleted)
-			def m = createFmessage(messageText)
+			def m = createTextMessage(messageText)
 		when:
 			keywordProcessorService.process(m)
 		then:
@@ -71,13 +71,13 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			Autoreply a = new Autoreply(name:"test", autoreplyText:"testing")
 			a.addToKeywords(new Keyword(value:"", isTopLevel:true))
-			a.metaClass.processKeyword = { Fmessage m, Keyword k ->
+			a.metaClass.processKeyword = { TextMessage m, Keyword k ->
 				k.ownerDetail = "PROCESSED"
 				k.save(failOnError:true, flush:true)
 			}
 			a.save(failOnError:true)
 		when:
-			keywordProcessorService.process(createFmessage("I'm just an innocent FMessage"))
+			keywordProcessorService.process(createTextMessage("I'm just an innocent FMessage"))
 		then:
 			Keyword.findAllByOwnerDetail("PROCESSED") == Keyword.findAllByValue('')
 	}
@@ -90,7 +90,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			p.addToKeywords(new Keyword(value: "BOTTOM${it}", isTopLevel: false, ownerDetail: "$it"))
 		}
 		p.addToResponses(PollResponse.createUnknown())
-		p.metaClass.processKeyword = { Fmessage m, Keyword k ->
+		p.metaClass.processKeyword = { TextMessage m, Keyword k ->
 			println "processing keyword $k, value: ${k.value}"
 			k.ownerDetail = "PROCESSED"
 			k.save(failOnError:true, flush:true)
@@ -99,8 +99,8 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		return p
 	}
 
-	private def createFmessage(text) {
-		Fmessage.build(text:text)
+	private def createTextMessage(text) {
+		TextMessage.build(text:text)
 	}
 }
 

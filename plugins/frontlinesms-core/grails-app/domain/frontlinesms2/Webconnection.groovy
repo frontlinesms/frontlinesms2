@@ -72,7 +72,7 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		tablePerHierarchy false
 	}
 
-	def processKeyword(Fmessage message, Keyword k) {
+	def processKeyword(TextMessage message, Keyword k) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		webconnectionService.doUpload(this, message)
@@ -116,9 +116,9 @@ abstract class Webconnection extends Activity implements FrontlineApi {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def fmessage = Fmessage.get(x.in.headers.'fmessage-id')
+		def textMessage = TextMessage.get(x.in.headers.'fmessage-id')
 		def encodedParameters = this.requestParameters.collect {
-			urlEncode(it.name) + '=' + urlEncode(webconnectionService.getProcessedValue(it, fmessage))
+			urlEncode(it.name) + '=' + urlEncode(webconnectionService.getProcessedValue(it, textMessage))
 		}.join('&')
 		println "PARAMS:::$encodedParameters"
 		x.in.headers[Exchange.HTTP_PATH] = this.url

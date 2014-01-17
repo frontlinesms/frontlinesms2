@@ -13,7 +13,7 @@ class WebconnectionService {
 	def i18nUtilService
 	def messageSendService
 
-	private String getReplacement(String arg, Fmessage msg) {
+	private String getReplacement(String arg, TextMessage msg) {
 		arg = (arg - '${') - '}'
 		def c = Webconnection.subFields[arg]
 		return c ? c(msg) : arg
@@ -39,8 +39,8 @@ class WebconnectionService {
 		}
 	}
 
-	private Fmessage createTestMessage() {
-		Fmessage fm = new Fmessage(src:"0000", text:Fmessage.TEST_MESSAGE_TEXT, inbound:true)
+	private TextMessage createTestMessage() {
+		TextMessage fm = new TextMessage(src:"0000", text:TextMessage.TEST_MESSAGE_TEXT, inbound:true)
 		fm.save(failOnError:true, flush:true)
 	}
 
@@ -79,13 +79,13 @@ class WebconnectionService {
 		println "### WebconnectionService.postProcess() ## headers ## ${x.in.headers}"
 		println "#### Completed postProcess #### ${x.in.headers.'fmessage-id'}"
 		def webConn = getWebConnection(x)
-		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		def message = TextMessage.get(x.in.headers.'fmessage-id')
 		changeMessageOwnerDetail(webConn, message, Webconnection.OWNERDETAIL_SUCCESS)
 		webConn.postProcess(x)
 	}
 
 	def handleException(Exchange x) {
-		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		def message = TextMessage.get(x.in.headers.'fmessage-id')
 		changeMessageOwnerDetail(getWebConnection(x), message, Webconnection.OWNERDETAIL_FAILED)
 		println "### WebconnectionService.handleException() ## headers ## ${x.in.headers}"
 		println "Web Connection request failed with exception: ${x.in.body}"
@@ -99,7 +99,7 @@ class WebconnectionService {
 		} else if(x.in.headers.'webconnectionStep-id') {
 			webConn = WebconnectionActionStep.get(x.in.headers.'webconnectionStep-id')
 		}
-		def message = Fmessage.get(x.in.headers.'fmessage-id')
+		def message = TextMessage.get(x.in.headers.'fmessage-id')
 		def text = i18nUtilService.getMessage(code:"webconnection.${message.ownerDetail}.label", args:[webConn.name])
 		println "######## StatusNotification::: $text #########"
 		def notification = SystemNotification.findOrCreateByText(text)
@@ -118,7 +118,7 @@ class WebconnectionService {
 	}
 
  	def retryFailed(Webconnection c) {
- 		Fmessage.findAllByMessageOwner(c).each {
+ 		TextMessage.findAllByMessageOwner(c).each {
  			if(it.ownerDetail == Webconnection.OWNERDETAIL_FAILED)
  				doUpload(c, it)
  		}
@@ -147,7 +147,7 @@ class WebconnectionService {
 		camelContext.routes.any { it.id ==~ /.*activity-${w.shortName}-${w.id}$/ } ? ConnectionStatus.CONNECTED : ConnectionStatus.FAILED
 	}
 
- 	private changeMessageOwnerDetail(Fmessage message, String s) {
+ 	private changeMessageOwnerDetail(TextMessage message, String s) {
  		message.setMessageDetail(message.messageOwner, s)
  		message.save(failOnError:true, flush:true)
  		println "Changing Status ${message.ownerDetail}"

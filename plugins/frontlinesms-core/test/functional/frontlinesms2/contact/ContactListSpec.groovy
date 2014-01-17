@@ -37,7 +37,7 @@ class ContactListSpec extends ContactBaseSpec {
 			to PageContactShow
 		then:
 			def contactNames = contactList.contacts - "Select All"
-			def expectedNames = (11..60).collect { "Contact${it} 987654321${it}" }
+			def expectedNames = (11..90).collect { "Contact${it} 987654321${it}" }
 			assert contactNames == expectedNames
 	}
 	
@@ -119,7 +119,7 @@ class ContactListSpec extends ContactBaseSpec {
 			to PageContactShow
 			contactList.selectAll.click()
 		then:
-			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 50}
+			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 80}
 	}
 
 	def "should deselect 'select all' when some contacts are not selected"() {
@@ -129,7 +129,7 @@ class ContactListSpec extends ContactBaseSpec {
 			to PageContactShow
 			contactList.selectAll.click()
 		then:
-			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 50}
+			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 80}
 			contactList.selectAll.checked
 		when:
 			contactList.selectContact 1
@@ -150,8 +150,8 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			remote {
 				def pedro = Contact.build(name:'Pedro', mobile:'+111')
-				(1..20).each { Fmessage.build(src:'+111', inbound:true, text:"message ${it}") }
-				def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
+				(1..20).each { TextMessage.build(src:'+111', inbound:true, text:"message ${it}") }
+				def outgoingMsg = new TextMessage(src:'000', inbound:false, text:"outgoing message to Pedro")
 						.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
 						.save(failOnError:true, flush:true)
 				null
@@ -172,8 +172,8 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			remote {
 				def pedro = Contact.build(name:'', mobile:'+111')
-				(1..20).each { Fmessage.build(src:'+111', inbound:true, text:"message ${it}") }
-				def outgoingMsg = new Fmessage(src:'000', inbound:false, text:"outgoing message to Pedro")
+				(1..20).each { TextMessage.build(src:'+111', inbound:true, text:"message ${it}") }
+				def outgoingMsg = new TextMessage(src:'000', inbound:false, text:"outgoing message to Pedro")
 						.addToDispatches(dst:"+111", status:DispatchStatus.SENT, dateSent:new Date())
 						.save(failOnError:true, flush:true)
 				null

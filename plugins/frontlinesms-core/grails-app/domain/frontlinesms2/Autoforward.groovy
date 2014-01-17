@@ -27,7 +27,7 @@ class Autoforward extends Activity {
 	}
 
 //> PROCESS METHODS
-	def processKeyword(Fmessage message, Keyword matchedKeyword) {
+	def processKeyword(TextMessage message, Keyword matchedKeyword) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		// FIXME please fix spaces around braces

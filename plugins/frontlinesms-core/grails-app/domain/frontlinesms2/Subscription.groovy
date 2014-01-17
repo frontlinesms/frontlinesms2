@@ -28,21 +28,21 @@ class Subscription extends Activity {
 		leaveAutoreplyText nullable:true, blank:false
 	}
 
-	def processJoin(Fmessage message){
+	def processJoin(TextMessage message){
 		println "I AM ABOUT TO CALL DO JOIN ON $subscriptionService"
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		subscriptionService.doJoin(this, message)
 	}
 
-	def processLeave(Fmessage message){
+	def processLeave(TextMessage message){
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		println "I AM ABOUT TO CALL DO LEAVE ON $subscriptionService"
 		subscriptionService.doLeave(this, message)
 	}
 
-	def processToggle(Fmessage message){
+	def processToggle(TextMessage message){
 		this.addToMessages(message)
 		this.save(failOnError:true)
 		println "I AM ABOUT TO CALL DO TOGGLE ON $subscriptionService"
@@ -59,7 +59,7 @@ class Subscription extends Activity {
 		messageSendService.send(outgoingMessage)
 	}
 
-	def processKeyword(Fmessage message, Keyword k) {
+	def processKeyword(TextMessage message, Keyword k) {
 		// TODO: Should add message to activity at this point
 		this.addToMessages(message)
 		this.save(failOnError:true)
@@ -89,14 +89,14 @@ class Subscription extends Activity {
 		aliases && aliases.toUpperCase().split(",").contains(message.substring(keyword.value.length()))	
 	}
 
-	def getDisplayText(Fmessage msg) {
+	def getDisplayText(TextMessage msg) {
 		if ((msg.messageOwner.id == this.id) && msg.ownerDetail) {
 			return (msg.ownerDetail?.toLowerCase() + ' ("' + msg.text + '")').truncate(50) // FIXME probably shouldn't truncate here
 		} else
 			return msg.text
 	}
 
-	def withEachCorrespondent(Fmessage message, Closure c) {
+	def withEachCorrespondent(TextMessage message, Closure c) {
 		def phoneNumbers = []
 		if (message.inbound)
 			phoneNumbers << message.src

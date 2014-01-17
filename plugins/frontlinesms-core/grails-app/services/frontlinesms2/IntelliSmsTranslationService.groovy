@@ -13,7 +13,7 @@ class IntelliSmsTranslationService implements Processor {
 		def i = exchange.in
 		println("in: ${i}")
 		if(isValidMessageSource(i.getHeader('From'))) {
-			Fmessage message = new Fmessage(inbound:true)
+			TextMessage message = new TextMessage(inbound:true)
 			def emailBody = i.body
 			def emailSubject = i.getHeader('Subject')
 			def emailDate = i.getHeader('Date')

@@ -3,7 +3,7 @@ import org.apache.camel.builder.RouteBuilder
 class SmslibTranslationRoute extends RouteBuilder {
 	void configure() {
 		from('seda:raw-smslib')
-				.beanRef('smslibTranslationService', 'toFmessage')
+				.beanRef('smslibTranslationService', 'toTextMessage')
 				.to('seda:incoming-fmessages-to-store')
 				.routeId('smslib-translation')
 	}

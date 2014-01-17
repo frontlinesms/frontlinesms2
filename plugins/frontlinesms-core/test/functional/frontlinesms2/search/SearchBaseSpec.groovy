@@ -5,9 +5,9 @@ import frontlinesms2.*
 class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestMessages() {
 		remote {
-			Fmessage.build(src:'Bob', text:'hi Bob')
-			Fmessage.build(src:'Alice', text:'hi Alice')
-			Fmessage.build(src:'+254778899', text:'test')
+			TextMessage.build(src:'Bob', text:'hi Bob')
+			TextMessage.build(src:'Alice', text:'hi Alice')
+			TextMessage.build(src:'+254778899', text:'test')
 			null
 		}
 	}
@@ -22,8 +22,8 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestMessages2() {
 		remote {
-			Fmessage.build(src:'Doe', text:'meeting at 11.00', date:new Date()-1)
-			Fmessage.build(src:'Alex', text:'hi alex', date:new Date()-1, starred:true)
+			TextMessage.build(src:'Doe', text:'meeting at 11.00', date:new Date()-1)
+			TextMessage.build(src:'Alex', text:'hi alex', date:new Date()-1, starred:true)
 			null
 		}
 	}
@@ -38,7 +38,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 			p.addToResponses(PollResponse.createUnknown())
 			p.save(failOnError:true, flush:true)
 
-			chickenResponse.addToMessages(Fmessage.build(src:'Joe', text:'eat more cow'))
+			chickenResponse.addToMessages(TextMessage.build(src:'Joe', text:'eat more cow'))
 			p.save(failOnError:true, flush:true)
 			null
 		}
@@ -66,15 +66,15 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 					.addToCustomFields(name:'like', value:'ake')
 					.save(failOnError:true, flush:true)
 
-			Fmessage.build(src:'+666666666', text:'finaly i stay in bed')
+			TextMessage.build(src:'+666666666', text:'finaly i stay in bed')
 			null
 		}
 	}
 
 	static createInboxTestMessages() {
 		remote {
-			Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-2)
-			Fmessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
+			TextMessage.build(src:'Bob', text:'hi Bob', date:new Date()-2)
+			TextMessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
 			null
 		}
 
@@ -83,9 +83,9 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createSearchTestMessages() {
 		remote {
-			Fmessage.build(src:'Alex', text:'meeting at 11.00', date:new Date()-1)
-			Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-1)
-			Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes')
+			TextMessage.build(src:'Alex', text:'meeting at 11.00', date:new Date()-1)
+			TextMessage.build(src:'Bob', text:'hi Bob', date:new Date()-1)
+			TextMessage.build(src:'Michael', text:'Can we get meet in 5 minutes')
 			null
 		}
 

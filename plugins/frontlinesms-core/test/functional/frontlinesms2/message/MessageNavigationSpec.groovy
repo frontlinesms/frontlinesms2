@@ -62,7 +62,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			remote {
 				def trashService = new TrashService()
 				def announcement = Announcement.build(name:'test-announcement')
-				Fmessage.getAll().each { trashService.sendToTrash(it) }
+				TextMessage.getAll().each { trashService.sendToTrash(it) }
 				trashService.sendToTrash(announcement)
 				null
 			}
@@ -79,7 +79,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			remote {
 				def trashService = new TrashService()
 				def announcement = Announcement.build(name:'test-announcement')
-				Fmessage.getAll().each { trashService.sendToTrash(it) }
+				TextMessage.getAll().each { trashService.sendToTrash(it) }
 				trashService.sendToTrash(announcement)
 				null
 			}

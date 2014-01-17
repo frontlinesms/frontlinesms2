@@ -51,7 +51,7 @@ class CustomActivityISpec extends IntegrationSpec {
 			customActivity.save(flush:true, failOnError:true)
 			def customActivityService = Mock(CustomActivityService)
 			customActivity.customActivityService = customActivityService
-			def m = new Fmessage(src:"123", text:"this is a message", inbound:true).save(failOnError:true)
+			def m = new TextMessage(src:"123", text:"this is a message", inbound:true).save(failOnError:true)
 		when:
 			customActivity.processKeyword(m, Mock(Keyword))
 		then:

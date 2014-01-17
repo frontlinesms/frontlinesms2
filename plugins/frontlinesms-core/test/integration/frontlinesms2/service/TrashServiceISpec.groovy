@@ -9,18 +9,18 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def trashService
 	
 	def cleanup() {
-		['Fmessage', 'MessageOwner', 'PollResponse'].each { domainClass ->
-			Fmessage.executeUpdate("DELETE FROM $domainClass")
+		['TextMessage', 'MessageOwner', 'PollResponse'].each { domainClass ->
+			TextMessage.executeUpdate("DELETE FROM $domainClass")
 		}
 		
-		assert !Fmessage.count()
+		assert !TextMessage.count()
 		assert !MessageOwner.count()
 		assert !PollResponse.count()
 	}
 	
 	def "should permanently delete a poll and its messages when trashed"() {
 		setup:
-			def message = Fmessage.build(src:'123456', date:new Date(), inbound:true, isDeleted:false)
+			def message = TextMessage.build(src:'123456', date:new Date(), inbound:true, isDeleted:false)
 			message.save(failOnError:true, flush:true)
 			def keyword = new Keyword(value: "FOOTBALL")
 			def p = new Poll(name:'Who is the best football team in the world?', deleted:true).addToKeywords(keyword)
@@ -36,36 +36,36 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Poll.count() == 0
 			PollResponse.count() == 0
-			Fmessage.count() == 0
+			TextMessage.count() == 0
 			Trash.count() == 0
 	}
 	
 	def "should permanently delete a folder and its messages when trashed"() {
 		given:
-			def message = Fmessage.build(src: '1234567', date: new Date(), inbound: true).save(failOnError:true, flush:true)
+			def message = TextMessage.build(src: '1234567', date: new Date(), inbound: true).save(failOnError:true, flush:true)
 			def folder = new Folder(name:"test", deleted:true).save(failOnError:true, flush:true)
 			folder.addToMessages(message)
 			folder.save(failOnError:true, flush:true)
-			assert Fmessage.count() == 1
+			assert TextMessage.count() == 1
 			assert folder.getLiveMessageCount() == 1
 		when:
 			trashService.emptyTrash()
 		then:
 			Poll.count() == 0
-			Fmessage.count() == 0
+			TextMessage.count() == 0
 			Trash.count() == 0
 	}
 
 	def 'empty trash permanently deletes messages with isDeleted flag true'() {
 		setup:
-			(1..3).each {Fmessage.build(src:'123456', isDeleted:false, date:new Date(), inbound:true).save(failOnError:true, flush:true)}
-			def inboxMessages = Fmessage.list()
-			(1..3).each {Fmessage.build(src:'123456', isDeleted:true, date:new Date(), inbound:true).save(failOnError:true, flush:true)}
+			(1..3).each {TextMessage.build(src:'123456', isDeleted:false, date:new Date(), inbound:true).save(failOnError:true, flush:true)}
+			def inboxMessages = TextMessage.list()
+			(1..3).each {TextMessage.build(src:'123456', isDeleted:true, date:new Date(), inbound:true).save(failOnError:true, flush:true)}
 			
 		when:
 			trashService.emptyTrash()
 		then:
-			Fmessage.list() == inboxMessages
+			TextMessage.list() == inboxMessages
 	}
 
 	def 'should not be able to delete the same item twice'() {
@@ -83,7 +83,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'should be able to delete a very long message without trash service failing'() {
 		given: 'message exists'
-			def m = Fmessage.build(text: '''This message could go on and on and on and on and on and on and
+			def m = TextMessage.build(text: '''This message could go on and on and on and on and on and on and
 					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 
 					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 
 					on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and 

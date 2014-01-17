@@ -36,7 +36,7 @@ databaseChangeLog = {
 		}
 	}
 
-	// Migrate old Fmessage.ownerDetail entries to new Message Detail domain
+	// Migrate old TextMessage.ownerDetail entries to new Message Detail domain
 	// can safely assume that all existing owners are ACTIVITY, not STEP, as custom activity not released yet
 	changeSet(author: "sitati", id:"1379593412207-3") {
 		grailsChange{

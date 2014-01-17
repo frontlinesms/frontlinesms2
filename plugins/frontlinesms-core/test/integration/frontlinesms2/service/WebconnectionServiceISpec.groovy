@@ -72,18 +72,18 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webconnectionService.postProcess(x)
 		then:
-			Fmessage.findByText("simple").ownerDetail == "success"
+			TextMessage.findByText("simple").ownerDetail == "success"
 	}
 
 	def 'webconnectionservice.send() should change ownerDetail to onwerdetail-pending'() {
 		given:
 			def webconnection =  Webconnection.findByName("Sync")
-			webconnection.addToMessages(Fmessage.build(text:"simple"))
+			webconnection.addToMessages(TextMessage.build(text:"simple"))
 			webconnection.save(flush:true)
 		when:
-			webconnectionService.doUpload(webconnection, Fmessage.findByText("simple"))
+			webconnectionService.doUpload(webconnection, TextMessage.findByText("simple"))
 		then:
-			Fmessage.findByText("simple").ownerDetail == "pending"
+			TextMessage.findByText("simple").ownerDetail == "pending"
 	}
 
 	def 'webconnectionService.handleException() should change ownerDetail to onwerdetail-failed'(){
@@ -92,7 +92,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webconnectionService.handleException(x)
 		then:
-			Fmessage.findByText("simple").ownerDetail == "failed"
+			TextMessage.findByText("simple").ownerDetail == "failed"
 	}
 
 	def 'webconnectionservice.getWebconnectionStatus should return NOT_CONNECTED when the webconnection is not active'() {
@@ -130,7 +130,7 @@ class WebconnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webconnection.addToRequestParameters(p2)
 			webconnection.addToRequestParameters(p3)
 		}
-		def message = Fmessage.build(text:messageText)
+		def message = TextMessage.build(text:messageText)
 		webconnection.addToMessages(message)
 		webconnection.save(failOnError:true, flush:true)
 		Exchange exchange = Mock(Exchange)

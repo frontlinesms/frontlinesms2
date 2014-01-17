@@ -32,7 +32,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		setup:
 			remote {
 				def d = new Dispatch(dst:"34567890", dateSent: new Date(), status: DispatchStatus.SENT)
-				new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush:true, failOnError:true)
+				new TextMessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush:true, failOnError:true)
 				null
 			}
 		when:
@@ -55,7 +55,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 
 	 def 'should not be able to archive activity messages'() {
 		when:
-			to PageMessagePoll, 'Miauow Mix', remote { Fmessage.findBySrc('Barnabus').id }
+			to PageMessagePoll, 'Miauow Mix', remote { TextMessage.findBySrc('Barnabus').id }
 		then:
 			waitFor { singleMessageDetails.displayed }
 			messageList.toggleSelect(0)

@@ -5,23 +5,23 @@ import frontlinesms2.*
 class MessageGebSpec extends grails.plugin.geb.GebSpec {
 	
 	static createTestMessages() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
-				new Fmessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
+		[new TextMessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
+				new TextMessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
+				new TextMessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 				}
 	}
 	
 	static createInboxTestMessages() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 2),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 1, starred: true)].each() {
+		[new TextMessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 2),
+				new TextMessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 1, starred: true)].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 				}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
+		def chickenMessage = new TextMessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
+		def liverMessage = new TextMessage(src:'Minime', dst:'+12345678', text:'i like liver')
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
@@ -32,15 +32,15 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createSearchTestMessages() {
-		[new Fmessage(src:'Alex', dst:'+254987654', text:'meeting at 11.00'),
-				new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
-				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
+		[new TextMessage(src:'Alex', dst:'+254987654', text:'meeting at 11.00'),
+				new TextMessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
+				new TextMessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 				}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
+		def chickenMessage = new TextMessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
+		def liverMessage = new TextMessage(src:'Minime', dst:'+12345678', text:'i like liver')
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)

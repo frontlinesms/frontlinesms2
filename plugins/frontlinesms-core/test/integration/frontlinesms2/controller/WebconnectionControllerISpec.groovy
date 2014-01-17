@@ -207,12 +207,12 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webconnection.save(failOnError:true, flush:true)
 			def m
 			5.times { it ->
-				m = new Fmessage(text:"test", inbound:true, src:"+1234$it").save(failOnError:true)
+				m = new TextMessage(text:"test", inbound:true, src:"+1234$it").save(failOnError:true)
 				m.setMessageDetailValue(webconnection, ((it % 2) ? Webconnection.OWNERDETAIL_FAILED : Webconnection.OWNERDETAIL_SUCCESS ))
 				webconnection.addToMessages(m)
 			}
 
-			m = new Fmessage(text:"test", inbound:true,src:"+12345").save(failOnError:true)
+			m = new TextMessage(text:"test", inbound:true,src:"+12345").save(failOnError:true)
 			m.setMessageDetailValue(webconnection, Webconnection.OWNERDETAIL_PENDING)
 			webconnection.addToMessages(m)
 
@@ -221,9 +221,9 @@ class WebconnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.retryFailed()
 		then: "Successful webconnections should not be changed"
-			Fmessage.findAllBySrcInList(["+12340", "+12342", "+12344"])*.ownerDetail == [Webconnection.OWNERDETAIL_SUCCESS] * 3
+			TextMessage.findAllBySrcInList(["+12340", "+12342", "+12344"])*.ownerDetail == [Webconnection.OWNERDETAIL_SUCCESS] * 3
 		and: "Failed webconnections should be retried"
-			Fmessage.findAllBySrcInList(["+12341", "+12343", "+12345"])*.ownerDetail == [Webconnection.OWNERDETAIL_PENDING] * 3
+			TextMessage.findAllBySrcInList(["+12341", "+12343", "+12345"])*.ownerDetail == [Webconnection.OWNERDETAIL_PENDING] * 3
 	}
 
 	def 'can edit an existing ushahidi web connection'(){

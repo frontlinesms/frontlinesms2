@@ -14,7 +14,7 @@ class SmppTranslationServiceSpec extends Specification {
 			delegate.size() <= max? delegate: delegate.substring(0, max-1) + '…'
 		}
 	}
-	def "incoming smpp message is translated into Fmessage"() {
+	def "incoming smpp message is translated into TextMessage"() {
 		given:
 			def messageText = "Test message"
 			def source = "+254725672318"

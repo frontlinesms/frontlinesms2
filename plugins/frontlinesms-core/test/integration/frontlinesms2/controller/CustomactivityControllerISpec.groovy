@@ -77,7 +77,7 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 				.addToSteps(replyStep)
 				.addToKeywords(value:"CUSTOM")
 				.save(failOnError:true, flush:true)
-			def message = Fmessage.build(text:'steppilize this')
+			def message = TextMessage.build(text:'steppilize this')
 			a.processKeyword(message, null)
 			controller.params.ownerId = a.id
 			controller.params.starred = false

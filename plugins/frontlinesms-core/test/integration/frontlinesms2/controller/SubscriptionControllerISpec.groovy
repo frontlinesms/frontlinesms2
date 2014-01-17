@@ -159,7 +159,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createTestMessageFromContact(text, Contact c) {
-		new Fmessage(text:text, src:c.mobile, inbound:true).save(failOnError:true)
+		new TextMessage(text:text, src:c.mobile, inbound:true).save(failOnError:true)
 	}
 
 }

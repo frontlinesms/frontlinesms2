@@ -18,8 +18,8 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToResponses(PollResponse.createUnknown())
 					.addToResponses(value:'known unknown', key:'B')
 					.save(failOnError:true, flush:true)
-			def message = Fmessage.build(src:'Bob', text:'I like manchester')
-			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob'))
+			def message = TextMessage.build(src:'Bob', text:'I like manchester')
+			PollResponse.findByValue('known unknown').addToMessages(TextMessage.findBySrc('Bob'))
 			poll.save(failOnError:true, flush:true)
 		when:
 			controller.params.messageId = message.id
@@ -33,7 +33,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 	def "message can be moved to a folder"() {
 		setup:
 			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true, flush:true)
+			def message = new TextMessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true, flush:true)
 		when:
 			controller.params.messageId = message.id
 			controller.params.ownerId = folder.id
@@ -47,7 +47,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 	def "should move a folder message to inbox section"() {
 		setup:
 			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'Bob', text:'I like nairobi', inbound:true, date: new Date()).save(failOnError: true, flush:true)
+			def message = new TextMessage(src:'Bob', text:'I like nairobi', inbound:true, date: new Date()).save(failOnError: true, flush:true)
 			folder.addToMessages(message)
 			folder.save(failOnError:true, flush:true)
 		when:
@@ -65,7 +65,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name: 'Who is badder?')
 			poll.editResponses(choiceA: 'known unknown', choiceB: 'unknown unknowns')
 			poll.save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true, flush:true)
+			def message = new TextMessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true, flush:true)
 			PollResponse.findByValue('known unknown').addToMessages(message)
 			poll.save(failOnError: true)
 		when:
@@ -84,7 +84,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name: 'Who is badder?')
 			poll.editResponses(choiceA: 'known unknown', choiceB: 'unknown unknowns')
 			poll.save(failOnError:true)
-			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true)
+			def message = new TextMessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true)
 			PollResponse.findByValue('known unknown').addToMessages(message)
 			poll.save(failOnError: true)
 		when:
