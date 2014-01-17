@@ -1,0 +1,7 @@
+#!/usr/bin/env groovy
+@Grab(group='commons-configuration', module='commons-configuration', version='1.10')
+import org.apache.commons.configuration.PropertiesConfigurationLayout
+import org.apache.commons.configuration.PropertiesConfiguration
+
+def messprop = new PropertiesConfiguration(new File('grails-app/i18n/messages.properties'))
+messprop.getKeys().each { println it }
