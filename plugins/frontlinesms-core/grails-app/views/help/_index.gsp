@@ -79,7 +79,7 @@
 	* [How do I import Messages and Contacts?][92]
 	* [How do I password-protect my FrontlineSMS installation?][103]
 	* [How do I use my modem/phone with FrontlineSMS?][94]
-	* [How do I use my Android phone with FrontlineSMS?][95]
+	* [How do I use my Android phone/SMSSync with FrontlineSMS?][95]
 	* [How do I connect FrontlineSMS to a Short Message Service Center (SMSC)?][96]
 	* [How do I edit/delete a Connection?][97]
 	* [How do I get FrontlineSMS to detect my device?][98]

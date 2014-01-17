@@ -111,6 +111,6 @@ You're finished! You can try sending a test message to make sure everything work
 [11]: ../images/help/smssync/add_sync_url_filled.png
 [12]: ../images/help/smssync/account_selected.png
 [13]: ../images/help/smssync/photo_1-3.jpg
-[14] ../images/help/smssync/enable_sync_and_tasks.png
-[15] ../images/help/smssync/sync_frequency.png
+[14]: ../images/help/smssync/enable_sync_and_tasks.png
+[15]: ../images/help/smssync/sync_frequency.png
 
