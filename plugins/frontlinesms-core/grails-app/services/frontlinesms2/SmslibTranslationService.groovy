@@ -31,8 +31,7 @@ class SmslibTranslationService {
 		def c = new COutgoingMessage(address, messageText)
 		c.originator = m.src
 		c.date = m.date.time
-		
-		exchange.out.body = c
-		exchange.out.setHeader('frontlinesms.dispatch.id', d.id)
+		exchange.in.body = c
+		exchange.in.setHeader('frontlinesms.dispatch.id', d.id)
 	}
 }
