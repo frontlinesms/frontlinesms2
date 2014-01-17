@@ -148,7 +148,7 @@
 [99]: settings/7.translatingfrontlinesms
 [100]: activities/8.creating_an_autoforward
 [101]: activities/9.creating_a_subscription
-[102]: activities/9.creating_a_web_connection
+[102]: activities/10.web_connection_api
 [103]: settings/8.basic_auth
 [104]: settings/10.custom_routing_rules
 [105]: activities/11.custom_activity_builder
