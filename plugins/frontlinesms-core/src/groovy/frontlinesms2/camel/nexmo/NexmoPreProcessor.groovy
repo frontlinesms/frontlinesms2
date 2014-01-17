@@ -12,6 +12,7 @@ class NexmoPreProcessor implements Processor {
 		// URL-encode body
 		def d = x.in.body
 		x.out.headers['frontlinesms.dispatch.id'] = d.id
+		x.out.headers[Fconnection.HEADER_FCONNECTION_ID] = x.fconnectionId
 		x.out.body = urlEncode(d.text)
 		
 		def destination = d.dst
