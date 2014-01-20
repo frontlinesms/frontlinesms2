@@ -8,7 +8,15 @@
 			</g:link>
 		</fsms:menuitem>
 		<fsms:menuitem bodyOnly="true" class="import">
-			<fsms:popup class="btn" controller="import" action="contactImportWizard" popupCall="mediumPopup.launchContactImportPopup(i18n('contact.import.label'), data)"><g:message code="contact.import.label"/></fsms:popup>
+			<fsms:popup class="btn" controller="import" action="contactWizard" popupCall="mediumPopup.launchContactImportPopup(i18n('contact.import.label'), data)"><g:message code="contact.import.label"/></fsms:popup>
+		</fsms:menuitem>
+		<fsms:menuitem bodyOnly="true" class="">
+			<g:if test="${contactsSection?.shortName}">
+				<fsms:popup class="btn" controller="export" action="contactWizard" params="[groupId:contactsSection?.id, contactsSection:contactsSection?.shortName]" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="group.export.label" args="${[contactsSection?.name]}"/></fsms:popup>
+			</g:if>
+			<g:else>
+				<fsms:popup class="btn" controller="export" action="contactWizard" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="contact.export.label"/></fsms:popup>
+			</g:else>
 		</fsms:menuitem>
 	</fsms:submenu>
 
