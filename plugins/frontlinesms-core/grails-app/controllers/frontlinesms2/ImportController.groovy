@@ -290,7 +290,7 @@ class ImportController extends ControllerUtils {
 		[csvData:session.csvData, recognisedTitles:STANDARD_FIELDS.keySet()]
 	}
 
-	def contactImportWizard() {
+	def contactWizard() {
 		render(template:"/contact/import_contacts")
 	}
 }
