@@ -43,8 +43,8 @@ In the event that you do NOT want FrontlineSMS to use a certain phone number, yo
 **Note: remember to save your selection!**
 
 ## Related topics:
-[Manually Adding A Device][3]
-[SMSSync][4]
+![Manually Adding A Device][3]
+![SMSSync][4]
 
 
 [1]: ../images/help/ConnectionsRoutingRules.png
