@@ -7,7 +7,7 @@
 				<g:message code="contact.create"/>
 			</g:link>
 		</fsms:menuitem>
-		<fsms:menuitem bodyOnly="true">
+		<fsms:menuitem bodyOnly="true" class="import">
 			<fsms:popup class="btn" controller="import" action="contactImportWizard" popupCall="mediumPopup.launchContactImportPopup(i18n('contact.import.label'), data)"><g:message code="contact.import.label"/></fsms:popup>
 		</fsms:menuitem>
 	</fsms:submenu>
