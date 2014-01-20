@@ -103,6 +103,7 @@ class FsmsTagLib {
 		if(att.title) {
 			def hTag = att.solo == 'true'? 'h2': 'h3'
 			out << "<$hTag>${g.message(code:att.title)}</$hTag>"
+			att.remove('title')
 		}
 		if(att.info) out << info([message:att.info])
 		def labelPrefix = att.remove('labelPrefix')?: ''
