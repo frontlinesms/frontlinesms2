@@ -7,7 +7,7 @@
 			</fsms:tab>
 			<fsms:tab controller="archive" mainNavSection="${mainNavSection}"/>
 			<fsms:tab controller="contact" mainNavSection="${mainNavSection}"/>
-			<fsms:tab controller="status" mainNavSection="${mainNavSection}">
+			<fsms:tab controller="connection" mainNavSection="${mainNavSection}">
 				<fsms:trafficLightStatus/>
 			</fsms:tab>
 			<fsms:tab controller="search" mainNavSection="${mainNavSection}"/>
