@@ -1,18 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
-		<meta name="layout" content="status_layout"/>
+		<meta name="layout" content="settings"/>
 		<title><g:message code="status.header"/></title>
 		</head>
 	<body>
-		<div id="left-column">
-			<fsms:render template="traffic"/>
+		<div id="body-content-head">
+			<div class="content">
+				<h1><g:message code="status.header"/></h1>
+			</div>
 		</div>
-		<div id="right-column">
-			<fsms:render template="connection_list"/>
-			<fsms:render template="device_detection"/>
-			
-		</div>
+		<fsms:render template="traffic"/>
 		<r:script>
 			// TODO should this be bind()/on() instead of delegate?
 			$("#time-filters").delegate("select", "change", function() {
