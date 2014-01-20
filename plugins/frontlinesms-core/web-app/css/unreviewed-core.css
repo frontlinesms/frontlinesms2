@@ -137,3 +137,6 @@ tr.connection .smssync-lastconnected { font-weight:bold; }
 tr.connection.receiveOnly .btn.test { display:none; }
 
 .saving-state-message { padding:10px; color:#808080; }
+.progress { float:right; }
+.updating { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding:18px 10px 10px 10px; }
+
