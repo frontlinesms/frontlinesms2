@@ -9,6 +9,7 @@
 	<fsms:contactWarning warningType="l10nWarning"/>
 	<fsms:contactWarning warningType="NonNumericNotAllowedWarning"/>
 
+	<p><span class="saving-state-message"></span></p>
 	<table>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
