@@ -7,6 +7,7 @@ var ContactEditor = function() {
 	var cachedFormHash,
 	fieldsToAdd = [], fieldsToRemove = [],
 	contactEditForm = $(".contact-edit-form"),
+	savingStateMessage = $(".edit .saving-state-message"),
 	contactEditWrapper = contactEditForm.find(".edit"),
 	field = function(name) {
 		var selecter = $.map(arguments, function(v, i) {
@@ -36,6 +37,7 @@ var ContactEditor = function() {
 						return false;
 					}
 					setUpdateInProgress(true, event.target);
+					setSavingStateMessage("contact.status.saving");
 					disableForm(event.target);
 				},
 				complete:function() {
@@ -99,6 +101,7 @@ var ContactEditor = function() {
 		buttonKids = button.children();
 		button.text(" " + i18n("contact.send.message", contactName));
 		button.prepend(buttonKids);
+		showSuccessfullySavedMessage();
 	},
 	handleFailureResponse = function(event, data) {
 		var
@@ -110,6 +113,7 @@ var ContactEditor = function() {
 			targetElement.parent().append("<label class='server-side-error' for='"+ localFieldName +"'>"+ item +"</label>");
 		});
 		contactEditWrapper.addClass("has-server-errors");
+		setSavingStateMessage("contact.status.unsaved");
 	},
 	disableForm = function(targetElement) {
 		targetElement = $(targetElement);
@@ -193,6 +197,18 @@ var ContactEditor = function() {
 		}
 
 		$("#contact-infos a.send-message").toggleClass("hidden", val !== "");
+	}
+
+	function setSavingStateMessage(messageCode, args) {
+		savingStateMessage.html(i18n(messageCode, args));
+	}
+
+	function showUnsavedChangesMessage() {
+		setSavingStateMessage("contact.status.unsaved");
+	}
+
+	function showSuccessfullySavedMessage() {
+		setSavingStateMessage("contact.status.saved", Date());
 	}
 
 	function checkMobileNumberForNonNumericCharacters() {
@@ -293,15 +309,19 @@ var ContactEditor = function() {
 		$("input[name=mobile]")
 				.focus(removeNonNumericCharacters)
 				.keyup(validateMobile)
-				.keyup(checkMobileNumberForNonNumericCharacters);
+				.keyup(checkMobileNumberForNonNumericCharacters)
+				.keyup(showUnsavedChangesMessage);
 		validateMobile();
 
 		// bind form data change listeners
-		$(".edit input[type=text], .edit textarea").blur(updateContactData);
-		$(".edit input[type=hidden], .edit select:not(#group-dropdown)").change(updateContactData);
+		$(".edit input[type=text], .edit textarea, .edit input[type=hidden], .edit select:not(#group-dropdown)")
+				.change(updateContactData)
+				.keyup(showUnsavedChangesMessage);
 
 		contactEditForm.bind("addedCustomFieldToContact", function() {
-			$(".edit input[type=text]").blur(updateContactData);
+			$(".edit input[type=text]")
+				.blur(updateContactData)
+				.keyup(showUnsavedChangesMessage);
 			$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
 		});
 		$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
