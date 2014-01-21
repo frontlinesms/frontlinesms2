@@ -116,7 +116,10 @@ class ImportController extends ControllerUtils {
 		flash.numberOfFailedLines = failedLines.size()
 		flash.failedContactsFormat = 'csv'
 		session.csvData = null
-		redirect controller:'settings', action:'porting'
+		if(flash.numberOfFailedLines)
+			redirect controller:'settings', action:'porting'
+		else
+			redirect controller:'contact', action:'show'
 	}
 
 	def failedContacts() {
@@ -285,6 +288,10 @@ class ImportController extends ControllerUtils {
 			return
 		}
 		[csvData:session.csvData, recognisedTitles:STANDARD_FIELDS.keySet()]
+	}
+
+	def contactWizard() {
+		render(template:"/contact/import_contacts")
 	}
 }
 
