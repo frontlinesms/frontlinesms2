@@ -11,6 +11,7 @@
 						<label for="routeRule-${i}" class="grabber">
 							<g:message code="routing.rule.${it.key}"/>
 							<g:checkBox name="routeRule-${i}" value="${it.key}" checked="${it.value}"/>
+							<span class="progress"></span>
 						</label>
 					</li>
 				</g:if>
