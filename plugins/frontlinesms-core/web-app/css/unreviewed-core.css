@@ -137,6 +137,11 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 tr.connection .smssync-lastconnected { font-weight:bold; }
 tr.connection.receiveOnly .btn.test { display:none; }
 
+.progress { float:right; }
+.updating { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding:18px 10px 10px 10px; }
+
+ul.sortable.checklist { width:50%; }
+
 #modalBox #importForm h3 { font-weight: bold; margin-bottom: 5px; }
 #modalBox #importForm input[type='file'] { margin-top: 10px; }
 #modalBox #importForm label[for='importCsvFile'] { font-style: italic; }
