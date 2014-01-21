@@ -144,3 +144,6 @@ tr.connection.receiveOnly .btn.test { display:none; }
 .saving-state-message { display:inline-block; float:right; text-align:right; margin:37px 0 0 0; color:#808080; }
 .contact_footer_controls { max-width:62%; }
 
+#message-detail-buttons a { display:block; text-align:left; }
+.other-actions .ui-selectmenu-wrapper { display:block; }
+
