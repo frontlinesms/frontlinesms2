@@ -94,7 +94,7 @@ input[type=text]:-moz-input-placeholder,
 input[type=text]:-ms-input-placeholder {
 	color:#bbb; font-style:italic; }
 
-#body.contacts #detail #single-contact #action-buttons { margin-top:20px; }
+#body.contacts #detail #single-contact #action-buttons { display:inline-block; vertical-align:top; margin-top:20px; }
 #body.contacts #detail #single-contact #action-buttons .icon-envelope,
 #body.contacts #detail #single-contact #action-buttons .icon-remove,
 #body.contacts #detail #single-contact #action-buttons .icon-remove-sign {
@@ -140,4 +140,7 @@ tr.connection.receiveOnly .btn.test { display:none; }
 #modalBox #importForm h3 { font-weight: bold; margin-bottom: 5px; }
 #modalBox #importForm input[type='file'] { margin-top: 10px; }
 #modalBox #importForm label[for='importCsvFile'] { font-style: italic; }
+
+.saving-state-message { display:inline-block; float:right; text-align:right; margin:37px 0 0 0; color:#808080; }
+.contact_footer_controls { max-width:62%; }
 

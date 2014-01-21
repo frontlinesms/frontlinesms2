@@ -86,20 +86,23 @@
 			</td>
 		</tr>
 	</table>
-	<div id="action-buttons" class="buttons">
-		<g:if test="${contactInstance?.id}">
-			<g:link url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
-				<i class="icon-remove-sign"></i>
-				<span><g:message code="contact.action.delete"/></span>
-			</g:link>
-		</g:if>
-		<g:if test="${contactInstance?.id}">
-			<g:actionSubmit class="stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
-		</g:if>
-		<g:else>
-			<g:actionSubmit class="stroked save" action="saveContact" value="${g.message(code:'action.save')}"/>
-			<g:link class="cancel stroked" action="index"><g:message code="action.cancel"/></g:link>
-		</g:else>
+	<div class="contact_footer_controls">
+		<div id="action-buttons" class="buttons">
+			<g:if test="${contactInstance?.id}">
+				<g:link url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
+					<i class="icon-remove-sign"></i>
+					<span><g:message code="contact.action.delete"/></span>
+				</g:link>
+			</g:if>
+			<g:if test="${contactInstance?.id}">
+				<g:actionSubmit class="stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
+			</g:if>
+			<g:else>
+				<g:actionSubmit class="stroked save" action="saveContact" value="${g.message(code:'action.save')}"/>
+				<g:link class="cancel stroked" action="index"><g:message code="action.cancel"/></g:link>
+			</g:else>
+		</div>
+		<span class="saving-state-message"></span>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
 		<div id="contact-infos">
