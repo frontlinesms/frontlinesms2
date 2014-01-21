@@ -1,4 +1,4 @@
-var routing = function() {
+var routing = (function() {
 	var
 	init = function () {
 		$('input[name^="routeRule"]').change(handleChange);
@@ -8,7 +8,7 @@ var routing = function() {
 	handleChange = function() {
 		var checkedBoxCount = $('input[name^="routeRule"]:checked').size(),
 		totalBoxCount = $('input[name^="routeRule"]').size();
-		showOrHideWarning(totalBoxCount > 0 && checkedBoxCount == 0);
+		showOrHideWarning(totalBoxCount > 0 && checkedBoxCount === 0);
 	},
 	initializeChangeListeners = function() {
 		$('input[name^="routeRule"]')
@@ -28,12 +28,13 @@ var routing = function() {
 	updateRoutingRules = function() {
 		var routingForm = $("#routing-form"),
 			formUrl = routingForm.attr("action"),
-			routingUseOrder = [];
+			routingUseOrder = [],
+			formData = routingForm.serialize();
 		routingForm.find("input[type=checkbox]:checked").each(function() {
 			routingUseOrder.push($(this).val());
 		});
 		routingForm.find("input[name=routingUseOrder]").val(routingUseOrder.join());
-		var formData = routingForm.serialize();
+
 		$.ajax({
 			url : formUrl,
 			type : "post",
@@ -41,19 +42,21 @@ var routing = function() {
 			success : function(data) {
 				var progressIndicator = routingForm.find(".progress.updating");
 				progressIndicator.removeClass("updating");
-				progressIndicator.addClass("icon-ok")
-				progressIndicator.fadeOut(1000, function() { $(this).removeClass("icon-ok").css("display", "") });
+				progressIndicator.addClass("icon-ok");
+				progressIndicator.fadeOut(1000, function() { $(this).removeClass("icon-ok").css("display", ""); });
 			}
 		});
 	},
 	showOrHideWarning = function(hasError) {
 		var warningElement = $('p.warning_message');
-		if(hasError)
+		if(hasError) {
 			warningElement.removeClass("hidden");
-		else
+		}
+		else {
 			warningElement.addClass("hidden");
+		}
 	};
 	return {
 		init: init
 	};
-}();
+}());
