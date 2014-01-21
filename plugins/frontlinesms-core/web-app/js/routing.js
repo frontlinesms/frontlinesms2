@@ -12,20 +12,20 @@ var routing = function() {
 	},
 	initializeChangeListeners = function() {
 		$('input[name^="routeRule"]')
-			.change(showUploadInProgressSpinner)
-			.change(uploadRoutingRules);
+			.change(showUpdateInProgressSpinner)
+			.change(updateRoutingRules);
 		$("ul.sortable.checklist").sortable({
-			update : function(event, ui) {
-				uploadRoutingRules();
+			update: function(event, ui) {
+				updateRoutingRules();
 				$(ui.item).find(".progress").addClass("updating");
 			}
 		});
 	},
-	showUploadInProgressSpinner = function() {
+	showUpdateInProgressSpinner = function() {
 		var checkBox = $(this);
 		checkBox.parent().find(".progress").addClass("updating");
 	},
-	uploadRoutingRules = function() {
+	updateRoutingRules = function() {
 		var routingForm = $("#routing-form"),
 			formUrl = routingForm.attr("action"),
 			routingUseOrder = [];
