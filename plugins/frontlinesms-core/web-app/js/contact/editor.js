@@ -204,11 +204,16 @@ var ContactEditor = function() {
 	}
 
 	function showUnsavedChangesMessage() {
-		setSavingStateMessage("contact.status.unsaved");
+		var newFormHash = contactEditForm.serialize().hashCode();
+		if(newFormHash !== cachedFormHash) {
+			setSavingStateMessage("contact.status.unsaved");
+		}
 	}
 
 	function showSuccessfullySavedMessage() {
-		setSavingStateMessage("contact.status.saved", Date());
+		var saveDate = new Date();
+		setSavingStateMessage("contact.status.saved", ("0" + saveDate.getHours()).slice(-2)   + ":" + 
+				    ("0" + saveDate.getMinutes()).slice(-2));
 	}
 
 	function checkMobileNumberForNonNumericCharacters() {
