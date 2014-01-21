@@ -548,6 +548,14 @@ class NewFeaturesDialog extends MediumPopup {
 	}
 }
 
+class ImportContactDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("contact.import.label")
+	}
+	static content = {
+	}
+}
+
 class AutoforwardCreateDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains("autoforward") || popupTitle.contains("wizard.fmessage.edit.title")

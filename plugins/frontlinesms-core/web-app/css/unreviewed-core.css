@@ -37,6 +37,7 @@ fieldset.table { display:table; }
 
 .remove-command { margin-left:5px; }
 
+#body.contacts ul.submenu li { padding-top: 5px; padding-bottom: 0px; }
 #body.contacts #detail #single-contact .buttons { margin:10px 0; }
 #body.contacts #detail #single-contact td label:nth-child(1) { font-style:italic; color:#444; display:inline-block; height:100%; }
 
@@ -136,5 +137,10 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 tr.connection .smssync-lastconnected { font-weight:bold; }
 tr.connection.receiveOnly .btn.test { display:none; }
 
+#modalBox #importForm h3 { font-weight: bold; margin-bottom: 5px; }
+#modalBox #importForm input[type='file'] { margin-top: 10px; }
+#modalBox #importForm label[for='importCsvFile'] { font-style: italic; }
+
 .saving-state-message { display:inline-block; float:right; text-align:right; margin:37px 0 0 0; color:#808080; }
 .contact_footer_controls { max-width:62%; }
+
