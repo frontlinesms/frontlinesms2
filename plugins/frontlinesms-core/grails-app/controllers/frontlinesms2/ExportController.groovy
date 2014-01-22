@@ -121,7 +121,7 @@ class ExportController extends ControllerUtils {
 	private def generateContactReport(contactInstanceList) {
 		List fields = ["name", "mobile", "email", "notes", "groupMembership"]
 		Map labels = params.format == "csv" ? 
-			["name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes", "groupMembership":"Group(s)"]
+			["name":"Name", "mobile":"Mobile Number", "email":"Email", "notes":"Notes", "groupMembership":"Group(s)"]
 			: ["name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes'), "groupMembership":message(code: 'export.contact.groups')]
 		// add custom fields
 		def customFields = CustomField.getAllUniquelyNamed()

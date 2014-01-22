@@ -151,3 +151,4 @@ ul.sortable.checklist { width:50%; }
 
 #message-detail-buttons a { display:block; text-align:left; }
 
+div#main-nav span#inbox-indicator.gray-out { background-color:#ccc; }

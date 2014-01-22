@@ -3,11 +3,11 @@
 	<div id="main-nav">
 		<ul>
 			<fsms:tab controller="message" mainNavSection="${mainNavSection}">
-				<span id="inbox-indicator" class="">${frontlinesms2.TextMessage.countTotalUnreadMessages()}</span>
+				<span id="inbox-indicator" class="${frontlinesms2.TextMessage.countTotalUnreadMessages() == 0 ? 'gray-out':''}">${frontlinesms2.TextMessage.countTotalUnreadMessages()}</span>
 			</fsms:tab>
 			<fsms:tab controller="archive" mainNavSection="${mainNavSection}"/>
 			<fsms:tab controller="contact" mainNavSection="${mainNavSection}"/>
-			<fsms:tab controller="status" mainNavSection="${mainNavSection}">
+			<fsms:tab controller="connection" mainNavSection="${mainNavSection}">
 				<fsms:trafficLightStatus/>
 			</fsms:tab>
 			<fsms:tab controller="search" mainNavSection="${mainNavSection}"/>

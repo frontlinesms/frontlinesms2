@@ -11,7 +11,7 @@ import ezvcard.*
 class ImportController extends ControllerUtils {
 	private final MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
-					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
+					'Email':'email', 'Group(s)':'groups', 'Notes':'notes']
 	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard', vcfDepricated:'text/directory']
 
 	def importData() {

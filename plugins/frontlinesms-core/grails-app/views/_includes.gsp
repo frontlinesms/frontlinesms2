@@ -25,6 +25,8 @@
 	};
 
 	new Image().src = "${r.resource(dir:'images', file:'status/red.png')}";
+	new Image().src = "${r.resource(dir:'images', file:'chosen-sprite.png')}";
+
 
 	<fsms:render template="/i18n"/>
 

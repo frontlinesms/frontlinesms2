@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.ConnectionStatus" %>
 <html>
 <head>
-	<meta name="layout" content="settings"/>
+	<meta name="layout" content="connection"/>
 	<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
 </head>
 <body>
