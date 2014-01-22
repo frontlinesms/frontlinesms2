@@ -106,6 +106,20 @@ grails.project.dependency.resolution = {
 		}
 		build ':bails:0.6'
 		compile ':font-awesome-resources:3.2.1.3'
+
+		// FIXES as per http://stackoverflow.com/questions/14581009/unknown-plugin-included-in-war-when-building
+		test ':build-test-data:2.0.5', {
+			export = false
+		}
+		test ':remote-control:1.4', {
+			export = false
+		}
+		test ':geb:latest', {
+			export = false
+		}
+		runtime ':frontlinesms-core:latest.integration', {
+			export = false
+		}
 	}
 }
 
