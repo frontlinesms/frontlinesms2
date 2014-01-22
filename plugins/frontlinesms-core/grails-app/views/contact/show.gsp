@@ -20,9 +20,12 @@
 		<div class="content">
 			<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
 			<g:hiddenField name="contactsSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
-			<g:if test="${contactInstance || !contactsSection}">
+			<g:if test="${contactInstance}">
 				<fsms:render template="single_contact"/>
 			</g:if>
+			<g:else>
+				<p class="no-content"><g:message code="contact.list.no.selected"/></p>	
+			</g:else>
 			<fsms:render template="multiple_contact"/>
 		</div>
 	</body>
