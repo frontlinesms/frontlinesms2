@@ -1,3 +1,5 @@
+import grails.util.BuildScope
+
 includeTargets << grailsScript("Init") << grailsScript("War")
 
 def envCheck = {
@@ -46,11 +48,16 @@ target(clearPluginXmls: 'Delete plugin.xml from all in-place plugins') {
 }
 
 target(main: 'Build installers for various platforms.') {
+	buildScope = BuildScope.WAR
 	clearPluginXmls()
 	envCheck()
 	if(!getValueAsBoolean('confirmNotProd', grailsSettings.grailsEnv == 'production')) {
 		input('Press Return to continue building...')
 	}
+	// begin horrible manual cleaning
+	new File('FrontlinesmsCoreGrailsPlugin.groovy').delete()
+	new File('.', 'target').deleteDir()
+	// end horrible manual cleaning
 	if(getValueAsBoolean('skipWar', false)) {
 		if(grailsSettings.grailsEnv == 'production') {
 			println "CANNOT SKIP WAR BUILD FOR PRODUCTION"
@@ -62,10 +69,6 @@ target(main: 'Build installers for various platforms.') {
 	} else {
 		depends(clean, war)
 	}
-	// begin horrible manual cleaning
-	new File('FrontlinesmsCoreGrailsPlugin.groovy').delete()
-	new File('.', 'target').deleteDir()
-	// end horrible manual cleaning
 	if(!isWindows()) if(getValueAsBoolean('compress', grailsSettings.grailsEnv == 'production')) {
 		println 'Forcing compression of installers...'
 		doScript 'enable_installer_compression'
