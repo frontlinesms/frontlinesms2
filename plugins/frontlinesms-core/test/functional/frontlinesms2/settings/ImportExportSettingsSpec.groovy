@@ -37,7 +37,7 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 		when:
 			skipToReview()
 		then:
-			[["Name","Mobile Number","E-mail Address","Notes","Group(s)"],
+			[["Name","Mobile Number","Email","Notes","Group(s)"],
 			["Kama","+123456789",'','',""],
 			["Vernerck","+447944888888",'','',""],
 			["Joe-Free","+254701000000",'','',""]].eachWithIndex { rowValue, rowIndex ->
@@ -62,7 +62,7 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 
 	private def createTestUpload(csvContent=null) {
 		def csvString = csvContent?:"""\
-"Name","Mobile Number","E-mail Address","Notes","Group(s)"
+"Name","Mobile Number","Email","Notes","Group(s)"
 "Kama","+123456789",,,""
 "Vernerck","+447944888888",,,""
 "Joe-Free","+254701000000",,,""

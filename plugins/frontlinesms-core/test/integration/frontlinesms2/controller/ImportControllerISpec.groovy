@@ -16,7 +16,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Uploading a contacts CSV file should create new contacts and groups in the database'() {
 		when:
-			importContactCsv('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
+			importContactCsv('''"Name","Mobile Number","Other Mobile Number","Email","Current Status","Notes","Group(s)"
 "Alice Sihoho","+254728749000","","","true","","/ToDo/Work"
 "Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
 "anyango Gitu","+254727689908","","","true","","/isIt\\\\/ToDo/Work/jobo"
@@ -29,7 +29,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'Uploading a contacts CSV file with failed contacts should create failed contacts in a file'() {
 		given:
-			importContactCsv('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
+			importContactCsv('''"Name","Mobile Number","Other Mobile Number","Email","Current Status","Notes","Group(s)"
 "Alice Sihoho254728749000","","","true","","/ToDo/Work"
 "Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
 "anyango Gitu","+254727689908","","","true","","/isIt\\/ToDo/Work/jobo"
@@ -43,13 +43,13 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			// check that headers are correctly set
 			controller.response.getHeader('Content-disposition') == 'attachment; filename=failedContacts.csv'
 			// check that body is correcty set
-			controller.response.contentAsString == '''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
+			controller.response.contentAsString == '''"Name","Mobile Number","Other Mobile Number","Email","Current Status","Notes","Group(s)"
 "Alice Sihoho254728749000","","","true","","/ToDo/Work"
 '''
 	}
 	def 'uploading contacts with backslash characters should unfortunately interpret them as separate groups'() {
 		when:
-			importContactCsv('''"Name","Mobile Number","E-mail Address","Notes","Group(s)","lake","town"
+			importContactCsv('''"Name","Mobile Number","Email","Notes","Group(s)","lake","town"
 "Alex","0702597711",,,"\\o/ team",,
 "Enock","0711756950",,,"\\o/ team",,
 "Geoff","0725675317",,,"\\o/ team",,
