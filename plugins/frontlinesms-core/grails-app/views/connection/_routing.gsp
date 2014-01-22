@@ -11,6 +11,7 @@
 						<label for="routeRule-${i}" class="grabber">
 							<g:message code="routing.rule.${it.key}"/>
 							<g:checkBox name="routeRule-${i}" value="${it.key}" checked="${it.value}"/>
+							<span class="progress"></span>
 						</label>
 					</li>
 				</g:if>
@@ -23,12 +24,12 @@
 						<label for="routeRule-${i}" class="grabber">
 							<g:message code="routing.rules.device" args="[it.key.name]" />
 							<g:checkBox name="routeRule-${i}" value="fconnection-${it.key.id}" checked="${it.value}"/>
+							<span class="progress"></span>
 						</label>
 					</li>
 				</g:if>
 			</g:each>
 		</fsms:checkboxGroup>
-		<g:submitButton name="saveRoutingDetails" class="btn" value="${message(code:'action.save')}" />
 	</g:form>
 </div>
 <g:javascript>
