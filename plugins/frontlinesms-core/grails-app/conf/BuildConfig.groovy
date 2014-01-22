@@ -114,10 +114,7 @@ grails.project.dependency.resolution = {
 		test ':remote-control:1.4', {
 			export = false
 		}
-		test ':geb:latest', {
-			export = false
-		}
-		runtime ':frontlinesms-core:latest.integration', {
+		test ':geb:0.7.2', {
 			export = false
 		}
 	}
