@@ -22,6 +22,10 @@ html { height:100%; width:100%; }
 #body.settings #body-content-container > * { width:100%; }
 #body.settings #body-content-head { background-color:#f04; }
 
+#body.connection #body-content-container { left:0; right:0; background-color:#fff; }
+#body.connection #body-content-container > * { width:100%; }
+#body.connection #body-content-head { background-color: #fff;  }
+
 #system-menu { position:absolute; right:0; top:0; }
 #system-menu li { display:inline-block; }
 

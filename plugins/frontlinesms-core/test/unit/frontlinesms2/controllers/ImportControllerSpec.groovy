@@ -45,7 +45,7 @@ class ImportControllerSpec extends Specification {
 	def 'failedContacts should trigger a download for a file named failedContacts.csv'() {
 		given:
 			controller.params.failedContacts = '''\
-			"Name","Mobile Number","E-mail Address","Notes","Group(s)","lake","town"
+			"Name","Mobile Number","Email","Notes","Group(s)","lake","town"
 			"Alice","+123456789","","","Friends\\Not Cats","Victoria",""
 			"Bob","+198765432","","","Friends\\Not Cats","","Kusumu"
 			"Kate","+198730948","","","","",""
