@@ -45,6 +45,7 @@
 		data = data.inbox_unread;
 		if(!data) { return; }
 		$('#inbox-indicator').html(data);
+		$('#inbox-indicator').removeClass('allRead');
 	});
 
 
