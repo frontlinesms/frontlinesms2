@@ -196,7 +196,7 @@ var ContactEditor = function() {
 			}
 		}
 
-		$("#contact-infos a.send-message").toggleClass("hidden", val !== "");
+		$("#contact-infos a.send-message").toggleClass("hidden", val === "");
 	}
 
 	function setSavingStateMessage(messageCode, args) {
