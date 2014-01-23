@@ -147,7 +147,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			singleMessageDetails.forward.click()
 			waitFor { at QuickMessageDialog }
 		then:
-			waitFor { compose.textArea.text() == "test" }
+			waitFor { textArea.text() == "test" }
 	}
 
 	def "message details should show the name of the route the message was received through"() {
@@ -192,21 +192,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			waitFor { singleMessageDetails.text == "hi Alice" }
 	}
 
-	def "should skip recipients tab if a message is replied"() {
-		given:
-			createInboxTestMessages()
-		when:
-			to PageMessageInbox, remote { TextMessage.findBySrc('Bob').id }
-		then:
-			singleMessageDetails.reply.click()
-			waitFor { at QuickMessageDialog }
-		when:
-			next.jquery.trigger('click')
-		then:
-			waitFor { confirm.displayed }
-	}
-	
-	def "should show the address of the contact in the confirm screen"() {
+	def "should show the address of the contact in the footer section"() {
 		given:
 			def message = remote {
 				def m = new TextMessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
@@ -217,11 +203,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
-		when:
-			next.jquery.trigger('click')
-			waitFor { confirm.displayed }
-		then:
-			confirm.recipientName == message.src
+			recipientName() == message.src
 	}
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
@@ -236,28 +218,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
-		when:
-			next.jquery.trigger('click')
-			waitFor { confirm.displayed }
-		then:
-			confirm.recipientName == message.srcName
-	}
-
-	def "should skip recipients tab for reply-all option"() {
-		given:
-			createInboxTestMessages()
-		when:
-			to PageMessageInbox
-			messageList.selectAll.click()
-			waitFor { multipleMessageDetails.replyAll.displayed }
-			multipleMessageDetails.replyAll.click()
-		then:
-			waitFor { at QuickMessageDialog }
-			compose.displayed
-		when:
-			next.click()
-		then:
-			waitFor { confirm.displayed }
+			recipientName() == message.srcName
 	}
 
 	def "should remain in the same page, after moving the message to the destination folder"() {
