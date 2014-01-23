@@ -1,12 +1,11 @@
 #/bin/bash
 
-generateZip=false
-
 OPTIND=1
+generateZip=false
 
 while getopts "z:" opt; do
 	case $opt in
-		z) generateZip=$OPTARG
+		z) generateZip=true
 			;;
 	esac
 done
@@ -29,6 +28,13 @@ for f in $(ls web-app/images | grep help --invert-match); do
 	rm -rf "$tempDir/images/$f"
 done
 
+if $generateZip; then
+	echo "Generating ZIP archive"
+	zip target/help.zip -r $tempDir
+	echo "Done generating ZIP archive"
+fi
+
 google-chrome "$tempDir"
+
 exit 0
 
