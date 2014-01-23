@@ -102,6 +102,7 @@ var ContactEditor = function() {
 		button.text(" " + i18n("contact.send.message", contactName));
 		button.prepend(buttonKids);
 		showSuccessfullySavedMessage();
+		updateLastSavedValue();
 	},
 	handleFailureResponse = function(event, data) {
 		var
@@ -224,6 +225,23 @@ var ContactEditor = function() {
 				.showIf(nonNumericCharactersFound, "fast");
 	}
 
+	function addRevertToLastSavedValueListener() {
+		if(event.keyCode == 27) {
+			var element = $(this);
+			var lastSavedValue = element.attr("lastSavedValue");
+			element.val(lastSavedValue);
+			element.trigger("blur");
+			savingStateMessage.html("");
+		}
+	}
+
+	function updateLastSavedValue() {
+		$.each($(".edit input[type=text], .edit textarea"), function(index, element) {
+			var element = $(element);
+			element.attr("lastsavedvalue", element.val());
+		});
+	}
+
 //> CUSTOM FIELD STUFF START
 	this.checkCustomFieldResult = function(json) {
 		var name, i;
@@ -311,6 +329,7 @@ var ContactEditor = function() {
 		cachedFormHash = contactEditForm.serialize().hashCode();
 		$("#notes").autosize();
 
+		$(".edit input[type=text], .edit textarea").keyup(addRevertToLastSavedValueListener);
 		$("input[name=mobile]")
 				.focus(removeNonNumericCharacters)
 				.keyup(validateMobile)
@@ -328,6 +347,7 @@ var ContactEditor = function() {
 				.blur(updateContactData)
 				.keyup(showUnsavedChangesMessage);
 			$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
+			$(".edit input[type=text], .edit textarea").keyup(addRevertToLastSavedValueListener);
 		});
 		$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
 
