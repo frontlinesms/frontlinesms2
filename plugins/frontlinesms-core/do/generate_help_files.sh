@@ -12,17 +12,23 @@ while getopts "z:" opt; do
 done
 
 tempDir="`mktemp -d`"
-cp -r "grails-app/conf/help" $tempDir
-tree "$tempDir"
+cp -r grails-app/conf/help/* $tempDir
+cp -r web-app/* $tempDir
 for f in $(find $tempDir -name \*.txt); do
-	echo "$f.html"
 	filename=$(basename "$f")
 	filenameWithoutExtension="${filename%.*}"
-	echo $filenameWithoutExtension
 	pandoc --from=markdown --to=html $f -o $f.html
 	rm $f
-	echo "\n"
 done
+
+for f in $(ls web-app | grep images --invert-match); do
+	rm -rf "$tempDir/$f"
+done
+
+for f in $(ls web-app/images | grep help --invert-match); do
+	rm -rf "$tempDir/images/$f"
+done
+
 google-chrome "$tempDir"
 exit 0
 
