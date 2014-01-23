@@ -42,7 +42,9 @@
 			</p></div>
 		</div>
 		<fsms:render template="/message/message_actions"/>
-		<fsms:render template="/message/other_actions"/>
+		<g:if test="${activityInstanceList || folderInstanceList}">
+			<fsms:render template="/message/other_actions"/>
+		</g:if>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>
