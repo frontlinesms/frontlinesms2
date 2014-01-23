@@ -83,8 +83,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			to PageMessageAnnouncement, 'New Office', remote { TextMessage.findBySrc('Max').id }
 			singleMessageDetails.forward.click()
 		then:
-			waitFor { at QuickMessageDialog }
-			compose.textArea.text() == "I will be late"
+			waitFor { at QuickMessageDialog && textArea.text() == "I will be late" }
 	}
 
 	def "message count displayed when multiple messages are selected"() {
