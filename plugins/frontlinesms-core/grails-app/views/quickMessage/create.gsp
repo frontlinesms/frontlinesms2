@@ -27,20 +27,19 @@
 	function initializePopup() {
 		$('ul.ui-tabs-nav,buttom#disabledBack').remove();
 		messageComposerUtils.init($('div.message-composer'));
+		$('select[name=recipients],textarea[name=messageText').change(updateRecipientAndMessageStats);
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				var value = $("#messageText").val().htmlEncode();
-				$("#confirm-message-text").html(value || "-"); // FIXME i18n
-				recipientSelecter.fetchRecipientCount();
-				console.log(recipientSelecter.getRecipientCount())
-				return (recipientSelecter.getRecipientCount() > 0);
+				var value = $("textarea[name=messageText]").val().htmlEncode();
+				return (recipientSelecter.getRecipientCount() > 0 && value.length > 0);
 			}
 		});
 		updateRecipientAndMessageStats()
 	}
 
 	function updateRecipientAndMessageStats() {
-		//TODO should update the stats in the footer. Will now be called on change of recipients and message text
+		var recipientCount = recipientSelecter.getRecipientCount();
+		$('#contacts-count').html(recipientCount);
 	}
 
 	function addFlashMessage(data) {
