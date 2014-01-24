@@ -64,7 +64,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 			multipleMessageDetails.replyAll.click()
 		then:
 			waitFor("veryslow") { at QuickMessageDialog }
-			waitFor("veryslow") { compose.textArea.displayed }
+			waitFor("veryslow") { textArea.displayed }
 	}
 
 	def "'Forward' button still work when all messages are unchecked"() {
@@ -85,7 +85,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 			singleMessageDetails.forward.click()
 		then:
 			waitFor("veryslow") { at QuickMessageDialog }
-			waitFor("veryslow") { compose.textArea.jquery.val() == "hi Alice" }
+			waitFor("veryslow") { textArea.jquery.val() == "hi Alice" }
 	}
 	
 	def "should set row as selected when a message is checked"() {

@@ -8,7 +8,7 @@ If you have a large number of contacts to import, then you can use a different m
 
 The column headings should follow the example in the screenshot below. Note that "group" is optional; it will be interpreted by FrontlineSMS as a group tag for the contact.
 
-**Note: the column headings must be exact (e.g. 'Email', not 'email address').**
+**Note: the column headings must be exact (e.g. 'E-mail Address', not 'email address').**
 
 ![Importing Multiple Contacts Headings][2]
 

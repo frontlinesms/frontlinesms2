@@ -1,0 +1,70 @@
+#!/bin/bash
+
+generateZip=false
+gitTree=false
+showHelp=false
+sshURL="frontlin@frontlinesms.com"
+pushToServer=false
+
+OPTIND=1
+
+while getopts "zt:ps:h" opt; do
+	case $opt in
+		t) gitTree=$OPTARG
+			;;
+		z) generateZip=$OPTARG
+			;;
+		h) showHelp=$OPTARG
+			;;
+		p) pushToServer=true
+			;;
+		s) sshURL=$OPTARG
+			;;
+	esac
+done
+
+if $showHelp; then
+	echo "Ahoy! I am the FrontlineSMS Help File Build script"
+	echo "usage: do/help/build [options]"
+	echo "	-h: Show this help text and exit"
+	echo "	-t <git hash>: The git tree or index to checkout"
+	echo "	-z: Set to generate a zip archive of the help files"
+	echo "	-p: Push to help.frontlinesms.com"
+	echo "	-s <username@server>: SSH URL to push to. $sshURL by default"
+	exit 0
+fi
+
+tempDir="`mktemp -d`"
+cp -r grails-app/conf/help/* $tempDir
+cp -r web-app/* $tempDir
+for f in $(find $tempDir -name \*.txt); do
+	filename=$(basename "$f")
+	filenameWithoutExtension="${filename%.*}"
+	pandoc --from=markdown --to=html $f -o $(dirname ${f})/$filenameWithoutExtension
+	rm $f
+done
+
+for f in $(ls web-app | grep images --invert-match); do
+	rm -rf "$tempDir/$f"
+done
+
+for f in $(ls web-app/images | grep help --invert-match); do
+	rm -rf "$tempDir/images/$f"
+done
+
+mkdir -p target/generated_help; cp -r $tempDir/* $_
+
+if $generateZip; then
+	echo "Generating ZIP archive"
+	zip target/help.zip -r $tempDir
+	echo "ZIP saved at target/help.zip"
+fi
+
+if $pushToServer; then
+	scp -rp ./target/generated_help $sshURL:subdomains/help/httpdocs/manuals/generated_help
+fi
+
+google-chrome target/generated_help
+
+exit 0
+

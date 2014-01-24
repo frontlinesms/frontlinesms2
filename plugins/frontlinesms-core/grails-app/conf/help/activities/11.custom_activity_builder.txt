@@ -1,0 +1,79 @@
+# Using the Custom Activity Builder
+
+FrontlineSMS offers a number of ways to create rules to help sort your incoming messages. One of the most powerful tools is the Custom Activity Builder, which lets you trigger multiple actions once a message is received, such as moving the sender to a different group, replying to the message, and/or forwarding the message. You can do any or all of these activities at the same time.
+
+The possibilities for the Custom Activity Builder are nearly limitless. In this help file, we'll show you how to navigate the Custom Activity Builder step-by-step, and walk through a simple example to show you how it works.
+ 
+1. In your inbox, select 'Create New Activity' on the left-hand side of the screen.
+
+You can see the button in the screenshot below:
+
+![Create Custom Activity][1]
+
+2. Now select Custom Activity Builder from the set of options in the list.
+
+We've circled the option in the screenshot above.
+
+3. Determine whether or not you want to use a 'Keyword' to help automatically sort incoming messages.
+
+A keyword is a word that tells FrontlineSMS to take a specific action with your messages, such as adding the sender to a group, or filing the message under the activity. For instance, if you were asking people for their favorite color, the keyword might be "Color." If someone responds with "Color blue," then their response will be sorted as per your instructions, rather than simply appearing in the inbox. Alternatively, you can choose to have no keyword.
+
+*Note: selecting 'Do Not Use A Keyword' means that any messages coming into the system will be associated with your activity -- unless they have a keyword you've associated with some other activity. In other words, any messages without a keyword will be sorted here. Use caution when selecting this option, as unintended messages may wind up being sorted here.*
+
+If you choose "Do not automatically sort messages," then you will need to manually send messages to the activity at a later point.
+
+If you want a keyword, enter the word of your choice, then click 'next.'
+
+Here is a screenshot in which we've assigned the keyword, "Color."
+
+![Custom Activity Keyword][2]
+
+4. Determine how you want the messages to behave.
+
+This is where the Custom Activity Builder gets exciting, because you can make messages trigger any number of actions.
+
+For instance, let's assume we have a group of people with "no color preference." But someone now sends a message with the phrase, "Color blue." We now know that person has a favorite color!
+
+First, we can automatically add them to a group that says "Specific color preference." You can select "add sender to group" -- in our case the group is "Specific color preference" -- as indicated in the screenshot.
+
+![Custom Activity Dropdown][3]
+
+Now you will be given the choice on which group the sender should join.
+
+![Custom Activity Group Add][4]
+
+*Note: you will need to have already created a group in advance for this to work.*
+
+In our example, we'll add someone to the group 
+
+Now, we might also want to remove them from another group, in this case "No color preference."
+
+So, we can add a step by selecting another action from the drop-down menu, as indicated in the screenshot.
+
+![Custom Activity Group Remove][6]
+
+Now you can see the list of your actions in the screenshot below. If you change your mind and want to remove an action, you can simply click the 'x' on the right-hand side of the action.
+
+If you're satisfied with your plan, then click 'Next.'
+
+![Editing Custom Activity][7]
+
+5. Name your activity, then save.
+
+Finally, choose a name for your activity and save. Once you've done this, you're finished! Messages will behave as instructed.
+
+![Custom Activity Save][8]
+
+[1]: ../images/help/CustomActivityBuilder/CreateCustomActivity.png
+[2]: ../images/help/CustomActivityBuilder/CABKeyword.png
+[3]: ../images/help/CustomActivityBuilder/CABAddStep.png
+[4]: ../images/help/CustomActivityBuilder/CABSelectGroup.png
+[5]: ../images/help/CustomActivityBuilder/CABRemoveFromGroup.png
+[6]: ../images/help/CustomActivityBuilder/CABRemoveFromGroup.png
+[7]: ../images/help/CustomActivityBuilder/EditingCAB.png
+[8]: ../images/help/CustomActivityBuilder/CABSave.png
+
+
+
+
+

@@ -3,7 +3,7 @@ import groovy.io.FileType
 String markdownLinkMatcher = /\[(\d+)\]: (\S+(?:\/\S+)*)/
 // FIXME this doesn't work right now for matching link references inline if there are multiple links on the same line in inline text.
 String inlineLinkMatcher = /.*\[(\d+)\].*/
-File helpDir = new File("web-app", "help")
+File helpDir = new File("grails-app", "conf/help")
 File imageDir = new File("web-app", "images/help")
 File indexFile = new File("grails-app/views/help", "_index.gsp")
 

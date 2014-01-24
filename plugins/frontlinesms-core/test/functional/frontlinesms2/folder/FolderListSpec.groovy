@@ -96,8 +96,7 @@ class FolderListSpec extends FolderBaseSpec {
 			singleMessageDetails.forward.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
-			at QuickMessageDialog
-			waitFor { compose.textArea.text() == "I will be late" }
+			textArea.text() == "I will be late"
 	}
 
 	def "message count displayed when multiple messages are selected"() {
