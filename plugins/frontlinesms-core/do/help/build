@@ -31,7 +31,7 @@ done
 if $generateZip; then
 	echo "Generating ZIP archive"
 	zip target/help.zip -r $tempDir
-	echo "Done generating ZIP archive"
+	echo "ZIP saved at target/help.zip"
 fi
 
 google-chrome "$tempDir"
