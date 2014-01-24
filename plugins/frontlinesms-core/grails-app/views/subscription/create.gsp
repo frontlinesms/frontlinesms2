@@ -11,4 +11,3 @@
 				/subscription/confirm,
 				/subscription/save,
 				/subscription/validate"/>
-
