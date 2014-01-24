@@ -15,6 +15,6 @@ The configuration details required to connect to an SMSC vary from case to case.
 
 All fields except the name should be populated with values provided by the other party.
 
-[1]: ../settings/smssync
+[1]: ../settings/9.smssync
 [2]: ../settings/4.setting_up_a_device
 

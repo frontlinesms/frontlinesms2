@@ -7,6 +7,7 @@ import serial.NoSuchPortException
 class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 	def fconnectionService
 	def i18nUtilService
+	def appSettingsService
 	
 	/**
 	 * Handles completion of detection of a device on a database port.
@@ -70,6 +71,7 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 								serial:detector.serial, imsi:detector.imsi)
 						.save(flush:true, failOnError:true)
 				log "Created new SmslibFconnection: $name"
+				addConnectionToRoutingRules(connectionToStart)
 			}
 		}
 		if(connectionToStart) {
@@ -81,6 +83,13 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 		SmslibFconnection.withNewSession { SmslibFconnection.findAll().each { c ->
 			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
 		} }
+	}
+
+	private addConnectionToRoutingRules(connection) {
+		def connectionUseSetting = appSettingsService['routing.use']
+		appSettingsService['routing.use'] = connectionUseSetting?
+			"$connectionUseSetting,fconnection-$connection.id":
+			"fconnection-$connection.id"
 	}
 
 	private boolean isPortVisible(String portName) {

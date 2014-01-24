@@ -11,7 +11,7 @@
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
-				<g:textField name="name" value="${contactInstance?.name}" class="${contactInstance?.id?'':'mobileOrNameRequired'}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
+				<g:textField name="name" value="${contactInstance?.name}" class="${contactInstance?.id?'':'mobileOrNameRequired'}" placeholder="${g.message(code:'contact.field.name.placeholder')}" lastsavedvalue="${contactInstance?.name}"/>
 				<label for="name" class="icon-edit"></label>
 			</td>
 		</tr>
@@ -21,14 +21,14 @@
 				<g:if test="${contactInstance}">
 					<i class="${contactInstance.flagCSSClasses}"></i>
 				</g:if>
-				<g:textField data-nonPrettyPhoneNumber="${contactInstance?.mobile?.trim()}" data-prettyPhoneNumber="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
+				<g:textField data-nonPrettyPhoneNumber="${contactInstance?.mobile?.trim()}" data-prettyPhoneNumber="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}" lastsavedvalue="${contactInstance?.mobile}"/>
 				<label for="mobile" class="icon-edit"></label>
 			</td>
 		</tr>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
-				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" placeholder="${g.message(code:'contact.field.email.placeholder')}"/>
+				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" placeholder="${g.message(code:'contact.field.email.placeholder')}" lastsavedvalue="${contactInstance?.email?:''}"/>
 				<label for="email" class="icon-edit"></label>
 			</td>
 		</tr>
@@ -55,7 +55,7 @@
 		<tr id="note-area" class="input basic-info editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
 			<td>
-				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
+				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}" lastsavedvalue="${contactInstance?.notes?:''}"/>
 				<label for="notes" class="icon-edit"></label>
 			</td>
 		</tr>
