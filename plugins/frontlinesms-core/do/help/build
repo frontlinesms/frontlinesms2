@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 OPTIND=1
 generateZip=false
