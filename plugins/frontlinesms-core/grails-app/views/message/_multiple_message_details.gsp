@@ -53,5 +53,7 @@
 			</g:if>
 		</g:elseif>
 	</div>
-		<fsms:render template="/message/other_actions"/>
+		<g:if test="${activityInstanceList || folderInstanceList}">
+			<fsms:render template="/message/other_actions"/>
+		</g:if>
 </div>

@@ -182,3 +182,8 @@ form#send-quick-message div.confirm table tr+tr {
 form#send-quick-message .quickmessage-composer-instruction {
 	margin-top:22px;
 }
+.api-instructions-title { margin-bottom:2px; }
+.api-url { margin-left:10px; }
+.api-url .url-value { font-weight:bold; font-size:1.2em; }
+.connection-id { margin-left:10px; }
+.connection-id .database-id-value { font-weight:bold; font-size:1.2em; }
