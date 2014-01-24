@@ -12,7 +12,6 @@ messageComposerUtils = (function() {
 		});
 
 		$(messageComposerParent).on('keyup', '.message-composer textarea', function() {
-			console.log($(this));
 			messageComposerUtils.updateCharacterCount($($(this).parent()[0]));
 		});
 	};

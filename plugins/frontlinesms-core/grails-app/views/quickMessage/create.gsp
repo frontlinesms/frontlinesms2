@@ -26,7 +26,7 @@
 <r:script>
 	function initializePopup() {
 		$('ul.ui-tabs-nav,buttom#disabledBack').remove();
-		messageComposerUtils.init($('div.message-composer'));
+		messageComposerUtils.init($('div.message-composer').parent());
 		$('select[name=recipients],textarea[name=messageText').change(updateRecipientAndMessageStats);
 		$("#tabs-1").contentWidget({
 			validate: function() {
