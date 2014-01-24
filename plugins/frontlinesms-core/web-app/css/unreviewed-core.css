@@ -154,6 +154,34 @@ ul.sortable.checklist { width:50%; }
 div#main-nav span#inbox-indicator.gray-out { background-color:#ccc; }
 div#main-nav span#inbox-indicator.allRead { background-color:#aaa; }
 
+form#send-quick-message {
+	margin-left:auto;
+	margin-right:auto;
+}
+form#send-quick-message div.confirm {
+	position:absolute;
+	bottom:0;
+	width:72%;
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+	margin-bottom:60px;
+	padding-top:12px;
+	border-top:1px solid #999;
+}
+form#send-quick-message div.confirm table {
+	margin-left:auto;
+	margin-right:auto;
+}
+form#send-quick-message div.confirm table tr {
+	display:inline-block;
+}
+form#send-quick-message div.confirm table tr+tr {
+	margin-left:10px;
+}
+form#send-quick-message .quickmessage-composer-instruction {
+	margin-top:22px;
+}
 .api-instructions-title { margin-bottom:2px; }
 .api-url { margin-left:10px; }
 .api-url .url-value { font-weight:bold; font-size:1.2em; }
