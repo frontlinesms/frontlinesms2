@@ -1,26 +1,30 @@
 #!/bin/bash
 
-OPTIND=1
 generateZip=false
 gitTree=false
 showHelp=false
 
-while getopts "z:t:h:" opt; do
+OPTIND=1
+
+while getopts "zt:h" opt; do
 	case $opt in
 		t) gitTree=$OPTARG
 			;;
-		z) generateZip=true
+		z) generateZip=$OPTARG
 			;;
-		h) showHelp=true
+		h) showHelp=$OPTARG
 			;;
 	esac
 done
 
+echo Show help $showHelp
+
 if $showHelp; then
 	echo "usage: do/help/build [options]"
-	echo "-h: Show this help text and exit"
-	echo "-t: The git tree or index to checkout"
-	echo "-z: Set to \"true\" to generate a zip archive of the help files"
+	echo "	-h: Show this help text and exit"
+	echo "	-t <git hash>: The git tree or index to checkout"
+	echo "	-z: Set to generate a zip archive of the help files"
+	echo "	-p: Push to help.frontlinesms.com"
 	exit 0
 fi
 
