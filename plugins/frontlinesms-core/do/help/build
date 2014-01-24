@@ -3,10 +3,12 @@
 generateZip=false
 gitTree=false
 showHelp=false
+sshURL="frontlin@frontlinesms.com"
+pushToServer=false
 
 OPTIND=1
 
-while getopts "zt:h" opt; do
+while getopts "zt:ps:h" opt; do
 	case $opt in
 		t) gitTree=$OPTARG
 			;;
@@ -14,10 +16,12 @@ while getopts "zt:h" opt; do
 			;;
 		h) showHelp=$OPTARG
 			;;
+		p) pushToServer=true
+			;;
+		s) sshURL=$OPTARG
+			;;
 	esac
 done
-
-echo Show help $showHelp
 
 if $showHelp; then
 	echo "usage: do/help/build [options]"
@@ -47,10 +51,15 @@ for f in $(ls web-app/images | grep help --invert-match); do
 done
 
 mkdir -p target/generated_help; cp -r $tempDir/* $_
+
 if $generateZip; then
 	echo "Generating ZIP archive"
 	zip target/help.zip -r $tempDir
 	echo "ZIP saved at target/help.zip"
+fi
+
+if $pushToServer; then
+	scp -rp ./target/generated_help $sshURL:subdomains/help/httpdocs/manuals/generated_help
 fi
 
 google-chrome target/generated_help
