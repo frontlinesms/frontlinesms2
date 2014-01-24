@@ -187,3 +187,4 @@ form#send-quick-message .quickmessage-composer-instruction {
 .api-url .url-value { font-weight:bold; font-size:1.2em; }
 .connection-id { margin-left:10px; }
 .connection-id .database-id-value { font-weight:bold; font-size:1.2em; }
+#create_subscription label.error { display:block; }

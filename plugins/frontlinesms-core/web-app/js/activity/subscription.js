@@ -47,10 +47,7 @@ var subscription = (function() {
 					},
 					messageText: {
 						required:true
-					},
-					groupName: {
-						required:true
-					}	
+					}
 				},
 				messages: {
 					addresses: {
@@ -79,9 +76,8 @@ var subscription = (function() {
 		},
 		addCustomValidationClasses = function() {
 			jQuery.validator.addMethod("not-empty", function(value, element) {
-				return ($('#subscriptionGroup').val() !== '');
+				return ($('#subscriptionGroup').val() !== '' && $('#subscriptionGroup').val() != 'create_group');
 			}, i18n("subscription.group.required.error"));
-			jQuery.validator.addMethod('unique-group', function(value, element) {});
 			
 			aliasCustomValidation();
 			genericSortingValidation();
@@ -99,6 +95,7 @@ var subscription = (function() {
 			$('#subscriptionGroup').change(function(){
 				var addGroup = $('.add-group'), groupNameInput = $(addGroup).find('input[name=groupName]');
 				groupNameInput.val('').removeClass('error');
+				groupNameInput.parent().find('label.error').remove();
 				if($(this).val() === 'create_group' && addGroup.hasClass('hide')) {
 					addGroup.removeClass('hide');
 				} else if($(this).val() !== 'create_group') {
@@ -112,13 +109,16 @@ var subscription = (function() {
 					subscriptionGroupSelect = $('#subscriptionGroup'),
 					createGroupOption,
 					optionToAdd;
+				if(groupName == '') {
+					return;
+				}
 				$.ajax({
 					type:'POST',
 					data:{'name': groupName},
 					url: url_root + 'group/save',
 					success: function(data){
 						if(!data.ok) {
-							$('#groupName').addClass('error');
+							$('#groupName').addClass('error').parent().append('<label for="groupName" class="error">' + i18n('group.name.validator.error') + '</label');
 							return;
 						}
 						optionToAdd = $("<option/>",{
@@ -134,6 +134,10 @@ var subscription = (function() {
 						subscriptionGroupSelect.selectmenu();
 					}
 				});
+			});
+			$('#groupName').change(function() {
+				$(this).removeClass('error');
+				$(this).parent().find('label.error').remove();
 			});
 		},
 		init = function() {
