@@ -405,6 +405,12 @@ class SubscriptionGroupTab extends geb.Module {
 			$('select#subscriptionGroup').jquery.val(groupId)
 			$('select#subscriptionGroup').jquery.trigger("change")
 		}
+		createGroup {
+			addToGroup 'create_group'
+		}
+		newGroupName { $('input#groupName') }
+		newGroupSubmit { $('a.create-group') }
+		groupNameError { $('label.error[for=groupName]') }
 	}
 }
 

@@ -133,6 +133,71 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			at SubscriptionCreateDialog
 	}
 
+	def "Can create a new group from the wizard" () {
+		when:
+			launchSubscriptionPopup()
+			waitFor { at SubscriptionCreateDialog }
+		then:
+			!group.newGroupName.displayed
+		when:
+			group.createGroup()
+		then:
+			group.newGroupName.displayed
+		when:
+			group.newGroupName << "myTestGroup"
+			group.newGroupSubmit.click()
+			waitFor {
+				!group.newGroupName.displayed
+			}
+			next.click()
+		then:
+			waitFor { keywords.displayed }
+		when:
+			keywords.keywordText = 'FRIENDS'
+			keywords.joinKeywords = 'join, start'
+			keywords.leaveKeywords = 'leave, stop'
+			keywords.defaultAction = "join"
+			next.click()
+		then:
+			waitFor { autoreply.displayed }
+		when:
+			autoreply.enableJoinAutoreply.click()
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to myTestGroup group"
+			autoreply.enableLeaveAutoreply.click()
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from myTestGroup group"
+			next.click()
+		then:
+			waitFor { confirm.subscriptionName.displayed }
+		when:
+			confirm.subscriptionName.value("myTestGroup subscription")
+			submit.click()
+		then:
+			waitFor { summary.message.displayed }
+		when:
+			submit.click()
+		then:
+			waitFor { at PageMessageSubscription }
+	}
+
+	def "Cannot create group if name is already in use" () {
+		setup:
+			remote { new Group(name:"Friends").save(failOnError:true, flush:true); null }
+		when:
+			launchSubscriptionPopup()
+			waitFor { at SubscriptionCreateDialog }
+		then:
+			!group.newGroupName.displayed
+		when:
+			group.createGroup()
+		then:
+			group.newGroupName.displayed
+		when:
+			group.newGroupName << "Friends"
+			group.newGroupSubmit.click()
+		then:
+			group.groupNameError.displayed
+	}
+
 	def "keyword aliases must be unique if provided"() {
 		setup:
 			remote { new Group(name:"Friends").save(failOnError:true, flush:true); null }
