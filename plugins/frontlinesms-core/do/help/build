@@ -24,11 +24,13 @@ while getopts "zt:ps:h" opt; do
 done
 
 if $showHelp; then
+	echo "Ahoy! I am the FrontlineSMS Help File Build script"
 	echo "usage: do/help/build [options]"
 	echo "	-h: Show this help text and exit"
 	echo "	-t <git hash>: The git tree or index to checkout"
 	echo "	-z: Set to generate a zip archive of the help files"
 	echo "	-p: Push to help.frontlinesms.com"
+	echo "	-s <username@server>: SSH URL to push to. $sshURL by default"
 	exit 0
 fi
 
