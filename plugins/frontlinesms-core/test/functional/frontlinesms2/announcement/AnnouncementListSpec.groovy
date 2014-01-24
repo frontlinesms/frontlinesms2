@@ -84,7 +84,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			singleMessageDetails.forward.click()
 		then:
 			waitFor { at QuickMessageDialog }
-			textArea.text() == "I will be late" }
+			textArea.text() == "I will be late"
 	}
 
 	def "message count displayed when multiple messages are selected"() {
