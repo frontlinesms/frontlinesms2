@@ -2,6 +2,7 @@ package frontlinesms2.settings
 
 import frontlinesms2.*
 import frontlinesms2.popup.ExportDialog
+import frontlinesms2.contact.*
 
 class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 	def "all contacts popup should appear when export button is clicked"(){
@@ -53,7 +54,7 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 			submitButton.click()
 		then:
 			waitFor {
-				at PageImportExportSettings
+				at PageContactShow
 			}
 			remote {
 				Contact.count() == 3
