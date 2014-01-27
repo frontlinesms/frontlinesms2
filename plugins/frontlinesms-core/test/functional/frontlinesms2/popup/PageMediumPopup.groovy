@@ -151,6 +151,7 @@ class RecipientsTab extends geb.Module {
 		chosenInput { $('.chzn-container input[type=text]') }
 		chosenOption { label=null ->
 			if (label) {
+				label = label.replace("+", "\\+")
 				def pattern = java.util.regex.Pattern.compile("(${label}|${label}\\s\\(\\d+\\)|\"${label}\")\$")
 				$('.chzn-container ul.chzn-results li.active-result', text: pattern)
 			}
