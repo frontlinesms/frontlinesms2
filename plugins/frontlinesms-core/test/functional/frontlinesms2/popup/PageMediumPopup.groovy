@@ -150,10 +150,10 @@ class RecipientsTab extends geb.Module {
 	static content = {
 		chosenInput { $('.chzn-container input[type=text]') }
 		chosenOption { label=null ->
-			if (label && !(['group', 'contact'].any { label.contains(it) }))
-				label = "\"$label\""
-			if (label)
-				$('.chzn-container ul.chzn-results li.active-result', text: startsWith(label))
+			if (label) {
+				def pattern = java.util.regex.Pattern.compile("(${label}|${label}\\s\\(\\d+\\)|\"${label}\")\$")
+				$('.chzn-container ul.chzn-results li.active-result', text: pattern)
+			}
 			else
 				$('.chzn-container ul.chzn-results li.active-result')
 		}
