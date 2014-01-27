@@ -15,7 +15,7 @@
 				<fsms:popup class="btn" controller="export" id="export" action="contactWizard" params="[groupId:contactsSection?.id, contactsSection:contactsSection?.shortName]" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="group.export.label" args="${[contactsSection?.name]}"/></fsms:popup>
 			</g:if>
 			<g:else>
-				<fsms:popup class="btn" controller="export" action="contactWizard" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="contact.export.label"/></fsms:popup>
+				<fsms:popup class="btn" controller="export" id="export" action="contactWizard" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="contact.export.label"/></fsms:popup>
 			</g:else>
 		</fsms:menuitem>
 	</fsms:submenu>
