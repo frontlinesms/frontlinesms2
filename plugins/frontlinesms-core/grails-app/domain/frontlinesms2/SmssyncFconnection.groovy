@@ -30,10 +30,6 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		lastConnectionTime nullable:true
 	}
 
-	static mapping = {
-		version false
-	}
-
 	def removeDispatchesFromQueue(dispatches) {
 		SmssyncFconnectionQueuedDispatch.delete(this, dispatches)
 	}
