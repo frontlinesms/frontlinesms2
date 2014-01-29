@@ -151,6 +151,7 @@ class RecipientsTab extends geb.Module {
 		chosenInput { $('.chzn-container input[type=text]') }
 		chosenOption { label=null ->
 			if (label) {
+				label = label.replace("+", "\\+")
 				def pattern = java.util.regex.Pattern.compile("(${label}|${label}\\s\\(\\d+\\)|\"${label}\")\$")
 				$('.chzn-container ul.chzn-results li.active-result', text: pattern)
 			}
@@ -410,7 +411,7 @@ class SubscriptionGroupTab extends geb.Module {
 		}
 		newGroupName { $('input#groupName') }
 		newGroupSubmit { $('a.create-group') }
-		groupNameError { $('label.error[for=groupName]') }
+		groupNameError(required:false) { $('label.error[for=groupName]') }
 	}
 }
 
