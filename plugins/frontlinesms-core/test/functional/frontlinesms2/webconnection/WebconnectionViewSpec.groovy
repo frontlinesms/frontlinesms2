@@ -76,14 +76,14 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor("veryslow") { at WebconnectionWizard }
 	}
 
-	def "Clicking the Quick Message button brings up the Quick Message Dialog"() {
+	def "Clicking the Send Message button brings up the Quick Message Dialog"() {
 		when:
 			to PageMessageWebconnection, "Sync"
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
 			waitFor('veryslow'){ at QuickMessageDialog }
-			waitFor{ compose.textArea.displayed }
+			waitFor{ textArea.displayed }
 	}
 
 	def "clicking the rename option opens the rename small popup"() {

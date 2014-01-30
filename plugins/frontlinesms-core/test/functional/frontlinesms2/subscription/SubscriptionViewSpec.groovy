@@ -73,10 +73,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header.quickMessage.click()
 		then:
 			waitFor('veryslow'){ at QuickMessageDialog }
-			waitFor{ compose.textArea.displayed }
+			waitFor{textArea.displayed }
 		when:
-			compose.textArea = "Message"
-			next.click()
+			textArea = "Message"
 		then:
 			waitFor { recipients.displayed }
 			waitFor { recipients.getRecipients('group') == [remote { Group.findByName('Camping').id }.toString() ] }

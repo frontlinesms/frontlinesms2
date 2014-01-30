@@ -12,7 +12,6 @@ class ChangeLanguageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			unsortedList.containsAll(['English', 'Deutsch', 'English', 'French', 'Indonesian', 'Japanese', 'Khmer', 'Kiswahili'])
 			unsortedList.sort() == unsortedList
-
 	}
 }
 

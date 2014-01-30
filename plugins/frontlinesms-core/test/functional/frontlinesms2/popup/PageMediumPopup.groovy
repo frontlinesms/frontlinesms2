@@ -411,7 +411,7 @@ class SubscriptionGroupTab extends geb.Module {
 		}
 		newGroupName { $('input#groupName') }
 		newGroupSubmit { $('a.create-group') }
-		groupNameError { $('label.error[for=groupName]') }
+		groupNameError(required:false) { $('label.error[for=groupName]') }
 	}
 }
 
