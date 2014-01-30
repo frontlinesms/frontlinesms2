@@ -56,11 +56,9 @@ class MessageStorageServiceTimingSpec extends IntegrationSpec {
 	private def addMessages(connection, messageCount) {
 		println "Creating $messageCount messages..."
 		messageCount.times {
-			connection.addToMessages(TextMessage.build())
+			TextMessage.build(connectionId:connection.id)
 		}
-		println "Messages created.  Flushing..."
-		connection.save(flush:true)
-		println "Flushed."
+		println "Messages created."
 	}
 
 	private def startTimer() {
