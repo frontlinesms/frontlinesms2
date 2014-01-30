@@ -3,8 +3,8 @@ package frontlinesms2
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 
-class MessageStorageService implements Processor {
-	public void process(Exchange ex) {
+class MessageStorageService {
+	public void process(ex) {
 		def log = { println "MessageStorageService.process() : $it" }
 		log "headers # $ex.in.headers"
 		def message = ex.in.body
