@@ -15,7 +15,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			subscription.click()
 		then:
-			waitFor { at SubscriptionCreateDialog }
+			waitFor("veryslow") { at SubscriptionCreateDialog }
 	}
 
 	def "Can create a new subscription" () {
@@ -195,7 +195,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			group.newGroupName << "Friends"
 			group.newGroupSubmit.click()
 		then:
-			group.groupNameError.displayed
+			waitFor { group.groupNameError.displayed }
 	}
 
 	def "keyword aliases must be unique if provided"() {
