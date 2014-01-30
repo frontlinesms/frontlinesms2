@@ -23,6 +23,7 @@ abstract class MediumPopup extends geb.Page {
 		errorPanel { $('div.error-panel') }
 		validationError { $('label.error') }
 		error { errorPanel.text()?.toLowerCase() }
+		thinking(required: false) { $('#thinking') }
 	}
 }
 

@@ -43,9 +43,11 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		to PageMessageInbox
 		bodyMenu.newActivity.click()
 		waitFor { at CreateActivityDialog }
+		waitFor { !thinking.displayed }
 		webconnection.click()
 		at WebconnectionWizard
 
+		waitFor { option('generic').displayed && !thinking.displayed }
 		if(!webconnectionType) {
 			waitFor { option('generic').displayed }
 			return true

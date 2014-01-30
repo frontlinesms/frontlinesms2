@@ -109,7 +109,7 @@ jQuery.fn.renderDefaultText = function() {
 };
 
 function showThinking() {
-	jQuery('#thinking').fadeIn();
+	jQuery('#thinking').show();
 }
 
 function fadeThinking() {
