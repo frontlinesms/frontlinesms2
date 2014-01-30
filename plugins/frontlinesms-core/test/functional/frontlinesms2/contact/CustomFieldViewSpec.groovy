@@ -74,7 +74,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			to PageContactShow, 'Bob'
 			singleContactDetails.addCustomField 'lake'
 			def customFeild = singleContactDetails.customField 'lake'
-			waitFor { !singleContactDetails.mobile.disabled }
+			waitFor { !customFeild.disabled }
 			customFeild.value('erie')
 			customFeild.blur()
 		then:
