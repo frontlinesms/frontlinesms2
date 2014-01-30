@@ -55,14 +55,6 @@ class Fconnection {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	boolean enabled = true
-	
-	static namedQueries = {
-		findByMessages { messageInstance ->
-				messages {
-					eq 'id', messageInstance.id
-				}
-		}
-	}
 
 	def getStatus() {
 		fconnectionService.getConnectionStatus(this)

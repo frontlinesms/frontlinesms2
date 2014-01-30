@@ -155,8 +155,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def messageId = remote {
 				def con = SmslibFconnection.build(name:'MTN Dongle', port:'stormyPort')
 				def message = TextMessage.build(src:'+254778899', text:'test')
-				con.addToMessages(message)
-				con.save(flush:true)
+				message.connectionId = con.id
+				message.save(failOnError:true, flush:true)
 				message.id
 			}
 		when:

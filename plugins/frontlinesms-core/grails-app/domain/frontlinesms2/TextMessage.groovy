@@ -211,7 +211,7 @@ class TextMessage extends Interaction {
 	}
 
 	def getReceivedOn() {
-		Fconnection.findByMessages(this).list()[0]
+		Fconnection.get(this.connectionId)
 	}
 
 	def getMessageDetailValue(owner) {

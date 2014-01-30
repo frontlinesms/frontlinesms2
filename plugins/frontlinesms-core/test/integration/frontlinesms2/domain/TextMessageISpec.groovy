@@ -303,8 +303,8 @@ class TextMessageISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def connection = SmslibFconnection.build(name:'MTN Dongle', port:'stormyPort')
 			def message = TextMessage.build(src:'111', text:"bla")
-			connection.addToMessages(message)
-			connection.save(failOnError:true)
+			message.connectionId = connection.id
+			message.save(failOnError:true)
 		then:
 			message.receivedOn.id == connection.id
 		when:
