@@ -106,9 +106,7 @@ class ExportController extends ControllerUtils {
 		List fields = ["id", "inboundContactName", "src", "outboundContactList", "dispatches.dst", "text", "date"]
 		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dispatches.dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
 		Map parameters = [title: message(code: 'export.message.title')]
-		if(params.format == 'pdf') {
-			parameters << ["pdf.encoding":"UniGB-UCS2-H", "font.family": "STSong-Light"]
-		}
+		setUnicodeParameter(parameters)
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try {
 			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:], parameters)
@@ -137,6 +135,7 @@ class ExportController extends ControllerUtils {
 			contact.metaClass.groupMembership = contact.groups*.name.join("\\\\")
 		}
 		Map parameters = [title: message(code: 'export.contact.title')]
+		setUnicodeParameter(parameters)
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
 		try {
 			exportService.export(params.format, response.outputStream, contactInstanceList, fields, labels, [:],parameters)
@@ -146,6 +145,13 @@ class ExportController extends ControllerUtils {
 		[contactInstanceList: contactInstanceList]
 	}
 	
+	private setUnicodeParameter(parameters) {
+		if(params.format == 'pdf') {
+			parameters << ["pdf.encoding":"UniGB-UCS2-H", "font.family": "STSong-Light"]
+		} else if(params.format == "csv"){
+			parameters << ['encoding':'UTF-8']
+		}
+	}
 	private def getActivityDescription() {
 		if(params.ownerId){
 			def messageOwner = MessageOwner.findById(params.ownerId)
