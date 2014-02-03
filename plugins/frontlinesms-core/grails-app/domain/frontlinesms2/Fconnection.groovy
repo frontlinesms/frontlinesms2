@@ -16,8 +16,6 @@ class Fconnection {
 	static final String HEADER_FCONNECTION_ID = 'fconnection-id'
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
-
-	static hasMany = [messages: TextMessage]
 	
 	static final implementations = [SmslibFconnection,
 			ClickatellFconnection,
@@ -57,17 +55,13 @@ class Fconnection {
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	boolean enabled = true
-	
-	static namedQueries = {
-		findByMessages { messageInstance ->
-				messages {
-					eq 'id', messageInstance.id
-				}
-		}
-	}
 
 	def getStatus() {
 		fconnectionService.getConnectionStatus(this)
+	}
+
+	def getMessages() {
+		TextMmessage.findAllByConnectionId(this.id)
 	}
 
 	def getFlagCSSClasses() {
