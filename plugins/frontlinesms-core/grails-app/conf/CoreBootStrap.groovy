@@ -328,8 +328,8 @@ class CoreBootStrap {
 		def m = TextMessage.findByText("modem message")
 		def modem = SmslibFconnection.list()[0]
 		modem.addToMessages(m)
-		modem.save(failOnError:true, flush:true)
-
+		m.connectionId = modem.id
+		m.save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initAnnouncements() {
