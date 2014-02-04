@@ -14,8 +14,6 @@ class TextMessage extends Interaction {
 
 	static hasMany = [dispatches:Dispatch, details:MessageDetail]
 
-	long connectionId
-
 	static constraints = {
 		text maxSize:MAX_TEXT_LENGTH
 		inboundContactName nullable:true
@@ -208,10 +206,6 @@ class TextMessage extends Interaction {
 				it.isDeleted = true
 			}
 		}
-	}
-
-	def getReceivedOn() {
-		Fconnection.get(this.connectionId)
 	}
 
 	def getMessageDetailValue(owner) {

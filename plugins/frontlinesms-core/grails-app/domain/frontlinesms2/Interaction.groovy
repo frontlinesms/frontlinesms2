@@ -13,6 +13,7 @@ class Interaction {
 	String src
 	String outboundContactName
 	String inboundContactName
+	long connectionId
 	boolean rd
 	boolean starred
 	boolean archived
@@ -42,6 +43,10 @@ class Interaction {
 
 	def beforeInsert = {
 		if(!this.inbound) this.read = true
+	}
+
+	def getReceivedOn() {
+		Fconnection.get(this.connectionId)
 	}
 
 	static namedQueries = {

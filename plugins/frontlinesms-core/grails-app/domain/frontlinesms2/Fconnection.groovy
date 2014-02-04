@@ -64,6 +64,11 @@ class Fconnection {
 		TextMmessage.findAllByConnectionId(this.id)
 	}
 
+	def addToMessages(msg) {
+		msg.connectionId = this.id
+		msg.save()
+	}
+
 	def getFlagCSSClasses() {
 		if('fromNumber' in this.properties) {
 			return mobileNumberUtilService.getFlagCSSClasses(fromNumber) 
