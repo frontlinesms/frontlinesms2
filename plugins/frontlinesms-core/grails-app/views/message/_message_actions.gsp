@@ -28,7 +28,7 @@
 			</g:elseif>
 		</g:if>
 
-		<g:if test="${messageSection != 'pending'  && !messageInstance.messageOwner?.archived}">
+		<g:if test="${!messageInstance.messageOwner?.archived}">
 			<g:actionSubmit id="delete-msg" class="msg-btn btn" value="${g.message(code:'fmessage.delete')}" action="delete"/>
 		</g:if>
 	</g:if>
