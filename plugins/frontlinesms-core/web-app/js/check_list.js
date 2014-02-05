@@ -97,7 +97,7 @@ check_list = (function() {
 
 	updateMultipleCheckedDetails = function(itemTypeString) {
 		if (itemTypeString === 'contact') {
-			$.get(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
+			$.post(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
 				var pane = $(data);
 				pane.show(); // Pane is initially display:hidden in GSP
 				$('#multiple-'+itemTypeString+'s').replaceWith(pane);
