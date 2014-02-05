@@ -1,0 +1,171 @@
+package frontlinesms2
+
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.io.StringWriter
+
+import au.com.bytecode.opencsv.CSVWriter
+import au.com.bytecode.opencsv.CSVParser
+import ezvcard.*
+
+class ImportService {
+	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
+					'Email':'email', 'Group(s)':'groups', 'Notes':'notes']
+
+	def importContactCsv(params, request) {
+		println "ImportService.importContactCsv) :: ENTRY"
+		def savedCount = 0
+		def headers
+		def parser = new CSVParser()
+		def failedLines = []
+		params.csv.eachLine { line ->
+			def tokens = parser.parseLine(line)
+			if(!headers) headers = tokens
+			else try {
+				if(headers.any { it.size() == 0 }) {
+					throw new RuntimeException("Empty headers in some contact import columns")
+				}
+				Contact c = new Contact()
+				def groups
+				def customFields = []
+				headers.eachWithIndex { key, i ->
+					def value = tokens[i]
+					if(key in STANDARD_FIELDS && key != 'Group(s)') {
+						c."${STANDARD_FIELDS[key]}" = value
+					} else if(key == 'Group(s)') {
+						def groupNames = getGroupNames(value)
+						groups = getGroups(groupNames)
+					} else {
+						if (value.size() > 0 ){
+							customFields << new CustomField(name:key, value:value)
+						}
+					}
+				}
+				// TODO not sure why this has to be done in a new session, but grails
+				// can't cope with failed saves if we don't do this
+				Contact.withNewSession {
+					c.save(failOnError:true)
+					if(groups) groups.each { c.addToGroup(it) }
+					if(customFields) customFields.each { c.addToCustomFields(it) }
+					c.save()
+				}
+				++savedCount
+			} catch(Exception ex) {
+				//TODO Vaneyck Fix this
+				//log.info message(code: 'import.contact.save.error'), ex
+				failedLines << tokens
+			}
+		}
+
+		def failedLineWriter = new StringWriter()
+		if(failedLines) {
+			def writer
+			try {
+				writer = new CSVWriter(failedLineWriter)
+				writer.writeNext(headers)
+				failedLines.each { writer.writeNext(it) }
+			} finally { try { writer.close() } catch(Exception ex) {} }
+		}
+//TODO Vaneycj Fix this also
+
+/*
+		if(savedCount > 0) {
+			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
+		}
+		flash.failedContacts = failedLineWriter.toString()
+		flash.numberOfFailedLines = failedLines.size()
+		flash.failedContactsFormat = 'csv'
+		session.csvData = null
+		if(flash.numberOfFailedLines)
+			redirect controller:'settings', action:'porting'
+		else
+			redirect controller:'contact', action:'show'
+*/
+	}
+
+	def importContactVcard(params, request) {
+		println "ImportService.importContactVcard() :: ENTRY"
+		def failedVcards = []
+		def savedCount = 0
+		def uploadFile = request.getFile('importCsvFile')
+		def processCard = { v ->
+			def mobile = v.telephoneNumbers? v.telephoneNumbers.first(): null
+			if(mobile) {
+				mobile = mobile.text?: mobile.uri?.number?: ''
+				mobile = mobile.replaceAll(/[^+\d]/, '')
+			}
+			def email = v.emails? v.emails.first().value: ''
+			try {
+				new Contact(name:v.formattedName.value,
+						mobile:mobile,
+						email:email).save(failOnError:true)
+				++savedCount
+			} catch(Exception ex) {
+				failedVcards << v
+			}
+		}
+		def parse = { format='', exceptionClass=null ->
+			try {
+				Ezvcard."parse${format.capitalize()}"(uploadFile.inputStream)
+						.all()
+						.each processCard
+			} catch(Exception ex) {
+				if(exceptionClass && ex.class.isAssignableFrom(exceptionClass)) {
+					return false
+				}
+				throw ex
+			}
+			return true
+		}
+		if(!(parse('xml', org.xml.sax.SAXParseException) ||
+				parse('json', com.fasterxml.jackson.core.JsonParseException) ||
+				(parse('html') && parse()))) {
+			throw new RuntimeException('Failed to parse vcf.')
+		}
+//TODO Vaneyck fix this
+/*
+		if(savedCount > 0) {
+			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
+		}
+		flash.failedContacts = Ezvcard.write(failedVcards).go()
+		flash.numberOfFailedLines = failedVcards.size()
+		flash.failedContactsFormat = 'vcf'
+		redirect controller:'settings', action:'porting'
+*/
+	}
+
+	private def getMessageFolder(name) {
+		Folder.findByName(name)?: new Folder(name:name).save(failOnError:true)
+	}
+
+	private saveMessagesIntoFolder(version, fm){
+		getMessageFolder("messages from "+version).addToMessages(fm)
+	}
+
+	private def getGroupNames(csvValue) {
+		Set csvGroups = []
+		csvValue.split("\\\\").each { gName ->
+			def longName
+			gName.split("/").each { shortName ->
+				csvGroups << shortName
+				longName = longName? "$longName-$shortName": shortName
+				csvGroups << longName
+			}
+		}
+		return csvGroups - ''
+	}
+
+	private def getGroups(groupNames) {
+		groupNames.collect { name ->
+			name = name.trim()
+			Group.findByName(name)?: new Group(name:name).save(failOnError:true)
+		}
+	}
+
+	private def getFailedContactsFile() {
+		if(!params.jobId || params.jobId!=UUID.fromString(params.jobId).toString()) params.jobId = UUID.randomUUID().toString()
+		def f = new File(ResourceUtils.resourcePath, "import_contacts_${params.jobId}.csv")
+		f.deleteOnExit()
+		return f
+	}
+}
