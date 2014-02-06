@@ -3,6 +3,7 @@ package frontlinesms2
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.io.StringWriter
+import java.security.MessageDigest
 
 import au.com.bytecode.opencsv.CSVWriter
 import au.com.bytecode.opencsv.CSVParser
@@ -11,6 +12,24 @@ import ezvcard.*
 class ImportService {
 	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
 					'Email':'email', 'Group(s)':'groups', 'Notes':'notes']
+
+	def systemNotificationService
+	def i18nUtilService
+	def grailsLinkGenerator
+	def failedContactList = []
+
+	def synchronized saveFailedContacts(failedContactInstance) {
+		failedContactList << failedContactInstance
+	}
+
+	def getFailedContactsByKey(k) {
+		def failedContactInstance = failedContactList.find { it.key == k }
+		def fileContents = failedContactInstance?.fileContent?:''
+		def systemNotificationTopic = "failed.contact.${failedContactInstance.key}"
+		failedContactList.remove(failedContactInstance)
+		SystemNotification.findByTopic(systemNotificationTopic).delete()
+		fileContents
+	}
 
 	def importContactCsv(params, request) {
 		println "ImportService.importContactCsv) :: ENTRY"
@@ -53,6 +72,7 @@ class ImportService {
 			} catch(Exception ex) {
 				//TODO Vaneyck Fix this
 				//log.info message(code: 'import.contact.save.error'), ex
+				println "ImportService.importContactsCsv :: exception :: $ex"
 				failedLines << tokens
 			}
 		}
@@ -66,21 +86,16 @@ class ImportService {
 				failedLines.each { writer.writeNext(it) }
 			} finally { try { writer.close() } catch(Exception ex) {} }
 		}
-//TODO Vaneycj Fix this also
 
-/*
 		if(savedCount > 0) {
-			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
+			systemNotificationService.create(code:'import.contact.complete', args:[savedCount])
+		} else {
+			def failedContactInstance = new FailedContact('csv', failedLineWriter.toString())
+			saveFailedContacts(failedContactInstance)
+			def downloadLink = grailsLinkGenerator.link(controller:'import', action:'failedContacts', params:[format:'csv', key:failedContactInstance.key])
+			def aTag = "<a href='$downloadLink'>${i18nUtilService.getMessage(code:'download.label')}</a>"
+			systemNotificationService.create(code:'import.contact.failed.info', topic:"failed.contact.${failedContactInstance.key}", args:[savedCount, failedLines.size(), aTag])
 		}
-		flash.failedContacts = failedLineWriter.toString()
-		flash.numberOfFailedLines = failedLines.size()
-		flash.failedContactsFormat = 'csv'
-		session.csvData = null
-		if(flash.numberOfFailedLines)
-			redirect controller:'settings', action:'porting'
-		else
-			redirect controller:'contact', action:'show'
-*/
 	}
 
 	def importContactVcard(params, request) {
@@ -122,16 +137,16 @@ class ImportService {
 				(parse('html') && parse()))) {
 			throw new RuntimeException('Failed to parse vcf.')
 		}
-//TODO Vaneyck fix this
-/*
+
 		if(savedCount > 0) {
-			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
+			systemNotificationService.create(code:'import.contact.complete', args:[savedCount])
+		} else {
+			def failedContactInstance = new FailedContact('vcf', Ezvcard.write(failedVcards).go())
+			saveFailedContacts(failedContactInstance)
+			def downloadLink = grailsLinkGenerator.link(controller:'import', action:'failedContacts', params:[format:'vcf', key:failedContactInstance.key])
+			def aTag = "<a href='$downloadLink'>${i18nUtilService.getMessage(code:'download.label')}</a>"
+			systemNotificationService.create(code:'import.contact.failed.info', topic:"failed.contact.${failedContactInstance.key}",args:[savedCount, failedVcards.size(), aTag])
 		}
-		flash.failedContacts = Ezvcard.write(failedVcards).go()
-		flash.numberOfFailedLines = failedVcards.size()
-		flash.failedContactsFormat = 'vcf'
-		redirect controller:'settings', action:'porting'
-*/
 	}
 
 	private def getMessageFolder(name) {
@@ -167,5 +182,24 @@ class ImportService {
 		def f = new File(ResourceUtils.resourcePath, "import_contacts_${params.jobId}.csv")
 		f.deleteOnExit()
 		return f
+	}
+}
+
+class FailedContact {
+	String key
+	String fileType
+	String fileContent
+
+	FailedContact(fileType, fileContent) {
+		def dataToHash = new Date().toString() + fileContent
+		this.key =  generateMD5(dataToHash.toString())
+		this.fileType =  fileType
+		this.fileContent = fileContent
+	}
+
+	def generateMD5(String s) {
+		MessageDigest digest = MessageDigest.getInstance("MD5")
+		digest.update(s.bytes);
+		new BigInteger(1, digest.digest()).toString(16).padLeft(32, '0')
 	}
 }

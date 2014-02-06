@@ -135,7 +135,8 @@ class ImportController extends ControllerUtils {
 	def failedContacts() {
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.${params.format}")
 		response.setHeader 'Content-Type', CONTENT_TYPES[params.format]
-		params.failedContacts.eachLine { response.outputStream << it << '\n' }
+		def failedContactFileContent = importService.getFailedContactsByKey(params.key)
+		response.outputStream << failedContactFileContent
 		response.outputStream.flush()
 	}
 
