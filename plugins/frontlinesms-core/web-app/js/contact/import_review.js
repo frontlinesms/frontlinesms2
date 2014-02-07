@@ -40,8 +40,8 @@ var ContactImportReviewer = function() {
 	},
 	init = function() {
 		var inputCells = $('tr.headers td input');
-		inputCells.change(checkForRecognisedHeader);
-		inputCells.change();
+		inputCells.keyup(checkForRecognisedHeader);
+		inputCells.keyup();
 	};
 	this.init = init;
 	this.submit = submit;
