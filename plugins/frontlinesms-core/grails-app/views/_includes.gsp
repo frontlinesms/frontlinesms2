@@ -24,8 +24,11 @@
 		"international.number.format.warning.disabled": ${Boolean.parseBoolean(grailsApplication.mainContext.appSettingsService.get('international.number.format.warning.disabled'))}
 	};
 
-	new Image().src = "${r.resource(dir:'images', file:'status/red.png')}";
-	new Image().src = "${r.resource(dir:'images', file:'chosen-sprite.png')}";
+	preloadImage = function(imageSource) {
+		new Image().src = imageSource;
+	}
+	preloadImage("${r.resource(dir:'images', file:'status/red.png')}");
+	preloadImage("${r.resource(dir:'images', file:'chosen-sprite.png')}");
 
 
 	<fsms:render template="/i18n"/>
