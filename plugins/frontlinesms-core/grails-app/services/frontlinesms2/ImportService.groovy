@@ -70,8 +70,7 @@ class ImportService {
 				}
 				++savedCount
 			} catch(Exception ex) {
-				//TODO Vaneyck Fix this
-				//log.info message(code: 'import.contact.save.error'), ex
+				log.info message(code: 'import.contact.save.error'), ex
 				println "ImportService.importContactsCsv :: exception :: $ex"
 				failedLines << tokens
 			}
