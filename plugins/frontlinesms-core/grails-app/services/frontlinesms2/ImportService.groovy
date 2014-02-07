@@ -70,7 +70,7 @@ class ImportService {
 				}
 				++savedCount
 			} catch(Exception ex) {
-				log.info message(code: 'import.contact.save.error'), ex
+				log.info i18nUtilService.getMessage(code: 'import.contact.save.error'), ex
 				println "ImportService.importContactsCsv :: exception :: $ex"
 				failedLines << tokens
 			}
@@ -95,6 +95,7 @@ class ImportService {
 			def aTag = "<a href='$downloadLink'>${i18nUtilService.getMessage(code:'download.label')}</a>"
 			systemNotificationService.create(code:'import.contact.failed.info', topic:"failed.contact.${failedContactInstance.key}", args:[savedCount, failedLines.size(), aTag])
 		}
+		SystemNotification.findByTopic('import.status')?.delete()
 	}
 
 	def importContactVcard(params, request) {
@@ -146,6 +147,7 @@ class ImportService {
 			def aTag = "<a href='$downloadLink'>${i18nUtilService.getMessage(code:'download.label')}</a>"
 			systemNotificationService.create(code:'import.contact.failed.info', topic:"failed.contact.${failedContactInstance.key}",args:[savedCount, failedVcards.size(), aTag])
 		}
+		SystemNotification.findByTopic('import.status')?.delete()
 	}
 
 	private def getMessageFolder(name) {

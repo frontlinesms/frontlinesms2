@@ -15,6 +15,7 @@ class ImportController extends ControllerUtils {
 	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard', vcfDepricated:'text/directory']
 
 	def importService
+	def systemNotificationService
 
 	def importData() {
 		println "ImportController.importData() :: params=$params"
@@ -29,12 +30,14 @@ class ImportController extends ControllerUtils {
 		println "ImportController.importContacts() :: ENTRY"
 		if(params.reviewDone) {
 			ImportContactsJob.triggerNow(['fileType':'csv', 'params':params, 'request':request])
+			systemNotificationService.create(code:'importing.status.label', topic:'import.status')
 			redirect controller:'contact', action:'show' 
 			return
 		}
 		switch(request.getFile('importCsvFile').contentType) {
 			case [CONTENT_TYPES.vcf, CONTENT_TYPES.vcfDepricated]:
 				ImportContactsJob.triggerNow(['fileType':'vcf', 'params':params, 'request':request])
+				systemNotificationService.create(code:'importing.status.label', topic:'import.status')
 				redirect controller:'contact', action:'show' 
 				break
 			default:
