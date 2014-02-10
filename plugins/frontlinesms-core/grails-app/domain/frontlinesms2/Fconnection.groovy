@@ -45,6 +45,7 @@ class Fconnection {
 	static mapping = {
 		sort id:'asc'
 		tablePerHierarchy false
+		version false
 	}
 
 	static constraints = {
@@ -61,7 +62,12 @@ class Fconnection {
 	}
 
 	def getMessages() {
-		TextMmessage.findAllByConnectionId(this.id)
+		TextMessage.findAllByConnectionId(this.id)
+	}
+
+	def addToMessages(msg) {
+		msg.connectionId = this.id
+		msg.save()
 	}
 
 	def getFlagCSSClasses() {

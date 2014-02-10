@@ -92,7 +92,7 @@
 #body.messages #detail #message-detail-content #no-message { text-align:center; }
 #body.messages #detail #message-detail-buttons, #body.messages #detail .other-actions { text-align:center; }
 #body.messages #detail #message-detail-buttons > * { text-align:center; width:178px; margin-bottom:10px; }
-#body.messages #detail #message-detail-buttons .btn,#body.messages #detail #message-detail-buttons .btn { box-sizing:border-box; width:100%; text-align:center; margin-bottom:10px; }
+#body.messages #detail #message-detail-buttons .btn,#body.messages #detail #message-detail-buttons .btn { box-sizing:border-box; -moz-box-sizing:border-box; width:100%; text-align:center; margin-bottom:10px; }
 #body.messages #detail .other-actions > * { margin-bottom:10px; }
 
 #body.messages #body-menu a.failures { background-image:url("../images/icons/error_on.png");
