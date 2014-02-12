@@ -17,6 +17,8 @@ class MessageSendService {
 		def dispatchCount = 0
 		m.dispatches.each { dispatch ->
 			if(dispatch.status == DispatchStatus.FAILED) {
+				dispatch.status = DispatchStatus.PENDING
+				dispatch.save()
 				sendMessage('seda:dispatches', dispatch)
 				++dispatchCount
 			}

@@ -122,6 +122,7 @@ class SingleMessageDetails extends geb.Module {
 		archive(required:false) { $('#archive-msg') }
 		unarchive { $('#unarchive-msg') }
 		reply { $('a#btn_reply') }
+		retry { $('a#btn_retry') }
 		forward { $('#btn_forward') }
 		delete(required:false) {$('#delete-msg')}
 		single_moveActions(required:false) { $("select#move-actions") }

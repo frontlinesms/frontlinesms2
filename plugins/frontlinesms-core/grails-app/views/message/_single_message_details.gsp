@@ -42,7 +42,7 @@
 			</p></div>
 		</div>
 		<fsms:render template="/message/message_actions"/>
-		<g:if test="${activityInstanceList || folderInstanceList}">
+		<g:if test="${!(messageSection == 'pending') && (activityInstanceList || folderInstanceList)}">
 			<fsms:render template="/message/other_actions"/>
 		</g:if>
 	</g:if>

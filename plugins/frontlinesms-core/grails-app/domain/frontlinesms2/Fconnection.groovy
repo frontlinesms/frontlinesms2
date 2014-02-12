@@ -62,7 +62,7 @@ class Fconnection {
 	}
 
 	def getMessages() {
-		TextMmessage.findAllByConnectionId(this.id)
+		TextMessage.findAllByConnectionId(this.id)
 	}
 
 	def addToMessages(msg) {
