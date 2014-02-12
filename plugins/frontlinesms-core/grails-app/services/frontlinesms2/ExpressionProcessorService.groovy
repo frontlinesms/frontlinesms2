@@ -64,18 +64,14 @@ class ExpressionProcessorService {
 			if (expression == '${recipient_number}')
 				return dispatch.dst
 			if (expression == '${recipient_name}') {
-				println "### Processing recipient_name substitution"
-				def recipientName = dispatch.message.outboundContactName
-				println "### dispatch.message : ${dispatch.message}"
-				println "### dispatch.message.outboundContactName: ${dispatch.message.outboundContactName}"
-				println "### TextMessage.get(dispatch.message.id).outboundContactName: ${TextMessage.get(dispatch.message.id).outboundContactName}"
+				def recipientName = dispatch.message.outboundContactName ?: dispatch.message.refresh().outboundContactName
 				return recipientName ?: dispatch.dst
 			}
 			if (expression == '${keyword}')
 				return getKeyword()
 			return expression
 		} catch (Exception e) {
-			println "### EXCEPTION"
+			println "### EXCEPTION while processing expression ${expression}. Value will be sent unsubstituted"
 			println e
 			return expression
 		}
