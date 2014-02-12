@@ -66,8 +66,8 @@ class AutoforwardService {
 			(newSmartGroups?:[] - oldSmartGroups).each{ autoforward.addToSmartGroups(it) }
 
 		} catch(Exception e) {
-			log.debug "# 1 ######### $autoforward.errors.allErrors"
-			log.debug "# Can't Change Contacts,Groups,SmartGroups # $e"
+			log.info "# 1 ######### $autoforward.errors.allErrors"
+			log.info "# Can't Change Contacts,Groups,SmartGroups # $e"
 		}
 		autoforward
 	}

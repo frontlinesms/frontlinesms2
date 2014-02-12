@@ -44,7 +44,7 @@ class ActivityController extends ControllerUtils {
 				modelToRender.contacts = contacts
 				modelToRender.addresses = addresses
 			} catch (MissingPropertyException e) {
-				log.debug "$e"
+				log.info "$e"
 			}
 
 			render view:"../$activityType/create", model: modelToRender
