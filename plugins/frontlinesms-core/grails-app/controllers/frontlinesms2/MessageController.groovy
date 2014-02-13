@@ -172,7 +172,7 @@ class MessageController extends ControllerUtils {
 			redirect(controller:'search', action:'result', params:
 					[searchId:params.searchId])
 		} else {
-			println "Forwarding to action: $params.messageSection"
+			log.info "Forwarding to action: $params.messageSection"
 			redirect(controller:params.controller, action:params.messageSection, params:
 					[ownerId:params.ownerId, starred:params.starred,
 							failed:params.failed, searchId:params.searchId])
