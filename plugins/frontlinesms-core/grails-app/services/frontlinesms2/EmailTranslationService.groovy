@@ -10,18 +10,18 @@ class EmailTranslationService implements Processor {
 	static transactional = false
 
 	void process(Exchange exchange) {
-		println("exchange ${exchange}")
+		log.info("exchange ${exchange}")
 		def i = exchange.in
-		println("in: ${i}")
+		log.info("in: ${i}")
 		TextMessage message = new TextMessage(inbound:true)
 		message.src = EMAIL_PROTOCOL_PREFIX + i.getHeader('From')
-		println("src: ${message.src}")
+		log.info("src: ${message.src}")
 //		message.dst = EMAIL_PROTOCOL_PREFIX + i.getHeader('To')
-//		println("dst: ${message.dst}")
+//		log.info("dst: ${message.dst}")
 		def emailBody = i.body
 		def emailSubject = i.getHeader('Subject')
-		println("emailBody: ${emailBody}")
-		println("emailSubject: ${emailSubject}")
+		log.info("emailBody: ${emailBody}")
+		log.info("emailSubject: ${emailSubject}")
 		message.text = emailSubject
 		if(emailBody != null) {
 			message.text = message.text ? "${message.text}\n${underline(emailSubject)}\n\n${emailBody}" : emailBody

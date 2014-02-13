@@ -165,7 +165,7 @@ class ContactController extends ControllerUtils {
 				data.errors."$field" = [errorMessage]
 			}
 		}
-		println "##### ${data}"
+		log.info "##### ${data}"
 		return data
 	}
 
