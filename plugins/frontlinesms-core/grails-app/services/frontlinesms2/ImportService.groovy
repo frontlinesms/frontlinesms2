@@ -111,9 +111,9 @@ class ImportService {
 			}
 			def email = v.emails? v.emails.first().value: ''
 			try {
-				new Contact(name:v.formattedName.value,
-						mobile:mobile,
-						email:email).save(failOnError:true)
+				Contact.withNewSession {
+					new Contact(name:v.formattedName.value, mobile:mobile, email:email).save(failOnError:true)
+				}
 				++savedCount
 			} catch(Exception ex) {
 				failedVcards << v
@@ -135,6 +135,7 @@ class ImportService {
 		if(!(parse('xml', org.xml.sax.SAXParseException) ||
 				parse('json', com.fasterxml.jackson.core.JsonParseException) ||
 				(parse('html') && parse()))) {
+			systemNotificationService.create(code:'import.contact.failed.invalid.vcf.file')
 			throw new RuntimeException('Failed to parse vcf.')
 		}
 
