@@ -43,9 +43,9 @@ class ExpressionProcessorService {
 		try {
 			// TODO could replace this manual mapping wth...a Map!  e.g. [sender_number:{incomingMessage.src}]
 			def ownerD = dispatch.message.ownerDetail
-			println "### Owner Detail for ${dispatch} ## ${ownerD}"
+			log.info "### Owner Detail for ${dispatch} ## ${ownerD}"
 			def incomingMessage = TextMessage.get(ownerD)
-			println "### Triggering incoming message # ${incomingMessage} # ${incomingMessage?.text}"
+			log.info "### Triggering incoming message # ${incomingMessage} # ${incomingMessage?.text}"
 			def getKeyword = { incomingMessage.messageOwner?.keywords?.find { incomingMessage.text.toUpperCase().startsWith(it.value) }?.value }
 			if (expression == '${message_text}') {
 				def keyword = getKeyword()

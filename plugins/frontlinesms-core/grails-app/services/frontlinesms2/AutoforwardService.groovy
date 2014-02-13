@@ -10,14 +10,14 @@ class AutoforwardService {
 	def dataSource
 
     def saveInstance(Autoforward autoforward, params) {
-    	println "##### Saving Autoforward in Service"
+    	log.info "##### Saving Autoforward in Service"
 		autoforward.name = params.name ?: autoforward.name
 		autoforward.sentMessageText = params.messageText ?: autoforward.sentMessageText
 		autoforward.keywords?.clear()
 		editContacts(autoforward, params)
-		println "##Just about to save"
+		log.info "##Just about to save"
 		autoforward.save(flush:true, failOnError:true)
-		println "##Just saved round 1"
+		log.info "##Just saved round 1"
 		if(params.sorting == 'global'){
 			autoforward.addToKeywords(new Keyword(value:''))
 		}else if(params.sorting == 'enabled'){
@@ -27,13 +27,13 @@ class AutoforwardService {
 				autoforward.addToKeywords(keyword)
 			}
 		} else {
-			println "##### AutoforwardService.saveInstance() # removing keywords"
+			log.info "##### AutoforwardService.saveInstance() # removing keywords"
 		}
-		println "# 2 ######### Saving Round 2 # $autoforward.errors.allErrors"
+		log.info "# 2 ######### Saving Round 2 # $autoforward.errors.allErrors"
 		autoforward.save(failOnError:true,flush:true)
-		println autoforward.contacts
-		println autoforward.groups
-		println autoforward.smartGroups
+		log.info autoforward.contacts
+		log.info autoforward.groups
+		log.info autoforward.smartGroups
 		return autoforward
 	}
 
@@ -66,8 +66,8 @@ class AutoforwardService {
 			(newSmartGroups?:[] - oldSmartGroups).each{ autoforward.addToSmartGroups(it) }
 
 		} catch(Exception e) {
-			println "# 1 ######### $autoforward.errors.allErrors"
-			println "# Can't Change Contacts,Groups,SmartGroups # $e"
+			log.info "# 1 ######### $autoforward.errors.allErrors"
+			log.info "# Can't Change Contacts,Groups,SmartGroups # $e"
 		}
 		autoforward
 	}
@@ -92,7 +92,7 @@ class AutoforwardService {
 	@Listener(topic='beforeDelete', namespace='gorm')
 	def handleDeletedContact(Contact contact) {
 		// TODO document why this is using raw SQL
-		println "### Removing Contact $contact from Autoforward ##"
+		log.info "### Removing Contact $contact from Autoforward ##"
 	    new Sql(dataSource).execute('DELETE FROM autoforward_contact WHERE contact_id=?', [contact.id])
 	    return true
 	}
@@ -100,7 +100,7 @@ class AutoforwardService {
 	@Listener(topic='beforeDelete', namespace='gorm')
 	def handleDeletedGroup(Group group) {
 		// TODO document why this is using raw SQL
-		println "## Removing Group $group From Autoforward"
+		log.info "## Removing Group $group From Autoforward"
 	    new Sql(dataSource).execute('DELETE FROM autoforward_grup WHERE group_id=?', [group.id])
 	    return true
 	}
@@ -108,7 +108,7 @@ class AutoforwardService {
 	@Listener(topic='beforeDelete', namespace='gorm')
 	def handleDeletedSmartGroup(SmartGroup smartGroup) {
 		// TODO document why this is using raw SQL
-		println "## Removing SmartGroup $smartGroup From Autoforward"
+		log.info "## Removing SmartGroup $smartGroup From Autoforward"
 	    new Sql(dataSource).execute('DELETE FROM autoforward_smart_group WHERE smart_group_id=?', [smartGroup.id])
 	    return true
 	}

@@ -15,7 +15,7 @@ class TrashService {
     	}
     
 	def sendToTrash(object) {
-		println "Deleting ${object}"
+		log.info "Deleting ${object}"
 		if (object instanceof frontlinesms2.TextMessage) {
 			object.isDeleted = true
 			new Trash(displayName:object.displayName,
