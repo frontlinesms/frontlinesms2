@@ -27,7 +27,9 @@ class ImportService {
 		def fileContents = failedContactInstance?.fileContent?:''
 		def systemNotificationTopic = "failed.contact.${failedContactInstance?.key}"
 		failedContactList.remove(failedContactInstance)
-		SystemNotification.findByTopic(systemNotificationTopic)?.delete()
+		def failedImportNotification = SystemNotification.findByTopic(systemNotificationTopic)
+		failedImportNotification?.read = true
+		failedImportNotification?.save()
 		fileContents
 	}
 
