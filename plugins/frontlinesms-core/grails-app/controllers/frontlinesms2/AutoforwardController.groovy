@@ -10,10 +10,8 @@ class AutoforwardController extends ActivityController {
 	}
 
 	def create() {
-		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 		[
 			messageText: '${message_text}',
-			groupList:groupList,
 			activityType: params.controller
 		]
 	}
