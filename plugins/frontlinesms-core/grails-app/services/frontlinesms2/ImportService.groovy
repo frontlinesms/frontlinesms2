@@ -17,6 +17,7 @@ class ImportService {
 	def i18nUtilService
 	def grailsLinkGenerator
 	def failedContactList = []
+	def sessionFactory
 
 	def synchronized saveFailedContacts(failedContactInstance) {
 		failedContactList << failedContactInstance
@@ -34,12 +35,16 @@ class ImportService {
 	}
 
 	def importContactCsv(params, request) {
-		println "ImportService.importContactCsv) :: ENTRY"
+		log.info "ImportService.importContactCsv) :: ENTRY"
 		def savedCount = 0
+		def processedCount = 0
 		def headers
 		def parser = new CSVParser()
 		def failedLines = []
 		params.csv.eachLine { line ->
+			if(processedCount % 100 == 0) {
+				cleanUpGorm()
+			}
 			def tokens = parser.parseLine(line)
 			if(!headers) headers = tokens
 			else try {
@@ -73,7 +78,7 @@ class ImportService {
 				++savedCount
 			} catch(Exception ex) {
 				log.info i18nUtilService.getMessage(code: 'import.contact.save.error'), ex
-				println "ImportService.importContactsCsv :: exception :: $ex"
+				log.info "ImportService.importContactsCsv :: exception :: $ex"
 				failedLines << tokens
 			}
 		}
@@ -101,7 +106,7 @@ class ImportService {
 	}
 
 	def importContactVcard(params, request) {
-		println "ImportService.importContactVcard() :: ENTRY"
+		log.info "ImportService.importContactVcard() :: ENTRY"
 		def failedVcards = []
 		def savedCount = 0
 		def uploadFile = request.getFile('importCsvFile')
@@ -125,7 +130,12 @@ class ImportService {
 			try {
 				Ezvcard."parse${format.capitalize()}"(uploadFile.inputStream)
 						.all()
-						.each processCard
+						.eachWithIndex { it, index ->
+							processCard it
+							if (index % 100 == 0) {
+								cleanUpGorm()
+							}
+						}
 			} catch(Exception ex) {
 				if(exceptionClass && ex.class.isAssignableFrom(exceptionClass)) {
 					return false
@@ -186,6 +196,12 @@ class ImportService {
 		def f = new File(ResourceUtils.resourcePath, "import_contacts_${params.jobId}.csv")
 		f.deleteOnExit()
 		return f
+	}
+
+	private def cleanUpGorm() {
+		def session = sessionFactory.currentSession
+		session.flush()
+		session.clear()
 	}
 }
 
