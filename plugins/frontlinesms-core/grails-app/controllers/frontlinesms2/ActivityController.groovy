@@ -14,8 +14,10 @@ class ActivityController extends ControllerUtils {
 	
 	def create() {
 		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
-		[contactList: Contact.list(),
-				groupList:groupList, activityType: params.controller]
+		[
+			groupList:groupList,
+			activityType: params.controller
+		]
 	}
 	
 
@@ -25,7 +27,6 @@ class ActivityController extends ControllerUtils {
 			def activityType = activityInstance.shortName
 
 			def modelToRender = [
-				contactList: Contact.list(),
 				groupList:groupList,
 				activityInstanceToEdit: activityInstance,
 				activityType: activityType,
