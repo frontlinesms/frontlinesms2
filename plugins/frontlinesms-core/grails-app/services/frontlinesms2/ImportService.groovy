@@ -86,7 +86,7 @@ class ImportService {
 			} finally { try { writer.close() } catch(Exception ex) {} }
 		}
 
-		if(savedCount > 0) {
+		if(savedCount > 0 && !failedLines) {
 			systemNotificationService.create(code:'import.contact.complete', args:[savedCount])
 		} else {
 			def failedContactInstance = new FailedContact('csv', failedLineWriter.toString())
@@ -139,7 +139,7 @@ class ImportService {
 			throw new RuntimeException('Failed to parse vcf.')
 		}
 
-		if(savedCount > 0) {
+		if(savedCount > 0 && !failedVcards) {
 			systemNotificationService.create(code:'import.contact.complete', args:[savedCount])
 		} else {
 			def failedContactInstance = new FailedContact('vcf', Ezvcard.write(failedVcards).go())
