@@ -181,6 +181,14 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)
+		then:
+			waitFor {
+				messageList.getCheckbox(0).disabled
+			}
+			waitFor {
+				!messageList.getCheckbox(0).disabled
+			}
+		when:
 			messageList.toggleSelect(1)
 		then:
 			waitFor('very slow') { multipleMessageDetails.displayed }
