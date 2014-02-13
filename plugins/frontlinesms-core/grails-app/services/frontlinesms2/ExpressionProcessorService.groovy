@@ -19,11 +19,9 @@ class ExpressionProcessorService {
 	}
 
 	String process(Dispatch dispatch) {
-		log.info "### ExpressionProcessorService.process, for dispatch "
 		def messageBody = dispatch.message.text
 		def matches = getExpressions(messageBody)
 		matches.unique().each { match ->
-			log.info "#### found $match, replaceing with ${getReplacement(match, dispatch)}"
 			messageBody = messageBody.replace(match, getReplacement(match, dispatch))
 		}
 		messageBody
