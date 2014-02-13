@@ -5,16 +5,17 @@ class SubscriptionController extends ActivityController {
 
 	def create() {
 		def groupList = Group.getAll()
-		[contactList:Contact.list(), groupList:groupList]
+		[groupList:groupList]
 	}
 
 	def edit() {
 		withActivity { activityInstance ->
 			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 			def activityType = activityInstance.shortName
-			render view:"../$activityType/create", model:[contactList:Contact.list(),
+			render view:"../$activityType/create", model: [
 				groupList:groupList,
-				activityInstanceToEdit:activityInstance]
+				activityInstanceToEdit:activityInstance
+			]
 		}
 	}
 
