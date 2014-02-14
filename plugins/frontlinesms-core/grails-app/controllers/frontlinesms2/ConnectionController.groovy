@@ -209,9 +209,9 @@ class ConnectionController extends ControllerUtils {
 			saveSuccessful = handleSaveResponse.success
 			connectionErrors = handleSaveResponse.errors
 			fconnectionInstance = handleSaveResponse.connectionInstance
-			flash.message = LogEntry.log(saveSuccessful ? handleSaveResponse.successMessage : message(code: 'connection.creation.failed', args:[handleSaveResponse.errors]))
 			withFormat {
 				html {
+					flash.message = LogEntry.log(saveSuccessful ? handleSaveResponse.successMessage : message(code: 'connection.creation.failed', args:[handleSaveResponse.errors]))
 					redirect(controller:'connection', action:"list") // FIXME - should just enable connection here and redirect to list action, surely!
 				}
 				json {
