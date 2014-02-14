@@ -6,19 +6,21 @@
 import org.apache.commons.io.FileUtils
 import org.apache.commons.configuration.PropertiesConfigurationLayout
 import org.apache.commons.configuration.PropertiesConfiguration
+
+def UTF8ENCODING = 'UTF-8'
 def mergeLogFile = new File('target/i18nMergeLog.txt')
-def	mergeLog = new Date() as String
+def mergeLog = new Date() as String
 def log = { text ->
 	mergeLog += "\n${text}"
 	println text
 }
 
 def getPropertiesForFile = { file ->
-	def props = new PropertiesConfiguration()	
+	def props = new PropertiesConfiguration()
 	props.setListDelimiter(0 as char)
 	props.setFile(file)
-	props.load()
-	props	
+	props.load(FileUtils.openInputStream(file), UTF8ENCODING)
+	props    
 }
 
 def updateExistingLanguageFromFile = { existingFile, newFile ->
@@ -28,8 +30,16 @@ def updateExistingLanguageFromFile = { existingFile, newFile ->
 	existingProperties.keys.each { key ->
 		(newProperties.containsKey(key)) ? existingProperties.setProperty(key, newProperties.getString(key)) : existingProperties.clearProperty(key)
 	}
-	existingProperties.save()
-	log "Updated ${newFile.name}"
+
+	existingProperties.setEncoding(UTF8ENCODING)
+	def updatedTranslationLines = []
+	existingProperties.keys.each {
+		if(existingProperties.getLayout().getComment(it)){
+			updatedTranslationLines << "${existingProperties.getLayout().getComment(it)}"
+		}
+		updatedTranslationLines << "$it=${existingProperties.getString(it)}"
+	}
+	FileUtils.writeLines(existingFile, UTF8ENCODING, updatedTranslationLines)
 }
 
 def updateLanguageFromFile = { newFile ->
@@ -61,4 +71,3 @@ else {
 }
 
 FileUtils.writeStringToFile(mergeLogFile, mergeLog)
-
