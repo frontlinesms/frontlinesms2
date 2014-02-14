@@ -233,9 +233,9 @@ class ConnectionController extends ControllerUtils {
 			appSettingsService['routing.use'] = connectionUseSetting?
 					"$connectionUseSetting,fconnection-$fconnectionInstance.id":
 					"fconnection-$fconnectionInstance.id"
-			flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
 			withFormat {
 				html {
+					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
 					forward action:'enable', id:fconnectionInstance.id
 				}
 				json {
@@ -243,9 +243,9 @@ class ConnectionController extends ControllerUtils {
 				}
 			}
 		} else {
-			flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
 			withFormat {
 				html {
+					flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
 					redirect(controller:'connection', action:"list")
 				}
 				json {
