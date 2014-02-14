@@ -4,6 +4,7 @@ class QuickMessageController extends ControllerUtils {
 	private static final CONTACT_ID_PATTERN = /^contact-(\d+)$/
 
 	def create() {
+		def groupList = params.groupList? Group.getAll(params.groupList.split(',').flatten().collect{ it as Long }): []
 		def recipientList = []
 		if(params.messageIds?.contains(',')) {
 			params.messageIds.tokenize(',').each {
@@ -23,6 +24,7 @@ class QuickMessageController extends ControllerUtils {
 		def configureTabs = params.configureTabs? configTabs(params.configureTabs): ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 		[configureTabs:configureTabs,
 				addresses:recipientList,
+				groups:groupList,
 				recipientCount:recipientList.size(),
 				recipientName:recipientName,
 				messageText:params.messageText?:'']
