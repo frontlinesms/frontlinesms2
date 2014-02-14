@@ -76,7 +76,7 @@ class SmartGroupController extends ControllerUtils {
 	
 	private def getRuleField(i) {
 		def f = params['rule-field']
-		println "field $f"
+		log.info "field $f"
 		if(f instanceof String[]) return f[i]
 		else {
 			assert i == 0

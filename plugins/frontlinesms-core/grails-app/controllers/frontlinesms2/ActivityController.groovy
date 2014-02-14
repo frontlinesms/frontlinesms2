@@ -44,7 +44,7 @@ class ActivityController extends ControllerUtils {
 				modelToRender.contacts = contacts
 				modelToRender.addresses = addresses
 			} catch (MissingPropertyException e) {
-				println "$e"
+				log.info "$e"
 			}
 
 			render view:"../$activityType/create", model: modelToRender
@@ -146,7 +146,7 @@ class ActivityController extends ControllerUtils {
 			if(currentKeyword && (currentKeyword.activity.id != instance.id))
 				collidingKeywords << [(currentKeyword.value):"'${currentKeyword.activity.name}'"]
 		}
-		println "colliding keywords:: $collidingKeywords"
+		log.info "colliding keywords:: $collidingKeywords"
 		return collidingKeywords
 	}
 

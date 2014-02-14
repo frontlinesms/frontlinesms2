@@ -9,23 +9,23 @@ class IntelliSmsTranslationService implements Processor {
 	static transactional = false //TODO please explain why this is not transactional
 
 	void process(Exchange exchange) {
-		println("exchange ${exchange}")
+		log.info("exchange ${exchange}")
 		def i = exchange.in
-		println("in: ${i}")
+		log.info("in: ${i}")
 		if(isValidMessageSource(i.getHeader('From'))) {
 			TextMessage message = new TextMessage(inbound:true)
 			def emailBody = i.body
 			def emailSubject = i.getHeader('Subject')
 			def emailDate = i.getHeader('Date')
 			message.src = INTERNATIONAL_SYMBOL + emailSubject.split(" ")[2]
-			println("src: ${message.src}")
-			println "emailBody: $emailBody"
-			println "emailSubject: $emailSubject"
-			println "emailDate: $emailDate"
+			log.info("src: ${message.src}")
+			log.info "emailBody: $emailBody"
+			log.info "emailSubject: $emailSubject"
+			log.info "emailDate: $emailDate"
 			message.text = emailSubject
 			message.date = Date.parse("EEE, dd MMM yyyy hh:mm:ss Z",emailDate)
 			
-			println "message sent on ${message.date}"
+			log.info "message sent on ${message.date}"
 			if(emailBody != null) {
 				message.text = emailBody
 			}
@@ -37,7 +37,7 @@ class IntelliSmsTranslationService implements Processor {
 	}
 
 	private isValidMessageSource(from) {
-		println "from: $from"
+		log.info "from: $from"
 		from.contains(INTELLISMS_MESSAGING_ADDR)
 	}
 }

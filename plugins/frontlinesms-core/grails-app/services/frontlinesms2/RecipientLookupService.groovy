@@ -92,7 +92,7 @@ class RecipientLookupService {
 	}
 
 	def getManualAddresses = { recipients ->
-		println "############# $recipients"
+		log.info "############# $recipients"
 		[recipients].flatten().findAll { it.startsWith('address') }.collect { stripPrefix(it) }
 	}
 

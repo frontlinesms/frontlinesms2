@@ -18,7 +18,7 @@ class ImportController extends ControllerUtils {
 	def systemNotificationService
 
 	def importData() {
-		println "ImportController.importData() :: params=$params"
+		log.info "ImportController.importData() :: params=$params"
 		if(params.data == 'messages') {
 			importMessages()
 		} else {
@@ -27,7 +27,7 @@ class ImportController extends ControllerUtils {
 	}
 
 	private def importContacts() {
-		println "ImportController.importContacts() :: ENTRY"
+		log.info "ImportController.importContacts() :: ENTRY"
 		if(params.reviewDone) {
 			ImportContactsJob.triggerNow(['fileType':'csv', 'params':params, 'request':request])
 			systemNotificationService.create(code:'importing.status.label', topic:'import.status')
@@ -47,7 +47,7 @@ class ImportController extends ControllerUtils {
 	}
 
 	private def prepareCsvReview() {
-		println "ImportController.prepareCsvReview() :: ENTRY"
+		log.info "ImportController.prepareCsvReview() :: ENTRY"
 		def uploadedCSVFile = request.getFile('importCsvFile')
 		def csvAsNestedLists = []
 		def headerRowSize
