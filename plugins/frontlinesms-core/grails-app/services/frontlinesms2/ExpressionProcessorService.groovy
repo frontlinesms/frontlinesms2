@@ -42,6 +42,9 @@ class ExpressionProcessorService {
 	private getReplacement(expression, dispatch) {
 		try {
 			// TODO could replace this manual mapping wth...a Map!  e.g. [sender_number:{incomingMessage.src}]
+			if(!dispatch.message.isAttached()) {
+				dispatch.message.attach()
+			}
 			def ownerD = dispatch.message.ownerDetail
 			log.info "### Owner Detail for ${dispatch} ## ${ownerD}"
 			def incomingMessage = TextMessage.get(ownerD)
@@ -64,13 +67,15 @@ class ExpressionProcessorService {
 			if (expression == '${recipient_number}')
 				return dispatch.dst
 			if (expression == '${recipient_name}') {
-				def recipientName = dispatch.message.outboundContactName
+				def recipientName = dispatch.message.outboundContactName ?: dispatch.message.refresh().outboundContactName
 				return recipientName ?: dispatch.dst
 			}
 			if (expression == '${keyword}')
 				return getKeyword()
 			return expression
 		} catch (Exception e) {
+			log.info "Exception when processing substitution"
+			log.info e
 			return expression
 		}
 	}
