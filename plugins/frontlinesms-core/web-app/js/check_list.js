@@ -1,5 +1,5 @@
 check_list = (function() {
-	var checkAll, itemCheckChanged, showMultipleDetailsPanel, updateCheckAllBox,
+	var checkAll, itemCheckChanged, showMultipleDetailsPanel, updateCheckAllBox, toggleCheckboxesEnabled,
 			tick = 0;
 
 	showMultipleDetailsPanel = function(itemTypeString) {
@@ -60,6 +60,15 @@ check_list = (function() {
 	    return $('#main-list .' + itemTypeString + '-select-checkbox:checked').size();
 	};
 
+	toggleCheckboxesEnabled = function(itemTypeString, enabled) {
+		if(enabled) {
+			$('#main-list .' + itemTypeString + '-select-checkbox,#' + itemTypeString + '-select-all').removeAttr('disabled');
+		}
+		else {
+			$('#main-list .' + itemTypeString + '-select-checkbox,#' + itemTypeString + '-select-all').attr('disabled', 'disabled');
+		}
+	};
+
 	updateSingleCheckedDetails = function(itemTypeString, itemId, row) {
 		var params, action, singleDetails, callerTick;
 		if (itemTypeString === 'message') {
@@ -78,6 +87,7 @@ check_list = (function() {
 		singleDetails.show();
 
 		callerTick = ++tick;
+		toggleCheckboxesEnabled(itemTypeString, false);
 		$.get(url_root + itemTypeString + action + itemId, params, function(data) {
 			var newPane = $(data);
 			if(callerTick !== tick) {
@@ -92,11 +102,13 @@ check_list = (function() {
 				// TODO if message was unread and we're in the inbox, please decrement unread messages count
 				// on the tab (e.g. MESSAGES (123) -> MESSAGES (122)
 			}
+			toggleCheckboxesEnabled(itemTypeString, true);
 		});
 	};
 
 	updateMultipleCheckedDetails = function(itemTypeString) {
 		if (itemTypeString === 'contact') {
+			toggleCheckboxesEnabled(itemTypeString, false);
 			$.post(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
 				var pane = $(data);
 				pane.show(); // Pane is initially display:hidden in GSP
@@ -104,6 +116,7 @@ check_list = (function() {
 				$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
 				applyContactPaneJavascriptEnhancements(pane);
 				showMultipleDetailsPanel(itemTypeString);
+				toggleCheckboxesEnabled(itemTypeString, true);
 			});
 		} else {
 			// update counter display
