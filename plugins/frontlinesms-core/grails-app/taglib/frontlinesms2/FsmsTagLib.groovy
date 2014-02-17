@@ -188,6 +188,12 @@ class FsmsTagLib {
 		}
 	}
 
+	def interactionTemplate = { att, body ->
+		def interactionType = (controllerName == 'missedCall' ? 'missedCall' : 'message')
+		def requestedTemplate = att.template
+		out << templateElseBody(att + [template: "/$interactionType/$requestedTemplate"], render(att + [template: "/interaction/$requestedTemplate"]))
+	}
+
 	def i18nBundle = {
 		def locale = RequestContextUtils.getLocale(request)
 		// Always include English in case their locale is not available.  The most accurate

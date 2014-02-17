@@ -25,7 +25,7 @@
 				<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 				<div id="main-list-container">
 					<div id="main-list-head">
-						<fsms:render template="/interaction/header"/>
+						<fsms:interactionTemplate template="header"/>
 					</div>
 					<fsms:render template="/interaction/interaction_list"/>
 					<div id="main-list-foot">

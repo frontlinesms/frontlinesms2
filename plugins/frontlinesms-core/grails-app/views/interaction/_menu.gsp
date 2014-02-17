@@ -13,7 +13,7 @@
 	</fsms:submenu>
 
 	<fsms:submenu code="missedCall.header" class="missedCalls">
-		<fsms:menuitem class="" selected="${messageSection=='missedCalls'}" controller="missedCall" action="inbox" code="missedCall.section.inbox" entitytype="inbox">
+		<fsms:menuitem class="" selected="${controllerName=='missedCall'}" controller="missedCall" action="inbox" code="missedCall.section.inbox" entitytype="inbox">
 			<fsms:unreadCount unreadCount="${MissedCall.countUnreadMessages()}"/>
 		</fsms:menuitem>
 	</fsms:submenu>
