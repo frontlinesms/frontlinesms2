@@ -23,7 +23,7 @@
 	<tbody>
 		<g:if test="${messageInstanceTotal > 0}">
 			<g:if test="${messageSection == 'trash' && !params.starred}">
-				<fsms:render template="/message/trash_list"/>
+				<fsms:render template="/interaction/trash_list"/>
 			</g:if>
 			<g:else>
 

@@ -54,6 +54,6 @@
 		</g:elseif>
 	</div>
 		<g:if test="${!(messageSection == 'pending') && (activityInstanceList || folderInstanceList)}">
-			<fsms:render template="/message/other_actions"/>
+			<fsms:render template="/interaction/other_actions"/>
 		</g:if>
 </div>

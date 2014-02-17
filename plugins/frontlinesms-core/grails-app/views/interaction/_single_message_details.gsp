@@ -41,9 +41,9 @@
 				${messageInstance.text}
 			</p></div>
 		</div>
-		<fsms:render template="/message/message_actions"/>
+		<fsms:render template="/interaction/message_actions"/>
 		<g:if test="${!(messageSection == 'pending') && (activityInstanceList || folderInstanceList)}">
-			<fsms:render template="/message/other_actions"/>
+			<fsms:render template="/interaction/other_actions"/>
 		</g:if>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
@@ -54,7 +54,7 @@
 			<p id="message-detail-date"><g:formatDate date="${Trash.findByObject(ownerInstance).dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.messages.size() == 1 ? g.message(code:'fmessage.count') : ownerInstance.messages.size() + " " + g.message(code:'fmessage.many')}</p></div>
 		</div>
-		<fsms:render template="/message/message_actions"/>
+		<fsms:render template="/interaction/message_actions"/>
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>

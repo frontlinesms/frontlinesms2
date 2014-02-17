@@ -3,6 +3,6 @@
 		<fsms:render template="/activity/${ownerInstance.shortName}/message_actions"/>
 	</g:if>
 	<g:if test="${(ownerInstance && !(ownerInstance?.archived)) || !(messageInstance?.archived)}">
-		<fsms:render template="/message/move_message"/>
+		<fsms:render template="/interaction/move_message"/>
 	</g:if>
 </div>
