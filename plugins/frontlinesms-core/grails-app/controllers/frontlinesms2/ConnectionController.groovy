@@ -209,9 +209,9 @@ class ConnectionController extends ControllerUtils {
 			saveSuccessful = handleSaveResponse.success
 			connectionErrors = handleSaveResponse.errors
 			fconnectionInstance = handleSaveResponse.connectionInstance
-			flash.message = LogEntry.log(saveSuccessful ? handleSaveResponse.successMessage : message(code: 'connection.creation.failed', args:[handleSaveResponse.errors]))
 			withFormat {
 				html {
+					flash.message = LogEntry.log(saveSuccessful ? handleSaveResponse.successMessage : message(code: 'connection.creation.failed', args:[handleSaveResponse.errors]))
 					redirect(controller:'connection', action:"list") // FIXME - should just enable connection here and redirect to list action, surely!
 				}
 				json {
@@ -233,9 +233,9 @@ class ConnectionController extends ControllerUtils {
 			appSettingsService['routing.use'] = connectionUseSetting?
 					"$connectionUseSetting,fconnection-$fconnectionInstance.id":
 					"fconnection-$fconnectionInstance.id"
-			flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
 			withFormat {
 				html {
+					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
 					forward action:'enable', id:fconnectionInstance.id
 				}
 				json {
@@ -243,9 +243,9 @@ class ConnectionController extends ControllerUtils {
 				}
 			}
 		} else {
-			flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
 			withFormat {
 				html {
+					flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
 					redirect(controller:'connection', action:"list")
 				}
 				json {

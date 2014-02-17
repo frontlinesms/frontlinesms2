@@ -44,16 +44,6 @@ class AnnouncementControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			editedAnnouncement.name == "renamed announcement"
 	}
 
-	def "list of smart groups should be included in the group list"() {
-		given:
-			def s = new SmartGroup(name:'English numbers', mobile:'+44').save(flush:true)
-		when:
-			def model = controller.create()
-		then:
-			model.groupList["smartgroup-$s.id"]?.name == 'English numbers'
-			model.groupList["smartgroup-$s.id"]?.addresses == []
-	}
-
 	@Unroll
 	def '#instanceCount announcement(s) can be fetched as a JSON list'() {
 		given:
