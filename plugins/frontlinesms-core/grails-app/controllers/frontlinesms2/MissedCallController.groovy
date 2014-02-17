@@ -35,14 +35,14 @@ class missedCallController extends ControllerUtils {
 
 		def model = [missedCallInstance: missedCallInstance,
 				ownerInstance:ownerInstance,
-				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
-				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(false, false),
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(false, false),
 				missedCallSection: params.missedCallSection]
 		render view:'/missedCall/_single_missedCall_details', model:model
 	}
 
 	def inbox() {
-		def missedCallInstanceList = MissedCall.inbox(params.starred, this.viewingArchive)
+		def missedCallInstanceList = MissedCall.inbox(params.starred)
 		render view:'../missedCall/standard',
 				model:[missedCallInstanceList: missedCallInstanceList.list(params),
 						missedCallSection:'inbox',
@@ -134,5 +134,31 @@ class missedCallController extends ControllerUtils {
 	}
 	
 	private def withMissedCall = withDomainObject MissedCall, { params.missedCallId }
+
+	private def getShowModel() {
+		def missedCallInstance = params.missedCallId? MissedCall.get(params.missedCallId): null
+		missedCallInstance?.read = true
+		missedCallInstance?.save()
+
+		def checkedMissedCallCount = getCheckedMissedCallList().size()
+		[missedCallInstance: missedCallInstance,
+				checkedMissedCallCount: checkedMissedCallCount,
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(false, false),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(false, false),
+				messageCount: TextMessage.countAllMessages(),
+				missedCallCount: MissedCall.countAllMissedCalls()]
+	}
+
+	private def getCheckedMissedCalls() {
+		return MissedCall.getAll(getCheckedMissedCallList()) - null
+	}
+
+	private def getCheckedMissedCallList() {
+		def checked = params['missedcall-select']?: params.missedCallId?: []
+		if(checked instanceof String) checked = checked.split(/\D+/) - ''
+		if(checked instanceof Number) checked = [checked]
+		if(checked.class.isArray()) checked = checked as List
+		return checked
+	}
 }
 

@@ -45,7 +45,7 @@ class MissedCall extends Interaction {
 		mobileNumberUtilService.getFlagCSSClasses(src)
 	}
 
-	static def countAllMessages() {
+	static def countAllMissedCalls() {
 		['inbox', 'deleted'].collectEntries { [it, MissedCall[it].count()] }
 	}
 
