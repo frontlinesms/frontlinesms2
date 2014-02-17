@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.TextMessage" %>
+<%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.MissedCall" %>
 <fsms:menu class="messages">
 	<fsms:submenu code="fmessage.header" class="messages">
 		<fsms:menuitem class="" selected="${messageSection=='inbox'}" controller="message" action="inbox" code="fmessage.section.inbox" entitytype="inbox">
@@ -9,6 +10,12 @@
 			<fsms:pendingCount pendingCount="${TextMessage.pendingAndNotFailed.count()}"/>
 		</fsms:menuitem>
 		<fsms:menuitem class="" selected="${messageSection=='trash'}" controller="message" action="trash" code="fmessage.section.trash"/>
+	</fsms:submenu>
+
+	<fsms:submenu code="missedCall.header" class="missedCalls">
+		<fsms:menuitem class="" selected="${messageSection=='missedCalls'}" controller="missedCall" action="inbox" code="missedCall.section.inbox" entitytype="inbox">
+			<fsms:unreadCount unreadCount="${MissedCall.countUnreadMessages()}"/>
+		</fsms:menuitem>
 	</fsms:submenu>
 
 	<fsms:submenu code="activities.header" class="activities">
