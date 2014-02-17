@@ -215,7 +215,7 @@ class ConnectionController extends ControllerUtils {
 			def handleSaveResponse = connectionService.handleSave(params)
 			saveSuccessful = handleSaveResponse.success
 			connectionErrors = handleSaveResponse.errors
-			fconnectionInstances = handleSaveResponse.connectionInstance
+			def fconnectionInstances = handleSaveResponse.connectionInstance
 			flash.newConnectionIds = (fconnectionInstances instanceof List ? fconnectionInstances*.id.join(',') : fconnectionInstances.id)
 			withFormat {
 				html {
