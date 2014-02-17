@@ -39,13 +39,13 @@
 						<fsms:render template="archived_folder_list"/>
 					</g:elseif>
 					<g:elseif test="${(messageSection == 'inbox' || messageSection == 'sent') && !viewingMessages}">
-						<fsms:render template="/interaction/message_list"/>
+						<fsms:render template="/interaction/interaction_list"/>
 					</g:elseif>
 					<g:elseif test="${!viewingMessages}">
 						<fsms:render template="/${messageSection}/archived_${messageSection}_list"/>
 					</g:elseif>
 					<g:else>
-						<fsms:render template="/interaction/message_list"/>
+						<fsms:render template="/interaction/interaction_list"/>
 					</g:else>
 					<div id="main-list-foot">
 						<fsms:render template="/interaction/footer"/>

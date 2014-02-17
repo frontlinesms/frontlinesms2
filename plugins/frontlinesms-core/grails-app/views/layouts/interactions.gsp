@@ -27,7 +27,7 @@
 					<div id="main-list-head">
 						<fsms:render template="/interaction/header"/>
 					</div>
-					<fsms:render template="/interaction/message_list"/>
+					<fsms:render template="/interaction/interaction_list"/>
 					<div id="main-list-foot">
 						<fsms:render template="/interaction/footer"/>
 					</div>
