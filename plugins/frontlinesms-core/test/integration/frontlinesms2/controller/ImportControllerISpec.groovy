@@ -363,7 +363,7 @@ United States of America</text></label>
 	}
 
 	def importMessages(String fileContent) {
-		mockFileUpload('importCsvFile', fileContent)
+		mockFileUpload('contactImportFile', fileContent)
 		controller.importMessages()
 	}
 
@@ -378,7 +378,7 @@ United States of America</text></label>
 	}
 
 	def importContacts(String fileContent, contentType=FILE_TYPE_CSV) {
-		mockFileUpload('importCsvFile', fileContent, contentType)
+		mockFileUpload('contactImportFile', fileContent, contentType)
 		controller.importContacts()
 	}
 

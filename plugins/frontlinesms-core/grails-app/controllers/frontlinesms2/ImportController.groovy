@@ -34,7 +34,7 @@ class ImportController extends ControllerUtils {
 			redirect controller:'contact', action:'show' 
 			return
 		}
-		switch(request.getFile('importCsvFile').contentType) {
+		switch(request.getFile('contactImportFile').contentType) {
 			case [CONTENT_TYPES.vcf, CONTENT_TYPES.vcfDepricated]:
 				ContactImportJob.triggerNow(['fileType':'vcf', 'params':params, 'request':request])
 				systemNotificationService.create(code:'importing.status.label', topic:'import.status')
@@ -48,7 +48,7 @@ class ImportController extends ControllerUtils {
 
 	private def prepareCsvReview() {
 		log.info "ImportController.prepareCsvReview() :: ENTRY"
-		def uploadedCSVFile = request.getFile('importCsvFile')
+		def uploadedCSVFile = request.getFile('contactImportFile')
 		def csvAsNestedLists = []
 		def headerRowSize
 		uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
@@ -68,7 +68,7 @@ class ImportController extends ControllerUtils {
 		def savedCount = 0
 		def failedCount = 0
 		def importingVersionOne = true
-		def uploadedCSVFile = request.getFile('importCsvFile')
+		def uploadedCSVFile = request.getFile('contactImportFile')
 		if(uploadedCSVFile) {
 			def headers
 			def standardFields = ['Message Content':'text', 'Sender Number':'src']

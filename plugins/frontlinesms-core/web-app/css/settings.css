@@ -17,7 +17,7 @@
 #body.settings #body-content h3 { font-weight:bold; margin-bottom:5px; margin-top:5px; margin-left:15px; }
 #body.settings #body-content #import .radio-choice { margin:5px; }
 #body.settings #body-content #import input[type='file'] { margin-top:10px; }
-#body.settings #body-content #import label[for='importCsvFile'] { font-style:italic; }
+#body.settings #body-content #import label[for='contactImportFile'] { font-style:italic; }
 
 #body.settings #body-content-container { background-color:white; border-left:1px solid #9e9e9e; }
 #body-content.connections .connection { width:100%; height:34px; border-bottom:1px solid #dedede; }

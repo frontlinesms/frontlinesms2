@@ -109,7 +109,7 @@ class ContactImportService {
 		log.info "ContactImportService.importContactVcard() :: ENTRY"
 		def failedVcards = []
 		def savedCount = 0
-		def uploadFile = request.getFile('importCsvFile')
+		def uploadFile = request.getFile('contactImportFile')
 		def processCard = { v ->
 			def mobile = v.telephoneNumbers? v.telephoneNumbers.first(): null
 			if(mobile) {
