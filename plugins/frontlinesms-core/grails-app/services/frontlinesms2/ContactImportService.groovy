@@ -9,7 +9,7 @@ import au.com.bytecode.opencsv.CSVWriter
 import au.com.bytecode.opencsv.CSVParser
 import ezvcard.*
 
-class ImportService {
+class ContactImportService {
 	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
 					'Email':'email', 'Group(s)':'groups', 'Notes':'notes']
 
@@ -35,7 +35,7 @@ class ImportService {
 	}
 
 	def importContactCsv(params, request) {
-		log.info "ImportService.importContactCsv) :: ENTRY"
+		log.info "ContactImportService.importContactCsv) :: ENTRY"
 		def savedCount = 0
 		def processedCount = 0
 		def headers
@@ -78,7 +78,7 @@ class ImportService {
 				++savedCount
 			} catch(Exception ex) {
 				log.info i18nUtilService.getMessage(code: 'import.contact.save.error'), ex
-				log.info "ImportService.importContactsCsv :: exception :: $ex"
+				log.info "ContactImportService.importContactsCsv :: exception :: $ex"
 				failedLines << tokens
 			}
 		}
@@ -106,7 +106,7 @@ class ImportService {
 	}
 
 	def importContactVcard(params, request) {
-		log.info "ImportService.importContactVcard() :: ENTRY"
+		log.info "ContactImportService.importContactVcard() :: ENTRY"
 		def failedVcards = []
 		def savedCount = 0
 		def uploadFile = request.getFile('importCsvFile')

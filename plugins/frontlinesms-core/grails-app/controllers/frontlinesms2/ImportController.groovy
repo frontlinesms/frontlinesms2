@@ -14,7 +14,7 @@ class ImportController extends ControllerUtils {
 					'Email':'email', 'Group(s)':'groups', 'Notes':'notes']
 	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard', vcfDepricated:'text/directory']
 
-	def importService
+	def contactImportService
 	def systemNotificationService
 
 	def importData() {
@@ -138,7 +138,7 @@ class ImportController extends ControllerUtils {
 	def failedContacts() {
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.${params.format}")
 		response.setHeader 'Content-Type', CONTENT_TYPES[params.format]
-		def failedContactFileContent = importService.getFailedContactsByKey(params.key)
+		def failedContactFileContent = contactImportService.getFailedContactsByKey(params.key)
 		response.outputStream << failedContactFileContent
 		response.outputStream.flush()
 	}

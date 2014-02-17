@@ -6,11 +6,11 @@ import spock.lang.*
 import grails.test.mixin.*
 
 @TestFor(ImportController)
-@Mock([ImportService])
+@Mock([ContactImportService])
 class ImportControllerSpec extends Specification {
 	def 'failedContacts should trigger a download for a file named failedContacts.csv'() {
 		given:
-			controller.importService =  Mock(ImportService)
+			controller.contactImportService =  Mock(ContactImportService)
 			controller.params.failedContacts = '''\
 			"Name","Mobile Number","Email","Notes","Group(s)","lake","town"
 			"Alice","+123456789","","","Friends\\Not Cats","Victoria",""

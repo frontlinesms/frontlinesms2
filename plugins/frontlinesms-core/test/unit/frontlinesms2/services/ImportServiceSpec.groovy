@@ -4,9 +4,9 @@ import frontlinesms2.*
 import spock.lang.*
 import grails.test.mixin.*
 
-@TestFor(ImportService)
+@TestFor(ContactImportService)
 @Mock(Group)
-class ImportServiceSpec extends Specification {
+class ContactImportServiceSpec extends Specification {
 	@Unroll
 	def 'getGroupNames should parse v1 CSV groups into v2 groups'() {
 		expect:
