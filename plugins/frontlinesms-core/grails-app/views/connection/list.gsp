@@ -92,6 +92,9 @@ $(function() {
 		}
 	});
 	preloadImage("${r.resource(dir:'images', file:'message/gray-ajax-spinner.gif')}");
+	<g:if test="${newConnectionIds}">
+		fconnection_list.pulseNewConnections("${newConnectionIds}");
+	</g:if>
 });
 </g:javascript>
 </body>
