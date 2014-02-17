@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class ImportContactsJob {
+class ContactImportJob {
 	def grailsApplication
 
 	def execute(context) {

@@ -29,14 +29,14 @@ class ImportController extends ControllerUtils {
 	private def importContacts() {
 		log.info "ImportController.importContacts() :: ENTRY"
 		if(params.reviewDone) {
-			ImportContactsJob.triggerNow(['fileType':'csv', 'params':params, 'request':request])
+			ContactImportJob.triggerNow(['fileType':'csv', 'params':params, 'request':request])
 			systemNotificationService.create(code:'importing.status.label', topic:'import.status')
 			redirect controller:'contact', action:'show' 
 			return
 		}
 		switch(request.getFile('importCsvFile').contentType) {
 			case [CONTENT_TYPES.vcf, CONTENT_TYPES.vcfDepricated]:
-				ImportContactsJob.triggerNow(['fileType':'vcf', 'params':params, 'request':request])
+				ContactImportJob.triggerNow(['fileType':'vcf', 'params':params, 'request':request])
 				systemNotificationService.create(code:'importing.status.label', topic:'import.status')
 				redirect controller:'contact', action:'show' 
 				break
