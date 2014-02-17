@@ -20,8 +20,6 @@ class MissedCall extends Interaction {
 				eq("archived", archived)
 				if(getOnlyStarred)
 					eq("starred", true)
-				eq("inbound", true)
-				isNull("messageOwner")
 			}
 		}
 		forReceivedStats { params ->

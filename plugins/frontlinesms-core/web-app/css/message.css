@@ -34,7 +34,7 @@
 #body-menu span.unread_message_count.zero,#body-menu span.pending_message_count.zero {
 	display:none;
 }
-#body.messages #main-list-container > * { width:auto; }
+#body.messages #main-list-container > * { width:100%; }
 
 #body.messages #main-list-head { padding:0 17px; background-color:white; }
 #body.messages #main-list-head div.content { display:table; width:100%; }
@@ -56,6 +56,7 @@
 
 #body.messages #main-list tr > * { width:0; }
 #body.messages #main-list tr > .content { width:100%; }
+#body.messages #main-list.no-content-column tr th#source-header { width:100%; }
 #body.messages #main-list tr > .no-content { width:100%; }
 #body.messages #main-list .unread { font-weight:bold; }
 #body.messages #main-list a.starred { background-image:url("../images/icons/star.png"); }

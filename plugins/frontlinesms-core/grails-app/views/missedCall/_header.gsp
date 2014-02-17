@@ -10,7 +10,7 @@
 	</g:if>
 	<g:else>
 		<h1 class="${messageSection}">
-			<g:message code="missedCall.header.inbox"/>
+			<g:message code="missedCall.header"/>
 		</h1>
 		<fsms:render template="/interaction/section_action_buttons"/>
 	</g:else>
