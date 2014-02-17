@@ -26,7 +26,7 @@
 				<div id="main-list-container">
 					<div id="main-list-head">
 						<g:if test="${viewingMessages}">
-							<fsms:render template="/message/header"/>
+							<fsms:render template="/interaction/header"/>
 						</g:if>
 						<g:else>
 							<fsms:render template="/archive/header"/>
@@ -39,21 +39,21 @@
 						<fsms:render template="archived_folder_list"/>
 					</g:elseif>
 					<g:elseif test="${(messageSection == 'inbox' || messageSection == 'sent') && !viewingMessages}">
-						<fsms:render template="/message/message_list"/>
+						<fsms:render template="/interaction/message_list"/>
 					</g:elseif>
 					<g:elseif test="${!viewingMessages}">
 						<fsms:render template="/${messageSection}/archived_${messageSection}_list"/>
 					</g:elseif>
 					<g:else>
-						<fsms:render template="/message/message_list"/>
+						<fsms:render template="/interaction/message_list"/>
 					</g:else>
 					<div id="main-list-foot">
-						<fsms:render template="/message/footer"/>
+						<fsms:render template="/interaction/footer"/>
 					</div>
 				</div>
 				<g:layoutBody/>
 				<div id="detail">
-					<fsms:render template="/message/message_details" />
+					<fsms:render template="/interaction/message_details" />
 				</div>
 			</g:form>
 		</div>

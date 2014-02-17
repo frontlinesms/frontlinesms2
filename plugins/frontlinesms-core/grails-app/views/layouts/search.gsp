@@ -27,13 +27,13 @@
 					<div id="main-list-head">
 						<fsms:render template="/search/header"/>
 					</div>
-					<fsms:render template="/message/message_list"/>
+					<fsms:render template="/interaction/message_list"/>
 					<div id="main-list-foot">
-						<fsms:render template="/message/footer"/>
+						<fsms:render template="/interaction/footer"/>
 					</div>
 				</div>
 				<div id="detail">
-					<fsms:render template="/message/message_details"/>
+					<fsms:render template="/interaction/message_details"/>
 				</div>
 			</g:form>
 		</div>
