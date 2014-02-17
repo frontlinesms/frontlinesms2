@@ -64,7 +64,10 @@ class FsmsTagLib {
 	def tab = { att, body ->
 		def con = att.controller
 		out << '<li class="' + con
-		if(att.mainNavSection) {
+		if(att.selectedOverride) {
+			if (att.selectedOverride) out << ' current'
+		}
+		else if(att.mainNavSection) {
 			if (att.mainNavSection == con) out << ' current'
 		}
 		else if(con == params.controller) {
