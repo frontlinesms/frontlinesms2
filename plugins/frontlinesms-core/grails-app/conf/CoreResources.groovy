@@ -112,6 +112,7 @@ modules = {
 	settings {
 		dependsOn 'common, font-awesome'
 		resource url:[dir:'js', file:'/settings/general_settings.js']
+		resource url:[dir:'js', file:'jquery.pulse.js']
 		resource url:[dir:'js', file:'contact/import_review.js']
 	}
 	
