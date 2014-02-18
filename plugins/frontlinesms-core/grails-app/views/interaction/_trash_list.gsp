@@ -7,8 +7,8 @@
 	<g:else>
 		<tr class="${t.object == ownerInstance ? 'selected' : ''}" id="activity-${t.id}">
 	</g:else>
-		<td class="message-select-cell">
-			<g:checkBox disabled="${t.objectClass == frontlinesms2.TextMessage ? 'false' : 'true'}" class="message-select message-select-checkbox" name="message-select" id="message-select-${t.object.id}" checked="${params.checkedId == t.object.id+'' ? 'true': 'false'}" value="${t.id}" onclick="check_list.itemCheckChanged('interaction',${t.object.id});"/>
+		<td class="interaction-select-cell">
+			<g:checkBox disabled="${t.objectClass == frontlinesms2.TextMessage ? 'false' : 'true'}" class="interaction-select interaction-select-checkbox" name="interaction-select" id="interaction-select-${t.object.id}" checked="${params.checkedId == t.object.id+'' ? 'true': 'false'}" value="${t.id}" onclick="check_list.itemCheckChanged('interaction',${t.object.id});"/>
 		</td>
 		<td class="message-star-cell" id="star-${t.objectId}">
 			<g:if test="${t.objectClass == frontlinesms2.TextMessage}">
