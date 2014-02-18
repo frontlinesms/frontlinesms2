@@ -41,7 +41,7 @@ class MessageController extends ControllerUtils {
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageSection: params.messageSection]
-		render view:'/message/_single_message_details', model:model
+		render view:'/interaction/_single_message_details', model:model
 	}
 
 	def inbox() {

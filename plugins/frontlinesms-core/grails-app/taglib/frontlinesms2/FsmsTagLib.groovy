@@ -192,7 +192,6 @@ class FsmsTagLib {
 	}
 
 	def interactionTemplate = { att, body ->
-		println "#### interaction template invoked for ${att.template}"
 		def interactionType = (controllerName == 'missedCall' ? 'missedCall' : 'message')
 		def requestedTemplate = att.template
 		// TODO find a way to reuse templateElseBody here - this re-implementation is to work around fact that 2nd render would be
