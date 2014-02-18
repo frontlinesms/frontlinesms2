@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.TextMessage" %>
 <%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.MissedCall" %>
+<%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.FrontlinesyncFconnection" %>
 <fsms:menu class="messages">
 	<fsms:submenu code="fmessage.header" class="messages">
 		<fsms:menuitem class="" selected="${messageSection=='inbox'}" controller="message" action="inbox" code="fmessage.section.inbox" entitytype="inbox">
@@ -12,11 +13,13 @@
 		<fsms:menuitem class="" selected="${messageSection=='trash'}" controller="message" action="trash" code="fmessage.section.trash"/>
 	</fsms:submenu>
 
-	<fsms:submenu code="missedCall.header" class="missedCalls">
-		<fsms:menuitem class="" selected="${params.controller=='missedCall'}" controller="missedCall" action="inbox" code="missedCall.section.inbox" entitytype="inbox">
-			<fsms:unreadCount unreadCount="${MissedCall.countUnreadMessages()}"/>
-		</fsms:menuitem>
-	</fsms:submenu>
+	<g:if test="${FrontlinesyncFconnection.count() || MissedCall.count()}">
+		<fsms:submenu code="missedCall.header" class="missedCalls">
+			<fsms:menuitem class="" selected="${params.controller=='missedCall'}" controller="missedCall" action="inbox" code="missedCall.section.inbox" entitytype="inbox">
+				<fsms:unreadCount unreadCount="${MissedCall.countUnreadMessages()}"/>
+			</fsms:menuitem>
+		</fsms:submenu>
+	</g:if>
 
 	<fsms:submenu code="activities.header" class="activities">
 		<g:each in="${activityInstanceList}" status="i" var="a">
