@@ -28,12 +28,12 @@ class missedCallController extends ControllerUtils {
 	}
 
 	def show() {
-		def missedCallInstance = MissedCall.get(params.missedCallId)
+		def interactionInstance = MissedCall.get(params.missedCallId)
 		def ownerInstance = missedCallOwner.get(params?.ownerId)
-		missedCallInstance.read = true
-		missedCallInstance.save()
+		interactionInstance.read = true
+		interactionInstance.save()
 
-		def model = [missedCallInstance: missedCallInstance,
+		def model = [interactionInstance: interactionInstance,
 				ownerInstance:ownerInstance,
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(false, false),
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(false, false),
@@ -42,17 +42,17 @@ class missedCallController extends ControllerUtils {
 	}
 
 	def inbox() {
-		def missedCallInstanceList = MissedCall.inbox(params.starred)
+		def interactionInstanceList = MissedCall.inbox(params.starred)
 		render view:'../missedCall/standard',
-				model:[missedCallInstanceList: missedCallInstanceList.list(params),
+				model:[interactionInstanceList: interactionInstanceList.list(params),
 						missedCallSection:'inbox',
-						missedCallInstanceTotal: missedCallInstanceList.count()] << getShowModel()
+						interactionInstanceTotal: interactionInstanceList.count()] << getShowModel()
 	}
 
 	def trash() {
 		def trashedObject
 		def trashInstanceList
-		def missedCallInstanceList
+		def interactionInstanceList
 		params.sort = params.sort?: 'date'
 		if(params.id) {
 			def setTrashInstance = { obj ->
@@ -65,15 +65,15 @@ class missedCallController extends ControllerUtils {
 			setTrashInstance(Trash.findById(params.id))
 		}
 		if(params.starred) {
-			missedCallInstanceList = MissedCall.deleted(params.starred)
+			interactionInstanceList = MissedCall.deleted(params.starred)
 		} else {
 			if(params.sort == 'date') params.sort = 'dateCreated'
 			trashInstanceList = Trash.list(params)
 		}
 		render view:'standard', model:[trashInstanceList: trashInstanceList,
-					missedCallInstanceList: missedCallInstanceList?.list(params),
+					interactionInstanceList: interactionInstanceList?.list(params),
 					missedCallSection:'trash',
-					missedCallInstanceTotal: Trash.count(),
+					interactionInstanceTotal: Trash.count(),
 					ownerInstance: trashedObject] << getShowModel()
 	}
 
@@ -96,9 +96,9 @@ class missedCallController extends ControllerUtils {
 	
 	def archive() {
 		def missedCalls = getCheckedmissedCalls().findAll { !it.missedCallOwner && !it.hasPending }
-		missedCalls.each { missedCallInstance ->
-			missedCallInstance.archived = true
-			missedCallInstance.save()
+		missedCalls.each { interactionInstance ->
+			interactionInstance.archived = true
+			interactionInstance.save()
 		}
 		flash.missedCall = dynamicmissedCall 'archived', missedCalls
 		if(params.missedCallSection == 'result') {
@@ -110,10 +110,10 @@ class missedCallController extends ControllerUtils {
 	
 	def unarchive() {
 		def missedCalls = getCheckedmissedCalls()
-		missedCalls.each { missedCallInstance ->
-			if(!missedCallInstance.missedCallOwner) {
-				missedCallInstance.archived = false
-				missedCallInstance.save(failOnError: true)
+		missedCalls.each { interactionInstance ->
+			if(!interactionInstance.missedCallOwner) {
+				interactionInstance.archived = false
+				interactionInstance.save(failOnError: true)
 			}
 		}
 		flash.missedCall = dynamicmissedCall 'unarchived', missedCalls
@@ -124,24 +124,24 @@ class missedCallController extends ControllerUtils {
 	}
 
 	def changeStarStatus() {
-		withMissedCall { missedCallInstance ->
-			missedCallInstance.starred =! missedCallInstance.starred
-			missedCallInstance.save(failOnError: true)
+		withMissedCall { interactionInstance ->
+			interactionInstance.starred =! interactionInstance.starred
+			interactionInstance.save(failOnError: true)
 			MissedCall.get(params.missedCallId).missedCallOwner?.refresh()
 			params.remove('missedCallId')
-			render(text: missedCallInstance.starred ? "starred" : "unstarred")
+			render(text: interactionInstance.starred ? "starred" : "unstarred")
 		}
 	}
 	
 	private def withMissedCall = withDomainObject MissedCall, { params.missedCallId }
 
 	private def getShowModel() {
-		def missedCallInstance = params.missedCallId? MissedCall.get(params.missedCallId): null
-		missedCallInstance?.read = true
-		missedCallInstance?.save()
+		def interactionInstance = params.missedCallId? MissedCall.get(params.missedCallId): null
+		interactionInstance?.read = true
+		interactionInstance?.save()
 
 		def checkedMissedCallCount = getCheckedMissedCallList().size()
-		[missedCallInstance: missedCallInstance,
+		[interactionInstance: interactionInstance,
 				checkedMissedCallCount: checkedMissedCallCount,
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(false, false),
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(false, false),

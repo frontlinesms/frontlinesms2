@@ -59,7 +59,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceList.size() == 9
+			model.interactionInstanceList.size() == 9
 	}
 
 	def "can search for starred messages only"() {
@@ -71,8 +71,8 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.starred = true
 			def model = controller.result()
 		then:
-			model.messageInstanceList.size() == 1
-			model.messageInstanceList*.starred.every() { it }
+			model.interactionInstanceList.size() == 1
+			model.interactionInstanceList*.starred.every() { it }
 	}
 
 	def "message searches can be restricted to a poll"() {
@@ -81,7 +81,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.activityId = "activity-${Poll.findByName('Miauow Mix').id}"
 			def model = controller.result()
 		then:
-			model.messageInstanceList*.src == ['Barnabus']
+			model.interactionInstanceList*.src == ['Barnabus']
 	}
 
 // FIXME	
@@ -96,7 +96,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.activityId = "folder-${folder.id}"
 			def model = controller.result()
 		then:
-			model.messageInstanceList*.src == ['+254111222']
+			model.interactionInstanceList*.src == ['+254111222']
 	}
 	
 	def "search for inbound messages only"() {
@@ -105,8 +105,8 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 9
-			model.messageInstanceList.every { it.inbound }
+			model.interactionInstanceTotal == 9
+			model.interactionInstanceList.every { it.inbound }
 	}
 
 	def "search for outgoing messages only"() {
@@ -118,8 +118,8 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.messageStatus = 'SENT, PENDING, FAILED'
 			def model = controller.result()
 		then:
-			model.messageInstanceList.size() == 3
-			model.messageInstanceList.every { !it.inbound }
+			model.interactionInstanceList.size() == 3
+			model.interactionInstanceList.every { !it.inbound }
 	}
 
 	def "message searches can be restricted to a contact group, and choice is still present after search completes"() {
@@ -130,7 +130,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId = Group.findByName('test').id
 			def model = controller.result()
 		then:
-			model.messageInstanceList*.src == ['+254333222']
+			model.interactionInstanceList*.src == ['+254333222']
 			controller.params.groupId == Group.findByName('test').id
 	}
 	
@@ -139,7 +139,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId = Group.findByName('nobody').id
 			def model = controller.result()
 		then:
-			model.messageInstanceList == []
+			model.interactionInstanceList == []
 	}
 	
 	def "message searches can be restricted to both contact groups and polls"() {
@@ -151,7 +151,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId = Group.findByName('test').id
 			def model = controller.result()
 		then:
-			model.messageInstanceList*.src == ['+254333222']
+			model.interactionInstanceList*.src == ['+254333222']
 	}
 	
 	def "message searches can be restricted to individual contacts"() {
@@ -161,7 +161,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.searchString = "work"
 			def model = controller.result()
 		then:
-			model.messageInstanceList*.src == ['+254987654']
+			model.interactionInstanceList*.src == ['+254987654']
 	}
 	
 	def "can include archived messages in search (or not)"() {
@@ -170,14 +170,14 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceList*.src == ['+254111222', '+254987654']
+			model.interactionInstanceList*.src == ['+254111222', '+254987654']
 			
 		when:
 			controller.params.searchString = "work"
 			controller.params.inArchive = false
 			model = controller.result()
 		then:
-			model.messageInstanceList*.src == ['+254111222']
+			model.interactionInstanceList*.src == ['+254111222']
 	}
 	
 	def "deleted messages do not appear in search results"() {
@@ -188,10 +188,10 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			TextMessage.findBySrc("+254333222").save(flush: true)
 			def model = controller.result()
 		then:
-			model.messageInstanceList*.src == ['Minime']
+			model.interactionInstanceList*.src == ['Minime']
 	}
 
-	def "messageInstanceTotal should give a total count of all the messages available"() {
+	def "interactionInstanceTotal should give a total count of all the messages available"() {
 		when:
 			controller.params.searchString = "w"
 			controller.params.inArchive = true
@@ -199,30 +199,30 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.offset = "0"
 			def model = controller.result()
 		then:
-			model.messageInstanceList.size() == 1
-			model.messageInstanceTotal == 3
+			model.interactionInstanceList.size() == 1
+			model.interactionInstanceTotal == 3
 	}
 	
 	def "if only end date is defined, return message before or on this date"() {
 		when:
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 8
+			model.interactionInstanceTotal == 8
 		when:
 			controller.params.endDate = TEST_DATE-1
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 2
+			model.interactionInstanceTotal == 2
 		when:
 			controller.params.endDate = TEST_DATE-5
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 2
+			model.interactionInstanceTotal == 2
 		when:
 			controller.params.endDate = TEST_DATE-6
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 1
+			model.interactionInstanceTotal == 1
 	}
 	
 	def "if only start date is defined, return only messages on or after this date"() {
@@ -230,17 +230,17 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.startDate = TEST_DATE-1
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 6
+			model.interactionInstanceTotal == 6
 		when:
 			controller.params.startDate = TEST_DATE-4
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 6
+			model.interactionInstanceTotal == 6
 		when:
 			controller.params.startDate = TEST_DATE-5
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 7
+			model.interactionInstanceTotal == 7
 	}
 	
 	@Unroll
@@ -251,7 +251,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.inArchive = archived
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == messageTotal
+			model.interactionInstanceTotal == messageTotal
 		where:
 			archived | startDelta | endDelta | messageTotal
 			null     | 4          | 0        | 5
@@ -267,7 +267,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			params.each { k, v -> controller.params[k] = v }
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == messageTotal
+			model.interactionInstanceTotal == messageTotal
 		where:
 			messageTotal | params
 			2            | [city:'Paris', inArchive:true]
@@ -286,12 +286,12 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.activityId = "folder-"+folder.id
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 1
+			model.interactionInstanceTotal == 1
 		when:
 			m.archived = true
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 1
+			model.interactionInstanceTotal == 1
 	}
 
 	def "search string with phone number should return matching messages"() {
@@ -299,7 +299,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.searchString = "+254333222"
 			def model = controller.result()
 		then:
-			model.messageInstanceList.size() == 1
+			model.interactionInstanceList.size() == 1
 	}
 
 	def "ensure dispatch count in message results is correct"() {
@@ -315,10 +315,10 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.max = "1"
 			def model = controller.result()
 		then:
-			model.messageInstanceList.size() == 1
-			model.messageInstanceList.first().text == "test"
-			model.messageInstanceList.first().dispatches.size() == 103
-			model.messageInstanceList.first().displayName == "103"
+			model.interactionInstanceList.size() == 1
+			model.interactionInstanceList.first().text == "test"
+			model.interactionInstanceList.first().dispatches.size() == 103
+			model.interactionInstanceList.first().displayName == "103"
 	}
 }
 

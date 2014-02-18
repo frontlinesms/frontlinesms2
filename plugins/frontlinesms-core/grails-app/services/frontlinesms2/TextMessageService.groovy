@@ -7,22 +7,22 @@ class TextMessageService {
 	
 	def move(messageList, activity, params) {
 		def messagesToSend = []
-		messageList.each { messageInstance ->
-			if(messageInstance.isMoveAllowed()){
-				messageInstance.clearAllDetails()
-				messageInstance.isDeleted = false
-				Trash.findByObject(messageInstance)?.delete(failOnError:true)
+		messageList.each { interactionInstance ->
+			if(interactionInstance.isMoveAllowed()){
+				interactionInstance.clearAllDetails()
+				interactionInstance.isDeleted = false
+				Trash.findByObject(interactionInstance)?.delete(failOnError:true)
 				if (params.messageSection == 'activity') {
-					activity.move(messageInstance)
+					activity.move(interactionInstance)
 					activity.save(failOnError:true, flush:true)
 				} else if (params.ownerId && params.ownerId != 'inbox') {
-					messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
-					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save(failOnError:true)
-					messageInstance.save()
+					interactionInstance.messageOwner?.removeFromMessages(interactionInstance)?.save(failOnError:true)
+					MessageOwner.get(params.ownerId).addToMessages(interactionInstance).save(failOnError:true)
+					interactionInstance.save()
 				} else {
-					messageInstance.with {
+					interactionInstance.with {
 						if(messageOwner) {
-							messageOwner.removeFromMessages(messageInstance).save(failOnError:true)
+							messageOwner.removeFromMessages(interactionInstance).save(failOnError:true)
 							save(failOnError:true)
 						}
 					}
@@ -36,13 +36,13 @@ class TextMessageService {
 	}
 
 	def search(search, params=[:]) {
-		def fmessageInstanceList = fmessageFilter(search)
+		def finteractionInstanceList = fmessageFilter(search)
 		def rawSearchResults = []
 		def searchMessageInstanceTotal = 0
 		def searchMessageInstanceList = []
 
-		if(fmessageInstanceList) {
-			rawSearchResults = TextMessage.search(fmessageInstanceList*.id)
+		if(finteractionInstanceList) {
+			rawSearchResults = TextMessage.search(finteractionInstanceList*.id)
 		}
 
 		if(rawSearchResults) {
@@ -51,7 +51,7 @@ class TextMessageService {
 			searchMessageInstanceList = rawSearchResults?.listDistinct(sort:'date', order:'desc', offset:offset, max:max)
 			searchMessageInstanceTotal = rawSearchResults?.count()
 		}
-		[messageInstanceList:searchMessageInstanceList, messageInstanceTotal:searchMessageInstanceTotal]
+		[interactionInstanceList:searchMessageInstanceList, interactionInstanceTotal:searchMessageInstanceTotal]
 	}
 
 	private def fmessageFilter(search) {

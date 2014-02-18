@@ -20,7 +20,7 @@
 		<div id="body" class="messages">
 			<fsms:render template="/archive/menu"/>
 			<g:form controller="${params.controller}"
-					params="[messageId:messageInstance?.id, searchId:search?.id]">
+					params="[messageId:interactionInstance?.id, searchId:search?.id]">
 				<g:hiddenField name="messageSection" value="${messageSection}"/>
 				<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 				<div id="main-list-container">

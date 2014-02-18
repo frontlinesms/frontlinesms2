@@ -1,6 +1,6 @@
 <%@page defaultCodec="html" %>
 <g:hiddenField name="sortField" value="${params.sort}"/>
-<g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
+<g:hiddenField name="messageTotal" value="${interactionInstanceTotal}"/>
 <g:if test="${messageSection == 'search'}">
   	<g:hiddenField name="activityId" value="${params.activityId}"/>
   	<g:hiddenField name="groupId" value="${params.groupId}"/>
@@ -21,14 +21,14 @@
 		</tr>
 	</thead>
 	<tbody>
-		<g:if test="${messageInstanceTotal > 0}">
+		<g:if test="${interactionInstanceTotal > 0}">
 			<g:if test="${messageSection == 'trash' && !params.starred}">
 				<fsms:render template="/interaction/trash_list"/>
 			</g:if>
 			<g:else>
 
-				<g:each in="${messageInstanceList}" status="i" var="m">
-					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${m.archived?'archived':''} ${m.hasSent? 'sent':''} ${m.hasPending? 'pending':''} ${m.hasFailed? 'failed':''} ownerdetail-${m.messageOwner?.shortName}-${m.ownerDetail}" id="message-${m.id}">
+				<g:each in="${interactionInstanceList}" status="i" var="m">
+					<tr class="message-preview ${m == interactionInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${m.archived?'archived':''} ${m.hasSent? 'sent':''} ${m.hasPending? 'pending':''} ${m.hasFailed? 'failed':''} ownerdetail-${m.messageOwner?.shortName}-${m.ownerDetail}" id="message-${m.id}">
 						<td colspan="1" class="message-select-cell">
 							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="check_list.itemCheckChanged('message', ${m.id});"/>
 							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>

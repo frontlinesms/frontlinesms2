@@ -1,44 +1,44 @@
 <%@ page defaultCodec="html" import="frontlinesms2.*" %>
 <div id="single-message">
-	<g:if test="${messageInstance}">
-		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
-		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
-		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
+	<g:if test="${interactionInstance}">
+		<g:hiddenField id="message-id" name="message-id" value="${interactionInstance.id}"/>
+		<g:hiddenField id="message-src" name="message-src" value="${interactionInstance.src}"/>
+		<g:hiddenField id="message-id" name="message-id" value="${interactionInstance.id}"/>
 		<div id='message-info'>
 			<p id="message-detail-sender">
-				<i class="${messageInstance.contactFlagCSSClasses}"></i>
+				<i class="${interactionInstance.contactFlagCSSClasses}"></i>
 				<span>
-					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
-						<fsms:popup controller="message" action="listRecipients" params="[messageId: messageInstance.id]" popupCall="showRecipientList(data)" class="btn">
-							<g:message code="fmessage.to.multiple" args="${[messageInstance.displayName]}" />
+					<g:if test="${!interactionInstance.inbound && interactionInstance.dispatches.size() > 1}">
+						<fsms:popup controller="message" action="listRecipients" params="[messageId: interactionInstance.id]" popupCall="showRecipientList(data)" class="btn">
+							<g:message code="fmessage.to.multiple" args="${[interactionInstance.displayName]}" />
 						</fsms:popup>
 					</g:if>
 					<g:else>
-						${messageInstance.displayName}
+						${interactionInstance.displayName}
 					</g:else>
-					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed"/>)</g:if>
-					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed"/>)</g:elseif>
+					<g:if test="${interactionInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed"/>)</g:if>
+					<g:elseif test="${interactionInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed"/>)</g:elseif>
 				</span> 
-				<g:if test="${messageInstance.displayName ==~ /^\+?[\d -.]+$/ && (messageInstance.inbound || messageInstance.dispatches.size() == 1)}">
-					<g:link class="add" elementId="add-contact" controller="contact" title="${g.message(code:'fmessage.addsender')}" action="createContact" params="[mobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"><g:message code="contact.new"/></g:link>
+				<g:if test="${interactionInstance.displayName ==~ /^\+?[\d -.]+$/ && (interactionInstance.inbound || interactionInstance.dispatches.size() == 1)}">
+					<g:link class="add" elementId="add-contact" controller="contact" title="${g.message(code:'fmessage.addsender')}" action="createContact" params="[mobile: (!interactionInstance.inbound && interactionInstance.dispatches.size() == 1) ? interactionInstance.dispatches.dst : interactionInstance.src]"><g:message code="contact.new"/></g:link>
 				</g:if>
 			</p>
-			<p id="message-detail-date"><g:formatDate date="${messageInstance.date}"/></p>
-			<g:if test="${messageInstance.inbound && messageInstance.receivedOn}">
+			<p id="message-detail-date"><g:formatDate date="${interactionInstance.date}"/></p>
+			<g:if test="${interactionInstance.inbound && interactionInstance.receivedOn}">
 				<p id="message-detail-fconnection">
-					<g:message code="fmessage.connection.receivedon" args="${[messageInstance.receivedOn?.name]}"/>
+					<g:message code="fmessage.connection.receivedon" args="${[interactionInstance.receivedOn?.name]}"/>
 				</p>
 			</g:if>
-			<g:if test="${messageInstance.messageOwner}">
-				<p id="message-detail-owner" class="${messageInstance.messageOwner.shortName}">
-					<g:link action="${messageInstance.messageOwner.shortName}" params="[ownerId: messageInstance.messageOwner.id]">
-						<g:message code="${messageInstance.messageOwner.shortName}.title" args="${[messageInstance.messageOwner.name]}"/>
+			<g:if test="${interactionInstance.messageOwner}">
+				<p id="message-detail-owner" class="${interactionInstance.messageOwner.shortName}">
+					<g:link action="${interactionInstance.messageOwner.shortName}" params="[ownerId: interactionInstance.messageOwner.id]">
+						<g:message code="${interactionInstance.messageOwner.shortName}.title" args="${[interactionInstance.messageOwner.name]}"/>
 					</g:link>
 				</p>
 			</g:if>
 			<div id="message-detail-content"><p>
 				<!-- TODO convert linebreaks in message to new paragraphs (?)  -->
-				${messageInstance.text}
+				${interactionInstance.text}
 			</p></div>
 		</div>
 		<fsms:render template="/interaction/message_actions"/>

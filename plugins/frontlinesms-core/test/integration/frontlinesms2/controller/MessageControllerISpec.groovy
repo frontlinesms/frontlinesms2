@@ -66,11 +66,11 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def message3 = TextMessage.build(date:createDate("2011/01/23"))
 			def message4 = TextMessage.build(date:createDate("2011/01/21"))
 		when:
-			def messageInstanceList = TextMessage.inbox(false, false)
+			def interactionInstanceList = TextMessage.inbox(false, false)
 		then:
-			messageInstanceList.count() == 4
-			messageInstanceList.list(sort:'date', order: 'desc') == [message2, message3, message4, message1]
-			messageInstanceList.list(sort:'date', order: 'desc') != [message1, message2, message3, message4]
+			interactionInstanceList.count() == 4
+			interactionInstanceList.list(sort:'date', order: 'desc') == [message2, message3, message4, message1]
+			interactionInstanceList.list(sort:'date', order: 'desc') != [message1, message2, message3, message4]
 	}
 
 	def 'calling SHOW action in inbox leads to unread message becoming read'() {

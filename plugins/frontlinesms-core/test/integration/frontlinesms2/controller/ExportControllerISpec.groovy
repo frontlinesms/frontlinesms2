@@ -22,7 +22,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result.messageInstanceList.size() == 2
+			result.interactionInstanceList.size() == 2
 	}
 
 	def "can export messages from a folder"() {
@@ -33,7 +33,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result.messageInstanceList.size() == 2
+			result.interactionInstanceList.size() == 2
 	}
 	
 	def "can export messages from an announcement"() {
@@ -44,7 +44,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result.messageInstanceList.size() == 1
+			result.interactionInstanceList.size() == 1
 	}
 	
 	def "can export all contacts"() {
@@ -84,7 +84,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result.messageInstanceList.size() == 1
+			result.interactionInstanceList.size() == 1
 	}
 
 	def "can export only received messages from a folder"() {
@@ -103,7 +103,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result.messageInstanceList.size() == 1
+			result.interactionInstanceList.size() == 1
 	}
 
 	def "can export only received messages from an activity"() {
@@ -122,7 +122,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result.messageInstanceList.size() == 1
+			result.interactionInstanceList.size() == 1
 	}
 
 
