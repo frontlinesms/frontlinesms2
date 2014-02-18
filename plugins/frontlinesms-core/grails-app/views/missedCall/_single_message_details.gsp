@@ -32,10 +32,7 @@
 				<g:message code="missedCall.displaytext" args="${[interactionInstance.displayName]}"/>
 			</p></div>
 		</div>
-		<fsms:render template="/interaction/message_actions"/>
-		<g:if test="${!(messageSection == 'pending') && (activityInstanceList || folderInstanceList)}">
-			<fsms:render template="/interaction/other_actions"/>
-		</g:if>
+		<fsms:render template="/missedCall/missedCall_actions"/>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>
