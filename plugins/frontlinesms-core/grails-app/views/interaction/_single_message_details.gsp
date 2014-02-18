@@ -1,5 +1,5 @@
 <%@ page defaultCodec="html" import="frontlinesms2.*" %>
-<div id="single-message">
+<div id="single-interaction">
 	<g:if test="${interactionInstance}">
 		<g:hiddenField id="message-id" name="message-id" value="${interactionInstance.id}"/>
 		<g:hiddenField id="message-src" name="message-src" value="${interactionInstance.src}"/>

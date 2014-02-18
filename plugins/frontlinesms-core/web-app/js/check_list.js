@@ -13,8 +13,8 @@ check_list = (function() {
 		if (itemTypeString === "contact") {
 			selectmenuTools.refresh("#multi-group-dropdown");
 		} else {
-			selectmenuTools.refresh("#multiple-messages #move-actions");
-			selectmenuTools.refresh("#multiple-messages #categorise_dropdown");
+			selectmenuTools.refresh("#multiple-interactions #move-actions");
+			selectmenuTools.refresh("#multiple-interactions #categorise_dropdown");
 		}
 	};
 
@@ -178,8 +178,8 @@ check_list = (function() {
 		checkedBoxes.each(function(){
 			showDropdown = (!$(this).parent().parent().hasClass("archived") || showDropdown);
 		});
-		single_moveActions = $("div#single-message a#move-actions-button");
-		multiple_moveActions = $("div#multiple-messages a#move-actions-button");
+		single_moveActions = $("div#single-interaction a#move-actions-button");
+		multiple_moveActions = $("div#multiple-interactions a#move-actions-button");
 		if(checkedBoxes.size() > 1) {
 			if(showDropdown){
 				multiple_moveActions.show();

@@ -1,4 +1,4 @@
-<div id="multiple-messages" style="display:none">
+<div id="multiple-interactions" style="display:none">
 	<div id='message-info'>
 		<g:if test="${messageSection == 'trash' && ownerInstance}">
 			<div id='activity-info'>
