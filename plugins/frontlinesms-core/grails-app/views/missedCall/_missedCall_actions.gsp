@@ -5,7 +5,7 @@
 	};
 </r:script>
 
-<div id="message-detail-buttons">
+<div id="interaction-detail-buttons">
 	<g:if test="${messageSection != 'trash'}">
 		<a id="btn_reply" class="msg-btn btn" onclick="mediumPopup.messageResponseClick('Reply')"><g:message code="missedCall.reply" /></a>
 

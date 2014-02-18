@@ -5,7 +5,7 @@
 	};
 </r:script>
 
-<div id="message-detail-buttons">
+<div id="interaction-detail-buttons">
 	<g:if test="${messageSection != 'trash'}">
 		<g:if test="${messageSection == 'pending'}">
 			<g:if test="${interactionInstance.hasFailed}">
