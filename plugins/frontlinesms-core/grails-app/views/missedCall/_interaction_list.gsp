@@ -26,7 +26,7 @@
 			<g:else>
 
 				<g:each in="${interactionInstanceList}" status="i" var="m">
-					<tr class="message-preview ${m == interactionInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${m.archived?'archived':''}" id="interaction-${m.id}">
+					<tr class="interaction-preview ${m == interactionInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${m.archived?'archived':''}" id="interaction-${m.id}">
 						<td colspan="1" class="interaction-select-cell">
 							<g:checkBox class="interaction-select interaction-select-checkbox" name="interaction-select" id="interaction-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="check_list.itemCheckChanged('interaction', ${m.id}, 'missedCall');"/>
 							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>

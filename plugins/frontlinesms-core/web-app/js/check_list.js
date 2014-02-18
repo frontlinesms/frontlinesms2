@@ -147,8 +147,8 @@ check_list = (function() {
 			if(checkedItemCount === 1) {
 				tableRow = $("#main-list tbody tr:first-child");
 				id = tableRow.attr("id").substring(itemTypeString.length + 1);
-				updateSingleCheckedDetails(itemTypeString, id, tableRow);
-			} else { updateMultipleCheckedDetails(itemTypeString); }
+				updateSingleCheckedDetails(itemTypeString, id, tableRow, itemSubtypeString);
+			} else { updateMultipleCheckedDetails(itemTypeString, itemSubtypeString); }
 		} else {
 			$('#main-list .' + itemTypeString + '-preview :checkbox').each(function(index, element) {
 				this.checked = false;

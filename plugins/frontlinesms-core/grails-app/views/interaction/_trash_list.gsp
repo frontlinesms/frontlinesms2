@@ -2,7 +2,7 @@
 <g:each in="${trashInstanceList}" status="i" var="t">
 	<g:if test="${t.objectClass == 'frontlinesms2.TextMessage'}">
 		<g:hiddenField name="src-${t.object.id}" value="${t.object.src}"/>
-		<tr class="message-preview ${t.object == interactionInstance ? 'selected' : ''}" id="message-${t.object.id}">
+		<tr class="interaction-preview ${t.object == interactionInstance ? 'selected' : ''}" id="message-${t.object.id}">
 	</g:if>
 	<g:else>
 		<tr class="${t.object == ownerInstance ? 'selected' : ''}" id="activity-${t.id}">
