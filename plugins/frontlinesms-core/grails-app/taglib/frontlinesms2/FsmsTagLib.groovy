@@ -192,9 +192,17 @@ class FsmsTagLib {
 	}
 
 	def interactionTemplate = { att, body ->
+		println "#### interaction template invoked for ${att.template}"
 		def interactionType = (controllerName == 'missedCall' ? 'missedCall' : 'message')
 		def requestedTemplate = att.template
-		out << templateElseBody(att + [template: "/$interactionType/$requestedTemplate"], render(att + [template: "/interaction/$requestedTemplate"]))
+		// TODO find a way to reuse templateElseBody here - this re-implementation is to work around fact that 2nd render would be
+		// rendered before passing to templateElseBody, which could cause failure
+		try {
+			out << render(att + [template: "/$interactionType/$requestedTemplate"])
+		}
+		catch(GrailsTagException gte) {
+			out << render(att + [template: "/interaction/$requestedTemplate"])
+		}
 	}
 
 	def i18nBundle = {
