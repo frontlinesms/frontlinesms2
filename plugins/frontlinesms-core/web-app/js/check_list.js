@@ -18,16 +18,16 @@ check_list = (function() {
 		}
 	};
 
-	itemCheckChanged = function(itemTypeString, itemId) {
+	itemCheckChanged = function(itemTypeString, itemId, itemSubtypeString) {
 		var count, checkedRow, newRowId, newId;
 		count = getCheckedItemCount(itemTypeString);
 		checkedRow = getRow(itemTypeString, itemId);
 		if(checkedRow.find('input[type=checkbox]').attr('checked')) {
 			if(count === 1) {
 				$('#main-list .selected').removeClass('selected');
-				updateSingleCheckedDetails(itemTypeString, itemId, checkedRow);
+				updateSingleCheckedDetails(itemTypeString, itemId, checkedRow, itemSubtypeString);
 			} else {
-				updateMultipleCheckedDetails(itemTypeString);
+				updateMultipleCheckedDetails(itemTypeString, itemSubtypeString);
 			}
 			checkedRow.addClass('selected');
 		} else if(count !== 0) {
@@ -35,9 +35,9 @@ check_list = (function() {
 			if (count === 1) {
 				newRowId = $('#main-list .selected').attr('id');
 				newId = newRowId.substring(itemTypeString.length + 1);
-				updateSingleCheckedDetails(itemTypeString, newId, getRow(itemTypeString, newRowId));
+				updateSingleCheckedDetails(itemTypeString, newId, getRow(itemTypeString, newRowId), itemSubtypeString);
 			} else {
-				updateMultipleCheckedDetails(itemTypeString);
+				updateMultipleCheckedDetails(itemTypeString, itemSubtypeString);
 			}
 		}
 		updateCheckAllBox(count);
@@ -69,16 +69,19 @@ check_list = (function() {
 		}
 	};
 
-	updateSingleCheckedDetails = function(itemTypeString, itemId, row) {
-		var params, action, singleDetails, callerTick;
+	updateSingleCheckedDetails = function(itemTypeString, itemId, row, itemSubtypeString) {
+		var params, action, singleDetails, callerTick, controller;
 		if (itemTypeString === 'interaction') {
 			row.removeClass("unread");
 			row.addClass("read");
-			params = { messageSection:$('input:hidden[name=messageSection]').val(), messageId: itemId, ownerId: $('input:hidden[name=ownerId]').val()};
+			params = { messageSection:$('input:hidden[name=messageSection]').val(), ownerId: $('input:hidden[name=ownerId]').val()};
+			params[itemSubtypeString + 'Id'] = itemId;
 			action = '/show/';
+			controller = itemSubtypeString; 
 		} else {
 			params = { contactsSection:$('input:hidden[name=contactsSection]').val() };
 			action = '/updateContactPane/';
+			controller = itemSubtypeString;
 		}
 		$("#multiple-"+itemTypeString+"s").hide();
 
@@ -88,7 +91,7 @@ check_list = (function() {
 
 		callerTick = ++tick;
 		toggleCheckboxesEnabled(itemTypeString, false);
-		$.get(url_root + itemTypeString + action + itemId, params, function(data) {
+		$.get(url_root + controller + action + itemId, params, function(data) {
 			var newPane = $(data);
 			if(callerTick !== tick) {
 				return;
@@ -131,7 +134,7 @@ check_list = (function() {
 		$("#mobile").trigger('change');
 	};
 
-	checkAll = function(itemTypeString) {
+	checkAll = function(itemTypeString, itemSubtypeString) {
 		var checkedItemCount, tableRow, id, originalSingleItemDisplay;
 		if($('#main-list :checkbox')[0].checked){
 			$('#main-list .' + itemTypeString + '-preview :checkbox').each(function(index) {

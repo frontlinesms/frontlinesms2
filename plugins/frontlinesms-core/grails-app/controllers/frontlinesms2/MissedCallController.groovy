@@ -29,16 +29,14 @@ class missedCallController extends ControllerUtils {
 
 	def show() {
 		def interactionInstance = MissedCall.get(params.missedCallId)
-		def ownerInstance = missedCallOwner.get(params?.ownerId)
 		interactionInstance.read = true
 		interactionInstance.save()
 
 		def model = [interactionInstance: interactionInstance,
-				ownerInstance:ownerInstance,
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(false, false),
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(false, false),
-				missedCallSection: params.missedCallSection]
-		render view:'/missedCall/_single_missedCall_details', model:model
+				missedCallSection: 'inbox'] // TODO correct this when missedCalls can enter other sections
+		render view:'/missedCall/_single_interaction_details', model:model
 	}
 
 	def inbox() {
