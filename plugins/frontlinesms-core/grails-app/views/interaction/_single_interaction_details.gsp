@@ -1,9 +1,8 @@
 <%@ page defaultCodec="html" import="frontlinesms2.*" %>
 <div id="single-interaction">
 	<g:if test="${interactionInstance}">
-		<g:hiddenField id="message-id" name="message-id" value="${interactionInstance.id}"/>
-		<g:hiddenField id="message-src" name="message-src" value="${interactionInstance.src}"/>
-		<g:hiddenField id="message-id" name="message-id" value="${interactionInstance.id}"/>
+		<g:hiddenField id="interaction-id" name="interaction-id" value="${interactionInstance.id}"/>
+		<g:hiddenField id="interaction-src" name="interaction-src" value="${interactionInstance.src}"/>
 		<div id='message-info'>
 			<p id="interaction-detail-sender">
 				<i class="${interactionInstance.contactFlagCSSClasses}"></i>

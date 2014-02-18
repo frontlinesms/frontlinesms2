@@ -4,11 +4,11 @@ function categorizeClickAction(me) {
 	responseId = me.substring(4, me.length);
 	ownerId = $("#owner-id").val();
 	messageSection = $('input:hidden[name=messageSection]').val();
-	if(getCheckedItemCount('message') > 1) {
-		messagesToChange = getCheckedList('message');
+	if(getCheckedItemCount('interaction') > 1) {
+		messagesToChange = getCheckedList('interaction');
 		successUrl = "message/" + messageSection + "/" + ownerId;
 	} else {
-		messagesToChange = $("#message-id").val();
+		messagesToChange = $("#interaction-id").val();
 		successUrl = "message/" + messageSection + "/" + ownerId + "/show/" + messagesToChange;
 	}
 
