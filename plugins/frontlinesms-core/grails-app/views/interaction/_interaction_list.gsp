@@ -10,7 +10,7 @@
 	<thead>
 		<tr>
 			<th>
-				<fsms:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="check_list.checkAll('message')" disabled="${messageSection == 'trash'}"/>
+				<fsms:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="check_list.checkAll('interaction')" disabled="${messageSection == 'trash'}"/>
 			</th>
 			<th></th>
 			<g:sortableColumn property="inboundContactName" title="${message(code:'fmessage.displayName.label')}" params="${params}" id='source-header'/>
@@ -30,7 +30,7 @@
 				<g:each in="${interactionInstanceList}" status="i" var="m">
 					<tr class="message-preview ${m == interactionInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${m.archived?'archived':''} ${m.hasSent? 'sent':''} ${m.hasPending? 'pending':''} ${m.hasFailed? 'failed':''} ownerdetail-${m.messageOwner?.shortName}-${m.ownerDetail}" id="message-${m.id}">
 						<td colspan="1" class="message-select-cell">
-							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="check_list.itemCheckChanged('message', ${m.id});"/>
+							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="check_list.itemCheckChanged('interaction', ${m.id});"/>
 							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>
 						</td>
 

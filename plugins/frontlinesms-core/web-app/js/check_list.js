@@ -71,7 +71,7 @@ check_list = (function() {
 
 	updateSingleCheckedDetails = function(itemTypeString, itemId, row) {
 		var params, action, singleDetails, callerTick;
-		if (itemTypeString === 'message') {
+		if (itemTypeString === 'interaction') {
 			row.removeClass("unread");
 			row.addClass("read");
 			params = { messageSection:$('input:hidden[name=messageSection]').val(), messageId: itemId, ownerId: $('input:hidden[name=ownerId]').val()};
@@ -98,7 +98,7 @@ check_list = (function() {
 			newPane.find('.dropdown').selectmenu();
 			if (itemTypeString === 'contact') {
 				applyContactPaneJavascriptEnhancements(newPane);
-			} else if (itemTypeString === 'message') {
+			} else if (itemTypeString === 'interaction') {
 				// TODO if message was unread and we're in the inbox, please decrement unread messages count
 				// on the tab (e.g. MESSAGES (123) -> MESSAGES (122)
 			}
