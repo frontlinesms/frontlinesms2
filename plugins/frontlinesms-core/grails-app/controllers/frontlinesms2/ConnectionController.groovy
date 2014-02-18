@@ -216,7 +216,7 @@ class ConnectionController extends ControllerUtils {
 			saveSuccessful = handleSaveResponse.success
 			connectionErrors = handleSaveResponse.errors
 			def fconnectionInstances = handleSaveResponse.connectionInstance
-			flash.newConnectionIds = (fconnectionInstances instanceof List ? fconnectionInstances*.id.join(',') : fconnectionInstances.id)
+			flash.newConnectionIds = (fconnectionInstances instanceof List ? fconnectionInstances*.id.join(',') : fconnectionInstances?.id)
 			withFormat {
 				html {
 					flash.message = LogEntry.log(saveSuccessful ? handleSaveResponse.successMessage : message(code: 'connection.creation.failed', args:[handleSaveResponse.errors]))
