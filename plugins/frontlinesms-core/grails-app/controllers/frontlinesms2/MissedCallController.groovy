@@ -43,7 +43,7 @@ class missedCallController extends ControllerUtils {
 		def interactionInstanceList = MissedCall.inbox(params.starred)
 		render view:'../missedCall/standard',
 				model:[interactionInstanceList: interactionInstanceList.list(params),
-						missedCallSection:'inbox',
+						messageSection:'missedCalls',
 						interactionInstanceTotal: interactionInstanceList.count()] << getShowModel()
 	}
 

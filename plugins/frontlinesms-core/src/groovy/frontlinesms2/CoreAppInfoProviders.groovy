@@ -45,6 +45,8 @@ class CoreAppInfoProviders {
 			if(!data.ownerId && section != 'trash') {
 				if(section == 'pending') {
 					messageCount = TextMessage.countPending(data.failed)
+				} else if (section == 'missedCalls') {
+					messageCount = MissedCall.inbox(data.starred).count()
 				} else {
 					messageCount = TextMessage."$section"(data.starred).count()
 				}
