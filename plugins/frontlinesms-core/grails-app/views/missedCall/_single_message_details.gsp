@@ -29,7 +29,7 @@
 			</g:if>
 			<div id="message-detail-content"><p>
 				<!-- TODO convert linebreaks in message to new paragraphs (?)  -->
-				Missed call from ${interactionInstance.displayName}
+				<g:message code="missedCall.displaytext" args="${[interactionInstance.displayName]}"/>
 			</p></div>
 		</div>
 		<fsms:render template="/interaction/message_actions"/>
