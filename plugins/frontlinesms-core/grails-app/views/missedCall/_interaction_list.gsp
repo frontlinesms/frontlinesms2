@@ -36,13 +36,13 @@
 							<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="missedCall" action="changeStarStatus" params='[missedCallId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
 						</td>
 						<td class="message-sender-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
-								<g:link class="displayName-${m.id}" controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
+								<g:link class="displayName-${m.id}" controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [missedCallId: m.id]}">
 									${m.displayName}
 								</g:link>
 						</td>
 						<td class="message-date-cell">
 							<g:hiddenField name="message-created-date" value="${m.date}" disabled="true"/>
-							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
+							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [missedCallId: m.id]}">
 								<g:formatDate date="${m.date}"/>
 							</g:link>
 						</td>
