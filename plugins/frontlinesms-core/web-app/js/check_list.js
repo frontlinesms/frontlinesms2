@@ -109,7 +109,7 @@ check_list = (function() {
 		});
 	};
 
-	updateMultipleCheckedDetails = function(itemTypeString) {
+	updateMultipleCheckedDetails = function(itemTypeString, itemSubtypeString) {
 		if (itemTypeString === 'contact') {
 			toggleCheckboxesEnabled(itemTypeString, false);
 			$.post(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
@@ -123,7 +123,7 @@ check_list = (function() {
 			});
 		} else {
 			// update counter display
-			$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
+			$('#checked-'+ itemTypeString + '-count').text(i18n(itemSubtypeString + ".multiple.selected", getCheckedItemCount(itemTypeString)));
 			showMultipleDetailsPanel(itemTypeString);
 		}
 	};

@@ -18,7 +18,7 @@
 		</g:if>
 		<g:else>
 			<div id="interaction-detail-content">
-				<p id='checked-message-count'>
+				<p id='checked-interaction-count'>
 					<g:message code="fmessage.selected.many" args="${[checkedMessageCount]}"/>
 				</p>
 			</div>
