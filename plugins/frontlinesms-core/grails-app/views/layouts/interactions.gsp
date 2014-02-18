@@ -34,7 +34,7 @@
 				</div>
 				<g:layoutBody/>
 				<div id="detail">
-					<fsms:render template="/interaction/message_details"/>
+					<fsms:render template="/interaction/interaction_details"/>
 				</div>
 			</g:form>
 		</div>
