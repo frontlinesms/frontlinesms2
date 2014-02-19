@@ -82,6 +82,7 @@ class CoreAppInfoProviders {
 			Folder.findAllByArchivedAndDeleted(false, false).each { folder ->
 				m.folders."${folder.id}" = TextMessage.countUnreadMessages(folder)
 			}
+			m.missedCalls = MissedCall.countUnread()
 			return m
 		}
 	}

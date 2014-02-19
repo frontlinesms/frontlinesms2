@@ -15,8 +15,8 @@
 
 	<g:if test="${FrontlinesyncFconnection.count() || MissedCall.count()}">
 		<fsms:submenu code="missedCall.header" class="missedCalls">
-			<fsms:menuitem class="" selected="${params.controller=='missedCall'}" controller="missedCall" action="inbox" code="missedCall.section.inbox" entitytype="inbox">
-				<fsms:unreadCount unreadCount="${MissedCall.countUnreadMessages()}"/>
+			<fsms:menuitem class="" selected="${params.controller=='missedCall'}" controller="missedCall" action="inbox" code="missedCall.section.inbox" entitytype="missedCalls">
+				<fsms:unreadCount unreadCount="${MissedCall.countUnread()}"/>
 			</fsms:menuitem>
 		</fsms:submenu>
 	</g:if>

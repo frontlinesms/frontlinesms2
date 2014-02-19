@@ -4,6 +4,7 @@ new_message_summary = (function() {
 		data = data.new_message_summary;
 		updateSpan($("li[entitytype='inbox'] a"), data.inbox, 'unread_message_count');
 		updateSpan($("li[entitytype='pending'] a"), data.pending, 'pending_message_count');
+		updateSpan($("li[entitytype='missedCalls'] a"), data.missedCalls, 'unread_message_count');
 		$.each(data.activities, function(activityId, unreadMessageCount) {
 			updateSpan($("li[entitytype='activity'][entityid='" + activityId + "'] a"), unreadMessageCount, 'unread_message_count');
 		});

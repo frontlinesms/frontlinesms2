@@ -47,7 +47,7 @@ class MissedCall extends Interaction {
 		['inbox', 'deleted'].collectEntries { [it, MissedCall[it].count()] }
 	}
 
-	static def countUnreadMessages() {
+	static def countUnread() {
 		MissedCall.unread.count()
 	}
 
