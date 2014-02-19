@@ -76,7 +76,7 @@ class missedCallController extends ControllerUtils {
 	}
 
 	def delete() {
-		def missedCalls = getCheckedmissedCalls()
+		def missedCalls = getCheckedMissedCalls()
 		missedCalls.each { m ->
 			trashService.sendToTrash(m)
 		}
@@ -93,7 +93,7 @@ class missedCallController extends ControllerUtils {
 	}
 	
 	def archive() {
-		def missedCalls = getCheckedmissedCalls().findAll { !it.missedCallOwner && !it.hasPending }
+		def missedCalls = getCheckedMissedCalls().findAll { !it.missedCallOwner && !it.hasPending }
 		missedCalls.each { interactionInstance ->
 			interactionInstance.archived = true
 			interactionInstance.save()
@@ -107,7 +107,7 @@ class missedCallController extends ControllerUtils {
 	}
 	
 	def unarchive() {
-		def missedCalls = getCheckedmissedCalls()
+		def missedCalls = getCheckedMissedCalls()
 		missedCalls.each { interactionInstance ->
 			if(!interactionInstance.missedCallOwner) {
 				interactionInstance.archived = false
@@ -152,7 +152,7 @@ class missedCallController extends ControllerUtils {
 	}
 
 	private def getCheckedMissedCallList() {
-		def checked = params['missedcall-select']?: params.missedCallId?: []
+		def checked = params['interaction-select']?: params.missedCallId?: []
 		if(checked instanceof String) checked = checked.split(/\D+/) - ''
 		if(checked instanceof Number) checked = [checked]
 		if(checked.class.isArray()) checked = checked as List

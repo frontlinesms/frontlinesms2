@@ -74,7 +74,7 @@ class MessageListHeader extends geb.Module {
 class MessageList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
-		selectAll { $("input#message-select-all") }
+		selectAll { $("input#interaction-select-all") }
 		messageSource { i=0 -> message(i).find('td.message-sender-cell').text() }
 		message { i=0, onlySelected=false -> onlySelected? $('tbody tr.selected', i): $("tbody tr:nth-of-type(${i+1})") }
 		messageCount { js.exec('return jQuery("#main-list tbody tr").size()') as Integer }
@@ -109,7 +109,7 @@ class MessageList extends geb.Module {
 }
 
 class SingleMessageDetails extends geb.Module {
-	static base = { $('#single-message') }
+	static base = { $('#single-interaction') }
 	static content = {
 		noneSelected { $('#message-detail-content').text() == 'fmessage.selected.none' }
 		sender { $('#message-detail-sender').text() }
@@ -136,7 +136,7 @@ class SingleMessageDetails extends geb.Module {
 }
 
 class MultipleMessageDetails extends geb.Module {
-	static base = { $('#multiple-messages') }
+	static base = { $('#multiple-interactions') }
 	static content = {
 		text { $('#message-detail-content').text() }
 		checkedMessageCount { ($('p#checked-message-count').text() =~ /many\.selected\[(\d+),\w+\]/)[0][1].toInteger() }
