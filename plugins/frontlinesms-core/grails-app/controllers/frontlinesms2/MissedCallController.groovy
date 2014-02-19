@@ -123,7 +123,6 @@ class missedCallController extends ControllerUtils {
 		withMissedCall { interactionInstance ->
 			interactionInstance.starred =! interactionInstance.starred
 			interactionInstance.save(failOnError: true)
-			MissedCall.get(params.interactionId).missedCallOwner?.refresh()
 			params.remove('interactionId')
 			render(text: interactionInstance.starred ? "starred" : "unstarred")
 		}
