@@ -298,7 +298,7 @@ var mediumPopup = (function() {
 				messageIds = "," + $("#interaction-id").val() + ",";
 			}
 		} else if(messageType === "Forward") {
-			text = $("#single-message #interaction-detail-content p").text().trim();
+			text = $("#single-interaction #interaction-detail-content p").text().trim();
 		}
 		if (typeof messageIds === "undefined") {
 			messageIds = "";
