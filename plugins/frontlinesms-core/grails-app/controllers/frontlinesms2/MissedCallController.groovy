@@ -27,6 +27,10 @@ class missedCallController extends ControllerUtils {
 		redirect action:'inbox', params:params
 	}
 
+	def missedCalls() {
+		redirect action:'inbox', params:params
+	}
+
 	def show() {
 		def interactionInstance = MissedCall.get(params.missedCallId)
 		interactionInstance.read = true
@@ -166,13 +170,13 @@ class missedCallController extends ControllerUtils {
 	}
 
 	private def defaultMessage(String code, Object... args=[]) {
-		def messageName = message code:'fmessage.label'
+		def messageName = message code:'missedCall.label'
 		return message(code:'default.' + code,
 				args:[messageName] + args)
 	}
 
 	private def pluralMessage(String code, count, Object... args=[]) {
-		def messageName = message code:'fmessage.label.multiple', args:[count]
+		def messageName = message code:'missedCall.label.multiple', args:[count]
 		return message(code:'default.' + code + '.multiple',
 				args:[messageName] + args)
 	}
