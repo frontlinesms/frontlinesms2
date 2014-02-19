@@ -47,6 +47,10 @@ class MissedCall extends Interaction {
 		['inbox', 'deleted'].collectEntries { [it, MissedCall[it].count()] }
 	}
 
+	static def countUnreadMessages() {
+		MissedCall.unread.count()
+	}
+
 	static def getMessageStats(params) {
 		def asKey = { date -> date.format('dd/MM') }
 		

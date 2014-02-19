@@ -161,6 +161,9 @@ class TextMessage extends Interaction {
 		def ids = pending(onlyFailed).list(params) as List
 		(!ids) ? [] : TextMessage.getAll(ids)
 	}
+	static def countUnreadMessages() {
+		TextMessage.unread.count()
+	}
 
 	static def countPending(onlyFailed) {
 		pending(onlyFailed).list().size()
