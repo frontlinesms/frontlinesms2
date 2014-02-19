@@ -1,6 +1,4 @@
-#body-menu li.messages h3 { background-image:url("../images/icons/message.png"); }
-#body-menu li.activities h3 { background-image:url("../images/icons/activity.png"); }
-#body-menu li.folders h3 { background-image:url("../images/icons/folder.png"); }
+#body-menu i.menuIcon { position:absolute; margin-left:-26px; text-align:right; font-size:1.2em; margin-top:-2px; }
 #body-menu span.menu-item-label { width: 80%; display: inline-block; }
 #body-menu li { position: relative; }
 #body-menu span.unread_message_count {
