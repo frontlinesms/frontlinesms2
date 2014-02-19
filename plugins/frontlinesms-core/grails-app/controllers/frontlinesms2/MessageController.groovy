@@ -72,7 +72,7 @@ class MessageController extends ControllerUtils {
 		params.sort = params.sort?: 'date'
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.objectClass == "frontlinesms2.TextMessage") {
+				if(obj.objectClass in ["frontlinesms2.TextMessage", "frontlinesms2.MissedCall"]) {
 					params.interactionId = obj.objectId
 				} else {
 					trashedObject = obj.object
@@ -90,7 +90,7 @@ class MessageController extends ControllerUtils {
 					interactionInstanceList: interactionInstanceList?.list(params),
 					messageSection:'trash',
 					interactionInstanceTotal: Trash.count(),
-					ownerInstance: trashedObject] << getShowModel()
+					ownerInstance: trashedObject] << getShowModel() << (params.interactionId ? [interactionInstance: Interaction.get(params.interactionId)] : [:])
 	}
 
 	def poll() { redirect(action: 'activity', params: params) }
