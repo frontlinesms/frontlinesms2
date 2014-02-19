@@ -111,11 +111,11 @@ class MessageList extends geb.Module {
 class SingleMessageDetails extends geb.Module {
 	static base = { $('#single-interaction') }
 	static content = {
-		noneSelected { $('#message-detail-content').text() == 'fmessage.selected.none' }
+		noneSelected { $('#interaction-detail-content').text() == 'fmessage.selected.none' }
 		sender { $('#message-detail-sender').text() }
 		senderLink { $('#message-detail-sender a') }
 		addToContacts(required:false) { $('#add-contact') }
-		text { $('#message-detail-content').text() }
+		text { $('#interaction-detail-content').text() }
 		date {
 			parseDate($('#message-detail-date').text())
 		}
@@ -138,7 +138,7 @@ class SingleMessageDetails extends geb.Module {
 class MultipleMessageDetails extends geb.Module {
 	static base = { $('#multiple-interactions') }
 	static content = {
-		text { $('#message-detail-content').text() }
+		text { $('#interaction-detail-content').text() }
 		checkedMessageCount { ($('p#checked-message-count').text() =~ /many\.selected\[(\d+),\w+\]/)[0][1].toInteger() }
 		replyAll(required:false) { $('a#btn_reply_all') }
 		retry { $("input#retry-failed") }
