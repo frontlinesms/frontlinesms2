@@ -139,7 +139,7 @@ class MultipleMessageDetails extends geb.Module {
 	static base = { $('#multiple-interactions') }
 	static content = {
 		text { $('#interaction-detail-content').text() }
-		checkedMessageCount { ($('p#checked-message-count').text() =~ /many\.selected\[(\d+),\w+\]/)[0][1].toInteger() }
+		checkedMessageCount { ($('p#checked-message-count').text() =~ /message\.multiple\.selected\[(\d+)]/)[0][1].toInteger() }
 		replyAll(required:false) { $('a#btn_reply_all') }
 		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}
