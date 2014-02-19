@@ -40,8 +40,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			singleMessageDetails.displayed && singleMessageDetails.noneSelected
 	}
 	
-	//FIXME this test fail when the local computer language is different than english. The Date return
-	//in the test in English while the UI date is in the local context
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()

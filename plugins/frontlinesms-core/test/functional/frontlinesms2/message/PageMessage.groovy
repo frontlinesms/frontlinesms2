@@ -112,12 +112,12 @@ class SingleMessageDetails extends geb.Module {
 	static base = { $('#single-interaction') }
 	static content = {
 		noneSelected { $('#interaction-detail-content').text() == 'fmessage.selected.none' }
-		sender { $('#message-detail-sender').text() }
-		senderLink { $('#message-detail-sender a') }
+		sender { $('#interaction-detail-sender').text() }
+		senderLink { $('#interaction-detail-sender a') }
 		addToContacts(required:false) { $('#add-contact') }
 		text { $('#interaction-detail-content').text() }
 		date {
-			parseDate($('#message-detail-date').text())
+			parseDate($('#interaction-detail-date').text())
 		}
 		archive(required:false) { $('#archive-msg') }
 		unarchive { $('#unarchive-msg') }
@@ -131,7 +131,7 @@ class SingleMessageDetails extends geb.Module {
 			$('select#move-actions').jquery.trigger("change")
 		}
 		moveActions { $('select#move-actions option')*.text() }
-		receivedOn(required:false) { $("#message-detail-fconnection") }
+		receivedOn(required:false) { $("#interaction-detail-fconnection") }
 	}
 }
 
