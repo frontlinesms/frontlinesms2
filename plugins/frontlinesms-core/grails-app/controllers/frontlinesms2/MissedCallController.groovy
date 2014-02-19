@@ -32,7 +32,7 @@ class missedCallController extends ControllerUtils {
 	}
 
 	def show() {
-		def interactionInstance = MissedCall.get(params.missedCallId)
+		def interactionInstance = MissedCall.get(params.interactionId)
 		interactionInstance.read = true
 		interactionInstance.save()
 
@@ -59,7 +59,7 @@ class missedCallController extends ControllerUtils {
 		if(params.id) {
 			def setTrashInstance = { obj ->
 				if(obj.objectClass == "frontlinesms2.MissedCall") {
-					params.missedCallId = obj.objectId
+					params.interactionId = obj.objectId
 				} else {
 					trashedObject = obj.object
 				}
@@ -114,7 +114,7 @@ class missedCallController extends ControllerUtils {
 		}
 		flash.message = dynamicMessage 'unarchived', missedCalls
 		if(params.controller == 'search')
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, missedCallId: params.missedCallId])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, interactionId: params.interactionId])
 		else
 			redirect(controller: 'archive', action: params.missedCallSection, params: [ownerId: params.ownerId])
 	}
@@ -123,16 +123,16 @@ class missedCallController extends ControllerUtils {
 		withMissedCall { interactionInstance ->
 			interactionInstance.starred =! interactionInstance.starred
 			interactionInstance.save(failOnError: true)
-			MissedCall.get(params.missedCallId).missedCallOwner?.refresh()
-			params.remove('missedCallId')
+			MissedCall.get(params.interactionId).missedCallOwner?.refresh()
+			params.remove('interactionId')
 			render(text: interactionInstance.starred ? "starred" : "unstarred")
 		}
 	}
 	
-	private def withMissedCall = withDomainObject MissedCall, { params.missedCallId }
+	private def withMissedCall = withDomainObject MissedCall, { params.interactionId }
 
 	private def getShowModel() {
-		def interactionInstance = params.missedCallId? MissedCall.get(params.missedCallId): null
+		def interactionInstance = params.interactionId? MissedCall.get(params.interactionId): null
 		interactionInstance?.read = true
 		interactionInstance?.save()
 
@@ -150,7 +150,7 @@ class missedCallController extends ControllerUtils {
 	}
 
 	private def getCheckedMissedCallList() {
-		def checked = params['interaction-select']?: params.missedCallId?: []
+		def checked = params['interaction-select']?: params.interactionId?: []
 		if(checked instanceof String) checked = checked.split(/\D+/) - ''
 		if(checked instanceof Number) checked = [checked]
 		if(checked.class.isArray()) checked = checked as List

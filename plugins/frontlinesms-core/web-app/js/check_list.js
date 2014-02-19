@@ -74,8 +74,7 @@ check_list = (function() {
 		if (itemTypeString === 'interaction') {
 			row.removeClass("unread");
 			row.addClass("read");
-			params = { messageSection:$('input:hidden[name=messageSection]').val(), ownerId: $('input:hidden[name=ownerId]').val()};
-			params[itemSubtypeString + 'Id'] = itemId;
+			params = { messageSection:$('input:hidden[name=messageSection]').val(), interactionId: itemId, ownerId: $('input:hidden[name=ownerId]').val()};
 			action = '/show/';
 			controller = itemSubtypeString; 
 		} else {

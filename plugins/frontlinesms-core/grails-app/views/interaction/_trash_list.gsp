@@ -12,7 +12,7 @@
 		</td>
 		<td class="message-star-cell" id="star-${t.objectId}">
 			<g:if test="${t.objectClass == frontlinesms2.TextMessage}">
-				<g:remoteLink class="${t.object.starred? 'starred':'unstarred'}" controller="message" action="changeStarStatus" params="[messageId: t.object.id]" onSuccess="setStarStatus('star-${t.object.id}',data)">
+				<g:remoteLink class="${t.object.starred? 'starred':'unstarred'}" controller="message" action="changeStarStatus" params="[interactionId: t.object.id]" onSuccess="setStarStatus('star-${t.object.id}',data)">
 				</g:remoteLink>
 			</g:if>
 			<g:else>

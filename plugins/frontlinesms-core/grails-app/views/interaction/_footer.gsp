@@ -22,7 +22,7 @@
 			<g:if test="${interactionInstanceTotal > 0}">
 				<g:paginate next="Next" prev="Back"
 					max="${grailsApplication.config.grails.views.pagination.max}"
-					action="${messageSection}" total="${interactionInstanceTotal ?: itemInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
+					action="${messageSection}" total="${interactionInstanceTotal ?: itemInstanceTotal}" params="${params.findAll({it.key != 'interactionId'})}"/>
 			</g:if>
 		</div>
 	</g:if>

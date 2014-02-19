@@ -31,7 +31,7 @@ class MessageController extends ControllerUtils {
 	}
 
 	def show() {
-		def interactionInstance = TextMessage.get(params.messageId)
+		def interactionInstance = TextMessage.get(params.interactionId)
 		def ownerInstance = MessageOwner.get(params?.ownerId)
 		interactionInstance.read = true
 		interactionInstance.save()
@@ -73,7 +73,7 @@ class MessageController extends ControllerUtils {
 		if(params.id) {
 			def setTrashInstance = { obj ->
 				if(obj.objectClass == "frontlinesms2.TextMessage") {
-					params.messageId = obj.objectId
+					params.interactionId = obj.objectId
 				} else {
 					trashedObject = obj.object
 				}
@@ -203,7 +203,7 @@ class MessageController extends ControllerUtils {
 		}
 		flash.message = dynamicMessage 'unarchived', messages
 		if(params.controller == 'search')
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, interactionId: params.interactionId])
 		else
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
@@ -231,14 +231,14 @@ class MessageController extends ControllerUtils {
 		withTextMessage { interactionInstance ->
 			interactionInstance.starred =! interactionInstance.starred
 			interactionInstance.save(failOnError: true)
-			TextMessage.get(params.messageId).messageOwner?.refresh()
-			params.remove('messageId')
+			TextMessage.get(params.interactionId).messageOwner?.refresh()
+			params.remove('interactionId')
 			render(text: interactionInstance.starred ? "starred" : "unstarred")
 		}
 	}
 	
 	def listRecipients() {
-		def message = TextMessage.get(params.messageId)
+		def message = TextMessage.get(params.interactionId)
 		if(!message) {
 			render text:'ERROR'
 			return
@@ -263,10 +263,10 @@ class MessageController extends ControllerUtils {
 //> PRIVATE HELPERS
 	boolean isViewingArchive() { params.controller=='archive' }
 
-	private def withTextMessage = withDomainObject TextMessage, { params.messageId }
+	private def withTextMessage = withDomainObject TextMessage, { params.interactionId }
 
 	private def getShowModel() {
-		def interactionInstance = params.messageId? TextMessage.get(params.messageId): null
+		def interactionInstance = params.interactionId? TextMessage.get(params.interactionId): null
 		interactionInstance?.read = true
 		interactionInstance?.save()
 
@@ -285,7 +285,7 @@ class MessageController extends ControllerUtils {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params['interaction-select']?: params.messageId?: []
+		def checked = params['interaction-select']?: params.interactionId?: []
 		if(checked instanceof String) checked = checked.split(/\D+/) - ''
 		if(checked instanceof Number) checked = [checked]
 		if(checked.class.isArray()) checked = checked as List

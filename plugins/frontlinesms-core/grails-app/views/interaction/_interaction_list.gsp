@@ -35,10 +35,10 @@
 						</td>
 
 						<td id="star-${m.id}" >
-							<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
+							<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[interactionId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
 						</td>
 						<td class="message-sender-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
-								<g:link class="displayName-${m.id}" controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
+								<g:link class="displayName-${m.id}" controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [interactionId: m.id]}">
 									<g:if test="${m.inbound}">
 										${m.displayName}
 									</g:if>
@@ -51,13 +51,13 @@
 								</g:link>
 						</td>
 						<td class="message-text-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
-							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
+							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [interactionId: m.id]}">
 								${m.messageOwner? m.messageOwner.getDisplayText(m).truncate(50) : m.text.truncate(50) }
 							</g:link>
 						</td>
 						<td class="message-date-cell">
 							<g:hiddenField name="message-created-date" value="${m.date}" disabled="true"/>
-							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
+							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [interactionId: m.id]}">
 								<g:formatDate date="${m.date}"/>
 							</g:link>
 						</td>

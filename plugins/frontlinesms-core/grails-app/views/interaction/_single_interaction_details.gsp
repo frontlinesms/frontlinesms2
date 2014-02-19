@@ -8,7 +8,7 @@
 				<i class="${interactionInstance.contactFlagCSSClasses}"></i>
 				<span>
 					<g:if test="${!interactionInstance.inbound && interactionInstance.dispatches.size() > 1}">
-						<fsms:popup controller="message" action="listRecipients" params="[messageId: interactionInstance.id]" popupCall="showRecipientList(data)" class="btn">
+						<fsms:popup controller="message" action="listRecipients" params="[interactionId: interactionInstance.id]" popupCall="showRecipientList(data)" class="btn">
 							<g:message code="fmessage.to.multiple" args="${[interactionInstance.displayName]}" />
 						</fsms:popup>
 					</g:if>

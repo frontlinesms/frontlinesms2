@@ -9,7 +9,7 @@
 	<g:if test="${messageSection != 'trash'}">
 		<g:if test="${messageSection == 'pending'}">
 			<g:if test="${interactionInstance.hasFailed}">
-				<g:link class="msg-btn btn" elementId="btn_retry" action="retry" params="${[messageId: interactionInstance.id]}"><g:message code="fmessage.retry" /></g:link>
+				<g:link class="msg-btn btn" elementId="btn_retry" action="retry" params="${[interactionId: interactionInstance.id]}"><g:message code="fmessage.retry" /></g:link>
 			</g:if>
 		</g:if>
 		<g:else>
