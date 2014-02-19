@@ -84,16 +84,10 @@ class missedCallController extends ControllerUtils {
 		missedCalls.each { m ->
 			trashService.sendToTrash(m)
 		}
-		flash.missedCall = dynamicMessage 'trashed', missedCalls
-		if (params.missedCallSection == 'result') {
-			redirect(controller:'search', action:'result', params:
-					[searchId:params.searchId])
-		} else {
-			log.info "Forwarding to action: $params.missedCallSection"
-			redirect(controller:params.controller, action:params.missedCallSection, params:
-					[ownerId:params.ownerId, starred:params.starred,
+		flash.message = dynamicMessage 'trashed', missedCalls
+		redirect(controller:params.controller, action:params.missedCallSection, params:
+				[ownerId:params.ownerId, starred:params.starred,
 							failed:params.failed, searchId:params.searchId])
-		}
 	}
 	
 	def archive() {
@@ -102,7 +96,7 @@ class missedCallController extends ControllerUtils {
 			interactionInstance.archived = true
 			interactionInstance.save()
 		}
-		flash.missedCall = dynamicMessage 'archived', missedCalls
+		flash.message = dynamicMessage 'archived', missedCalls
 		if(params.missedCallSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		} else {
@@ -118,7 +112,7 @@ class missedCallController extends ControllerUtils {
 				interactionInstance.save(failOnError: true)
 			}
 		}
-		flash.missedCall = dynamicMessage 'unarchived', missedCalls
+		flash.message = dynamicMessage 'unarchived', missedCalls
 		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, missedCallId: params.missedCallId])
 		else
