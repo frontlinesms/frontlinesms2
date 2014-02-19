@@ -57,7 +57,7 @@ class MessageControllerSpec extends Specification {
 			[new TextMessage(text:'', id:1L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
 				new TextMessage(text:'', id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
 				new TextMessage(text:'', id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])]*.save(failOnError:true)
-			params['message-select'] = [1, 2]
+			params['interaction-select'] = [1, 2]
 			2 * mockMessageSendService.retry(_) >> { m ->
 				return 1 }
 		when:
