@@ -144,7 +144,7 @@ ul.sortable.checklist { width:50%; }
 
 #modalBox #importForm h3 { font-weight: bold; margin-bottom: 5px; }
 #modalBox #importForm input[type='file'] { margin-top: 10px; }
-#modalBox #importForm label[for='importCsvFile'] { font-style: italic; }
+#modalBox #importForm label[for='contactImportFile'] { font-style: italic; }
 
 .saving-state-message { display:inline-block; float:right; text-align:right; margin:37px 0 0 0; color:#808080; }
 .contact_footer_controls { max-width:62%; }

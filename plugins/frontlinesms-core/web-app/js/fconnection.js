@@ -3,9 +3,23 @@ fconnection_list = (function() {
 		var containerSelecter = "#connection-" + id;
 		$(containerSelecter + " .connection-status").attr("class", "connection-status " + status);
 		sanchez.replaceContent(containerSelecter + " .controls", "fconnection-controls-" + status, { connectionId:id });
+	},
+	pulseNewConnections = function(ids) {
+		$.each(ids.split(','), function(index, id) {
+			$('#connection-' + id).pulse({
+				backgroundColor : '#5cb85c',
+				color           : 'white'
+			},
+			{
+				returnDelay : 900,
+				interval    : 700,
+				pulses      : 1
+			});
+		});
 	};
 	return {
-		update:update
+		update:update,
+		pulseNewConnections:pulseNewConnections
 	};
 }());
 

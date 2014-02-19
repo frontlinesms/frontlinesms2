@@ -8,9 +8,9 @@ class PageImportExportSettings extends PageSettings {
 	static content = {
 		exportOption { option-> $("input[name=exportData]", value:option) }
 		exportButton { $("input#exportSubmit") }
-		importFileUploader { $("input[name=importCsvFile]") }
+		importFileUploader { $("input[name=contactImportFile]") }
 		uploadCsv { path ->
-			$("form[name=importForm]").importCsvFile = path
+			$("form[name=importForm]").contactImportFile = path
 			return true
 		}
 		importOption { option-> $("input[name=data]", value:option) }

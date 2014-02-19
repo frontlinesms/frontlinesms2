@@ -4,6 +4,6 @@
 			labelPrefix="import."
 			checked="contacts.csv"/>
 	<fsms:info message="import.contacts.info"/>
-	<input type="file" name="importCsvFile" onchange="this.form.submit();" accept="text/csv,text/vcard,text/directory,.csv,.vcf"/>
-	<label for="importCsvFile"><g:message code="import.prompt"/></label>
+	<input type="file" name="contactImportFile" onchange="this.form.submit();" accept="text/csv,text/vcard,text/directory,.csv,.vcf"/>
+	<label for="contactImportFile"><g:message code="import.prompt"/></label>
 </g:uploadForm>
