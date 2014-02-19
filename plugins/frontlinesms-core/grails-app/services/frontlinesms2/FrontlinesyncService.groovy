@@ -9,10 +9,9 @@ class FrontlinesyncService {
 
 		try {
 			data.payload.each { e ->
-				sendMessageAndHeaders('seda:incoming-fmessages-to-store',
-						new TextMessage(inbound:true,
+				sendMessageAndHeaders('seda:incoming-missedcalls-to-store',
+						new MissedCall(inbound:true,
 								src:e.fromNumber,
-								text:'missed call',
 								date:new Date(e.callTimestamp)),
 						['fconnection-id':connection.id])
 			}
