@@ -9,23 +9,23 @@ class CoreUrlMappings {
 			action = 'show'
 		}
 		
-		"/search/no_search/$messageId?"(controller:'search', action:'no_search') {}
+		"/search/no_search/$interactionId?"(controller:'search', action:'no_search') {}
 		"/search/result/show/"(controller:'search', action:'result') {}
-		"/search/result/show/$messageId"(controller:'search', action:'result') {}
+		"/search/result/show/$interactionId"(controller:'search', action:'result') {}
 		
 		"/message/inbox/"(controller:'message', action:'inbox') {}
-		"/message/inbox/show/$messageId"(controller:'message', action:'inbox') {}
+		"/message/inbox/show/$interactionId"(controller:'message', action:'inbox') {}
 
-		"/message/sent/show/$messageId"(controller:'message', action:'sent') {}
-		"/message/pending/show/$messageId"(controller:'message', action: 'pending') {}
+		"/message/sent/show/$interactionId"(controller:'message', action:'sent') {}
+		"/message/pending/show/$interactionId"(controller:'message', action: 'pending') {}
 		"/message/trash/show/$id"(controller:'message', action: 'trash') {}
 
 		"/message/activity/$ownerId"(controller:'message', action:'activity') {}
 		"/message/activity/$ownerId/step/$stepId"(controller:'message', action:'activity') {}
-		"/message/activity/$ownerId/show/$messageId"(controller:'message', action:'activity') {}
+		"/message/activity/$ownerId/show/$interactionId"(controller:'message', action:'activity') {}
 
 		"/message/folder/$ownerId"(controller:'message', action:'folder') {}
-		"/message/folder/$ownerId/show/$messageId"(controller:'message', action:'folder') {}
+		"/message/folder/$ownerId/show/$interactionId"(controller:'message', action:'folder') {}
 
 		// Don't know why this is neccessary, but it is
 		"/poll/create"(controller:'poll', action:'create')
@@ -41,16 +41,16 @@ class CoreUrlMappings {
 		"/customactivity/create"(controller:'customactivity', action: 'create')
 		"/customactivity/save"(controller:'customactivity', action: 'save')
 		
-		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
-		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}
+		"/archive/inbox/show/$interactionId"(controller:'archive', action:'inbox') {}
+		"/archive/sent/show/$interactionId"(controller:'archive', action:'sent') {}
 		
 		"/archive/activity"(controller:'archive', action:'activityList') {}
 		"/archive/activity/$ownerId"(controller:'archive', action:'activity') {}
-		"/archive/activity/$ownerId/show/$messageId"(controller:'archive', action:'activity') {}
+		"/archive/activity/$ownerId/show/$interactionId"(controller:'archive', action:'activity') {}
 		
 		"/archive/folder"(controller:'archive', action:'folderList') {}
 		"/archive/folder/$ownerId"(controller:'archive', action:'folder') {}
-		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
+		"/archive/folder/$ownerId/show/$interactionId"(controller:'archive', action:'folder') {}
 
 		"/webconnection/$imp/$action"(controller:'webconnection') {}
 
