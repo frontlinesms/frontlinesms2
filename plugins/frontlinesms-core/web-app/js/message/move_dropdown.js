@@ -38,7 +38,7 @@ function moveAction() {
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/move',
-		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
+		data: { messageSection:moveTargetType, interactionId:messagesToMove, ownerId:moveTargetId },
 		success: function(data) { window.location = location; }
 	});
 }
