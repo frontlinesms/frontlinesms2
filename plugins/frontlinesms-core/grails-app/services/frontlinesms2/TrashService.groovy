@@ -16,7 +16,7 @@ class TrashService {
     
 	def sendToTrash(object) {
 		log.info "Deleting ${object}"
-		if (object instanceof frontlinesms2.TextMessage) {
+		if (object instanceof frontlinesms2.Interaction) {
 			object.isDeleted = true
 			new Trash(displayName:object.displayName,
 					displayText:object.text.truncate(Trash.MAXIMUM_DISPLAY_TEXT_SIZE),

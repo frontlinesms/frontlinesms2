@@ -80,7 +80,7 @@ class missedCallController extends ControllerUtils {
 		missedCalls.each { m ->
 			trashService.sendToTrash(m)
 		}
-		flash.missedCall = dynamicmissedCall 'trashed', missedCalls
+		flash.missedCall = dynamicMessage 'trashed', missedCalls
 		if (params.missedCallSection == 'result') {
 			redirect(controller:'search', action:'result', params:
 					[searchId:params.searchId])
@@ -98,7 +98,7 @@ class missedCallController extends ControllerUtils {
 			interactionInstance.archived = true
 			interactionInstance.save()
 		}
-		flash.missedCall = dynamicmissedCall 'archived', missedCalls
+		flash.missedCall = dynamicMessage 'archived', missedCalls
 		if(params.missedCallSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		} else {
@@ -114,7 +114,7 @@ class missedCallController extends ControllerUtils {
 				interactionInstance.save(failOnError: true)
 			}
 		}
-		flash.missedCall = dynamicmissedCall 'unarchived', missedCalls
+		flash.missedCall = dynamicMessage 'unarchived', missedCalls
 		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, missedCallId: params.missedCallId])
 		else
@@ -157,6 +157,24 @@ class missedCallController extends ControllerUtils {
 		if(checked instanceof Number) checked = [checked]
 		if(checked.class.isArray()) checked = checked as List
 		return checked
+	}
+
+	private def dynamicMessage(String code, def list) {
+		def count = list.size()
+		if(count == 1) defaultMessage code
+		else pluralMessage code, count
+	}
+
+	private def defaultMessage(String code, Object... args=[]) {
+		def messageName = message code:'fmessage.label'
+		return message(code:'default.' + code,
+				args:[messageName] + args)
+	}
+
+	private def pluralMessage(String code, count, Object... args=[]) {
+		def messageName = message code:'fmessage.label.multiple', args:[count]
+		return message(code:'default.' + code + '.multiple',
+				args:[messageName] + args)
 	}
 }
 
