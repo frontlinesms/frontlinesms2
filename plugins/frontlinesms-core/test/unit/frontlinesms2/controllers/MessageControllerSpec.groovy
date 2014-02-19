@@ -42,7 +42,7 @@ class MessageControllerSpec extends Specification {
 			[new TextMessage(text:'', id:1, inbound:false, dispatches:[new Dispatch()]),
 					new TextMessage(text:'', id:2, inbound:false, dispatches:[new Dispatch()]),
 					new TextMessage(text:'', id:3, inbound:false, dispatches:[new Dispatch()])]*.save(failOnError:true)*.id
-			params.messageId = 1
+			params.interactionId = 1
 			1 * mockMessageSendService.retry(_) >> { m ->
 				assert m*.id == [1]
 				return 1 }
@@ -75,22 +75,22 @@ class MessageControllerSpec extends Specification {
 			1 * controller.trashService.emptyTrash()
 	}
 
-	def "archiving a message should redirect to the calling action without a messageId"() {
+	def "archiving a message should redirect to the calling action without a interactionId"() {
 		given:
 			params.controller = "message"
 			params.messageSection = "inbox"
-			params.messageId = TextMessage.build().id
+			params.interactionId = TextMessage.build().id
 		when:
 			controller.archive()
 		then:
 			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId="
 	}
 
-	def "archiving a message IN SEARCH should redirect to the calling action without a messageId"() {
+	def "archiving a message IN SEARCH should redirect to the calling action without a interactionId"() {
 		given:
 			params.controller = "message"
 			params.messageSection = "result"
-			params.messageId = TextMessage.build().id
+			params.interactionId = TextMessage.build().id
 			params.searchId = 1
 		when:
 			controller.archive()
@@ -104,7 +104,7 @@ class MessageControllerSpec extends Specification {
 			params.controller = "message"
 			params.messageSection = "result"
 			params.searchId = "1"
-			params.messageId = message.id
+			params.interactionId = message.id
 		when:
 			controller.archive()
 		then:

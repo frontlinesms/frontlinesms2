@@ -11,11 +11,11 @@ class QuickMessageControllerISpec extends IntegrationSpec {
 		controller = new QuickMessageController()
 	}
 
-	def 'create returns the prepopulated recipients based on params.messageIds'() {
+	def 'create returns the prepopulated recipients based on params.interactionIds'() {
 		setup:
 			def m1 = new TextMessage(src:'12345', text:'This is an incoming message', inbound:true).save(failOnError:true)
 			def m2 = new TextMessage(src:'23456', text:'This is an incoming message', inbound:true).save(failOnError:true)
-			controller.params.messageIds = TextMessage.list().collect{ it.id }.join(",")
+			controller.params.interactionIds = TextMessage.list().collect{ it.id }.join(",")
 		when:
 			def result = controller.create()
 		then:

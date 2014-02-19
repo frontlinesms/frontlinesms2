@@ -253,7 +253,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			
 			// TODO move this test to MessageController
 			def controller = new MessageController()
-			controller.params.messageId = m.id
+			controller.params.interactionId = m.id
 			controller.params.ownerId = 'inbox'
 			controller.params.messageSection = 'inbox'
 		when:

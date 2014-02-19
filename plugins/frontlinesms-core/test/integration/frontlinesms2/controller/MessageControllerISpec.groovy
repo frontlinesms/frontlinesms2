@@ -78,7 +78,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def id = TextMessage.build().id
 			assert TextMessage.get(id).read == false
 		when:
-			controller.params.messageId = id
+			controller.params.interactionId = id
 			controller.params.messageSection = 'inbox'
 			controller.show()
 		then:
@@ -101,7 +101,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def id = TextMessage.build().id
 			assert TextMessage.get(id).read == false
 		when:
-			controller.params.messageId = id
+			controller.params.interactionId = id
 			controller.params.messageSection = 'inbox'
 			controller.changeStarStatus()
 		then:
@@ -113,7 +113,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def id = TextMessage.build(starred:true).id
 			assert TextMessage.get(id).starred
 		when:
-			controller.params.messageId = id
+			controller.params.interactionId = id
 			controller.params.messageSection = 'inbox'
 			controller.changeStarStatus()
 		then:
@@ -141,7 +141,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = TestData.createFootballPoll()
 			def message = TextMessage.build()
 		when:
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.ownerId = poll.id
 			controller.params.messageSection = 'activity'
 			controller.move()
@@ -159,7 +159,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToDispatches(dst:'456', status:DispatchStatus.SENT, dateSent:new Date())
 					.addToDispatches(dst:'789', status:DispatchStatus.FAILED)
 					.save(failOnError:true)
-			controller.params.messageId = m.id
+			controller.params.interactionId = m.id
 		when:
 			controller.listRecipients()
 		then:
@@ -185,7 +185,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def newOwner = new Autoreply(name:"Toothpaste", autoreplyText: "Thanks for the input").addToKeywords(k).save(failOnError:true)
 
 			// TODO move this test to MessageController
-			controller.params.messageId = m.id
+			controller.params.interactionId = m.id
 			controller.params.ownerId = newOwner.id
 			controller.params.messageSection = 'activity'
 		when:
@@ -222,7 +222,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webConnection.addToMessages(message)
 			webConnection.save(failOnError:true, flush:true)
 		when:
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.ownerId = announcement.id
 			controller.params.messageSection = 'activity'
 			controller.move()
@@ -242,7 +242,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			poll.save(failOnError:true, flush:true)
 
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.ownerId = poll.id
 			controller.params.messageSection = 'activity'
 		when:
