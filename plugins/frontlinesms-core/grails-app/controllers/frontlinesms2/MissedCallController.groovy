@@ -82,9 +82,9 @@ class missedCallController extends ControllerUtils {
 	def delete() {
 		def missedCalls = getCheckedMissedCalls()
 		missedCalls.each { m ->
-			trashService.sendToTrash(m)
+			m.delete()
 		}
-		flash.message = dynamicMessage 'trashed', missedCalls
+		flash.message = dynamicMessage 'deleted', missedCalls
 		redirect(controller:params.controller, action:params.missedCallSection, params:
 				[ownerId:params.ownerId, starred:params.starred,
 							failed:params.failed, searchId:params.searchId])
