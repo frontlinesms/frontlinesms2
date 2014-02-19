@@ -20,7 +20,7 @@ class TrashService {
 		if (object instanceof frontlinesms2.Interaction) {
 			object.isDeleted = true
 			new Trash(displayName:object.displayName,
-					displayText:(object instanceof frontlinesms2.TextMessage ? object.text.truncate(Trash.MAXIMUM_DISPLAY_TEXT_SIZE) : i18nUtilService.getMessage(code:'missedCall.displayText', args:[object.displayName])),
+					displayText:(object instanceof frontlinesms2.TextMessage ? object.text.truncate(Trash.MAXIMUM_DISPLAY_TEXT_SIZE) : i18nUtilService.getMessage(code:'missedCall.displaytext', args:[object.displayName])),
 					objectClass:object.class.name,
 					objectId:object.id).save()
 			object.save(failOnError:true, flush:true)
