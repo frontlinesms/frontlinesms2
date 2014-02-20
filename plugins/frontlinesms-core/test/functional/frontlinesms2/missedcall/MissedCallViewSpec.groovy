@@ -21,15 +21,13 @@ class MissedCallViewSpec extends MessageBaseSpec {
 			messageList.messageCount() == 3
 	}
 
-	def "When clicked, a missed call's details are displayed"() {
+	def "When viewing a missed call, the details are displayed, as well as relevant actions"() {
 		when:
-			to PageMissedCall
-			messageList.clickLink(0)
+			to PageMissedCall, MissedCall.findBySrc('123').id
 		then:
-			waitFor {
-				singleMessageDetails.sender.displayed
-			}
-			singleMessageDetails.sender == '321'
+			singleMessageDetails.sender.startsWith '123'
+			singleMessageDetails.date
+			singleMessageDetails.text == 'missedCall.displaytext[123]'
 	}
 
 	def "Can delete a missed call"() {
@@ -90,7 +88,7 @@ class MissedCallViewSpec extends MessageBaseSpec {
 			messageList.toggleSelect(0)
 		then:
 			waitFor {
-				singleMessageDetails.sender.displayed
+				singleMessageDetails.sender
 			}
 		when:
 			messageList.toggleSelect(1)
