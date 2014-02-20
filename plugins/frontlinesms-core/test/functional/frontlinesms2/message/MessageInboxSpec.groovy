@@ -181,9 +181,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			messageList.toggleSelect(0)
 		then:
 			waitFor {
-				messageList.getCheckbox(0).disabled
-			}
-			waitFor {
 				!messageList.getCheckbox(0).disabled
 			}
 		when:
