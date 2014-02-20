@@ -102,9 +102,9 @@ class MissedCallViewSpec extends MessageBaseSpec {
 	}
 
 	private def createTestMissedCalls() {
-		new MissedCall(src:'123', date:new Date() - 2).save(failOnError: true)
-		new MissedCall(src:'214124', date:new Date() - 1).save(failOnError: true)
-		new MissedCall(src:'321', date:new Date()).save(failOnError: true)
+		new MissedCall(src:'123', date:new Date() - 2).save(flush:true, failOnError: true)
+		new MissedCall(src:'214124', date:new Date() - 1).save(flush:true, failOnError: true)
+		new MissedCall(src:'321', date:new Date()).save(flush:true, failOnError: true)
 	}
 }
 
