@@ -48,7 +48,7 @@ function launchCategorisePopup(moveTargetType,messagesToMove,moveTargetId){
 		type:'POST',
 		beforeSend : function() { showThinking(); },
 		url: url_root + 'subscription/categoriseSubscriptionPopup',
-		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
+		data: { messageSection:moveTargetType, interactionId:messagesToMove, ownerId:moveTargetId },
 		success: function(data) {
 			hideThinking();
 			launchSmallPopup(i18n('subscription.categorise.title'), data, i18n('wizard.ok'), function() {
