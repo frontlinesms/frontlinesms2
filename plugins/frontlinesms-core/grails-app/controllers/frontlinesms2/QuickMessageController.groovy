@@ -8,7 +8,7 @@ class QuickMessageController extends ControllerUtils {
 		def recipientList = []
 		if(params.messageIds?.contains(',')) {
 			params.messageIds.tokenize(',').each {
-				def msg = TextMessage.findById(it)
+				def msg = Interaction.findById(it)
 				if (msg.inbound) {
 					recipientList << msg.src
 				} else {
