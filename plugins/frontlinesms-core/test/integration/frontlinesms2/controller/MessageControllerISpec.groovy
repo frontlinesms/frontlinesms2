@@ -202,8 +202,8 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def m2 = TextMessage.build(messageOwner:announcement,archived:true)//archived owner fails
 			def m3 = TextMessage.build()//inbox message passes
 			def controller = new MessageController()
-			controller.params['message-select'] = []
-			controller.params['message-select'] << m1.id << m2.id << m3.id
+			controller.params['interaction-select'] = []
+			controller.params['interaction-select'] << m1.id << m2.id << m3.id
 			controller.params.ownerId = announcement2.id
 		when:
 			controller.move()
