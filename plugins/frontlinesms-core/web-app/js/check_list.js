@@ -80,7 +80,7 @@ check_list = (function() {
 		} else {
 			params = { contactsSection:$('input:hidden[name=contactsSection]').val() };
 			action = '/updateContactPane/';
-			controller = itemSubtypeString;
+			controller = itemTypeString;
 		}
 		$("#multiple-"+itemTypeString+"s").hide();
 
