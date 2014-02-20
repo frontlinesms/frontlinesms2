@@ -16,6 +16,8 @@ class CoreUrlMappings {
 		"/message/inbox/"(controller:'message', action:'inbox') {}
 		"/message/inbox/show/$interactionId"(controller:'message', action:'inbox') {}
 
+		"/missedCall/inbox/show/$interactionId"(controller:'missedCall', action:'missedCalls') {}
+
 		"/message/sent/show/$interactionId"(controller:'message', action:'sent') {}
 		"/message/pending/show/$interactionId"(controller:'message', action: 'pending') {}
 		"/message/trash/show/$id"(controller:'message', action: 'trash') {}
