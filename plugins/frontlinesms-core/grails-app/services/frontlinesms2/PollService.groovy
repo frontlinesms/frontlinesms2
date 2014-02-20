@@ -34,4 +34,16 @@ class PollService{
 		poll.save(failOnError:true)
 		poll
 	}
+
+	def sendPollReply(pollInstance, message) {
+		def params = [:]
+		params.addresses = message.src
+		params.messageText = pollInstance.autoreplyText
+		def outgoingMessage = messageSendService.createOutgoingMessage(params)
+		pollInstance.addToMessages(outgoingMessage)
+		pollInstance.save(failOnError:true)
+		outgoingMessage.setMessageDetail(pollInstance, message.id)
+		outgoingMessage.save(failOnError:true)
+		messageSendService.send(outgoingMessage)
+	}
 }

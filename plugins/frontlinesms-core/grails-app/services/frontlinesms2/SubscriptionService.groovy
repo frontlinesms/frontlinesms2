@@ -52,7 +52,7 @@ class SubscriptionService {
 				}
 			}
 			if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText) {
-				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
+				sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText, message)
 			}
 		})
 	}
@@ -69,7 +69,7 @@ class SubscriptionService {
 					foundContact?.removeFromGroup(group)
 				}
 				if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.leaveAutoreplyText) {
-					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
+					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText, message)
 				}
 			}
 		})
@@ -86,17 +86,17 @@ class SubscriptionService {
 				if(foundContact.isMemberOf(group)) {
 					foundContact.removeFromGroup(group)
 					if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.leaveAutoreplyText)
-						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText)
+						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.leaveAutoreplyText, message)
 				} else {
 					group.addToMembers(foundContact);
 					if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText)
-						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
+						sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText, message)
 				}
 			} else {
 				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
 				group.addToMembers(foundContact);
 				if(subscriptionOrActionStep instanceof Activity && subscriptionOrActionStep.joinAutoreplyText)
-					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText)
+					sendAutoreplyMessage(foundContact, subscriptionOrActionStep.joinAutoreplyText, message)
 			}
 		})
 	}
@@ -117,17 +117,16 @@ class SubscriptionService {
 		}
 	}
 
-	def sendAutoreplyMessage(Contact foundContact, autoreplyText, addToActivity=false, subscription=null) {
+	def sendAutoreplyMessage(Contact foundContact, autoreplyText, incomingMessage) {
+		def subscription = incomingMessage.messageOwner
 		def params = [:]
 		params.addresses = foundContact.mobile
 		params.messageText = autoreplyText
 		def outgoingMessage = messageSendService.createOutgoingMessage(params)
-		if(addToActivity) {
-			subscription.addToMessages(outgoingMessage)
-			subscription.save(failOnError:true)
-		} else {
-			outgoingMessage.save(failOnError:true)
-		}
+		subscription.addToMessages(outgoingMessage)
+		subscription.save(failOnError:true)
+		outgoingMessage.setMessageDetail(subscription, incomingMessage.id)
+		outgoingMessage.save(failOnError:true)
 		messageSendService.send(outgoingMessage)
 	}
 }

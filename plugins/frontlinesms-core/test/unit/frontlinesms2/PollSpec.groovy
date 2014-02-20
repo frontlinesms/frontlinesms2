@@ -23,6 +23,8 @@ class PollSpec extends Specification {
 		Activity.metaClass.static.get = {Long id -> 
 			Poll.findById(id)
 		}
+
+		
 	}
 
 	@Unroll
@@ -88,12 +90,15 @@ class PollSpec extends Specification {
 			poll.messageSendService = sendService
 			poll.autoreplyText = "some reply text"
 			poll.save(failOnError:true, flush:true)
-
+			
 			def replyMessage = TextMessage.build(text:"woteva")
 			sendService.createOutgoingMessage({ params ->
 				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
 			}) >> replyMessage
 
+			def pollService = Mock(PollService)
+			pollService.sendPollReply(_,_) >> { sendService.send(replyMessage)}
+			poll.pollService = pollService
 
 			def inMessage = TextMessage.build(text:"message text", src:TEST_NUMBER)
 		when:

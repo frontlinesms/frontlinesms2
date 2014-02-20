@@ -77,6 +77,7 @@ class SubscriptionServiceSpec extends Specification {
 		m.inbound >> true
 		m.text >> messageText
 		m.src >> src
+		m.messageOwner >> Mock(Subscription)
 		return m
 	}
 }
