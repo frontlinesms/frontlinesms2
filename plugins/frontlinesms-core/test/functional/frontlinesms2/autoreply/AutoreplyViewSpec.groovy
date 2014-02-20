@@ -106,7 +106,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text?.toLowerCase() == "many.selected[2,message]" }
+			waitFor { multipleMessageDetails.text?.toLowerCase() == "message.multiple.selected[2]" }
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {
