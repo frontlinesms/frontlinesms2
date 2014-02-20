@@ -20,9 +20,9 @@ class PageMessageTrash extends PageMessage {
 
 	static content = {
 		trashMoreActions { $("ul.buttons li.trash #trash-actions") }
-		senderDetails { $('div#message-info p#message-detail-sender').text() }
+		senderDetails { $('div#interaction-info p#message-detail-sender').text() }
 		date {
-			parseDate($('div#message-info p#message-detail-date').text())
+			parseDate($('div#interaction-info p#message-detail-date').text())
 		}
 	}
 }
