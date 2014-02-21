@@ -8,7 +8,18 @@ class FrontlinesyncService {
 		}
 
 		try {
-			data.payload.each { e ->
+			log.info "Saving the incoming text messages"
+			data.payload.inboundTextMessages.each { e ->
+				sendMessageAndHeaders('seda:incoming-fmessages-to-store',
+						new TextMessage(inbound:true,
+								src:e.fromNumber,
+								text:e.text,
+								date:new Date(e.smsTimestamp)),
+						['fconnection-id':connection.id])
+			}
+
+			log.info "Saving the missed calls"
+			data.payload.missedCalls.each { e ->
 				sendMessageAndHeaders('seda:incoming-fmessages-to-store',
 						new TextMessage(inbound:true,
 								src:e.fromNumber,
