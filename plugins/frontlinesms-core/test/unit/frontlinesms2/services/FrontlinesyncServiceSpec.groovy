@@ -47,7 +47,13 @@ class FrontlinesyncServiceSpec extends Specification {
 	def 'apiProcess does not return 403 if secret is missing but connection has empty secret'() {
 		given:
 			setupConnection('')
-			setupPayload()
+			setupPayload('secret', [
+					'missedCalls': [
+					[fromNumber: 123, callTimestamp: 1233212341],	
+					[fromNumber: 234, callTimestamp: 1524621462],	
+					[fromNumber: 345, callTimestamp: 1426142612]
+				]
+			])
 		when:
 			service.apiProcess(connection, controller)	
 		then:
@@ -58,9 +64,11 @@ class FrontlinesyncServiceSpec extends Specification {
 		given:
 			setupConnection('secret')
 			setupPayload('secret', [
-				[fromNumber: 123, callTimestamp: 1233212341],	
-				[fromNumber: 234, callTimestamp: 1524621462],	
-				[fromNumber: 345, callTimestamp: 1426142612],	
+					'missedCalls': [
+					[fromNumber: 123, callTimestamp: 1233212341],	
+					[fromNumber: 234, callTimestamp: 1524621462],	
+					[fromNumber: 345, callTimestamp: 1426142612]
+				]
 			])
 		when:
 			service.apiProcess(connection, controller)
@@ -68,6 +76,23 @@ class FrontlinesyncServiceSpec extends Specification {
 			rendered.text == 'OK'
 			sendMessageAndHeadersInvokationCount == 3
 			queue == 'seda:incoming-missedcalls-to-store'
+	}
+
+	def 'each text message in payload is passed to incoming-fmessages-to-store'() {
+		given:
+			setupConnection('secret')
+			setupPayload('secret', [
+					'inboundTextMessages' : [
+					[fromNumber: 123, smsTimestamp: 123123123, text: 'message'],
+					[fromNumber: 123, smsTimestamp: 123123123, text: 'message']
+					]
+				])
+		when:
+			service.apiProcess(controller, controller)
+		then:
+			rendered.text == 'OK'
+			sendMessageAndHeadersInvokationCount == 2
+			queue == 'seda:incoming-fmessages-to-store'
 	}
 
 	private def setupConnection(secret) {
