@@ -1,5 +1,8 @@
-#!/usr/bin
+#!/bin/bash
 
 # Read sprint number from application.properties
+sprintNumber=`sed '/^\#/d' ./application.properties | grep "sprint.number" | cut -d "=" -f 2`
+echo "Generating build for iteration $sprintNumber"
+
 # Generate installers
 # Push installers to s3 bucket, "sprint-builds"
