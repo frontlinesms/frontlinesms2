@@ -1,0 +1,21 @@
+<settings>
+	<profiles>
+		<profile>
+			<id>frontlinesms-default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<devenv.install4jc>/usr/local/bin/install4jc</devenv.install4jc>
+			</properties>
+		</profile>
+    </profiles>
+    <servers>
+            <server>
+                <id>frontlinesms.repo</id>
+                <username>m2repo</username>
+                <password>x39gJS6Z</password>
+            </server>
+    </servers>
+</settings>
+	

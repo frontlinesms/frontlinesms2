@@ -276,8 +276,8 @@ class TextMessageISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def dataModel = controller.result()
 		then:
-			dataModel.messageInstanceList.size() == dataModel.messageInstanceList*.id.unique().size() &&
-					dataModel.messageInstanceList.size() == 50
+			dataModel.interactionInstanceList.size() == dataModel.interactionInstanceList*.id.unique().size() &&
+					dataModel.interactionInstanceList.size() == 50
 	}
 
 	@Unroll
@@ -291,8 +291,8 @@ class TextMessageISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def dataModel = controller.result()
 		then:
-			dataModel.messageInstanceList.size() == dataModel.messageInstanceList*.id.unique().size()
-			dataModel.messageInstanceList*.id.containsAll(TextMessage.list(offset : offset,max : max,sort:"date", order:"desc")*.id)
+			dataModel.interactionInstanceList.size() == dataModel.interactionInstanceList*.id.unique().size()
+			dataModel.interactionInstanceList*.id.containsAll(TextMessage.list(offset : offset,max : max,sort:"date", order:"desc")*.id)
 		where:
 			offset | max
 			0      | 50

@@ -18,23 +18,23 @@
 	<body>
 		<fsms:render template="/head"/>
 		<div id="body" class="messages">
-			<fsms:render template="/message/menu"/>
+			<fsms:render template="/interaction/menu"/>
 			<g:form controller="${params.controller}"
-					params="[messageId: messageInstance?.id, searchId: search?.id]">
+					params="[interactionId: interactionInstance?.id, searchId: search?.id]">
 				<g:hiddenField name="messageSection" value="${messageSection}"/>
 				<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 				<div id="main-list-container">
 					<div id="main-list-head">
-						<fsms:render template="/message/header"/>
+						<fsms:interactionTemplate template="header"/>
 					</div>
-					<fsms:render template="/message/message_list"/>
+					<fsms:interactionTemplate template="interaction_list"/>
 					<div id="main-list-foot">
-						<fsms:render template="/message/footer"/>
+						<fsms:render template="/interaction/footer"/>
 					</div>
 				</div>
 				<g:layoutBody/>
 				<div id="detail">
-					<fsms:render template="/message/message_details"/>
+					<fsms:render template="/interaction/interaction_details"/>
 				</div>
 			</g:form>
 		</div>

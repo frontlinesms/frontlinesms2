@@ -1,10 +1,10 @@
-<div id="multiple-messages" style="display:none">
+<div id="multiple-interactions" style="display:none">
 	<div id='message-info'>
 		<g:if test="${messageSection == 'trash' && ownerInstance}">
 			<div id='activity-info'>
-				<p id="message-detail-sender">${ownerInstance.name}</p>
-				<p id="message-detail-date"><g:formatDate date="${ownerInstance.dateCreated}"/></p>
-				<div id="message-detail-content">
+				<p id="interaction-detail-sender">${ownerInstance.name}</p>
+				<p id="interaction-detail-date"><g:formatDate date="${ownerInstance.dateCreated}"/></p>
+				<div id="interaction-detail-content">
 					<p>
 						<g:if test="${ownerInstance.getLiveMessageCount() == 1}">
 							<g:message code="fmessage.count.single"/>
@@ -17,14 +17,14 @@
 			</div>
 		</g:if>
 		<g:else>
-			<div id="message-detail-content">
-				<p id='checked-message-count'>
+			<div id="interaction-detail-content">
+				<p id='checked-interaction-count'>
 					<g:message code="fmessage.selected.many" args="${[checkedMessageCount]}"/>
 				</p>
 			</div>
 		</g:else>
 	</div>
-	<div id="message-detail-buttons">
+	<div id="interaction-detail-buttons">
 		<g:if test="${messageSection == 'trash' && ownerInstance}">
 			<g:remoteLink class="msg-btn btn"
 					controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}"
@@ -54,6 +54,6 @@
 		</g:elseif>
 	</div>
 		<g:if test="${!(messageSection == 'pending') && (activityInstanceList || folderInstanceList)}">
-			<fsms:render template="/message/other_actions"/>
+			<fsms:render template="/interaction/other_actions"/>
 		</g:if>
 </div>

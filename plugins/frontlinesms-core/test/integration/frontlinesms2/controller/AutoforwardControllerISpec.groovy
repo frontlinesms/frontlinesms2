@@ -52,7 +52,7 @@ class AutoforwardControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 			def message = TextMessage.build(text:'This should be moved to Autoforward')
 			def controller = new MessageController()
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.ownerId = autoforward.id
 			controller.params.messageSection = 'activity'
 		when:

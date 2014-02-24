@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class TrashService {
+	def i18nUtilService
     	def emptyTrash() {
     	TextMessage.findAllByIsDeleted(true).each {
     		def conn = it.receivedOn
@@ -16,10 +17,10 @@ class TrashService {
     
 	def sendToTrash(object) {
 		log.info "Deleting ${object}"
-		if (object instanceof frontlinesms2.TextMessage) {
+		if (object instanceof frontlinesms2.Interaction) {
 			object.isDeleted = true
 			new Trash(displayName:object.displayName,
-					displayText:object.text.truncate(Trash.MAXIMUM_DISPLAY_TEXT_SIZE),
+					displayText:(object instanceof frontlinesms2.TextMessage ? object.text.truncate(Trash.MAXIMUM_DISPLAY_TEXT_SIZE) : i18nUtilService.getMessage(code:'missedCall.displaytext', args:[object.displayName])),
 					objectClass:object.class.name,
 					objectId:object.id).save()
 			object.save(failOnError:true, flush:true)

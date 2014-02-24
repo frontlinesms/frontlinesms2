@@ -33,7 +33,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			messageList.toggleSelect(1)
 			waitFor("veryslow") { multipleMessageDetails.displayed }
 		then:
-			waitFor("veryslow") { multipleMessageDetails.text == 'many.selected[2,message]' }
+			waitFor("veryslow") { multipleMessageDetails.text == 'message.multiple.selected[2]' }
 			!multipleMessageDetails.replyAll.displayed
 	}
 

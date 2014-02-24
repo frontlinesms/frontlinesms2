@@ -66,7 +66,7 @@ class SubscriptionController extends ActivityController {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params.messagesList?: params.messageId?: []
+		def checked = params['interaction-select']?: params.interactionId?: []
 		if(checked instanceof String) checked = checked.split(/\D+/) - ''
 		if(checked instanceof Number) checked = [checked]
 		if(checked.class.isArray()) checked = checked as List

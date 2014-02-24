@@ -289,16 +289,16 @@ var mediumPopup = (function() {
 		me = $(this);
 		if (messageType === "Reply") {
 			configureTabs = "tabs-1, tabs-3, tabs-4";
-			checkedMessageCount = getCheckedItemCount("message");
+			checkedMessageCount = getCheckedItemCount("interaction");
 			if(checkedMessageCount > 0) {
-				messageIds = getCheckedList("message");
+				messageIds = getCheckedList("interaction");
 			} else {
 				// wrap the message ID in commas so that the quick message controller knows...it's a message ID
 				// there is probably a much more sane way of doing this, and TODO we should be doing it
-				messageIds = "," + $("#message-id").val() + ",";
+				messageIds = "," + $("#interaction-id").val() + ",";
 			}
 		} else if(messageType === "Forward") {
-			text = $("#single-message #message-detail-content p").text().trim();
+			text = $("#single-interaction #interaction-detail-content p").text().trim();
 		}
 		if (typeof messageIds === "undefined") {
 			messageIds = "";

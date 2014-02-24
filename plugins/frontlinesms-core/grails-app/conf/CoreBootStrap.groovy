@@ -73,6 +73,7 @@ class CoreBootStrap {
 			dev_initContacts()
 			dev_initFconnections()
 			dev_initTextMessages()
+			dev_initMissedCalls()
 			dev_initPolls()
 			dev_initAutoreplies()
 			dev_initAutoforwards()
@@ -152,6 +153,13 @@ class CoreBootStrap {
 	private def dev_initGroups() {
 		if(!bootstrapData) return
 		['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
+	}
+
+	private def dev_initMissedCalls() {
+		if(!bootstrapData) return
+		for(i in 1..20) {
+			new MissedCall(src:"+1234567$i", date: new Date() - i).save()
+		}
 	}
 	
 	private def dev_initTextMessages() {

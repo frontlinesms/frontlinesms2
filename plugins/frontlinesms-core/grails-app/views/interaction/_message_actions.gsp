@@ -5,11 +5,11 @@
 	};
 </r:script>
 
-<div id="message-detail-buttons">
+<div id="interaction-detail-buttons">
 	<g:if test="${messageSection != 'trash'}">
 		<g:if test="${messageSection == 'pending'}">
-			<g:if test="${messageInstance.hasFailed}">
-				<g:link class="msg-btn btn" elementId="btn_retry" action="retry" params="${[messageId: messageInstance.id]}"><g:message code="fmessage.retry" /></g:link>
+			<g:if test="${interactionInstance.hasFailed}">
+				<g:link class="msg-btn btn" elementId="btn_retry" action="retry" params="${[interactionId: interactionInstance.id]}"><g:message code="fmessage.retry" /></g:link>
 			</g:if>
 		</g:if>
 		<g:else>
@@ -18,8 +18,8 @@
 
 		<a id="btn_forward" class="msg-btn btn" onclick="mediumPopup.messageResponseClick('Forward')"><g:message code="fmessage.forward" /></a>
 
-		<g:if test="${!(messageSection == 'pending') && !messageInstance.messageOwner}">
-			<g:if test="${!messageInstance.archived}">
+		<g:if test="${!(messageSection == 'pending') && !interactionInstance.messageOwner}">
+			<g:if test="${!interactionInstance.archived}">
 				<g:actionSubmit id="archive-msg" class="msg-btn btn" value="${g.message(code:'fmessage.archive')}" action="archive"/>
 			</g:if>
 			<g:elseif test="${messageSection}"> 
@@ -27,7 +27,7 @@
 			</g:elseif>
 		</g:if>
 
-		<g:if test="${!messageInstance.messageOwner?.archived}">
+		<g:if test="${!interactionInstance.messageOwner?.archived}">
 			<g:actionSubmit id="delete-msg" class="msg-btn btn" value="${g.message(code:'fmessage.delete')}" action="delete"/>
 		</g:if>
 	</g:if>

@@ -8,6 +8,7 @@ class Poll extends Activity {
 
 //> SERVICES
 	def messageSendService
+	def pollService
 
 //> PROPERTIES
 	String autoreplyText
@@ -149,13 +150,7 @@ class Poll extends Activity {
 		response?.addToMessages(message)
 		response?.save()
 		if(this.autoreplyText) {
-			def params = [:]
-			params.addresses = message.src
-			params.messageText = this.autoreplyText
-			def outgoingMessage = messageSendService.createOutgoingMessage(params)
-			this.addToMessages(outgoingMessage)
-			messageSendService.send(outgoingMessage)
-			this.save(failOnError:true)
+			pollService.sendPollReply(this, message)
 		}
 		this.save(failOnError:true)
 	}

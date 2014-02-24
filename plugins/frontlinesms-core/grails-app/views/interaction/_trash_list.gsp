@@ -2,17 +2,17 @@
 <g:each in="${trashInstanceList}" status="i" var="t">
 	<g:if test="${t.objectClass == 'frontlinesms2.TextMessage'}">
 		<g:hiddenField name="src-${t.object.id}" value="${t.object.src}"/>
-		<tr class="message-preview ${t.object == messageInstance ? 'selected' : ''}" id="message-${t.object.id}">
+		<tr class="interaction-preview ${t.object == interactionInstance ? 'selected' : ''}" id="message-${t.object.id}">
 	</g:if>
 	<g:else>
 		<tr class="${t.object == ownerInstance ? 'selected' : ''}" id="activity-${t.id}">
 	</g:else>
-		<td class="message-select-cell">
-			<g:checkBox disabled="${t.objectClass == frontlinesms2.TextMessage ? 'false' : 'true'}" class="message-select message-select-checkbox" name="message-select" id="message-select-${t.object.id}" checked="${params.checkedId == t.object.id+'' ? 'true': 'false'}" value="${t.id}" onclick="check_list.itemCheckChanged('message',${t.object.id});"/>
+		<td class="interaction-select-cell">
+			<g:checkBox disabled="${t.objectClass == frontlinesms2.TextMessage ? 'false' : 'true'}" class="interaction-select interaction-select-checkbox" name="interaction-select" id="interaction-select-${t.object.id}" checked="${params.checkedId == t.object.id+'' ? 'true': 'false'}" value="${t.id}" onclick="check_list.itemCheckChanged('interaction',${t.object.id}, 'message');"/>
 		</td>
 		<td class="message-star-cell" id="star-${t.objectId}">
 			<g:if test="${t.objectClass == frontlinesms2.TextMessage}">
-				<g:remoteLink class="${t.object.starred? 'starred':'unstarred'}" controller="message" action="changeStarStatus" params="[messageId: t.object.id]" onSuccess="setStarStatus('star-${t.object.id}',data)">
+				<g:remoteLink class="${t.object.starred? 'starred':'unstarred'}" controller="message" action="changeStarStatus" params="[interactionId: t.object.id]" onSuccess="setStarStatus('star-${t.object.id}',data)">
 				</g:remoteLink>
 			</g:if>
 			<g:else>

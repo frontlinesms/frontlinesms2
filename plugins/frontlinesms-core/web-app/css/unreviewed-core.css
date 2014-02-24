@@ -149,7 +149,7 @@ ul.sortable.checklist { width:50%; }
 .saving-state-message { display:inline-block; float:right; text-align:right; margin:37px 0 0 0; color:#808080; }
 .contact_footer_controls { max-width:62%; }
 
-#message-detail-buttons a { display:block; text-align:left; }
+#interaction-detail-buttons a { display:block; text-align:left; }
 
 div#main-nav span#inbox-indicator.gray-out { background-color:#ccc; }
 div#main-nav span#inbox-indicator.allRead { background-color:#aaa; }

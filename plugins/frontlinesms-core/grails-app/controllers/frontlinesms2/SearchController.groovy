@@ -50,17 +50,17 @@ class SearchController extends MessageController {
 
 		[searchDescription:getSearchDescription(search), search:search,
 				checkedMessageCount:params.checkedMessageList?.tokenize(',')?.size(),
-				messageInstanceList:searchResultsList.messageInstanceList,
-				messageInstanceTotal:searchResultsList.messageInstanceTotal] << show() << no_search()
+				interactionInstanceList:searchResultsList.interactionInstanceList,
+				interactionInstanceTotal:searchResultsList.interactionInstanceTotal] << show() << no_search()
 	}
 
 	def show() {
-		def messageInstance = params.messageId ? TextMessage.get(params.messageId.toLong()) : null
-		if (messageInstance && !messageInstance.read) {
-			messageInstance.read = true
-			messageInstance.save()
+		def interactionInstance = params.interactionId ? TextMessage.get(params.interactionId.toLong()) : null
+		if (interactionInstance && !interactionInstance.read) {
+			interactionInstance.read = true
+			interactionInstance.save()
 		}
-		[messageInstance: messageInstance]
+		[interactionInstance: interactionInstance]
 	}
 		
 	def contactSearch() {

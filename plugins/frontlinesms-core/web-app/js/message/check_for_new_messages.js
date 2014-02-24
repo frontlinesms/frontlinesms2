@@ -17,13 +17,14 @@ check_for_new_messages = (function() {
 			failed: $('input:hidden[name=failed]').val() };
 	},
 	newMessageResponseHandler = function(data) {
+		var type = ($('#messageSection').val() === 'missedCalls' ? 'missedCall' : 'fmessage');
 		data = data.new_messages;
 		if(!data) { return; }
 		currentTotal = parseInt($("#messageTotal").val(), 10);
 		newTotal = data;
 		if(newTotal > currentTotal) {
 			newMessageCount = newTotal - currentTotal;
-			notificationContents = "<a id='refreshMessageList'>" + i18n("fmessage.new.info", newMessageCount) + "</a>";
+			notificationContents = "<a id='refreshMessageList'>" + i18n(type + ".new.info", newMessageCount) + "</a>";
 			if(!$("#main-list #new-message-notification").html()) {
 				$('#main-list tbody tr:first').before('<tr id="new-message-notification"><td colspan="5">' + notificationContents + '</td></tr>');
 			} else {
@@ -44,7 +45,7 @@ check_for_new_messages = (function() {
 			mostRecentOldMessage = Math.max(mostRecentOldMessage, $(this).find("#message-created-date").val());
 		});
 
-		$.get(url_root + 'message/' + section, { messageId:messageId, ownerId:ownerId, sort:sortField, order:sortOrder }, function(data) {
+		$.get(url_root + (section === 'missedCalls' ? 'missedCall/' : 'message/') + section, { messageId:messageId, ownerId:ownerId, sort:sortField, order:sortOrder }, function(data) {
 			$('#messageTotal').replaceWith($(data).find('#messageTotal'));
 			$("#new-message-notification").slideUp(500);
 			$("#new-message-notification").remove();

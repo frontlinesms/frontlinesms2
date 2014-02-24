@@ -64,7 +64,10 @@ class FsmsTagLib {
 	def tab = { att, body ->
 		def con = att.controller
 		out << '<li class="' + con
-		if(att.mainNavSection) {
+		if(att.selectedOverride) {
+			if (att.selectedOverride) out << ' current'
+		}
+		else if(att.mainNavSection) {
 			if (att.mainNavSection == con) out << ' current'
 		}
 		else if(con == params.controller) {
@@ -185,6 +188,19 @@ class FsmsTagLib {
 		}
 		catch(GrailsTagException gte) {
 			out << body()
+		}
+	}
+
+	def interactionTemplate = { att, body ->
+		def interactionType = (controllerName == 'missedCall' ? 'missedCall' : 'message')
+		def requestedTemplate = att.template
+		// TODO find a way to reuse templateElseBody here - this re-implementation is to work around fact that 2nd render would be
+		// rendered before passing to templateElseBody, which could cause failure
+		try {
+			out << render(att + [template: "/$interactionType/$requestedTemplate"])
+		}
+		catch(GrailsTagException gte) {
+			out << render(att + [template: "/interaction/$requestedTemplate"])
 		}
 	}
 
@@ -463,9 +479,17 @@ class FsmsTagLib {
 	}
 
 	def submenu = { att, body ->
+		def icon
+		def iconMap = ['messages': 'envelope', 'missedCalls': 'phone', 'activities': 'comments', 'folders':'folder-open']
+		if(att.class in iconMap.keySet()) {
+			icon = iconMap[att.class]	
+		}
 		out << '<li class="'+ att.class +'">'
 		if(att.code) {
 			out << '<h3>'
+			if(icon) {
+				out << "<i class='menuIcon icon-$icon'></i>"
+			}
 			out << g.message(code:att.code)
 			out << '</h3>'
 		}
