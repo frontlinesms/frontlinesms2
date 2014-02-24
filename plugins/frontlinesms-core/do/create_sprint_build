@@ -25,7 +25,7 @@ echo "Generating build for iteration $sprintNumber"
 grails -Ddb.migrations=false prod build-installers --stacktrace
 
 # Tag build
-git tag "SPRINT-BUILD-$sprintNumber"
+git tag "SPRINT-$sprintNumber"
 
 # Restore app.version
 git checkout application.properties # This removes the cruft that gets added every time you compile the app
