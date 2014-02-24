@@ -41,10 +41,6 @@ def isReleaseBuild() {
 	return !(appVersion.contains('SNAPSHOT') || appVersion.contains('RC'))
 }
 
-def isSprintBuild() {
-	return getValueAsBoolean('sprint', false)
-}
-
 target(clearPluginXmls: 'Delete plugin.xml from all in-place plugins') {
 	delete {
 		fileset dir:'..', includes:'*/plugin.xml'
@@ -95,16 +91,11 @@ target(main: 'Build installers for various platforms.') {
 		doScript 'installer_dbmigration_disable'
 	}
 	def appName = metadata.'app.name'
-	def buildVersion 
-	if (isSprintBuild()) {
-		buildVersion = "SPRINT-${metadata['sprint.number']}"
-	} else {
-		buildVersion = metadata.'app.version'
-	}
-	println "Building $appName, v$buildVersion"
+	def appVersion = metadata.'app.version'
+	println "Building $appName, v$appVersion"
 	def webappTempDir = '../frontlinesms-core/install/src/web-app'
 	delete(dir:webappTempDir)
-	unzip(src:"target/${appName}-${buildVersion}.war", dest:webappTempDir)
+	unzip(src:"target/${appName}-${appVersion}.war", dest:webappTempDir)
 
 	// Build instal4j custom code JAR
 	exec(dir:'../frontlinesms-core/install', output:'install4j-custom-classes.maven.log', executable:mvn(), args) {
@@ -116,7 +107,7 @@ target(main: 'Build installers for various platforms.') {
 	
 	// Build installers
 	exec(dir:'../frontlinesms-core/install', output:'install4j.maven.log', executable:mvn(), args) {
-		arg value:"-Dbuild.version=$buildVersion"
+		arg value:"-Dbuild.version=$appVersion"
 		arg value:"-Dfrontlinesms.flavour=$appName"
 		arg value:'clean'
 		arg value:'package'

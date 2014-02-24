@@ -9,9 +9,32 @@ fi
 
 # Read sprint number from application.properties
 sprintNumber=`sed '/^\#/d' ./application.properties | grep "sprint.number" | cut -d "=" -f 2`
+appVersion=`sed '/^\#/d' ./application.properties | grep "app.version" | cut -d "=" -f 2`
+
+# Remove and back up application version
+sed 's/app\.version=/app\.version\.backup=/g' -i application.properties
+echo "app.version=SPRINT-$sprintNumber" >> application.properties
+
+git add application.properties
+git commit -m "SPRINT-$sprintNumber-BUILD SETUP: Backup app.version [$appVersion] and change to SPRINT-$sprintNumber for BuildInstaller script"
+
 echo "Generating build for iteration $sprintNumber"
 
-# Generate installers
-grails prod BuildInstallers -Dfrontlinesms2.build.sprint=true
+# Generate installers with migrations disabled
+do/build_installers_with_migrations_disabled
+
+# Tag build
+git tag "SPRINT-$sprintNumber-BUILD"
+
+# Restore app.version
+git checkout application.properties # This removes the cruft that gets added every time you compile the app
+sed '/app\.version=/d' -i application.properties
+sed 's/app\.version\.backup=/app\.version=/g' -i application.properties
+git commit -m "SPRINT-$sprintNumber-BUILD CLEANUP: Restore app.version to $appVersion"
+
+# Bumping up sprint number
+sed "s/sprint\.number=`echo $sprintNumber`/sprint\.number=`expr $sprintNumber + 1`/g" -i application.properties
+git add application.properties
+git commit -m "SPRINT-$sprintNumber-BUILD POST-BUILD: Bumping up sprint.number to `expr $sprintNumber + 1`"
 
 # Push installers to s3 bucket, "sprint-builds"
