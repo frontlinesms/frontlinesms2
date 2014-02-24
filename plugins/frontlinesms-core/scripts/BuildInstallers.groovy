@@ -97,7 +97,7 @@ target(main: 'Build installers for various platforms.') {
 	def appName = metadata.'app.name'
 	def buildVersion 
 	if (isSprintBuild()) {
-		buildVersion = "SPRINT-${metadata.'sprint.number'}"
+		buildVersion = "SPRINT-${metadata['sprint.number']}"
 	} else {
 		buildVersion = metadata.'app.version'
 	}
