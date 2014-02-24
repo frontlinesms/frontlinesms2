@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Abort if git repo is not clean
+if test -n "$(git status --porcelain)"
+then
+	echo "ABORT The sprint build has been terminated due to unclean git repo"
+	exit 1
+fi
+
+# Read sprint number from application.properties
+sprintNumber=`sed '/^\#/d' ./application.properties | grep "sprint.number" | cut -d "=" -f 2`
+echo "Generating build for iteration $sprintNumber"
+
+# Generate installers
+grails prod BuildInstallers -Dfrontlinesms2.build.sprint=true
+
+# Push installers to s3 bucket, "sprint-builds"
