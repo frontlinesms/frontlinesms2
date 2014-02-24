@@ -23,6 +23,9 @@ echo "Generating build for iteration $sprintNumber"
 # Generate installers with migrations disabled
 do/build_installers_with_migrations_disabled
 
+# Tag build
+git tag "SPRINT-$sprintNumber-BUILD"
+
 # Restore app.version
 git checkout application.properties # This removes the cruft that gets added every time you compile the app
 sed '/app\.version=/d' -i application.properties
