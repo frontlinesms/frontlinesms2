@@ -9,9 +9,18 @@ fi
 
 # Read sprint number from application.properties
 sprintNumber=`sed '/^\#/d' ./application.properties | grep "sprint.number" | cut -d "=" -f 2`
+appVersion=`sed '/^\#/d' ./application.properties | grep "app.version" | cut -d "=" -f 2`
+
+# Remove and back up application version
+sed 's/app\.version=/app\.version\.backup=/g' -i application.properties
+echo "app.version=$sprintNumber" >> application.properties
+
+git add application.properties
+git commit -m "SPRINT-$sprintNumber-BUILD: Backup app.version [$appVersion] and change to SPRINT-$sprintNumber for BuildInstaller script"
+
 echo "Generating build for iteration $sprintNumber"
 
 # Generate installers
-grails prod BuildInstallers -Dfrontlinesms2.build.sprint=true
+grails prod BuildInstallers
 
 # Push installers to s3 bucket, "sprint-builds"
