@@ -20,8 +20,8 @@ git commit -m "SPRINT-$sprintNumber-BUILD SETUP: Backup app.version [$appVersion
 
 echo "Generating build for iteration $sprintNumber"
 
-# Generate installers
-grails prod BuildInstallers -Ddb.migrations=false
+# Generate installers with migrations disabled
+do/build_installers_with_migrations_disabled
 
 # Restore app.version
 git checkout application.properties # This removes the cruft that gets added every time you compile the app
