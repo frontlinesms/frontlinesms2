@@ -13,7 +13,7 @@ appVersion=`sed '/^\#/d' ./application.properties | grep "app.version" | cut -d 
 
 # Remove and back up application version
 sed 's/app\.version=/app\.version\.backup=/g' -i application.properties
-echo "app.version=$sprintNumber" >> application.properties
+echo "app.version=SPRINT-$sprintNumber" >> application.properties
 
 git add application.properties
 git commit -m "SPRINT-$sprintNumber-BUILD SETUP: Backup app.version [$appVersion] and change to SPRINT-$sprintNumber for BuildInstaller script"
