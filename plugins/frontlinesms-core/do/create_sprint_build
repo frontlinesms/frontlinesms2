@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Abort if git repo is not clean
 if test -n "$(git status --porcelain)"
