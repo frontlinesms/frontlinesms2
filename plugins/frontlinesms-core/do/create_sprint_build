@@ -1,0 +1,5 @@
+#!/usr/bin
+
+# Read sprint number from application.properties
+# Generate installers
+# Push installers to s3 bucket, "sprint-builds"
