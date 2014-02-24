@@ -3,7 +3,7 @@ package frontlinesms2
 import grails.converters.*
 
 
-class missedCallController extends ControllerUtils {
+class MissedCallController extends ControllerUtils {
 //> CONSTANTS
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST", archive: "POST"]
 
