@@ -71,7 +71,7 @@ class ContactISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def matches = Contact.findByCustomFields(fields)
 		then:
-			matches*.name == contacts
+			matches*.name.sort() == contacts.sort()
 		where:
 			fields                                         | contacts
 			[:]                                            | ['Adam', 'Bernie', 'Chaz', 'Dave']
