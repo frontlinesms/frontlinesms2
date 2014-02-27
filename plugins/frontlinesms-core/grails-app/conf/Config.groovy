@@ -127,3 +127,5 @@ frontlinesms.blockedNotificationList = []
 
 mobileNumbers.international.warn = true
 mobileNumbers.nonNumeric.warn = true
+
+upload.maximum.size=15728640
