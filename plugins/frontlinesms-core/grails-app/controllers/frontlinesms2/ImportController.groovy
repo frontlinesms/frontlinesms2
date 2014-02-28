@@ -20,7 +20,7 @@ class ImportController extends ControllerUtils {
 	def importData() {
 		if(request.exception) {
 			systemNotificationService.create(code:'import.maxfilesize.exceeded', args:[(grailsApplication.config.upload.maximum.size/(1024*1024) as int)])
-			redirect(uri: request.getHeader('referer'))
+			redirect controller:'settings', action:'porting'
 			return
 		}
 		log.info "ImportController.importData() :: params=$params"
