@@ -19,11 +19,11 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			header.title == 'poll.title[football teams]'
 		when:
-			to PageMessagePoll, 'Football Teams', TextMessage.findBySrc('Alice').id
+			to PageMessagePoll, 'Football Teams', remote { TextMessage.findBySrc('Alice').id }
 		then:
 			header.title == 'poll.title[football teams]'
 		when:
-			to PageMessagePoll, Poll.findByName('Football Teams').id, 2
+			to PageMessagePoll, remote { Poll.findByName('Football Teams').id }, 2
 		then:
 			header.title == 'poll.title[football teams]'
 	}
@@ -40,7 +40,7 @@ class PollCedSpec extends PollBaseSpec {
 			submit.click()
 		then:
 			waitFor { summary.displayed }
-			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
+			remote { Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown") }
 	}
 
 	def "should require keywords if sorting is enabled"() {
@@ -202,7 +202,7 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.pollName = "Coffee Poll"
 			submit.click()
 		then:
-			waitFor { Poll.findByName("Coffee Poll") }
+			waitFor { remote { Poll.findByName("Coffee Poll")?.id } }
 	}
 
 	def "can enter instructions for the poll and allow user to edit message"() {
@@ -260,7 +260,7 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.pollName = "Coffee Poll"
 			submit.click()
 		then:
-			waitFor {Poll.findByName("Coffee Poll") }
+			waitFor { remote { Poll.findByName("Coffee Poll")?.id } }
 	}
 
 	def "should update confirm screen when user decides not to send messages"() {
@@ -278,11 +278,14 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "can launch export popup"() {
 		when:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
-			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
-			poll.addToResponses(key: 'Unknown', value: 'Unknown')
-			poll.save(failOnError:true, flush:true)
+			def pollId = remote {
+				def p = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+				p.addToResponses(key: 'A', value: 'Michael-Jackson')
+				p.addToResponses(key: 'B', value: 'Chuck-Norris')
+				p.addToResponses(key: 'Unknown', value: 'Unknown')
+				p.save(failOnError:true, flush:true)
+				p.id
+			}
 			to PageMessageInbox
 		then:
 			at PageMessageInbox
@@ -299,11 +302,14 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "can rename a poll"() {
 		when:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
-			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
-			poll.addToResponses(key: 'Unknown', value: 'Unknown')
-			poll.save(failOnError:true, flush:true)
+			def pollId = remote {
+				def p = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+				p.addToResponses(key: 'A', value: 'Michael-Jackson')
+				p.addToResponses(key: 'B', value: 'Chuck-Norris')
+				p.addToResponses(key: 'Unknown', value: 'Unknown')
+				p.save(failOnError:true, flush:true)
+				p.id
+			}
 			to PageMessageInbox
 		then:
 			at PageMessageInbox
@@ -335,9 +341,9 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "deleted polls show up in the trash section"() {
 		setup:
-			def poll = deletePoll()
+			def pollId = deletePoll()
 		when:
-			to PageMessageTrash, Trash.findByObjectId(poll.id).id
+			to PageMessageTrash, remote { Trash.findByObjectId(pollId).id }
 		then:
 			messageList.messageCount == 1
 			messageList.messageSource == 'Who is badder?'
@@ -346,12 +352,13 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "selected poll and its details are displayed"() {
 		setup:
-			def poll = deletePoll()
+			def pollId = deletePoll()
+			def pollName = remote { Poll.get(pollId).name }
 		when:
-			to PageMessageTrash, Trash.findByObjectId(poll.id).id
+			to PageMessageTrash, remote { Trash.findByObjectId(pollId).id }
 		then:
 			messageList.messageCount == 1
-			messageList.messageSource == poll.name
+			messageList.messageSource == pollName
 			messageList.messageText == "${poll.getLiveMessageCount()} message(s)"
 			messageList.messageDate
 	}
@@ -367,17 +374,20 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			ok.click()
 		then:
-			!Poll.findAll()
+			remote  { Poll.findAll().size() == 0 }
 	}
 
 	def "user can edit an existing poll"() {
 		setup:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-			poll.addToResponses(key: 'A', value: 'Michael-Jackson', aliases:'A')
-			poll.addToResponses(key: 'B', value: 'Chuck-Norris', aliases:'B')
-			poll.addToResponses(PollResponse.createUnknown())
-			poll.save(failOnError:true, flush:true)
-			poll.refresh()
+			def pollId = remote {
+				def p = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+				p.addToResponses(key: 'A', value: 'Michael-Jackson', aliases:'A')
+				p.addToResponses(key: 'B', value: 'Chuck-Norris', aliases:'B')
+				p.addToResponses(PollResponse.createUnknown())
+				p.save(failOnError:true, flush:true)
+				p.refresh()
+				p.id
+			}
 		when:
 			to PageMessageInbox
 			bodyMenu.activityLinks[0].click()
@@ -415,17 +425,21 @@ class PollCedSpec extends PollBaseSpec {
 			submit.click()
 		then:
 			waitFor { summary.displayed }
-			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }
+			waitFor { remote { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") } }
 	}
 	
 	def "should display errors when poll validation fails"() {
 		given:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
-			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
-			poll.addToResponses(key: 'Unknown', value: 'Unknown')
-			poll.save(failOnError:true, flush:true)
-			assert Poll.count() == 1
+			def pollId = remote {
+				def p = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+				p.addToResponses(key: 'A', value: 'Michael-Jackson')
+				p.addToResponses(key: 'B', value: 'Chuck-Norris')
+				p.addToResponses(key: 'Unknown', value: 'Unknown')
+				p.save(failOnError:true, flush:true)
+				p.id
+			}
+			remote { assert Poll.count() == 1 }
+			
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
@@ -436,23 +450,26 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.pollName = 'Who is badder?'
 			submit.click()
 		then:
-			assert Poll.count() == 1
+			remote { Poll.count() == 1 }
 			at PollDialog
 			waitFor { errorPanel.displayed }
 	}
 
 	def "Choices for a saved poll should validate as required"() {
 		setup:
-			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
-			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
-			poll.addToResponses(key: 'C', value: 'Michael Jordan')
-			poll.addToResponses(key: 'D', value: 'Bart Simpson')
-			poll.addToResponses(key: 'Unknown', value: 'Unknown')
-			poll.save(failOnError:true, flush:true)
-			poll.refresh()
+			def pollId = remote {
+				def p = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+				p.addToResponses(key: 'A', value: 'Michael-Jackson')
+				p.addToResponses(key: 'B', value: 'Chuck-Norris')
+				p.addToResponses(key: 'C', value: 'Michael Jordan')
+				p.addToResponses(key: 'D', value: 'Bart Simpson')
+				p.addToResponses(key: 'Unknown', value: 'Unknown')
+				p.save(failOnError:true, flush:true)
+				p.refresh()
+				p.id
+			}
 		when:
-			to PageMessagePoll, poll.id
+			to PageMessagePoll, pollId
 		then:
 			moreActions.value("edit").click()
 		when:
@@ -469,16 +486,19 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def deletePoll() {
-		def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-		poll.addToResponses(key: 'A', value: 'Michael-Jackson')
-		poll.addToResponses(key: 'B', value: 'Chuck-Norris')
-		poll.addToResponses(key: 'Unknown', value: 'Unknown')
-		poll.save(failOnError:true, flush:true)
-		to PageMessagePoll, poll.id
+		def pollId = remote {
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
+			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+			poll.addToResponses(key: 'Unknown', value: 'Unknown')
+			poll.save(failOnError:true, flush:true)
+			poll.id
+		}
+		to PageMessagePoll, pollId
 		moreActions.value("delete")
 		waitFor { at DeleteActivity }
 		ok.click()
-		poll
+		pollId
 	}
 
 	def launchPollPopup(pollType='yesNo', question='question', enableMessage=true) {
