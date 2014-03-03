@@ -21,13 +21,13 @@ class QueuedDispatch implements Serializable {
 		return new HashCodeBuilder().append(connectionId).append(dispatchId).toHashCode()
 	}
 
-	static QueuedDispatch create(SmssyncFconnection connection, Dispatch dispatch, boolean flush=false) {
+	static QueuedDispatch create(Fconnection connection, Dispatch dispatch, boolean flush=false) {
 		new QueuedDispatch(connectionId:connection.id,
 				dispatchId:dispatch.id)
 			.save(flush:flush, insert:true)
 	}
 
-	static void delete(SmssyncFconnection c, dispatches) {
+	static void delete(Fconnection c, dispatches) {
 		if(dispatches) {
 			executeUpdate "DELETE FROM QueuedDispatch WHERE connectionId=:connectionId AND dispatchId in :dispatchIds",
 					[connectionId:c.id, dispatchIds:dispatches*.id]

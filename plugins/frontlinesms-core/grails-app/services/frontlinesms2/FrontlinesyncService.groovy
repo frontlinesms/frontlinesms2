@@ -55,12 +55,15 @@ class FrontlinesyncService {
 	private generateOutgoingResponse(connection) {
 		def responseMap = [:]
 		def q = connection.queuedDispatches
-		responseMap.messages = responseMap.messages = q.collect { d ->
-				d.status = DispatchStatus.SENT
-				d.dateSent = new Date()
-				d.save(failOnError: true)
-				[to:d.dst, message:d.text]
-			}
+		if(q) {
+			connection.removeDispatchesFromQueue(q)
+			responseMap.messages = responseMap.messages = q.collect { d ->
+					d.status = DispatchStatus.SENT
+					d.dateSent = new Date()
+					d.save(failOnError: true)
+					[to:d.dst, message:d.text]
+				}
+		}
 		responseMap
 	}
 

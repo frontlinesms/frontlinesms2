@@ -20,7 +20,7 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	def dispatchRouterService
 
 	Date lastConnectionTime
-	boolean sendEnabled = false
+	boolean sendEnabled = true
 	boolean receiveEnabled = true
 	String secret
 
@@ -74,5 +74,8 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 		QueuedDispatch.getDispatches(this)
 	}
 
+	def updateDispatch(Exchange x) {
+		// Dispatch is already in PENDING state so no need to change the status
+	}
 }
 
