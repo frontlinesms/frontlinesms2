@@ -1,6 +1,6 @@
 <ul class="buttons">
 	<li><fsms:quickMessage class="section-action-button btn"/></li>
-	<g:if test="${!(messageSection in ['trash', 'folder', 'activity'])}">
+	<g:if test="${!(messageSection in ['trash', 'folder', 'activity', 'missedCalls'])}">
 		<li><g:link elementId="export" url="#" class="btn">
 			<g:message code="fmessage.export"/>
 		</g:link></li>
