@@ -113,6 +113,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
 				def m1 = TextMessage.build(text:'I want to leave', src:'prudence', read:true)
+				sleep 2000
 				def m2 = TextMessage.build(text:'I want to join', src:'wilburforce', read:true)
 				def s = Subscription.findByName('Camping Subscription')
 				[s:s.id, m:m1.id]
@@ -132,6 +133,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
 				def m1 = TextMessage.build(text:'I want to go away', src:'+12321', read:true)
+				sleep 2000
 				def m2 = TextMessage.build(text:'I want to come in', src:'+1232123', read:true)
 				def s = Subscription.findByName('Camping Subscription')
 				[s:s.id, m1:m1.id, m2:m2.id]
@@ -179,6 +181,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
 				def m1 = TextMessage.build(text:'I want to go away', src:'+12321', read:true)
+				sleep 2000
 				def m2 = TextMessage.build(text:'I want to come in', src:'+1232123', read:true)
 				def subscription = Subscription.findByName('Camping Subscription')
 				[m1:m1.id, m2:m2.id, s:subscription.id]
@@ -227,6 +230,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 				def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 				g.addToMembers(c1)
 				def m1 = TextMessage.build(text:'I want to go away', src:'+12321', read:true)
+				sleep 2000
 				def m2 = TextMessage.build(text:'I want to come in', src:'+1232123', read:true)
 				def subscription = Subscription.findByName('Camping Subscription')
 				[m1:m1.id, m2:m2.id, s:subscription.id]
