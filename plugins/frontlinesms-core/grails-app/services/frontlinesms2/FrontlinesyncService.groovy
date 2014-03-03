@@ -1,5 +1,9 @@
 package frontlinesms2
 
+import org.springframework.transaction.annotation.Transactional
+import org.apache.camel.Exchange
+import grails.converters.JSON
+
 class FrontlinesyncService {
 	def apiProcess(connection, controller) {
 		def data = controller.request.JSON
@@ -27,10 +31,37 @@ class FrontlinesyncService {
 						['fconnection-id':connection.id])
 			}
 
-			controller.render text:'OK'
+			def payload
+			if(connection.sendEnabled) {
+				def outgoingPayload = generateOutgoingResponse(connection)
+				payload = (outgoingPayload as JSON)
+			} else {
+				payload = ([success:true] as JSON)
+			}
+			controller.render payload
 		} catch(Exception ex) {
 			failure(controller, ex.message)
 		}
+	}
+
+	@Transactional
+	void processSend(Exchange x) {
+		def connection = FrontlinesyncFconnection.get(x.in.headers['fconnection-id'])
+		connection.addToQueuedDispatches(x.in.body)
+		connection.save(failOnError:true)
+	}
+
+	@Transactional
+	private generateOutgoingResponse(connection) {
+		def responseMap = [:]
+		def q = connection.queuedDispatches
+		responseMap.messages = responseMap.messages = q.collect { d ->
+				d.status = DispatchStatus.SENT
+				d.dateSent = new Date()
+				d.save(failOnError: true)
+				[to:d.dst, message:d.text]
+			}
+		responseMap
 	}
 
 	private def failure(controller, message='ERROR', status=500) {

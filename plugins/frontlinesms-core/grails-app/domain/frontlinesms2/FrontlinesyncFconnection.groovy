@@ -43,13 +43,36 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	List<RouteDefinition> getRouteDefinitions() {
 		def routeDefinitions = new RouteBuilder() {
 			@Override void configure() {}
-			List getRouteDefinitions() { [] }
+			List getRouteDefinitions() {
+				def definitions = []
+				if(isSendEnabled()) {
+					definitions << from("seda:out-${FrontlinesyncFconnection.this.id}")
+							.setHeader('fconnection-id', simple(FrontlinesyncFconnection.this.id.toString()))
+							.beanRef('frontlinesyncService', 'processSend')
+							.routeId("out-internet-${FrontlinesyncFconnection.this.id}")
+				}
+				return definitions
+			}
 		}.routeDefinitions
 		return routeDefinitions
 	}
 
+
 	String getFullApiUrl(request) {
 		return apiEnabled? "${urlHelperService.getBaseUrl(request)}" :''
 	}
+
+	def removeDispatchesFromQueue(dispatches) {
+		QueuedDispatch.delete(this, dispatches)
+	}
+
+	def addToQueuedDispatches(d) {
+		QueuedDispatch.create(this, d)
+	}
+
+	def getQueuedDispatches() {
+		QueuedDispatch.getDispatches(this)
+	}
+
 }
 
