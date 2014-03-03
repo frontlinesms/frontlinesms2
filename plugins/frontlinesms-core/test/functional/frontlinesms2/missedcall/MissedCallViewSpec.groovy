@@ -23,7 +23,7 @@ class MissedCallViewSpec extends MessageBaseSpec {
 
 	def "When viewing a missed call, the details are displayed, as well as relevant actions"() {
 		when:
-			to PageMissedCall, MissedCall.findBySrc('123').id
+			to PageMissedCall, remote  { MissedCall.findBySrc('123').id }
 		then:
 			singleMessageDetails.sender.startsWith '123'
 			singleMessageDetails.date
@@ -32,7 +32,7 @@ class MissedCallViewSpec extends MessageBaseSpec {
 
 	def "Can delete a missed call"() {
 		when:
-			to PageMissedCall, MissedCall.findBySrc('123').id
+			to PageMissedCall, remote { MissedCall.findBySrc('123').id }
 		then:
 			singleMessageDetails.delete.displayed
 		when:
@@ -64,7 +64,7 @@ class MissedCallViewSpec extends MessageBaseSpec {
 
 	def "Can reply to a missed call by SMS"() {
 		when:
-			to PageMissedCall, MissedCall.findBySrc('123').id
+			to PageMissedCall, remote { MissedCall.findBySrc('123').id }
 		then:
 			singleMessageDetails.reply.displayed
 		when:
@@ -102,9 +102,12 @@ class MissedCallViewSpec extends MessageBaseSpec {
 	}
 
 	private def createTestMissedCalls() {
-		new MissedCall(src:'123', date:new Date() - 2).save(flush:true, failOnError: true)
-		new MissedCall(src:'214124', date:new Date() - 1).save(flush:true, failOnError: true)
-		new MissedCall(src:'321', date:new Date()).save(flush:true, failOnError: true)
+		remote {
+			new MissedCall(src:'123', date:new Date() - 2).save(flush:true, failOnError: true)
+			new MissedCall(src:'214124', date:new Date() - 1).save(flush:true, failOnError: true)
+			new MissedCall(src:'321', date:new Date()).save(flush:true, failOnError: true)
+			null
+		}
 	}
 }
 
