@@ -27,5 +27,17 @@ class ImportControllerSpec extends Specification {
 			
 			controller.response.getHeader('Content-disposition') == "attachment; filename=failedContacts.csv"
 	}
+
+	def 'if maximum size is exceeded, the user is notified'() {
+		given:
+			def notified = false
+			controller.contactImportService =  Mock(ContactImportService)
+			controller.systemNotificationService = [create: { Map args -> notified = true }]
+			controller.request.exception = true
+		when:
+			controller.importData()
+		then:
+			notified
+	}
 }
 
