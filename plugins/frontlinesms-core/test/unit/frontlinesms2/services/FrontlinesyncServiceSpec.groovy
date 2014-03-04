@@ -88,12 +88,24 @@ class FrontlinesyncServiceSpec extends Specification {
 					]
 				])
 		when:
-			service.apiProcess(controller, controller)
+			service.apiProcess(connection, controller)
 		then:
 			rendered.text == 'OK'
 			sendMessageAndHeadersInvokationCount == 2
 			queue == 'seda:incoming-fmessages-to-store'
 	}
+
+	def 'apiProcess should return outgoing message payload if available'() {
+		given:
+		when:
+			service.apiProcess(connection, controller)
+		then:
+			false
+	}
+
+	def 'generateOutgoingResponses should return messages as a map'() { throw RuntimeException('bad') }
+
+	def 'processSend should add queuedDispatches to connection'() { throw RuntimeException('bad') }
 
 	private def setupConnection(secret) {
 		connection = [id:123, secret:secret]
