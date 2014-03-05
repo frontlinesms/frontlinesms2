@@ -1,24 +1,32 @@
-# Online help documents now available
-There is a knowledge base online which is constantly updated and provides easy search of our articles. [If you have access to the internet then please use this resources: http://support.frontlinesms.com][1]
+# New features in FrontlineSMS v 2.3
+## Better ways to connect:
+### SMSSync
+FrontlineSMS now supports SMSSync, an Android application from our friends at Ushahidi that allows you to sync text messages from an Android phone to FrontlineSMS. Note: you'll need a local area network or Internet access to use this feature. We still support modems and mobile phones; SMSSync just represents an additional way to connect to the people you care about.
 
-# New features in FrontlineSMS v 2.2.0
-## New activities
-### Subscriptions
-This activity allows users to add and remove themselves from groups by texting in certain keywords. For example, a user may text in 'join' to join a group or 'leave' to leave a group. This means that, for example, they can choose to join groups that control recipients of certain alerts or information, such as events listings; or could sign up as volunteers. 
+### Custom Routing Preferences
+We now allow you to set custom routing preferences among your connections. For example, you can instruct FrontlineSMS to respond to users via the phone number they texted first. Or, you can prioritize your phone numbers so that you are using your preferred connection first. This feature has been requested by many users, and we're excited to add it to this list!
 
-### Web Connections
-This activity allows you to set up a connection to a web-based server or service, such as Ushahidi or Twitter. A FrontlineSMS deployment instance can upload messages to a specified url, and an incoming action, like a piece of data pushed from a database, can trigger an outbound SMS. We have included a custom integration with Ushahidi and Crowdmap, so that users can easily link their FrontlineSMS instance to the popular mapping platform.
+## A powerful new activity:
+### Custom Activity Builder
+This lets you link several actions together based on a single keyword or incoming message. For instance, you can add to or remove a sender from a group, forward a message, send an autoreply ... or combine all of the above. It gives you a powerful way to have FrontlineSMS perform several tasks at the same time ... all automatically.
 
-##Improvements
-We have made a major improvement to the way keywords function, so that you can make it simpler for your users to text you. You can now specify multiple keywords separated by commas, so that you can cater for spelling mistakes, multiple languages, and other reasons for keyword variation.
+## A better way to manage translations:
+### Translations
+We've improved the process for users to translate both FrontlineSMS and FrontlineCloud and we are adding new languages constantly.
+Don't see a language you need? Is a current language not specific to your dialect? Contact us, and we can give you access to translate into any language or dialect of your choice. support@frontlinesms.com
 
-### Multiple keywords for activities
-Auto-replies, Polls, Web Connections and Subscriptions now allow you to list more than one keyword to trigger a specific activity. This means  you can support more than one language or spelling of a word.
+## Improvements
+We have made significant improvements to contact editing and importing, as well as our help files. Here is a quick summary:
 
-### Single keywords in Polls and Subscriptions
-Similarly, Polls now optionally allow you to set only one keyword for poll responses - rather than requiring you to text a Poll keyword, then a response keyword, response keywords can now do both jobs. For example in a poll about food, sample answers might be FOOD PIE or FOOD SODA. The new single keyword setting allows you simply to text in PIE or SODA.
+### Contact Editing and Importing
+We've added a new contact import tool, which will help you organize your column headings before finalizing your contact import. No more guessing as to whether your column headings are correct; we allow you to edit them during the import to ensure everything is accurate. 
+We've also improved the contact editing page so that edits looks cleaner.
 
-##Basic Authentication
-Users can now set simple password authentication so that users logging into the platform across a network will be asked for a password before being able to interact with the system.
+### Improved Visual Cues
+We've made some small improvements to visual cues in the app, but we think they have a big effect on the user experience. For instance, now notifications appear next to activities when you receive a message, so you won't miss anything important! The application also assists with showing phone number formats and shows a country flag next to each phone number -- all with the goal of helping you ensure you're reaching the right person.
+
+## And stay tuned ...
+
+We are committed to releasing a number of great features in the next few months. Stay tuned for a new version of FrontlineSMS desktop soon!
 
 [1]: http://support.frontlinesms.com

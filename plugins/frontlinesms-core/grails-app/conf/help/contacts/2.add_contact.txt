@@ -1,18 +1,23 @@
-# Creating a Contact
+# Adding and Importing Contacts
 
-Creating Contacts allows you to save contact details in FrontlineSMS. You can use these details to easily identify those you are interacting with, [send messages][1], add recipients to [activities][2] and create [smart groups][3]. There are two ways to add a contact to the FrontlineSMS system: the first is to add a contact in the [Contacts][4] tab which you can access from the top header. The second way is to click on the (plus icon here) icon that you will find next to numbers that are not currently in the FrontlineSMS system. Clicking on the (plus icon) icon will lead you to the [Contact][4] tab, and the process to add a contact is the same as described here. By using the second method the telephone number will be already filled in for you.
+## Adding a Single Contact
 
-![Adding a COntact][13]
+Adding a contact allows you to create contacts one at a time in FrontlineSMS. Instructions for importing multiple contacts can be found below.
+
+Once your contacts are in the system, you can use these details to easily identify those you are interacting with, [send messages][1], add recipients to [activities][2] and create [smart groups][3]. 
+
+There are two ways to add a single contact to the FrontlineSMS system: the first is to add a contact in the [Contacts][4] tab which you can access from the top header. The second way is to click on the (plus icon here) icon that you will find next to numbers that are not currently in the FrontlineSMS system. Clicking on the (plus icon) icon will lead you to the [Contact][4] tab, and the process to add a contact is the same as described here. By using the second method, the telephone number will be already filled in for you.
 
 ### 1. Setting up a New Contact
 Navigate to the [Contacts][4] tab, which you can find in the [navigation tab][5] at the top of your screen.
-There is a button which says "Create New Contact".
-Clicking this will present you with an empty form that you will use to enter the details of your new contact.
+There is a button which says "Create New Contact", which you can see in the screenshot below.
+Clicking this will present you with an empty form that you will use to enter the details of your new contact. **Remember to click 'save'**
+
+![Adding a New Contact][11]
 
 __OR__
 
-If you have clicked on a (plus icon) icon you will automatically be brought to the contacts tab, with a new contact form set up for you, with the number already entered.
-
+If you have clicked on a (plus icon) icon, you will automatically be brought to the contacts tab, with a new contact form set up for you, with the number already entered.
 
 ### 2. Filling in the details
 
@@ -21,20 +26,20 @@ The default information boxes that are displayed in each contact record allow yo
   
 >*__Technical Tips!__
 >The 'Name' field has a 255 character limit.
->The 'Notes' field as a 1024 character limit.
+>The 'Notes' field has a 1024 character limit.
   
-You  can add custom fields that allow you to specify more information that you need. For example, you may want to add a postal address, or information about which region the contact is from, or you may even want to add what the contact's favourite colour is. 
+You can add custom fields that allow you to specify more information that you need. For example, you may want to add a postal address, or information about which region the contact is from, or you may even want to add what the contact's favorite color is. 
 
 >*__Technical Tips!__
 >The name of a custom field can only be 255 characters long. Similarly, once created, custom fields have a 255 character limit.
 
 To create a custom field:  
 
-1.  There is a drop down box which says 'Add more information' (2). Clicking on this will bring up a list of preset fields that you can use, such as Street Address, City and Postcode. This will add the selected field to each contact in your system offering you space to add additional information.  
+1.  There is a drop down box which says 'Add more information' (2). This will add the selected field to each contact in your system offering you space to add additional information.  
 2.  If none of these options are what you are looking for, then choose the "Create New" option in the drop down box.
 3.  A window will then appear, allowing you to enter a name for the new field. 
 4.  If you want this new field to appear by default in all new contacts created from this point on, then check the box next to where it says "Make a default field".
-5.  Once you have named the field, it will now appear in your contact's details (and all other contacts if you have made it default)  for you to fill out.
+5.  Once you have named the field, it will now appear in your contact's details (and all other contacts if you have made it default) for you to fill out.
 
 Once a field has been created it can be accessed easily again from the drop down menu from any contact. The field can also be removed from a particular contact by clicking the 'x' next to the field.
 
@@ -46,7 +51,7 @@ Please click [here][9] for more information on how to do that.
 
 To add contacts to groups you have created from their contact record, follow these instructions:
 
-1.  Next to the heading 'Group' there is a dropdown box called 'Add to Group...' (3)
+1.  Next to the heading 'Group' there is a dropdown box called 'Add to Group...'
 2.  Clicking on this will bring up a list of groups that currently exist in the system.
 3.  Simply choose the group you wish to add the contact to and the group name will appear next to the 'Group' heading. 
 4.  To add this contact to another group repeat the above steps. You can add as many groups as you want, there is no limit.
@@ -55,10 +60,40 @@ If you want to remove a contact from a group, simply click the 'x' icon that app
 
 ### 3. Saving and Modifying a Contact's Details
 
-Now that you have added all the information you want to be associated with this contact, clicking on the 'Save' (4) button will commit your changes to memory.   
-Don't worry if you accidentally saved the wrong information or need to modify the contact's details.  
-You can do this at any time, simply by navigating to and selecting the contact you wish to edit. The contact's details will be displayed and you will be able to change/add information. Once you have finished editing, click 'Save' again to commit your changes to memory.  
+Now that you have added all the information you want to be associated with this contact, clicking on the 'Save' button will commit your changes to memory.   
+Don't worry if you accidentally saved the wrong information or need to modify the contact's details, because you can edit this at any time.  
+The contact's details will be displayed and you will be able to change/add information. Once you have finished editing, click 'Save' again to commit your changes to memory.  
 If you change your mind about altering a contact's details and you want to leave them as they were, then clicking 'Cancel' instead of 'Save' will remove any changes you have made and return the details as they were before you started to make any changes.
+
+## Importing Multiple Contacts
+
+If you have a large number of contacts to import, then you can use a different mechanism for importing them into FrontlineSMS by following the instructions below. The important steps are highlighted in the screenshot below.
+
+![Importing Multiple Contacts][12]
+
+1. Make sure your column headings are correct.
+
+The column headings should follow the example in the screenshot below. Note that "group" is optional; it will be interpreted by FrontlineSMS as a group tag for the contact.
+
+**Note: the column headings must be exact (e.g. 'E-mail Address', not 'email address').**
+
+![Importing Multiple Contacts Headings][13]
+
+**Note: If you are importing using vCards, you only need to ensure that your contact's mobile number is correctly listed as a mobile number; FrontlineSMS will ignore other numbers.**
+
+2. Click on 'Settings' in the upper right-hand corner of the window. Then click on 'Import and Export.'
+
+3. Select the type of file you wish to import. You can choose .csv - a common database format, or a vCard / .vcf format which is used in many contact management systems. 
+
+4. Select the file from your computer. If it is a vCard it will import at this point. If it is a .csv file, you will now have the chance to review your file, as per the screenshot below. Ensure that your column headings are accurate; they will appear as green if they are correct, or yellow if they are incorrect. Once you're happy with the column headings, click "Import all contacts." FrontlineSMS will tell you if your contacts imported successfully or now.
+
+![Review Contact Import][14]
+
+If your contact did not import successfully, you will receive a fail notice as pictured below. FrontlineSMS will ask if you want to download a spreadsheet of the failed contact entries so that you can correct the issues and attempt to import them again into FrontlineSMS. 
+
+![Import Fail Notice][15]
+
+
 
 ### Related Actions
 
@@ -77,4 +112,8 @@ If you change your mind about altering a contact's details and you want to leave
 [8]: ../activities/4.creating_an_announcement
 [9]: ../contacts/6.add_remove_contact_to_from_a_group
 [10]: ../contacts/7.messages_sent_or_received_by_contact
-[13]: ../images/help/add_contact.png
+[11]: ../images/help/ContactNew.png
+[12]: ../images/help/ContactImport.png
+[13]: ../images/help/contact_import/Screenshot_5_20_13_4_24_PM.jpg
+[14]: ../images/help/contact_import/ReviewContactImport.png
+[15]: ../images/help/contact_import/ImportFailNotice.png 

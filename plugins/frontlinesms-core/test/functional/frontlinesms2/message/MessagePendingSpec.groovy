@@ -33,7 +33,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			messageList.toggleSelect(1)
 			waitFor("veryslow") { multipleMessageDetails.displayed }
 		then:
-			waitFor("veryslow") { multipleMessageDetails.text == 'many.selected[2,message]' }
+			waitFor("veryslow") { multipleMessageDetails.text == 'message.multiple.selected[2]' }
 			!multipleMessageDetails.replyAll.displayed
 	}
 
@@ -42,9 +42,9 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			to PageMessagePending
 			messageList.toggleSelect(1)
 		then:
-			waitFor { singleMessageDetails.reply.displayed }
+			waitFor { singleMessageDetails.retry.displayed }
 		when:
-			singleMessageDetails.reply.click()
+			singleMessageDetails.retry.click()
 		then:	
 			waitFor { notifications.flashMessage.displayed }
 	}
@@ -54,7 +54,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			to PageMessagePending
 			messageList.toggleSelect(1)
 		then:
-			waitFor { singleMessageDetails.reply.displayed }
+			waitFor { singleMessageDetails.retry.displayed }
 		when:
 			messageList.selectAll.click()
 		then:

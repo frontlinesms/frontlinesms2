@@ -7,6 +7,17 @@
 				<g:message code="contact.create"/>
 			</g:link>
 		</fsms:menuitem>
+		<fsms:menuitem bodyOnly="true" class="import">
+			<fsms:popup class="btn" controller="import" action="contactWizard" popupCall="mediumPopup.launchContactImportPopup(i18n('contact.import.label'), data)"><g:message code="contact.import.label"/></fsms:popup>
+		</fsms:menuitem>
+		<fsms:menuitem bodyOnly="true" class="">
+			<g:if test="${contactsSection?.shortName}">
+				<fsms:popup class="btn" controller="export" id="export" action="contactWizard" params="[groupId:contactsSection?.id, contactsSection:contactsSection?.shortName]" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="group.export.label" args="${[contactsSection?.name]}"/></fsms:popup>
+			</g:if>
+			<g:else>
+				<fsms:popup class="btn" controller="export" id="export" action="contactWizard" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="contact.export.label"/></fsms:popup>
+			</g:else>
+		</fsms:menuitem>
 	</fsms:submenu>
 
 	<fsms:submenu code="contact.groups.header" class="groups">
@@ -14,7 +25,7 @@
 			<fsms:menuitem selected="${contactsSection instanceof frontlinesms2.Group && contactsSection.id==g.id}" controller="group" action="show" string="${g.name}" id="${g.id}" />
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<fsms:popup  class="btn create" controller="group" action="create" popupCall="launchSmallPopup(i18n('smallpopup.group.create.title'), data, i18n('action.create'))">
+			<fsms:popup class="btn create" controller="group" action="create" popupCall="launchSmallPopup(i18n('smallpopup.group.create.title'), data, i18n('action.create'))">
 				<g:message code="contact.create.group"/>
 			</fsms:popup >
 		</fsms:menuitem>
@@ -31,7 +42,7 @@
 	</fsms:submenu>
 </fsms:menu>
 
-<g:javascript disposition="head">
+<r:script>
 	var createSmartGroup = function() {
 		$("#submit").attr('disabled', 'disabled');
 		if(validateSmartGroup()) {
@@ -42,4 +53,4 @@
 			$('.error-panel').show();
 		}
 	};
-</g:javascript>
+</r:script>

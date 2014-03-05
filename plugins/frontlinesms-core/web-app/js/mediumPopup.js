@@ -3,7 +3,7 @@ var mediumPopup = (function() {
 		cancel, submit, submitWithoutClose, range,
 		editConnection, validateSmartGroup, // TODO move these activity/content-specific methods to somewhere more suitable
 		createModalBox,
-		launchMediumPopup, launchNewFeaturePopup, launchMediumWizard, launchHelpWizard,
+		launchMediumPopup, launchContactImportPopup, launchNewFeaturePopup, launchMediumWizard, launchHelpWizard,
 		getCurrentTab, getCurrentTabDom, getCurrentTabIndex, getTabLength,
 		prevButton, nextButton,
 		addValidation, enableTab, disableTab,
@@ -48,6 +48,20 @@ var mediumPopup = (function() {
 		initializePopup(modalBox);
 		selectmenuTools.initAll("select");
 	};
+
+	launchContactImportPopup = function(title, html){
+		var modalBox = createModalBox(html)
+		modalBox.dialog({
+			modal: true,
+			width: 675,
+			height: 320,
+			title: title,
+			buttons: [{ text:i18n("action.cancel"), click:cancel, id:"cancel"}],
+			close: function() { $(this).remove(); }
+		});
+		addChangeHandlersForRadiosAndCheckboxes();
+	};
+
 	launchNewFeaturePopup = function(title, html, btnFinishedText, submitAction) {
 		var modalBox = createModalBox(html);
 		modalBox.dialog({
@@ -275,16 +289,16 @@ var mediumPopup = (function() {
 		me = $(this);
 		if (messageType === "Reply") {
 			configureTabs = "tabs-1, tabs-3, tabs-4";
-			checkedMessageCount = getCheckedItemCount("message");
+			checkedMessageCount = getCheckedItemCount("interaction");
 			if(checkedMessageCount > 0) {
-				messageIds = getCheckedList("message");
+				messageIds = getCheckedList("interaction");
 			} else {
 				// wrap the message ID in commas so that the quick message controller knows...it's a message ID
 				// there is probably a much more sane way of doing this, and TODO we should be doing it
-				messageIds = "," + $("#message-id").val() + ",";
+				messageIds = "," + $("#interaction-id").val() + ",";
 			}
 		} else if(messageType === "Forward") {
-			text = $("#single-message #message-detail-content p").text().trim();
+			text = $("#single-interaction #interaction-detail-content p").text().trim();
 		}
 		if (typeof messageIds === "undefined") {
 			messageIds = "";
@@ -320,6 +334,7 @@ var mediumPopup = (function() {
 		enableTab:enableTab,
 		launchMediumPopup:launchMediumPopup,
 		launchNewFeaturePopup:launchNewFeaturePopup,
+		launchContactImportPopup:launchContactImportPopup,
 		launchMediumWizard:launchMediumWizard,
 		launchHelpWizard:launchHelpWizard,
 		messageResponseClick:messageResponseClick, // TODO move this somewhere more suitable

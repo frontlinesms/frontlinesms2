@@ -7,6 +7,7 @@ import serial.NoSuchPortException
 class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 	def fconnectionService
 	def i18nUtilService
+	def appSettingsService
 	
 	/**
 	 * Handles completion of detection of a device on a database port.
@@ -14,47 +15,47 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 	 * connections to the same device.
 	 */
 	synchronized void handleDetectionCompleted(ATDeviceDetector detector) {
-		def log = { println "# $it" }
-		println "#####################################################"
-		log "deviceDetectionService.handleDetectionCompleted()"
-		log "port: [$detector.portName]"
-		log "manufacturer: [$detector.manufacturer]"
-		log "model: [$detector.model]"
-		log "imsi: [$detector.imsi]"
-		log "serial: [$detector.serial]"
-		log "SMS send supported: $detector.smsSendSupported"
-		log "SMS receive supported: $detector.smsReceiveSupported"
+		def logWithPrefix = { log.info "# $it" }
+		log.info "#####################################################"
+		logWithPrefix "deviceDetectionService.handleDetectionCompleted()"
+		logWithPrefix "port: [$detector.portName]"
+		logWithPrefix "manufacturer: [$detector.manufacturer]"
+		logWithPrefix "model: [$detector.model]"
+		logWithPrefix "imsi: [$detector.imsi]"
+		logWithPrefix "serial: [$detector.serial]"
+		logWithPrefix "SMS send supported: $detector.smsSendSupported"
+		logWithPrefix "SMS receive supported: $detector.smsReceiveSupported"
 
 		if(!(detector.smsSendSupported || detector.smsReceiveSupported)) {
-			log "No point connecting if no SMS functionality is supported."
+			logWithPrefix "No point connecting if no SMS functionality is supported."
 			return
 		}
 
-		log "Available connections in database:"
+		logWithPrefix "Available connections in database:"
 		SmslibFconnection.findAll().each { c ->
-			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
+			logWithPrefix "    $c.id\t$c.port\t$c.serial\t$c.imsi"
 		}
 
 		def matchingModemAndSim = SmslibFconnection.findAllBySerialAndImsi(detector.serial, detector.imsi)
-		log "Matching modem and SIM in database:"
+		logWithPrefix "Matching modem and SIM in database:"
 		matchingModemAndSim.each { c ->
-			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
+			logWithPrefix "    $c.id\t$c.port\t$c.serial\t$c.imsi"
 		}
 		if(matchingModemAndSim.any { it.status == ConnectionStatus.CONNECTED ||
 				(it.port != detector.portName && isPortVisible(it.port)) }) {
-			log "There was a created route already on this device."
+			logWithPrefix "There was a created route already on this device."
 			return
 		}
 
 		def connectionToStart
 		def exactMatch = matchingModemAndSim.find { it.port == detector.portName }
 		if(exactMatch && !(exactMatch.status in [ConnectionStatus.CONNECTED, ConnectionStatus.DISABLED])) {
-			log "Found exact match: $exactMatch"
+			logWithPrefix "Found exact match: $exactMatch"
 			connectionToStart = exactMatch
 		} else {
 			def c = SmslibFconnection.findForDetector(detector).list()
 			if(c) {
-				log "Found for detector: $c"
+				logWithPrefix "Found for detector: $c"
 				c = c[0]
 				def dirty = !(c.serial && c.imsi)
 				if(!c.serial) c.setSerial(detector.serial)
@@ -69,18 +70,26 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 								port:detector.portName, baud:detector.maxBaudRate,
 								serial:detector.serial, imsi:detector.imsi)
 						.save(flush:true, failOnError:true)
-				log "Created new SmslibFconnection: $name"
+				logWithPrefix "Created new SmslibFconnection: $name"
+				addConnectionToRoutingRules(connectionToStart)
 			}
 		}
 		if(connectionToStart) {
-			log "Starting connection $connectionToStart with imsi=$connectionToStart.imsi;serial=$connectionToStart.serial"
+			logWithPrefix "Starting connection $connectionToStart with imsi=$connectionToStart.imsi;serial=$connectionToStart.serial"
 			fconnectionService.createRoutes(connectionToStart)
 		}
 
-		log "After connection, smslibfconnections:"
+		logWithPrefix "After connection, smslibfconnections:"
 		SmslibFconnection.withNewSession { SmslibFconnection.findAll().each { c ->
-			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
+			logWithPrefix "    $c.id\t$c.port\t$c.serial\t$c.imsi"
 		} }
+	}
+
+	private addConnectionToRoutingRules(connection) {
+		def connectionUseSetting = appSettingsService['routing.use']
+		appSettingsService['routing.use'] = connectionUseSetting?
+			"$connectionUseSetting,fconnection-$connection.id":
+			"fconnection-$connection.id"
 	}
 
 	private boolean isPortVisible(String portName) {

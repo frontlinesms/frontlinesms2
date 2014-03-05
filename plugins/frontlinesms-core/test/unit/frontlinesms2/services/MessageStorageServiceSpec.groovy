@@ -11,7 +11,7 @@ import org.apache.camel.impl.DefaultExchange
 import frontlinesms2.*
 
 @TestFor(MessageStorageService)
-@Mock([TextMessage, Fconnection, SmslibFconnection])
+@Mock([TextMessage, MissedCall, Fconnection, SmslibFconnection])
 class MessageStorageServiceSpec extends Specification {
 	def conn 
 
@@ -38,6 +38,15 @@ class MessageStorageServiceSpec extends Specification {
 			service.process(createTestExchange(m, conn.id))
 		then:
 			TextMessage.findAll() == [m]
+	}
+
+	def "it can also save a MissedCall"() {
+		given:
+			def m = new MissedCall(src:"12345")
+		when:
+			service.process(createTestExchange(m, conn.id))
+		then:
+			MissedCall.findAll() == [m]
 	}
 
 	def createTestExchange(def fmessage, connectionId=null) {

@@ -62,10 +62,10 @@ class SmartGroupController extends ControllerUtils {
 	}
 	
 	def delete() {
-		if (SmartGroup.get(params.id)?.delete(flush: true))
-				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
-		else
-			flash.message =  message(code: 'flash.smartgroup.delete.unable')
+		SmartGroup.withTransaction {
+			SmartGroup.get(params.id)?.delete(flush: true)
+		}
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
 		redirect(controller: "contact", action:"show")
 	}
 	
@@ -76,7 +76,7 @@ class SmartGroupController extends ControllerUtils {
 	
 	private def getRuleField(i) {
 		def f = params['rule-field']
-		println "field $f"
+		log.info "field $f"
 		if(f instanceof String[]) return f[i]
 		else {
 			assert i == 0

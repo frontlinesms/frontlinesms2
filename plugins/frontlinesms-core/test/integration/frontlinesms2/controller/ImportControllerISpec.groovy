@@ -16,50 +16,30 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Uploading a contacts CSV file should create new contacts and groups in the database'() {
 		when:
-			importContactCsv('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
+			importContactCsv('''"Name","Mobile Number","Other Mobile Number","Email","Current Status","Notes","Group(s)"
 "Alice Sihoho","+254728749000","","","true","","/ToDo/Work"
 "Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
 "anyango Gitu","+254727689908","","","true","","/isIt\\\\/ToDo/Work/jobo"
 ''')
 		then:
 			// check that contacts and groups were created
-			Contact.list()*.name.sort() == ['Alice Sihoho', 'Amira Cheserem', 'anyango Gitu']
-			Group.list()*.name.sort() == ['ToDo', 'ToDo-Work', 'ToDo-Work-jobo', 'Work', 'isIt', 'jobo']
+			waitAbit { Contact.list()*.name.sort() == ['Alice Sihoho', 'Amira Cheserem', 'anyango Gitu'] }
+			waitAbit { Group.list()*.name.sort() == ['ToDo', 'ToDo-Work', 'ToDo-Work-jobo', 'Work', 'isIt', 'jobo'] }
 	}
 	
-	def 'Uploading a contacts CSV file with failed contacts should create failed contacts in a file'() {
-		given:
-			importContactCsv('''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
-"Alice Sihoho254728749000","","","true","","/ToDo/Work"
-"Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
-"anyango Gitu","+254727689908","","","true","","/isIt\\/ToDo/Work/jobo"
-''')
-		when:
-			// failed contacts file is downloaded
-			controller.params.failedContacts = controller.flash.failedContacts
-			controller.params.format = "csv"
-			controller.failedContacts()
-		then:
-			// check that headers are correctly set
-			controller.response.getHeader('Content-disposition') == 'attachment; filename=failedContacts.csv'
-			// check that body is correcty set
-			controller.response.contentAsString == '''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
-"Alice Sihoho254728749000","","","true","","/ToDo/Work"
-'''
-	}
 	def 'uploading contacts with backslash characters should unfortunately interpret them as separate groups'() {
 		when:
-			importContactCsv('''"Name","Mobile Number","E-mail Address","Notes","Group(s)","lake","town"
+			importContactCsv('''"Name","Mobile Number","Email","Notes","Group(s)","lake","town"
 "Alex","0702597711",,,"\\o/ team",,
 "Enock","0711756950",,,"\\o/ team",,
 "Geoff","0725675317",,,"\\o/ team",,
 "Vaneyck","0723127992",,,"\\o/ team",,
 ''')
 		then:
-			Group.list()*.name == ['o', 'o- team', 'team']
-			Contact.count() == 4
+			waitAbit { Group.list()*.name == ['o', 'o- team', 'team'] }
+			waitAbit { Contact.count() == 4 }
 			def groups = Group.findAll()
-			Contact.findAll().every { groups.every { group -> it.isMemberOf(group) } }
+			waitAbit { Contact.findAll().every { groups.every { group -> it.isMemberOf(group) } } }
 	}
 	
 	def 'Uploading a messages CSV file from version 1 should create new messages and folder in the database'() {
@@ -72,9 +52,9 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 ''')
 		then:
 			// check that messages and folders were created
-			TextMessage.list()*.text.sort() == ['Message Received Msg1.', 'Message Received Msg2.', 'Message Sent Msg1', 'Message Sent Msg2']
-			Folder.list().name == ['messages from v1']
-			TextMessage.list()*.messageOwner.name.every { it == 'messages from v1' }
+			waitAbit { TextMessage.list()*.text.sort() == ['Message Received Msg1.', 'Message Received Msg2.', 'Message Sent Msg1', 'Message Sent Msg2'] }
+			waitAbit { Folder.list().name == ['messages from v1'] }
+			waitAbit { TextMessage.list()*.messageOwner.name.every { it == 'messages from v1' } }
 	}
 	
 	def 'Uploading a messages CSV file from version 2 should create new messages and folder in the database'() {
@@ -86,9 +66,9 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 ''')
 		then:
 			// check that messages and folders were created
-			TextMessage.list()*.text.sort() == ['Message 1', 'Message 2', 'Message 3']
-			Folder.list().name == ['messages from v2']
-			TextMessage.list()*.messageOwner.name.every { it == 'messages from v2' }
+			waitAbit { TextMessage.list()*.text.sort() == ['Message 1', 'Message 2', 'Message 3'] }
+			waitAbit { Folder.list().name == ['messages from v2'] }
+			waitAbit { TextMessage.list()*.messageOwner.name.every { it == 'messages from v2' } }
 	}
 
 	def 'Uploading a messages CSV file from version 2 should be able to handle line breaks in messages'() {
@@ -104,15 +84,15 @@ Shantelle","2012-06-12 15:58:44.488"
 ''')
 		then:
 			// check that messages and folders were created
-			TextMessage.list()*.text.sort() == ['''Joyce
+			waitAbit { TextMessage.list()*.text.sort() == ['''Joyce
 Vancouver
 Siloi
 Rotation
 Amelia
 Georgina
-Shantelle''']
-			Folder.list().name == ['messages from v2']
-			TextMessage.list()*.messageOwner.name.every { it == 'messages from v2' }
+Shantelle'''] }
+			waitAbit { Folder.list().name == ['messages from v2'] }
+			waitAbit { TextMessage.list()*.messageOwner.name.every { it == 'messages from v2' } }
 	}
 
 	def 'Uploading a message with a very long content field results in the message content being...'() {
@@ -122,7 +102,7 @@ Shantelle''']
 "Received","Received","2012-02-24 17:22:59","short message","254705693656","254704593656"
 ''')
 		then:
-			TextMessage.list()*.text == ['short message', ('0123456789ABCDEF' * 256)[0..1598] + '…']
+			waitAbit { TextMessage.list()*.text == ['short message', ('0123456789ABCDEF' * 256)[0..1598] + '…'] }
 	}
 
 	def 'Uploading a CSV with a BOM should not cause issues'() {
@@ -131,7 +111,7 @@ Shantelle''']
 "Received","Received","2012-02-16 16:42:24","+123456789","Safaricom","254704593656"
 ''')
 		then:
-			TextMessage.list()*.inbound == [true]
+			waitAbit { TextMessage.list()*.inbound == [true] }
 	}
 
 	def 'contact import should support vcard 2.1'() {
@@ -153,9 +133,9 @@ EMAIL;PREF;INTERNET:forrestgump@example.com
 REV:20080424T195243Z
 END:VCARD''')
 		then:
-			Contact.list().size() == 1
-			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+			waitAbit { Contact.list().size() == 1 }
+			waitAbit { Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']] }
 	}
 
 	def 'contact import should support vcard 3.0'() {
@@ -177,9 +157,9 @@ EMAIL;TYPE=PREF,INTERNET:forrestgump@example.com
 REV:2008-04-24T19:52:43Z
 END:VCARD''')
 		then:
-			Contact.list().size() == 1
-			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']]
+			waitAbit { Contact.list().size() == 1 }
+			waitAbit { Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '1115551212', 'forrestgump@example.com']] }
 	}
 
 	def 'contact import should support vcard 4.0'() {
@@ -201,9 +181,9 @@ EMAIL:forrestgump@example.com
 REV:20080424T195243Z
 END:VCARD''')
 		then:
-			Contact.list().size() == 1
-			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']]
+			waitAbit { Contact.list().size() == 1 }
+			waitAbit { Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']] }
 	}
 
 	def 'contact import should support xCard'() {
@@ -276,9 +256,9 @@ United States of America</text></label>
   </vcard>
 </vcards>''')
 		then:
-			Contact.list().size() == 1
-			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']]
+			waitAbit { Contact.list().size() == 1 }
+			waitAbit { Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']] }
 	}
 
 	def 'contact import should support jCard'() {
@@ -310,9 +290,9 @@ United States of America</text></label>
   ]
 ]''')
 		then:
-			Contact.list().size() == 1
-			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']]
+			waitAbit { Contact.list().size() == 1 }
+			waitAbit { Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']] }
 	}
 
 	def 'contact import should support hCard'() {
@@ -377,13 +357,13 @@ United States of America</text></label>
   </body>
 </html>''')
 		then:
-			Contact.list().size() == 1
-			Contact.list().collect() {
-				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']]
+			waitAbit { Contact.list().size() == 1 }
+			waitAbit { Contact.list().collect() {
+				[it.name, it.mobile, it.email] } == [['Forrest Gump', '+11115551212', 'forrestgump@example.com']] }
 	}
 
 	def importMessages(String fileContent) {
-		mockFileUpload('importCsvFile', fileContent)
+		mockFileUpload('contactImportFile', fileContent)
 		controller.importMessages()
 	}
 
@@ -398,12 +378,24 @@ United States of America</text></label>
 	}
 
 	def importContacts(String fileContent, contentType=FILE_TYPE_CSV) {
-		mockFileUpload('importCsvFile', fileContent, contentType)
+		mockFileUpload('contactImportFile', fileContent, contentType)
 		controller.importContacts()
 	}
 
 	def mockFileUpload(filename, fileContent, contentType=FILE_TYPE_CSV) {
 		controller.request.addFile(new GrailsMockMultipartFile(filename, 'somefile', contentType, fileContent.getBytes("UTF-8")))
+	}
+
+	def waitAbit = { condition ->
+		def conditionSatisfied = false
+		for(x in (0..10)){
+			if(condition) {
+				conditionSatisfied = true
+				break
+			}
+			sleep(500)
+		}
+		return conditionSatisfied
 	}
 }
 

@@ -17,7 +17,7 @@ class AutoreplyService {
 				autoreply.addToKeywords(keyword)
 			}
 		} else {
-			println "##### AutoreplyService.saveInstance() # removing keywords"
+			log.info "##### AutoreplyService.saveInstance() # removing keywords"
 		}
 		autoreply.save(failOnError:true, flush:true)
 	}

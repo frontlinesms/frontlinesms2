@@ -42,8 +42,8 @@ class SearchSideBar extends geb.Module {
 class DetailSideBar extends geb.Module {
 	static base = { $('#detail') }
 	static content = {
-		messageOwnerLink { $('#message-detail-owner a')}
-		messageContent { $('#message-detail-content p').jquery.text() }
+		messageOwnerLink { $('#interaction-detail-owner a')}
+		messageContent { $('#interaction-detail-content p').jquery.text() }
 	}
 }
 

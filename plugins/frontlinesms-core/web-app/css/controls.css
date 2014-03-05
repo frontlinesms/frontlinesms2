@@ -110,9 +110,12 @@ input[type="text"].search { background-image:url('../images/icons/search.png');
 	resize:none;
 	border:none;
 	outline:none;
+	overflow-x:hidden;
+	overflow-y:hidden;
 	display:inline-block !important;
 	margin:0;
 	max-width:90%;
+	min-width:80%;
 }
 .message-composer .controls {
 	display:inline-block !important;

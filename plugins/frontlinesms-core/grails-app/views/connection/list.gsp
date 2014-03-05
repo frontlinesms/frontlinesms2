@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.ConnectionStatus" %>
 <html>
 <head>
-	<meta name="layout" content="settings"/>
+	<meta name="layout" content="connection"/>
 	<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
 </head>
 <body>
@@ -91,6 +91,10 @@ $(function() {
 			}
 		}
 	});
+	preloadImage("${r.resource(dir:'images', file:'message/gray-ajax-spinner.gif')}");
+	<g:if test="${newConnectionIds}">
+		fconnection_list.pulseNewConnections("${newConnectionIds}");
+	</g:if>
 });
 </g:javascript>
 </body>

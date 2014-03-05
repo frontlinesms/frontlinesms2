@@ -20,20 +20,20 @@
 		<div id="body" class="messages">
 			<fsms:render template="menu"/>
 			<g:form controller="${params.controller}"
-					params="[ownerId: ownerInstance?.id, messageId: messageInstance?.id]">
+					params="[ownerId: ownerInstance?.id, interactionId: interactionInstance?.id]">
 				<g:hiddenField name="searchId" value="${search?.id}"/>
 				<g:hiddenField name="messageSection" value="${messageSection}"/>
 				<div id="main-list-container">
 					<div id="main-list-head">
 						<fsms:render template="/search/header"/>
 					</div>
-					<fsms:render template="/message/message_list"/>
+					<fsms:render template="/interaction/interaction_list"/>
 					<div id="main-list-foot">
-						<fsms:render template="/message/footer"/>
+						<fsms:render template="/interaction/footer"/>
 					</div>
 				</div>
 				<div id="detail">
-					<fsms:render template="/message/message_details"/>
+					<fsms:render template="/interaction/interaction_details"/>
 				</div>
 			</g:form>
 		</div>

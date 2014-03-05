@@ -7,6 +7,7 @@ var ContactEditor = function() {
 	var cachedFormHash,
 	fieldsToAdd = [], fieldsToRemove = [],
 	contactEditForm = $(".contact-edit-form"),
+	savingStateMessage = $(".edit .saving-state-message"),
 	contactEditWrapper = contactEditForm.find(".edit"),
 	field = function(name) {
 		var selecter = $.map(arguments, function(v, i) {
@@ -36,6 +37,7 @@ var ContactEditor = function() {
 						return false;
 					}
 					setUpdateInProgress(true, event.target);
+					setSavingStateMessage("contact.status.saving");
 					disableForm(event.target);
 				},
 				complete:function() {
@@ -99,6 +101,8 @@ var ContactEditor = function() {
 		buttonKids = button.children();
 		button.text(" " + i18n("contact.send.message", contactName));
 		button.prepend(buttonKids);
+		showSuccessfullySavedMessage();
+		updateLastSavedValue();
 	},
 	handleFailureResponse = function(event, data) {
 		var
@@ -110,6 +114,7 @@ var ContactEditor = function() {
 			targetElement.parent().append("<label class='server-side-error' for='"+ localFieldName +"'>"+ item +"</label>");
 		});
 		contactEditWrapper.addClass("has-server-errors");
+		setSavingStateMessage("contact.status.unsaved");
 	},
 	disableForm = function(targetElement) {
 		targetElement = $(targetElement);
@@ -192,7 +197,24 @@ var ContactEditor = function() {
 			}
 		}
 
-		$("#contact-infos a.send-message").toggleClass("hidden", val !== "");
+		$("#contact-infos a.send-message").toggleClass("hidden", val === "");
+	}
+
+	function setSavingStateMessage(messageCode, args) {
+		savingStateMessage.html(i18n(messageCode, args));
+	}
+
+	function showUnsavedChangesMessage() {
+		var newFormHash = contactEditForm.serialize().hashCode();
+		if(newFormHash !== cachedFormHash) {
+			setSavingStateMessage("contact.status.unsaved");
+		}
+	}
+
+	function showSuccessfullySavedMessage() {
+		var saveDate = new Date();
+		setSavingStateMessage("contact.status.saved", ("0" + saveDate.getHours()).slice(-2)   + ":" + 
+				    ("0" + saveDate.getMinutes()).slice(-2));
 	}
 
 	function checkMobileNumberForNonNumericCharacters() {
@@ -201,6 +223,24 @@ var ContactEditor = function() {
 		nonNumericCharactersFound = !(/^\+?[0-9]*$/.test($(this).val().trim()));
 		$(".warning.NonNumericNotAllowedWarning")
 				.showIf(nonNumericCharactersFound, "fast");
+	}
+
+	function escapeHanlder() {
+		if(typeof(event) !== 'undefined' && event.keyCode == 27) {
+			var element = $(this);
+			var lastSavedValue = element.attr("lastSavedValue");
+			element.val(lastSavedValue);
+			element.trigger("blur");
+			savingStateMessage.html("");
+		}
+		return true;
+	}
+
+	function updateLastSavedValue() {
+		$.each($(".edit input[type=text], .edit textarea"), function(index, element) {
+			var element = $(element);
+			element.attr("lastsavedvalue", element.val());
+		});
 	}
 
 //> CUSTOM FIELD STUFF START
@@ -290,19 +330,25 @@ var ContactEditor = function() {
 		cachedFormHash = contactEditForm.serialize().hashCode();
 		$("#notes").autosize();
 
+		$(".edit input[type=text], .edit textarea").keyup(escapeHanlder);
 		$("input[name=mobile]")
 				.focus(removeNonNumericCharacters)
 				.keyup(validateMobile)
-				.keyup(checkMobileNumberForNonNumericCharacters);
+				.keyup(checkMobileNumberForNonNumericCharacters)
+				.keyup(showUnsavedChangesMessage);
 		validateMobile();
 
 		// bind form data change listeners
-		$(".edit input[type=text], .edit textarea").blur(updateContactData);
-		$(".edit input[type=hidden], .edit select:not(#group-dropdown)").change(updateContactData);
+		$(".edit input[type=text], .edit textarea, .edit input[type=hidden], .edit select:not(#group-dropdown)")
+				.change(updateContactData)
+				.keyup(showUnsavedChangesMessage);
 
 		contactEditForm.bind("addedCustomFieldToContact", function() {
-			$(".edit input[type=text]").blur(updateContactData);
+			$(".edit input[type=text]")
+				.blur(updateContactData)
+				.keyup(showUnsavedChangesMessage);
 			$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
+			$(".edit input[type=text], .edit textarea").keyup(escapeHanlder);
 		});
 		$(".edit .custom-field .remove-command").click(removeCustomFieldClickHandler);
 

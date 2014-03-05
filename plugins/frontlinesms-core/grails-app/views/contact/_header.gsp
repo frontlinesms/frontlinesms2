@@ -14,14 +14,10 @@
 							noSelection="${['': g.message(code:'group.moreactions')]}"
 							onchange="selectmenuTools.snapback(this)"/>
 			</g:else>
-			<fsms:popup class="btn" controller="export" action="contactWizard" params="[groupId:contactsSection?.id, contactsSection:contactsSection.shortName]" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="action.export"/></fsms:popup>
 		</div>
 	</g:if>
 	<g:else>
 		<h1><g:message code="contact.all.contacts" args="${[contactInstanceTotal]}"/></h1>
-		<div class="header-buttons">
-			<fsms:popup class="btn" controller="export" action="contactWizard" popupCall="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('action.export'))"><g:message code="action.export"/></fsms:popup>
-		</div>
 	</g:else>
 </div>
 

@@ -13,20 +13,17 @@ class ActivityController extends ControllerUtils {
 	}
 	
 	def create() {
-		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
-		[contactList: Contact.list(),
-				groupList:groupList, activityType: params.controller]
+		[
+			activityType: params.controller
+		]
 	}
 	
 
 	def edit() {
 		withActivity { activityInstance ->
-			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 			def activityType = activityInstance.shortName
 
 			def modelToRender = [
-				contactList: Contact.list(),
-				groupList:groupList,
 				activityInstanceToEdit: activityInstance,
 				activityType: activityType,
 			]
@@ -44,7 +41,7 @@ class ActivityController extends ControllerUtils {
 				modelToRender.contacts = contacts
 				modelToRender.addresses = addresses
 			} catch (MissingPropertyException e) {
-				println "$e"
+				log.info "$e"
 			}
 
 			render view:"../$activityType/create", model: modelToRender
@@ -146,7 +143,7 @@ class ActivityController extends ControllerUtils {
 			if(currentKeyword && (currentKeyword.activity.id != instance.id))
 				collidingKeywords << [(currentKeyword.value):"'${currentKeyword.activity.name}'"]
 		}
-		println "colliding keywords:: $collidingKeywords"
+		log.info "colliding keywords:: $collidingKeywords"
 		return collidingKeywords
 	}
 

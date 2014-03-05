@@ -1,5 +1,5 @@
 check_list = (function() {
-	var checkAll, itemCheckChanged, showMultipleDetailsPanel, updateCheckAllBox,
+	var checkAll, itemCheckChanged, showMultipleDetailsPanel, updateCheckAllBox, toggleCheckboxesEnabled,
 			tick = 0;
 
 	showMultipleDetailsPanel = function(itemTypeString) {
@@ -13,21 +13,21 @@ check_list = (function() {
 		if (itemTypeString === "contact") {
 			selectmenuTools.refresh("#multi-group-dropdown");
 		} else {
-			selectmenuTools.refresh("#multiple-messages #move-actions");
-			selectmenuTools.refresh("#multiple-messages #categorise_dropdown");
+			selectmenuTools.refresh("#multiple-interactions #move-actions");
+			selectmenuTools.refresh("#multiple-interactions #categorise_dropdown");
 		}
 	};
 
-	itemCheckChanged = function(itemTypeString, itemId) {
+	itemCheckChanged = function(itemTypeString, itemId, itemSubtypeString) {
 		var count, checkedRow, newRowId, newId;
 		count = getCheckedItemCount(itemTypeString);
 		checkedRow = getRow(itemTypeString, itemId);
 		if(checkedRow.find('input[type=checkbox]').attr('checked')) {
 			if(count === 1) {
 				$('#main-list .selected').removeClass('selected');
-				updateSingleCheckedDetails(itemTypeString, itemId, checkedRow);
+				updateSingleCheckedDetails(itemTypeString, itemId, checkedRow, itemSubtypeString);
 			} else {
-				updateMultipleCheckedDetails(itemTypeString);
+				updateMultipleCheckedDetails(itemTypeString, itemSubtypeString);
 			}
 			checkedRow.addClass('selected');
 		} else if(count !== 0) {
@@ -35,9 +35,9 @@ check_list = (function() {
 			if (count === 1) {
 				newRowId = $('#main-list .selected').attr('id');
 				newId = newRowId.substring(itemTypeString.length + 1);
-				updateSingleCheckedDetails(itemTypeString, newId, getRow(itemTypeString, newRowId));
+				updateSingleCheckedDetails(itemTypeString, newId, getRow(itemTypeString, newRowId), itemSubtypeString);
 			} else {
-				updateMultipleCheckedDetails(itemTypeString);
+				updateMultipleCheckedDetails(itemTypeString, itemSubtypeString);
 			}
 		}
 		updateCheckAllBox(count);
@@ -60,16 +60,27 @@ check_list = (function() {
 	    return $('#main-list .' + itemTypeString + '-select-checkbox:checked').size();
 	};
 
-	updateSingleCheckedDetails = function(itemTypeString, itemId, row) {
-		var params, action, singleDetails, callerTick;
-		if (itemTypeString === 'message') {
+	toggleCheckboxesEnabled = function(itemTypeString, enabled) {
+		if(enabled) {
+			$('#main-list .' + itemTypeString + '-select-checkbox,#' + itemTypeString + '-select-all').removeAttr('disabled');
+		}
+		else {
+			$('#main-list .' + itemTypeString + '-select-checkbox,#' + itemTypeString + '-select-all').attr('disabled', 'disabled');
+		}
+	};
+
+	updateSingleCheckedDetails = function(itemTypeString, itemId, row, itemSubtypeString) {
+		var params, action, singleDetails, callerTick, controller;
+		if (itemTypeString === 'interaction') {
 			row.removeClass("unread");
 			row.addClass("read");
-			params = { messageSection:$('input:hidden[name=messageSection]').val(), messageId: itemId, ownerId: $('input:hidden[name=ownerId]').val()};
+			params = { messageSection:$('input:hidden[name=messageSection]').val(), interactionId: itemId, ownerId: $('input:hidden[name=ownerId]').val()};
 			action = '/show/';
+			controller = itemSubtypeString; 
 		} else {
 			params = { contactsSection:$('input:hidden[name=contactsSection]').val() };
 			action = '/updateContactPane/';
+			controller = itemTypeString;
 		}
 		$("#multiple-"+itemTypeString+"s").hide();
 
@@ -78,7 +89,8 @@ check_list = (function() {
 		singleDetails.show();
 
 		callerTick = ++tick;
-		$.get(url_root + itemTypeString + action + itemId, params, function(data) {
+		toggleCheckboxesEnabled(itemTypeString, false);
+		$.get(url_root + controller + action + itemId, params, function(data) {
 			var newPane = $(data);
 			if(callerTick !== tick) {
 				return;
@@ -88,26 +100,29 @@ check_list = (function() {
 			newPane.find('.dropdown').selectmenu();
 			if (itemTypeString === 'contact') {
 				applyContactPaneJavascriptEnhancements(newPane);
-			} else if (itemTypeString === 'message') {
+			} else if (itemTypeString === 'interaction') {
 				// TODO if message was unread and we're in the inbox, please decrement unread messages count
 				// on the tab (e.g. MESSAGES (123) -> MESSAGES (122)
 			}
+			toggleCheckboxesEnabled(itemTypeString, true);
 		});
 	};
 
-	updateMultipleCheckedDetails = function(itemTypeString) {
+	updateMultipleCheckedDetails = function(itemTypeString, itemSubtypeString) {
 		if (itemTypeString === 'contact') {
-			$.get(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
+			toggleCheckboxesEnabled(itemTypeString, false);
+			$.post(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
 				var pane = $(data);
 				pane.show(); // Pane is initially display:hidden in GSP
 				$('#multiple-'+itemTypeString+'s').replaceWith(pane);
 				$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
 				applyContactPaneJavascriptEnhancements(pane);
 				showMultipleDetailsPanel(itemTypeString);
+				toggleCheckboxesEnabled(itemTypeString, true);
 			});
 		} else {
 			// update counter display
-			$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
+			$('#checked-'+ itemTypeString + '-count').text(i18n(itemSubtypeString + ".multiple.selected", getCheckedItemCount(itemTypeString)));
 			showMultipleDetailsPanel(itemTypeString);
 		}
 	};
@@ -118,7 +133,7 @@ check_list = (function() {
 		$("#mobile").trigger('change');
 	};
 
-	checkAll = function(itemTypeString) {
+	checkAll = function(itemTypeString, itemSubtypeString) {
 		var checkedItemCount, tableRow, id, originalSingleItemDisplay;
 		if($('#main-list :checkbox')[0].checked){
 			$('#main-list .' + itemTypeString + '-preview :checkbox').each(function(index) {
@@ -131,8 +146,8 @@ check_list = (function() {
 			if(checkedItemCount === 1) {
 				tableRow = $("#main-list tbody tr:first-child");
 				id = tableRow.attr("id").substring(itemTypeString.length + 1);
-				updateSingleCheckedDetails(itemTypeString, id, tableRow);
-			} else { updateMultipleCheckedDetails(itemTypeString); }
+				updateSingleCheckedDetails(itemTypeString, id, tableRow, itemSubtypeString);
+			} else { updateMultipleCheckedDetails(itemTypeString, itemSubtypeString); }
 		} else {
 			$('#main-list .' + itemTypeString + '-preview :checkbox').each(function(index, element) {
 				this.checked = false;
@@ -165,8 +180,8 @@ check_list = (function() {
 		checkedBoxes.each(function(){
 			showDropdown = (!$(this).parent().parent().hasClass("archived") || showDropdown);
 		});
-		single_moveActions = $("div#single-message a#move-actions-button");
-		multiple_moveActions = $("div#multiple-messages a#move-actions-button");
+		single_moveActions = $("div#single-interaction a#move-actions-button");
+		multiple_moveActions = $("div#multiple-interactions a#move-actions-button");
 		if(checkedBoxes.size() > 1) {
 			if(showDropdown){
 				multiple_moveActions.show();

@@ -8,7 +8,7 @@ class SearchUrlMappingSpec extends Specification {
 	def testSearchMapping() {
 		expect:
 			assertForwardUrlMapping('/search/result/show/123', controller:'search', action:'result') {
-				messageId = 123
+				interactionId = 123
 			}
 	}
 }

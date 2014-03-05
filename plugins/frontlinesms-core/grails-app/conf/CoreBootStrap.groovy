@@ -73,6 +73,7 @@ class CoreBootStrap {
 			dev_initContacts()
 			dev_initFconnections()
 			dev_initTextMessages()
+			dev_initMissedCalls()
 			dev_initPolls()
 			dev_initAutoreplies()
 			dev_initAutoforwards()
@@ -152,6 +153,13 @@ class CoreBootStrap {
 	private def dev_initGroups() {
 		if(!bootstrapData) return
 		['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
+	}
+
+	private def dev_initMissedCalls() {
+		if(!bootstrapData) return
+		for(i in 1..20) {
+			new MissedCall(src:"+1234567$i", date: new Date() - i).save()
+		}
 	}
 	
 	private def dev_initTextMessages() {
@@ -328,8 +336,8 @@ class CoreBootStrap {
 		def m = TextMessage.findByText("modem message")
 		def modem = SmslibFconnection.list()[0]
 		modem.addToMessages(m)
-		modem.save(failOnError:true, flush:true)
-
+		m.connectionId = modem.id
+		m.save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initAnnouncements() {
@@ -642,6 +650,7 @@ YOU HAVE A COMPATIBLE SERIAL LIBRARY INSTALLED.'''
 		println "# CoreBootStrap.updateAvailableFconnections() :: Fconnection implementations before pruning: ${Fconnection.implementations}"
 		Fconnection.implementations.remove(ClickatellFconnection)
 		Fconnection.implementations.remove(IntelliSmsFconnection)
+		Fconnection.implementations.remove(NexmoFconnection)
 		println "# CoreBootStrap.updateAvailableFconnections() :: Fconnection implementations after pruning: ${Fconnection.implementations}"
 	}
 }

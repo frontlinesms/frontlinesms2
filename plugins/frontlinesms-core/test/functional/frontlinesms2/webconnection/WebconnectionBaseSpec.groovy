@@ -10,9 +10,11 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 			def syncKeyword = new Keyword(value:"SYNC")
 			def ushKeyword = new Keyword(value:"USH")
 			def keyword = new Keyword(value:"TRIAL")
+			println "###### JUST SET THE KEYWORDS ######"
 			new GenericWebconnection(name:"Sync", url:"http://www.frontlinesms.com/sync", httpMethod:Webconnection.HttpMethod.GET).addToKeywords(syncKeyword).save(failOnError:true, flush:true)
 			new UshahidiWebconnection(name:"Trial", url:"https://trial.crowdmap.com/frontlinesms/", httpMethod:Webconnection.HttpMethod.POST).addToKeywords(keyword).save(failOnError:true, flush:true)
 			new UshahidiWebconnection(name:"Ush", url:"http://www.ushahidi.com/frontlinesms", httpMethod:Webconnection.HttpMethod.GET).addToKeywords(ushKeyword).save(failOnError:true, flush:true)
+			println "## Webconnection ######### ${Webconnection.findByName('Sync')} ##########"
 			null
 		}
 	}
@@ -25,8 +27,7 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 
-	static createTestMessages(Webconnection wcLocal) {
-		def wcId = wcLocal.id
+	static createTestMessages(wcId) {
 		remote {
 			def wc = Webconnection.get(wcId)
 			(0..90).each {
@@ -43,9 +44,11 @@ abstract class WebconnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		to PageMessageInbox
 		bodyMenu.newActivity.click()
 		waitFor { at CreateActivityDialog }
+		waitFor { !thinking.displayed }
 		webconnection.click()
 		at WebconnectionWizard
 
+		waitFor { option('generic').displayed && !thinking.displayed }
 		if(!webconnectionType) {
 			waitFor { option('generic').displayed }
 			return true

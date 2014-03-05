@@ -15,12 +15,12 @@ class DeviceDetectionService {
 		
 		if(Environment.current != Environment.TEST) {
 			def disableDetect = System.properties['serial.detect.disable']
-			println "DeviceDetectionService.init() :: disableDetect? $disableDetect"
+			log.info "DeviceDetectionService.init() :: disableDetect? $disableDetect"
 			if(!disableDetect || !Boolean.parseBoolean(disableDetect)) {
-				println 'DeviceDetectionService.init() :: detection enabled.  Starting...'
+				log.info 'DeviceDetectionService.init() :: detection enabled.  Starting...'
 				detect()
-			} else println 'DeviceDetectionService.init() :: detection disabled.'
-		} else println 'DeviceDetectionService.init() :: detection disabled as grails environment is test.'
+			} else log.info 'DeviceDetectionService.init() :: detection disabled.'
+		} else log.info 'DeviceDetectionService.init() :: detection disabled as grails environment is test.'
 	}
 
 	def detect() {
@@ -36,14 +36,14 @@ class DeviceDetectionService {
 	}
 	
 	def stopFor(String port) {
-		println "DeviceDetectionService.stopFor($port)..."
+		log.info "DeviceDetectionService.stopFor($port)..."
 		def detectorThread
 		detector.detectors.each {
-			println "Checking $it.portName..."
+			log.info "Checking $it.portName..."
 			if(it.portName == port) {
-				println "Port matched."
+				log.info "Port matched."
 				detectorThread = it
-			} else println "Not the right port."
+			} else log.info "Not the right port."
 		}
 		if(detectorThread && detectorThread!=Thread.currentThread()) {
 			detectorThread.interrupt()

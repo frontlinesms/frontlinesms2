@@ -74,7 +74,7 @@ class MessageListHeader extends geb.Module {
 class MessageList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
-		selectAll { $("input#message-select-all") }
+		selectAll { $("input#interaction-select-all") }
 		messageSource { i=0 -> message(i).find('td.message-sender-cell').text() }
 		message { i=0, onlySelected=false -> onlySelected? $('tbody tr.selected', i): $("tbody tr:nth-of-type(${i+1})") }
 		messageCount { js.exec('return jQuery("#main-list tbody tr").size()') as Integer }
@@ -109,19 +109,20 @@ class MessageList extends geb.Module {
 }
 
 class SingleMessageDetails extends geb.Module {
-	static base = { $('#single-message') }
+	static base = { $('#single-interaction') }
 	static content = {
-		noneSelected { $('#message-detail-content').text() == 'fmessage.selected.none' }
-		sender { $('#message-detail-sender').text() }
-		senderLink { $('#message-detail-sender a') }
+		noneSelected { $('#interaction-detail-content').text() == 'fmessage.selected.none' }
+		sender { $('#interaction-detail-sender').text() }
+		senderLink { $('#interaction-detail-sender a') }
 		addToContacts(required:false) { $('#add-contact') }
-		text { $('#message-detail-content').text() }
+		text { $('#interaction-detail-content').text() }
 		date {
-			parseDate($('#message-detail-date').text())
+			parseDate($('#interaction-detail-date').text())
 		}
 		archive(required:false) { $('#archive-msg') }
 		unarchive { $('#unarchive-msg') }
 		reply { $('a#btn_reply') }
+		retry { $('a#btn_retry') }
 		forward { $('#btn_forward') }
 		delete(required:false) {$('#delete-msg')}
 		single_moveActions(required:false) { $("select#move-actions") }
@@ -130,15 +131,15 @@ class SingleMessageDetails extends geb.Module {
 			$('select#move-actions').jquery.trigger("change")
 		}
 		moveActions { $('select#move-actions option')*.text() }
-		receivedOn(required:false) { $("#message-detail-fconnection") }
+		receivedOn(required:false) { $("#interaction-detail-fconnection") }
 	}
 }
 
 class MultipleMessageDetails extends geb.Module {
-	static base = { $('#multiple-messages') }
+	static base = { $('#multiple-interactions') }
 	static content = {
-		text { $('#message-detail-content').text() }
-		checkedMessageCount { ($('p#checked-message-count').text() =~ /many\.selected\[(\d+),\w+\]/)[0][1].toInteger() }
+		text { $('#interaction-detail-content').text() }
+		checkedMessageCount { ($('p#checked-interaction-count').text() =~ /message\.multiple\.selected\[(\d+)]/)[0][1].toInteger() }
 		replyAll(required:false) { $('a#btn_reply_all') }
 		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}

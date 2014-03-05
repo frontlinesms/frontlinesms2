@@ -1,7 +1,4 @@
-#body.status #content { background-color:#eee; position:fixed; top:80px; bottom:0; left:0; right:0; }
-#body.status h3 { padding:17px 25px; text-transform:uppercase; font-weight:bold; border-bottom:1px solid #eee; }
-#body.status #left-column { position:fixed; top:83px; bottom:0; width:47%; margin:0 25px; overflow-x:hidden; overflow-y:auto; }
-#body.status #traffic-status { background:white; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; }
+#traffic-status { margin:10px; background:white; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px; }
 #body.status #right-column { position:fixed; right:0; top:83px; bottom:0; width:47%; float:right; margin:0 25px;
 	overflow-x:hidden; overflow-y:auto; }
 #body.status #connection-status, #body.status #device-detection { background:white; margin-left:25px; margin-bottom:25px;
@@ -39,7 +36,7 @@
 
 #traffic-status #type-filters{
 	width: 40%;
-	margin: 17px 17px;
+	margin: 0 17px 17px 17px;
 	height: 130px;
 }
 #traffic-status #type-filters li{
@@ -64,6 +61,10 @@
 	margin: 10px 0 10px 25px;
 	float:right;
 	width:100%;
+}
+#traffic-status #time-filters div.date-picker {
+	display:block;
+	margin-top:5px;
 }
 #traffic-status #time-filters #pre-defined-range-options{
    	width: 200px;

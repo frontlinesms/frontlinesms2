@@ -62,7 +62,7 @@ modules = {
 	}
 	
 	messages {
-		dependsOn 'common'
+		dependsOn 'common, font-awesome'
 		resource url:[dir:'js', file:'message/arrow_navigation.js'], disposition:'head'
 		resource url:[dir:'js', file:'message/star_message.js'], disposition:'head'
 		resource url:[dir:'js', file:'message/categorize_dropdown.js'], disposition:'head'
@@ -112,6 +112,7 @@ modules = {
 	settings {
 		dependsOn 'common, font-awesome'
 		resource url:[dir:'js', file:'/settings/general_settings.js']
+		resource url:[dir:'js', file:'jquery.pulse.js']
 		resource url:[dir:'js', file:'contact/import_review.js']
 	}
 	

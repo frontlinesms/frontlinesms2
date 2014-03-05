@@ -27,9 +27,15 @@ class ConnectionController extends ControllerUtils {
 		withFconnection {
 			model << [connectionInstance: it]
 		}
+		def newConnectionIds
+		if(flash.newConnectionIds) {
+			newConnectionIds = flash.newConnectionIds
+			flash.newConnectionIds = null
+		}
 		[connectionInstanceList:fconnectionInstanceList,
 				fconnectionInstanceTotal:fconnectionInstanceTotal,
 				fconnectionRoutingMap:fconnectionRoutingMap,
+				newConnectionIds:newConnectionIds,
 				appSettings:appSettings]
 	}
 
@@ -157,7 +163,8 @@ class ConnectionController extends ControllerUtils {
 				smssyncService.startTimeoutCounter(connectionInstance)
 			}
 		}
-		redirect(action:'list', params:params)
+		flash.newConnectionIds = params.id
+		redirect(action:'list', params: params)
 	}
 
 	def disable() {
@@ -208,13 +215,15 @@ class ConnectionController extends ControllerUtils {
 			def handleSaveResponse = connectionService.handleSave(params)
 			saveSuccessful = handleSaveResponse.success
 			connectionErrors = handleSaveResponse.errors
-			fconnectionInstance = handleSaveResponse.connectionInstance
+			def fconnectionInstances = handleSaveResponse.connectionInstance
+			flash.newConnectionIds = (fconnectionInstances instanceof List ? fconnectionInstances*.id.join(',') : fconnectionInstances?.id)
 			withFormat {
 				html {
 					flash.message = LogEntry.log(saveSuccessful ? handleSaveResponse.successMessage : message(code: 'connection.creation.failed', args:[handleSaveResponse.errors]))
 					redirect(controller:'connection', action:"list") // FIXME - should just enable connection here and redirect to list action, surely!
 				}
 				json {
+
 					render((saveSuccessful ? [ok:true, redirectUrl:createLink(action:'list')] : [ok:false, text:handleSaveResponse.errors.join(", ")]) as JSON)
 				}
 			}

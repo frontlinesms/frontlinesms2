@@ -3,14 +3,14 @@ function moveAction() {
 	messageSection = $('input:hidden[name=messageSection]').val();
 	ownerId = $('input:hidden[name=ownerId]').val();
 	searchId = $("input:hidden[name=searchId]").val();
-	if(getCheckedItemCount('message') > 1) {
+	if(getCheckedItemCount('interaction') > 1) {
 		// TODO should calculate selected IDs here rather than getting from hidden field.  Use
 		// something like $('#message-list tr :checked');
-		messagesToMove = getCheckedList('message');
-		moveTarget = $('#multiple-messages select#move-actions option:selected');
+		messagesToMove = getCheckedList('interaction');
+		moveTarget = $('#multiple-interactions select#move-actions option:selected');
 	} else {
-		messagesToMove = $("#message-id").val();
-		moveTarget = $('#single-message select#move-actions option:selected');
+		messagesToMove = $("#interaction-id").val();
+		moveTarget = $('#single-interaction select#move-actions option:selected');
 	}
 
 	moveTargetType = moveTarget.attr("class").split(/\s+/)[0];
@@ -23,7 +23,7 @@ function moveAction() {
 		return;
 	}
 
-	if(messageSection === 'result' && getCheckedItemCount('message') === 0) {
+	if(messageSection === 'result' && getCheckedItemCount('interaction') === 0) {
 		location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection === 'result') {
 		location = url_root + "search/" + messageSection + '?searchId=' + searchId;
@@ -38,7 +38,7 @@ function moveAction() {
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/move',
-		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
+		data: { messageSection:moveTargetType, interactionId:messagesToMove, ownerId:moveTargetId },
 		success: function(data) { window.location = location; }
 	});
 }
@@ -48,7 +48,7 @@ function launchCategorisePopup(moveTargetType,messagesToMove,moveTargetId){
 		type:'POST',
 		beforeSend : function() { showThinking(); },
 		url: url_root + 'subscription/categoriseSubscriptionPopup',
-		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
+		data: { messageSection:moveTargetType, interactionId:messagesToMove, ownerId:moveTargetId },
 		success: function(data) {
 			hideThinking();
 			launchSmallPopup(i18n('subscription.categorise.title'), data, i18n('wizard.ok'), function() {

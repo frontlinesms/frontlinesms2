@@ -4,17 +4,14 @@ class SubscriptionController extends ActivityController {
 	def subscriptionService
 
 	def create() {
-		def groupList = Group.getAll()
-		[contactList:Contact.list(), groupList:groupList]
 	}
 
 	def edit() {
 		withActivity { activityInstance ->
-			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 			def activityType = activityInstance.shortName
-			render view:"../$activityType/create", model:[contactList:Contact.list(),
-				groupList:groupList,
-				activityInstanceToEdit:activityInstance]
+			render view:"../$activityType/create", model: [
+				activityInstanceToEdit:activityInstance
+			]
 		}
 	}
 
@@ -69,7 +66,7 @@ class SubscriptionController extends ActivityController {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params.messagesList?: params.messageId?: []
+		def checked = params['interaction-select']?: params.interactionId?: []
 		if(checked instanceof String) checked = checked.split(/\D+/) - ''
 		if(checked instanceof Number) checked = [checked]
 		if(checked.class.isArray()) checked = checked as List

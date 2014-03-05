@@ -47,7 +47,7 @@ class GroupController extends ControllerUtils {
 			flash.message = message(code:'default.created.message', args:[message(code:'group.label'), groupInstance.name])
 			withFormat {
 				json {
-					render([ok:true] as JSON)
+					render([ok:true, id:groupInstance.id, name:groupInstance.name] as JSON)
 				}
 			}
 		} else {

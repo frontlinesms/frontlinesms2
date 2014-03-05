@@ -11,8 +11,9 @@ class ContactEditSpec extends ContactBaseSpec {
 	def setup() {
 		createTestContacts()
 		remote {
-			ctx.grailsApplication.mainContext.appSettingsService.set("non.numeric.characters.removed.warning.disabled", 'some placeholder value')
-			ctx.grailsApplication.mainContext.appSettingsService.set("international.number.format.warning.disabled", 'some placeholder value')
+			def grailsApplication = org.codehaus.groovy.grails.commons.ApplicationHolder.application
+			grailsApplication.mainContext.appSettingsService.set("non.numeric.characters.removed.warning.disabled", 'some placeholder value')
+			grailsApplication.mainContext.appSettingsService.set("international.number.format.warning.disabled", 'some placeholder value')
 		}
 	}
 

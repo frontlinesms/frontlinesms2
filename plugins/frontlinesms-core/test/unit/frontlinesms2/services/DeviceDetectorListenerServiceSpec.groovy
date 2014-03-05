@@ -13,6 +13,7 @@ import serial.mock.MockSerial
 class DeviceDetectorListenerServiceSpec extends Specification {
 	def fconnectionService
 	def i18nUtilService
+	def appSettingsService
 	
 	def setup() {
 		MockSerial.init()
@@ -20,10 +21,12 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 		assert !fconnectionService
 		fconnectionService = Mock(FconnectionService)
 		i18nUtilService = Mock(I18nUtilService)
+		appSettingsService = Mock(AppSettingsService)
 		i18nUtilService.getMessage(_) >> { Map args -> args.code }
 
 		service.fconnectionService = fconnectionService
 		service.i18nUtilService = i18nUtilService
+		service.appSettingsService = appSettingsService
 	}
 
 	def 'handleDetected should create a new fconnection for newly detected devices'() {
@@ -194,6 +197,20 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			1   | 0          | '00000'     | '00000'      | 1            | null          | '11111'        | true
 			1   | 1          | null        | '00000'      | 0            | '11111'       | '11111'        | true
 			0   | 0          | '00000'     | '00000'      | 0            | '11111'       | '11111'        | true
+	}
+
+	def 'handleDetectionCompleted should add connection to routing rules'() {
+		given:
+			def port = "PORT1"
+			def serial = '12345'
+			def imsi = '56789'
+			def d = mockDetector(port:port, serial:serial, imsi:imsi)
+			def successfullyAddedConnectionToRoutingRules =  false
+			service.metaClass.addConnectionToRoutingRules = { c-> successfullyAddedConnectionToRoutingRules = true }
+		when:
+			service.handleDetectionCompleted(d)
+		then:
+			successfullyAddedConnectionToRoutingRules
 	}
 	
 	private SmslibFconnection mockFconnection(Map params) {

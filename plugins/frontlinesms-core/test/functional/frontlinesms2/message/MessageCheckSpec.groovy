@@ -61,7 +61,6 @@ class MessageCheckSpec extends MessageBaseSpec {
 			multipleMessageDetails.replyAll.click()
 		then:
 			waitFor { at QuickMessageDialog }
-			waitFor { next.displayed }
 	}
 
 	def "the count of messages being sent is updated even in 'Reply all'"() {
@@ -82,11 +81,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			multipleMessageDetails.replyAll.click()
 		then:
 			waitFor { at QuickMessageDialog }
-			waitFor { next.displayed }
-		when:
-			next.click()
-		then:
-			confirm.messagesToSendCount == '2'
+			messagesToSendCount() == '2'
 	}
 
 	def "Should show the contact's name when replying to multiple messages from the same contact"() {
@@ -107,12 +102,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			multipleMessageDetails.replyAll.click()
 		then:
 			waitFor { at QuickMessageDialog }
-			waitFor { next.displayed }
-		when:
-			next.click()
-		then:
-			waitFor { confirm.displayed }
-			confirm.recipientName == "Alice"
+			recipientName() == "Alice"
 	}
 
 	def "'Forward' button works even when all messages are unchecked"() {
@@ -131,9 +121,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			singleMessageDetails.forward.click()
 		then:
 			waitFor { at QuickMessageDialog }
-			waitFor { next.displayed }
-		then:
-			compose.textArea.text() == "hi Alice"
+			textArea.text() == "hi Alice"
 	}
 
 	def "should uncheck message when a different message is clicked"() {

@@ -37,6 +37,7 @@ fieldset.table { display:table; }
 
 .remove-command { margin-left:5px; }
 
+#body.contacts ul.submenu li { padding-top: 5px; padding-bottom: 0px; }
 #body.contacts #detail #single-contact .buttons { margin:10px 0; }
 #body.contacts #detail #single-contact td label:nth-child(1) { font-style:italic; color:#444; display:inline-block; height:100%; }
 
@@ -93,7 +94,7 @@ input[type=text]:-moz-input-placeholder,
 input[type=text]:-ms-input-placeholder {
 	color:#bbb; font-style:italic; }
 
-#body.contacts #detail #single-contact #action-buttons { margin-top:20px; }
+#body.contacts #detail #single-contact #action-buttons { display:inline-block; vertical-align:top; margin-top:20px; }
 #body.contacts #detail #single-contact #action-buttons .icon-envelope,
 #body.contacts #detail #single-contact #action-buttons .icon-remove,
 #body.contacts #detail #single-contact #action-buttons .icon-remove-sign {
@@ -135,3 +136,55 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 
 tr.connection .smssync-lastconnected { font-weight:bold; }
 tr.connection.receiveOnly .btn.test { display:none; }
+
+.progress { float:right; }
+.updating { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding:18px 10px 10px 10px; }
+
+ul.sortable.checklist { width:50%; }
+
+#modalBox #importForm h3 { font-weight: bold; margin-bottom: 5px; }
+#modalBox #importForm input[type='file'] { margin-top: 10px; }
+#modalBox #importForm label[for='contactImportFile'] { font-style: italic; }
+
+.saving-state-message { display:inline-block; float:right; text-align:right; margin:37px 0 0 0; color:#808080; }
+.contact_footer_controls { max-width:62%; }
+
+#interaction-detail-buttons a { display:block; text-align:left; }
+
+div#main-nav span#inbox-indicator.gray-out { background-color:#ccc; }
+div#main-nav span#inbox-indicator.allRead { background-color:#aaa; }
+
+form#send-quick-message {
+	margin-left:auto;
+	margin-right:auto;
+}
+form#send-quick-message div.confirm {
+	position:absolute;
+	bottom:0;
+	width:72%;
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+	margin-bottom:60px;
+	padding-top:12px;
+	border-top:1px solid #999;
+}
+form#send-quick-message div.confirm table {
+	margin-left:auto;
+	margin-right:auto;
+}
+form#send-quick-message div.confirm table tr {
+	display:inline-block;
+}
+form#send-quick-message div.confirm table tr+tr {
+	margin-left:10px;
+}
+form#send-quick-message .quickmessage-composer-instruction {
+	margin-top:22px;
+}
+.api-instructions-title { margin-bottom:2px; }
+.api-url { margin-left:10px; }
+.api-url .url-value { font-weight:bold; font-size:1.2em; }
+.connection-id { margin-left:10px; }
+.connection-id .database-id-value { font-weight:bold; font-size:1.2em; }
+#create_subscription label.error { display:block; }

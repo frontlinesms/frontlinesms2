@@ -76,9 +76,9 @@ var subscription = (function() {
 		},
 		addCustomValidationClasses = function() {
 			jQuery.validator.addMethod("not-empty", function(value, element) {
-				return ($('#subscriptionGroup').val() !== '');
+				return ($('#subscriptionGroup').val() !== '' && $('#subscriptionGroup').val() != 'create_group');
 			}, i18n("subscription.group.required.error"));
-
+			
 			aliasCustomValidation();
 			genericSortingValidation();
 		},
@@ -91,9 +91,60 @@ var subscription = (function() {
 			$("#confirm-join-autoreply-text").html($("#joinAutoreplyText").val().htmlEncode() || i18n("announcement.message.none"));
 			$("#confirm-leave-autoreply-text").html($("#leaveAutoreplyText").val().htmlEncode() || i18n("announcement.message.none"));
 		},
+		selectGroupChangeListener = function() {
+			$('#subscriptionGroup').change(function(){
+				var addGroup = $('.add-group'), groupNameInput = $(addGroup).find('input[name=groupName]');
+				groupNameInput.val('').removeClass('error');
+				groupNameInput.parent().find('label.error').remove();
+				if($(this).val() === 'create_group' && addGroup.hasClass('hide')) {
+					addGroup.removeClass('hide');
+				} else if($(this).val() !== 'create_group') {
+					addGroup.addClass('hide');
+				}
+			});
+		},
+		setAddGroupOnClickHandler = function() {
+			$('a.btn.create-group').click(function() {
+				var groupName = $('#groupName').val(), 
+					subscriptionGroupSelect = $('#subscriptionGroup'),
+					createGroupOption,
+					optionToAdd;
+				if(groupName == '') {
+					return;
+				}
+				$.ajax({
+					type:'POST',
+					data:{'name': groupName},
+					url: url_root + 'group/save',
+					success: function(data){
+						if(!data.ok) {
+							$('#groupName').addClass('error').parent().append('<label for="groupName" class="error">' + i18n('group.name.validator.error') + '</label');
+							return;
+						}
+						optionToAdd = $("<option/>",{
+							value: data.id, 
+							text:data.name,
+							selected:'selected'
+						});
+						createGroupOption = subscriptionGroupSelect.find('option[value=create_group]').remove();
+						subscriptionGroupSelect.append(optionToAdd);
+						subscriptionGroupSelect.append(createGroupOption);
+						$('.add-group').addClass('hide');
+						subscriptionGroupSelect.val(data.id);
+						subscriptionGroupSelect.selectmenu();
+					}
+				});
+			});
+			$('#groupName').change(function() {
+				$(this).removeClass('error');
+				$(this).parent().find('label.error').remove();
+			});
+		},
 		init = function() {
 			initializeTabValidation(createFormValidator());
 			selectmenuTools.initAll("select");
+			selectGroupChangeListener();
+			setAddGroupOnClickHandler();
 			addCustomValidationClasses();
 		};
 	return {

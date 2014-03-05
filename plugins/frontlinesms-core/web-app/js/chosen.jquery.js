@@ -263,6 +263,7 @@ Copyright (c) 2011 by Harvest
         case 17:
           break;
         default:
+	  this.search_field.removeAttr('placeholder');
           return this.results_search();
       }
     };
@@ -689,9 +690,13 @@ Copyright (c) 2011 by Harvest
     Chosen.prototype.show_search_field_default = function() {
       if (this.is_multiple) {
         if(this.choices < 1 && !this.active_field) {
+	  this.search_field.attr('placeholder', this.default_text);
           this.search_field.val(this.default_text);
           return this.search_field.addClass("default");
         }
+	else {
+	  this.search_field.removeAttr('placeholder');
+	}
       } else {
         this.search_field.val("");
         return this.search_field.removeClass("default");
@@ -823,6 +828,7 @@ Copyright (c) 2011 by Harvest
           this.results_hide();
         }
         this.search_field.val("");
+	this.search_field.removeAttr('placeholder');
         if (this.is_multiple || this.form_field_jq.val() !== this.current_value) {
           this.form_field_jq.trigger("change", {
             'selected': this.form_field.options[item.options_index].value

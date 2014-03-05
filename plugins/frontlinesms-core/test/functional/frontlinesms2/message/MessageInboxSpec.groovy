@@ -40,8 +40,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			singleMessageDetails.displayed && singleMessageDetails.noneSelected
 	}
 	
-	//FIXME this test fail when the local computer language is different than english. The Date return
-	//in the test in English while the UI date is in the local context
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
@@ -147,7 +145,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			singleMessageDetails.forward.click()
 			waitFor { at QuickMessageDialog }
 		then:
-			waitFor { compose.textArea.text() == "test" }
+			waitFor { textArea.text() == "test" }
 	}
 
 	def "message details should show the name of the route the message was received through"() {
@@ -155,8 +153,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def messageId = remote {
 				def con = SmslibFconnection.build(name:'MTN Dongle', port:'stormyPort')
 				def message = TextMessage.build(src:'+254778899', text:'test')
-				con.addToMessages(message)
-				con.save(flush:true)
+				message.connectionId = con.id
+				message.save(failOnError:true, flush:true)
 				message.id
 			}
 		when:
@@ -181,6 +179,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 			messageList.toggleSelect(0)
+		then:
+			waitFor {
+				!messageList.getCheckbox(0).disabled
+			}
+		when:
 			messageList.toggleSelect(1)
 		then:
 			waitFor('very slow') { multipleMessageDetails.displayed }
@@ -192,21 +195,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			waitFor { singleMessageDetails.text == "hi Alice" }
 	}
 
-	def "should skip recipients tab if a message is replied"() {
-		given:
-			createInboxTestMessages()
-		when:
-			to PageMessageInbox, remote { TextMessage.findBySrc('Bob').id }
-		then:
-			singleMessageDetails.reply.click()
-			waitFor { at QuickMessageDialog }
-		when:
-			next.jquery.trigger('click')
-		then:
-			waitFor { confirm.displayed }
-	}
-	
-	def "should show the address of the contact in the confirm screen"() {
+	def "should show the address of the contact in the footer section"() {
 		given:
 			def message = remote {
 				def m = new TextMessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true, flush:true)
@@ -217,11 +206,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
-		when:
-			next.jquery.trigger('click')
-			waitFor { confirm.displayed }
-		then:
-			confirm.recipientName == message.src
+			recipientName() == message.src
 	}
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
@@ -236,28 +221,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
-		when:
-			next.jquery.trigger('click')
-			waitFor { confirm.displayed }
-		then:
-			confirm.recipientName == message.srcName
-	}
-
-	def "should skip recipients tab for reply-all option"() {
-		given:
-			createInboxTestMessages()
-		when:
-			to PageMessageInbox
-			messageList.selectAll.click()
-			waitFor { multipleMessageDetails.replyAll.displayed }
-			multipleMessageDetails.replyAll.click()
-		then:
-			waitFor { at QuickMessageDialog }
-			compose.displayed
-		when:
-			next.click()
-		then:
-			waitFor { confirm.displayed }
+			recipientName() == message.srcName
 	}
 
 	def "should remain in the same page, after moving the message to the destination folder"() {

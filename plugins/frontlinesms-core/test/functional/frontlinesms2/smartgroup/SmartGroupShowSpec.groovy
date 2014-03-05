@@ -40,11 +40,15 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 			bodyMenu.getSmartGroupLink('English Contacts').click()
 		then:
 			header.title.startsWith("english contacts")
-			contactList.contact[1].displayed
+			waitFor {
+				contactList.contact[1].displayed
+			}
 		when:
 			contactList.contact[1].click()
 		then:
-			bodyMenu.getSmartGroupLink('English Contacts').click()
+			waitFor {
+				header.title.startsWith("english contacts")
+			}
 	}
 
 	def 'user can edit an existing smartGroup'() {

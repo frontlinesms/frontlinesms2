@@ -29,39 +29,39 @@ class ExportController extends ControllerUtils {
 	
 	def downloadMessageReport() {
 		def messageSection = params.messageSection
-		def messageInstanceList
+		def interactionInstanceList
 		//TODO Clean up switch mess
 		switch(messageSection) {
 			case 'inbox':
-				messageInstanceList = TextMessage.inbox(params.starred, params.viewingArchive).list()
+				interactionInstanceList = TextMessage.inbox(params.starred, params.viewingArchive).list()
 				break
 			case 'sent':
-				messageInstanceList = TextMessage.sent(params.starred, params.viewingArchive).list()
+				interactionInstanceList = TextMessage.sent(params.starred, params.viewingArchive).list()
 				break
 			case 'pending':
-				messageInstanceList = TextMessage.listPending(params.failed, params)
+				interactionInstanceList = TextMessage.listPending(params.failed, params)
 				break
 			case 'trash':
-				messageInstanceList = TextMessage.trash().list()
+				interactionInstanceList = TextMessage.trash().list()
 				break
 			case 'activity':
-				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred?:false, params.inbound)
+				interactionInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred?:false, params.inbound)
 				break
 			case 'folder':
-				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred?:false, params.inbound).list()
+				interactionInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred?:false, params.inbound).list()
 				break
 			case 'radioShow':
-				messageInstanceList = MessageOwner.get(params.ownerId).getShowMessages().list()
+				interactionInstanceList = MessageOwner.get(params.ownerId).getShowMessages().list()
 				break
 			case 'result':
-				messageInstanceList = TextMessage.search(Search.get(params.searchId)).list()
+				interactionInstanceList = TextMessage.search(Search.get(params.searchId)).list()
 				break
 			default:
-				messageInstanceList = TextMessage.findAll()
+				interactionInstanceList = TextMessage.findAll()
 				break
 		}
 		
-		generateMessageReport(messageInstanceList.unique())
+		generateMessageReport(interactionInstanceList.unique())
 	}
 	
 	def contactWizard() {
@@ -102,26 +102,24 @@ class ExportController extends ControllerUtils {
 		render text:Ezvcard.write(cards).go()
 	}
 
-	private def generateMessageReport(messageInstanceList) {
+	private def generateMessageReport(interactionInstanceList) {
 		List fields = ["id", "inboundContactName", "src", "outboundContactList", "dispatches.dst", "text", "date"]
 		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dispatches.dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
 		Map parameters = [title: message(code: 'export.message.title')]
-		if(params.format == 'pdf') {
-			parameters << ["pdf.encoding":"UniGB-UCS2-H", "font.family": "STSong-Light"]
-		}
+		setUnicodeParameter(parameters)
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try {
-			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:], parameters)
+			exportService.export(params.format, response.outputStream, interactionInstanceList, fields, labels, [:], parameters)
 		} catch(Exception e) {
 			render(text: message(code: 'report.creation.error'))
 		}
-		[messageInstanceList: messageInstanceList]
+		[interactionInstanceList: interactionInstanceList]
 	}
 	
 	private def generateContactReport(contactInstanceList) {
 		List fields = ["name", "mobile", "email", "notes", "groupMembership"]
 		Map labels = params.format == "csv" ? 
-			["name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes", "groupMembership":"Group(s)"]
+			["name":"Name", "mobile":"Mobile Number", "email":"Email", "notes":"Notes", "groupMembership":"Group(s)"]
 			: ["name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes'), "groupMembership":message(code: 'export.contact.groups')]
 		// add custom fields
 		def customFields = CustomField.getAllUniquelyNamed()
@@ -137,6 +135,7 @@ class ExportController extends ControllerUtils {
 			contact.metaClass.groupMembership = contact.groups*.name.join("\\\\")
 		}
 		Map parameters = [title: message(code: 'export.contact.title')]
+		setUnicodeParameter(parameters)
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
 		try {
 			exportService.export(params.format, response.outputStream, contactInstanceList, fields, labels, [:],parameters)
@@ -146,6 +145,13 @@ class ExportController extends ControllerUtils {
 		[contactInstanceList: contactInstanceList]
 	}
 	
+	private setUnicodeParameter(parameters) {
+		if(params.format == 'pdf') {
+			parameters << ["pdf.encoding":"UniGB-UCS2-H", "font.family": "STSong-Light"]
+		} else if(params.format == "csv"){
+			parameters << ['encoding':'UTF-8']
+		}
+	}
 	private def getActivityDescription() {
 		if(params.ownerId){
 			def messageOwner = MessageOwner.findById(params.ownerId)

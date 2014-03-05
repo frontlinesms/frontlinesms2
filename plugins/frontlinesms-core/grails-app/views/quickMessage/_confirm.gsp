@@ -1,14 +1,5 @@
 <div class="confirm">
-	<h2><g:message code="quickmessage.details.label"/></h2>
 	<table>
-		<tr>
-			<td>
-				<g:message code="quickmessage.message.label"/>
-			</td>
-			<td id="confirm-message-text">
-				<g:message code="quickmessage.message.none"/>
-			</td>
-		</tr>
 		<tr>
 			<td><g:message code="quickmessage.recipient.label"/></td>
 			<g:if test="${recipientCount == 1}">

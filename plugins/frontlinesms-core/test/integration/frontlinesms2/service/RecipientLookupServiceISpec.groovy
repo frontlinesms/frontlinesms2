@@ -35,8 +35,8 @@ class RecipientLookupServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def results = recipientLookupService.lookup([term:"12"])
 		then:
-			getLookupResultFor(results, "group") == ["test-group-12"]
-			getLookupResultFor(results, "smartGroup") == ["test-smartgroup-12"]
+			getLookupResultFor(results, "group") == ["test-group-12 (0)"]
+			getLookupResultFor(results, "smartGroup") == ["test-smartgroup-12 (0)"]
 			getLookupResultFor(results, "contact") == ["test-contact-12"]
 			getLookupResultFor(results, "address") == ['"12"']
 	}

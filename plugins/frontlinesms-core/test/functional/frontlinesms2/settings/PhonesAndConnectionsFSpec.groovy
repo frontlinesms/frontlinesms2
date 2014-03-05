@@ -41,7 +41,6 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			routing.useLastReceivedConnection.@checked
 		when:
 			routing.useLastReceivedConnection.click()
-			routing.save.click()
 		then:
 			waitFor { at PageConnectionSettings }
 			!routing.useLastReceivedConnection.@checked

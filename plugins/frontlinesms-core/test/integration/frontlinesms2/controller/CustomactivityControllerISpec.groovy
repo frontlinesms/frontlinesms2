@@ -85,13 +85,13 @@ class CustomactivityControllerISpec extends grails.plugin.spock.IntegrationSpec 
 		when:
 			controller.activity()
 		then:
-			controller.modelAndView.model.messageInstanceList.size() == 1
+			controller.modelAndView.model.interactionInstanceList.size() == 1
 		when:
 			controller.params.stepId = replyStep.id
 			controller.params.ownerId = a.id
 			controller.activity()
 		then:
-			controller.modelAndView.model.messageInstanceList.size() == 2
+			controller.modelAndView.model.interactionInstanceList.size() == 2
 	}
 
 	def "steps should be edited when editing a custom activity not removed"() {

@@ -10,12 +10,12 @@ class PageMessagePoll extends frontlinesms2.page.PageMessageActivity {
 	static content = {
 		moreActions { $('div.header-buttons select#more-actions') }
 		categoriseSingle { responseId ->
-			$("#single-message #categorise_dropdown").jquery.val("btn-"+responseId)
-			$("#single-message #categorise_dropdown").jquery.trigger("change")
+			$("#single-interaction #categorise_dropdown").jquery.val("btn-"+responseId)
+			$("#single-interaction #categorise_dropdown").jquery.trigger("change")
 		}
 		categoriseMultiple { responseId ->
-			$("#multiple-messages #categorise_dropdown").jquery.val("btn-"+responseId)
-			$("#multiple-messages #categorise_dropdown").jquery.trigger("change")
+			$("#multiple-interactions #categorise_dropdown").jquery.val("btn-"+responseId)
+			$("#multiple-interactions #categorise_dropdown").jquery.trigger("change")
 		}
 		statsLabels {$('div.stats table tbody tr td.value')*.text()}
 		statsNumbers {$('div.stats table tbody tr td.count')*.text()}

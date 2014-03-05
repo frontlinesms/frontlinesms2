@@ -20,10 +20,10 @@ class WebconnectionService {
 	}
 
 	private changeMessageOwnerDetail(activityOrStep, message, s) {
-		println "Status to set to $message is $s"
+		log.info "Status to set to $message is $s"
 		message.setMessageDetail(activityOrStep, s)
 		message.save(failOnError:true, flush:true)
-		println "Changing Status ${message.ownerDetail}"
+		log.info "Changing Status ${message.ownerDetail}"
 	}
 
 	private def createRoute(webconnectionInstance, routes) {
@@ -32,9 +32,9 @@ class WebconnectionService {
 			camelContext.addRouteDefinitions(routes)
 			LogEntry.log("Created Webconnection routes: ${routes*.id}")
 		} catch(FailedToCreateProducerException ex) {
-			println ex
+			log.info ex
 		} catch(Exception ex) {
-			println ex
+			log.info ex
 			deactivate(webconnectionInstance)
 		}
 	}
@@ -65,19 +65,19 @@ class WebconnectionService {
 	}
 	
 	void preProcess(Exchange x) {
-		println "x: ${x}"
-		println "x.in: ${x.in}"
-		println "x.in.headers: ${x.in.headers}"
+		log.info "x: ${x}"
+		log.info "x.in: ${x.in}"
+		log.info "x.in.headers: ${x.in.headers}"
 		def webConn = getWebConnection(x)
 		webConn.preProcess(x)
 	}
 
 	void postProcess(Exchange x) {
-		println "x: ${x}"
-		println "x.in: ${x.in}"
-		println "x.in.headers: ${x.in.headers}"
-		println "### WebconnectionService.postProcess() ## headers ## ${x.in.headers}"
-		println "#### Completed postProcess #### ${x.in.headers.'fmessage-id'}"
+		log.info "x: ${x}"
+		log.info "x.in: ${x.in}"
+		log.info "x.in.headers: ${x.in.headers}"
+		log.info "### WebconnectionService.postProcess() ## headers ## ${x.in.headers}"
+		log.info "#### Completed postProcess #### ${x.in.headers.'fmessage-id'}"
 		def webConn = getWebConnection(x)
 		def message = TextMessage.get(x.in.headers.'fmessage-id')
 		changeMessageOwnerDetail(webConn, message, Webconnection.OWNERDETAIL_SUCCESS)
@@ -87,8 +87,8 @@ class WebconnectionService {
 	def handleException(Exchange x) {
 		def message = TextMessage.get(x.in.headers.'fmessage-id')
 		changeMessageOwnerDetail(getWebConnection(x), message, Webconnection.OWNERDETAIL_FAILED)
-		println "### WebconnectionService.handleException() ## headers ## ${x.in.headers}"
-		println "Web Connection request failed with exception: ${x.in.body}"
+		log.info "### WebconnectionService.handleException() ## headers ## ${x.in.headers}"
+		log.info "Web Connection request failed with exception: ${x.in.body}"
 		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
@@ -101,14 +101,14 @@ class WebconnectionService {
 		}
 		def message = TextMessage.get(x.in.headers.'fmessage-id')
 		def text = i18nUtilService.getMessage(code:"webconnection.${message.ownerDetail}.label", args:[webConn.name])
-		println "######## StatusNotification::: $text #########"
+		log.info "######## StatusNotification::: $text #########"
 		def notification = SystemNotification.findOrCreateByText(text)
 		notification.read = false
 		notification.save(failOnError:true, flush:true)
 	}
 
 	def doUpload(activityOrStep, message) {
-		println "## Webconnection.doUpload() ## uploading message # ${message}"
+		log.info "## Webconnection.doUpload() ## uploading message # ${message}"
 		def headers = [:]
 		headers.'fmessage-id' = message.id
 		if(activityOrStep instanceof Webconnection) (headers.'webconnection-id' = activityOrStep.id) 
@@ -133,7 +133,7 @@ class WebconnectionService {
 		webconnectionInstance.keywords?.clear()
 		webconnectionInstance.save(flush:true, failOnError:true)
 		if (params.sorting == 'disabled') {
-			println "##### WebconnectionService.saveInstance() # removing keywords"
+			log.info "##### WebconnectionService.saveInstance() # removing keywords"
 		} else if(params.sorting == 'global') {
 			webconnectionInstance.addToKeywords(new Keyword(value:'', isTopLevel:true))
 		} else if(params.sorting == 'enabled') {
@@ -150,7 +150,7 @@ class WebconnectionService {
  	private changeMessageOwnerDetail(TextMessage message, String s) {
  		message.setMessageDetail(message.messageOwner, s)
  		message.save(failOnError:true, flush:true)
- 		println "Changing Status ${message.ownerDetail}"
+ 		log.info "Changing Status ${message.ownerDetail}"
  	}
 
 	def apiProcess(webcon, controller) {
@@ -162,7 +162,7 @@ class WebconnectionService {
 	}
 
 	def deactivate(activityOrStep) {
-		println "################ Deactivating Webconnection :: ${activityOrStep}"
+		log.info "################ Deactivating Webconnection :: ${activityOrStep}"
 		camelContext.stopRoute("activity-${activityOrStep.shortName}-${activityOrStep.id}")
 		camelContext.removeRoute("activity-${activityOrStep.shortName}-${activityOrStep.id}")
 	}
@@ -172,9 +172,9 @@ class WebconnectionService {
 		def recipients = controller.request.JSON?.recipients
 		def secret = controller.request.JSON?.secret
 		def errors = [invalid:[], missing:[]]
-		println "JSON IS ${controller.request.JSON}"
-		println "MESSAGE IS ${controller.request.JSON?.message}"
-		println "RECIPIENTS IS ${controller.request.JSON?.recipients}"
+		log.info "JSON IS ${controller.request.JSON}"
+		log.info "MESSAGE IS ${controller.request.JSON?.message}"
+		log.info "RECIPIENTS IS ${controller.request.JSON?.recipients}"
 
 		//> Detect and return 401 (authentication) error conditions
 		if(webcon.secret && !secret)
@@ -194,12 +194,12 @@ class WebconnectionService {
 			if (errors.invalid) errorList << (errors.invalid.join(", "))
 			if (errors.missing) errorList << "missing required field(s): " + errors.missing.join(", ")
 			def errorMessage = errorList.join(", ")
-			println "errorMessage ::: $errorMessage"
+			log.info "errorMessage ::: $errorMessage"
 			return [status:400, text:errorMessage]
 		}
 
 		//> Populate destinations
-		println "evaluating the destinations for $recipients ...."
+		log.info "evaluating the destinations for $recipients ...."
 		def groups = []
 		def addresses = []
 		recipients.each {
@@ -227,11 +227,11 @@ class WebconnectionService {
 		}
 		groups = groups.unique()
 		addresses = addresses.unique()
-		println "groups: $groups. Addresses: $addresses"
+		log.info "groups: $groups. Addresses: $addresses"
 
 		//> Send message
 		def m = messageSendService.createOutgoingMessage([messageText: message, addresses: addresses, groups: groups])
-		println "I am about to send $m"
+		log.info "I am about to send $m"
 		if(!m.dispatches) {
 			return [status:400, text:"no recipients supplied"]
 		}

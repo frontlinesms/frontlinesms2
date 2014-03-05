@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title><g:message code="poll.title" args="${[ownerInstance.name]}"/></title>
-		<meta name="layout" content="${params.controller=='message' || params.controller=='search' ? 'messages' : 'archive'}"/>
+		<meta name="layout" content="${params.controller=='message' || params.controller=='search' ? 'interactions' : 'archive'}"/>
 		<r:require module="graph"/>
 	</head>
 	<body>

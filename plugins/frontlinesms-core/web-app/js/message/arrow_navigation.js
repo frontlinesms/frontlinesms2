@@ -20,16 +20,17 @@ $(document.documentElement).keyup(function (event) {
 });
 
 function changeRowSelection(oldSelected, newSelected) {
-	var newSelectedId;
+	var newSelectedId, messageSection;
 	newSelectedId = newSelected.attr("id");
 	if(newSelectedId) {
 		oldSelected.removeClass("selected");
 		newSelected.addClass("selected");
 		if(newSelectedId.indexOf("activity") === -1) {
-			if($("input:hidden[name=messageSection]").val() !== "trash") {
-				updateSingleCheckedDetails("message", newSelectedId.substring("message-".length), newSelected);
-				oldSelected.find(".message-select-checkbox").prop("checked", false);
-				newSelected.find(".message-select-checkbox").prop("checked", true);
+			messageSection = $("input:hidden[name=messageSection]").val();
+			if(messageSection !== "trash") {
+				updateSingleCheckedDetails("interaction", newSelectedId.substring("interaction-".length), newSelected, (messageSection == 'missedCalls' ? 'missedCall' : 'message'));
+				oldSelected.find(".interaction-select-checkbox").prop("checked", false);
+				newSelected.find(".interaction-select-checkbox").prop("checked", true);
 			}
 		}
 	}

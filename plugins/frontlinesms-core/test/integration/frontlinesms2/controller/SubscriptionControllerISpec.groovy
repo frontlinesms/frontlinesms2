@@ -120,7 +120,7 @@ class SubscriptionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			s.addToMessages(m)
 			s.save(failOnError:true)
 			controller.params.ownerId = s.id
-			controller.params.messageId = m.id
+			controller.params.interactionId = m.id
 		when:
 			controller."${triggeredAction}"()
 		then:

@@ -4,21 +4,22 @@ On this page you will find out how to modify an existing contact.
 
 ### Editing a contact
 
-To modify the information saved under a contact, you have to navigate to the selected contact in the [contacts tab][2], make the changes and then save the changes to the contact.
+To modify the information saved under a contact, you have to navigate to the selected contact in the [contacts tab][2] and make the changes. Your changes will then be saved automatically.
 
 1. Navigate to the [contacts tab][2].
 2. Select the contact you wish to edit by either finding it in the [contact list][3] OR using the [search][4] feature in the [contact footer][5].
 3. In the [contact details][6] area, make the necessary edits to the contact.
-4. Once you have made the changes BE SURE TO CLICK SAVE. If you do not click Save, your changes will be lost.  
-If you decide you don't want to keep the changes you have made, click "Cancel" and your contact will be returned to its most recently saved state.
+4. Once you have made the changes, the contact details will be saved automatically. You will also see the phone number auto-format and show the relevant country flag. If the country flag is incorrect, it's a good visual cue for you to check to make sure the phone number is correctly entered in an international format. **Your changes will be saved automatically.**  
+
+![Edit Contacts Screen Shot](../images/help/ContactEdits.png)
 
 ### Deleting a Contact
 
-To delete a contact navigate to the contact record and select "Delete".
-![Delete Contact][11]
+To delete a contact navigate to the contact record and select "Delete this Contact".
 
-To delete multiple contacts, select the contacts you wish to delete and select "Delete All".
-![Deleting Multiple Contacts][12]
+To delete multiple contacts, select the contacts you wish to delete and select "Delete All" as in the screenshot below.
+
+![Delete Multiple Contacts Screen Shot](../images/help/ContactMultipleDelete.png)
 
 ### Related Actions
 [Adding a New contact][7]  

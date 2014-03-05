@@ -1,0 +1,116 @@
+# Installing SMSSync
+
+SMSSync allows you to receive texts on your Android phone, and then forward those messages to a website or an application like FrontlineSMS. You will need an Android phone, and that phone must have a cellular network connection, as well as a data connection, for SMSSync to work properly.
+
+To install SMSSync, first, visit an Android app store and download the app:
+
+![SMSSync banner][1]
+
+When you start the app, you will see a generally blank screen like this:
+
+![No Sync URL available][2]
+
+Next, you can tap "Sync URL" and then the "+" icon to add a new URL connection. Your screen will look something like this:
+
+![Add Sync URL][3]
+
+If you need additional assistance in configuring the app, you can also visit the help page at Ushahidi's website: http://smssync.ushahidi.com/howto
+
+# Connecting SMSSync to FrontlineSMS Version 2
+
+SMSSync is an Android application that allows your Android phone to exchange text messages with an application like FrontlineSMS. You can learn more about the product, as well as how to download it, by reading Installing SMSSync. You can also find additional assistance at Ushahidi's help site, http://smssync.ushahidi.com/howto
+
+In order to connect FrontlineSMS to SMSSync, you will need both applications running simultaneously. This is because you need to go through some basic steps to create the connection. After this initial setup, you do not need both applications to be running simultaneously for the connection to work properly.
+
+Once you've downloaded and installed SMSSync, log into FrontlineSMS and click on **Settings** in the upper right-hand corner. From there, you can click on "Connections."
+
+![Settings page screenshot][4]
+
+Select "SMSSync" and then click "Next."
+
+![Connection selector][5]
+
+Now you will see a lovely set of instructions on how to create a connection with SMSSync. Here, we expand on those a bit, including screenshots.
+
+![SMSSync instructions][6]
+
+First, enter a Secret into FrontlineSMS. This is effectively a password of your choosing that allows you your Android to verify your connection to FrontlineSMS.
+
+Timeout is an advanced feature that allows you to set the number of minutes your Android will attempt to sync messages before failing.  In other words, once SMSSync and FrontlineSMS are connected, your Android will attempt to forward and receive messages to and from FrontlineSMS. If for some reason SMSSync cannot contact FrontlineSMS (for instance, of our servers were down), the Android phone will eventually "timeout" and stop trying to send or receive those messages. You can set a time period for how long the Android attempts to establish a connection. The default is set at 60 minutes, and if you aren't sure, you can just leave this number for now.
+
+You then need to name the connection. You can choose any name you like, such as "Bob's Work Android." Enter that in the final field, and click "next."
+
+Here is one example of how we completed the form:
+
+![Completed SMSSync details][7]
+
+If you have completed all of the fields, you will be prompted to confirm your settings. Your screen will look something like this:
+
+![SMSSync settings confirmation screen][8]
+
+If everything looks correct, then click "Done."
+
+Finally -- and this is very important -- make note of the URL (which is a fancy way to say web address) that appears under your connection. This is your Sync URL, and you will need it to finalize a connection to your Android phone. The Sync URL is highlighted with a purple bar in the screenshot below.
+
+![Sync URL screenshot][9]
+
+Now, on your Android phone, open up SMSSync. Tap on the "Sync URL" tab. Then you can click the "+" symbol to add a new connection. You should get a screen that looks like this:
+
+![Screenshot for adding Sync URL to SMSSync][10]
+
+The first field, "Enter Title for the Sync URL," can be anything you want. For example, "FrontlineSMS Demo".
+
+Next, enter the Secret Key you created in FrontlineSMS.
+
+You can ignore the keywords feature for now; FrontlineSMS will help you manage Keywords.
+
+Finally, you need to enter the URL (web address) you saved from earlier in this process.
+
+Your completed form will look something like this:
+
+![Sync URL filled][11]
+
+Tap "ok" to save the new entry.
+
+Next, you will see a screen in which you can select a Sync URL for SMSSync to connect with. Select the URL you just created. In our example, it is "FrontlineSMS Demo" Then select "Start SMSSync service."
+
+Your screen will look something like this:
+
+![SMSSync Sync URL selected][12]
+
+Ok, you're nearly finished.
+
+Finally, you need to enable "Auto Sync" and "Task Checking" within the SMSSync app settings. By default, SMSSync only checks for outgoing messages when delivering incoming ones. This means your messages from FrontlineSMS could be stuck in 'pending' for a long time with the default settings. Enabling these settings in the SMSSync app allows SMSSync to check for outgoing messages even when no incoming messages have yet arrived, as well as sync with FrontlineSMS on a regular basis.
+
+In order to do this, first click on "Settings" within the SMSSync app.
+
+![Photo of a phone running SMSSync with pull up menu][13]
+
+Then, scroll down and then click "Enable Auto Sync" and "Enable Task Checking." The first allows the Android to regularly send incoming messages to FrontlineSMS. The second allows the Android to check with FrontlineSMS to see if there are any messages pending.
+
+![Screenshot of SMSSync sync and task features][14]
+
+You can also set the Frequency for each task. We recommend somewhere between 1 and 30 minutes between each task depending on how quickly you need your messages sent and received, and your required battery life.
+
+Note: the more frequently SMSSync checks for messages, the faster it will drain your battery. We recommend leaving your Android connected to a good power supply if you need it to connect to FrontlineSMS frequently.
+
+![SMSSync polling frequency selection][15]
+
+You're finished! You can try sending a test message to make sure everything works properly.
+
+[1]: ../images/help/smssync/Screenshot_6_7_13_2_35_PM.jpg
+[2]: ../images/help/smssync/initial.png
+[3]: ../images/help/smssync/add_sync_url.png
+[4]: ../images/help/smssync/Screenshot_6_7_13_3_11_PM-2.jpg
+[5]: ../images/help/smssync/Screenshot_6_7_13_3_03_PM-2.jpg
+[6]: ../images/help/smssync/SMSSync_Configure_your_Connections.jpg
+[7]: ../images/help/smssync/Configure_your_Connections-2.jpg
+[8]: ../images/help/smssync/Configure_your_Connections.jpg
+[9]: ../images/help/smssync/Configure_your_Connections-5.jpg
+[10]: ../images/help/smssync/add_sync_url.png
+[11]: ../images/help/smssync/add_sync_url_filled.png
+[12]: ../images/help/smssync/account_selected.png
+[13]: ../images/help/smssync/photo_1-3.jpg
+[14]: ../images/help/smssync/enable_sync_and_tasks.png
+[15]: ../images/help/smssync/sync_frequency.png
+

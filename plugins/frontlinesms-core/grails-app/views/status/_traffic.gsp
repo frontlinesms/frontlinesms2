@@ -55,7 +55,6 @@ $(function() {
 });
 </r:script>
 <div id="traffic-status">
-	<h3 id="traffic-title"><g:message code="traffic.header"/></h3>
 	<div id="trafficGraph" class="ui-widget-content ui-resizable"></div>
 	<g:form action="show" method="post" name="trafficForm">
 		<fsms:render template="/status/filters"/>

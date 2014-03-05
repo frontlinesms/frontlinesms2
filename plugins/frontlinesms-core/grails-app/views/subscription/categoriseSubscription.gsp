@@ -3,7 +3,7 @@
 <meta name="layout" content="popup"/>
 <div>
 	<g:form name="categorize_subscription" controller="subscription">
-		<g:hiddenField id="messages" name="messagesList" value="${params.messageId}"/>
+		<g:hiddenField id="messages" name="interactionId" value="${params.interactionId}"/>
 		<g:hiddenField id="owner" name="ownerId" value="${params.ownerId}"/>
 		<p class="info"><g:message code="subscription.categorise.info" args="${[Subscription.get(params.ownerId)?.name]}" /></p>
 		<div class="subscription_input">

@@ -31,49 +31,49 @@ class MessageController extends ControllerUtils {
 	}
 
 	def show() {
-		def messageInstance = TextMessage.get(params.messageId)
+		def interactionInstance = TextMessage.get(params.interactionId)
 		def ownerInstance = MessageOwner.get(params?.ownerId)
-		messageInstance.read = true
-		messageInstance.save()
+		interactionInstance.read = true
+		interactionInstance.save()
 
-		def model = [messageInstance: messageInstance,
+		def model = [interactionInstance: interactionInstance,
 				ownerInstance:ownerInstance,
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageSection: params.messageSection]
-		render view:'/message/_single_message_details', model:model
+		render view:'/interaction/_single_interaction_details', model:model
 	}
 
 	def inbox() {
-		def messageInstanceList = TextMessage.inbox(params.starred, this.viewingArchive)
+		def interactionInstanceList = TextMessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
-				model:[messageInstanceList: messageInstanceList.list(params),
+				model:[interactionInstanceList: interactionInstanceList.list(params),
 						messageSection:'inbox',
-						messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+						interactionInstanceTotal: interactionInstanceList.count()] << getShowModel()
 	}
 
 	def sent() {
-		def messageInstanceList = TextMessage.sent(params.starred, this.viewingArchive)
+		def interactionInstanceList = TextMessage.sent(params.starred, this.viewingArchive)
 		render view:'../message/standard', model:[messageSection:'sent',
-				messageInstanceList: messageInstanceList.list(params).unique(),
-				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+				interactionInstanceList: interactionInstanceList.list(params).unique(),
+				interactionInstanceTotal: interactionInstanceList.count()] << getShowModel()
 	} 
 
 	def pending() {
-		render view:'standard', model:[messageInstanceList:TextMessage.listPending(params.failed, params),
+		render view:'standard', model:[interactionInstanceList:TextMessage.listPending(params.failed, params),
 				messageSection:'pending',
-				messageInstanceTotal: TextMessage.countPending()] << getShowModel()
+				interactionInstanceTotal: TextMessage.countPending()] << getShowModel()
 	}
 	
 	def trash() {
 		def trashedObject
 		def trashInstanceList
-		def messageInstanceList
+		def interactionInstanceList
 		params.sort = params.sort?: 'date'
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.objectClass == "frontlinesms2.TextMessage") {
-					params.messageId = obj.objectId
+				if(obj.objectClass in ["frontlinesms2.TextMessage", "frontlinesms2.MissedCall"]) {
+					params.interactionId = obj.objectId
 				} else {
 					trashedObject = obj.object
 				}
@@ -81,16 +81,16 @@ class MessageController extends ControllerUtils {
 			setTrashInstance(Trash.findById(params.id))
 		}
 		if(params.starred) {
-			messageInstanceList = TextMessage.deleted(params.starred)
+			interactionInstanceList = TextMessage.deleted(params.starred)
 		} else {
 			if(params.sort == 'date') params.sort = 'dateCreated'
 			trashInstanceList = Trash.list(params)
 		}
 		render view:'standard', model:[trashInstanceList: trashInstanceList,
-					messageInstanceList: messageInstanceList?.list(params),
+					interactionInstanceList: interactionInstanceList?.list(params),
 					messageSection:'trash',
-					messageInstanceTotal: Trash.count(),
-					ownerInstance: trashedObject] << getShowModel()
+					interactionInstanceTotal: Trash.count(),
+					ownerInstance: trashedObject] << getShowModel() << (params.interactionId ? [interactionInstance: Interaction.get(params.interactionId)] : [:])
 	}
 
 	def poll() { redirect(action: 'activity', params: params) }
@@ -106,7 +106,7 @@ class MessageController extends ControllerUtils {
 			if (params.starred == null) params.starred = false
 			if (params.failed == null) params.failed = false
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
-			def messageInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
+			def interactionInstanceList = activityInstance.getActivityMessages(params.starred, getSent, params.stepId, params)
 			def sentMessageCount = 0
 			def sentDispatchCount = 0
 			TextMessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
@@ -114,9 +114,9 @@ class MessageController extends ControllerUtils {
 				sentMessageCount++				
 			}
 			render view:"/activity/${activityInstance.shortName}/show",
-				model:[messageInstanceList: messageInstanceList,
+				model:[interactionInstanceList: interactionInstanceList,
 						messageSection: params.messageSection?:'activity',
-						messageInstanceTotal: activityInstance.getMessageCount(params.starred, getSent),
+						interactionInstanceTotal: activityInstance.getMessageCount(params.starred, getSent),
 						stepInstance:Step.get(params.stepId),
 						ownerInstance: activityInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null,
@@ -134,10 +134,10 @@ class MessageController extends ControllerUtils {
 		if (folderInstance) {
 			if (params.starred == null) params.starred = false
 			def getSent = params.containsKey("inbound") ? Boolean.parseBoolean(params.inbound) : null
-			def messageInstanceList = folderInstance?.getFolderMessages(params.starred, getSent)
-			render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
+			def interactionInstanceList = folderInstance?.getFolderMessages(params.starred, getSent)
+			render view:'../message/standard', model:[interactionInstanceList: interactionInstanceList.list(params),
 						messageSection:'folder',
-						messageInstanceTotal: messageInstanceList.count(),
+						interactionInstanceTotal: interactionInstanceList.count(),
 						ownerInstance: folderInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
 		} else {
@@ -172,7 +172,7 @@ class MessageController extends ControllerUtils {
 			redirect(controller:'search', action:'result', params:
 					[searchId:params.searchId])
 		} else {
-			println "Forwarding to action: $params.messageSection"
+			log.info "Forwarding to action: $params.messageSection"
 			redirect(controller:params.controller, action:params.messageSection, params:
 					[ownerId:params.ownerId, starred:params.starred,
 							failed:params.failed, searchId:params.searchId])
@@ -181,9 +181,9 @@ class MessageController extends ControllerUtils {
 	
 	def archive() {
 		def messages = getCheckedMessages().findAll { !it.messageOwner && !it.hasPending }
-		messages.each { messageInstance ->
-			messageInstance.archived = true
-			messageInstance.save()
+		messages.each { interactionInstance ->
+			interactionInstance.archived = true
+			interactionInstance.save()
 		}
 		flash.message = dynamicMessage 'archived', messages
 		if(params.messageSection == 'result') {
@@ -195,15 +195,15 @@ class MessageController extends ControllerUtils {
 	
 	def unarchive() {
 		def messages = getCheckedMessages()
-		messages.each { messageInstance ->
-			if(!messageInstance.messageOwner) {
-				messageInstance.archived = false
-				messageInstance.save(failOnError: true)
+		messages.each { interactionInstance ->
+			if(!interactionInstance.messageOwner) {
+				interactionInstance.archived = false
+				interactionInstance.save(failOnError: true)
 			}
 		}
 		flash.message = dynamicMessage 'unarchived', messages
 		if(params.controller == 'search')
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, interactionId: params.interactionId])
 		else
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
@@ -219,8 +219,8 @@ class MessageController extends ControllerUtils {
 	def changeResponse() {
 		def responseInstance = PollResponse.get(params.responseId)
 		def checkedMessages = getCheckedMessages()
-		checkedMessages.each { messageInstance ->
-			responseInstance.addToMessages(messageInstance)
+		checkedMessages.each { interactionInstance ->
+			responseInstance.addToMessages(interactionInstance)
 		}
 		responseInstance.poll.save()
 		flash.message = dynamicMessage 'updated', checkedMessages
@@ -228,17 +228,17 @@ class MessageController extends ControllerUtils {
 	}
 
 	def changeStarStatus() {
-		withTextMessage { messageInstance ->
-			messageInstance.starred =! messageInstance.starred
-			messageInstance.save(failOnError: true)
-			TextMessage.get(params.messageId).messageOwner?.refresh()
-			params.remove('messageId')
-			render(text: messageInstance.starred ? "starred" : "unstarred")
+		withTextMessage { interactionInstance ->
+			interactionInstance.starred =! interactionInstance.starred
+			interactionInstance.save(failOnError: true)
+			TextMessage.get(params.interactionId).messageOwner?.refresh()
+			params.remove('interactionId')
+			render(text: interactionInstance.starred ? "starred" : "unstarred")
 		}
 	}
 	
 	def listRecipients() {
-		def message = TextMessage.get(params.messageId)
+		def message = TextMessage.get(params.interactionId)
 		if(!message) {
 			render text:'ERROR'
 			return
@@ -263,21 +263,21 @@ class MessageController extends ControllerUtils {
 //> PRIVATE HELPERS
 	boolean isViewingArchive() { params.controller=='archive' }
 
-	private def withTextMessage = withDomainObject TextMessage, { params.messageId }
+	private def withTextMessage = withDomainObject TextMessage, { params.interactionId }
 
 	private def getShowModel() {
-		def messageInstance = params.messageId? TextMessage.get(params.messageId): null
-		messageInstance?.read = true
-		messageInstance?.save()
+		def interactionInstance = params.interactionId? TextMessage.get(params.interactionId): null
+		interactionInstance?.read = true
+		interactionInstance?.save()
 
 		def checkedMessageCount = getCheckedMessageList().size()
-		[messageInstance: messageInstance,
+		[interactionInstance: interactionInstance,
 				checkedMessageCount: checkedMessageCount,
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageCount: TextMessage.countAllMessages(),
 				hasFailedMessages: TextMessage.hasFailedMessages(),
-				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
+				failedDispatchCount: interactionInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(interactionInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
 	private def getCheckedMessages() {
@@ -285,7 +285,7 @@ class MessageController extends ControllerUtils {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params['message-select']?: params.messageId?: []
+		def checked = params['interaction-select']?: params.interactionId?: []
 		if(checked instanceof String) checked = checked.split(/\D+/) - ''
 		if(checked instanceof Number) checked = [checked]
 		if(checked.class.isArray()) checked = checked as List

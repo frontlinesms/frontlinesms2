@@ -11,14 +11,15 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 	def setup() {
 		createWebconnections()
 		createTestActivities()
-		createTestMessages(Webconnection.findByName("Sync"))
+		def wcId = remote { Webconnection.findByName("Sync").id }
+		createTestMessages(wcId)
 	}
 
 	def "Webconnection page should show the details of a generic Webconnection in the header"() {
 		setup:
-			def webconnection  = Webconnection.findByName("Sync")
+			def webconnectionName  = remote { Webconnection.findByName("Sync").name }
 		when:
-			to PageMessageWebconnection, webconnection.name
+			to PageMessageWebconnection, webconnectionName
 		then:
 			waitFor { title == 'webconnection.title[Sync]' }
 			header.name == 'webconnection.title[sync]'
@@ -31,20 +32,21 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 	@Unroll
 	def 'Webconnection page should show API url, excluding secret, iff API is enabled'() {
 		setup:
-			def c = GenericWebconnection.build(name:'me', apiEnabled:true, secret:secret, url:'http://test.com')
+			def webconnectionName = remote { GenericWebconnection.build(name:'me', apiEnabled:true, secret:secret, url:'http://test.com').name }
+			def wcId = remote { GenericWebconnection.build(name:'me', apiEnabled:true, secret:secret, url:'http://test.com').id }
 		when:
-			to PageMessageWebconnection, c.name
+			to PageMessageWebconnection, webconnectionName
 		then:
-			header.api.endsWith "/api/1/webconnection/$c.id"
+			header.api.endsWith "/api/1/webconnection/$wcId"
 		where:
 			secret << [null, 'imagine']
 	}
 
 	def "Webconnection page should show the details of an Ushahidi Webconnection in the header"() {
 		setup:
-			def webconnection  = Webconnection.findByName("Ush")
+			def webconnectionName  = remote { Webconnection.findByName("Ush").name }
 		when:
-			to PageMessageWebconnection, "Ush"
+			to PageMessageWebconnection, webconnectionName
 		then:
 			waitFor { title == 'webconnection.title[Ush]' }
 			header.name == 'webconnection.title[ush]'
@@ -76,14 +78,14 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor("veryslow") { at WebconnectionWizard }
 	}
 
-	def "Clicking the Quick Message button brings up the Quick Message Dialog"() {
+	def "Clicking the Send Message button brings up the Quick Message Dialog"() {
 		when:
 			to PageMessageWebconnection, "Sync"
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
 			waitFor('veryslow'){ at QuickMessageDialog }
-			waitFor{ compose.textArea.displayed }
+			waitFor{ textArea.displayed }
 	}
 
 	def "clicking the rename option opens the rename small popup"() {
@@ -205,7 +207,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 			waitFor { singleMessageDetails.displayed }
 			waitFor { singleMessageDetails.text == "Test message 0" }
 		when:
-			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			singleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { at PageMessageWebconnection }
 			waitFor { notifications.flashMessageText.contains("updated") }
@@ -229,7 +231,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
-			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
+			multipleMessageDetails.moveTo(remote { Activity.findByName("Sample Announcement").id }).click()
 		then:
 			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
 			!(messageList.messageText(0) in ['Test message 0', 'Test message 1'])

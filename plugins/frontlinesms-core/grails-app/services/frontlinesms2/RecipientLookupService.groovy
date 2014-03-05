@@ -69,12 +69,12 @@ class RecipientLookupService {
 
 	private def lookupGroups(query, alreadySelected=[]) {
 		Group.findAllByNameIlikeAndIdNotInList(query, alreadySelected, [max:MAX_PER_SECTION]).collect {
-			[value: "group-${it.id}", text: it.name] }
+			[value: "group-${it.id}", text: "$it.name (${it.countMembers()})"] }
 	}
 
 	private def lookupSmartgroups(query, alreadySelected=[]) {
 		SmartGroup.findAllByNameIlikeAndIdNotInList(query, alreadySelected, [max:MAX_PER_SECTION]).collect {
-			[value: "smartgroup-${it.id}", text: it.name] }
+			[value: "smartgroup-${it.id}", text: "$it.name (${it.countMembers()})"] }
 	}
 
 	def stripPrefix = { it.tokenize('-')[1] }
@@ -92,7 +92,7 @@ class RecipientLookupService {
 	}
 
 	def getManualAddresses = { recipients ->
-		println "############# $recipients"
+		log.info "############# $recipients"
 		[recipients].flatten().findAll { it.startsWith('address') }.collect { stripPrefix(it) }
 	}
 

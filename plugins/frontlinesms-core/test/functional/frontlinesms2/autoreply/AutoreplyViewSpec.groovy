@@ -46,7 +46,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			header.quickMessage.click()
 		then:
 			waitFor('veryslow'){ at QuickMessageDialog }
-			waitFor{ compose.textArea.displayed }
+			waitFor{ textArea.displayed }
 	}
 
 	def "clicking the rename option opens the rename small popup"() {
@@ -106,7 +106,7 @@ class AutoreplyViewSpec extends AutoreplyBaseSpec {
 			messageList.toggleSelect(1)
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text?.toLowerCase() == "many.selected[2,message]" }
+			waitFor { multipleMessageDetails.text?.toLowerCase() == "message.multiple.selected[2]" }
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {

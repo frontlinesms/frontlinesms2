@@ -1,7 +1,7 @@
 package frontlinesms2.contact
 
 import frontlinesms2.*
-
+import frontlinesms2.popup.*
 import geb.Browser
 import grails.plugin.geb.GebSpec
 
@@ -45,6 +45,14 @@ class ContactCreateSpec extends ContactBaseSpec {
 			singleContactDetails.save.click()
 		then:
 			remote { Contact.findByNameAndMobile("Bob", "123456789").id }
+	}
+
+	def 'Import contacts should launch import wizard'() {
+		when:
+			to PageContactCreate
+			bodyMenu.importContacts.click()
+		then:
+			waitFor { at ImportContactDialog }
 	}
 
 }

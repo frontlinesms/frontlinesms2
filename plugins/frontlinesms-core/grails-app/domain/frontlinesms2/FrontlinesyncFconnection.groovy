@@ -49,9 +49,7 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	String getFullApiUrl(request) {
-		def entityClassApiUrl = FrontlinesyncFconnection.getAnnotation(FrontlineApiAnnotations.class)?.apiUrl()
- 		def path = grailsLinkGenerator.link(controller:'api', params:[entityClassApiUrl:entityClassApiUrl, entityId:id], absolute:false)
-		return apiEnabled? "${urlHelperService.getBaseUrl(request)}$path" :''
+		return apiEnabled? "${urlHelperService.getBaseUrl(request)}" :''
 	}
 }
 

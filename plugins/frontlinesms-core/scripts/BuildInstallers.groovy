@@ -1,3 +1,5 @@
+import grails.util.BuildScope
+
 includeTargets << grailsScript("Init") << grailsScript("War")
 
 def envCheck = {
@@ -46,11 +48,16 @@ target(clearPluginXmls: 'Delete plugin.xml from all in-place plugins') {
 }
 
 target(main: 'Build installers for various platforms.') {
+	buildScope = BuildScope.WAR
 	clearPluginXmls()
 	envCheck()
 	if(!getValueAsBoolean('confirmNotProd', grailsSettings.grailsEnv == 'production')) {
 		input('Press Return to continue building...')
 	}
+	// begin horrible manual cleaning
+	new File('FrontlinesmsCoreGrailsPlugin.groovy').delete()
+	new File('.', 'target').deleteDir()
+	// end horrible manual cleaning
 	if(getValueAsBoolean('skipWar', false)) {
 		if(grailsSettings.grailsEnv == 'production') {
 			println "CANNOT SKIP WAR BUILD FOR PRODUCTION"
@@ -59,7 +66,9 @@ target(main: 'Build installers for various platforms.') {
 			println "Skipping WAR build..."
 			depends(clean)
 		}
-	} else depends(clean, war)
+	} else {
+		depends(clean, war)
+	}
 	if(!isWindows()) if(getValueAsBoolean('compress', grailsSettings.grailsEnv == 'production')) {
 		println 'Forcing compression of installers...'
 		doScript 'enable_installer_compression'
@@ -106,6 +115,13 @@ target(main: 'Build installers for various platforms.') {
 
 	// Make sure that linux installer is executable
 	chmod dir:'../frontlinesms-core/install/target/install4j', includes:'*.sh', type:'file', perm:'a+x'
+
+	exec(executable:'/usr/bin/env') {
+		arg value:'git'
+		arg value:'checkout'
+		arg value:'--'
+		arg value:'FrontlinesmsCoreGrailsPlugin.groovy'
+	}
 
 	envCheck()
 }

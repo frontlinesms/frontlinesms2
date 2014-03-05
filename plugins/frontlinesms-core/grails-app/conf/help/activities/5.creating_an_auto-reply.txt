@@ -1,6 +1,6 @@
 # Creating an AutoReply #
 
-An autoreply is a type of activity which allows you to set up FrontlineSMS to automatically send replies to messages as they are received. Autoreplies can be set up to work globally, on all messages that are received, or they can be set up to be triggered by messages containing [keywords][1]. 
+An autoreply is a type of activity which allows you to set up FrontlineSMS to automatically send replies to messages as they are received. Autoreplies can be set up to work globally, on all messages that are received, or they can be set up to be triggered by messages containing [keywords]. 
 
 Received messages that trigger an autoreply based on a keyword will be moved into the autoreply activity along with a copy of the autoreply that was sent. 
 

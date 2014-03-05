@@ -1,7 +1,5 @@
 <div id="single-contact" class="single-contact ${(contactInstance?.id)?'edit':''}">
-	<g:if test="${contactInstance}">
-		<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
-	</g:if>
+	<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 	<g:hiddenField name="groupsToAdd" value=","/>
 	<g:hiddenField name="groupsToRemove" value=","/>
 	<g:hiddenField name="fieldsToAdd" value=","/>
@@ -13,7 +11,7 @@
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
-				<g:textField name="name" value="${contactInstance?.name}" class="${contactInstance?.id?'':'mobileOrNameRequired'}" placeholder="${g.message(code:'contact.field.name.placeholder')}"/>
+				<g:textField name="name" value="${contactInstance?.name}" class="${contactInstance?.id?'':'mobileOrNameRequired'}" placeholder="${g.message(code:'contact.field.name.placeholder')}" lastsavedvalue="${contactInstance?.name}"/>
 				<label for="name" class="icon-edit"></label>
 			</td>
 		</tr>
@@ -23,14 +21,14 @@
 				<g:if test="${contactInstance}">
 					<i class="${contactInstance.flagCSSClasses}"></i>
 				</g:if>
-				<g:textField data-nonPrettyPhoneNumber="${contactInstance?.mobile?.trim()}" data-prettyPhoneNumber="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}"/>
+				<g:textField data-nonPrettyPhoneNumber="${contactInstance?.mobile?.trim()}" data-prettyPhoneNumber="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}" lastsavedvalue="${contactInstance?.mobile}"/>
 				<label for="mobile" class="icon-edit"></label>
 			</td>
 		</tr>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
-				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" placeholder="${g.message(code:'contact.field.email.placeholder')}"/>
+				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" placeholder="${g.message(code:'contact.field.email.placeholder')}" lastsavedvalue="${contactInstance?.email?:''}"/>
 				<label for="email" class="icon-edit"></label>
 			</td>
 		</tr>
@@ -57,7 +55,7 @@
 		<tr id="note-area" class="input basic-info editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
 			<td>
-				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
+				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}" lastsavedvalue="${contactInstance?.notes?:''}"/>
 				<label for="notes" class="icon-edit"></label>
 			</td>
 		</tr>
@@ -86,20 +84,23 @@
 			</td>
 		</tr>
 	</table>
-	<div id="action-buttons" class="buttons">
-		<g:if test="${contactInstance?.id}">
-			<g:link url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
-				<i class="icon-remove-sign"></i>
-				<span><g:message code="contact.action.delete"/></span>
-			</g:link>
-		</g:if>
-		<g:if test="${contactInstance?.id}">
-			<g:actionSubmit class="stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
-		</g:if>
-		<g:else>
-			<g:actionSubmit class="stroked save" action="saveContact" value="${g.message(code:'action.save')}"/>
-			<g:link class="cancel stroked" action="index"><g:message code="action.cancel"/></g:link>
-		</g:else>
+	<div class="contact_footer_controls">
+		<div id="action-buttons" class="buttons">
+			<g:if test="${contactInstance?.id}">
+				<g:link url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
+					<i class="icon-remove-sign"></i>
+					<span><g:message code="contact.action.delete"/></span>
+				</g:link>
+			</g:if>
+			<g:if test="${contactInstance?.id}">
+				<g:actionSubmit class="stroked save" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
+			</g:if>
+			<g:else>
+				<g:actionSubmit class="stroked save" action="saveContact" value="${g.message(code:'action.save')}"/>
+				<g:link class="cancel stroked" action="index"><g:message code="action.cancel"/></g:link>
+			</g:else>
+		</div>
+		<span class="saving-state-message"></span>
 	</div>
 	<g:if test="${contactInstance && contactInstance.id}">
 		<div id="contact-infos">

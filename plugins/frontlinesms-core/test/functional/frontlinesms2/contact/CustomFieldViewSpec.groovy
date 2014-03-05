@@ -74,10 +74,13 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			to PageContactShow, 'Bob'
 			singleContactDetails.addCustomField 'lake'
 			def customFeild = singleContactDetails.customField 'lake'
+			waitFor { !customFeild.disabled }
 			customFeild.value('erie')
 			customFeild.blur()
 		then:
-			singleContactDetails.contactsCustomFields.containsAll(['lake', 'town'])
+			waitFor {
+				singleContactDetails.contactsCustomFields.containsAll(['lake', 'town'])
+			}
 	}
 
 	def "adding a custom field to a contact does not add it to the database if there is a blank value for field"() {

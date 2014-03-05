@@ -23,6 +23,7 @@ abstract class MediumPopup extends geb.Page {
 		errorPanel { $('div.error-panel') }
 		validationError { $('label.error') }
 		error { errorPanel.text()?.toLowerCase() }
+		thinking(required: false) { $('#thinking') }
 	}
 }
 
@@ -31,32 +32,26 @@ class QuickMessageDialog extends MediumPopup {
 		popupTitle.contains("message") || popupTitle.contains("forward") || popupTitle.contains("reply")
 	}
 	static content = {
-		compose { module QuickMessageComposeTab }
-		recipients { module QuickMessageRecipientsTab }
-		confirm { module QuickMessageConfirmTab }
 		errorPanel { $(".error-panel") }
+		textArea { $('textArea[name=messageText]') }
+		recipients { module QuickMessageRecipientSelector } 
+		charCount { $('div.character-count-display').text() }
+		magicWand { $("#magicwand-selectsendMessageText") }
+		messagesToSendCount { $('#messages-count').text() }
+		recipientName { $('td#recipient').text() }
 	}
 }
 
-class QuickMessageComposeTab extends geb.Module {
+class QuickMessageRecipientSelector extends RecipientsTab {
+	static base = { $('div#tabs-1') }
+}
+
+class GenericComposeTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
 		textArea { $('textarea#messageText') }
 		wordCount { $("span#send-contact-infos").text() }
 		magicWand { $("#magicwand-selectmessageText") }
-	}
-}
-
-class QuickMessageRecipientsTab extends RecipientsTab {
-	static base = { $('div#tabs-2') }
-}
-
-class QuickMessageConfirmTab extends geb.Module {
-	static base = { $('div#tabs-3') }
-	static content = {
-		messagesToSendCount { $('#messages-count').text() }
-		recipientName { $('td#recipient').text() }
-		messageText { $('td#confirm-message-text').text() }
 	}
 }
 
@@ -156,10 +151,11 @@ class RecipientsTab extends geb.Module {
 	static content = {
 		chosenInput { $('.chzn-container input[type=text]') }
 		chosenOption { label=null ->
-			if (label && !(['group', 'contact'].any { label.contains(it) }))
-				label = "\"$label\""
-			if (label)
-				$('.chzn-container ul.chzn-results li.active-result', text: label)
+			if (label) {
+				label = label.replace("+", "\\+")
+				def pattern = java.util.regex.Pattern.compile("(${label}|${label}\\s\\(\\d+\\)|\"${label}\")\$")
+				$('.chzn-container ul.chzn-results li.active-result', text: pattern)
+			}
 			else
 				$('.chzn-container ul.chzn-results li.active-result')
 		}
@@ -246,7 +242,7 @@ class AnnouncementDialog extends MediumPopup {
 		popupTitle.contains("announcement")
 	}
 	static content = {
-		composeAnnouncement {module QuickMessageComposeTab}
+		composeAnnouncement {module GenericComposeTab}
 		recipients {module AnnouncementRecipientsTab}
 		confirm { module AnnouncementConfirmTab }
 		summary { module AnnouncementSummary }
@@ -411,6 +407,12 @@ class SubscriptionGroupTab extends geb.Module {
 			$('select#subscriptionGroup').jquery.val(groupId)
 			$('select#subscriptionGroup').jquery.trigger("change")
 		}
+		createGroup {
+			addToGroup 'create_group'
+		}
+		newGroupName { $('input#groupName') }
+		newGroupSubmit { $('a.create-group') }
+		groupNameError(required:false) { $('label.error[for=groupName]') }
 	}
 }
 
@@ -543,6 +545,14 @@ class AutoreplySummaryTab extends geb.Module {
 class NewFeaturesDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains("feature")
+	}
+	static content = {
+	}
+}
+
+class ImportContactDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("contact.import.label")
 	}
 	static content = {
 	}

@@ -1,18 +1,3 @@
-
-$(function(){
-	$("ul.sortable.checklist").sortable();
-
-	$("#routing-form").submit(function() {
-		var form = $(this),
-		routingUseOrder = [];
-		form.find("input[type=checkbox]:checked").each(function() {
-			routingUseOrder.push($(this).val());
-		});
-		form.find("input[name=routingUseOrder]").val(routingUseOrder.join());
-		return true;
-	});
-});
-
 var basicAuthValidation = {
 	find: function(selecter) { return $("#basic-auth").find(selecter); },
 	enable: function() {

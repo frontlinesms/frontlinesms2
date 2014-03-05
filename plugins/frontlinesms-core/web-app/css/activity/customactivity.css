@@ -7,7 +7,6 @@
 #custom-activity-config-container .step:hover { background-color: #eee; }
 #custom-activity-config-container .step > .remove-command { font-weight:bold; font-size: 1.2em; float:right; cursor: pointer; margin-top: 4px; }
 
-#custom-activity-config-container .step textarea { display:block; width:98%; }
 #custom-activity-config-container .step h4 { display:inline-block; padding-left:2px; padding-top: 3px; }
 #custom-activity-config-container .step.reply h4 { display:block; }
 #custom-activity-config-container .step.reply .controls .magicwand-container a { text-align:right; }

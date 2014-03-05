@@ -69,6 +69,7 @@ grails.project.dependency.resolution = {
 		}
 		compile 'com.googlecode.libphonenumber:libphonenumber:4.3'
 		compile 'com.googlecode.ez-vcard:ez-vcard:0.9.0'
+		compile 'org.apache.httpcomponents:httpclient:4.3'
 	}
 
 	plugins {
@@ -106,6 +107,17 @@ grails.project.dependency.resolution = {
 		}
 		build ':bails:0.6'
 		compile ':font-awesome-resources:3.2.1.3'
+
+		// FIXES as per http://stackoverflow.com/questions/14581009/unknown-plugin-included-in-war-when-building
+		test ':build-test-data:2.0.5', {
+			export = false
+		}
+		test ':remote-control:1.4', {
+			export = false
+		}
+		test ':geb:0.7.2', {
+			export = false
+		}
 	}
 }
 

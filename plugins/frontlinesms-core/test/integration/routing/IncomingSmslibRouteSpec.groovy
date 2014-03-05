@@ -31,7 +31,7 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			while(mockPortHandler.receiveMessages) { sleep(100) }
 			sleep 3000
 			sessionFactory.currentSession.flush()
-			sleep 3000
+			sleep 10000
 		then:
 			def poll = Poll.findByName('What do you think of goo?')
 			def messages = TextMessage.findAll()*.refresh()

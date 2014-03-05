@@ -36,13 +36,6 @@ fi
 echo "Please enter the name of the version as it should be after build (e.g. 2.4.3-SNAPSHOT)"
 read POST_BUILD_VERSION
 
-# Assert that Kiswahili translation is complete
-echo "# Checking for completeness of Kiswahili translation"
-groovy do/i18n-compare.groovy grails-app/i18n/messages.properties grails-app/i18n/messages_sw.properties
-RETVAL=$?
-[ $RETVAL -ne 0 ] && echo "# FAILURE: Swahili translation is incomplete" && exit 1
-echo "# Swahili i18n is complete"
-
 # Drop -SNAPSHOT from application.properties
 sed -i "s/\(app\.version=\).*\$/\1${APP_VERSION}/" application.properties
 
@@ -84,5 +77,5 @@ git commit -m "2.${POST_BUILD_VERSION} ready for dev after 2.${APP_VERSION} rele
 do/deploy_builds
 
 # Push (uncomment the lines below and delete the TODO: when this script passes QA)
-# git push
-# git push --tags
+git push
+git push --tags

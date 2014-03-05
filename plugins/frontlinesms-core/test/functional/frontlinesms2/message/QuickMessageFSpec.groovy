@@ -15,38 +15,10 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			at QuickMessageDialog
 	}
 
-	def "should select the next tab on click of next"() {
-		when:
-			launchQuickMessageDialog()
-		then:
-			waitFor { compose.displayed }
-		when:
-			next.click()
-		then:
-			waitFor { recipients.displayed }
-	}
-
-	def "should select the previous tab on click of back"() {
-		when:
-			launchQuickMessageDialog()
-		then:
-			waitFor { compose.displayed }
-		when:
-			next.click()
-		then:
-			waitFor { recipients.displayed }
-		when:
-			previous.click()
-		then:
-			waitFor { compose.displayed }
-
-	}
-
 	def "should add the manually entered contacts to the list "() {
 		when:
 			launchQuickMessageDialog()
-			waitFor { compose.displayed }
-			next.click()
+			waitFor { textArea.displayed }
 			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
@@ -55,8 +27,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def "should not add the same manually entered contact more than once "() {
 		when:
 			launchQuickMessageDialog()
-			waitFor { compose.displayed }
-			next.click()
+			waitFor { textArea.displayed }
 			recipients.addRecipient("+919544426000")
 			recipients.addRecipient("+919544426000")
 		then:
@@ -70,8 +41,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def "dropping a manually added contact updates the recipients count "() {
 		when:
 			launchQuickMessageDialog()
-			waitFor { compose.displayed }
-			next.click()
+			waitFor { textArea.displayed }
 			recipients.addRecipient("+919544426000")
 		then:
 			waitFor { recipients.count == 1 }
@@ -84,10 +54,10 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def "should send the message to the selected recipients"() {
 		when:
 			launchQuickMessageDialog()
-			waitFor { compose.displayed }
-			next.click()
+			waitFor { textArea.displayed }
+			textArea << "hi there"
+			textArea.jquery.trigger('keyup')
 			recipients.addRecipient("+919544426000")
-			next.click()
 			submit.click()
 		then:
 			at PageMessageInbox
@@ -103,15 +73,10 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			createData()
 		when:
 			launchQuickMessageDialog()
-			waitFor { next.displayed }
-			next.click()
-		then:
-			recipients.displayed
-		when:
+			waitFor { recipients.displayed }
 			recipients.addRecipient('group1')
-			next.click()
 		then:
-			waitFor { confirm.displayed && confirm.messagesToSendCount() == '2' }
+			waitFor { messagesToSendCount() == '2' }
 	}
 
 	def "should not allow to proceed if the recipients are not selected in the quick message screen"() {
@@ -119,14 +84,11 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			createData()
 		when:
 			launchQuickMessageDialog()
-			waitFor { next.displayed }
-			next.click()
-		then:
 			recipients.displayed
-		when:
-			next.click()
+			textArea << "hi there"
+			textArea.jquery.trigger('keyup')
+			submit.click()
 		then:
-			recipients.displayed
 			waitFor { errorPanel.displayed }
 	}
 
@@ -136,21 +98,21 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { compose.wordCount == 'message.character.count[160,1]' }
+			waitFor { charCount() == '0' }
 		when:
-			compose.textArea << "h"
-			compose.textArea.jquery.trigger('keyup')
+			textArea << "h"
+			textArea.jquery.trigger('keyup')
 		then:
-			waitFor { compose.wordCount == 'message.character.count[159,1]' }
+			waitFor { charCount() == '1' }
 	}
 	
-	def "magic wand should be available and clicking should display menu"() {
+	def "magic wand should be available"() {
 		setup:
 			createData()
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { compose.magicWand.displayed }
+			waitFor { magicWand.displayed }
 	}
 
 	def "using contact name magic wand option should insert substitution variable"() {
@@ -159,15 +121,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { compose.wordCount == 'message.character.count[160,1]' }
+			waitFor { charCount() == '0' }
 		when:
-			compose.textArea << "Hello, "
-			compose.textArea.jquery.trigger('keyup')
+			textArea << "Hello, "
+			textArea.jquery.trigger('keyup')
 		then:
-			compose.magicWand.jquery.val('recipient_number')
-			compose.magicWand.jquery.trigger('change')
+			magicWand.jquery.val('recipient_number')
+			magicWand.jquery.trigger('change')
 		then:
-			waitFor { compose.textArea.jquery.val() == 'Hello, ${recipient_number}' }
+			waitFor { textArea.jquery.val() == 'Hello, ${recipient_number}' }
 	}
 	
 	private def createData() {
@@ -192,15 +154,4 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		waitFor { at QuickMessageDialog }
 	}
 	
-	def toRecipientsTab() {
-		at QuickMessageDialog
-		tab(2).click()
-		waitFor { recipients.displayed }
-	}
-	
-	def toConfirmTab() {
-		at QuickMessageDialog
-		tab(3).click()
-		waitFor { confirm.displayed }
-	}
 }

@@ -22,7 +22,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue('known unknown').addToMessages(TextMessage.findBySrc('Bob'))
 			poll.save(failOnError:true, flush:true)
 		when:
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.responseId = r2.id
 			controller.params.ownerId = poll.id
 			controller.changeResponse()
@@ -35,7 +35,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
 			def message = new TextMessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true, flush:true)
 		when:
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.ownerId = folder.id
 			controller.params.messageSection = 'folder'
 			controller.move()
@@ -52,7 +52,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 			folder.save(failOnError:true, flush:true)
 		when:
 			assert message.messageOwner
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.messageSection = 'inbox'
 			controller.move()
 		then:
@@ -70,7 +70,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.save(failOnError: true)
 		when:
 			assert message.messageOwner
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.messageSection = 'inbox'
 			controller.move()
 		then:
@@ -90,7 +90,7 @@ class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			assert message.messageOwner == poll
 			assert PollResponse.findByValue('known unknown').messages == [message]
-			controller.params.messageId = message.id
+			controller.params.interactionId = message.id
 			controller.params.ownerId = folder.id
 			controller.params.messageSection = 'folder'
 			controller.move()

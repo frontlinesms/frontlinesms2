@@ -2,6 +2,7 @@ package frontlinesms2.settings
 
 import frontlinesms2.*
 import frontlinesms2.popup.ExportDialog
+import frontlinesms2.contact.*
 
 class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 	def "all contacts popup should appear when export button is clicked"(){
@@ -37,7 +38,7 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 		when:
 			skipToReview()
 		then:
-			[["Name","Mobile Number","E-mail Address","Notes","Group(s)"],
+			[["Name","Mobile Number","Email","Notes","Group(s)"],
 			["Kama","+123456789",'','',""],
 			["Vernerck","+447944888888",'','',""],
 			["Joe-Free","+254701000000",'','',""]].eachWithIndex { rowValue, rowIndex ->
@@ -53,7 +54,7 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 			submitButton.click()
 		then:
 			waitFor {
-				at PageImportExportSettings
+				at PageContactShow
 			}
 			remote {
 				Contact.count() == 3
@@ -62,7 +63,7 @@ class ImportExportSettingsSpec extends grails.plugin.geb.GebSpec {
 
 	private def createTestUpload(csvContent=null) {
 		def csvString = csvContent?:"""\
-"Name","Mobile Number","E-mail Address","Notes","Group(s)"
+"Name","Mobile Number","Email","Notes","Group(s)"
 "Kama","+123456789",,,""
 "Vernerck","+447944888888",,,""
 "Joe-Free","+254701000000",,,""

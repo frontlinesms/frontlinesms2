@@ -11,11 +11,19 @@ import ezvcard.*
 class ImportController extends ControllerUtils {
 	private final MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
-					'E-mail Address':'email', 'Group(s)':'groups', 'Notes':'notes']
+					'Email':'email', 'Group(s)':'groups', 'Notes':'notes']
 	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard', vcfDepricated:'text/directory']
 
+	def contactImportService
+	def systemNotificationService
+
 	def importData() {
-	println "ImportController.importData() :: params=$params"
+		if(request.exception) {
+			systemNotificationService.create(code:'import.maxfilesize.exceeded', args:[(grailsApplication.config.upload.maximum.size/(1024*1024) as int)])
+			redirect controller:'settings', action:'porting'
+			return
+		}
+		log.info "ImportController.importData() :: params=$params"
 		if(params.data == 'messages') {
 			importMessages()
 		} else {
@@ -24,23 +32,28 @@ class ImportController extends ControllerUtils {
 	}
 
 	private def importContacts() {
-		println "ImportController.importContacts() :: ENTRY"
+		log.info "ImportController.importContacts() :: ENTRY"
 		if(params.reviewDone) {
-			importContactCsv()
+			ContactImportJob.triggerNow(['fileType':'csv', 'params':params, 'request':request])
+			systemNotificationService.create(code:'importing.status.label', topic:'import.status')
+			redirect controller:'contact', action:'show' 
 			return
 		}
-		switch(request.getFile('importCsvFile').contentType) {
+		switch(request.getFile('contactImportFile').contentType) {
 			case [CONTENT_TYPES.vcf, CONTENT_TYPES.vcfDepricated]:
-				importContactVcard()
+				ContactImportJob.triggerNow(['fileType':'vcf', 'params':params, 'request':request])
+				systemNotificationService.create(code:'importing.status.label', topic:'import.status')
+				redirect controller:'contact', action:'show' 
 				break
 			default:
 				prepareCsvReview()
 		}
+		println "ImportController.importContact() :: EXIT"
 	}
 
 	private def prepareCsvReview() {
-		println "ImportController.prepareCsvReview() :: ENTRY"
-		def uploadedCSVFile = request.getFile('importCsvFile')
+		log.info "ImportController.prepareCsvReview() :: ENTRY"
+		def uploadedCSVFile = request.getFile('contactImportFile')
 		def csvAsNestedLists = []
 		def headerRowSize
 		uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
@@ -55,82 +68,12 @@ class ImportController extends ControllerUtils {
 		redirect action:'reviewContacts'
 		return
 	}
-	
-	private def importContactCsv() {
-		def savedCount = 0
-		def headers
-		def parser = new CSVParser()
-		def failedLines = []
-		params.csv.eachLine { line ->
-			def tokens = parser.parseLine(line)
-			if(!headers) headers = tokens
-			else try {
-				if(headers.any { it.size() == 0 }) {
-					throw new RuntimeException("Empty headers in some contact import columns")
-				}
-				Contact c = new Contact()
-				def groups
-				def customFields = []
-				headers.eachWithIndex { key, i ->
-					def value = tokens[i]
-					if(key in STANDARD_FIELDS && key != 'Group(s)') {
-						c."${STANDARD_FIELDS[key]}" = value
-					} else if(key == 'Group(s)') {
-						def groupNames = getGroupNames(value)
-						groups = getGroups(groupNames)
-					} else {
-						if (value.size() > 0 ){
-							customFields << new CustomField(name:key, value:value)
-						}
-					}
-				}
-				// TODO not sure why this has to be done in a new session, but grails
-				// can't cope with failed saves if we don't do this
-				Contact.withNewSession {
-					c.save(failOnError:true)
-					if(groups) groups.each { c.addToGroup(it) }
-					if(customFields) customFields.each { c.addToCustomFields(it) }
-					c.save()
-				}
-				++savedCount
-			} catch(Exception ex) {
-				log.info message(code: 'import.contact.save.error'), ex
-				failedLines << tokens
-			}
-		}
 
-		def failedLineWriter = new StringWriter()
-		if(failedLines) {
-			def writer
-			try {
-				writer = new CSVWriter(failedLineWriter)
-				writer.writeNext(headers)
-				failedLines.each { writer.writeNext(it) }
-			} finally { try { writer.close() } catch(Exception ex) {} }
-		}
-
-		if(savedCount > 0) {
-			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
-		}
-		flash.failedContacts = failedLineWriter.toString()
-		flash.numberOfFailedLines = failedLines.size()
-		flash.failedContactsFormat = 'csv'
-		session.csvData = null
-		redirect controller:'settings', action:'porting'
-	}
-
-	def failedContacts() {
-		response.setHeader("Content-disposition", "attachment; filename=failedContacts.${params.format}")
-		response.setHeader 'Content-Type', CONTENT_TYPES[params.format]
-		params.failedContacts.eachLine { response.outputStream << it << '\n' }
-		response.outputStream.flush()
-	}
-
-	def importMessages() {
+	private def importMessages() {
 		def savedCount = 0
 		def failedCount = 0
 		def importingVersionOne = true
-		def uploadedCSVFile = request.getFile('importCsvFile')
+		def uploadedCSVFile = request.getFile('contactImportFile')
 		if(uploadedCSVFile) {
 			def headers
 			def standardFields = ['Message Content':'text', 'Sender Number':'src']
@@ -197,86 +140,12 @@ class ImportController extends ControllerUtils {
 		}
 	}
 
-	private def getMessageFolder(name) {
-		Folder.findByName(name)?: new Folder(name:name).save(failOnError:true)
-	}
-
-	private saveMessagesIntoFolder(version, fm){
-		getMessageFolder("messages from "+version).addToMessages(fm)
-	}
-
-	private def getGroupNames(csvValue) {
-		Set csvGroups = []
-		csvValue.split("\\\\").each { gName ->
-			def longName
-			gName.split("/").each { shortName ->
-				csvGroups << shortName
-				longName = longName? "$longName-$shortName": shortName
-				csvGroups << longName
-			}
-		}
-		return csvGroups - ''
-	}
-
-	private def getGroups(groupNames) {
-		groupNames.collect { name ->
-			name = name.trim()
-			Group.findByName(name)?: new Group(name:name).save(failOnError:true)
-		}
-	}
-
-	private def getFailedContactsFile() {
-		if(!params.jobId || params.jobId!=UUID.fromString(params.jobId).toString()) params.jobId = UUID.randomUUID().toString()
-		def f = new File(ResourceUtils.resourcePath, "import_contacts_${params.jobId}.csv")
-		f.deleteOnExit()
-		return f
-	}
-
-	private def importContactVcard() {
-		def failedVcards = []
-		def savedCount = 0
-		def uploadFile = request.getFile('importCsvFile')
-		def processCard = { v ->
-			def mobile = v.telephoneNumbers? v.telephoneNumbers.first(): null
-			if(mobile) {
-				mobile = mobile.text?: mobile.uri?.number?: ''
-				mobile = mobile.replaceAll(/[^+\d]/, '')
-			}
-			def email = v.emails? v.emails.first().value: ''
-			try {
-				new Contact(name:v.formattedName.value,
-						mobile:mobile,
-						email:email).save(failOnError:true)
-				++savedCount
-			} catch(Exception ex) {
-				failedVcards << v
-			}
-		}
-		def parse = { format='', exceptionClass=null ->
-			try {
-				Ezvcard."parse${format.capitalize()}"(uploadFile.inputStream)
-						.all()
-						.each processCard
-			} catch(Exception ex) {
-				if(exceptionClass && ex.class.isAssignableFrom(exceptionClass)) {
-					return false
-				}
-				throw ex
-			}
-			return true
-		}
-		if(!(parse('xml', org.xml.sax.SAXParseException) ||
-				parse('json', com.fasterxml.jackson.core.JsonParseException) ||
-				(parse('html') && parse()))) {
-			throw new RuntimeException('Failed to parse vcf.')
-		}
-		if(savedCount > 0) {
-			flash.message = g.message(code:'import.contact.complete', args:[savedCount])
-		}
-		flash.failedContacts = Ezvcard.write(failedVcards).go()
-		flash.numberOfFailedLines = failedVcards.size()
-		flash.failedContactsFormat = 'vcf'
-		redirect controller:'settings', action:'porting'
+	def failedContacts() {
+		response.setHeader("Content-disposition", "attachment; filename=failedContacts.${params.format}")
+		response.setHeader 'Content-Type', CONTENT_TYPES[params.format]
+		def failedContactFileContent = contactImportService.getFailedContactsByKey(params.key)
+		response.outputStream << failedContactFileContent
+		response.outputStream.flush()
 	}
 
 	def reviewContacts() {
@@ -285,6 +154,10 @@ class ImportController extends ControllerUtils {
 			return
 		}
 		[csvData:session.csvData, recognisedTitles:STANDARD_FIELDS.keySet()]
+	}
+
+	def contactWizard() {
+		render(template:"/contact/import_contacts")
 	}
 }
 

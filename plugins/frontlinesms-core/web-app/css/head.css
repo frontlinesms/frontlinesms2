@@ -19,11 +19,18 @@ body { background-image:url("../images/head_background.png");
 	background-image:url("../images/tab/message_current.png"); }
 #main-nav li.message:hover { background-image:url("../images/tab/message_hover.png"); }
 #main-nav li.message:active { background-image:url("../images/tab/message_pressed.png"); }
+
 #main-nav li.status { background-image:url("../images/tab/status.png"); width:120px; }
 #main-nav li.status.current, #main-nav li.status.current:hover, #main-nav li.status.current:active {
 	background-image:url("../images/tab/status_current.png"); }
 #main-nav li.status:hover { background-image:url("../images/tab/status_hover.png"); }
 #main-nav li.status:active { background-image:url("../images/tab/status_pressed.png"); }
+
+#main-nav li.connection { background-image:url("../images/tab/connection.png"); width:130px; }
+#main-nav li.connection.current, #main-nav li.connection.current:hover, #main-nav li.connection.current:active {
+	background-image:url("../images/tab/connection_current.png"); }
+#main-nav li.connection:hover { background-image:url("../images/tab/connection_hover.png"); }
+#main-nav li.connection:active { background-image:url("../images/tab/connection_pressed.png"); }
 
 #system-menu { right:17px; }
 #system-menu li a { display:block; border-top:3px solid #D5AFC6; padding:6px; }
@@ -31,6 +38,7 @@ body { background-image:url("../images/head_background.png");
 #inbox-indicator { border-radius:3px; background-color:#C03283; color:white; font-weight:bold; padding:2px 4px; margin-left:3px; font-size:90%; }
 #status-indicator { padding:8px; background-repeat:no-repeat; background-position:center center; margin-left:3px; }
 #status-indicator.red { background-image:url('../images/status/red.png'); }
+#status-indicator.grey { background-image:url('../images/status/grey.png'); }
 #status-indicator.green { background-image:url('../images/status/green.png'); }
 #status-indicator.orange { background-image:url('../images/status/orange.png'); }
 

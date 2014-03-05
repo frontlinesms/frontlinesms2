@@ -1,0 +1,54 @@
+# Creating Rules for Sending Messages Through Multiple Phone Numbers or Connections
+
+FrontlineSMS is highly configurable, meaning many features in the application will help you send messages in a useful way. One of the most powerful tools for this is configuring routing rules, in which you can select how to messages through a variety of your phone numbers.
+
+If you only have a single connection, such as through one modem, then messages will always send and receive through that single connection. But once you add an additional connection, such as an additional modem or an Android phone using SMSSync, FrontlineSMS will allow you to create rules for sending outgoing messages.
+
+In other words, routing rules allow you to set your own preferences for sending messages, and improve the chances that your messages will be delivered to the people you are trying to reach.
+
+This help file explains how to create these routing rules.
+
+If you would like to set routing rules, click "Settings" in the upper right-hand corner of your screen, then "Phones and Connections." Your screen should now look something like the one below (although perhaps with fewer connections than our test account):
+
+![Connection routing rules][1]
+
+Now you can create routing rules following the steps below.
+
+1. First, make sure you have all of your connections configured. This could be multiple modems, a modem and an instance of SMSSync, or a combination of these.
+
+You will then see a list of options, as in the screenshot above.
+ 
+2. Next, decide whether outgoing messages should be sent through the most recent number used by the people you are trying to reach.
+
+In many cases, the people you are trying to reach will message the number they are most familiar with. Therefore, you can instruct FrontlineSMS to send outgoing messages through that same number.
+
+For instance, if Jane is trying to reach you and has your Android telephone number, you probably want to respond to Jane through that same number. If you respond through a different phone number, she may not know who you are! To always reply to someone through the same number they messaged most recently, select the very first box, as indicated in the screenshot below.
+
+![Connection routing rules 2][2]
+
+3. Now decide the priority order for other connections in your list.
+
+You can also set the priority order for the other phone numbers you have connections with. Note that you can do this whether or not you have selected the box to send messages through the most recent number contacts have messaged. This is useful for:
+
+- situations in which you are messaging contacts for the first time, because you can prioritize the least expensive or most reliable phone number
+- forcing FrontlineSMS to use your preferred phone number, no matter how other contacts have reached you
+- prioritizing how FrontlineSMS will message someone if a phone number fails; in other words, if FrontlineSMS cannot reach someone through your first preferred connection, it will try again on the second most preferred connection, and so on
+
+In order to create a prioritized list, you can 'drag and drop' your phone numbers to create your preferred order. Below is one example. Let's say the third connection on your list is actually the one you prefer to use for sending most messages. You can 'grab' the number by hovering over the left-hand tab with your cursor, where the arrow is pointing in the screenshot below.
+
+4. Finally, be sure to deselect any phone numbers you do not want FrontlineSMS to use.
+
+In the event that you do NOT want FrontlineSMS to use a certain phone number, you can simply deselect it in the list by clicking on the relevant box and ensuring the checkmark disappears.
+
+**Note: remember to save your selection!**
+
+## Related topics:
+[Manually Adding A Device][3]
+[SMSSync][4]
+
+
+[1]: ../images/help/ConnectionsRoutingRules.png
+[2]: ../images/help/ConnectionsRoutingRules2.png
+[3]: ../settings/5.manually_adding_device.txt
+[4]: ../settings/9.smssync.txt
+

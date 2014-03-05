@@ -1,127 +1,18 @@
 # Translating FrontlineSMS Version 2
 
-_FrontlineSMS Version 2 offers the opportunity to translate the interface into a language that isn't currently supported. Your translation will then be made available in all future revisions of the software for everyone to utilise._
+_FrontlineSMS Version 2 offers the opportunity to translate the interface into a language that isn't currently supported. Your translation will then be made available in all future revisions of the software for everyone to use._
 
-### Preparation
+All Frontline products work with a user-friendly, internet-based application for internationalizing, or translating, the platform. The application allows you to translate the core language file of FrontlineSMS line-by-line, replacing the English text with equivalent text from the language or dialect of your choice.
 
-At present, you can translate the FrontlineSMS Version 2 interface into another language using the method below.
+As such, the process demands an internet connection and some familiarity with computers. 
 
-In future, FrontlineSMS Version 2 will have a user-friendly in-app interface for internationalizing, or translating, the platform. You can keep track of the progress of this functionality on our Upcoming Features page.
+We welcome volunteers to translate our applications into any language or dialect, and we will make the translations available to others who speak the same language or dialect as you. In other words, all of your work in providing a translation will benefit everyone in the Frontline community.
 
-In the meantime, we have a more complicated method which you can use to translate version 2 into other languages. This method involves manually editing the core language file of FrontlineSMS Version 2 to replace the English text used in the program with equivalent text from the language you are translating to. As such, for now the process will take longer and requires more technical expertise than it will eventually. it may be a lengthy and time consuming process which demands some familiarity with computers, as not following these instructions correctly may damage your installation of FrontlineSMS
-
-**These instructions are for Windows computers.** However, the general method does not differ between platforms and is applicable to Mac systems as well.
-
-Before you begin, it is highly recommended that you download and install [Notepad++][2]. It is a small and free software which will make editing the core language file a much more pleasant and streamlined process. Once at the Notepad++ website, click on "Download" on the left hand side and select the first entry for the latest version of Notepad++. Once you have finished translating FrontlineSMS Version 2 you can uninstall Notepad++ if you wish to.
-
-You can use other similar editors, and even the built in Notepad software of Windows. Unfortunately, this may result in a more difficult editing experience because these editors may read the format of the language file incorrectly. Consequently, your editing experience may differ from the one outlined below.
-
-### How to translate FrontlineSMS Version 2
-
-1.Navigate to the directory you specific to installed FrontlineSMS Version 2.
-
-The default location on a 32-bit Windows computer is: C:\program files\frontlinesms2
-
-The default location on a 64-bit Windows computer is: C:\program files (x86)\frontlinesms2
-
-2.Once in this folder, navigate to: **web-app\WEB-INF\grails-app\i18n**
-
-3.In this folder you should see 2 files: **messages.properties** and **messages_sw.properties**
-
-Right-click on messages.properties and select "Copy" from the menu that appears. Go to your desktop, or any other safe location on your computer and Paste a copy of the file there. You have just created a backup copy of the file, in the off chance that something goes wrong. Remember where you saved this backup.
-
-4.We **only** want to use the **messages.properties** file. So, open Notepad++ (or whichever program you are using for editing) and open this file in the editor using File>>Open **OR** drag and drop the **messages.properties** file into the Notepad++ window.
-
-5.Once open, you should see something similar to the below:
-
-    # FrontlineSMS English translation by the FrontlineSMS team, Nairobi
-    language.name=English
-
-    # Common action imperatives - to be used for button labels and similar
-    action.ok=OK
-    action.close=Close
-    action.cancel=Cancel
-    action.done=Done
-    action.next=Next
-    action.prev=Previous
-    action.back=Back
-    action.create=Create
-    action.edit=Edit
-    action.rename=Rename
-    action.delete=Delete
-    action.send=Send
-    action.export=Export
-
-    #Connections:
-    connection.creation.failed = Connection could not be created {0}
-    connection.route.disabled = Disabled route from {0} to {1}
-    connection.route.connecting = Connecting...
-    connection.route.disconnecting = Disconnecting...
-    connection.route.successNotification = Successfully created route on {0}
-    connection.route.failNotification = Failed to create route on {0}
-    connection.route.disableNotification = Disconnected route on {0}
-    connection.test.sent = Test message successfully sent to {0} using {1}
-
-If you aren't using Notepad++ you may see something different.
-
-While editing this file there are some guidelines that should be followed to ensure that your translation will work once converted:
-
-**Do Not** edit the _keys_. These are all the entries on the left of the = sign. For example, connection.creation.failed is a key.
-
-**Do Not** edit the _arguments_. These are indicated by { }. The location of the argument in the sentence or phrase can be adjusted but the content of the brackets should not be altered.
-
-**Do edit** the English phrases on the right of the = sign.
-
-6.The first and most important step is to update the value of the **language.name** key. This is found at the top of the file and lets us and other users know what language you have translated into.
-
-Replace "English" with the name of the language you are translating to and move on to the next step.
-
-7.Once you have entered the name of the translation, the rest of the process involved substituting the English with their translated equivalents for each key.
-
->**Some tips:** When substituting English phrases with their translated equivalents, it is important to remember that the grammar of phrases and/or words may not be the same between the language. Therefore, it is important to ensure that the grammar is correct for the language you are translating into.
-
->For example:
-
->message.deleted.many={0} messages deleted
-
->This key indicates the text used when multiple messages are deleted. The {0} will indicate the number of messages that were deleted. >Hence, in English this sentence is grammatically correct.
-
->Let's translate this into Swahili:
-
->message.deleted.many={0} risala imefutwa
-
->This is **not correct**. We need to make sure that the phrase makes grammatical sense in Swahili:
-
->message.deleted.many=risala {0} imefutwa
-
->This is **correct**. Note that we moved the argument to ensure the phrase makes grammatical sense. This is fine to do as long as you do >not edit the contents of the brackets.
-
-8.When you have finished translation the file needs to be saved. **Do not** overwrite the **messages.properties** file that exists currently. Instead, choose File>Save As..
-
-Pick a location that you can remember and find again.
-
-Enter the file name in the following format: message_[language_name].properties. So, for Swahili the file name would be: message_swahili.properties
-
-9.In addition to this file, a javascript file needs to be generated for your new translation to work.
-To obtain this file you will need an internet connection. When you are connected to the internet, navigate to [translate.frontlinesms.com][6].
-Use the form at the bottom of this page to upload your messages_xy.properties file.
-This will allow a messages_xy.js file to be created. You may be prompted to choose a download location for this file. If you are then select a location that you remember. If you are not prompted, it is likely the file has been saved to your browsers default download directory.
-
-10. Navigate back to the directory where you installed FrontlineSMS Version 2 and then navigate here: web-app\i18n
-
-11. Move or copy the messages_xy.js file into this folder.
-
-When you start FrontlineSMS Version 2, your new language will be available for selection in the languages drop box in the ‘Settings’ menu!
-
-If you are happy for FrontlineSMS to distribute your translation in future releases, you can specify this when uploading the messages.properties file. If you do allow us to do this, we appreciate the work you have put in and are thankful for your time and effort. Your work will help make the software usable by a wider range of people and in a greater range of contexts.
-
----
+If you are interested in translating FrontlineSMS, please get in touch with us directly at support@frontlinesms.com 
 
 ### See Also
-[Changing languages][4]
-[Configuring Detected Devices][5]
+[Changing languages][1]
+[Configuring Detected Devices][2]
 
-[2]: ../settings/http://notepad-plus-plus.org/
-[4]: ../settings/2.changing_languages
-[5]: ../settings/4.setting_up_a_device
-[6]: ../settings/http://translate.frontlinesms.com/
+[1]: ../settings/2.changing_languages
+[2]: ../settings/4.setting_up_a_device
