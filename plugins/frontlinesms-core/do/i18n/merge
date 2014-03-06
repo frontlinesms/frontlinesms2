@@ -35,9 +35,9 @@ def updateExistingLanguageFromFile = { existingFile, newFile ->
 	def updatedTranslationLines = []
 	existingProperties.keys.each {
 		if(existingProperties.getLayout().getComment(it)){
-			updatedTranslationLines << "${existingProperties.getLayout().getComment(it)}"
+			updatedTranslationLines << "${existingProperties.getLayout().getComment(it)}".replaceAll("\\\\","\\\\\\\\").replaceAll("\n", "\\\\n")
 		}
-		updatedTranslationLines << "$it=${existingProperties.getString(it)}"
+		updatedTranslationLines << "$it=${existingProperties.getString(it)}".replaceAll("\\\\","\\\\\\\\").replaceAll("\n", "\\\\n")
 	}
 	FileUtils.writeLines(existingFile, UTF8ENCODING, updatedTranslationLines)
 }
