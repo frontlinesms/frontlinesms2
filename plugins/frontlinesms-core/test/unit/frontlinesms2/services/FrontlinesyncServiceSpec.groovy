@@ -6,14 +6,18 @@ import frontlinesms2.*
 
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
+import org.apache.camel.Message
+import grails.buildtestdata.mixin.Build
 
 @TestFor(FrontlinesyncService)
+@Build(FrontlinesyncFconnection)
 class FrontlinesyncServiceSpec extends Specification {
 	def connection
 	def controller
 	def json
 	def rendered
 	def queue
+	def successJson = ([success:true] as grails.converters.JSON).toString(false)
 	def sendMessageAndHeadersInvokationCount
 	def setup() {
 		rendered = null
@@ -57,7 +61,7 @@ class FrontlinesyncServiceSpec extends Specification {
 		when:
 			service.apiProcess(connection, controller)	
 		then:
-			rendered.text == 'OK'
+			rendered.text.toString(false) ==successJson
 	}
 
 	def 'each missed call in payload is passed to incoming-missedcalls-to-store'() {
@@ -73,7 +77,7 @@ class FrontlinesyncServiceSpec extends Specification {
 		when:
 			service.apiProcess(connection, controller)
 		then:
-			rendered.text == 'OK'
+			rendered.text.toString(false) == successJson
 			sendMessageAndHeadersInvokationCount == 3
 			queue == 'seda:incoming-missedcalls-to-store'
 	}
@@ -90,22 +94,52 @@ class FrontlinesyncServiceSpec extends Specification {
 		when:
 			service.apiProcess(connection, controller)
 		then:
-			rendered.text == 'OK'
+			rendered.text.toString(false) == successJson
 			sendMessageAndHeadersInvokationCount == 2
 			queue == 'seda:incoming-fmessages-to-store'
 	}
 
 	def 'apiProcess should return outgoing message payload if available'() {
 		given:
+			def connection = setupConnection("secret")
+			connection.sendEnabled = true
+			setupPayload('secret', ['inboundTextMessages':[]])
+			service.metaClass.generateOutgoingResponse = { c ->
+				['messages':[]]
+			}
 		when:
 			service.apiProcess(connection, controller)
 		then:
-			false
+			rendered.text.toString() == (['messages' : []] as grails.converters.JSON).toString(false)
 	}
 
-	def 'generateOutgoingResponses should return messages as a map'() { throw RuntimeException('bad') }
+	def 'generateOutgoingResponses should return messages as a map'() {
+		given:
+			def connection  = setupConnection("secret")
+			connection.sendEnabled =  true
+			connection.queuedDispatches = [mockDispatch('123', 'yeah')]
+			connection.removeDispatchesFromQueue = { q -> true }
+		expect:
+			service.generateOutgoingResponse(connection).equals([messages:[[to:'123', message:'yeah']]])
+			
+	}
 
-	def 'processSend should add queuedDispatches to connection'() { throw RuntimeException('bad') }
+	def 'processSend should add queuedDispatches to connection'() {
+		given:
+			def addedToQueuedDispatches = false
+			def connection = FrontlinesyncFconnection.build()
+			connection.metaClass.addToQueuedDispatches = { d -> addedToQueuedDispatches = true }
+			FrontlinesyncFconnection.metaClass.static.get = { id -> connection }
+			def x = Mock(Exchange)
+			def m = Mock(Message)
+			m.headers >> ['fconnection-id':1]
+			x.in >> m
+		when:
+			service.processSend(x)
+		then:
+			assert addedToQueuedDispatches
+			
+	}
 
 	private def setupConnection(secret) {
 		connection = [id:123, secret:secret]
@@ -117,5 +151,9 @@ class FrontlinesyncServiceSpec extends Specification {
 			json.payload = payload
 		}
 		controller = [request:[JSON: json], render: { Map it -> rendered = it }]
+	}
+
+	private mockDispatch(dst, text) {
+		[dst:dst, text:text, save: { m -> true }]
 	}
 }

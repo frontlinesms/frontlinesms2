@@ -38,7 +38,7 @@ class FrontlinesyncService {
 			} else {
 				payload = ([success:true] as JSON)
 			}
-			controller.render payload
+			controller.render text:payload
 		} catch(Exception ex) {
 			failure(controller, ex.message)
 		}
