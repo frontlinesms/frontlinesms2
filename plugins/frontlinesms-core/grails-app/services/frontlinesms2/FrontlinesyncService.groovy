@@ -55,7 +55,7 @@ class FrontlinesyncService {
 		def q = connection.queuedDispatches
 		if(q) {
 			connection.removeDispatchesFromQueue(q)
-			responseMap.messages = responseMap.messages = q.collect { d ->
+			responseMap.messages = q.collect { d ->
 					d.status = DispatchStatus.SENT
 					d.dateSent = new Date()
 					d.save(failOnError: true)
