@@ -31,7 +31,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	def removeDispatchesFromQueue(dispatches) {
-		SmssyncFconnectionQueuedDispatch.delete(this, dispatches)
+		QueuedDispatch.delete(this, dispatches)
 	}
 
 	def apiProcess(controller) {
@@ -39,11 +39,11 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	def addToQueuedDispatches(d) {
-		SmssyncFconnectionQueuedDispatch.create(this, d)
+		QueuedDispatch.create(this, d)
 	}
 
 	def getQueuedDispatches() {
-		SmssyncFconnectionQueuedDispatch.getDispatches(this)
+		QueuedDispatch.getDispatches(this)
 	}
 
 	def updateDispatch(Exchange x) {

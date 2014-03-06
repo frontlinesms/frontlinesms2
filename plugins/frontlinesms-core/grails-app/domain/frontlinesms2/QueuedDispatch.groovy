@@ -2,18 +2,17 @@ package frontlinesms2
 
 import org.apache.commons.lang.builder.HashCodeBuilder
 
-class SmssyncFconnectionQueuedDispatch implements Serializable {
+class QueuedDispatch implements Serializable {
 	static mapping = {
 		id composite: ['connectionId', 'dispatchId']
 		version false
-		table 'smssync_dispatch'
 	}
 
 	long connectionId
 	long dispatchId
 
 	boolean equals(that) {
-		that instanceof SmssyncFconnectionQueuedDispatch &&
+		that instanceof QueuedDispatch &&
 				that.connectionId == this.connectionId &&
 				that.dispatchId == this.dispatchId
 	}
@@ -22,22 +21,22 @@ class SmssyncFconnectionQueuedDispatch implements Serializable {
 		return new HashCodeBuilder().append(connectionId).append(dispatchId).toHashCode()
 	}
 
-	static SmssyncFconnectionQueuedDispatch create(SmssyncFconnection connection, Dispatch dispatch, boolean flush=false) {
-		new SmssyncFconnectionQueuedDispatch(connectionId:connection.id,
+	static QueuedDispatch create(Fconnection connection, Dispatch dispatch, boolean flush=false) {
+		new QueuedDispatch(connectionId:connection.id,
 				dispatchId:dispatch.id)
 			.save(flush:flush, insert:true)
 	}
 
-	static void delete(SmssyncFconnection c, dispatches) {
+	static void delete(Fconnection c, dispatches) {
 		if(dispatches) {
-			executeUpdate "DELETE FROM SmssyncFconnectionQueuedDispatch WHERE connectionId=:connectionId AND dispatchId in :dispatchIds",
+			executeUpdate "DELETE FROM QueuedDispatch WHERE connectionId=:connectionId AND dispatchId in :dispatchIds",
 					[connectionId:c.id, dispatchIds:dispatches*.id]
 		}
 	}
 
 	static getDispatches(connection) {
 		// TODO should do this in a single query
-		def dispatchIds = Dispatch.executeQuery("SELECT q.dispatchId FROM SmssyncFconnectionQueuedDispatch q WHERE q.connectionId=:connectionId",
+		def dispatchIds = Dispatch.executeQuery("SELECT q.dispatchId FROM QueuedDispatch q WHERE q.connectionId=:connectionId",
 				[connectionId:connection.id])
 		Dispatch.getAll(dispatchIds) - null
 	}
