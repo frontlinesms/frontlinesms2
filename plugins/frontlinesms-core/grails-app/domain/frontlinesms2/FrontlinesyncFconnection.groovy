@@ -9,9 +9,9 @@ import frontlinesms2.api.*
 @FrontlineApiAnnotations(apiUrl="frontlinesync")
 class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	static String getShortName() { 'frontlinesync' }
-	static final configFields = ['info-setup': ['secret'], 'info-name':['name']]
+	static final configFields = ['info-setup': ['secret'], 'info-name':['name'], 'info-sendEnabled':['sendEnabled']]
 	static final passwords = []
-	static final defaultValues = [timeout:60]
+	static final defaultValues = [timeout:60, sendEnabled:true]
 
 	def frontlinesyncService
 	def appSettingsService
