@@ -1,0 +1,73 @@
+#!/usr/bin/env groovy
+@Grapes([
+	@Grab(group='commons-configuration', module='commons-configuration', version='1.10'),
+	@Grab(group='org.apache.commons', module='commons-io', version='1.3.2')
+])
+import org.apache.commons.io.FileUtils
+import org.apache.commons.configuration.PropertiesConfigurationLayout
+import org.apache.commons.configuration.PropertiesConfiguration
+
+def UTF8ENCODING = 'UTF-8'
+def mergeLogFile = new File('target/i18nMergeLog.txt')
+def mergeLog = new Date() as String
+def log = { text ->
+	mergeLog += "\n${text}"
+	println text
+}
+
+def getPropertiesForFile = { file ->
+	def props = new PropertiesConfiguration()
+	props.setListDelimiter(0 as char)
+	props.setFile(file)
+	props.load(FileUtils.openInputStream(file), UTF8ENCODING)
+	props    
+}
+
+def updateExistingLanguageFromFile = { existingFile, newFile ->
+	def existingProperties = getPropertiesForFile existingFile
+	def newProperties = getPropertiesForFile newFile
+	def existingKeys = existingProperties.keys
+	existingProperties.keys.each { key ->
+		(newProperties.containsKey(key)) ? existingProperties.setProperty(key, newProperties.getString(key)) : existingProperties.clearProperty(key)
+	}
+
+	existingProperties.setEncoding(UTF8ENCODING)
+	def updatedTranslationLines = []
+	existingProperties.keys.each {
+		if(existingProperties.getLayout().getComment(it)){
+			updatedTranslationLines << "${existingProperties.getLayout().getComment(it)}".replaceAll("\\\\","\\\\\\\\").replaceAll("\n", "\\\\n")
+		}
+		updatedTranslationLines << "$it=${existingProperties.getString(it)}".replaceAll("\\\\","\\\\\\\\").replaceAll("\n", "\\\\n")
+	}
+	FileUtils.writeLines(existingFile, UTF8ENCODING, updatedTranslationLines)
+}
+
+def updateLanguageFromFile = { newFile ->
+	// check if it exists in i18n folder
+	// if not, just copy it in and report this in log
+	// if it does, call update
+	def existingFile = new File("grails-app/i18n/${newFile.name}")
+	if(!existingFile.exists() ) {
+		FileUtils.copyFile(newFile, existingFile)
+		log "New translation ${existingFile.name} added"
+	}
+	else {
+		updateExistingLanguageFromFile existingFile, newFile
+	}
+}
+
+
+
+def englishProperties = new PropertiesConfiguration()
+englishProperties.setListDelimiter(0 as char)
+englishProperties.setFile(new File('grails-app/i18n/messages.properties'))
+englishProperties.load()
+def otherFile = new File(args[0])
+if (otherFile.directory) {
+	otherFile.listFiles().each { file -> updateLanguageFromFile file }
+}
+else {
+	updateLanguageFromFile otherFile
+}
+
+FileUtils.writeStringToFile(mergeLogFile, mergeLog)
