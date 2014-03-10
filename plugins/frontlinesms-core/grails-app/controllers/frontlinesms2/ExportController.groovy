@@ -103,13 +103,21 @@ class ExportController extends ControllerUtils {
 	}
 
 	private def generateMessageReport(interactionInstanceList) {
-		List fields = ["id", "inboundContactName", "src", "outboundContactList", "dispatches.dst", "text", "date"]
-		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dispatches.dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
+		List fields = ["id", "inboundContactName", "src", "outboundContactList", "dst", "text", "date"]
+		def thisInteractionAsMap
+		def interactions = interactionInstanceList.collect { interaction ->
+			thisInteractionAsMap = [:]
+			fields.each { field ->
+				thisInteractionAsMap."$field" = (field == 'dst') ? interaction.dispatches*.dst : interaction."$field"
+			}
+			thisInteractionAsMap
+		}
+		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
 		Map parameters = [title: message(code: 'export.message.title')]
 		setUnicodeParameter(parameters)
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try {
-			exportService.export(params.format, response.outputStream, interactionInstanceList, fields, labels, [:], parameters)
+			exportService.export(params.format, response.outputStream, interactions, fields, labels, [:], parameters)
 		} catch(Exception e) {
 			render(text: message(code: 'report.creation.error'))
 		}
