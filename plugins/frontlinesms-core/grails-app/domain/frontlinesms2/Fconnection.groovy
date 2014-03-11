@@ -26,7 +26,7 @@ class Fconnection {
 			SmppFconnection]
 	static final betaImplementations = [FrontlinesyncFconnection] + implementations
 	static final getImplementations(params) {
-		(params.beta || Boolean.parseBoolean(ApplicationHolder.application.mainContext.getBean('appSettingsService').get('beta'))) ? betaImplementations: implementations
+		(params.beta || Boolean.parseBoolean(ApplicationHolder.application.mainContext.getBean('appSettingsService').beta)) ? betaImplementations: implementations
 	}
 
 	static getNonnullableConfigFields = { clazz ->
