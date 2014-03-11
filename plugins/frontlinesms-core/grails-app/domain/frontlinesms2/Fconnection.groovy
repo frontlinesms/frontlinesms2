@@ -5,6 +5,7 @@ import grails.util.Environment
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import org.apache.camel.Exchange
+import org.codehaus.groovy.grails.commons.ApplicationHolder
 
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
@@ -25,7 +26,7 @@ class Fconnection {
 			SmppFconnection]
 	static final betaImplementations = [FrontlinesyncFconnection] + implementations
 	static final getImplementations(params) {
-		params.beta? betaImplementations: implementations
+		(params.beta || Boolean.parseBoolean(ApplicationHolder.application.mainContext.getBean('appSettingsService').get('beta'))) ? betaImplementations: implementations
 	}
 
 	static getNonnullableConfigFields = { clazz ->
