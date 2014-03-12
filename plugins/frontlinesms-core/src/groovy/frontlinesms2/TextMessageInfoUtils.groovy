@@ -2,12 +2,12 @@ package frontlinesms2
 import org.smslib.util.GsmAlphabet
 
 class TextMessageInfoUtils {
-	private static final int SMS_LENGTH_LIMIT = 160 
-	private static final int SMS_MULTIPART_LENGTH_LIMIT = 153 
-	private static final int SMS_LENGTH_LIMIT_UCS2 = 70 
-	private static final int SMS_MULTIPART_LENGTH_LIMIT_UCS2 = 63 
+	private static final int SMS_LENGTH_LIMIT = 160
+	private static final int SMS_MULTIPART_LENGTH_LIMIT = 153
+	private static final int SMS_LENGTH_LIMIT_UCS2 = 70
+	private static final int SMS_MULTIPART_LENGTH_LIMIT_UCS2 = 63
 	private static final List SMS_DOUBLE_SIZE_CHARACTER_LIST = ['\f', '^', '{', '}', '[', ']', '~', '\\', '|', '€']
-	
+
 	public static def getMessageInfos(String text) {
 		int charCount = text.size()
 		int partCount
