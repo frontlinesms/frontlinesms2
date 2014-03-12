@@ -19,8 +19,8 @@ class ClickatellPreProcessor implements Processor {
 		else {
 			set x, 'unicode', '0'
 		}
-		//TODO
-		set x, 'concat', '1'
+		def concat = TextMessageInfoUtils.getMessageInfos(d.text).partCount
+		set x, 'concat', "${concat}"
 		x.in.body = urlEncode(text)
 		
 		def destination = d.dst
