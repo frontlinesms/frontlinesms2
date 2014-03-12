@@ -20,8 +20,8 @@ class TextMessageInfoServiceSpec extends Specification {
 			text      | chars | remaining | parts
 			''        | 0     | 160       | 1
 			'a' * 160 | 160   | 0         | 1
-			'a' * 161 | 161   | 109       | 2
-			'a' * 270 | 270   | 0         | 2
+			'a' * 161 | 161   | 145       | 2
+			'a' * 306 | 306   | 0         | 2
 	}
 }
 
