@@ -19,6 +19,8 @@ class ClickatellPreProcessor implements Processor {
 		else {
 			set x, 'unicode', '0'
 		}
+		//TODO
+		set x, 'concat', '1'
 		x.in.body = urlEncode(text)
 		
 		def destination = d.dst
