@@ -110,7 +110,7 @@ class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 		when:
 			p.process(x)
 		then:
-			x.in.headers.'clickatell.concat' == expectedConcat
+			x.in.headers.'clickatell.concat' == "${expectedConcat}"
 		where:
 			messageText                 | expectedConcat
 			'159 characters of text, which should be neatly wrapped in a single message payload and sent with concat set to one because GSM allows 160 chars in one message.'                | 1
