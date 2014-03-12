@@ -2,14 +2,11 @@ package frontlinesms2
 import org.smslib.util.GsmAlphabet
 
 class TextMessageInfoUtils {
-	/** Maximum number of characters that can be fit into a single 7-bit GSM SMS message. TODO this value should probably be fetched from {@link TpduUtils}. */
 	private static final int SMS_LENGTH_LIMIT = 160 
-	/** Maximum number of characters that can be fit in one part of a multipart 7-bit GSM SMS message.  TODO this number is incorrect, I suspect.  The value should probably be fetched from {@link TpduUtils}. */
-	private static final int SMS_MULTIPART_LENGTH_LIMIT = 135 
-	/** Maximum number of characters that can be fit into a single UCS-2 SMS message. TODO this value should probably be fetched from {@link TpduUtils}. */
+	private static final int SMS_MULTIPART_LENGTH_LIMIT = 153 
 	private static final int SMS_LENGTH_LIMIT_UCS2 = 70 
-	/** Maximum number of characters that can be fit in one part of a multipart UCS-2 SMS message.  TODO this number is incorrect, I suspect.  The value should probably be fetched from {@link TpduUtils}. */
-	private static final int SMS_MULTIPART_LENGTH_LIMIT_UCS2 = 60 
+	private static final int SMS_MULTIPART_LENGTH_LIMIT_UCS2 = 63 
+	private static final List SMS_DOUBLE_SIZE_CHARACTER_LIST = ['\f', '^', '{', '}', '[', ']', '~', '\\', '|', '€']
 	
 	public static def getMessageInfos(String text) {
 		int charCount = text.size()
@@ -21,6 +18,9 @@ class TextMessageInfoUtils {
 			remaining = SMS_LENGTH_LIMIT
 		} else if(GsmAlphabet.areAllCharactersValidGSM(text)) {
 			// 7-bit
+			text.each { character ->
+				if(character in SMS_DOUBLE_SIZE_CHARACTER_LIST) charCount ++
+			}
 			if(charCount <= SMS_LENGTH_LIMIT) {
 				// single part
 				partCount = 1
