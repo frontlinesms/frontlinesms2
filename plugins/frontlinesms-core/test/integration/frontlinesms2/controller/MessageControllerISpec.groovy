@@ -125,7 +125,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.message = "!@:%^&*(){" * 30
 			controller.sendMessageCount()
 		then:
-			controller.response.contentAsString == '{"charCount":300,"partCount":3,"remaining":105}'
+			controller.response.contentAsString == '{"charCount":360,"partCount":3,"remaining":99}'
 	}
 
 	def 'calling "sendMessageCount" returns the number of characters remaining'() {
