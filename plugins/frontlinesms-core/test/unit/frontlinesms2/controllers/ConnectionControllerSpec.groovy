@@ -1,7 +1,7 @@
 package frontlinesms2.controllers
 
 import frontlinesms2.*
-
+import org.codehaus.groovy.grails.commons.ApplicationHolder
 import spock.lang.*
 
 @TestFor(ConnectionController)
@@ -14,6 +14,7 @@ class ConnectionControllerSpec extends Specification {
 		controller.appSettingsService = appSettingsService
 		controller.grailsApplication = [mainContext: [:]]
 		controller.metaClass.setFlashMessage = { String msg -> msg }
+		ApplicationHolder.metaClass.static.getApplication = { -> return [mainContext: [getBean: { String name -> [beta:'true'] }] ] }
 	}
 
 	def 'createRoute should trigger EnableFconnectionJob'() {
