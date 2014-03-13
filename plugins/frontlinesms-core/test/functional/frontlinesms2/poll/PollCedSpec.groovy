@@ -354,12 +354,13 @@ class PollCedSpec extends PollBaseSpec {
 		setup:
 			def pollId = deletePoll()
 			def pollName = remote { Poll.get(pollId).name }
+			def msgCount = remote { Poll.get(pollId).getLiveMessageCount() }
 		when:
 			to PageMessageTrash, remote { Trash.findByObjectId(pollId).id }
 		then:
 			messageList.messageCount == 1
 			messageList.messageSource == pollName
-			messageList.messageText == "${poll.getLiveMessageCount()} message(s)"
+			messageList.messageText == "${msgCount} message(s)"
 			messageList.messageDate
 	}
 
