@@ -33,7 +33,7 @@ class WebconnectionViewSpec extends WebconnectionBaseSpec {
 	def 'Webconnection page should show API url, excluding secret, iff API is enabled'() {
 		setup:
 			def webconnectionName = remote { GenericWebconnection.build(name:'me', apiEnabled:true, secret:secret, url:'http://test.com').name }
-			def wcId = remote { GenericWebconnection.build(name:'me', apiEnabled:true, secret:secret, url:'http://test.com').id }
+			def wcId = remote { GenericWebconnection.findByName('me').id }
 		when:
 			to PageMessageWebconnection, webconnectionName
 		then:
