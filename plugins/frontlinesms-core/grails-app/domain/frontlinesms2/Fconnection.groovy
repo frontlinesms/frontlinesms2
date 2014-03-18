@@ -24,10 +24,11 @@ class Fconnection {
 			NexmoFconnection,
 			SmssyncFconnection,
 			SmppFconnection]
-	static final betaImplementations = [FrontlinesyncFconnection] + implementations
 	static final getImplementations(params) {
 		(params.beta || Boolean.parseBoolean(ApplicationHolder.application.mainContext.getBean('appSettingsService').beta ?: 'false')) ? betaImplementations: implementations
 	}
+
+	static getBetaImplementations() { [FrontlinesyncFconnection] + implementations }
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
