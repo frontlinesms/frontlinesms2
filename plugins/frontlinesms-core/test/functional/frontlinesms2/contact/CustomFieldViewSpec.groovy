@@ -69,20 +69,6 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			waitFor { remote { !CustomField.findByContact(Contact.findByName("Bob")) } }
 	}
 
-	def 'loosing focus on a custom field actually adds field to contact in database if value is filled in'() {
-		when:
-			to PageContactShow, 'Bob'
-			singleContactDetails.addCustomField 'lake'
-			def customFeild = singleContactDetails.customField 'lake'
-			waitFor { !customFeild.disabled }
-			customFeild.value('erie')
-			customFeild.blur()
-		then:
-			waitFor {
-				singleContactDetails.contactsCustomFields.containsAll(['lake', 'town'])
-			}
-	}
-
 	def "adding a custom field to a contact does not add it to the database if there is a blank value for field"() {
 		when:
 			to PageContactShow, 'Bob'
