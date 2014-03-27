@@ -106,8 +106,25 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.listSize() == 1
 	}
 
-	def 'creating new frontlinesync connection should work'() { assert false }
-	def 'editing a frontlinesync connection should load the ui with the saved passcode'() { assert false }
+	def 'can setup a Frontlinesync connection'() {
+		given:
+			remote {
+				Fconnection.implementations.add(FrontlinesyncFconnection)
+			}
+			to PageConnection
+			assert noContent.displayed
+		when:
+			launchCreateWizard("frontlinesync")
+			connectionForm.frontlinesyncname = "Text the World"
+			next.click()
+			submit.click()
+		then:
+			at PageConnection
+			waitFor { connectionList.connectionName(0).contains("Text the World") }
+			remote {
+				Fconnection.implementations.remove(FrontlinesyncFconnection)
+			}
+	}
 
 /* FIXME TODO FIXME TODO make this work reliably.  Prizes on offer.
  Have commented this out as it seems to randomly fail to validate.
