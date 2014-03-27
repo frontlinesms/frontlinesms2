@@ -70,6 +70,7 @@ grails.project.dependency.resolution = {
 		compile 'com.googlecode.libphonenumber:libphonenumber:4.3'
 		compile 'com.googlecode.ez-vcard:ez-vcard:0.9.0'
 		compile 'org.apache.httpcomponents:httpclient:4.3'
+		compile 'org.apache.commons:commons-math:2.0'
 	}
 
 	plugins {

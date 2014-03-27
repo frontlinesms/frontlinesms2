@@ -106,6 +106,9 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.listSize() == 1
 	}
 
+	def 'creating new frontlinesync connection should work'() { assert false }
+	def 'editing a frontlinesync connection should load the ui with the saved passcode'() { assert false }
+
 /* FIXME TODO FIXME TODO make this work reliably.  Prizes on offer.
  Have commented this out as it seems to randomly fail to validate.
 

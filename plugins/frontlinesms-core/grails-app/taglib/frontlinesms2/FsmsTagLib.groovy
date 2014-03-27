@@ -4,6 +4,8 @@ import org.springframework.web.servlet.support.RequestContextUtils
 import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
 import frontlinesms2.CoreAppInfoProviders as CAIP
 
+import org.apache.commons.math.random.RandomDataImpl;
+
 class FsmsTagLib {
 	static namespace = 'fsms'
 
@@ -603,6 +605,20 @@ class FsmsTagLib {
 		}
 		out << "<p>${description}</p>"
 		out << "</div>"
+	}
+
+	def frontlineSyncPasscode = { att, body ->
+		println "$att"
+		def connection = att.connection
+		def passcode
+		if(connection) {
+			passcode = connection.secret
+		} else {
+			def randomData = new RandomDataImpl()
+			passcode = randomData.nextInt(1000, 9999)
+		}
+		out << g.hiddenField(name:'frontlinesyncsecret', value:passcode)
+		out << "<div class='passcode-pretty'>${passcode}</div>"
 	}
 
 	private def getFields(att) {
