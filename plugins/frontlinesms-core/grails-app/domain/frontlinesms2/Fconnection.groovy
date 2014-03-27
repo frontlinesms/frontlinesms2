@@ -53,6 +53,8 @@ class Fconnection {
 	static constraints = {
 		name blank:false
 	}
+
+	static boolean useGsp = false
 	
 	String name
 	boolean sendEnabled = true

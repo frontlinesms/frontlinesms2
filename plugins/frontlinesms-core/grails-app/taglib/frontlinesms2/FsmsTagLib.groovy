@@ -276,7 +276,7 @@ class FsmsTagLib {
 		if(att.table) out << '<table>'
 		if(att.list) out << "<div class='field-list'>"
 		def fields = getFields(att)
-		if(fields) {
+		if(!useGsp(att)) {
 			if(fields instanceof Map) {
 				generateSection(att, fields)
 			} else {
@@ -626,6 +626,10 @@ class FsmsTagLib {
 		if(!fields) fields = att.instanceClass?.configFields
 		if(fields instanceof String) fields = fields.tokenize(',')*.trim()
 		return fields
+	}
+
+	private def useGsp(att) {
+		att.instanceClass?.useGsp
 	}
 
 	private def getFieldLabel(clazz, fieldName) {
