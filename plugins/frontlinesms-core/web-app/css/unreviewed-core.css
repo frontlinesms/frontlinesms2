@@ -189,4 +189,4 @@ form#send-quick-message .quickmessage-composer-instruction {
 .connection-config .database-config-value { font-weight:bold; font-size:1.6em; font-family:Courier New; }
 #create_subscription label.error { display:block; }
 
-.frontlinesync-passcode .passcode-pretty { font-size:7em; font-family:Comic Sans; text-align:center; }
+.frontlinesync-passcode .passcode-pretty { font-size:7em; font-family:Courier New; text-align:center; }
