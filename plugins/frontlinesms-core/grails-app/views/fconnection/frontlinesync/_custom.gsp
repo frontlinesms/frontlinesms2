@@ -7,6 +7,7 @@
 	</div>
 	<br/>
 	<p><g:message code="frontlinesync.passcode-setup"/></p>
+	<br/>
 	<div class="frontlinesync-passcode">
 		<fsms:frontlineSyncPasscode connection="${fconnectionInstance}"/>
 	</div>

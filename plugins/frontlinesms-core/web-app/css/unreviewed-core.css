@@ -185,8 +185,17 @@ form#send-quick-message .quickmessage-composer-instruction {
 .api-instructions-title { margin-bottom:2px; }
 .api-url { margin-left:10px; }
 .api-url .url-value { font-weight:bold; font-size:1.2em; }
-.connection-config { margin-left:10px; }
-.connection-config .database-config-value { font-weight:bold; font-size:1.6em; font-family:Courier New; }
+
+.config-table { display:table; border-collapse:separate; border-spacing:5px; }
+.config-values { display:table-row; }
+.connection:hover .connection-config { background-color:white; }
+.connection-config { display:table-cell; padding: 5px 20px; border:1px solid black; }
+.connection-config .field-label { text-align:center; } 
+.connection-config .field-value { text-align:center; }
+.connection-config .connection-id { margin-top:2px; } 
+.connection-config .connection-secret { margin-top:2px; } 
+.database-config-value { font-weight:bold; font-size:3.6em; font-family:Courier New; }
+.api-url .connection-url { font-size:2em; line-height:1.5em; }
 #create_subscription label.error { display:block; }
 
 .frontlinesync-passcode .passcode-pretty { font-size:7em; font-family:Courier New; text-align:center; }
