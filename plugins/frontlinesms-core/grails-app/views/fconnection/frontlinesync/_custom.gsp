@@ -14,8 +14,8 @@
 	<p><g:message code="frontlinesync.info-sendEnabled"/></p>
 	<br/>
 	<div>
-		<g:checkBox name="frontlinesyncsendEnabled" value="${connectionInstance?.sendEnabled}" checked="${connectionInstance?.sendEnabled}"/>
-		<label><g:message code="frontlinesync.sendEnabled.label"/></label>
+		<g:checkBox name="frontlinesyncsendEnabled" value="${fconnectionInstance?.sendEnabled}" checked="${fconnectionInstance?.sendEnabled}"/>
+		<label for="frontlinesyncsendEnabled"><g:message code="frontlinesync.sendEnabled.label"/></label>
 	</div>
 	<br/>
 	<p><g:message code="frontlinesync.final-setup"/></p>
