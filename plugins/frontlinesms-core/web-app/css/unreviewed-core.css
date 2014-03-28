@@ -188,8 +188,11 @@ form#send-quick-message .quickmessage-composer-instruction {
 
 .config-table { display:table; border-collapse:separate; border-spacing:5px; }
 .config-values { display:table-row; }
-.connection:hover .connection-config { background-color:white; }
-.connection-config { display:table-cell; padding: 5px 20px; border:1px solid black; }
+.connection-config-container { padding:5px; height:auto; position:relative; }
+.connection-config-container .icon { text-align:end; font-size:1.5em; position:absolute; bottom:5px; right: 5px; }
+.connection:hover .connection-config-container { background-color:white; }
+.connection-config-container { display:table-cell; border:1px solid black; }
+.connection-config { padding: 3px 15px; }
 .connection-config .field-label { text-align:center; } 
 .connection-config .field-value { text-align:center; }
 .connection-config .connection-id { margin-top:2px; } 
