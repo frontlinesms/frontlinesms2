@@ -278,7 +278,7 @@ class FsmsTagLib {
 		if(att.table) out << '<table>'
 		if(att.list) out << "<div class='field-list'>"
 		def fields = getFields(att)
-		if(!useGsp(att)) {
+		if(!hasCustomConfigTemplate(att)) {
 			if(fields instanceof Map) {
 				generateSection(att, fields)
 			} else {
@@ -610,7 +610,6 @@ class FsmsTagLib {
 	}
 
 	def frontlineSyncPasscode = { att, body ->
-		println "$att"
 		def connection = att.connection
 		def passcode
 		if(connection) {
@@ -630,7 +629,7 @@ class FsmsTagLib {
 		return fields
 	}
 
-	private def useGsp(att) {
+	private def hasCustomConfigTemplate(att) {
 		return (groovyPageLocator.findTemplateByPath("/fconnection/${att.instanceClass?.shortName}/config") != null)
 	}
 
