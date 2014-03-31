@@ -11,7 +11,6 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	static String getShortName() { 'frontlinesync' }
 	static final passwords = []
 	static final configFields = ['info-setup': ['secret'], 'info-name':['name'], 'info-sendEnabled':['sendEnabled']]
-	static boolean useGsp = true
 
 	def frontlinesyncService
 	def appSettingsService
