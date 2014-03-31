@@ -3,6 +3,7 @@ package frontlinesms2
 import org.springframework.web.servlet.support.RequestContextUtils
 import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
 import frontlinesms2.CoreAppInfoProviders as CAIP
+import org.codehaus.groovy.grails.web.pages.discovery.GrailsConventionGroovyPageLocator
 
 import org.apache.commons.math.random.RandomDataImpl;
 
@@ -14,6 +15,7 @@ class FsmsTagLib {
 	def grailsApplication
 	def i18nUtilService
 	def statusIndicatorService
+	GrailsConventionGroovyPageLocator groovyPageLocator
 
 	def info = { att ->
 		def cssClass = 'info'
@@ -302,7 +304,7 @@ class FsmsTagLib {
 				if(att.table) out << '</td></tr>'
 			}
 		} else {
-			out << render(template: "/fconnection/${att.instanceClass?.shortName}/custom")
+			out << render(template: "/fconnection/${att.instanceClass?.shortName}/config")
 		}
 		if(att.table) out << '</table>'
 		if(att.list) out << '</div>'
@@ -629,7 +631,7 @@ class FsmsTagLib {
 	}
 
 	private def useGsp(att) {
-		att.instanceClass?.useGsp
+		return (groovyPageLocator.findTemplateByPath("/fconnection/${att.instanceClass?.shortName}/config") != null)
 	}
 
 	private def getFieldLabel(clazz, fieldName) {

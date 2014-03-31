@@ -54,8 +54,6 @@ class Fconnection {
 		name blank:false
 	}
 
-	static boolean useGsp = false
-	
 	String name
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
