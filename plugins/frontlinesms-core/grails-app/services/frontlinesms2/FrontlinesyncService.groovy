@@ -29,6 +29,18 @@ class FrontlinesyncService {
 						['fconnection-id':connection.id])
 			}
 
+			data.payload.outboundTextMessageStatuses.each { msgStatus ->
+				Dispatch d = Dispatch.get(msgStatus.dispatchId)
+				if(msgStatus.status == 'SENT') {
+					d.status = DispatchStatus.SENT
+					d.dateSent = new Date()
+				}
+				else {
+					d.status = DispatchStatus.FAILED
+				}
+				d.save(failOnError: true)
+			}
+
 			def payload
 			if(connection.sendEnabled) {
 				def outgoingPayload = generateOutgoingResponse(connection)
@@ -56,10 +68,7 @@ class FrontlinesyncService {
 		if(q) {
 			connection.removeDispatchesFromQueue(q)
 			responseMap.messages = q.collect { d ->
-					d.status = DispatchStatus.SENT
-					d.dateSent = new Date()
-					d.save(failOnError: true)
-					[to:d.dst, message:d.text]
+					[to:d.dst, message:d.text, dispatchId:d.id]
 				}
 		}
 		responseMap
