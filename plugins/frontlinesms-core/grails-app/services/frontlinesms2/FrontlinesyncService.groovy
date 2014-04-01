@@ -62,7 +62,18 @@ class FrontlinesyncService {
 					[to:d.dst, message:d.text]
 				}
 		}
+		if(connection.configSynced) {
+			responseMap.config = generateSyncConfig(connection)
+		}
 		responseMap
+	}
+
+	private generateSyncConfig(connection) {
+		def m = [:]
+		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
+			m."$it" = connection."$it"
+		}
+		m
 	}
 
 	private def failure(controller, message='ERROR', status=500) {
