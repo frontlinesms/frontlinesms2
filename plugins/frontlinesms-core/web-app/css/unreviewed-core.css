@@ -206,6 +206,6 @@ form#send-quick-message .quickmessage-composer-instruction {
 .frontlinesync-passcode .passcode-pretty { font-size:7em; font-family:Courier New; text-align:center; }
 
 .sync-config-status { }
-.sync-config-status-toggler { display:inline; text-decoration:underline; }
+.sync-config-status-toggler { display:inline; text-decoration:underline !important; }
 .sync-config-container { margin-left:20px; display:none; }
 .synced-config { margin:5px 0; }
