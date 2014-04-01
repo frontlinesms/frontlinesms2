@@ -33,7 +33,7 @@ class FrontlinesyncServiceSpec extends Specification {
 			[id:2, dst:456, status:DispatchStatus.PENDING]
 		]
 		dispatches.each { it.save = { Map args -> return true } }
-		Dispatch.metaClass.static.get = { long id ->
+		Dispatch.metaClass.static.get = { Serializable id ->
 			dispatches.find { it.id == id }
 		}
 	}
@@ -114,8 +114,8 @@ class FrontlinesyncServiceSpec extends Specification {
 			setupConnection('secret')
 			setupPayload('secret', [
 					'outboundTextMessageStatuses' : [
-					[dispatchId: 1, status: 'SENT'],
-					[dispatchId: 2, status: 'FAILED']
+						[dispatchId: 1, status: 'SENT'],
+						[dispatchId: 2, status: 'FAILED']
 					]
 				])
 		when:

@@ -30,7 +30,7 @@ class FrontlinesyncService {
 			}
 
 			data.payload.outboundTextMessageStatuses.each { msgStatus ->
-				Dispatch d = Dispatch.get(msgStatus.dispatchId)
+				def d = Dispatch.get(msgStatus.dispatchId)
 				if(msgStatus.status == 'SENT') {
 					d.status = DispatchStatus.SENT
 					d.dateSent = new Date()
@@ -50,6 +50,7 @@ class FrontlinesyncService {
 			}
 			controller.render text:payload
 		} catch(Exception ex) {
+			ex.printStackTrace()
 			failure(controller, ex.message)
 		}
 	}
