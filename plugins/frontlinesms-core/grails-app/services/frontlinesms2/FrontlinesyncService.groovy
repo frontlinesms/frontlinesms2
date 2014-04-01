@@ -64,6 +64,8 @@ class FrontlinesyncService {
 		}
 		if(connection.configSynced) {
 			responseMap.config = generateSyncConfig(connection)
+			connection.configSynced = true
+			connection.save()
 		}
 		responseMap
 	}
