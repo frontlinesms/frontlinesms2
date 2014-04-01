@@ -114,8 +114,8 @@ class FrontlinesyncServiceSpec extends Specification {
 			setupConnection('secret')
 			setupPayload('secret', [
 					'outboundTextMessageStatuses' : [
-						[dispatchId: 1, status: 'SENT'],
-						[dispatchId: 2, status: 'FAILED']
+						[dispatchId: 1, deliveryStatus: '2'], // 2 == success
+						[dispatchId: 2, deliveryStatus: '9']
 					]
 				])
 		when:

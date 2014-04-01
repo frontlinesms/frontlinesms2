@@ -5,6 +5,8 @@ import org.apache.camel.Exchange
 import grails.converters.JSON
 
 class FrontlinesyncService {
+	public static final int OUTBOUND_MESSAGE_SUCCESS_CODE = 2
+
 	def apiProcess(connection, controller) {
 		def data = controller.request.JSON
 		if(connection.secret && data.secret != connection.secret) {
@@ -31,14 +33,14 @@ class FrontlinesyncService {
 
 			data.payload.outboundTextMessageStatuses.each { msgStatus ->
 				def d = Dispatch.get(msgStatus.dispatchId)
-				if(msgStatus.status == 'SENT') {
-					d.status = DispatchStatus.SENT
-					d.dateSent = new Date()
+				if(msgStatus.deliveryStatus as int == OUTBOUND_MESSAGE_SUCCESS_CODE) {
+					d?.status = DispatchStatus.SENT
+					d?.dateSent = new Date()
 				}
 				else {
-					d.status = DispatchStatus.FAILED
+					d?.status = DispatchStatus.FAILED
 				}
-				d.save(failOnError: true)
+				d?.save(failOnError: true)
 			}
 
 			def payload
