@@ -35,12 +35,8 @@ class FrontlinesyncService {
 			}
 
 			def payload
-			if(connection.sendEnabled) {
-				def outgoingPayload = generateOutgoingResponse(connection)
-				payload = (outgoingPayload as JSON)
-			} else {
-				payload = ([success:true] as JSON)
-			}
+			def outgoingPayload = generateOutgoingResponse(connection)
+			payload = (outgoingPayload as JSON)
 			controller.render text:payload
 		} catch(Exception ex) {
 			failure(controller, ex.message)
@@ -57,20 +53,25 @@ class FrontlinesyncService {
 	@Transactional
 	private generateOutgoingResponse(connection) {
 		def responseMap = [:]
-		def q = connection.queuedDispatches
-		if(q) {
-			connection.removeDispatchesFromQueue(q)
-			responseMap.messages = q.collect { d ->
-					d.status = DispatchStatus.SENT
-					d.dateSent = new Date()
-					d.save(failOnError: true)
-					[to:d.dst, message:d.text]
-				}
+		if(connection.sendEnabled) {
+			def q = connection.queuedDispatches
+			if(q) {
+				connection.removeDispatchesFromQueue(q)
+				responseMap.messages = q.collect { d ->
+						d.status = DispatchStatus.SENT
+						d.dateSent = new Date()
+						d.save(failOnError: true)
+						[to:d.dst, message:d.text]
+					}
+			}
 		}
 		if(!connection.configSynced) {
 			responseMap.config = generateSyncConfig(connection)
 			connection.configSynced = true
 			connection.save()
+		}
+		if(responseMap.keySet().size() == 0) {
+			responseMap.success =  true
 		}
 		responseMap
 	}
