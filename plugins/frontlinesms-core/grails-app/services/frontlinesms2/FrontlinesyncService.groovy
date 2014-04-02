@@ -29,6 +29,11 @@ class FrontlinesyncService {
 						['fconnection-id':connection.id])
 			}
 
+			if(data.payload.config) {
+				def config = data.payload.config
+				updateSyncConfig(config, connection)
+			}
+
 			def payload
 			if(connection.sendEnabled) {
 				def outgoingPayload = generateOutgoingResponse(connection)
@@ -62,12 +67,21 @@ class FrontlinesyncService {
 					[to:d.dst, message:d.text]
 				}
 		}
-		if(connection.configSynced) {
+		if(!connection.configSynced) {
 			responseMap.config = generateSyncConfig(connection)
 			connection.configSynced = true
 			connection.save()
 		}
 		responseMap
+	}
+
+	@Transactional
+	private updateSyncConfig(config, connection){
+		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
+			connection."$it" = config."$it"
+		}
+		connection.configSynced = true
+		connection.save()
 	}
 
 	private generateSyncConfig(connection) {
