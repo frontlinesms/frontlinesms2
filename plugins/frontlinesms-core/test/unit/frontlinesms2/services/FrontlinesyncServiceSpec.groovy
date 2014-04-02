@@ -8,10 +8,13 @@ import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.TestMixin
+import grails.test.mixin.web.ControllerUnitTestMixin
 
 @TestFor(FrontlinesyncService)
 @Build(FrontlinesyncFconnection)
 @Mock(Dispatch)
+@TestMixin(ControllerUnitTestMixin)
 class FrontlinesyncServiceSpec extends Specification {
 	def connection
 	def controller
