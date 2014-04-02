@@ -43,13 +43,14 @@ class FrontlinesyncService {
 				d?.save(failOnError: true)
 			}
 
-			def payload
-			if(connection.sendEnabled) {
-				def outgoingPayload = generateOutgoingResponse(connection)
-				payload = (outgoingPayload as JSON)
-			} else {
-				payload = ([success:true] as JSON)
+			if(data.payload.config) {
+				def config = data.payload.config
+				updateSyncConfig(config, connection)
 			}
+
+			def payload
+			def outgoingPayload = generateOutgoingResponse(connection)
+			payload = (outgoingPayload as JSON)
 			controller.render text:payload
 		} catch(Exception ex) {
 			ex.printStackTrace()
@@ -67,14 +68,41 @@ class FrontlinesyncService {
 	@Transactional
 	private generateOutgoingResponse(connection) {
 		def responseMap = [:]
-		def q = connection.queuedDispatches
-		if(q) {
-			connection.removeDispatchesFromQueue(q)
-			responseMap.messages = q.collect { d ->
+		if(connection.sendEnabled) {
+			def q = connection.queuedDispatches
+			if(q) {
+				connection.removeDispatchesFromQueue(q)
+				responseMap.messages = q.collect { d ->
 					[to:d.dst, message:d.text, dispatchId:d.id]
 				}
+			}
+		}
+		if(!connection.configSynced) {
+			responseMap.config = generateSyncConfig(connection)
+			connection.configSynced = true
+			connection.save()
+		}
+		if(responseMap.keySet().size() == 0) {
+			responseMap.success =  true
 		}
 		responseMap
+	}
+
+	@Transactional
+	private updateSyncConfig(config, connection){
+		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
+			connection."$it" = config."$it"
+		}
+		connection.configSynced = true
+		connection.save()
+	}
+
+	private generateSyncConfig(connection) {
+		def m = [:]
+		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
+			m."$it" = connection."$it"
+		}
+		m
 	}
 
 	private def failure(controller, message='ERROR', status=500) {
