@@ -91,6 +91,13 @@ $(function() {
 			}
 		}
 	});
+
+	app_info.listen("frontlinesync_config_synced_status", function(data){
+		var i, data = data.frontlinesync_config_synced_status;
+		for(i=data.length-1; i>=0; --i) {
+			frontlinesync.updateConfigSynced(data[i]);
+		}
+	});
 	preloadImage("${r.resource(dir:'images', file:'message/gray-ajax-spinner.gif')}");
 	<g:if test="${newConnectionIds}">
 		fconnection_list.pulseNewConnections("${newConnectionIds}");
