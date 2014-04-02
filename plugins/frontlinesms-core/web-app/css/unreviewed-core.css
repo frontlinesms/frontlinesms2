@@ -186,7 +186,6 @@ form#send-quick-message .quickmessage-composer-instruction {
 .api-url { margin-left:10px; }
 .api-url .url-value { font-weight:bold; font-size:1.2em; }
 
-.config-table-container.connected { display:none; }
 .config-table-container.connecting { display:block; }
 .config-table { display:table; border-collapse:separate; border-spacing:5px; }
 .config-values { display:table-row; }
