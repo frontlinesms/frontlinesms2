@@ -71,6 +71,9 @@
 </script>
 
 <script id="fconnection-controls-CONNECTING" type="text/x-sanchez-template">
+	<g:link controller="connection" action="delete" class="btn route" id="{{connectionId}}">
+		<g:message code="connection.delete"/>
+	</g:link>
 </script>
 
 
