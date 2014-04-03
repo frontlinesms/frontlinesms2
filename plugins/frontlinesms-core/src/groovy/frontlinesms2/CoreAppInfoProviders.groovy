@@ -25,6 +25,12 @@ class CoreAppInfoProviders {
 			}
 		}
 
+		s.registerProvider('frontlinesync_config_synced_status') { app, controller, data ->
+			FrontlinesyncFconnection.findAll().collect { c ->
+				[id:c.id, configSynced:c.configSynced, status:c.status.toString(), sendEnabled:c.sendEnabled, receiveEnabled:c.receiveEnabled, missedCallEnabled:c.missedCallEnabled]
+			}
+		}
+
 		s.registerProvider 'contact_message_stats', contactMessageStats
 
 		s.registerProvider('system_notification') { app, controller, data ->

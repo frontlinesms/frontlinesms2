@@ -59,6 +59,7 @@ modules = {
 		resource url:[dir:'js', file:'selectmenuTools.js'], disposition:'head'
 		resource url:[dir:'js', file:'jquery.autosize-min.js']
 		resource url:[dir:'js', file:'message_composer.js']
+		resource url:[dir:'js', file:'frontlinesync.js', disposition:'head']
 	}
 	
 	messages {

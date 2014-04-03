@@ -146,7 +146,7 @@ class FrontlinesyncServiceSpec extends Specification {
 	def 'generateOutgoingResponses should return messages as a map, including to, message and dispatchId'() {
 		given:
 			def connection  = setupConnection("secret")
-			connection.sendEnabled =  true
+			connection.sendEnabled = true
 			connection.queuedDispatches = [mockDispatch('123', 'yeah', 123)]
 			connection.removeDispatchesFromQueue = { q -> true }
 		expect:
@@ -171,8 +171,17 @@ class FrontlinesyncServiceSpec extends Specification {
 			
 	}
 
+	def 'generateOutgoingResponses should return config as a map is not synced'() {
+		given:
+			def connection  = setupConnection("secret")
+			connection.configSynced = false
+		expect:
+			service.generateOutgoingResponse(connection).equals([config:[sendEnabled:null, receiveEnabled:null, missedCallEnabled:null]])
+			
+	}
+
 	private def setupConnection(secret) {
-		connection = [id:123, secret:secret]
+		connection = [id:123, secret:secret, save :{ -> println "# Saving connection" }, configSynced:true]
 	}
 
 	private def setupPayload(secret=null, payload=null) {
