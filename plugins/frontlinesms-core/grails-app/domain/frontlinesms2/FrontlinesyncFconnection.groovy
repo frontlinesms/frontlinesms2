@@ -38,7 +38,7 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	def getCustomStatus() {
 		// Currently this is just an API receiving incoming stuff, so it's always
 		// deemed to be connected.
-		return ConnectionStatus.CONNECTED
+		lastConnectionTime ? ConnectionStatus.CONNECTED : ConnectionStatus.CONNECTING
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {
