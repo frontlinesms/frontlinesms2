@@ -29,6 +29,7 @@
 </div>
 
 <div class="sync-config-status-container">
+	<i class="expand icon-chevron-sign-right"></i>
 	<a class="sync-config-status-toggler" href="#" onclick="frontlinesync.toggleOptions()"><g:message code="frontlinesync.connection.options.label"/></a>
 	<span class='sync-config-status'>
 		${message(code:"frontlinesync.sync.config.dirty."+(!c.configSynced))}

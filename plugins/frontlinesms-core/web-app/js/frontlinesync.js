@@ -12,6 +12,16 @@ var frontlinesync =  (function() {
 
 	toggleOptions = function() {
 		syncConfigContainer.toggle();
+		var expandIcon = $(".sync-config-status-container .expand");
+		var signRightIcon = "icon-chevron-sign-right";
+		var signDownIcon = "icon-chevron-sign-down";
+		if(expandIcon.hasClass(signRightIcon)) {
+			expandIcon.removeClass(signRightIcon);
+			expandIcon.addClass(signDownIcon);
+		} else {
+			expandIcon.addClass(signRightIcon);
+			expandIcon.removeClass(signDownIcon);
+		}
 	};
 
 	updateConfigSynced = function(data) {
