@@ -92,7 +92,7 @@ class FrontlinesyncService {
 	@Transactional
 	public updateSyncConfig(config, connection, markAsDirty = true){
 		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
-			connection."$it" = config."$it"
+			connection."$it" = config."$it" as boolean
 		}
 		connection.configSynced = markAsDirty
 		if(connection.sendEnabled) {
