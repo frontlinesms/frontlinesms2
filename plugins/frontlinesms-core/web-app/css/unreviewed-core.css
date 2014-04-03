@@ -186,8 +186,11 @@ form#send-quick-message .quickmessage-composer-instruction {
 .api-url { margin-left:10px; }
 .api-url .url-value { font-weight:bold; font-size:1.2em; }
 
+.sync-config-status-container { display:none; }
+tr.connection.connected .sync-config-status-container { display:block; }
 .sync-config-status-container .expand { font-size:14px; }
-.config-table-container.connecting { display:block; }
+.config-table-container{ display:none; }
+tr.connection.connecting .config-table-container{ display:block; }
 .config-table { display:table; border-collapse:separate; border-spacing:5px; }
 .config-values { display:table-row; }
 .connection-config-container { padding:5px; height:auto; position:relative; }
