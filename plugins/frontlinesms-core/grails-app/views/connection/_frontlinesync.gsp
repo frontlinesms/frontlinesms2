@@ -1,4 +1,4 @@
-<div class="config-table-container ${c.status.toString().toLowerCase()}">
+<div class="config-table-container">
 	<p class="api-instructions-title"><g:message code="frontlinesync.api.title"/></p>
 
 	<div class="config-table">
