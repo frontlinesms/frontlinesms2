@@ -5,6 +5,7 @@ import org.apache.camel.Exchange
 import grails.converters.JSON
 
 class FrontlinesyncService {
+	def fconnectionService
 	public static final int OUTBOUND_MESSAGE_SUCCESS_CODE = 2
 
 	def apiProcess(connection, controller) {
@@ -89,11 +90,17 @@ class FrontlinesyncService {
 	}
 
 	@Transactional
-	private updateSyncConfig(config, connection){
+	public updateSyncConfig(config, connection, markAsDirty = true){
 		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
 			connection."$it" = config."$it"
 		}
-		connection.configSynced = true
+		connection.configSynced = markAsDirty
+		if(connection.sendEnabled) {
+			fconnectionService.enableFconnection(connection)
+		}
+		else {
+			fconnectionService.disableFconnection(connection)
+		}
 		connection.save()
 	}
 

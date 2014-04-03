@@ -3,13 +3,12 @@ package frontlinesms2
 import grails.converters.JSON
 
 class FrontlinesyncController extends ControllerUtils {
+	def frontlinesyncService
 	def index() { redirect action:'update' }
 
 	def update() {
 		withFconnection { frontlinesyncInstance ->
-			frontlinesyncInstance.properties = params
-			frontlinesyncInstance.configSynced =  false
-			frontlinesyncInstance.save()
+			frontlinesyncService.updateSyncConfig(params, frontlinesyncInstance, false)
 			render ([success:true] as JSON)
 		}
 	}
