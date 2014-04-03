@@ -6,7 +6,7 @@ var frontlinesync =  (function() {
 
 	afterUpdate = function() {
 		hideThinking();
-		syncConfigContainer.hide();
+		toggleOptions();
 		syncConfigStatus.html(i18n('frontlinesync.sync.config.dirty.true'));
 	};
 
