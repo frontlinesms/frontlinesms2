@@ -19,9 +19,9 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	def dispatchRouterService
 
 	Date lastConnectionTime
-	boolean sendEnabled = true
-	boolean receiveEnabled = true
-	boolean missedCallEnabled = true
+	boolean sendEnabled = false
+	boolean receiveEnabled = false
+	boolean missedCallEnabled = false
 	boolean configSynced = false
 	String secret
 

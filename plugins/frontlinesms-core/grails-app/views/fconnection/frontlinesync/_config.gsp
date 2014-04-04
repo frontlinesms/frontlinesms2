@@ -12,12 +12,5 @@
 		<fsms:frontlineSyncPasscode connection="${fconnectionInstance}"/>
 	</div>
 	<br/>
-	<p><g:message code="frontlinesync.info-sendEnabled"/></p>
-	<br/>
-	<div>
-		<g:checkBox name="frontlinesyncsendEnabled" value="${fconnectionInstance?.sendEnabled}" checked="${fconnectionInstance?.sendEnabled}"/>
-		<label for="frontlinesyncsendEnabled"><g:message code="frontlinesync.sendEnabled.label"/></label>
-	</div>
-	<br/>
 	<p><g:message code="frontlinesync.final-setup"/></p>
 </div>
