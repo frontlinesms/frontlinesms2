@@ -101,7 +101,6 @@ class DispatchRouterService {
 	def handleFailed(Exchange x) {
 		log.info "handleFailed() : ENTRY"
 		log.info "handleFailed() : exchange $x"
-		log.info "handleFailed() : exchange.in.headers ${x.in.headers}"
 		log.info "handleFailed() : exchange.in.body ${x.in.body}"
 		updateDispatch(x, DispatchStatus.FAILED)
 		log.info "handleFailed() : EXIT"
