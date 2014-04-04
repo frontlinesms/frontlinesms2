@@ -36,8 +36,6 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	boolean isApiEnabled() { return this.sendEnabled || this.receiveEnabled }
 
 	def getCustomStatus() {
-		// Currently this is just an API receiving incoming stuff, so it's always
-		// deemed to be connected.
 		lastConnectionTime ? (this.enabled ? ConnectionStatus.CONNECTED : ConnectionStatus.DISABLED) : ConnectionStatus.CONNECTING
 	}
 
