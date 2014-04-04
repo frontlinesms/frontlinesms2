@@ -20,7 +20,7 @@ class DispatchRouterService {
 	def slip(Exchange exchange,
 			@Header(Exchange.SLIP_ENDPOINT) String previous,
 			@Header('requested-fconnection-id') String requestedFconnectionId) {
-		def logWithPrefix = { log.info "DispatchRouterService.slip() : $it" }
+		def logWithPrefix = { log.info "slip() : $it" }
 		logWithPrefix "ENTRY"
 		logWithPrefix "Routing exchange $exchange with previous endpoint $previous and target fconnection $requestedFconnectionId"
 		logWithPrefix "x.in=$exchange?.in"
@@ -85,31 +85,34 @@ class DispatchRouterService {
 			if(!filteredRouteList) filteredRouteList = allOutRoutes.findAll { it.id.contains('-modem-') }
 			if(!filteredRouteList) filteredRouteList = allOutRoutes
 			
-			log.info "DispatchRouterService.getRouteIdByRoundRobin() : Routes available: ${filteredRouteList*.id}"
-			log.info "DispatchRouterService.getRouteIdByRoundRobin() : Counter has counted up to $counter"
+			log.info "getRouteIdByRoundRobin() : Routes available: ${filteredRouteList*.id}"
+			log.info "getRouteIdByRoundRobin() : Counter has counted up to $counter"
 			return filteredRouteList[++counter % filteredRouteList.size]?.id
 		}
 	}
 
 	def handleCompleted(Exchange x) {
-		log.info "DispatchRouterService.handleCompleted() : ENTRY"
+		log.info "handleCompleted() : ENTRY"
 		def connection = Fconnection.get(x.in.getHeader('fconnection-id'))
 		connection?.updateDispatch(x)
-		log.info "DispatchRouterService.handleCompleted() : EXIT"
+		log.info "handleCompleted() : EXIT"
 	}
 
 	def handleFailed(Exchange x) {
-		log.info "DispatchRouterService.handleFailed() : ENTRY"
+		log.info "handleFailed() : ENTRY"
+		log.info "handleFailed() : exchange $x"
+		log.info "handleFailed() : exchange.in.headers ${x.in.headers}"
+		log.info "handleFailed() : exchange.in.body ${x.in.body}"
 		updateDispatch(x, DispatchStatus.FAILED)
-		log.info "DispatchRouterService.handleFailed() : EXIT"
+		log.info "handleFailed() : EXIT"
 	}
 
 	def handleNoRoutes(Exchange x) {
-		log.info "DispatchRouterService.handleNoRoutes() : NoRouteAvailableException handling..."
+		log.info "handleNoRoutes() : NoRouteAvailableException handling..."
 		systemNotificationService.create(code:"routing.notification.no-available-route")
 		x.out.body = x.in.body
 		x.out.headers = x.in.headers
-		log.info "DispatchRouterService.handleNoRoutes() : EXIT"
+		log.info "handleNoRoutes() : EXIT"
 	}
 
 	private Dispatch updateDispatch(Exchange x, s) {
@@ -122,7 +125,7 @@ class DispatchRouterService {
 			d = Dispatch.get(id)
 		}
 		
-		log.info "DispatchRouterService.updateDispatch() : dispatch=$d" 
+		log.info "updateDispatch() : dispatch=$d" 
 		
 		if(d) {
 			d.status = s
@@ -137,7 +140,7 @@ class DispatchRouterService {
 	}
 
 	private getLastReceiverConnection(exchange) {
-		def logWithPrefix = { log.info "DispatchRouterService.slip() : $it" }
+		def logWithPrefix = { log.info "slip() : $it" }
 		logWithPrefix "Dispatch is ${exchange.in.getBody()}"
 		def d = exchange.in.getBody()
 		logWithPrefix "dispatch to send # $d ### d.dst # $d?.dst"

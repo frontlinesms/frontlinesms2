@@ -17,13 +17,6 @@
 				</div>
 				<div class="icon"><i class="icon-lock"></i></div>
 			</div>
-			<div class="connection-config-container">
-				<div class="connection-config api-url">
-					<div class="field-label"><g:message code="frontlinesync.api.url.label"/></div>
-					<div class="field-value connection-url">${c.getFullApiUrl(request)}</div>
-				</div>
-				<div class="icon api-url"><i class="icon-link"></i></div>
-			</div>
 		</div>
 	</div>
 </div>
