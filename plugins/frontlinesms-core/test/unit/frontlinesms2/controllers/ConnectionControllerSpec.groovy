@@ -54,7 +54,7 @@ class ConnectionControllerSpec extends Specification {
 			Fconnection.findAll() == [c]
 		where:
 			status << [ConnectionStatus.CONNECTED, ConnectionStatus.NOT_CONNECTED,
-					ConnectionStatus.CONNECTING, ConnectionStatus.FAILED]
+					ConnectionStatus.FAILED]
 	}
 
 	def 'can set the routing preferences'() {

@@ -71,15 +71,15 @@ class FconnectionService {
 	}
 
 	def getConnectionStatus(Fconnection c) {
-		if(c.hasProperty('customStatus')) {
-			return c.customStatus
-		}
 		if(!c.enabled) return ConnectionStatus.DISABLED
 		if(c.id in connectingIds) {
 			return ConnectionStatus.CONNECTING
 		}
 		if(camelContext.routes.any { it.id ==~ /.*-$c.id$/ }) {
 			return ConnectionStatus.CONNECTED
+		}
+		if(c.hasProperty('customStatus')) {
+			return c.customStatus
 		}
 		return ConnectionStatus.FAILED
 	}
