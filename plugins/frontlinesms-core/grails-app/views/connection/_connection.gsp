@@ -1,5 +1,5 @@
 <%@ page import="frontlinesms2.api.FrontlineApi" %>
-<tr class="connection-header connection ${c.sendEnabled ? '' : 'receiveOnly'}" id="connection-${c?.id}">
+<tr class="connection-header connection ${c.sendEnabled ? '' : 'receiveOnly'} ${c.status?.toString()?.toLowerCase()}" id="connection-${c?.id}">
 	<td class="connection-status ${c.status}"></td>
 	<td class="connection-type"><g:message code="${c.shortName}.label"/></td>
 	<td class="connection-flag"><i class="${c.flagCSSClasses}"></i></td>

@@ -19,9 +19,9 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	def dispatchRouterService
 
 	Date lastConnectionTime
-	boolean sendEnabled = true
-	boolean receiveEnabled = true
-	boolean missedCallEnabled = true
+	boolean sendEnabled = false
+	boolean receiveEnabled = false
+	boolean missedCallEnabled = false
 	boolean configSynced = false
 	String secret
 
@@ -36,9 +36,7 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	boolean isApiEnabled() { return this.sendEnabled || this.receiveEnabled }
 
 	def getCustomStatus() {
-		// Currently this is just an API receiving incoming stuff, so it's always
-		// deemed to be connected.
-		return ConnectionStatus.CONNECTED
+		lastConnectionTime ? (this.enabled ? ConnectionStatus.CONNECTED : ConnectionStatus.DISABLED) : ConnectionStatus.CONNECTING
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {

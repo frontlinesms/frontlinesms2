@@ -1,4 +1,4 @@
-<div class="config-table-container ${c.status.toString().toLowerCase()}">
+<div class="config-table-container">
 	<p class="api-instructions-title"><g:message code="frontlinesync.api.title"/></p>
 
 	<div class="config-table">
@@ -23,14 +23,14 @@
 
 <div class="sync-config-status-container">
 	<i class="expand icon-chevron-sign-right"></i>
-	<a class="sync-config-status-toggler" href="#" onclick="frontlinesync.toggleOptions()"><g:message code="frontlinesync.connection.options.label"/></a>
+	<a class="sync-config-status-toggler" href="#" onclick="frontlinesync.toggleOptions(${c.id})"><g:message code="frontlinesync.connection.options.label"/></a>
 	<span class='sync-config-status'>
 		${message(code:"frontlinesync.sync.config.dirty."+(!c.configSynced))}
 	</span>
 </div>
 
 <div class="sync-config-container">
-	<g:formRemote name="sync-config-form" url="${[controller:'frontlinesync', action:'update', params:[id:c.id]]}" before="frontlinesync.beforeUpdate()" after="frontlinesync.afterUpdate()">
+	<g:formRemote name="sync-config-form" url="${[controller:'frontlinesync', action:'update', params:[id:c.id]]}" before="frontlinesync.beforeUpdate()" after="frontlinesync.afterUpdate(${c.id})">
 		<div class="synced-config">
 			<g:checkBox name="sendEnabled" checked="${c.sendEnabled}"/>
 			<label for="sendEnabled"><g:message code="frontlinesync.sendEnabled.sync.config.label"/></label>

@@ -1,20 +1,22 @@
 var frontlinesync =  (function() {
-	var connetionRow, updateConfigSynced, beforeUpdate, afterUpdate, toggleOptions, syncConfigContainer = $('.sync-config-container'), syncConfigStatus = $('.sync-config-status');
+	var connetionRow, updateConfigSynced, beforeUpdate, afterUpdate, toggleOptions, , ;
 	beforeUpdate = function() {
 		showThinking();
 	};
 
-	afterUpdate = function() {
+	afterUpdate = function(connectionId) {
+		var syncConfigStatus = $(getConnectionRow(connectionId) + ' .sync-config-status')
 		hideThinking();
-		toggleOptions();
+		toggleOptions(connectionId);
 		syncConfigStatus.html(i18n('frontlinesync.sync.config.dirty.true'));
 	};
 
-	toggleOptions = function() {
-		syncConfigContainer.toggle();
-		var expandIcon = $(".sync-config-status-container .expand");
+	toggleOptions = function(connectionId) {
+		var syncConfigContainer = $(getConnectionRow(connectionId) + ' .sync-config-container');
+		var expandIcon = $(getConnectionRow(connectionId) +  " .sync-config-status-container .expand");
 		var signRightIcon = "icon-chevron-sign-right";
 		var signDownIcon = "icon-chevron-sign-down";
+		syncConfigContainer.toggle();
 		if(expandIcon.hasClass(signRightIcon)) {
 			expandIcon.removeClass(signRightIcon);
 			expandIcon.addClass(signDownIcon);
@@ -24,8 +26,12 @@ var frontlinesync =  (function() {
 		}
 	};
 
+	getConnectionRow = function(connectionId) {
+		return ("#connection-" + connectionId);
+	}
+
 	updateConfigSynced = function(data) {
-		connectionRow = $('#connection-' + data.id);
+		connectionRow = $(getConnectionRow(data.id)); 
 		var configSyncedMessage = i18n('frontlinesync.sync.config.dirty.' + !data.configSynced);
 		connectionRow.find(".sync-config-status").html(configSyncedMessage);
 		connectionRow.find("#sendEnabled").attr("checked", data.sendEnabled);

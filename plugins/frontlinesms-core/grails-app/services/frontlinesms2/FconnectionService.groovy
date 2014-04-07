@@ -78,11 +78,9 @@ class FconnectionService {
 		if(camelContext.routes.any { it.id ==~ /.*-$c.id$/ }) {
 			return ConnectionStatus.CONNECTED
 		}
-
 		if(c.hasProperty('customStatus')) {
 			return c.customStatus
 		}
-
 		return ConnectionStatus.FAILED
 	}
 

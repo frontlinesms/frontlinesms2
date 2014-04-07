@@ -51,6 +51,8 @@ class FrontlinesyncService {
 
 			def payload
 			def outgoingPayload = generateOutgoingResponse(connection)
+			connection.lastConnectionTime = new Date()
+			connection.save()
 			payload = (outgoingPayload as JSON)
 			controller.render text:payload
 		} catch(Exception ex) {

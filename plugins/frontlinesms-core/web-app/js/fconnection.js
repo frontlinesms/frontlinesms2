@@ -1,8 +1,13 @@
 fconnection_list = (function() {
 	var update = function(status, id) {
 		var containerSelecter = "#connection-" + id;
+		var wasConnected = $(containerSelecter).hasClass('connected');
+		$(containerSelecter).removeClass('connecting connected disabled failed').addClass(status.toLowerCase());
 		$(containerSelecter + " .connection-status").attr("class", "connection-status " + status);
 		sanchez.replaceContent(containerSelecter + " .controls", "fconnection-controls-" + status, { connectionId:id });
+		if((status === 'CONNECTED') && !wasConnected) {
+			pulseNewConnections(id+"");
+		}
 	},
 	pulseNewConnections = function(ids) {
 		$.each(ids.split(','), function(index, id) {
