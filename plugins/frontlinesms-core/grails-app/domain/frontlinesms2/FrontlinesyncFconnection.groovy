@@ -10,7 +10,7 @@ import frontlinesms2.api.*
 class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	static String getShortName() { 'frontlinesync' }
 	static final passwords = []
-	static final configFields = ['info-setup': ['secret'], 'info-name':['name'], 'info-sendEnabled':['sendEnabled']]
+	static final configFields = ['info-setup': ['secret'], 'info-name':['name']]
 
 	def frontlinesyncService
 	def appSettingsService
