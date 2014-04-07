@@ -1,5 +1,5 @@
 var frontlinesync =  (function() {
-	var connetionRow, updateConfigSynced, beforeUpdate, afterUpdate, toggleOptions, , ;
+	var connetionRow, updateConfigSynced, beforeUpdate, afterUpdate, toggleOptions;
 	beforeUpdate = function() {
 		showThinking();
 	};
