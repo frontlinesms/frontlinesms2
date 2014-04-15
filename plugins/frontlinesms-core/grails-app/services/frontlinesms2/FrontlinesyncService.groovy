@@ -10,6 +10,7 @@ class FrontlinesyncService {
 
 	def apiProcess(connection, controller) {
 		def data = controller.request.JSON
+		log.info "PARAMS : ${data}"
 		if(connection.secret && data.secret != connection.secret) {
 			return failure(controller, 'bad secret', 403)
 		}
