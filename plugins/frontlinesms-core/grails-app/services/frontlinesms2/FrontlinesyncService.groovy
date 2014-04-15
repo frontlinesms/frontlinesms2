@@ -101,7 +101,7 @@ class FrontlinesyncService {
 			fconnectionService.enableFconnection(connection)
 		}
 		else {
-			fconnectionService.disableFconnection(connection)
+			fconnectionService.destroyRoutes(connection)
 		}
 		connection.save()
 	}
