@@ -128,7 +128,13 @@ class FsmsTagLib {
 			def label = g.message(code:labelCode)
 			def id = att.name + '-' + i
 			def itemAttributes = att + [value:value, checked:isChecked(value), id:id]
-			out << '<li><label>'
+			if(att.disabledValues && att.disabledValues.split(',').contains(value)) {
+				itemAttributes += [disabled: 'disabled']
+				out << '<li class="disabled"><label>'
+			}
+			else {
+				out << '<li><label>'
+			}
 			def imagePath = "images/icons/${value}.png"
 			if(hasDescription) {
 				if(useImages && grailsApplication.parentContext.getResource(imagePath)?.exists()) {

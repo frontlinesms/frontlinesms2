@@ -53,6 +53,15 @@ class ImportController extends ControllerUtils {
 
 	private def prepareCsvReview() {
 		log.info "ImportController.prepareCsvReview() :: ENTRY"
+
+		// Temporarily block contact import via csv
+		if(true) {
+			log.info "Redirecting to contacts page with disabled notification"
+			systemNotificationService.create(code:'import.contact.csv.disabled')
+			redirect controller:'contact'
+			return
+		}
+
 		def uploadedCSVFile = request.getFile('contactImportFile')
 		def csvAsNestedLists = []
 		def headerRowSize

@@ -54,7 +54,7 @@ var mediumPopup = (function() {
 		modalBox.dialog({
 			modal: true,
 			width: 675,
-			height: 320,
+			height: 360,
 			title: title,
 			buttons: [{ text:i18n("action.cancel"), click:cancel, id:"cancel"}],
 			close: function() { $(this).remove(); }

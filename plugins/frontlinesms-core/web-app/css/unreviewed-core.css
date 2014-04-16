@@ -212,3 +212,8 @@ tr.connection.connecting .config-table-container{ display:block; }
 .sync-config-status-toggler { display:inline; text-decoration:underline !important; }
 .sync-config-container { margin-left:20px; display:none; }
 .synced-config { margin:5px 0; }
+
+#importForm .input li.disabled label { color: #777; }
+#importForm .input li.disabled label:hover { background-color:#fff !important; }
+#importForm p.csvDisabledNotification { font-weight: bold; margin:15px 0; }
+#importForm p.csvDisabledNotification a { color:#a8206c; text-decoration: underline; }
