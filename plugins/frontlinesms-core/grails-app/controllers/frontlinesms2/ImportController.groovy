@@ -12,7 +12,7 @@ class ImportController extends ControllerUtils {
 	private final MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	private final STANDARD_FIELDS = ['Name':'name', 'Mobile Number':'mobile',
 					'Email':'email', 'Group(s)':'groups', 'Notes':'notes']
-	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard', vcfDepricated:'text/directory']
+	private final CONTENT_TYPES = [csv:'text/csv', vcf:'text/vcard', vcfDepricatedMac:'text/directory', vcfDepricatedWindows:'text/x-vcard']
 
 	def contactImportService
 	def systemNotificationService
@@ -41,7 +41,7 @@ class ImportController extends ControllerUtils {
 			return
 		}
 		switch(request.getFile('contactImportFile').contentType) {
-			case [CONTENT_TYPES.vcf, CONTENT_TYPES.vcfDepricated]:
+			case [CONTENT_TYPES.vcf, CONTENT_TYPES.vcfDepricatedMac, CONTENT_TYPES.vcfDepricatedWindows]:
 				ContactImportJob.triggerNow(['fileType':'vcf', 'params':params, 'request':request])
 				systemNotificationService.create(code:'importing.status.label', topic:'import.status')
 				redirect controller:'contact', action:'show' 
