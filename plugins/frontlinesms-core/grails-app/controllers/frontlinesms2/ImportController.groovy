@@ -67,9 +67,10 @@ class ImportController extends ControllerUtils {
 		}
 
 		def csvEntryLimit = (appSettingsService.SP("csv.import.row.limit", "2000") as Integer)
-		if(csvAsNestedLists.size() > csvEntryLimit) {
-			session.csvLimitReached = true
-			session.csvEntryLimit = csvEntryLimit
+		def csvLimitReached = (csvAsNestedLists.size() > csvEntryLimit)
+		session.csvLimitReached = csvLimitReached
+		session.csvEntryLimit = csvEntryLimit
+		if(csvLimitReached) {
 			session.csvData = csvAsNestedLists.subList(0, csvEntryLimit + 1)
 		} else {
 			session.csvData = csvAsNestedLists
