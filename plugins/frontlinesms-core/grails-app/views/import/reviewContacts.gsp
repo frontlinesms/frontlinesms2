@@ -20,6 +20,9 @@
 				<i class="icon-file-text"></i>
 				<g:message code="settings.import.contact.review.submit"/>
 			</a>
+			<g:if test="${csvLimitReached == true}">
+				<p class="warning_message"><g:message code="settings.import.contact.review.csv.limit.reached" args="${[csvEntryLimit]}"/></p>
+			</g:if>
 			<input type="hidden" name="recognisedTitles" value="${recognisedTitles.join(',')}"/>
 			<g:form name="reviewForm" action="importData">
 				<input type="hidden" name="reviewDone" value="true"/>

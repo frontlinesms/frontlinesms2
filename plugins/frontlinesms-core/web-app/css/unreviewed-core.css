@@ -133,6 +133,7 @@ label.server-side-error { color: #c00; display:block; margin:5px 0; padding:0; w
 .import-review .headers td input.empty { background-color:#f2dede; border-color:#ebccd1; }
 .import-review .known-fields { margin:8px; }
 .import-review a { margin:10px 7px; padding:8px; }
+.import-review a.no-margin-padding { padding:0px; margin:0px; }
 
 tr.connection .smssync-lastconnected { font-weight:bold; }
 tr.connection.receiveOnly .btn.test { display:none; }

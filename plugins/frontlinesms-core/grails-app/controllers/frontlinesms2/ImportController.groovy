@@ -16,6 +16,7 @@ class ImportController extends ControllerUtils {
 
 	def contactImportService
 	def systemNotificationService
+	def appSettingsService
 
 	def importData() {
 		if(request.exception) {
@@ -64,7 +65,16 @@ class ImportController extends ControllerUtils {
 				csvAsNestedLists << tokens
 			}
 		}
-		session.csvData = csvAsNestedLists
+
+		def csvEntryLimit = (appSettingsService.SP("csv.import.row.limit", "2000") as Integer)
+		if(csvAsNestedLists.size() > csvEntryLimit) {
+			session.csvLimitReached = true
+			session.csvEntryLimit = csvEntryLimit
+			session.csvData = csvAsNestedLists.subList(0, csvEntryLimit + 1)
+		} else {
+			session.csvData = csvAsNestedLists
+		}
+
 		redirect action:'reviewContacts'
 		return
 	}
@@ -153,7 +163,7 @@ class ImportController extends ControllerUtils {
 			redirect controller:'settings', action:'porting'
 			return
 		}
-		[csvData:session.csvData, recognisedTitles:STANDARD_FIELDS.keySet()]
+		[csvData:session.csvData, csvLimitReached:session.csvLimitReached, csvEntryLimit:session.csvEntryLimit, recognisedTitles:STANDARD_FIELDS.keySet()]
 	}
 
 	def contactWizard() {

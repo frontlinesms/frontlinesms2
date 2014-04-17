@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class AppSettingsService {
+	static final SP = { key, _default='' -> [System.properties[key], System.env[key.toUpperCase().replace('.', '_')], _default].find { it != null } }
 	def grailsApplication
 	private static final File PROPERTIES_FILE = new File(ResourceUtils.resourceDirectory, 'app-settings.properties')
 	private def settings = [:]
