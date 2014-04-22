@@ -42,8 +42,8 @@ var routing = (function() {
 			success : function(data) {
 				var progressIndicator = routingForm.find(".progress.updating");
 				progressIndicator.removeClass("updating");
-				progressIndicator.addClass("icon-ok");
-				progressIndicator.fadeOut(1000, function() { $(this).removeClass("icon-ok").css("display", ""); });
+				progressIndicator.addClass("fa-check");
+				progressIndicator.fadeOut(1000, function() { $(this).removeClass("fa-check").css("display", ""); });
 			}
 		});
 	},

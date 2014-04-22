@@ -14,8 +14,8 @@ var frontlinesync =  (function() {
 	toggleOptions = function(connectionId) {
 		var syncConfigContainer = $(getConnectionRow(connectionId) + ' .sync-config-container');
 		var expandIcon = $(getConnectionRow(connectionId) +  " .sync-config-status-container .expand");
-		var signRightIcon = "icon-chevron-sign-right";
-		var signDownIcon = "icon-chevron-sign-down";
+		var signRightIcon = "fa-chevron-circle-right";
+		var signDownIcon = "fa-chevron-circle-down";
 		syncConfigContainer.toggle();
 		if(expandIcon.hasClass(signRightIcon)) {
 			expandIcon.removeClass(signRightIcon);
