@@ -88,7 +88,7 @@
 		<div id="action-buttons" class="buttons">
 			<g:if test="${contactInstance?.id}">
 				<g:link url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
-					<i class="icon-remove-sign"></i>
+					<i class="fa-times-circle"></i>
 					<span><g:message code="contact.action.delete"/></span>
 				</g:link>
 			</g:if>

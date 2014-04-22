@@ -8,7 +8,7 @@
 					<g:each in="${sharedGroupInstanceList}" status="i" var="g">
 						<li id="${g.name}" class="${g == groupInstance ? 'selected' : ''}">
 							<span>${g.name}</span>
-							<a class="icon-remove remove-group remove-command" id="remove-group-${g.id}"></a>
+							<a class="fa-times remove-group remove-command" id="remove-group-${g.id}"></a>
 						</li>
 					</g:each>
 				</ul>

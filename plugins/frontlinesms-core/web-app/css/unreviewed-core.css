@@ -71,12 +71,12 @@ fieldset.table { display:table; }
 #body.contacts .edit .btn-delete { color:#e00c0e; }
 #body.contacts .edit .btn-delete:hover span,
 #body.contacts .cancel:hover { text-decoration:underline; }
-#body.contacts .edit .editable .icon-remove { visibility:hidden; }
+#body.contacts .edit .editable .fa-times { visibility:hidden; }
 #body.contacts .edit .remove-command { background:none; }
 #body.contacts .icon-edit { vertical-align:middle; font-size:18px; }
 #body.contacts .edit table tr.editable:hover { background-color:#F8F8F8; }
-#body.contacts .edit table tr.editable:hover .icon-remove { visibility:visible; }
-#body.contacts .edit table tr.editable .icon-remove:hover { color:#e00c0e; }
+#body.contacts .edit table tr.editable:hover .fa-times { visibility:visible; }
+#body.contacts .edit table tr.editable .fa-times:hover { color:#e00c0e; }
 #body.contacts #note-area { position:relative; }
 #body.contacts #note-area .icon-edit { position:absolute; }
 #body.contacts table tr.editable input[type='text'], #body.contacts table tr.editable textarea { width:180px; }
@@ -96,8 +96,8 @@ input[type=text]:-ms-input-placeholder {
 
 #body.contacts #detail #single-contact #action-buttons { display:inline-block; vertical-align:top; margin-top:20px; }
 #body.contacts #detail #single-contact #action-buttons .icon-envelope,
-#body.contacts #detail #single-contact #action-buttons .icon-remove,
-#body.contacts #detail #single-contact #action-buttons .icon-remove-sign {
+#body.contacts #detail #single-contact #action-buttons .fa-times,
+#body.contacts #detail #single-contact #action-buttons .fa-times-circle {
 		font-size:14px; }
 #body.contacts #contact-infos a:after { content:'\a'; white-space:pre; }
 #body.contacts #contact-infos { min-width: 170px; }
