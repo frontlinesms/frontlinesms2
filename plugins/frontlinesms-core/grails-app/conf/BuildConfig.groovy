@@ -107,7 +107,7 @@ grails.project.dependency.resolution = {
 			export = false
 		}
 		build ':bails:0.6'
-		compile ':font-awesome-resources:3.2.1.3'
+		compile ":font-awesome-resources:4.0.3.0"
 
 		// FIXES as per http://stackoverflow.com/questions/14581009/unknown-plugin-included-in-war-when-building
 		test ':build-test-data:2.0.5', {
