@@ -114,7 +114,7 @@
 				<g:message code="contact.search.messages"/>
 			</g:link>
 			<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', contactId:contactInstance?contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
-				<i class="icon-envelope"></i>
+				<i class="fa-envelope"></i>
 				<g:message code="contact.send.message" args="${[contactInstance?.name?:contactInstance?.mobile]}"/>
 			</fsms:popup>
 		</div>
