@@ -95,7 +95,7 @@ input[type=text]:-ms-input-placeholder {
 	color:#bbb; font-style:italic; }
 
 #body.contacts #detail #single-contact #action-buttons { display:inline-block; vertical-align:top; margin-top:20px; }
-#body.contacts #detail #single-contact #action-buttons .icon-envelope,
+#body.contacts #detail #single-contact #action-buttons .fa-envelope,
 #body.contacts #detail #single-contact #action-buttons .fa-times,
 #body.contacts #detail #single-contact #action-buttons .fa-times-circle {
 		font-size:14px; }
