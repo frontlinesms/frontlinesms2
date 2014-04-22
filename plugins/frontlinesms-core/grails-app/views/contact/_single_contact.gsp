@@ -109,7 +109,7 @@
 				<li class="sent"><g:message code="contact.messages.sent" args="${[contactInstance?.outboundMessagesCount]}"/></li>
 				<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
 			</ul>
-			<g:link class="stroked icon-search search" controller='search' action='result'
+			<g:link class="stroked fa-search-plus search" controller='search' action='result'
 					params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
 				<g:message code="contact.search.messages"/>
 			</g:link>
