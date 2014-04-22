@@ -34,6 +34,7 @@
 #body.contacts #detail #single-contact #contact-infos { position:absolute; top:17px; right:17px; }
 #body.contacts #detail #single-contact #contact-infos h2 { font-weight:bold; }
 #body.contacts #detail #single-contact #contact-infos ul { margin:10px 0; }
+#body.contacts #detail #single-contact #contact-infos .search{ display:inline; }
 #body.contacts #detail #single-contact #contact-infos ul li { padding:5px 0 5px 25px;
 	background-position:left center; background-repeat:no-repeat; }
 #body.contacts #detail #single-contact #contact-infos ul li.sent { background-image:url("../images/message/sent.png"); }
