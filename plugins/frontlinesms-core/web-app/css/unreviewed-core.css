@@ -73,16 +73,16 @@ fieldset.table { display:table; }
 #body.contacts .cancel:hover { text-decoration:underline; }
 #body.contacts .edit .editable .fa-times { visibility:hidden; }
 #body.contacts .edit .remove-command { background:none; }
-#body.contacts .icon-edit { vertical-align:middle; font-size:18px; }
+#body.contacts .fa-pencil-square-o { vertical-align:middle; font-size:18px; }
 #body.contacts .edit table tr.editable:hover { background-color:#F8F8F8; }
 #body.contacts .edit table tr.editable:hover .fa-times { visibility:visible; }
 #body.contacts .edit table tr.editable .fa-times:hover { color:#e00c0e; }
 #body.contacts #note-area { position:relative; }
-#body.contacts #note-area .icon-edit { position:absolute; }
+#body.contacts #note-area .fa-pencil-square-o { position:absolute; }
 #body.contacts table tr.editable input[type='text'], #body.contacts table tr.editable textarea { width:180px; }
 #body.contacts table tr.editable input[type='text'][name=mobile] { width:156px; }
-#body.contacts table tr.editable .icon-edit { opacity:0.0; display:inline-block; margin-left:5px; transition:opacity 200ms linear; }
-#body.contacts .edit table tr.editable:hover .icon-edit { opacity:1.0; }
+#body.contacts table tr.editable .fa-pencil-square-o { opacity:0.0; display:inline-block; margin-left:5px; transition:opacity 200ms linear; }
+#body.contacts .edit table tr.editable:hover .fa-pencil-square-o { opacity:1.0; }
 
 #body.contacts table tr:hover * { cursor:pointer; }
 #body.contacts .edit table tr:hover input { cursor:text; }

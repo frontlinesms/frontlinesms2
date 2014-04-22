@@ -17,7 +17,7 @@
 				<g:message code="settings.import.contact.review.unrecognisedTitles" />
 			</p>
 			<a class="stroked submitContacts">
-				<i class="icon-file-text"></i>
+				<i class="fa-file-text"></i>
 				<g:message code="settings.import.contact.review.submit"/>
 			</a>
 			<g:if test="${csvLimitReached}">
@@ -39,7 +39,7 @@
 				</table>
 			</g:form>
 			<a class="stroked submitContacts">
-				<i class="icon-file-text"></i>
+				<i class="fa-file-text"></i>
 				<g:message code="settings.import.contact.review.submit"/>
 			</a>
 		</div>
