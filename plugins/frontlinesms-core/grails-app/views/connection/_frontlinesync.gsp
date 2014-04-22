@@ -8,14 +8,14 @@
 					<div class="field-label"><g:message code="frontlinesync.api.connection.id.label"/></div>
 					<div class="field-value database-config-value connection-id">${c.id}</div>
 				</div>
-				<div class="icon"><i class="icon-android"></i></div>
+				<div class="icon"><i class="fa-android"></i></div>
 			</div>
 			<div class="connection-config-container">
 				<div class="connection-config">
 					<div class="field-label"><g:message code="frontlinesync.api.connection.secret.label"/></div>
 					<div class="field-value database-config-value connection-secret">${c.secret}</div>
 				</div>
-				<div class="icon"><i class="icon-lock"></i></div>
+				<div class="icon"><i class="fa-lock"></i></div>
 			</div>
 		</div>
 	</div>
