@@ -492,7 +492,7 @@ class FsmsTagLib {
 		if(att.code) {
 			out << '<h3>'
 			if(icon) {
-				out << "<i class='menuIcon icon-$icon'></i>"
+				out << "<i class='menuIcon fa-$icon'></i>"
 			}
 			out << g.message(code:att.code)
 			out << '</h3>'
