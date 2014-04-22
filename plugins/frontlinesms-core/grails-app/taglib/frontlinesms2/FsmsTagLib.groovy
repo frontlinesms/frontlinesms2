@@ -484,7 +484,7 @@ class FsmsTagLib {
 
 	def submenu = { att, body ->
 		def icon
-		def iconMap = ['messages': 'envelope', 'missedCalls': 'phone', 'activities': 'comments', 'folders':'folder-open']
+		def iconMap = ['messages': 'envelope', 'missedCalls': 'phone', 'activities': 'comments', 'folders':'folder-open', 'contacts':'user', 'groups':'users', 'smartgroups':'cog']
 		if(att.class in iconMap.keySet()) {
 			icon = iconMap[att.class]	
 		}
@@ -492,7 +492,7 @@ class FsmsTagLib {
 		if(att.code) {
 			out << '<h3>'
 			if(icon) {
-				out << "<i class='menuIcon fa-$icon'></i>"
+				out << "<i class='menuIcon fa fa-$icon'></i>"
 			}
 			out << g.message(code:att.code)
 			out << '</h3>'

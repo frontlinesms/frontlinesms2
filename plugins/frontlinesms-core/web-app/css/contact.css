@@ -1,7 +1,3 @@
-#body-menu li.contacts h3 { background-image:url("../images/icons/contacts.png"); }
-#body-menu li.groups h3 { background-image:url("../images/icons/groups.png"); }
-#body-menu li.smartgroups h3 { background-image:url("../images/icons/smartgroups.png"); }
-
 #body.contacts #main-list-container > * { width:auto }
 #body.contacts #main-list-head { background-color:white; border-bottom:none; padding:0 17px; }
 #body.contacts #main-list-head .content { display:table; width:100%; padding-bottom:17px; }
