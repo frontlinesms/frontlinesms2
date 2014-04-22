@@ -152,7 +152,7 @@ var ContactEditor = function() {
 		if(updateInProgress) {
 			targetElement.after("<i class='update in-progress'/>");
 		} else {
-			targetElement.parent().find(".update.in-progress").removeClass('in-progress').addClass('icon-ok').addClass('done').fadeOut(1000, function() { $(this).remove(); });
+			targetElement.parent().find(".update.in-progress").removeClass('in-progress').addClass('fa-check').addClass('done').fadeOut(1000, function() { $(this).remove(); });
 		}
 	},
 	removeCustomFieldClickHandler = function(event) {
