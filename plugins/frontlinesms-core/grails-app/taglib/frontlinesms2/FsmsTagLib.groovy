@@ -4,7 +4,6 @@ import org.springframework.web.servlet.support.RequestContextUtils
 import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
 import frontlinesms2.CoreAppInfoProviders as CAIP
 import org.codehaus.groovy.grails.web.pages.discovery.GrailsConventionGroovyPageLocator
-
 import org.apache.commons.math.random.RandomDataImpl;
 
 class FsmsTagLib {
@@ -707,6 +706,14 @@ class FsmsTagLib {
 				out << confirmTableRow(att + [field:key])
 			}
 		}
+	}
+
+	def inlineEditable = { att ->
+		def domainClassName = att.instance.class.name
+		def currentValue = att.instance."${att.field}"
+		def classes = "inline-editable ${att.class ?: ''}"
+		out << "<input type=\"text\" class=\"${classes}\" value=\"${currentValue}\" data-instanceid=\"${att.instance.id}\" data-savedvalue=\"${currentValue}\" data-domainclass=\"${domainClassName}\" data-field=\"${att.field}\" />"
+		out << '<label class="fa fa-pencil-square-o"></label>'
 	}
 
 	private def isRequired(instanceClass, field) {
