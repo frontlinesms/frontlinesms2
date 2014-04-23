@@ -15,7 +15,7 @@
 		<g:textField name="rule-text" class="rule-text" value='${value}'/>
 	</td>
 	<td>
-		<a onclick="removeRule(this)" class="remove-command fa-times" style="display:${isFirst?'none':'auto'}"/>
+		<a onclick="removeRule(this)" class="remove-command fa fa-times" style="display:${isFirst?'none':'auto'}"/>
 	</td>
 </tr>
 

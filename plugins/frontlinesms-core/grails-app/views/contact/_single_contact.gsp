@@ -12,7 +12,7 @@
 			<td><label for="name"><g:message code="contact.name.label"/></label></td>
 			<td>
 				<g:textField name="name" value="${contactInstance?.name}" class="${contactInstance?.id?'':'mobileOrNameRequired'}" placeholder="${g.message(code:'contact.field.name.placeholder')}" lastsavedvalue="${contactInstance?.name}"/>
-				<label for="name" class="fa-pencil-square-o"></label>
+				<label for="name" class="fa fa-pencil-square-o"></label>
 			</td>
 		</tr>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
@@ -22,14 +22,14 @@
 					<i class="${contactInstance.flagCSSClasses}"></i>
 				</g:if>
 				<g:textField data-nonPrettyPhoneNumber="${contactInstance?.mobile?.trim()}" data-prettyPhoneNumber="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" class="phoneNumber ${contactInstance?.id?'':'mobileOrNameRequired'}" name="mobile" value="${contactInstance?.mobile?.trim()?.toPrettyPhoneNumber()}" placeholder="${g.message(code:'contact.field.mobile.placeholder')}" lastsavedvalue="${contactInstance?.mobile}"/>
-				<label for="mobile" class="fa-pencil-square-o"></label>
+				<label for="mobile" class="fa fa-pencil-square-o"></label>
 			</td>
 		</tr>
 		<tr class="editable" title="${g.message(code:'contact.field.click.to.edit')}">
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
 				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}" placeholder="${g.message(code:'contact.field.email.placeholder')}" lastsavedvalue="${contactInstance?.email?:''}"/>
-				<label for="email" class="fa-pencil-square-o"></label>
+				<label for="email" class="fa fa-pencil-square-o"></label>
 			</td>
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
@@ -56,7 +56,7 @@
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
 			<td>
 				<g:textArea name="notes" id="notes" value="${contactInstance?.notes}" lastsavedvalue="${contactInstance?.notes?:''}"/>
-				<label for="notes" class="fa-pencil-square-o"></label>
+				<label for="notes" class="fa fa-pencil-square-o"></label>
 			</td>
 		</tr>
 		<tr id="group-section" class="input basic-info">
@@ -88,7 +88,7 @@
 		<div id="action-buttons" class="buttons">
 			<g:if test="${contactInstance?.id}">
 				<g:link url="#" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn-delete stroked warn">
-					<i class="fa-times-circle"></i>
+					<i class="fa fa-times-circle"></i>
 					<span><g:message code="contact.action.delete"/></span>
 				</g:link>
 			</g:if>
@@ -109,12 +109,12 @@
 				<li class="sent"><g:message code="contact.messages.sent" args="${[contactInstance?.outboundMessagesCount]}"/></li>
 				<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
 			</ul>
-			<g:link class="stroked fa-search-plus search" controller='search' action='result'
+			<g:link class="stroked fa fa-search search" controller='search' action='result'
 					params="${contactInstance?.name? [contactString: contactInstance?.name]:[searchString: contactInstance?.mobile]}">
 				<g:message code="contact.search.messages"/>
 			</g:link>
 			<fsms:popup class="send-message stroked ${contactInstance?.mobile?.trim()?'':'hidden'}" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', contactId:contactInstance?contactInstance.id:'']" popupCall="mediumPopup.launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
-				<i class="fa-envelope"></i>
+				<i class="fa fa-envelope"></i>
 				<g:message code="contact.send.message" args="${[contactInstance?.name?:contactInstance?.mobile]}"/>
 			</fsms:popup>
 		</div>
