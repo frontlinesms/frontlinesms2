@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "# Searching for fontawesome icons without fa class..."
+grep -Er 'fa-' grails-app/views/ | grep -v 'fa '
+FOUND_STATUS=$?
+
+if [ 1 -eq $FOUND_STATUS ]; then
+	echo "# No incorrect font awesome icon usage was found."
+	RETURN_STATUS=0
+else
+	echo "# Font Awesome icons without the fa class were found. These work on Chromium for linux but not other browsers. Please add 'fa' class"
+	RETURN_STATUS=1
+fi
+
+exit $RETURN_STATUS
+

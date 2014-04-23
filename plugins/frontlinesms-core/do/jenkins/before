@@ -2,6 +2,7 @@
 set -e
 do/check_for_ignored_tests
 do/check_for_bad_template_renders
+do/check_for_missing_fa_class
 do/check_for_bad_resource_tags
 do/check_for_setInterval_calls
 do/check_for_static_simple_date_format
