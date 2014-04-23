@@ -36,7 +36,7 @@ class ConnectionList extends Module {
 		listSize { $("tbody tr.connection").size() }
 		connection { i=0 -> $('tbody tr.connection', i) }
 		hoverOn { i -> connection(i).find('div.controls').jquery.css("visibility", "visible") }
-		connectionName { i-> connection(i).find("td.connection-name").text() }
+		connectionName { i-> connection(i).find("td.connection-name input").value() }
 		btnEnableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'connection.route.enable') }
 		btnRetryConnection(wait:true) { i ->  hoverOn(i) ; connection(i).find(".btn", text:'connection.route.retryconnection') }
 		btnDisableRoute(wait:true) { i -> hoverOn(i) ; connection(i).find(".btn", text:'connection.route.disable') }
