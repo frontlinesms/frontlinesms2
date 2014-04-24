@@ -264,6 +264,14 @@ class ConnectionController extends ControllerUtils {
 		}
 	}
 
+	def routingRules() {
+		def appSettings = [:]
+		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
+		appSettings['routing.use'] = appSettingsService.get("routing.use")
+		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
+		render(template:'routing', model:[appSettings: appSettings, fconnectionRoutingMap: fconnectionRoutingMap])
+	}
+
 	private def withFconnection = withDomainObject Fconnection, { params.id }, { redirect(controller:'connection', action:'list') }
 }
 
