@@ -259,9 +259,23 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to PageConnection
 			connectionList.connectionNameInput(0).click()
 			connectionList.connectionNameInput(0).value('this is a new name')
-			$('td.connection-name input.inline-editable').jquery.trigger('change')
+			connectionList.connectionNameInput(0).jquery.trigger('change')
 		then:
 			waitFor { remote { Fconnection.getAll()[0].name } == 'this is a new name' }
+	}
+
+	def 'failure to provide a name results in validation error'() {
+		given:
+			createTestSmssyncConnection(false)
+		when:
+			to PageConnection
+			connectionList.connectionNameInput(0).click()
+			connectionList.connectionNameInput(0).value('')
+			connectionList.connectionNameInput(0).jquery.trigger('change')
+		then:
+			waitFor { 
+				connectionList.connectionNameValidationError(0).displayed
+			}
 	}
 
 	private def createBadConnection() {
