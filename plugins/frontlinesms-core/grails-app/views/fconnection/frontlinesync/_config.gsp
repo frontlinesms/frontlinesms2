@@ -3,7 +3,7 @@
 	<br/>
 	<div class="input-item">
 		<label><g:message code="frontlinesync.name.label"/></label>
-		<g:textField name="frontlinesyncname" value="${fconnectionInstance?.name?:''}"/>
+		<g:textField name="frontlinesyncname" value="${fconnectionInstance?.name?:'FrontlineSync'}"/>
 	</div>
 	<br/>
 	<p><g:message code="frontlinesync.passcode-setup"/></p>
