@@ -7,6 +7,7 @@ fconnection_list = (function() {
 		sanchez.replaceContent(containerSelecter + " .controls", "fconnection-controls-" + status, { connectionId:id });
 		if((status === 'CONNECTED') && !wasConnected) {
 			pulseNewConnections(id+"");
+			routing.refreshRoutingRules();
 		}
 	},
 	pulseNewConnections = function(ids) {
