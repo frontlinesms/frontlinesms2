@@ -43,6 +43,10 @@
 			<g:checkBox name="missedCallEnabled" checked="${c.missedCallEnabled}"/>
 			<label for="missedCallEnabled"><g:message code="frontlinesync.missedCallEnabled.sync.config.label"/></label>
 		</div>
+		<div class="synced-config frequency">
+			<label for="syncFrequency">Check frequency: <em class="syncFrequencyValue">2</em></label>
+			<input name="syncFrequency" value="2" type="text" data-slider="true" data-slider-snap="true" data-slider-theme="volume" data-slider-values="1,2,3,4,5,6">
+		</div>
 		<div>
 			<g:submitButton class="btn" name="sync-config-button" controller="frontlinesync" action="update" value="${message(code:'frontlinesync.sync.config.button')}"/>
 		</div>
