@@ -23,10 +23,12 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	boolean receiveEnabled = false
 	boolean missedCallEnabled = false
 	boolean configSynced = false
+	Integer checkIntervalMinutes
 	String secret
 
 	static constraints = {
 		lastConnectionTime nullable:true
+		checkIntervalMinutes nullable:true
 	}
 
 	def apiProcess(controller) {
