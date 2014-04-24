@@ -8,7 +8,8 @@ import frontlinesms2.dev.MockModemUtils
 
 import serial.mock.MockSerial
 import serial.mock.CommPortIdentifier
-import spock.lang.*
+import geb.Browser
+import grails.plugin.geb.GebSpec
 
 class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'When there are no connections, this is explained to the user'() {
@@ -249,6 +250,18 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then: 'the time the phone last contacted is shown'
 			connectionList.smssyncLastconnected(0).displayed
 			connectionList.smssyncLastconnected(0).text()?.contains('smssync.lastConnected.never')
+	}
+
+	def 'can rename a connection inline'() {
+		given:
+			createTestSmssyncConnection(false)
+		when:
+			to PageConnection
+			connectionList.connectionNameInput(0).click()
+			connectionList.connectionNameInput(0).value('this is a new name')
+			$('td.connection-name input.inline-editable').jquery.trigger('change')
+		then:
+			waitFor { remote { Fconnection.getAll()[0].name } == 'this is a new name' }
 	}
 
 	private def createBadConnection() {

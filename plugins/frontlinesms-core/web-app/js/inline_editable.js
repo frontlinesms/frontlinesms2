@@ -6,16 +6,16 @@ InlineEditable = function() {
 	var
 	updateInProgress = false,
 	init = function() {
-		$('.inline-editable').blur(handleBlur);	
+		$('.inline-editable').change(handleUserInput);
 	},
-	handleBlur = function() {
+	handleUserInput = function(e) {
 		var getDataAttr = function(name, selector) {
 			return $(selector).attr('data-' + name);
 		},
 		newValue = $(this).val(),
 		dataToSend = {};
 		$.each(['domainclass', 'field', 'instanceid', 'savedvalue'], function(index, fieldName) {
-			dataToSend[fieldName] = getDataAttr(fieldName, event.target);
+			dataToSend[fieldName] = getDataAttr(fieldName, e.target);
 		});
 		if(dataToSend.savedvalue === newValue) {
 			return;
@@ -26,8 +26,8 @@ InlineEditable = function() {
 			url:url_root + "inlineEditable/update",
 			data:dataToSend,
 			beforeSend:function() {
-				setUpdateInProgress(true, event.target);
-				toggleFormEnabled(false, event.target);
+				setUpdateInProgress(true, e.target);
+				toggleFormEnabled(false, e.target);
 			},
 			success:handleServerResponse
 		});
