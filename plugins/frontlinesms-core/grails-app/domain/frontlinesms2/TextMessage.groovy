@@ -150,7 +150,7 @@ class TextMessage extends Interaction {
 	}
 
 	private def areAnyDispatches(status) {
-		dispatches?.any { it.status == status }
+		!inbound && dispatches?.any { it.status == status }
 	}
 
 	public void setText(String text) {
@@ -224,7 +224,7 @@ class TextMessage extends Interaction {
 
 	//> GETTER AND SETTER OF MESSAGE DETAIL THAT USE CURRENT MESSAGE OWNER
 	def getOwnerDetail() {
-		getMessageDetailValue(this.messageOwner)
+		messageOwner ? getMessageDetailValue(this.messageOwner) : null
 	}
 
 	def setMessageDetail(activityOrStep, val) {
