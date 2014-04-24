@@ -71,3 +71,4 @@ var routing = (function() {
 		refreshRoutingRules: refreshRoutingRules
 	};
 }());
+$(function() { routing.init(); });
