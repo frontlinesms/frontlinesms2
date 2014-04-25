@@ -58,7 +58,7 @@ if(typeof frontlineSyncCheckSettingOptions == 'undefined') {
 	frontlineSyncCheckSettingOptions = [];
 	<g:each in="${FrontlinesyncFconnection.syncFrequencyOptions}" var="minuteVal">
 		frontlineSyncCheckSettingOptions.push({
-			'valueInMinutes': ${minuteVal?:'null'},
+			'valueInMinutes': ${minuteVal},
 			'i18n': "${g.message(code: 'frontlinesync.syncOption.' + (minuteVal ?: 'manual'))}"
 		});
 	</g:each>

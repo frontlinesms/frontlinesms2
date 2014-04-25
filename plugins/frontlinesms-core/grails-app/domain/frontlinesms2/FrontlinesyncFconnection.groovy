@@ -8,7 +8,7 @@ import frontlinesms2.api.*
 
 @FrontlineApiAnnotations(apiUrl="frontlinesync")
 class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
-	static final syncFrequencyOptions = [1, 5, 15, 30, 60, 120, null]
+	static final syncFrequencyOptions = [1, 5, 15, 30, 60, 120, 0]
 	static String getShortName() { 'frontlinesync' }
 	static final passwords = []
 	static final configFields = ['info-setup': ['secret'], 'info-name':['name']]
@@ -24,12 +24,11 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	boolean receiveEnabled = false
 	boolean missedCallEnabled = false
 	boolean configSynced = false
-	Integer checkIntervalMinutes
+	int checkIntervalMinutes = 0
 	String secret
 
 	static constraints = {
 		lastConnectionTime nullable:true
-		checkIntervalMinutes nullable:true
 	}
 
 	def apiProcess(controller) {

@@ -100,8 +100,8 @@ class FrontlinesyncService {
 		if(config.syncFrequency) {
 			connection.checkIntervalMinutes = FrontlinesyncFconnection.syncFrequencyOptions[config.syncFrequency as int]
 		}
-		else if(config.syncInterval) {
-			connection.checkIntervalMinutes = config.syncInterval.toString() == 'null' ? null : (config.syncInterval as Integer)
+		else if(config.syncInterval != null) {
+			connection.checkIntervalMinutes = config.syncInterval as Integer
 		}
 		connection.configSynced = markAsDirty
 		if(connection.sendEnabled) {
