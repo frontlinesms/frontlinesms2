@@ -97,6 +97,7 @@ class FrontlinesyncService {
 		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
 			connection."$it" = config."$it" as boolean
 		}
+		connection.checkIntervalMinutes = FrontlinesyncFconnection.syncFrequencyOptions[config.syncFrequency as int]
 		connection.configSynced = markAsDirty
 		if(connection.sendEnabled) {
 			fconnectionService.enableFconnection(connection)
