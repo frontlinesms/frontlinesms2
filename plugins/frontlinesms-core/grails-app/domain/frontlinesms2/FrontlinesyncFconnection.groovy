@@ -8,6 +8,7 @@ import frontlinesms2.api.*
 
 @FrontlineApiAnnotations(apiUrl="frontlinesync")
 class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
+	static final syncFrequencyOptions = [1, 5, 15, 30, 60, 120, null]
 	static String getShortName() { 'frontlinesync' }
 	static final passwords = []
 	static final configFields = ['info-setup': ['secret'], 'info-name':['name']]
@@ -58,6 +59,9 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 		return routeDefinitions
 	}
 
+	def getSyncFrequencyOptionListIndex() {
+		return syncFrequencyOptions.indexOf(checkIntervalMinutes)
+	}
 
 	String getFullApiUrl(request) {
 		return apiEnabled? "${urlHelperService.getBaseUrl(request)}" :''

@@ -213,3 +213,11 @@ tr.connection.connecting .config-table-container{ display:block; }
 .sync-config-status-toggler { display:inline; text-decoration:underline !important; }
 .sync-config-container { margin-left:20px; display:none; }
 .synced-config { margin:5px 0; }
+label[for=syncFrequency] {
+	margin-top:10px;
+	display:block;
+	color:#333;
+}
+label[for=syncFrequency] em {
+	font-weight:bold;
+}

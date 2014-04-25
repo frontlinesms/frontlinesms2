@@ -1,5 +1,5 @@
 var frontlinesync =  (function() {
-	var connetionRow, updateConfigSynced, beforeUpdate, afterUpdate, toggleOptions;
+	var connetionRow, updateConfigSynced, beforeUpdate, afterUpdate, toggleOptions, updateCheckFrequencyLabel, bindEventListeners;
 	beforeUpdate = function() {
 		showThinking();
 	};
@@ -38,10 +38,29 @@ var frontlinesync =  (function() {
 		connectionRow.find("#receiveEnabled").attr("checked", data.receiveEnabled);
 		connectionRow.find("#missedCallEnabled").attr("checked", data.missedCallEnabled);
 	};
+
+	updateCheckFrequencyLabel = function(connectionId) {
+		var row = $(getConnectionRow(connectionId)),
+		indexValue = row.find('input[name=syncFrequency]').val();
+		row.find('em.syncFrequencyValue').html(frontlineSyncCheckSettingOptions[indexValue].i18n);
+	};
+
+	updateAllFrequencyLabels = function() {
+		$('input[name=syncFrequency]').trigger('slider:changed');
+	}
+
+	bindEventListeners = function() {
+		$('input[name=syncFrequency]').bind('slider:changed', function() {
+			updateCheckFrequencyLabel($(this).closest('tr').attr('id').split('-')[1]);
+		});
+	};
+
+	bindEventListeners();
 	return {
 		beforeUpdate: beforeUpdate,
 		afterUpdate: afterUpdate,
 		toggleOptions: toggleOptions,
-		updateConfigSynced: updateConfigSynced
+		updateConfigSynced: updateConfigSynced,
+		updateAllFrequencyLabels: updateAllFrequencyLabels
 	};
 })();
