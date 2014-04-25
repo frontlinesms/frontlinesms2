@@ -31,12 +31,13 @@ var frontlinesync =  (function() {
 	}
 
 	updateConfigSynced = function(data) {
-		connectionRow = $(getConnectionRow(data.id)); 
-		var configSyncedMessage = i18n('frontlinesync.sync.config.dirty.' + !data.configSynced);
+		var connectionRow = $(getConnectionRow(data.id)),
+		configSyncedMessage = i18n('frontlinesync.sync.config.dirty.' + !data.configSynced);
 		connectionRow.find(".sync-config-status").html(configSyncedMessage);
 		connectionRow.find("#sendEnabled").attr("checked", data.sendEnabled);
 		connectionRow.find("#receiveEnabled").attr("checked", data.receiveEnabled);
 		connectionRow.find("#missedCallEnabled").attr("checked", data.missedCallEnabled);
+		connectionRow.find("input[name=syncFrequency]").simpleSlider("setValue", data.syncFrequencyIndex);
 	};
 
 	updateCheckFrequencyLabel = function(connectionId) {
