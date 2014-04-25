@@ -45,8 +45,8 @@
 			<label for="missedCallEnabled"><g:message code="frontlinesync.missedCallEnabled.sync.config.label"/></label>
 		</div>
 		<div class="synced-config frequency">
-			<label for="syncFrequency">Check frequency: <em class="syncFrequencyValue">${g.message(code: 'frontlinesync.syncOption.' + (c.checkIntervalMinutes ?: 'manual'))}</em></label>
-			<input name="syncFrequency" value="${c.getSyncFrequencyOptionListIndex()}" type="text" data-slider="true" data-slider-snap="true" data-slider-values="${(0..(FrontlinesyncFconnection.syncFrequencyOptions.size() - 1)).join(',')}">
+			<label for="checkIntervalIndex"><g:message code="frontlinesync.checkInterval.label"/>: <em class="checkIntervalValue">${g.message(code: 'frontlinesync.checkInterval.' + (c.checkInterval ?: 'manual'))}</em></label>
+			<input name="checkIntervalIndex" value="${c.getIndexOfCurrentCheckFrequency()}" type="text" data-slider="true" data-slider-snap="true" data-slider-values="${(0..(FrontlinesyncFconnection.checkIntervalOptions.size() - 1)).join(',')}">
 		</div>
 		<div>
 			<g:submitButton class="btn" name="sync-config-button" controller="frontlinesync" action="update" value="${message(code:'frontlinesync.sync.config.button')}"/>
@@ -56,10 +56,10 @@
 <g:javascript>
 if(typeof frontlineSyncCheckSettingOptions == 'undefined') {
 	frontlineSyncCheckSettingOptions = [];
-	<g:each in="${FrontlinesyncFconnection.syncFrequencyOptions}" var="minuteVal">
+	<g:each in="${FrontlinesyncFconnection.checkIntervalOptions}" var="minuteVal">
 		frontlineSyncCheckSettingOptions.push({
 			'valueInMinutes': ${minuteVal},
-			'i18n': "${g.message(code: 'frontlinesync.syncOption.' + (minuteVal ?: 'manual'))}"
+			'i18n': "${g.message(code: 'frontlinesync.checkInterval.' + (minuteVal ?: 'manual'))}"
 		});
 	</g:each>
 }

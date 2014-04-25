@@ -27,7 +27,7 @@ class CoreAppInfoProviders {
 
 		s.registerProvider('frontlinesync_config_synced_status') { app, controller, data ->
 			FrontlinesyncFconnection.findAll().collect { c ->
-				[id:c.id, syncFrequencyIndex: c.getSyncFrequencyOptionListIndex(), configSynced:c.configSynced, status:c.status.toString(), sendEnabled:c.sendEnabled, receiveEnabled:c.receiveEnabled, missedCallEnabled:c.missedCallEnabled]
+				[id:c.id, checkIntervalIndex: c.getIndexOfCurrentCheckFrequency(), configSynced:c.configSynced, status:c.status.toString(), sendEnabled:c.sendEnabled, receiveEnabled:c.receiveEnabled, missedCallEnabled:c.missedCallEnabled]
 			}
 		}
 

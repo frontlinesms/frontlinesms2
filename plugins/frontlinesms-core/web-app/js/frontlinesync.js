@@ -37,21 +37,21 @@ var frontlinesync =  (function() {
 		connectionRow.find("#sendEnabled").attr("checked", data.sendEnabled);
 		connectionRow.find("#receiveEnabled").attr("checked", data.receiveEnabled);
 		connectionRow.find("#missedCallEnabled").attr("checked", data.missedCallEnabled);
-		connectionRow.find("input[name=syncFrequency]").simpleSlider("setValue", data.syncFrequencyIndex);
+		connectionRow.find("input[name=checkIntervalIndex]").simpleSlider("setValue", data.checkIntervalIndex);
 	};
 
 	updateCheckFrequencyLabel = function(connectionId) {
 		var row = $(getConnectionRow(connectionId)),
-		indexValue = row.find('input[name=syncFrequency]').val();
-		row.find('em.syncFrequencyValue').html(frontlineSyncCheckSettingOptions[indexValue].i18n);
+		indexValue = row.find('input[name=checkIntervalIndex]').val();
+		row.find('em.checkIntervalValue').html(frontlineSyncCheckSettingOptions[indexValue].i18n);
 	};
 
 	updateAllFrequencyLabels = function() {
-		$('input[name=syncFrequency]').trigger('slider:changed');
+		$('input[name=checkIntervalIndex]').trigger('slider:changed');
 	}
 
 	bindEventListeners = function() {
-		$('input[name=syncFrequency]').bind('slider:changed', function() {
+		$('input[name=checkIntervalIndex]').bind('slider:changed', function() {
 			updateCheckFrequencyLabel($(this).closest('tr').attr('id').split('-')[1]);
 		});
 	};

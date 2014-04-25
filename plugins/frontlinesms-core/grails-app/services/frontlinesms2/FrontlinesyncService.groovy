@@ -97,11 +97,11 @@ class FrontlinesyncService {
 		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
 			connection."$it" = config."$it" as boolean
 		}
-		if(config.syncFrequency) {
-			connection.checkIntervalMinutes = FrontlinesyncFconnection.syncFrequencyOptions[config.syncFrequency as int]
+		if(config.checkIntervalIndex) {
+			connection.checkInterval = FrontlinesyncFconnection.checkIntervalOptions[config.checkIntervalIndex as int]
 		}
-		else if(config.syncInterval != null) {
-			connection.checkIntervalMinutes = config.syncInterval as Integer
+		else if(config.checkInterval != null) {
+			connection.checkInterval = config.checkInterval as Integer
 		}
 		connection.configSynced = markAsDirty
 		if(connection.sendEnabled) {
