@@ -115,7 +115,7 @@ class FrontlinesyncService {
 
 	private generateSyncConfig(connection) {
 		def m = [:]
-		["sendEnabled", "receiveEnabled", "missedCallEnabled"].each {
+		["sendEnabled", "receiveEnabled", "missedCallEnabled", "checkInterval"].each {
 			m."$it" = connection."$it"
 		}
 		m
