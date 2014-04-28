@@ -45,6 +45,14 @@ class ConnectionList extends Module {
 		status { i -> connection(i).find('td.connection-status') }
 		smssyncUrl { i -> connection(i).find('p.api-url') }
 		smssyncLastconnected { i -> connection(i).find('em.smssync-lastconnected') }
+		frontlineSyncConfigExpander { i -> connection(i).find('a.sync-config-status-toggler') }
+		frontlineSyncConfigHolder(required:false) { i -> connection(i).find('div.sync-config-container') }
+		frontlineSyncSendEnabled { i -> connection(i).find('#sendEnabled') }
+		frontlineSyncReceiveEnabled { i -> connection(i).find('#receiveEnabled') }
+		frontlineSyncMissedCallEnabled { i -> connection(i).find('#missedCallEnabled') }
+		frontlineSyncCheckFrequencyValue { i -> connection(i).find('input[name=checkIntervalIndex]').jquery.val() }
+		setFrontlineSyncCheckFrequencyValue { val -> js.exec "\$('input[name=checkIntervalIndex]').simpleSlider('setValue', ${val});" }
+		frontlineSyncSaveConfig { i -> connection(i).find('#sync-config-button') }
 	}
 }
 
