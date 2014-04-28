@@ -3,7 +3,12 @@
 	<br/>
 	<div class="input-item">
 		<label><g:message code="frontlinesync.name.label"/></label>
-		<g:textField name="frontlinesyncname" value="${(fconnectionInstance?.name?:'FrontlineSync '+ (frontlinesms2.FrontlinesyncFconnection.countByNameLike("%FrontlineSync%") ?: '')).trim()}"/>
+		<%
+			def connectionsCount = frontlinesms2.FrontlinesyncFconnection.countByNameLike("%FrontlineSync%")
+			def suffix = connectionsCount?"($connectionsCount)" :''
+			def connectionName = fconnectionInstance?.name?:'FrontlineSync '+ suffix
+		%>
+		<g:textField name="frontlinesyncname" value="${connectionName}"/>
 	</div>
 	<br/>
 	<p><g:message code="frontlinesync.passcode-setup"/></p>
