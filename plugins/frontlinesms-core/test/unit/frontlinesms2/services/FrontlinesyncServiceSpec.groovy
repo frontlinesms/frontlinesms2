@@ -176,7 +176,7 @@ class FrontlinesyncServiceSpec extends Specification {
 			def connection  = setupConnection("secret")
 			connection.configSynced = false
 		expect:
-			service.generateOutgoingResponse(connection).equals([config:[sendEnabled:null, receiveEnabled:null, missedCallEnabled:null]])
+			service.generateOutgoingResponse(connection).equals([config:[sendEnabled:null, receiveEnabled:null, missedCallEnabled:null, checkInterval: null]])
 			
 	}
 
