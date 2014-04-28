@@ -76,6 +76,37 @@ class FrontlinesyncFSpec extends grails.plugin.geb.GebSpec {
 			0 		| 'manual'
 	}
 
+	def 'changing the checkInterval updates the text display live, and submitting the value updates the saved interval on the server'() {
+		given:
+			setUpTestConnection(true,0)
+		when:
+			to PageConnection
+			connectionList.frontlineSyncConfigExpander(0).click()
+		then:
+			connectionList.frontlineSyncCheckIntervalString(0) == "frontlinesync.checkInterval.manual"
+		when:
+			connectionList.setFrontlineSyncCheckFrequencyValue(intervalIndex)
+		then:
+			connectionList.frontlineSyncCheckIntervalString(0) == "frontlinesync.checkInterval.${expectedString}"
+		when:
+			connectionList.frontlineSyncSaveConfig(0).click()
+		then:
+			waitFor {
+				remote {
+					FrontlinesyncFconnection.findBySecret('3469').checkInterval == checkInterval
+				}
+			}
+		where:
+			checkInterval   | expectedString | intervalIndex
+			1 		| '1' 		 | 0
+			5 		| '5' 		 | 1
+			15 		| '15' 		 | 2
+			30 		| '30' 		 | 3
+			60 		| '60' 		 | 4
+			120 		| '120'   	 | 5
+			0 		| 'manual' 	 | 6
+	}
+
 	def 'when config is changed in the back end while the UI is displayed, the display is updated asynchronously, including the \'dirty\' flag'() {
 		given:
 			setUpTestConnection(true,0)
