@@ -210,12 +210,9 @@ tr.connection.connected .sync-config-status-container { display:block; }
 .sync-config-status-container .expand { font-size:14px; }
 .config-table-container{ display:none; }
 tr.connection.connecting .config-table-container{ display:block; }
-.config-table { display:table; border-collapse:separate; border-spacing:5px; }
-.config-values { display:table-row; }
-.connection-config-container { padding:5px; height:auto; position:relative; }
+.connection-config-container { display:inline-block; padding:5px; height:auto; position:relative; border:1px solid black; }
 .connection-config-container .icon { text-align:end; font-size:1.5em; position:absolute; bottom:5px; right: 5px; }
 .connection:hover .connection-config-container { background-color:white; }
-.connection-config-container { display:table-cell; border:1px solid black; }
 .connection-config { padding: 3px 15px; }
 .connection-config .field-label { text-align:center; } 
 .connection-config .field-value { text-align:center; }
