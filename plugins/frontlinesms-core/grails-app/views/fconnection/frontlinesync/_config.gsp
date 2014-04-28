@@ -2,14 +2,8 @@
 	<p><g:message code="frontlinesync.info-setup"/></p>
 	<br/>
 	<div class="input-item">
-		<g:if test="${frontlinesyncCount > 0}">
-			<label><g:message code="frontlinesync.name.label"/></label>
-			<g:textField name="frontlinesyncname" value="${fconnectionInstance?.name?:'FrontlineSync'+frontlinesyncCount}"/>
-		</g:if>
-		<g:else>
-			<label><g:message code="frontlinesync.name.label"/></label>
-			<g:textField name="frontlinesyncname" value="${fconnectionInstance?.name?:'FrontlineSync'}"/>
-		</g:else>
+		<label><g:message code="frontlinesync.name.label"/></label>
+		<g:textField name="frontlinesyncname" value="${(fconnectionInstance?.name?:'FrontlineSync '+ (frontlinesms2.FrontlinesyncFconnection.countByNameLike("%FrontlineSync%") ?: '')).trim()}"/>
 	</div>
 	<br/>
 	<p><g:message code="frontlinesync.passcode-setup"/></p>

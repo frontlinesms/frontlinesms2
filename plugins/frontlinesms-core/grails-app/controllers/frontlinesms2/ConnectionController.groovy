@@ -47,8 +47,7 @@ class ConnectionController extends ControllerUtils {
 				}
 			}
 		} else {
-			def frontlinesyncCount = FrontlinesyncFconnection.countByNameLike("%FrontlineSync%")
-			return [action:'save', frontlinesyncCount:frontlinesyncCount]
+			return [action:'save']
 		}
 	}
 
