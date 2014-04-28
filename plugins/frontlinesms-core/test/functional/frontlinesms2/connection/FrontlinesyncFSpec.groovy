@@ -56,9 +56,66 @@ class FrontlinesyncFSpec extends grails.plugin.geb.GebSpec {
 			}
 	}
 
-	private def setUpTestConnection() {
+	@Unroll
+	def 'each checkInterval is represented by the slider, with appropriate text above it'() {
+		given:
+			setUpTestConnection(true,checkInterval)
+		when:
+			to PageConnection
+			connectionList.frontlineSyncConfigExpander(0).click()
+		then:
+			connectionList.frontlineSyncCheckIntervalString(0) == "frontlinesync.checkInterval.${expectedString}"
+		where:
+			checkInterval   | expectedString
+			1 		| '1'
+			5 		| '5'
+			15 		| '15'
+			30 		| '30'
+			60 		| '60'
+			120 		| '120'
+			0 		| 'manual'
+	}
+
+	def 'when config is changed in the back end while the UI is displayed, the display is updated asynchronously, including the \'dirty\' flag'() {
+		given:
+			setUpTestConnection(true,0)
+		when:
+			to PageConnection
+			connectionList.frontlineSyncConfigExpander(0).click()
+		then:
+			connectionList.frontlineSyncConfigSyncStatus(0) == 'frontlinesync.sync.config.dirty.true'
+			!connectionList.frontlineSyncSendEnabled(0).value()
+			!connectionList.frontlineSyncReceiveEnabled(0).value()
+			!connectionList.frontlineSyncMissedCallEnabled(0).value()
+			connectionList.frontlineSyncCheckIntervalString(0) == "frontlinesync.checkInterval.manual"
+		when:
+			remote {
+				def fc = FrontlinesyncFconnection.findBySecret('3469')
+				fc.sendEnabled = true
+				fc.receiveEnabled = true
+				fc.missedCallEnabled = true
+				fc.checkInterval = 60
+				fc.configSynced = true
+				fc.save(flush:true, failOnError: true)
+				return null
+			}
+		then:
+			waitFor ('very slow') {
+				connectionList.frontlineSyncConfigSyncStatus(0) == 'frontlinesync.sync.config.dirty.false'
+				connectionList.frontlineSyncSendEnabled(0).value()
+				connectionList.frontlineSyncReceiveEnabled(0).value()
+				connectionList.frontlineSyncMissedCallEnabled(0).value()
+				connectionList.frontlineSyncCheckIntervalString(0) == "frontlinesync.checkInterval.60"
+			}
+	}
+
+	private def setUpTestConnection(hasBeenContacted=true,checkInterval=0) {
 		remote {
-			new FrontlinesyncFconnection(name:"FrontlineSync connection", secret:'3469', enabled:true, sendEnabled: false, receiveEnabled: false, missedCallEnabled: false, checkInterval:0).save(flush: true, failOnError:true)
+			def conn = new FrontlinesyncFconnection(name:"FrontlineSync connection", secret:'3469', enabled:true, sendEnabled: false, receiveEnabled: false, missedCallEnabled: false, checkInterval:checkInterval)
+			if(hasBeenContacted) {
+				conn.lastConnectionTime = new Date()	
+			}
+			conn.save(flush: true, failOnError:true)
 			return null
 		}
 	}

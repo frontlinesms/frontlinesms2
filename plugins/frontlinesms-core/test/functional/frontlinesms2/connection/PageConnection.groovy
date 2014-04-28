@@ -52,7 +52,9 @@ class ConnectionList extends Module {
 		frontlineSyncMissedCallEnabled { i -> connection(i).find('#missedCallEnabled') }
 		frontlineSyncCheckFrequencyValue { i -> connection(i).find('input[name=checkIntervalIndex]').jquery.val() }
 		setFrontlineSyncCheckFrequencyValue { val -> js.exec "\$('input[name=checkIntervalIndex]').simpleSlider('setValue', ${val});" }
+		frontlineSyncCheckIntervalString { i -> connection(i).find('em.checkIntervalValue').text() }
 		frontlineSyncSaveConfig { i -> connection(i).find('#sync-config-button') }
+		frontlineSyncConfigSyncStatus { i -> connection(i).find('span.sync-config-status').text() }
 	}
 }
 
