@@ -5,8 +5,8 @@
 		<label><g:message code="frontlinesync.name.label"/></label>
 		<%
 			def connectionsCount = frontlinesms2.FrontlinesyncFconnection.countByNameLike("%FrontlineSync%")
-			def suffix = connectionsCount?"($connectionsCount)" :''
-			def connectionName = fconnectionInstance?.name?:'FrontlineSync '+ suffix
+			def suffix = connectionsCount?" ($connectionsCount)" :''
+			def connectionName = fconnectionInstance?.name?:'FrontlineSync'+ suffix
 		%>
 		<g:textField name="frontlinesyncname" value="${connectionName}"/>
 	</div>
