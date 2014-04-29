@@ -75,7 +75,7 @@ class FconnectionService {
 		if(c.id in connectingIds) {
 			return ConnectionStatus.CONNECTING
 		}
-		if(camelContext.routes.any { it.id ==~ /.*-$c.id$/ }) {
+		if(camelContext.routes.any { it.id ==~ /out.*-$c.id$/ }) {
 			return ConnectionStatus.CONNECTED
 		}
 		if(c.hasProperty('customStatus')) {

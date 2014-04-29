@@ -45,7 +45,7 @@ fieldset.table { display:table; }
 #body.contacts #group-list li:hover .remove-command { visibility:visible; }
 #body.contacts #group-list li:hover .remove-command:hover { color:#e00c0e; }
 
-#body.contacts .editable input[type="text"], #body.contacts .editable textarea {
+#body.contacts .editable input[type="text"], #body.contacts .editable textarea,input.inline-editable {
 	border:1px #bbb solid;
 	transition:border-color 1s linear;
 	-webkit-transition:border-color 1s linear;
@@ -59,7 +59,25 @@ fieldset.table { display:table; }
 }
 #body.contacts .edit .editable input[type="text"] { border:1px #fff solid; }
 #body.contacts .edit .editable input[type="text"]:focus,
-#body.contacts .edit .editable input[type="text"]:hover,
+input.inline-editable {
+	font-size:inherit;
+	background-color:transparent;
+	border-color:transparent;
+	min-width:200px;
+}
+.inline-editable-parent label.fa {
+	opacity:0.0;
+	vertical-align:middle;
+	font-size:18px;
+	margin-left:5px;
+}
+.inline-editable-parent:hover label.fa {
+	transition:opacity 200ms linear;
+	-webkit-transition:opacity 200ms linear;
+	-moz-transition:opacity 200ms linear;
+	opacity:1.0;
+}
+#body.contacts .edit .editable input[type="text"]:hover,input.inline-editable:hover,
 #body.contacts #note-area textarea:hover {
 	background-color:#fff;
 	border-color:#bbb;
@@ -106,7 +124,7 @@ input[type=text]:-ms-input-placeholder {
 #body.contacts label.error { color:#c00; }
 #body.contacts .edit .editable input[type="text"].error { border: 1px solid #c00; }
 
-#body.contacts .update.in-progress { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding-left:18px; }
+.update.in-progress { background:url("../images/message/gray-ajax-spinner.gif") 2px 0 no-repeat; padding-left:18px; }
 #body.contacts .update.done { padding-left:4px; }
 #body.contacts table td { position: relative; }
 
@@ -192,12 +210,9 @@ tr.connection.connected .sync-config-status-container { display:block; }
 .sync-config-status-container .expand { font-size:14px; }
 .config-table-container{ display:none; }
 tr.connection.connecting .config-table-container{ display:block; }
-.config-table { display:table; border-collapse:separate; border-spacing:5px; }
-.config-values { display:table-row; }
-.connection-config-container { padding:5px; height:auto; position:relative; }
+.connection-config-container { display:inline-block; padding:5px; height:auto; position:relative; border:1px solid black; }
 .connection-config-container .icon { text-align:end; font-size:1.5em; position:absolute; bottom:5px; right: 5px; }
 .connection:hover .connection-config-container { background-color:white; }
-.connection-config-container { display:table-cell; border:1px solid black; }
 .connection-config { padding: 3px 15px; }
 .connection-config .field-label { text-align:center; } 
 .connection-config .field-value { text-align:center; }
