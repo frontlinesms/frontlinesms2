@@ -239,21 +239,21 @@ class ConnectionController extends ControllerUtils {
 		if(saveSuccessful) {
 			doAfterSaveOperations(fconnectionInstance)
 			def connectionUseSetting = appSettingsService['routing.use']
-			def purgedRules = []
+			def retainedRules = []
 			if (connectionUseSetting) {
 				connectionUseSetting.split(',').each { rule ->
 					if(rule.startsWith('fconnection-')) {
 						if(Fconnection.countById(rule.split('-')[1] as int)) {
-							purgedRules << rule
+							retainedRules << rule
 						}
 					}
 					else {
-						purgedRules << rule
+						retainedRules << rule
 					}
 				}
 			}
-			appSettingsService['routing.use'] = purgedRules?
-					"${purgedRules.join(',')},fconnection-$fconnectionInstance.id":
+			appSettingsService['routing.use'] = retainedRules?
+					"${retainedRules.join(',')},fconnection-$fconnectionInstance.id":
 					"fconnection-$fconnectionInstance.id"
 			withFormat {
 				html {
