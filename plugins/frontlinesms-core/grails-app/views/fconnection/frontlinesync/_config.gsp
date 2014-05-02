@@ -1,5 +1,7 @@
 <div class="frontlinesync-edit-form">
-	<p><g:message code="frontlinesync.info-setup"/></p>
+	<p><g:message code="frontlinesync.info-setup.p1"/></p>
+	<br/>
+	<p><g:message code="frontlinesync.info-setup.p2"/></p>
 	<br/>
 	<div class="input-item">
 		<label><g:message code="frontlinesync.name.label"/></label>
@@ -10,12 +12,10 @@
 		%>
 		<g:textField name="frontlinesyncname" value="${connectionName}"/>
 	</div>
+	<fsms:frontlineSyncPasscode connection="${fconnectionInstance}"/>
 	<br/>
-	<p><g:message code="frontlinesync.passcode-setup"/></p>
-	<br/>
-	<div class="frontlinesync-passcode">
-		<fsms:frontlineSyncPasscode connection="${fconnectionInstance}"/>
-	</div>
-	<br/>
-	<p><g:message code="frontlinesync.final-setup"/></p>
+	<a target="_blank" class="google-play-link" href="https://play.google.com/store/apps/details?id=com.simlab.frontlinesync">
+		<img alt="Android app on Google Play"
+			src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
+	</a>
 </div>

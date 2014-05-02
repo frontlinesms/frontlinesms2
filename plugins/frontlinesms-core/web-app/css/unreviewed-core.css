@@ -211,6 +211,7 @@ tr.connection.connected .sync-config-status-container { display:block; }
 .config-table-container{ display:none; }
 tr.connection.connecting .config-table-container{ display:block; }
 .connection-config-container { display:inline-block; padding:5px; height:auto; position:relative; border:1px solid black; }
+.connection-config-container.noborder { border:none; }
 .connection-config-container .icon { text-align:end; font-size:1.5em; position:absolute; bottom:5px; right: 5px; }
 .connection:hover .connection-config-container { background-color:white; }
 .connection-config { padding: 3px 15px; }
@@ -235,4 +236,10 @@ label[for=checkIntervalIndex] {
 }
 label[for=checkIntervalIndex] em {
 	font-weight:bold;
+}
+.google-play-link {
+	display: block;
+}
+.google-play-link.large {
+	padding-top:10px;
 }

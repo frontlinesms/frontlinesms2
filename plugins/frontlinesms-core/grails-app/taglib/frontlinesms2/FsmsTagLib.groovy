@@ -618,7 +618,6 @@ class FsmsTagLib {
 			passcode = randomData.nextInt(1000, 9999)
 		}
 		out << g.hiddenField(name:'frontlinesyncsecret', value:passcode)
-		out << "<div class='passcode-pretty'>${passcode}</div>"
 	}
 
 	private def getFields(att) {
