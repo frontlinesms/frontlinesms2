@@ -8,6 +8,7 @@ var frontlinesync =  (function() {
 		var syncConfigStatus = $(getConnectionRow(connectionId) + ' .sync-config-status')
 		hideThinking();
 		toggleOptions(connectionId);
+		routing.refreshRoutingRules();
 		syncConfigStatus.html(i18n('frontlinesync.sync.config.dirty.true'));
 	};
 
@@ -31,8 +32,11 @@ var frontlinesync =  (function() {
 	}
 
 	updateConfigSynced = function(data) {
-		var connectionRow = $(getConnectionRow(data.id)),
-		configSyncedMessage = i18n('frontlinesync.sync.config.dirty.' + !data.configSynced);
+		connectionRow = $(getConnectionRow(data.id)); 
+		var configSyncedMessage = i18n('frontlinesync.sync.config.dirty.' + !data.configSynced);
+		if(Boolean(connectionRow.find('#sendEnabled').attr('checked')) !== Boolean(data.sendEnabled)) {
+			routing.refreshRoutingRules();
+		}
 		connectionRow.find(".sync-config-status").html(configSyncedMessage);
 		connectionRow.find("#sendEnabled").attr("checked", data.sendEnabled);
 		connectionRow.find("#receiveEnabled").attr("checked", data.receiveEnabled);

@@ -32,8 +32,3 @@
 		</fsms:checkboxGroup>
 	</g:form>
 </div>
-<g:javascript>
-$(function() {
-	routing.init();
-});
-</g:javascript>

@@ -103,6 +103,9 @@ class ConnectionControllerSpec extends Specification {
 	@Unroll
 	def 'creating a connection should add it to the enabled routes list'() {
 		given: 'TODO set up request vars'
+			Fconnection.metaClass.static.countById = { id ->
+				return 1
+			}
 			def ass = ['routing.use':initialSetting]
 			controller.appSettingsService = ass
 			params.connectionType = 'smssync'
@@ -119,8 +122,27 @@ class ConnectionControllerSpec extends Specification {
 			initialSetting | finalSetting
 			null|/^fconnection-\d+$/
 			''|/^fconnection-\d+$/
-			'fconnection-C'|/^fconnection-C,fconnection-\d+$/
-			'fconnection-C,fconnection-A'|/^fconnection-C,fconnection-A,fconnection-\d+$/
+			'fconnection-9'|/^fconnection-9,fconnection-\d+$/
+			'fconnection-9,fconnection-8'|/^fconnection-9,fconnection-8,fconnection-\d+$/
+	}
+
+	def 'when adding new connections to the routing rule list, non-existent connections are purged from it'() {
+		given:
+			Fconnection.metaClass.static.countById = { id ->
+				return (id == 2 || id == 3) ? 1 : 0
+			}
+			def ass = ['routing.use':'uselastreceiver,fconnection-1,fconnection-3,fconnection-2,fconnection-4,fconnection-5']
+			controller.appSettingsService = ass
+			params.connectionType = 'smssync'
+			params.smssyncname = 'test-connection'
+			params.smssyncreceiveEnabled = true
+			params.smssyncsecret = ''
+			params.smssyncsendEnabled = true
+			params.smssynctimeout = '60'
+		when:
+			controller.save()
+		then:
+			ass['routing.use'] ==~ /^uselastreceiver,fconnection-3,fconnection-2,fconnection-\d+$/
 	}
 
 	private def buildTestConnection(status) {

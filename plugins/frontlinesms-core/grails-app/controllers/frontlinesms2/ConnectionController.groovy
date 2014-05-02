@@ -239,8 +239,21 @@ class ConnectionController extends ControllerUtils {
 		if(saveSuccessful) {
 			doAfterSaveOperations(fconnectionInstance)
 			def connectionUseSetting = appSettingsService['routing.use']
-			appSettingsService['routing.use'] = connectionUseSetting?
-					"$connectionUseSetting,fconnection-$fconnectionInstance.id":
+			def retainedRules = []
+			if (connectionUseSetting) {
+				connectionUseSetting.split(',').each { rule ->
+					if(rule.startsWith('fconnection-')) {
+						if(Fconnection.countById(rule.split('-')[1] as int)) {
+							retainedRules << rule
+						}
+					}
+					else {
+						retainedRules << rule
+					}
+				}
+			}
+			appSettingsService['routing.use'] = retainedRules?
+					"${retainedRules.join(',')},fconnection-$fconnectionInstance.id":
 					"fconnection-$fconnectionInstance.id"
 			withFormat {
 				html {
@@ -262,6 +275,14 @@ class ConnectionController extends ControllerUtils {
 				}
 			}
 		}
+	}
+
+	def routingRules() {
+		def appSettings = [:]
+		appSettings['routing.otherwise'] = appSettingsService.get("routing.otherwise")
+		appSettings['routing.use'] = appSettingsService.get("routing.use")
+		def fconnectionRoutingMap = getRoutingRules(appSettings['routing.use'])
+		render(template:'routing', model:[appSettings: appSettings, fconnectionRoutingMap: fconnectionRoutingMap])
 	}
 
 	private def withFconnection = withDomainObject Fconnection, { params.id }, { redirect(controller:'connection', action:'list') }

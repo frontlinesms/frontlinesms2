@@ -47,6 +47,16 @@ var routing = (function() {
 			}
 		});
 	},
+	refreshRoutingRules = function() {
+		$.ajax({
+			type: 'POST',
+			url: url_root + 'connection/routingRules',
+			success: function(data) {
+				$('#routing-preferences').html($(data).html());
+				init();
+			}
+		});
+	},
 	showOrHideWarning = function(hasError) {
 		var warningElement = $('p.warning_message');
 		if(hasError) {
@@ -57,6 +67,8 @@ var routing = (function() {
 		}
 	};
 	return {
-		init: init
+		init: init,
+		refreshRoutingRules: refreshRoutingRules
 	};
 }());
+$(function() { routing.init(); });
