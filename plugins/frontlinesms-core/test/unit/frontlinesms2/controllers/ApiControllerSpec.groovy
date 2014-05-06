@@ -9,6 +9,7 @@ class ApiControllerSpec extends Specification {
 	def setup() {
 		def grailsApplication = [domainClasses:[[clazz:Webconnection]]]
 		controller.grailsApplication = grailsApplication
+		controller.apiService = [invokeApiProcess : { entity, controller -> return [ status: 200 ]}]
 
 		Webconnection.metaClass.static.findById = { id -> Mock(GenericWebconnection) }
 		Webconnection.metaClass.static.findAllByNameIlike = { name -> Mock(GenericWebconnection) }
