@@ -22,6 +22,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	Date lastConnectionTime
 	boolean sendEnabled = true
 	boolean receiveEnabled = true
+	boolean hasDispatches = false
 	String secret
 	int timeout = 360 // 3 hour default
 
@@ -31,7 +32,10 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 	}
 
 	def removeDispatchesFromQueue(dispatches) {
-		QueuedDispatch.delete(this, dispatches)
+		QueuedDispatch.deleteAll(this)
+		if(this.hasDispatches) {
+			this.hasDispatches = false
+		}
 	}
 
 	def apiProcess(controller) {

@@ -15,6 +15,7 @@ class SmssyncService {
 	void processSend(Exchange x) {
 		def connection = SmssyncFconnection.get(x.in.headers['fconnection-id'])
 		connection.addToQueuedDispatches(x.in.body)
+		connection.hasDispatches = true
 		connection.save(failOnError:true)
 	}
 
@@ -97,12 +98,11 @@ class SmssyncService {
 	private def generateOutgoingResponse(connection, boolean includeWhenEmpty) {
 		def responseMap = [:]
 
-		def q = connection.queuedDispatches
+		def q = connection.hasDispatches ? connection.queuedDispatches : []
 		if(q || includeWhenEmpty) {
 			responseMap.task = 'send'
 
 			connection.removeDispatchesFromQueue(q)
-
 			responseMap.messages = q.collect { d ->
 				d.status = DispatchStatus.SENT
 				d.dateSent = new Date()
