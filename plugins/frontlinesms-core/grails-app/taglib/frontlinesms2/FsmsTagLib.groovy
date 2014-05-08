@@ -436,7 +436,6 @@ class FsmsTagLib {
 
 	def trafficLightStatus = { att ->
 		out << '<span id="status-indicator" class="indicator '
-		def connections = Fconnection.list()
 		out << statusIndicatorService.color
 		out << '"></span>'
 	}
