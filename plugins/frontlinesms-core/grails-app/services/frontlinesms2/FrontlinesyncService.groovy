@@ -73,9 +73,9 @@ class FrontlinesyncService {
 	private generateOutgoingResponse(connection) {
 		def responseMap = [:]
 		if(connection.sendEnabled) {
-			def q = connection.queuedDispatches
+			def q = connection.hasDispatches ? connection.queuedDispatches : []
 			if(q) {
-				connection.removeDispatchesFromQueue(q)
+				connection.removeDispatchesFromQueue()
 				responseMap.messages = q.collect { d ->
 					[to:d.dst, message:d.text, dispatchId:d.id]
 				}
