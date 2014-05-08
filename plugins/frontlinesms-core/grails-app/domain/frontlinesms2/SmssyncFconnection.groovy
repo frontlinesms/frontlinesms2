@@ -31,7 +31,7 @@ class SmssyncFconnection extends Fconnection implements FrontlineApi {
 		lastConnectionTime nullable:true
 	}
 
-	def removeDispatchesFromQueue(dispatches) {
+	def removeDispatchesFromQueue() {
 		QueuedDispatch.deleteAll(this)
 		if(this.hasDispatches) {
 			this.hasDispatches = false

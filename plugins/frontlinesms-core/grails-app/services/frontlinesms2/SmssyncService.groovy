@@ -102,7 +102,7 @@ class SmssyncService {
 		if(q || includeWhenEmpty) {
 			responseMap.task = 'send'
 
-			connection.removeDispatchesFromQueue(q)
+			connection.removeDispatchesFromQueue()
 			responseMap.messages = q.collect { d ->
 				d.status = DispatchStatus.SENT
 				d.dateSent = new Date()
