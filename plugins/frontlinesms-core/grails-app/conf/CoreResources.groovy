@@ -27,7 +27,6 @@ modules = {
 
 		resource url:[dir:'css', file:'help.css']
 		resource url:[dir:'js', file:'frontlinesms_core.js'], disposition:'head'
-		resource url:[dir:'js', file:'timer.js'], disposition:'head'
 		resource url:[dir:'js', file:'app_info.js'], disposition:'head'
 		resource url:[dir:'js', file:'activity/popups.js'], disposition:'head'
 		resource url:[dir:'js', file:"activity/custom_activity.js"], disposition:'head'
