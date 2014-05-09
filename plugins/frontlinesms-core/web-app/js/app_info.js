@@ -2,12 +2,14 @@ app_info = (function() {
 	var
 	callbacks,
 	counter,
+	fibonacciTimeOffsetPair = [1, 1],
 	failCallback,
-	init = function(repeatInterval) {
+	repeatIntervalOffset,
+	init = function(initialRepeatIntervalOffset) {
 		counter = 0;
 		callbacks = {};
-		repeatInterval = repeatInterval || 15000;
-		timer.setInterval(requester, repeatInterval);
+		repeatIntervalOffset = initialRepeatIntervalOffset || 15000;
+		setTimeout(requester, repeatIntervalGenerator());
 	},
 	callbackProcessor = function(data) {
 		var c;
@@ -55,6 +57,7 @@ app_info = (function() {
 				success:callbackProcessor,
 				error:failureProcessor });
 		}
+		setTimeout(requester, repeatIntervalGenerator());
 	},
 	listen = function(interest, f, data, callback) {
 		if(!interest || !f) {
@@ -85,6 +88,14 @@ app_info = (function() {
 			throw "Cannot override old failure listener.";
 		}
 		failCallback = listener;
+	},
+	repeatIntervalGenerator = function() {
+		fibonacciTimeOffsetPair = [
+			fibonacciTimeOffsetPair[1],
+			fibonacciTimeOffsetPair[0] + fibonacciTimeOffsetPair[1]
+		];
+		var nextRepeatInterval = fibonacciTimeOffsetPair[0] * 1000 + repeatIntervalOffset;
+		return nextRepeatInterval;
 	},
 	stopListening = function(disinterest) {
 		delete callbacks[disinterest];
