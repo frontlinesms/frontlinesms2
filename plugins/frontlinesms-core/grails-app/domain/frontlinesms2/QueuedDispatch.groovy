@@ -35,7 +35,7 @@ class QueuedDispatch implements Serializable {
 	}
 
 	static void deleteAll(Fconnection c) {
-		executeUpdate "DELETE FROM QueuedDispatch WHERE connectionId=:connectionId"
+		executeUpdate ("DELETE FROM QueuedDispatch WHERE connectionId=:connectionId", [connectionId:c.id])
 	}
 
 	static getDispatches(connection) {
