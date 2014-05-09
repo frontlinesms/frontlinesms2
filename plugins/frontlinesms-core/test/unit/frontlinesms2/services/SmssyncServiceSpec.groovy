@@ -45,6 +45,7 @@ class SmssyncServiceSpec extends Specification {
 	def setupDefaultConnection(boolean sendEnabled=true) {
 		connection.receiveEnabled >> true
 		connection.enabled >> true
+		connection.hasDispatches >> true
 		if(sendEnabled) {
 			connection.sendEnabled >> true
 			mockDispatchQueue(connection, [1, 2, 3])
