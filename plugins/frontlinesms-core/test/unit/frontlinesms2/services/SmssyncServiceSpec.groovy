@@ -45,6 +45,7 @@ class SmssyncServiceSpec extends Specification {
 	def setupDefaultConnection(boolean sendEnabled=true) {
 		connection.receiveEnabled >> true
 		connection.enabled >> true
+		connection.hasDispatches >> true
 		if(sendEnabled) {
 			connection.sendEnabled >> true
 			mockDispatchQueue(connection, [1, 2, 3])
@@ -92,7 +93,10 @@ class SmssyncServiceSpec extends Specification {
 				controller.params.from = '1234567890'
 				controller.params.message = 'word'
 			}
-			if(dispatchCount) mockDispatchQueue(connection, (1..dispatchCount))
+			if(dispatchCount) {
+				mockDispatchQueue(connection, (1..dispatchCount))
+				connection.hasDispatches >> true
+			}
 		when:
 			def actualResponse = service.generateApiResponse(connection, controller)
 		then:

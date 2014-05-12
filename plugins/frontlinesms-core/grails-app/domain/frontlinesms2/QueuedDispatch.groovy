@@ -34,6 +34,10 @@ class QueuedDispatch implements Serializable {
 		}
 	}
 
+	static void deleteAll(Fconnection c) {
+		executeUpdate ("DELETE FROM QueuedDispatch WHERE connectionId=:connectionId", [connectionId:c.id])
+	}
+
 	static getDispatches(connection) {
 		// TODO should do this in a single query
 		def dispatchIds = Dispatch.executeQuery("SELECT q.dispatchId FROM QueuedDispatch q WHERE q.connectionId=:connectionId",

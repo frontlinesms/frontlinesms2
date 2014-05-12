@@ -24,6 +24,7 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	boolean receiveEnabled = false
 	boolean missedCallEnabled = false
 	boolean configSynced = false
+	boolean hasDispatches = false
 	int checkInterval = 1
 	String secret
 
@@ -66,12 +67,17 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 		return apiEnabled? "${urlHelperService.getBaseUrl(request)}" :''
 	}
 
-	def removeDispatchesFromQueue(dispatches) {
-		QueuedDispatch.delete(this, dispatches)
+	def removeDispatchesFromQueue() {
+		QueuedDispatch.deleteAll(this)
+		if(this.hasDispatches) {
+			this.hasDispatches = false
+			this.save()
+		}
 	}
 
 	def addToQueuedDispatches(d) {
 		QueuedDispatch.create(this, d)
+		this.hasDispatches = true
 	}
 
 	def getQueuedDispatches() {

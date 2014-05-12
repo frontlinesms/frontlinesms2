@@ -147,8 +147,9 @@ class FrontlinesyncServiceSpec extends Specification {
 		given:
 			def connection  = setupConnection("secret")
 			connection.sendEnabled = true
+			connection.hasDispatches =  true
 			connection.queuedDispatches = [mockDispatch('123', 'yeah', 123)]
-			connection.removeDispatchesFromQueue = { q -> true }
+			connection.removeDispatchesFromQueue = { true }
 		expect:
 			service.generateOutgoingResponse(connection).equals([messages:[[to:'123', message:'yeah', dispatchId: 123]]])
 			
