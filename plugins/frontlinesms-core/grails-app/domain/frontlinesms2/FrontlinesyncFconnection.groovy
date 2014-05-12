@@ -25,7 +25,7 @@ class FrontlinesyncFconnection extends Fconnection implements FrontlineApi {
 	boolean missedCallEnabled = false
 	boolean configSynced = false
 	boolean hasDispatches = false
-	int checkInterval = 1
+	int checkInterval = 15
 	String secret
 
 	static constraints = {
