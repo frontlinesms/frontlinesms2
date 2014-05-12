@@ -38,7 +38,7 @@ def doScript(name) {
 
 def isReleaseBuild() {
 	def appVersion = metadata['app.version'].toUpperCase()
-	return !(appVersion.contains('SNAPSHOT') || appVersion.contains('RC'))
+	return !(appVersion.contains('SNAPSHOT') || appVersion.contains('RC') || appVersion.contains('SPRINT'))
 }
 
 target(clearPluginXmls: 'Delete plugin.xml from all in-place plugins') {
