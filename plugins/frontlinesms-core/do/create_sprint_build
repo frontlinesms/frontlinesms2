@@ -22,7 +22,7 @@ git commit -m "SPRINT-BUILD-$sprintNumber SETUP: Backup app.version [$appVersion
 echo "Generating build for iteration $sprintNumber"
 
 # Generate installers with migrations disabled
-grails -Ddb.migrations=false prod clean build-installers --stacktrace
+grails -Ddb.migrations=false prod build-installers --stacktrace
 
 # Tag build
 git tag "SPRINT-$sprintNumber"
