@@ -14,8 +14,12 @@
 	</div>
 	<fsms:frontlineSyncPasscode connection="${fconnectionInstance}"/>
 	<br/>
+        <a target="_blank" class="google-play-link" href="https://play.google.com/store/apps/details?id=com.simlab.frontlinesync">
+		<g:message code="fconnection.frontlinesync.googleplaystore.download"/>
+	</a>
+        <br/>
 	<a target="_blank" class="google-play-link" href="https://play.google.com/store/apps/details?id=com.simlab.frontlinesync">
-		<img alt="Android app on Google Play"
-			src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
+	<g:img alt="Android app on Google Play" uri="/images/en_app_rgb_wo_45.png"/>
+	
 	</a>
 </div>
