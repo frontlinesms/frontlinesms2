@@ -19,7 +19,7 @@
 	</a>
         <br/>
 	<a target="_blank" class="google-play-link" href="https://play.google.com/store/apps/details?id=com.simlab.frontlinesync">
-	<img alt="Android app on Google Play" src="${g.resource(file:'/images/frontlinesync_play_badge.png')}"/>
+	<img alt="Android app on Google Play" src="${r.resource(file:'/images/frontlinesync_play_badge.png')}"/>
 	
 	</a>
 </div>
