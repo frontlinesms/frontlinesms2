@@ -55,6 +55,7 @@ class DispatchRouterService {
 					logWithPrefix "Route Id selected: $routeId"
 					if(routeId) {
 						if(exchange.in.body instanceof Dispatch) {
+							sleep 40
 							def dispatch = exchange.in.body
 							logWithPrefix " dispatch.fconnectionId:::: $route"
 							dispatch.fconnectionId = route as Long
