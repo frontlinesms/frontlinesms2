@@ -57,7 +57,6 @@ class DispatchRouterService {
 						if(exchange.in.body instanceof Dispatch) {
 							def dispatch = exchange.in.body
 							logWithPrefix " dispatch.fconnectionId:::: $route"
-							dispatch.refresh()
 							dispatch.fconnectionId = route as Long
 							dispatch.save(failOnError:true, flush:true)
 						}
