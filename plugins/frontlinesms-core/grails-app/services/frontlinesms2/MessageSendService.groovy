@@ -40,7 +40,6 @@ class MessageSendService {
 		def dispatches = generateDispatches(addresses)
 		dispatches.each {
 			message.addToDispatches(it)
-			it.save(flush:true)
 		}
 		return message
 	}
