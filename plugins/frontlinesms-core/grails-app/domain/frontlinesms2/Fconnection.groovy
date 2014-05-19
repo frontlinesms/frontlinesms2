@@ -23,12 +23,13 @@ class Fconnection {
 			ClickatellFconnection,
 			IntelliSmsFconnection,
 			NexmoFconnection,
-			SmppFconnection]
+			SmppFconnection,
+			SmssyncFconnection]
 	static final getImplementations(params) {
 		(params.beta || Boolean.parseBoolean(ApplicationHolder.application.mainContext.getBean('appSettingsService').beta ?: 'false')) ? betaImplementations: implementations
 	}
 
-	static getBetaImplementations() { [SmssyncFconnection] + implementations }
+	static getBetaImplementations() { implementations }
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields

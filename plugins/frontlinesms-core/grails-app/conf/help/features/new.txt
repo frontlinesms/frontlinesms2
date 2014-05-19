@@ -1,32 +1,11 @@
-# New features in FrontlineSMS v 2.3
-## Better ways to connect:
-### SMSSync
-FrontlineSMS now supports SMSSync, an Android application from our friends at Ushahidi that allows you to sync text messages from an Android phone to FrontlineSMS. Note: you'll need a local area network or Internet access to use this feature. We still support modems and mobile phones; SMSSync just represents an additional way to connect to the people you care about.
+# New features in FrontlineSMS v 2.4
+## A new Android gateway!
+### FrontlineSync
+Details of FrontlineSync
 
-### Custom Routing Preferences
-We now allow you to set custom routing preferences among your connections. For example, you can instruct FrontlineSMS to respond to users via the phone number they texted first. Or, you can prioritize your phone numbers so that you are using your preferred connection first. This feature has been requested by many users, and we're excited to add it to this list!
-
-## A powerful new activity:
-### Custom Activity Builder
-This lets you link several actions together based on a single keyword or incoming message. For instance, you can add to or remove a sender from a group, forward a message, send an autoreply ... or combine all of the above. It gives you a powerful way to have FrontlineSMS perform several tasks at the same time ... all automatically.
-
-## A better way to manage translations:
-### Translations
-We've improved the process for users to translate both FrontlineSMS and FrontlineCloud and we are adding new languages constantly.
-Don't see a language you need? Is a current language not specific to your dialect? Contact us, and we can give you access to translate into any language or dialect of your choice. support@frontlinesms.com
-
-## Improvements
-We have made significant improvements to contact editing and importing, as well as our help files. Here is a quick summary:
-
-### Contact Editing and Importing
-We've added a new contact import tool, which will help you organize your column headings before finalizing your contact import. No more guessing as to whether your column headings are correct; we allow you to edit them during the import to ensure everything is accurate. 
-We've also improved the contact editing page so that edits looks cleaner.
-
-### Improved Visual Cues
-We've made some small improvements to visual cues in the app, but we think they have a big effect on the user experience. For instance, now notifications appear next to activities when you receive a message, so you won't miss anything important! The application also assists with showing phone number formats and shows a country flag next to each phone number -- all with the goal of helping you ensure you're reaching the right person.
+## Numerous UI improvements and bug fixes
 
 ## And stay tuned ...
-
-We are committed to releasing a number of great features in the next few months. Stay tuned for a new version of FrontlineSMS desktop soon!
+We have improved our release process to ensure FrontlineSMS receives more bug fixes more quickly.
 
 [1]: http://support.frontlinesms.com
