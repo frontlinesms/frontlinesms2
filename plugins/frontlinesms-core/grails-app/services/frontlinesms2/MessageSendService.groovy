@@ -40,6 +40,7 @@ class MessageSendService {
 		def dispatches = generateDispatches(addresses)
 		dispatches.each {
 			message.addToDispatches(it)
+			it.save(flush:true)
 		}
 		return message
 	}
@@ -65,7 +66,7 @@ class MessageSendService {
 	def generateDispatches(List addresses) {
 		(addresses.unique() - null).collect {
 			it = it.replaceAll(/\s|\(|\)|\-/, "")
-			new Dispatch(dst:it, status:DispatchStatus.PENDING).save(flush: true)
+			new Dispatch(dst:it, status:DispatchStatus.PENDING)
 		}
 	}
 }
