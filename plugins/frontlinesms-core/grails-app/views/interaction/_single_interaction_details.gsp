@@ -64,8 +64,11 @@
 
 <r:script>
 function showRecipientList(list) {
-	var html = '<ul class="recipient-list">';
-	for(r in list) { r=list[r]; html += "<li>" + r.display + " (" + r.status + ")</li>"; }
+	var html = '<ul class="recipient-list">', recipient, i;
+	for(i = 0; i < list.length; i++) {
+		recipient=list[i];
+		html += "<li>" + recipient.display + " (" + recipient.status + ")</li>";
+	}
 	html += '</ul>';
 	launchSmallPopup(i18n('smallpopup.recipients.title'), html, i18n('action.done'), cancel);
 }
