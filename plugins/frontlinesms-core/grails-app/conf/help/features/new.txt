@@ -1,10 +1,35 @@
 # New features in FrontlineSMS v 2.4
 ## A new Android gateway!
 ### FrontlineSync
-Details of FrontlineSync
+FrontlineSync is an Android app (running on v. 2.3 and up) which lets you easily send and receive messages to and from FrontlineSMS — even if your Android phone is in a different location from you. FrontlineSync also registers missed calls to the phone in your FrontlineSync or FrontlineCloud workspace.
 
-## Numerous UI improvements and bug fixes
+There are some basic requirements for this to work: your Android phone will need to be on, and have access both to a mobile signal and wifi or data signal, with an appropriate plan; also, you will need the FrontlineSync application to be installed and synced with FrontlineSMS. After that, any messages you send will be routed through your Android phone … and incoming messages will be routed back to your inbox. All with a local number!
 
+## New features
+1.  Now you can register Missed Calls in FrontlineSMS using FrontlineSync
+2.  Alongside SMSSync and USB modems, FrontlineSync provides another even more stable way of sending and receiving SMS
+3.  FrontlineSync has performed faster in our tests when sending multiple SMS 
+4.  Import contacts using the vCard/VCF file format
+
+## General improvements and interface updates
+1.  The link to the Connections management screen was moved up into the top navigation to make it easier to access.  The old 'Status' information is now positioned to in the Settings section under 'Usage Statistics'
+2.  There is now more comprehensive support (UCS2) of special characters such as Arabic when handling message sending, viewing and exporting
+3.  New Send Message window is now just 1 simple screen to send a Quick Message
+4.  Improvements to the contact import review screen allow faster and more detailed editing of contacts
+5.  Routing rules on the Connections tab are new and improved
+6.  We added a new icon set to associate objects in the app more clearly and consistently
+7.  Activities listed in the Messages view no longer have the type of Activity shown to save space
+8.  Added a short-cut in Activity builders to allow you to create new groups without having to navigate back to the Contacts section
+9.  Message count in top navigation is now grey when no new messages exist
+10.  You can now edit the name of a connection directly in the Connections list
+11. While editing inline on the Contacts or Connections screen, you can now undo your edits with the ESC key
+
+## Important bug fixes
+ * Importing large numbers of contacts is now much more stable and works in the background.  Meaning it returns the response once done and does not require you to wait.
+ * Some variable replacement was not working when using the 'magic wand' feature in Activities
+ * Notifications on new messages were sometimes counting from the wrong folders
+ * Various bug fixes in the contact and groups management interface
+ 
 ## And stay tuned ...
 We have improved our release process to ensure FrontlineSMS receives more bug fixes more quickly.
 
