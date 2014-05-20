@@ -14,7 +14,7 @@ Navigate to the connections tab  in FrontlineSMS  and click on the 'Add new conn
 
 ![Add-New-Connection][1]
 
-A list of the available connections will appear as below.  Select FrontlineSync and click ‘Next’.
+A list of the available connections will appear as below.  Select FrontlineSync and click 'Next'.
 
 ![Select connection][2]
 This will create a new connection by default named 'FrontlineSync'. Click 'Next' unless you wish to set a particular name for the connection. 
