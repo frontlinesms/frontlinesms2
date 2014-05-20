@@ -18,17 +18,18 @@ class Fconnection {
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
 	
-	static final implementations = [SmslibFconnection,
+	static final implementations = [FrontlinesyncFconnection,
+			SmslibFconnection,
 			ClickatellFconnection,
 			IntelliSmsFconnection,
 			NexmoFconnection,
-			FrontlinesyncFconnection,
-			SmppFconnection]
+			SmppFconnection,
+			SmssyncFconnection]
 	static final getImplementations(params) {
 		(params.beta || Boolean.parseBoolean(ApplicationHolder.application.mainContext.getBean('appSettingsService').beta ?: 'false')) ? betaImplementations: implementations
 	}
 
-	static getBetaImplementations() { [SmssyncFconnection] + implementations }
+	static getBetaImplementations() { implementations }
 
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
