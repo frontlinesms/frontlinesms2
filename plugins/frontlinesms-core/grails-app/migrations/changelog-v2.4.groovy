@@ -65,7 +65,7 @@ databaseChangeLog = {
 
 	changeSet(author: "vaneyck (generated)", id: "1400489400949-5") {
 		addColumn(tableName: "FRONTLINESYNC_FCONNECTION") {
-			column(name: "CONFIG_SYNCED", type: "BOOLEAN") {
+			column(name: "CONFIG_SYNCED", type: "BOOLEAN", defaultValue: true) {
 				constraints(nullable: "false")
 			}
 		}
@@ -73,7 +73,7 @@ databaseChangeLog = {
 
 	changeSet(author: "vaneyck (generated)", id: "1400489400949-6") {
 		addColumn(tableName: "FRONTLINESYNC_FCONNECTION") {
-			column(name: "HAS_DISPATCHES", type: "BOOLEAN") {
+			column(name: "HAS_DISPATCHES", type: "BOOLEAN", defaultValue: true) {
 				constraints(nullable: "false")
 			}
 		}
@@ -81,7 +81,7 @@ databaseChangeLog = {
 
 	changeSet(author: "vaneyck (generated)", id: "1400489400949-7") {
 		addColumn(tableName: "FRONTLINESYNC_FCONNECTION") {
-			column(name: "MISSED_CALL_ENABLED", type: "BOOLEAN") {
+			column(name: "MISSED_CALL_ENABLED", type: "BOOLEAN", defaultValue: true) {
 				constraints(nullable: "false")
 			}
 		}
@@ -89,7 +89,7 @@ databaseChangeLog = {
 
 	changeSet(author: "vaneyck (generated)", id: "1400489400949-8") {
 		addColumn(tableName: "SMSSYNC_FCONNECTION") {
-			column(name: "HAS_DISPATCHES", type: "BOOLEAN") {
+			column(name: "HAS_DISPATCHES", type: "BOOLEAN", defaultValue: true) {
 				constraints(nullable: "false")
 			}
 		}
