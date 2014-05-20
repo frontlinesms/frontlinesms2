@@ -55,8 +55,7 @@ class DispatchRouterService {
 					logWithPrefix "Route Id selected: $routeId"
 					if(routeId) {
 						if(exchange.in.body instanceof Dispatch) {
-							sleep 40
-							def dispatch = exchange.in.body
+							def dispatch = waitForDispatchToBePersisted(exchange.in.body.id)
 							logWithPrefix " dispatch.fconnectionId:::: $route"
 							dispatch.fconnectionId = route as Long
 							dispatch.save(failOnError:true, flush:true)
@@ -156,6 +155,25 @@ class DispatchRouterService {
 		def routeToTake = allOutRoutes.find{ it.id.endsWith("-${connection.id}") }
 		log.info "Chosen Route ## $routeToTake"
 		routeToTake? routeToTake.id: null
+	}
+
+	private waitForDispatchToBePersisted(dispatchId, attemptCount=0) {
+		log.info "Checking for Dispatch $dispatchId in db..."
+		def d = Dispatch.get(dispatchId)
+		if (d) {
+			log.info "Dispatch $dispatchId successfully retrieved from db."
+			return d
+		}
+		else if(attemptCount < 10){
+			def timeToSleep = 50 + (50 * attemptCount)
+			log.info "Dispatch not found in database. Waiting for $timeToSleep ms before checking again for dispatch $dispatchId in db"
+			sleep(timeToSleep)
+			return waitForDispatchToBePersisted(dispatchId, attemptCount+1)
+		}
+		else {
+			log.info "Dispatch not found in db after 10 attempts, throwing exception"
+			throw new NullPointerException("Dispatch not found in database")
+		}
 	}
 }
 
