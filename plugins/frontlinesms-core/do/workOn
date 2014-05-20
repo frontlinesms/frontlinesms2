@@ -1,0 +1,25 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+	echo "# Usage: do/workOn TOOLS-XYZ"
+	exit 1
+fi
+echo "Is $1 a User Story [s] or a Bug [b]? [s/b]"
+read storyFlag
+
+if [ "$storyFlag" == "s" ]; then
+	echo "Treating new ticket as story, will branch from master"
+	git co master
+elif [ "$storyFlag" == "b" ]; then
+	echo "Treating new ticket as bug, will branch from core-4.x maintenance branch"
+	git co core-4.x
+else
+	echo "invalid input, exiting"
+	exit 1
+fi
+
+git pull
+git co -b $1
+git push -u origin $1
+
+echo "Created new branch $1 on origin. Happy coding!"
+
