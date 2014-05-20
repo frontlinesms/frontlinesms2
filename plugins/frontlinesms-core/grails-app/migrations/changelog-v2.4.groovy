@@ -144,8 +144,4 @@ databaseChangeLog = {
 	changeSet(author: "vaneyck (generated)", id: "1400489400949-18") {
 		dropTable(tableName: "FCONNECTION_FMESSAGE")
 	}
-
-	changeSet(author: "vaneyck (generated)", id: "1400489400949-19") {
-		dropTable(tableName: "SMSSYNC_DISPATCH")
-	}
 }
