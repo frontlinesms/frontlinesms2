@@ -34,7 +34,7 @@ If not downloaded already, please visit the Google Play Store and download Front
 ![Select type][5]
 
 Select the the Frontline product which you would like to link FrontlineSync to, in this case, FrontlineSMS
-Enter your Android Identifier and Passcode which were generated in the final step of setting up your new connection in your FrontlineSMS workspace.  You will also need to enter the address of your FrontlineSMS computer; see further details on how to get this address. 
+Enter your Android Identifier and Passcode which were generated in the final step of setting up your new connection in your FrontlineSMS workspace.  You will also need to enter the address of your FrontlineSMS computer; [see further details on how to get this address][10]. 
 You can define a port number of your choice in this step, however the application will append port 8130 by default if not set.  The protocol expected is http:// and this will also be auto-completed if missing.
 
 ![Connect with passcode][6]
@@ -69,3 +69,4 @@ If you notice that your FrontlineSync connection is not sending or receiving mes
 [7]: ../images/help/smssync/2.3.options.jpg
 [8]: ../images/help/smssync/3.1.green_connection.jpg
 [9]: ../images/help/smssync/3.2.too_many_sms.jpg
+[10]: settings/4d.finding_on_a_lan
