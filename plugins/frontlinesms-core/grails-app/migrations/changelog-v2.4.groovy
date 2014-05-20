@@ -24,12 +24,12 @@ databaseChangeLog = {
 	changeSet(author: "vaneyck (generated)", id: "1400489400949-2") {
 		addColumn(tableName: "FMESSAGE") {
 			column(name: "CLASS", type: "VARCHAR(255)") {
-				constraints(nullable: "false")
+				constraints(nullable: "true")
 			}
 		}
 	}
 
-	// Set all fmessage.class to frontlinesms2.TextMessage
+	//Set all fmessage.class to frontlinesms2.TextMessage
         changeSet(author: "vaneyck", id:"1387530956381-3") {
                 grailsChange{
                         change{
@@ -37,6 +37,10 @@ databaseChangeLog = {
                         }   
                 }   
         }
+
+ 	changeSet(author: "vaneyck (by hand)", id: "addNotNullConstraint-to-fmessage.class-1387530956381-3") {
+		addNotNullConstraint(columnDataType: "VARCHAR", columnName: "CLASS", tableName: "FMESSAGE")
+	}
 
 	//Move FCONNECTION_FMESSAGE data to the FMESSAGE table CONNECTION_ID
 	changeSet(author: "vaneyck (generated)", id: "1400489400949-3") {
@@ -54,7 +58,7 @@ databaseChangeLog = {
 	changeSet(author: "vaneyck (generated)", id: "1400489400949-4") {
 		addColumn(tableName: "FRONTLINESYNC_FCONNECTION") {
 			column(name: "CHECK_INTERVAL", type: "INT") {
-				constraints(nullable: "false")
+				constraints(nullable: "true")
 			}
 		}
 	}
