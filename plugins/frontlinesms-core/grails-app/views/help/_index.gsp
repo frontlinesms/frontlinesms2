@@ -71,18 +71,20 @@
 		* [How do I perform a simple search?][72] 
 	* ### Advanced
 		* [How do I perform a much more detailed search?][74]
-* ### Status
-	* [What is the Status Tab?][82]
-	* [How do I see how many messages I have sent or received?][87]
-* ### Settings
-	* [How do I change the Language?][91]
-	* [How do I import Messages and Contacts?][92]
-	* [How do I password-protect my FrontlineSMS installation?][103]
+* ### Connections
+	* [How do I set up FrontlineSync to work with FrontlineSMS?][106]
+	* [How do I locate my FrontlineSMS workspace so that I can connect it to FrontlineSync?][107]
 	* [How do I use my modem/phone with FrontlineSMS?][94]
 	* [How do I use my Android phone/SMSSync with FrontlineSMS?][95]
 	* [How do I connect FrontlineSMS to a Short Message Service Center (SMSC)?][96]
 	* [How do I edit/delete a Connection?][97]
 	* [How do I get FrontlineSMS to detect my device?][98]
+* ### Settings
+	* [How do I change the Language?][91]
+	* [How do I import Messages and Contacts?][92]
+	* [What are Usage Statistics?][82]
+	* [How do I see how many messages I have sent or received?][87]
+	* [How do I password-protect my FrontlineSMS installation?][103]
 	* [How do I translate the interface into my language?][99]
 	* [How do I create rules for sending messages through multiple Connections][104]
 
@@ -152,4 +154,6 @@
 [103]: settings/8.basic_auth
 [104]: settings/10.custom_routing_rules
 [105]: activities/11.custom_activity_builder
+[106]: settings/4c.connecting_to_frontlinesync
+[107]: settings/4d.finding_on_a_lan
 </markdown:renderHtml>
