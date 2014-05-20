@@ -1,0 +1,39 @@
+# Connecting FrontlineSync to FrontlineSMS on a local network
+
+A smartphone running FrontlineSync can communicate with your computer running FrontlineSMS over an existing local network (LAN), via smartphone tethering, or through a public-facing IP over the Internet.
+
+#RECOMMENDED: Connecting FrontlineSMS and FrontlineSync over an existing local network (LAN).
+
+1. Ensure that your computer running FrontlineSMS is connected to your local network, your LAN is probably handled using by a router.
+
+2. Connect your Android smartphone running FrontlineSync to your local network via WiFi.
+
+3. Look up your computer’s local IP address. (There is a useful document written by LinkSys on how to find this)
+
+4. On your Android phone, open FrontlineSync and select 'Connect to FrontlineSMS'. In Step 2 of 4 of the FrontlineSync configuration menu, you will need to enter the IP address of the computer running FrontlineSMS in the third field after entering the auto-generated ID and Passcode. 
+
+5. Please note that your router may assign a new IP address to your FrontlineSMS machine every so often, or if your machine reconnects to the local network. If this occurs, you will need to repeat steps 3 and 4 to check the IP hasn't changed.  If it has changed it is a simple update that only needs to be done on the FrontlineSync connection configuration settings on your Android.
+It is possible to configure your router to assign the same local IP address to your machine each time. Contact your network administrator or consult your router’s manual for more details.
+
+ #Connecting FrontlineSMS and FrontlineSync via smartphone tethering.
+ 
+1. Set up your smartphone as a wireless hotspot or source a connecting USB cable. (Note: Some carriers may restrict this functionality or require an additional fee to enable it.)
+
+2. Connect your computer running FrontlineSMS to the smartphone-created WiFi network or via the cable. (Note that your computer’s internet connection will transfer from WiFi to your smartphone’s data connection if using the hotspot route.)
+
+3. Look up your computer’s local IP address. (There is a useful document written by LinkSys on how to find this)
+
+4. On your Android phone, open FrontlineSync and select 'Connect to FrontlineSMS'. In Step 2 of 4 of the FrontlineSync configuration menu, you will need to enter the IP address of the computer running FrontlineSMS in the third field after entering the auto-generated ID and Passcode. 
+
+#ADVANCED USERS: Connecting FrontlineSMS and FrontlineSync via public IP
+
+1. If your computer running FrontlineSMS is accessible over the Internet via a public IP address (or a DNS service), you can connect to it with any Internet-connected smartphone running FrontlineSync wherever located. Consider contacting your network administrator if you wish to take advantage of this setup.
+
+2. Connect your smartphone running FrontlineSync to the Internet.
+
+3. Look up the public IP address you wish to use. Google will automatically report your public IP address if you search for “what is my IP”. [This Google search shows useful results].  You will probably need to set this up manually with network administration and/or you FrontlineSMS computer's DNS settings.
+
+4. You will probably need to set up ‘port forwarding’ on your network’s router to forward to the host computer.  FrontlineSMS uses port 8130 by default so if you want to use the public IP on a different port it is easiest to forward port 8130 to your required port. 8130 will be the internal port whereas the service port will be your new chosen port.
+
+5. On your Android phone, open FrontlineSync and select 'Connect to FrontlineSMS'. In Step 2 of 4 of the FrontlineSync configuration menu, you will need to enter the IP address of the computer running FrontlineSMS in the third field after entering the auto-generated ID and Passcode. 
+
