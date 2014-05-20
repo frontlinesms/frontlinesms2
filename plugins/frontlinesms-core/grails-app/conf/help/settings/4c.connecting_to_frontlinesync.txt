@@ -1,0 +1,72 @@
+# Creating a FrontlineSync Connection on FrontlineSMS
+
+FrontlineSync is an Android app which allows users to connect their device to FrontlineSMS in order to use the device as a connection for sending and receiving SMSs and tracking missed calls. Please note you will need FrontlineSMS in addition to FrontlineSync in order to use this service.
+
+FrontlineSync does not directly limit the number of messages that can be sent via the app, however, your Android device or mobile service provider may limit the number of messages that can be sent during a given period.
+
+# Setting up a new FrontlineSync Connection on FrontlineSMS
+
+Enabling the use of FrontlineSync as an SMS and missed call gateway is a 2 step process; you must create a FrontlineSync connection in your FrontlineSMS workspace, then you will need to download and install the FrontlineSync Android app on your Android through the Play Store.  Information from your new connection will then need to be entered into the Android app:
+
+# Step 1, creating your connection in FrontlineSMS
+
+Navigate to the connections tab  in FrontlineSMS  and click on the 'Add new connection' button.
+
+![Add-New-Connection][1]
+
+A list of the available connections will appear as below.  Select FrontlineSync and click 'Next'.
+
+![Select connection][2]
+This will create a new connection by default named 'FrontlineSync'. Click 'Next' unless you wish to set a particular name for the connection. 
+
+![connection name][3]
+You can ignore the next screen and click 'Create' to complete the set up as the page simply confirms your options
+
+Your new connection will now appear on your Connections page.  The connection will have be set to 'Connecting status (Orange light)' while it waits to complete the connection to the Android App. 
+
+![Connecting state][4]
+Your work on FrontlineSMS is now done and you now need to enter details into the Android app.
+
+#Step 2: Installing FrontlineSync and connecting the app
+
+If not downloaded already, please visit the Google Play Store and download FrontlineSync onto your Android.  FrontlineSync is compatible with Android versions 2.3.0 and above. After completing the installation, open the application to configure your connection:
+
+![Select type][5]
+
+Select the the Frontline product which you would like to link FrontlineSync to, in this case, FrontlineSMS
+Enter your Android Identifier and Passcode which were generated in the final step of setting up your new connection in your FrontlineSMS workspace.  You will also need to enter the address of your FrontlineSMS computer; [see further details on how to get this address][10]. 
+You can define a port number of your choice in this step, however the application will append port 8130 by default if not set.  The protocol expected is http:// and this will also be auto-completed if missing.
+
+![Connect with passcode][6]
+
+The app will now try to contact your FrontlineSMS workspace.  It will only proceed to Step 3 if successful. Progressing from Step 2/4 will also auto the connection status in FrontlineSMS from Orange to Green.
+Once a connection has been reached you need to set the data that you would like FrontlineSync to handle. Here you can also set the frequency that the FrontlineSync will communicate with FrontlineSMS; a lower number here will mean FrontlineSync checks with FrontlineSMS more regularly but can affect your Android's battery life.
+
+You are all set!  Next you will be taken to the app's dashboard.  See more details on the dashboard.
+
+![Options][7]
+
+If you now return to FrontlineSMS, you will now see that the FrontlineSync connection status is now green showing that there is communication with your Android phone. If you expand the connection options  link, you will see that the Options you chose in set up match what you set up on the Android.
+![green connected][8]
+
+# Troubleshooting tips
+If you notice that your FrontlineSync connection is not sending or receiving messages and uploading missed calls:
+* Check that the application on your Android app has not been switched off.
+* Check that you have configured your sync settings.
+* Ensure that you have got enough mobile phone credit and that the phone is connected to Internet.
+* Ensure that the connection is not disabled on FrontlineSMS.
+* Check that the Connection is placed first on top of your routing rules.
+* The sending limit for bulk messages depends on your Android version. FrontlineSMS  alerts you when you exceed the limit and when you click deny the items will remain in the pending messages folder. 
+
+![SMS exceeded][9]
+
+[1]: ../images/help/frontlinesync/1.1.Add-New-Connection.jpg
+[2]: ../images/help/frontlinesync/1.2.Select-Modem-Type.jpg
+[3]: ../images/help/frontlinesync/1.3.Connection-Name.jpg
+[4]: ../images/help/frontlinesync/1.4.orange_connection.jpg
+[5]: ../images/help/frontlinesync/2.1.config.jpg
+[6]: ../images/help/frontlinesync/2.2.passcode_and_ip.jpg
+[7]: ../images/help/frontlinesync/2.3.options.jpg
+[8]: ../images/help/frontlinesync/3.1.green_connection.jpg
+[9]: ../images/help/frontlinesync/3.2.too_many_sms.jpg
+[10]: settings/4d.finding_on_a_lan
