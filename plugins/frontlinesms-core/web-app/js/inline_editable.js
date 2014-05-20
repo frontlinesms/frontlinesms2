@@ -31,6 +31,7 @@ InlineEditable = function() {
 			},
 			success:handleServerResponse
 		});
+		$(e.target).attr('size', $(this).val().length + 20);
 	},
 	toggleFormEnabled = function(enabled, targetElement) {
 		if (enabled) {
@@ -66,9 +67,6 @@ InlineEditable = function() {
 			targetElement.parent().append("<label class='server-side-error'>"+ data.error +"</label>");
 		}
 	},
-	resizeToFit = function(selector) {
-		$(selector).attr('size', Math.max($(this).val().length + 5, 20));
-	};
 
 	init();
 };

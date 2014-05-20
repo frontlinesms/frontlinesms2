@@ -709,8 +709,9 @@ class FsmsTagLib {
 	def inlineEditable = { att ->
 		def domainClassName = att.instance.class.name
 		def currentValue = att.instance."${att.field}"
+		def currentValueSize = currentValue.length() + 20
 		def classes = "inline-editable ${att.class ?: ''}"
-		out << "<input type=\"text\" class=\"${classes}\" value=\"${currentValue}\" data-instanceid=\"${att.instance.id}\" data-savedvalue=\"${currentValue}\" data-domainclass=\"${domainClassName}\" data-field=\"${att.field}\" />"
+		out << "<input type=\"text\" size=\"${currentValueSize}\" class=\"${classes}\" value=\"${currentValue}\" data-instanceid=\"${att.instance.id}\" data-savedvalue=\"${currentValue}\" data-domainclass=\"${domainClassName}\" data-field=\"${att.field}\" />"
 		out << '<label class="fa fa-pencil-square-o"></label>'
 	}
 

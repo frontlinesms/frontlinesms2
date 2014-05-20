@@ -1,9 +1,9 @@
 # New features in FrontlineSMS v 2.4
 ## A new Android gateway!
 ### FrontlineSync
-FrontlineSync is an Android app (running on v. 2.3 and up) which lets you easily send and receive messages to and from FrontlineSMS — even if your Android phone is in a different location from you. FrontlineSync also registers missed calls to the phone in your FrontlineSync or FrontlineCloud workspace.
+FrontlineSync is an Android app (running on v. 2.3 and up) which lets you easily send and receive messages to and from FrontlineSMS - even if your Android phone is in a different location from you. FrontlineSync also registers missed calls to the phone in your FrontlineSync or FrontlineCloud workspace.
 
-There are some basic requirements for this to work: your Android phone will need to be on, and have access both to a mobile signal and wifi or data signal, with an appropriate plan; also, you will need the FrontlineSync application to be installed and synced with FrontlineSMS. After that, any messages you send will be routed through your Android phone … and incoming messages will be routed back to your inbox. All with a local number!
+There are some basic requirements for this to work: your Android phone will need to be on, and have access both to a mobile signal and wifi or data signal, with an appropriate plan; also, you will need the FrontlineSync application to be installed and synced with FrontlineSMS. After that, any messages you send will be routed through your Android phone, and incoming messages will be routed back to your inbox. All with a local number!
 
 ## New features
 1.  Now you can register Missed Calls in FrontlineSMS using FrontlineSync
