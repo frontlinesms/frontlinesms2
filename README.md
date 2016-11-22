@@ -1,4 +1,4 @@
-# FrontlineSMS v2 core codebase:ivan dummy update remove
+# FrontlineSMS v2 core codebase
 
 This folder contains 
 - the codebase for FrontlineSMS 2.x in the standard Grails application layout (grails-app, src, test, web-app, etc)
